@@ -1,8 +1,8 @@
 <?php
 $host = getenv('DB_HOST') ?: 'localhost';
 $db   = getenv('DB_NAME') ?: 'alpha216_db';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
+$user = getenv('DB_USER') ?: 'admin'; // Default to admin for production
+$pass = getenv('DB_PASS') ?: 'Alpina@2026'; // Default to the password we set
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
