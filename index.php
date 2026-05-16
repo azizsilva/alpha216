@@ -146,8 +146,8 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
         ];
         
         foreach ($slides as $slide) {
-            echo '<div class="item slider-item-alert" style="background: url(\'' . $slide['bg'] . '\') center right / cover no-repeat;">';
-            echo '<div class="slider-overlay-gradient"></div>';
+            echo '<div class="item slider-item-alert" style="background: url(\'' . $slide['bg'] . '\') center center / cover no-repeat;">';
+            // echo '<div class="slider-overlay-gradient"></div>';
             echo '<div class="slider-content">';
             echo '<h2 style="font-size: 28px; line-height: 1.1;">' . $slide['title'] . '</h2>';
             if (isset($slide['desc'])) {
@@ -620,10 +620,11 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
     height: 420px;
     border-radius: 16px;
     overflow: hidden;
-    transform: scale(0.85);
+    /* transform: scale(0.85); */
     transition: all 0.5s ease;
     opacity: 0.5;
     box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .premium-slider .owl-item.center .item {
@@ -634,6 +635,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
 }
 
 .slider-overlay-gradient {
+    display: none;
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, rgba(10,30,10,0.9) 0%, rgba(10,30,10,0.6) 40%, transparent 100%);
