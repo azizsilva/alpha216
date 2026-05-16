@@ -66,9 +66,9 @@ if ($mk_fragment) {
             <h4 class="fc-section-title">FOURNISSEURS DE CASINOS</h4>
             <div class="fc-providers-grid">
                 <!-- Row 1 (Cleaned) -->
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/pragmratic.png" alt="Pragmatic Play"></div>
+                <div class="provider-box"><img src="<?php echo $base_url; ?>images/pragmatic.png" alt="Pragmatic Play"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1658314_evolution_logo_online_250x100-white.png" alt="Evolution"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654603_Amatic%20250x100.png" alt="Amatic"></div>
+                <div class="provider-box"><img src="<?php echo $base_url; ?>images/amatic.png" alt="Amatic"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654605_PGSoft-250x100.png" alt="PG Soft"></div>
                 <div class="provider-box"><span class="provider-text-logo">3 OAKS</span></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654685_Spribe-250x100.png" alt="Spribe"></div>
