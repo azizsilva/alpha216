@@ -132,13 +132,13 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
         // Carousel slides
         $slides = [
             [
-                'bg' => 'images/bg_soccer.jpeg',
+                'bg' => $base_url . 'images/bg_soccer.jpeg',
                 'title' => '',
                 'btn1' => 'CONNEXION',
                 'btn2' => ''
             ],
             [
-                'bg' => 'images/bg_alpha.jpeg',
+                'bg' => $base_url . 'images/bg_alpha.jpeg',
                 'title' => '',
                 'btn1' => 'CONNEXION',
                 'btn2' => ''
