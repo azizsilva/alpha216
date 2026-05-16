@@ -19,14 +19,7 @@ if ($mk_fragment) {
         <span style="font-size: 24px;">⚽</span>
         <span>Paris sportifs</span>
     </a>
-    <a href="<?php echo $base_url; ?>promos" class="mbn-item">
-        <span style="font-size: 24px;">🎁</span>
-        <span>Promos</span>
-    </a>
-    <a href="<?php echo $base_url; ?>search" class="mbn-item">
-        <span style="font-size: 24px;">🔍</span>
-        <span>Recherche</span>
-    </a>
+
     <div class="mbn-item" onclick="document.getElementById('mobileLeftSidebar').classList.toggle('active')">
         <span style="font-size: 24px;">🍔</span>
         <span>Menu</span>

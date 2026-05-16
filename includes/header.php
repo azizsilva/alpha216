@@ -2624,21 +2624,14 @@ if (!headers_sent()) {
           <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>live-football'">
               <i class="fa fa-clock-o icon-left"></i> <span class="text" data-translate="live_football">LIVE FOOTBALL</span> <i class="fa fa-chevron-right icon-right"></i>
           </div>
-          <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>casino'">
-              <i class="fa fa-diamond icon-left"></i> <span class="text" data-translate="ace_casino">ACE CASINO</span> <i class="fa fa-chevron-right icon-right"></i>
-          </div>
+
           <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>casino-games/live-casino/'">
               <i class="fa fa-dot-circle-o icon-left"></i> <span class="text" data-translate="live_casino">LIVE CASINO</span> <i class="fa fa-chevron-right icon-right"></i>
           </div>
           <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>sports/'">
               <i class="fa fa-futbol-o icon-left"></i> <span class="text" data-translate="sports">SPORTS</span> <i class="fa fa-chevron-right icon-right"></i>
           </div>
-          <div class="sidebar-menu-item" onclick="toggleMobileMenu(); launchGame('8a704858d5deb4af1ddc722092ac7614', 'Sports Book');">
-              <i class="fa fa-book icon-left"></i> <span class="text" data-translate="sports_book">SPORTS BOOK</span> <i class="fa fa-chevron-right icon-right"></i>
-          </div>
-          <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>casino-games/virtual-sports/'">
-              <i class="fa fa-desktop icon-left"></i> <span class="text" data-translate="virtual_sports">VIRTUAL SPORTS</span> <i class="fa fa-chevron-right icon-right"></i>
-          </div>
+
           <div class="sidebar-menu-item" onclick="location.href='<?php echo $base_url; ?>casino-games/slot-games/'">
               <i class="fa fa-th icon-left"></i> <span class="text" data-translate="slot_games">SLOTS</span> <i class="fa fa-chevron-right icon-right"></i>
           </div>
