@@ -5,9 +5,9 @@ function admin_role_map() {
     return [
         'admin' => ['label' => 'Admin', 'panel' => 'admin', 'path' => '/admin/'],
         'partner' => ['label' => 'Partner', 'panel' => 'partner', 'path' => '/admin/'],
-        'super_master' => ['label' => 'Super Master', 'panel' => 'super-master', 'path' => '/admin/'],
-        'master' => ['label' => 'Master', 'panel' => 'master', 'path' => '/admin/'],
-        'agent' => ['label' => 'Agent', 'panel' => 'agent', 'path' => '/admin/'],
+        'super_master' => ['label' => 'Super Admin', 'panel' => 'super-master', 'path' => '/admin/'],
+        'master' => ['label' => 'Admin', 'panel' => 'master', 'path' => '/admin/'],
+        'agent' => ['label' => 'Shop', 'panel' => 'agent', 'path' => '/admin/'],
         'player' => ['label' => 'Player', 'panel' => '', 'path' => '/'],
     ];
 }

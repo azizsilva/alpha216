@@ -1873,11 +1873,11 @@ textarea {
 
 /* TailAdmin dark skin, using local tanitadmin SVG/logo assets */
 :root {
-  --ta-bg: #0b101b;
-  --ta-surface: #111827;
-  --ta-muted-surface: #151d2c;
-  --ta-border: #1f2937;
-  --ta-border-strong: #344054;
+  --ta-bg: #000000;
+  --ta-surface: #0a0a0a;
+  --ta-muted-surface: #111111;
+  --ta-border: #222222;
+  --ta-border-strong: #333333;
   --ta-heading: #f9fafb;
   --ta-text: #d0d5dd;
   --ta-muted: #98a2b3;

@@ -126,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="target_role">Create Role</label>
                 <select name="target_role" id="target_role" class="form-select">
                   <option value="partner" <?php echo $target_role === 'partner' ? 'selected' : ''; ?>>Partner</option>
-                  <option value="super_master" <?php echo $target_role === 'super_master' ? 'selected' : ''; ?>>Super Master</option>
-                  <option value="master" <?php echo $target_role === 'master' ? 'selected' : ''; ?>>Master</option>
-                  <option value="agent" <?php echo $target_role === 'agent' ? 'selected' : ''; ?>>Agent</option>
+                  <option value="super_master" <?php echo $target_role === 'super_master' ? 'selected' : ''; ?>>Super Admin</option>
+                  <option value="master" <?php echo $target_role === 'master' ? 'selected' : ''; ?>>Admin</option>
+                  <option value="agent" <?php echo $target_role === 'agent' ? 'selected' : ''; ?>>Shop</option>
                   <option value="player" <?php echo $target_role === 'player' ? 'selected' : ''; ?>>Player</option>
                 </select>
               </div>

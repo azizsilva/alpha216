@@ -247,21 +247,21 @@ $ops_menu = [
 ];
 if ($admin_role === 'admin') {
     $ops_menu[] = ['masters/?role=partner', 'Partners', 'ri-user-star-line', ['/masters?role=partner']];
-    $ops_menu[] = ['masters/?role=super_master', 'Super Masters', 'ri-user-star-line', ['/masters?role=super_master']];
-    $ops_menu[] = ['masters/?role=master', 'Masters', 'ri-user-star-line', ['/masters?role=master']];
-    $ops_menu[] = ['agents/', 'Agents', 'ri-user-settings-line', ['/agents']];
+    $ops_menu[] = ['masters/?role=super_master', 'Super Admins', 'ri-user-star-line', ['/masters?role=super_master']];
+    $ops_menu[] = ['masters/?role=master', 'Admins', 'ri-user-star-line', ['/masters?role=master']];
+    $ops_menu[] = ['agents/', 'Shops', 'ri-user-settings-line', ['/agents']];
     $ops_menu[] = ['players/', 'Players', 'ri-team-line', ['/players']];
 } elseif ($admin_role === 'partner') {
-    $ops_menu[] = ['masters/?role=super_master', 'Super Masters', 'ri-user-star-line', ['/masters?role=super_master']];
-    $ops_menu[] = ['masters/?role=master', 'Masters', 'ri-user-star-line', ['/masters?role=master']];
-    $ops_menu[] = ['agents/', 'Agents', 'ri-user-settings-line', ['/agents']];
+    $ops_menu[] = ['masters/?role=super_master', 'Super Admins', 'ri-user-star-line', ['/masters?role=super_master']];
+    $ops_menu[] = ['masters/?role=master', 'Admins', 'ri-user-star-line', ['/masters?role=master']];
+    $ops_menu[] = ['agents/', 'Shops', 'ri-user-settings-line', ['/agents']];
     $ops_menu[] = ['players/', 'Players', 'ri-team-line', ['/players']];
 } elseif ($admin_role === 'super_master') {
-    $ops_menu[] = ['masters/?role=master', 'Masters', 'ri-user-star-line', ['/masters?role=master']];
-    $ops_menu[] = ['agents/', 'Agents', 'ri-user-settings-line', ['/agents']];
+    $ops_menu[] = ['masters/?role=master', 'Admins', 'ri-user-star-line', ['/masters?role=master']];
+    $ops_menu[] = ['agents/', 'Shops', 'ri-user-settings-line', ['/agents']];
     $ops_menu[] = ['players/', 'Players', 'ri-team-line', ['/players']];
 } elseif ($admin_role === 'master') {
-    $ops_menu[] = ['agents/', 'Agents', 'ri-user-settings-line', ['/agents']];
+    $ops_menu[] = ['agents/', 'Shops', 'ri-user-settings-line', ['/agents']];
     $ops_menu[] = ['players/', 'Players', 'ri-team-line', ['/players']];
 } elseif ($admin_role === 'agent') {
     $ops_menu[] = ['players/', 'Players', 'ri-team-line', ['/players']];

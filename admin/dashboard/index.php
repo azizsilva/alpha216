@@ -253,7 +253,7 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <div class="text-body-secondary">Super Masters</div>
+              <div class="text-body-secondary">Super Admins</div>
               <h4 class="mb-0"><?php echo (int)($overview['super_masters'] ?? 0); ?></h4>
             </div>
             <a class="btn btn-sm btn-primary" href="../masters/?role=super_master">View</a>
@@ -266,7 +266,7 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <div class="text-body-secondary">Masters</div>
+              <div class="text-body-secondary">Admins</div>
               <h4 class="mb-0"><?php echo (int)($overview['masters'] ?? 0); ?></h4>
             </div>
             <a class="btn btn-sm btn-primary" href="../masters/">View</a>
@@ -279,7 +279,7 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <div class="text-body-secondary">Agents</div>
+              <div class="text-body-secondary">Shops</div>
               <h4 class="mb-0"><?php echo (int)($overview['agents'] ?? 0); ?></h4>
             </div>
             <a class="btn btn-sm btn-primary" href="../agents/">View</a>
@@ -324,9 +324,9 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
                 <th>ID</th>
                 <th>Partner</th>
                 <th>Password</th>
-                <th>Super Masters</th>
-                <th>Masters</th>
-                <th>Agents</th>
+                <th>Super Admins</th>
+                <th>Admins</th>
+                <th>Shops</th>
                 <th>Players</th>
                 <th>Status</th>
               </tr>
@@ -359,12 +359,12 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
       <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
           <div>
-            <h5 class="mb-1">Latest Super Masters</h5>
-            <div class="text-body-secondary">Newest super master accounts</div>
+            <h5 class="mb-1">Latest Super Admins</h5>
+            <div class="text-body-secondary">Newest super admin accounts</div>
           </div>
           <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" href="../create-member/?create_role=super_master">Create Super Master</a>
-            <a class="btn btn-outline-secondary" href="../masters/?role=super_master">All Super Masters</a>
+            <a class="btn btn-primary" href="../create-member/?create_role=super_master">Create Super Admin</a>
+            <a class="btn btn-outline-secondary" href="../masters/?role=super_master">All Super Admins</a>
           </div>
         </div>
         <div class="card-body">
@@ -373,11 +373,11 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Super Master</th>
+                <th>Super Admin</th>
                 <th>Password</th>
                 <th>Partner</th>
-                <th>Masters</th>
-                <th>Agents</th>
+                <th>Admins</th>
+                <th>Shops</th>
                 <th>Players</th>
                 <th>Status</th>
               </tr>
@@ -410,12 +410,12 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
       <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
           <div>
-            <h5 class="mb-1">Latest Masters</h5>
+            <h5 class="mb-1">Latest Admins</h5>
             <div class="text-body-secondary">Full hierarchy overview</div>
           </div>
           <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-primary" href="../create-member/?create_role=master">Create Master</a>
-            <a class="btn btn-outline-secondary" href="../masters/">All Masters</a>
+            <a class="btn btn-primary" href="../create-member/?create_role=master">Create Admin</a>
+            <a class="btn btn-outline-secondary" href="../masters/">All Admins</a>
           </div>
         </div>
         <div class="card-body">
@@ -423,12 +423,12 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Master</th>
+                <th>Admin</th>
                 <th>Password</th>
                 <th>Commission %</th>
                 <th>Balance</th>
                 <th>Credit Limit</th>
-                <th>Agents</th>
+                <th>Shops</th>
                 <th>Players</th>
                 <th>Status</th>
                 <th class="text-right">Actions</th>
@@ -467,19 +467,19 @@ function ta_fetch_monthly_sales(PDO $pdo, $role, $user_id) {
       <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
           <div>
-            <h5 class="mb-1">Latest Agents</h5>
-            <div class="text-body-secondary">Recently created agents</div>
+            <h5 class="mb-1">Latest Shops</h5>
+            <div class="text-body-secondary">Recently created shops</div>
           </div>
-          <a class="btn btn-outline-secondary" href="../agents/">All Agents</a>
+          <a class="btn btn-outline-secondary" href="../agents/">All Shops</a>
         </div>
         <div class="card-body">
           <table class="table table-hover custom-table">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Agent</th>
+                <th>Shop</th>
                 <th>Password</th>
-                <th>Master</th>
+                <th>Admin</th>
                 <th>Players</th>
                 <th class="text-right">Actions</th>
               </tr>
