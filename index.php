@@ -626,6 +626,12 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
     image-rendering: -webkit-optimize-contrast;
 }
 
+@media (max-width: 768px) {
+    .premium-slider .item {
+        height: 320px !important;
+    }
+}
+
 .premium-slider .owl-item.center .item {
     transform: scale(1);
     opacity: 1;
