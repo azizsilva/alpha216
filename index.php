@@ -629,7 +629,17 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
 @media (max-width: 768px) {
     .premium-slider .item {
         height: 320px !important;
-        margin-top: 100px;
+        margin-top: 88px;
+        background-position: center center !important;
+    }
+    .slider-content {
+        left: 0 !important;
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0 20px !important;
+    }
+    .slider-buttons {
+        justify-content: center !important;
     }
 }
 
