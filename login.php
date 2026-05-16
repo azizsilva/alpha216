@@ -64,7 +64,7 @@ $asset_path = 'https://tanitbet216.com/ui/www.moneyking365.com/';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Xbet216 - Login</title>
-  <link rel="icon" type="image/x-icon" href="https://tanitbet216.com/tanitbet.png">
+  <link rel="icon" type="image/x-icon" href="/assets/images/logo_bets.jpeg">
 
   <!-- CSS Assets -->
   <link href="<?php echo $asset_path; ?>assets/css/bootstrap.css" rel="stylesheet">
@@ -141,7 +141,7 @@ $asset_path = 'https://tanitbet216.com/ui/www.moneyking365.com/';
         <div class="col-md-6 col-lg-4">
             <div class="login-wrapper">
                 <div class="logo-area">
-                     <img src="https://tanitbet216.com/tanitbet.png" alt="Royalwinbet" style="max-width: 250px;">
+                     <img src="/assets/images/logo_bets.jpeg" alt="Alpha 216" style="max-width: 250px;">
                 </div>
                 
                 <?php if ($error): ?>

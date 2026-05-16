@@ -37,7 +37,7 @@ if ($mk_fragment) {
     <div class="container-fluid">
         <!-- Top Logo -->
         <div class="fc-footer-logo-wrap text-center">
-            <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="alpina216" class="fc-main-logo">
+            <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="Alpha 216" class="fc-main-logo">
         </div>
 
         <!-- Main Links -->

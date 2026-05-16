@@ -210,7 +210,7 @@ if (!headers_sent()) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Xbet216 | Sportsbook and Online Casino</title>
+  <title>Alpha 216 | Premium Sportsbook & Casino</title>
   <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($site_favicon_url); ?>">
   <!-- Bootstrap 3.3.7 CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -2909,7 +2909,7 @@ if ($__path !== '' && (preg_match('#/sports/?$#i', $__path) || preg_match('#/spo
     <!-- Left: Logo & Menu -->
     <div class="navbar-left-content">
       <a class="navbar-brand" href="<?php echo $base_url; ?>">
-        <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="tanitbet216" style="height: 60px;">
+        <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="Alpha 216" style="height: 60px;">
       </a>
       
       <ul class="desktop-nav-menu hidden-xs hidden-sm">

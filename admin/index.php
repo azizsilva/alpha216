@@ -68,14 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$admin_logo_url = '/tanitbet216.png';
+$admin_logo_url = '/assets/images/logo_bets.jpeg';
 ?>
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo htmlspecialchars($panel_label); ?> Login | TanitAdmin</title>
+    <title><?php echo htmlspecialchars($panel_label); ?> Login | AlphaAdmin</title>
     <link rel="icon" type="image/x-icon" href="/tanitbet.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -292,7 +292,7 @@ $admin_logo_url = '/tanitbet216.png';
         <div class="ta-login-brand">
           <img class="ta-login-logo" src="<?php echo htmlspecialchars($admin_logo_url); ?>" alt="TanitAdmin">
         </div>
-        <h1 class="ta-login-title"><?php echo htmlspecialchars($panel_label); ?> Login<br>TanitBet216 Games</h1>
+        <h1 class="ta-login-title"><?php echo htmlspecialchars($panel_label); ?> Login<br>Alpha 216 Games</h1>
 
           <?php if ($error): ?>
             <div class="ta-login-alert"><?php echo htmlspecialchars($error); ?></div>
@@ -317,7 +317,7 @@ $admin_logo_url = '/tanitbet216.png';
 
             <button class="ta-login-btn" type="submit">Log In</button>
           </form>
-          <div class="ta-login-note">TanitBet216 secure <?php echo htmlspecialchars(strtolower($panel_label)); ?> access</div>
+          <div class="ta-login-note">Alpha 216 secure <?php echo htmlspecialchars(strtolower($panel_label)); ?> access</div>
       </main>
     </div>
     <script>
