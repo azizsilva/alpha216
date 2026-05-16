@@ -118,7 +118,7 @@ if ($role === 'admin') {
     <div class="ta-member-head-main">
       <div>
         <h5 class="mb-1"><?php echo htmlspecialchars($target_label); ?>s</h5>
-        <div class="text-body-secondary">Admin &gt; Partner &gt; Super Master &gt; Master &gt; Agent &gt; Player</div>
+        <div class="text-body-secondary">Admin Shop &gt; Partner &gt; Super Master &gt; Master &gt; Agent &gt; Player</div>
       </div>
       <a class="btn btn-primary" href="<?php echo $admin_base; ?>create-member/?create_role=<?php echo urlencode($target_role); ?><?php echo $parent_id ? '&parent_id=' . urlencode((string)$parent_id) : ''; ?>">Create <?php echo htmlspecialchars($target_label); ?></a>
     </div>

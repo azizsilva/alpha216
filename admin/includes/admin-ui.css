@@ -1,7 +1,7 @@
 :root {
-  --ta-primary: #465fff;
-  --ta-primary-soft: #eef4ff;
-  --ta-primary-dark: #3448d9;
+  --ta-primary: #bfff00;
+  --ta-primary-soft: rgba(191, 255, 0, 0.1);
+  --ta-primary-dark: #8fff00;
   --ta-bg: #f8fafc;
   --ta-surface: #ffffff;
   --ta-muted-surface: #f2f4f7;
@@ -1208,13 +1208,13 @@ textarea {
 .bg-primary {
   border-color: var(--ta-primary) !important;
   background: var(--ta-primary) !important;
-  color: #fff !important;
+  color: #111827 !important;
 }
 
 .btn-primary:hover {
   border-color: var(--ta-primary-dark) !important;
   background: var(--ta-primary-dark) !important;
-  color: #fff !important;
+  color: #111827 !important;
 }
 
 .btn-secondary,
