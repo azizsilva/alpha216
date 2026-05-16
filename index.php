@@ -132,14 +132,14 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
         // Carousel slides
         $slides = [
             [
-                'bg' => 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                'title' => 'PARIEZ SUR<br><span>VOS SPORTS</span>',
+                'bg' => 'images/bg_soccer.jpeg',
+                'title' => '',
                 'btn1' => 'CONNEXION',
                 'btn2' => ''
             ],
             [
-                'bg' => 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                'title' => '10% cashback<br><small style="color:#fff; font-size:16px; font-weight:normal;">sur slots 🍒</small>',
+                'bg' => 'images/bg_alpha.jpeg',
+                'title' => '',
                 'btn1' => 'CONNEXION',
                 'btn2' => ''
             ]
