@@ -237,8 +237,7 @@ if ($mk_fragment) {
     max-width: 100%;
     max-height: 80%;
     object-fit: contain;
-    /* Neon Green Filter: #bfff00 */
-    filter: brightness(0) saturate(100%) invert(86%) sepia(87%) saturate(1054%) hue-rotate(24deg) brightness(108%) contrast(105%);
+    /* Removed filter to ensure all provider logos are visible */
 }
 
 .provider-text-logo {
