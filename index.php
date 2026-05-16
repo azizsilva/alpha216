@@ -617,7 +617,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
 
 .premium-slider .item {
     position: relative;
-    height: 550px;
+    height: 480px;
     border-radius: 0px;
     overflow: hidden;
     transition: all 0.5s ease;
