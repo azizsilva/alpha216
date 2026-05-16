@@ -1,7 +1,12 @@
 <?php
 require_once 'includes/db.php';
+global $pdo;
 
 try {
+    if (!$pdo) {
+        throw new Exception("Database connection failed. Please check includes/db.php settings.");
+    }
+    
     $username = 'owneralpina';
     $password = 'owneraplina';
     $hash = md5($password);
