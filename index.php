@@ -146,7 +146,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
         ];
         
         foreach ($slides as $slide) {
-            echo '<div class="item slider-item-alert" style="background: url(\'' . $slide['bg'] . '\') center center / cover no-repeat;">';
+            echo '<div class="item slider-item-alert" style="background: url(\'' . $slide['bg'] . '\') top center / cover no-repeat;">';
             // echo '<div class="slider-overlay-gradient"></div>';
             echo '<div class="slider-content">';
             echo '<h2 style="font-size: 28px; line-height: 1.1;">' . $slide['title'] . '</h2>';
@@ -154,8 +154,8 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                 echo '<p style="font-size: 14px; font-weight: 500; margin-top: 10px;">' . $slide['desc'] . '</p>';
             }
             echo '<div class="slider-buttons">';
-            if ($slide['btn1']) echo '<button class="btn-slider-primary">' . $slide['btn1'] . '</button>';
-            if ($slide['btn2']) echo '<button class="btn-slider-secondary">' . $slide['btn2'] . '</button>';
+            if ($slide['btn1']) echo '<button class="btn-slider-primary" onclick="$(\'#loginModal\').modal(\'show\');">' . $slide['btn1'] . '</button>';
+            if ($slide['btn2']) echo '<button class="btn-slider-secondary" onclick="$(\'#signupModal\').modal(\'show\');">' . $slide['btn2'] . '</button>';
             echo '</div>'; 
             echo '</div>'; 
             echo '</div>'; 
@@ -617,13 +617,12 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
 
 .premium-slider .item {
     position: relative;
-    height: 420px;
-    border-radius: 16px;
+    height: 550px;
+    border-radius: 0px;
     overflow: hidden;
-    /* transform: scale(0.85); */
     transition: all 0.5s ease;
-    opacity: 0.5;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    opacity: 1;
+    box-shadow: none;
     image-rendering: -webkit-optimize-contrast;
 }
 
