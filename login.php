@@ -63,7 +63,7 @@ $asset_path = 'https://tanitbet216.com/ui/www.moneyking365.com/';
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>tanitbet216.com - Login</title>
+  <title>Xbet216 - Login</title>
   <link rel="icon" type="image/x-icon" href="https://tanitbet216.com/tanitbet.png">
 
   <!-- CSS Assets -->

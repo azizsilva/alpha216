@@ -210,7 +210,7 @@ if (!headers_sent()) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>tanitbet216</title>
+  <title>Xbet216 | Sportsbook and Online Casino</title>
   <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($site_favicon_url); ?>">
   <!-- Bootstrap 3.3.7 CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
