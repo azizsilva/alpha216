@@ -1,4 +1,9 @@
 <?php
+$local_env = dirname(__DIR__) . '/local.env.php';
+if (file_exists($local_env)) {
+    require_once $local_env;
+}
+
 $host = getenv('DB_HOST') ?: 'localhost';
 $db   = getenv('DB_NAME') ?: 'alpha216_db';
 $user = getenv('DB_USER') ?: 'admin'; // Default to admin for production
