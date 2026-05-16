@@ -1,6 +1,6 @@
 <?php
 $host = getenv('DB_HOST') ?: 'localhost';
-$db   = getenv('DB_NAME') ?: 'u842075676_tanichub';
+$db   = getenv('DB_NAME') ?: 'alpha216_db';
 $user = getenv('DB_USER') ?: 'root';
 $pass = getenv('DB_PASS') ?: '';
 $charset = 'utf8mb4';
