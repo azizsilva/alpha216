@@ -1,0 +1,122 @@
+[
+  {
+    "gameid": "1eb74f99e1ec8b92de107ec15a2fbab0",
+    "gamename": "Air Jet",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/air-jet.png"
+  },
+  {
+    "gameid": "ecb85ab8f21b8ba38b5a02c75439f986",
+    "gamename": "StarX",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/starx.png"
+  },
+  {
+    "gameid": "57d3e23fd19fcaf39e3f21296abda937",
+    "gamename": "Fortune Crash",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/fortune-crash.png"
+  },
+  {
+    "gameid": "869a80ef07b52fd28ecbd9635f975f86",
+    "gamename": "Meta Crash",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/meta-crash.png"
+  },
+  {
+    "gameid": "c2d868c5e3e0c38c124bb92542d799a2",
+    "gamename": "Tropicana",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/tropicana.png"
+  },
+  {
+    "gameid": "3fb8f8cc20d38890a9aa683795e04b8a",
+    "gamename": "Crime Empire",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/crime-empire.png"
+  },
+  {
+    "gameid": "f7c684ecf897372050523782c8a024bb",
+    "gamename": "Mines",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/mines.png"
+  },
+  {
+    "gameid": "5bc5edc9da839e0aecd29a8e14aad65d",
+    "gamename": "Dice",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/dice.png"
+  },
+  {
+    "gameid": "eefd53e6076e4083b732ac50e0191a92",
+    "gamename": "Plinko",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/plinko.png"
+  },
+  {
+    "gameid": "8b8d096e7f9f8bd9b0a1166ac483b8c0",
+    "gamename": "Hilo",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/hilo.png"
+  },
+  {
+    "gameid": "8956f9db526abbc3db296c6319645f83",
+    "gamename": "Keno",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/keno.png"
+  },
+  {
+    "gameid": "c5d165f1d582fc51d50f00d9292b3c97",
+    "gamename": "Coin Flip",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/coin-flip.png"
+  },
+  {
+    "gameid": "118559f0194423e0144186351e978c9b",
+    "gamename": "Penalty",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/penalty.png"
+  },
+  {
+    "gameid": "1ad2a0d2c8f78836f5d9747b6fb915ac",
+    "gamename": "Blackjack",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/blackjack.png"
+  },
+  {
+    "gameid": "3e18331df2f26579367af0e9b8f8993b",
+    "gamename": "Poker",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/poker.png"
+  },
+  {
+    "gameid": "0f257734e9e190f27e2530daad00c730",
+    "gamename": "Astronaut",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/astronaut.png"
+  },
+  {
+    "gameid": "3c67d0096c90b842bb293a5d8a37b06c",
+    "gamename": "Crash",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/crash.png"
+  },
+  {
+    "gameid": "ab7798205d55ea1d7bf9476651b76abe",
+    "gamename": "Double",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/double.png"
+  },
+  {
+    "gameid": "fce08e0b1c1bd905d4b5d8f3505e458e",
+    "gamename": "Chicken Pirate",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/chicken-pirate.png"
+  },
+  {
+    "gameid": "aa684aa0f9576d9186efab0d809a560f",
+    "gamename": "Pump It",
+    "providerName": "100HP",
+    "image": "https://providers.gamblly-api.com/assets/providers/100hp/pump-it.png"
+  }
+]

@@ -1,0 +1,968 @@
+[
+  {
+    "gameid": "b6e3f379228119389ebf1e6ed2b51a3d",
+    "gamename": "2 Powerful Dragons",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "71be67621d9aa9df0ab6f14f524abbe1",
+    "gamename": "3 Golden Wishes",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "eba214daa72d7e9fb8554e324dd590f2",
+    "gamename": "8 Tigers Gold™Megaways™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6f31c38a01cfc0ae57a08f6790935e92",
+    "gamename": "8 Treasures 1 Queen",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "809cdf853b4ac08a3f13145b3a015351",
+    "gamename": "88 Shi fu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ca45b8ab8c3e04af8c6979a26b09ac17",
+    "gamename": "9 Sons 1 King",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "148d2df4c671a1017a2a57ef9c1cb6f3",
+    "gamename": "Alive! Megaways",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0077aab39c96003020db1ef8d319b933",
+    "gamename": "Aztec Reel",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "865ad65eca37b325394178bba635f8ec",
+    "gamename": "Big Buffalo",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "81ad20295258e0ff224e597e309d0bc5",
+    "gamename": "Big Buffalo Badlands",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "598b73a6bc5d3f75b8b1f24031df33e6",
+    "gamename": "Big Buffalo Megaways",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "75284597e5f4dbd8a83b60feea2353c0",
+    "gamename": "Big Lion",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "89df8873885f4072c5e44349b5978fff",
+    "gamename": "Big Top Bonanza Megaways™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "d89d910a6a063040aaf4e3d0aede92b8",
+    "gamename": "Book Of Gems Megaways",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "e055f1cbae3ea20feae609ba5fd49a19",
+    "gamename": "Buffalo Lightning",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6eb8137f1d9c2723fcdcd6e4060eae4b",
+    "gamename": "Butterfly Moon",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6ffddfef71a53e14852030aadde35ead",
+    "gamename": "Cai Shen Lai Le",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "9cf43d6192eea651fedc3695ed0ff850",
+    "gamename": "Cai Shen Ye",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "8fb88fc48b2847737b35185b27566e73",
+    "gamename": "Cash Mine",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "8be4e126200b885c9843902fe53e91ee",
+    "gamename": "Chaoji 888",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "402e33797c474334d5206fbbd67a421c",
+    "gamename": "Chilli Festival",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0a77ef8813e793b9bfa9fc7611aa10ed",
+    "gamename": "Choi\\'s Travelling Show",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "bafcf5c29dd7eaa2e0c4a7ff67646028",
+    "gamename": "Christmas Luck",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ea3af3c1f464762cc593d029821ed794",
+    "gamename": "Combat Masters",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6ea073e96db242df979fccdddfc87541",
+    "gamename": "Da Hei Ci Fu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "f38f0627f192db45627e73a08d56e378",
+    "gamename": "Da Lan Deluxe",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "c1487e33c18273b10afedf9c6c6fb049",
+    "gamename": "Da Lan Deluxe Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "e893224daab09c50ad732af88f12d448",
+    "gamename": "Da Mao Zhao Cai: Money Cat",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "34b31abc6b236b2fff86996c81379931",
+    "gamename": "Dance with the Devil",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "f4dc0c05fd57dd197c35e139fa13e2b4",
+    "gamename": "Devil Joker Slots",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "d4895b401ffba4e8e6b42c109db7849b",
+    "gamename": "Disco Mania Megaways™ Merge™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "acc08fd28098bc8f9f22d01c9969e612",
+    "gamename": "Double Bonus",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "f315837993d1dcd8f82e84a484fafd01",
+    "gamename": "Double Jungle",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "dc706e7ac946a2f287e1042298359759",
+    "gamename": "Double Scatter 7’s",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6ec98dabaac9ccdb43364bcf14674edc",
+    "gamename": "Dragon Riches",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "82e60a57d1757dfd5fcd1ded1719364a",
+    "gamename": "Egypt Cash",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4d0838e8333bce6964f8d220b65ee77e",
+    "gamename": "Egypt Spin",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "cc047e58efe5c934b3aa32c1b00e2708",
+    "gamename": "El Paso Gold",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "772242cbdbd4fcbc28be4e95daaf2e32",
+    "gamename": "Explosion",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "d5b6e6cd7103cb9dbca631be802ceb52",
+    "gamename": "Feng Kuang Ma Jiang",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "bc66878f01a48eb41950125c349cd29f",
+    "gamename": "Fire Festival",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "43ea08f48dd248b832a0a46e47cc1c0d",
+    "gamename": "Fire Reel",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "a308700b0c6f2e67d8c92d5382ab9ba3",
+    "gamename": "Fire Reel Deluxe",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4c49dc52d29742ebec54ebfa17273a41",
+    "gamename": "Five Tiger Generals",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "be990772f4d43054d57198e22734e66f",
+    "gamename": "Flaming Phoenix",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "837c9aa9193bd2e69c646119efca918a",
+    "gamename": "Forest Fruit Magic",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "122f9f11921b558da201215b8066379c",
+    "gamename": "Fortune Lions",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1172861ac4b42c3f242e214a536008ed",
+    "gamename": "Fortunes Risingᵀᴹ",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "7dad743c6b9421fd84f63a819ba62562",
+    "gamename": "Fruitopolis",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1e4f31e13fdd0b11601e856a27446585",
+    "gamename": "Fruity Girl",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "b68056f552b66afedec65fd471a1749f",
+    "gamename": "Fu Bao Bao",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4621ca468f0bde91ab644638f28426fd",
+    "gamename": "Fu Shou Qi Tian",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "3bda622dd4e5106afea2118b5374184f",
+    "gamename": "Gem Queen",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "e20856ac5ea91c89d2a9992bed2efa15",
+    "gamename": "Gem Queen Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "eb0136a07aca96794411e9ab2ce4a42d",
+    "gamename": "Gem Temple",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "68cc91f7d370b6156c8fb38736bbe372",
+    "gamename": "Genie Mega Reels",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4ba64103f4c98c11d68681542b9f58fa",
+    "gamename": "Genie Shot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "831a1094a0d58881b97a233d4bf7184f",
+    "gamename": "Go Gold",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "3889a6901937bc611de5ed4c93bd6aee",
+    "gamename": "God of Lightning",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1e73c3f204a075a1af01064a79980a4b",
+    "gamename": "Goddess of 8 Directions",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ba87e9668de9cda7bac08a0cfc5939f3",
+    "gamename": "Gold Shot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "54395942db22c0345f15c5af4807130f",
+    "gamename": "Golden Garden",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1242d76e427f9fbdaa5704a3c7fb0e91",
+    "gamename": "Halloween Luck™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "eb0e5e3954a29b607cbec6b6efdeb476",
+    "gamename": "Hao Shi Cheng Shuang",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0b223351a1b97ffc93cc945b0a5ebe04",
+    "gamename": "Heart 2 Heart",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "28a57f4222c68ef4941c1ece236653d6",
+    "gamename": "Hearts & Dragons",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "b5609e50e2d767aa5b91c4a846367167",
+    "gamename": "Heavenly Gold™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "aea548032abdc6a86af73d6f36c64e92",
+    "gamename": "Heavenly Phoenix",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "a1d0c684db4f45c3c5cba4b2e3e7e01e",
+    "gamename": "Heavenly Ruler",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "dde83e3bf72f68f481af8461b802a94f",
+    "gamename": "Huan Le Cai Shen",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "81006fe4b1bd9e81581689f90c5c3313",
+    "gamename": "Inca Gems",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "88afc55e2d82e9bf303d809e3d0c47e1",
+    "gamename": "Inca Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "26c6115de5344ef21fa7ecf3b2de0f35",
+    "gamename": "Jaguar Gold",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0c5ad039f881df30e9bf569796360776",
+    "gamename": "Ji Xiang Long",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "9b30581f6f09df1cf9d4b445920424d8",
+    "gamename": "Jin Dynasty™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "c5157fb973c1eac462df3a09109b3163",
+    "gamename": "Jin Qian Wa",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "8b47f8c8bc37c16e10886e258257a31a",
+    "gamename": "Jin Qian Wa Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "509166c5d8bdefa47583b0671f957996",
+    "gamename": "Joker Multi Win",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "7d636cb52e190aea6b4850642d319838",
+    "gamename": "Joker’s Luck Deluxe",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "74dcd3d2c8d253404428b5f2f2b8fcc7",
+    "gamename": "Joker's Luck",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "b5acfd35fa42d85c33bf12b5a629273b",
+    "gamename": "Judge and Jury Megaways™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "441dcb660ce98a376be703ab17724a8d",
+    "gamename": "Knight’s Saga",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "27183716165c209b43b6ba61a9da9a36",
+    "gamename": "Ku Xuan Cai Shen",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "85e45e9743f6ef756533bee493f632b5",
+    "gamename": "Legendary Dragons",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "dd9c15b311ce9fb8e1178f7e8d0ce27d",
+    "gamename": "Liu Fu Shou",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "b8c94f500c6dd4711f077ec663bb5c9b",
+    "gamename": "Long Long Long",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "303fdc2131f666cdf1428882f9be9173",
+    "gamename": "Lucky Chan Chu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4f9a56e3064e08613de28d4c407b72cb",
+    "gamename": "Lucky Fisherman",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4390664934e67ce8a518135fea090b17",
+    "gamename": "Mahjong Jinpai™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "c2ba337fee0cbaed80fdf388e6d0ad27",
+    "gamename": "Max Chance and the Safari Secrets™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "bb902e1f03818abc43369b9f66886811",
+    "gamename": "Maya Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "15571b0374f029ea61c65a83a7fd0cbc",
+    "gamename": "Maya Millions",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "06001f103b787dd74b2c03f688c0b359",
+    "gamename": "Mermaid Beauty",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1fbbd593d48494159b41337a1a4ea6bb",
+    "gamename": "Metal Reel",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "296aba8d418627070f189aed8fdfd62e",
+    "gamename": "Middle Shot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "7e9573a5423ad6fdc38d01752008181a",
+    "gamename": "Middle Shot Deluxe",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ae9eb969a5bd2ac30db1af53e0966e1c",
+    "gamename": "Monkey Pays",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "2149075b40a5dfe2a609c21bc77652fd",
+    "gamename": "Nunchucks Chicken",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "7b194d38a951cf3f0f43083c59b4398f",
+    "gamename": "Pirate Empress",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "8cd2c3994e74ac24aacd2ca6bd948473",
+    "gamename": "Pot Shot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "824b6a87409b820f51125c0ecde53a13",
+    "gamename": "Queen of Wands",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "bf140e2993959dc007f2a5850bb875ce",
+    "gamename": "Rain Balls",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6cca45ab4851045a665ca1d1bb2ec7de",
+    "gamename": "Ramesses Fortune",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "73dc3954744c63b3683a00cffd2da41e",
+    "gamename": "Respin King",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "a855d314c2dcc53faa0215f5a930ab5e",
+    "gamename": "Respin Mania",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "6474a6b0f6f219911a3a2af1c7a0ef18",
+    "gamename": "Respin Mania Mega Reels",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "dc1e8a35fa3d9fba67aeecdf2ffa1b9c",
+    "gamename": "Respin Mania Wu Shi Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "74a958a6b28f9944ed13798602abce2a",
+    "gamename": "Riverboat Reel",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "247f66f2436af1419d8cf8075554a2fe",
+    "gamename": "Royal Rings",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "b924abc3035e0c959b8566392e225f53",
+    "gamename": "Ruby Pearl",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "aa090fcfd8e9561b248fffd86b200eaa",
+    "gamename": "San Fu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "932456c7801e75741b242b84b7e83256",
+    "gamename": "Savannah Cash",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "033284c4356b1cdf5a394f8a2aee6079",
+    "gamename": "Sea of Pearls",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "d66f3cad5c0db71b58e6a8261a2c32a5",
+    "gamename": "Shaolin Showdown",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "a9b78e7ca2fdf030a63a1edf60201a5c",
+    "gamename": "Shen Long Bao Shi",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "94369616f6222c15d39614cd7537d674",
+    "gamename": "Shen Long Bao Shi Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "7bf7e788c9770c2bc58af8a8b24fc3d4",
+    "gamename": "Shen Qi Jiu Long",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "c7b2d71fd30910f71b916e13f586106b",
+    "gamename": "Sheng Cai You Dao",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "8ff6f5d80841743b8eed82bafc37ba57",
+    "gamename": "Shui Guo Cai Fu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0fbac0b67eef080bc84bf8d7487110c2",
+    "gamename": "Shui Guo Cai Fu Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "741496dd25648965c4bf16c388dc523c",
+    "gamename": "Si Ling",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0f0504ebeb4a0b4c628ece4f6a8ee507",
+    "gamename": "Si Ling Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1a8aa016d75bd74779007bcab31646b5",
+    "gamename": "Si Ling Megaways™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ae4edf9b04ae31fe298bedbcd34542bd",
+    "gamename": "Si Mei",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "bfec7d13e555db1dcc8bc077ff91d6ab",
+    "gamename": "Si Mei Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "00a3110e3ef5cac9252b4fd1dd536cb5",
+    "gamename": "Sky Piggies™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "cde3ce3b03c57107b3b23b182a7b48e9",
+    "gamename": "Song Cai Tong Zi",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "25cd21126006d77b3a27d37dacd80f7f",
+    "gamename": "Sticky Sevens Megaways",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ded576d565c2e8c4ef9ccd219cbf3ff8",
+    "gamename": "Sugar Land",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4df374478d308700995c1090428b1d1e",
+    "gamename": "Super Elephant",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "ec54cddc43598a43e9feff87e946b1f5",
+    "gamename": "Super Lion",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "fae92a210dfc24a201bb154faa0ba49f",
+    "gamename": "Super Lion non-JP",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "c6d5ff8f82556ed45b5c246d1416fa9a",
+    "gamename": "Super Wolf",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "fbcc7abd970b347c18512f8b96591f55",
+    "gamename": "Tale of Two Dragons",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "5b47ab807e79e7661b4b9ff3447e35f8",
+    "gamename": "Tale of Two Dragons Jackpot Edition",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "9420ffa8a93743eea223493dcb9c68bf",
+    "gamename": "Teller of Tales™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "533a03d0efc805f62fdfce6889bf8bf6",
+    "gamename": "The Orca, the Iceberg and the Penguin",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "11a52733bcb3f809a160497ea7252721",
+    "gamename": "The Pearl Game",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0c56c51403809b70fa4db3c493862d86",
+    "gamename": "The Reel Macau",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "539b3f3b9c5cbb6644d45bfb5117d014",
+    "gamename": "Triple Monkey",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "5e7fba41d45ccae413ab0ca99368d956",
+    "gamename": "Twin Fruits",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "37814277c094c1a9157265ea9de7589f",
+    "gamename": "Viva Fruit Vegas",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "fc8ff3660db597c7dd9e4dae3b63d4f8",
+    "gamename": "Warriors Gold",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "402e9b9bef5e74462c1a09c0a613ade2",
+    "gamename": "Water Reel",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4450014aea62e50441cdbf28c10156a3",
+    "gamename": "Water Reel Deluxe",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "86192a20777693d5f84aafcd38c15230",
+    "gamename": "West Shot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "edb20bab2063713b5e00f809827ce7fe",
+    "gamename": "Wicked 777",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "593935cd3e3dd34da09f8e51f291fe7d",
+    "gamename": "Wicked Dice",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "9acfca8a01097454c58dafa75f0b28ab",
+    "gamename": "Wicked Hot",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "de7a1f7031c2d4f87382da6586b5ac0a",
+    "gamename": "Wild Five",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "01d838ad756d57f3a0e5a9bc653279f0",
+    "gamename": "Wild Wild Cash Out",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "43d93747f6963dd6375d46b2c0f0fd13",
+    "gamename": "Witchin Winnin",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "1368e9a93cfbcfc579f2ca01596ae282",
+    "gamename": "World Cup Gold™",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "4ff4dde7900f17eff4a83b85b2bb567c",
+    "gamename": "Wu Fu Wa Wa",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "64d6967ea0d908214663200d029d4dd4",
+    "gamename": "Xiao Wu Kong",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "e7468fa4a6447ea626b7af5565bb5ab3",
+    "gamename": "Xing Yun Bian Lian",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "0ee64d339f2e0cef07513c6ce3672d56",
+    "gamename": "Xuan Wu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "63653f69de12b72959806daf9a2cd91b",
+    "gamename": "Ying Xiong Lu Bu",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "5875b999993fba5e5b9852c4e5c6907a",
+    "gamename": "Zeus Kingdom of Riches",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "212bd662e0811bf7e3bc896158b57190",
+    "gamename": "Zhao Cai Tong Zi",
+    "providerName": "Skywind",
+    "image": ""
+  },
+  {
+    "gameid": "f36aac71ff331eb9e0830a5449adb145",
+    "gamename": "Zhao Cai Tong Zi Jackpot",
+    "providerName": "Skywind",
+    "image": ""
+  }
+]

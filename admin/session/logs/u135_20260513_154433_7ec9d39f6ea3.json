@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-13T15:44:33+00:00",
+    "user_id": 135,
+    "username": "Adem",
+    "role": "partner",
+    "ip": "41.230.155.175",
+    "forwarded_for": "41.230.155.175",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9,ar-TN;q=0.8,ar;q=0.7,en-US;q=0.6,en;q=0.5",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fcreate-member%2F%3Fcreate_role%3Dpartner",
+    "session_id_hash": "d75e37760feafc37f483d3d4bb8809cbe471ad3302416884eda4114199a91b0f"
+}

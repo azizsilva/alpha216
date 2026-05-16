@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-08T17:30:24+00:00",
+    "user_id": 94,
+    "username": "Benzart",
+    "role": "agent",
+    "ip": "154.107.98.18",
+    "forwarded_for": "154.107.98.18",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.7",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "a3866b416a77cb4afb72686f10ac3d83145c5d70812e2f2c7f8b88eba574d610"
+}

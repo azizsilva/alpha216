@@ -1,0 +1,9 @@
+# Ignore local WAMP/Dev files
+/node_modules
+/.gemini
+/.vscode
+/error.log
+/scratch
+.htaccess
+/assets/images/*.tmp
+.mk_schema_ready

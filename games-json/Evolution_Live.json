@@ -1,0 +1,1022 @@
+[
+  {
+    "gameid": "97dcc429fe7142159aab82b918780f14",
+    "gamename": "2 Hand Casino Hold'em",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/2-hand-casino-hold-em-730a5291.webp"
+  },
+  {
+    "gameid": "08f7ef59810b52bd7b75716737dc01aa",
+    "gamename": "Always 9 Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/always-9-baccarat-755f73eb.webp"
+  },
+  {
+    "gameid": "0afb35f8abd269ca0c0c65a49d5145db",
+    "gamename": "American Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/american-roulette-34a79758.jpg"
+  },
+  {
+    "gameid": "ed9e15ea8a2cbb9e7ad2604819764d43",
+    "gamename": "Auto-Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/auto-roulette-c8a39ec0.jpg"
+  },
+  {
+    "gameid": "367c395a50d4ef9edda332e17094670b",
+    "gamename": "Auto-Roulette VIP",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/auto-roulette-vip-97ceed84.jpg"
+  },
+  {
+    "gameid": "9b25f8d744859c6840d16ff6103dc5a6",
+    "gamename": "Bac Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/bac-bo-fe691da6.png"
+  },
+  {
+    "gameid": "1d955d48d50aef2e9546466d9d859be1",
+    "gamename": "Baccarat A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/baccarat-a-6412727b.webp"
+  },
+  {
+    "gameid": "0ea8519b837ebd62f5a8978acca33e1d",
+    "gamename": "Baccarat B",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/baccarat-b-0f4227a7.webp"
+  },
+  {
+    "gameid": "21cf3fdf28915845ff76f963695bb8e3",
+    "gamename": "Baccarat C",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/baccarat-c-89c5c20e.webp"
+  },
+  {
+    "gameid": "e7df9c2fdf7c680ddee3739f5b703c88",
+    "gamename": "Blackjack A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-a-5ebb25e2.webp"
+  },
+  {
+    "gameid": "5344ba3dbbd1b3c4b0082fe6212d502c",
+    "gamename": "Blackjack B",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-b-10ed60fe.webp"
+  },
+  {
+    "gameid": "135c1d0063a5a18532314e7f669da0a2",
+    "gamename": "Blackjack C",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-c-a4c5f0bd.webp"
+  },
+  {
+    "gameid": "7d4e80750fdbd046e210dc8e1d1a0c21",
+    "gamename": "Blackjack Diamond VIP",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-diamond-vip-aeadae23.webp"
+  },
+  {
+    "gameid": "06e7ecf8debac2b86e8b38342de30a7a",
+    "gamename": "Blackjack Fortune VIP",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-fortune-vip-25b74c26.jpg"
+  },
+  {
+    "gameid": "79efa086e10bbd8543b6e03e7a491351",
+    "gamename": "Blackjack Grand VIP",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-grand-vip-d2020db8.webp"
+  },
+  {
+    "gameid": "d609730e8da3693bd8ac428926747390",
+    "gamename": "Blackjack Party",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-party-ff786711.jpg"
+  },
+  {
+    "gameid": "c2bd2aafaa4dbaff9df0cd0b53fc6056",
+    "gamename": "Blackjack Platinum VIP",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-platinum-vip-68695d61.webp"
+  },
+  {
+    "gameid": "faa0c98465e5fe48aefaca3fc885977e",
+    "gamename": "Blackjack Silver A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-a-cd92255a.webp"
+  },
+  {
+    "gameid": "8de1993b371ce298b85584d21e5d2106",
+    "gamename": "Blackjack Silver B",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-b-67607c74.webp"
+  },
+  {
+    "gameid": "422b5f8f63f54841a0045584237c4eee",
+    "gamename": "Blackjack Silver C",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-c-e27b72d1.webp"
+  },
+  {
+    "gameid": "91cbad4d3ac237e40d477539e5c767fa",
+    "gamename": "Blackjack Silver D",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-d-44420874.webp"
+  },
+  {
+    "gameid": "0fcd90352f378191e02359a0ab9df5a8",
+    "gamename": "Blackjack Silver E",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-e-5dae8105.webp"
+  },
+  {
+    "gameid": "cd2394d2d8ef2160c8b4826233f7b2fb",
+    "gamename": "Blackjack Silver F",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-f-2be81ae3.webp"
+  },
+  {
+    "gameid": "fdc106b08bfc4c4d324cac4fa347bf19",
+    "gamename": "Blackjack Silver G",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-silver-g-c7e5f259.webp"
+  },
+  {
+    "gameid": "9f509cdc3cdce669368977eda1588011",
+    "gamename": "Blackjack VIP 1",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-1-12564acc.webp"
+  },
+  {
+    "gameid": "323f4086833fda7bb471f10e18a28364",
+    "gamename": "Blackjack VIP 10",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-10-72248a72.webp"
+  },
+  {
+    "gameid": "1329b0405db81b9964d6dd6eb0a514c9",
+    "gamename": "Blackjack VIP 11",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-11-a90070af.webp"
+  },
+  {
+    "gameid": "87a7f4550407f5ed73c3353a54a11187",
+    "gamename": "Blackjack VIP 12",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-12-1a3d1fe1.webp"
+  },
+  {
+    "gameid": "ad6b96a22d790052e3f899b3ece69c03",
+    "gamename": "Blackjack VIP 13",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-13-7b700a17.webp"
+  },
+  {
+    "gameid": "1d5d1c1c3d9c76bd7f4c58b9239c373a",
+    "gamename": "Blackjack VIP 14",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-14-5cdfff96.webp"
+  },
+  {
+    "gameid": "e200f3434cd89322594336ee0f90afd0",
+    "gamename": "Blackjack VIP 15",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-15-6975e982.webp"
+  },
+  {
+    "gameid": "295743c7d72fd2eb61ca06749bb25a44",
+    "gamename": "Blackjack VIP 16",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-16-1f224627.webp"
+  },
+  {
+    "gameid": "994a2681526c98fec2b9a2d63a642faa",
+    "gamename": "Blackjack VIP 17",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-17-30025b67.webp"
+  },
+  {
+    "gameid": "31915e590bc4f5904681c9ed3fec7e91",
+    "gamename": "Blackjack VIP 19",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-19-e1271fe2.webp"
+  },
+  {
+    "gameid": "7530ac3d1140882df7e883641237bb42",
+    "gamename": "Blackjack VIP 2",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-2-b61886d8.webp"
+  },
+  {
+    "gameid": "a9d74415dfdde9ca16087d260c63fd68",
+    "gamename": "Blackjack VIP 20",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-20-66da1295.webp"
+  },
+  {
+    "gameid": "ba4f73d5e19cb97db65f0766cd785434",
+    "gamename": "Blackjack VIP 22",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-22-7006c343.webp"
+  },
+  {
+    "gameid": "cc61ff297d5beef775880c9ffcccf63e",
+    "gamename": "Blackjack VIP 25",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-25-21a526f9.webp"
+  },
+  {
+    "gameid": "84c4ac47b33cb83dbdfbd56af4e658ad",
+    "gamename": "Blackjack VIP 26",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-26-463137e3.webp"
+  },
+  {
+    "gameid": "74f9dadea990e593f531953b1feaac7b",
+    "gamename": "Blackjack VIP 27",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-27-b0bbea85.webp"
+  },
+  {
+    "gameid": "e2124ac641282f02462d0b6e0245f3f9",
+    "gamename": "Blackjack VIP 28",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-28-87eb63e1.webp"
+  },
+  {
+    "gameid": "f8e17bc0ad780b65f684558001ee2e64",
+    "gamename": "Blackjack VIP 3",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-3-6d26f730.webp"
+  },
+  {
+    "gameid": "530ed3caad9e07621982956b571f6794",
+    "gamename": "Blackjack VIP 30",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-30-4c40cfee.webp"
+  },
+  {
+    "gameid": "d8ab16519a21608d1fed93cc83690593",
+    "gamename": "Blackjack VIP 31",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-31-eeb19ff5.webp"
+  },
+  {
+    "gameid": "97e1e4e23f9fd02ea58a8415a515d1e5",
+    "gamename": "Blackjack VIP 32",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-32-519da727.webp"
+  },
+  {
+    "gameid": "401d3a40b06fa9b0ee299e31823796d9",
+    "gamename": "Blackjack VIP 33",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-33-16b9efdc.webp"
+  },
+  {
+    "gameid": "8b6200a6ef1f7df8c91c51dfe4444866",
+    "gamename": "Blackjack VIP 34",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-34-089ff3b4.webp"
+  },
+  {
+    "gameid": "64fee17522e56dd16ad4a0548c5b842c",
+    "gamename": "Blackjack VIP 35",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-35-f5bde119.webp"
+  },
+  {
+    "gameid": "c6361dfd83d86cc5c98e2b41c28791eb",
+    "gamename": "Blackjack VIP 36",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-36-807f979d.webp"
+  },
+  {
+    "gameid": "3acbe78079e7e8841ab34ebe03a1f4d7",
+    "gamename": "Blackjack VIP 37",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-37-b9fef755.webp"
+  },
+  {
+    "gameid": "abdae315508ec2b531c87cadf4b790ae",
+    "gamename": "Blackjack VIP 38",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-38-1c9122e2.webp"
+  },
+  {
+    "gameid": "aed251dded03e8a1e665e52cdc4b6e80",
+    "gamename": "Blackjack VIP 4",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-4-b306cfbd.webp"
+  },
+  {
+    "gameid": "e02f15bb0df96c186555c62264bd4379",
+    "gamename": "Blackjack VIP 41",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-41-31bb22b6.webp"
+  },
+  {
+    "gameid": "bb5d9a68f06045695ba133a6f4bba082",
+    "gamename": "Blackjack VIP 44",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-44-00ae7129.webp"
+  },
+  {
+    "gameid": "f3d684a1b2fb22ac35c67e296df4db31",
+    "gamename": "Blackjack VIP 5",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-5-f54dd936.webp"
+  },
+  {
+    "gameid": "4a33673ccc580aea8ae80ffa03c12ba7",
+    "gamename": "Blackjack VIP 6",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-6-418aac41.webp"
+  },
+  {
+    "gameid": "3d3f89247b5ec9e98e76ef2b22da2532",
+    "gamename": "Blackjack VIP 7",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-7-b2e017d1.webp"
+  },
+  {
+    "gameid": "ecffee81bd446ea53e4836e497f9e803",
+    "gamename": "Blackjack VIP 8",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-8-a3c038c1.webp"
+  },
+  {
+    "gameid": "54806d16c3eac96d4bea63ccfc0c674c",
+    "gamename": "Blackjack VIP 9",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-9-dfa31258.webp"
+  },
+  {
+    "gameid": "555681ca33cd74847afbab62a9c446a3",
+    "gamename": "Blackjack VIP A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-a-a36fe18b.webp"
+  },
+  {
+    "gameid": "446551dd9ae32002824b065e57686463",
+    "gamename": "Blackjack VIP B",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-b-381e4345.webp"
+  },
+  {
+    "gameid": "3a3bb51ef96c4795ac20c935ca68443b",
+    "gamename": "Blackjack VIP Beta",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-beta-1e7c281c.webp"
+  },
+  {
+    "gameid": "68c5eb853ecdfee94cd5a22f3210aacf",
+    "gamename": "Blackjack VIP C",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-c-e070853d.webp"
+  },
+  {
+    "gameid": "d3cc53709c12b63755a2e40bba47f448",
+    "gamename": "Blackjack VIP D",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-d-a1fe4bc1.webp"
+  },
+  {
+    "gameid": "2c2f06025f65fe745cabd81a3aae8aba",
+    "gamename": "Blackjack VIP E",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-e-2361e31b.webp"
+  },
+  {
+    "gameid": "201a27d2b833951f5d982dc5c313fe74",
+    "gamename": "Blackjack VIP F",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-f-6f7948d9.webp"
+  },
+  {
+    "gameid": "40273c03c2a48786cb6111e35f012e6b",
+    "gamename": "Blackjack VIP G",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-g-3236cc91.webp"
+  },
+  {
+    "gameid": "9f71de77938927179599cd645a5688c5",
+    "gamename": "Blackjack VIP Gamma",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-gamma-3ee9e216.webp"
+  },
+  {
+    "gameid": "fe2e28180d600b1dfc7784324d3df640",
+    "gamename": "Blackjack VIP H",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-h-310b6728.webp"
+  },
+  {
+    "gameid": "2703c1a1340451d9f9d35904c721f7d6",
+    "gamename": "Blackjack VIP I",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-i-6b831b23.webp"
+  },
+  {
+    "gameid": "bd5be8139f01f6719bdd15b92e005523",
+    "gamename": "Blackjack VIP J",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-j-6a72ab35.webp"
+  },
+  {
+    "gameid": "ce84d2072af4db522109e3e349bec9c9",
+    "gamename": "Blackjack VIP K",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-k-1ec779e6.webp"
+  },
+  {
+    "gameid": "2d2e7afef9695e9cf82be87a08f28d23",
+    "gamename": "Blackjack VIP L",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-l-0c2b9919.webp"
+  },
+  {
+    "gameid": "bee49a234fcb2ed9547b9e1562953f35",
+    "gamename": "Blackjack VIP M",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-m-262091c7.webp"
+  },
+  {
+    "gameid": "8cadf51f3bab6ca1d1351e39920f0cd0",
+    "gamename": "Blackjack VIP N",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-n-5758c6f0.webp"
+  },
+  {
+    "gameid": "4134e22ef51602a341306df756ee8f2c",
+    "gamename": "Blackjack VIP O",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-o-10c5fc0d.webp"
+  },
+  {
+    "gameid": "5a04abf1c8f61ff36beaa840b38fd720",
+    "gamename": "Blackjack VIP P",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-p-dc1f70f2.webp"
+  },
+  {
+    "gameid": "694ea4e8c2bc49bb69c0c113a29e5c18",
+    "gamename": "Blackjack VIP Q",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-q-bb8ec123.webp"
+  },
+  {
+    "gameid": "20e34228a5086c5a4198a3c967f99301",
+    "gamename": "Blackjack VIP R",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-r-0a9061e7.webp"
+  },
+  {
+    "gameid": "78beceac05fb03bb597646ee2a85cb1e",
+    "gamename": "Blackjack VIP T",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-t-166cdfde.webp"
+  },
+  {
+    "gameid": "921477a239b298fdd623e29c8f982274",
+    "gamename": "Blackjack VIP U",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-u-bab78eca.webp"
+  },
+  {
+    "gameid": "195f9f3cb289ab0c8e281317692590ba",
+    "gamename": "Blackjack VIP X",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-x-71f9f783.webp"
+  },
+  {
+    "gameid": "54b14b8af2eab62dad3053c09ff7508d",
+    "gamename": "Blackjack VIP Z",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/blackjack-vip-z-a42be4b7.webp"
+  },
+  {
+    "gameid": "724eebd5cbe7555b01ed60279cb59e5a",
+    "gamename": "Caribbean Stud Poker",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/caribbean-stud-poker-0995c260.jpg"
+  },
+  {
+    "gameid": "8cb4d1c55915742a45f59f2adbb97e24",
+    "gamename": "Casino Hold'em",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/casino-hold-em-5f7083fc.jpg"
+  },
+  {
+    "gameid": "689dd8e8f17dae910dba9fdd4990d41e",
+    "gamename": "Craps",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/craps-8bb412ec.jpg"
+  },
+  {
+    "gameid": "c177ce05258ed2dcbdece64434eaf817",
+    "gamename": "Crazy Coin Flip",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/crazy-coin-flip-cfb0edb9.jpg"
+  },
+  {
+    "gameid": "911a32ad38d77f86baf29a2cdb95da05",
+    "gamename": "Crazy Pachinko",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/crazy-pachinko-23db03d7.png"
+  },
+  {
+    "gameid": "917c0c51d248c33eb058e3210a2e7371",
+    "gamename": "Crazy Time",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/crazy-time-ed42b962.png"
+  },
+  {
+    "gameid": "814aa56348ac4165588f2a3e251f8732",
+    "gamename": "Crazy Time A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/crazy-time-a-f4d46a57.png"
+  },
+  {
+    "gameid": "eda1a2c5edb8370f8df58dcf8e1381b9",
+    "gamename": "Dead or Alive: Saloon",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/dead-or-alive-saloon-f05dc4ae.jpg"
+  },
+  {
+    "gameid": "fae08e8e222f162b27a2d5c4329d1044",
+    "gamename": "Double Ball Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/double-ball-roulette-6511c0f5.jpg"
+  },
+  {
+    "gameid": "1fd20a344c9f147cdef85bbaa7447dcd",
+    "gamename": "Dragon Tiger",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/dragon-tiger-40f529cd.png"
+  },
+  {
+    "gameid": "7f50a6fbfcd9257299303b5757d43525",
+    "gamename": "Dream Catcher",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/dream-catcher-939d0294.png"
+  },
+  {
+    "gameid": "0cca3db8b5cbf76b1ac52f9e9f149aa1",
+    "gamename": "Emperor Bac Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/emperor-bac-bo-9a6cf1ed.jpg"
+  },
+  {
+    "gameid": "1eaa16200ee75bddd50ab54b01fbefa9",
+    "gamename": "Emperor Dragon Tiger",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/emperor-dragon-tiger-814fdca1.jpg"
+  },
+  {
+    "gameid": "53b7cbb34adc1279d0df4c0942af9393",
+    "gamename": "Emperor Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/emperor-roulette-2c5cdf91.jpg"
+  },
+  {
+    "gameid": "6a1e55dc7a14f038d9b0207fdb3ecbc0",
+    "gamename": "Emperor Sic Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/emperor-sic-bo-00c10ef9.jpg"
+  },
+  {
+    "gameid": "758772f63feb61b6ab997d8d37385a65",
+    "gamename": "Emperor Sic Bo A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/emperor-sic-bo-a-5071ac39.jpg"
+  },
+  {
+    "gameid": "ed0d26758183cfc88c8c791233d86de9",
+    "gamename": "Extra Chilli Epic Spins",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/extra-chilli-epic-spins-5278788e.jpg"
+  },
+  {
+    "gameid": "5cb6aa4e2ce1c775c568561401ffdfca",
+    "gamename": "Fan Tan",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/fan-tan-b814c82b.png"
+  },
+  {
+    "gameid": "88b2d98462fbc45d6d31e95083e183df",
+    "gamename": "First Person American Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-american-roulette-b7b937b6.jpg"
+  },
+  {
+    "gameid": "4ac0e874a4d5fc55bcdba5302b43bc96",
+    "gamename": "First Person Blackjack",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-blackjack-3965951b.png"
+  },
+  {
+    "gameid": "823245918aa2afd108a5912e363c083c",
+    "gamename": "First Person Craps",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-craps-1491dd86.jpg"
+  },
+  {
+    "gameid": "4b4c45709dfd8188d7d6d12fae15bd42",
+    "gamename": "First Person Dragon Tiger",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-dragon-tiger-15b85545.jpg"
+  },
+  {
+    "gameid": "7ee0da50996278d7fe5136f86f368fa5",
+    "gamename": "First Person Dream Catcher",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-dream-catcher-c376be97.jpg"
+  },
+  {
+    "gameid": "7b5d05fc48390b74980d63ac1ea78ed5",
+    "gamename": "First Person HiLo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-hilo-c52e7857.jpg"
+  },
+  {
+    "gameid": "fde4cf03eb3504e9f3898e528231f564",
+    "gamename": "First Person Prosperity Tree Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-prosperity-tree-baccarat-74f2a691.jpg"
+  },
+  {
+    "gameid": "797aa3e732352d1348b5c876597f5cb4",
+    "gamename": "First Person Super Sic Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-super-sic-bo-94d439c5.jpg"
+  },
+  {
+    "gameid": "24e52b094b2dfadb0c641ed4f4935077",
+    "gamename": "First Person Video Poker",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-video-poker-e4d4ecc0.jpg"
+  },
+  {
+    "gameid": "318291bd00fb6542cf6b6d35e2a9b41a",
+    "gamename": "First Person XXXtreme Lightning Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-xxxtreme-lightning-baccarat-22dbac91.jpg"
+  },
+  {
+    "gameid": "7f59ab12793402d5d5c499798460c3a1",
+    "gamename": "First Person XXXtreme Lightning Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/first-person-xxxtreme-lightning-roulette-566a0079.jpg"
+  },
+  {
+    "gameid": "392e13e38b3cec5ad259254a206d343a",
+    "gamename": "Football Studio",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/football-studio-2f0cad3c.png"
+  },
+  {
+    "gameid": "1909b4e3380dc37654f8e3997e63ec1b",
+    "gamename": "Football Studio Dice",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/football-studio-dice-5dd3627e.jpg"
+  },
+  {
+    "gameid": "8405541014f364b7dc59657aa6892446",
+    "gamename": "Funky Time",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/funky-time-f34dd51a.png"
+  },
+  {
+    "gameid": "a8d52f6fa06dafce786d70d190c25cbe",
+    "gamename": "Gold Vault Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/gold-vault-roulette-72ae6b7b.jpg"
+  },
+  {
+    "gameid": "3b43390eebe1f1a84b15f1251a253b24",
+    "gamename": "Immersive Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/immersive-roulette-45627008.png"
+  },
+  {
+    "gameid": "58d7089aa20bce7f70e0e2ce81e888f4",
+    "gamename": "Infinite Blackjack",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/infinite-blackjack-8a28919a.png"
+  },
+  {
+    "gameid": "e722b180875038d8a9b5df84ff340577",
+    "gamename": "Infinite Fun Fun 21 Blackjack",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/infinite-fun-fun-21-blackjack-64bb5a20.jpg"
+  },
+  {
+    "gameid": "ec65c22981a707736871eecfca8e5e25",
+    "gamename": "Instant Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/instant-roulette-2bea2b99.jpg"
+  },
+  {
+    "gameid": "0f78172e62af19dcc9c75077ea0d0cd0",
+    "gamename": "Lightning Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-baccarat-317559be.png"
+  },
+  {
+    "gameid": "96050ea4ce01c7c295c15cf910aa7bc4",
+    "gamename": "Lightning Ball",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-ball-ef920883.jpg"
+  },
+  {
+    "gameid": "d8da3c5c99a593a44c97325e7ba83838",
+    "gamename": "Lightning Dragon Tiger",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-dragon-tiger-52b36204.jpg"
+  },
+  {
+    "gameid": "4a858d6b74c05260d3ea2762838798c7",
+    "gamename": "Lightning Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-roulette-b0c36c3a.png"
+  },
+  {
+    "gameid": "7df14b65a14ab249155c76bc888f4f59",
+    "gamename": "Lightning Sic Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-sic-bo-62e451ae.png"
+  },
+  {
+    "gameid": "2fa292e4b9852e4f2d79360bab5ccbbc",
+    "gamename": "Lightning Storm",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/lightning-storm-0391600a.png"
+  },
+  {
+    "gameid": "3955853fc6a0b53f7f9b9cff0be19cb8",
+    "gamename": "Mega Ball",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/mega-ball-57c38736.png"
+  },
+  {
+    "gameid": "067806e82742ca16bfffe70f76215647",
+    "gamename": "MONOPOLY Big Baller",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/monopoly-big-baller-5c488acf.png"
+  },
+  {
+    "gameid": "d496ac5fd91702331133e44b6bd12b26",
+    "gamename": "MONOPOLY Live",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/monopoly-live-40dded6d.png"
+  },
+  {
+    "gameid": "c367b8269a44719f19d7264b37d4582b",
+    "gamename": "Peek Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/peek-baccarat-f10dab54.jpg"
+  },
+  {
+    "gameid": "1d1c0d3ec98deb128bdd5acdef0f157e",
+    "gamename": "Power Blackjack",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/power-blackjack-f9fc2d4a.jpg"
+  },
+  {
+    "gameid": "418f38d98be47c4f77c052347e56b481",
+    "gamename": "Prosperity Tree Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/prosperity-tree-baccarat-fa3dfab0.jpg"
+  },
+  {
+    "gameid": "6ddd73419e9a49b6b942e29088219d64",
+    "gamename": "Red Door Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/red-door-roulette-f8363e3b.png"
+  },
+  {
+    "gameid": "c9020da3ac9119910b7146416d5a9850",
+    "gamename": "Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/roulette-59eb9a66.png"
+  },
+  {
+    "gameid": "1ffeecc77f75d0485e83036269fd9401",
+    "gamename": "Speed Auto Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-auto-roulette-48721371.jpg"
+  },
+  {
+    "gameid": "ca432917c1beafa247d346bdc7c178a7",
+    "gamename": "Speed Baccarat A",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-a-5e4db2bb.png"
+  },
+  {
+    "gameid": "d3c71b0de6799ca7419d1e7834a05a47",
+    "gamename": "Speed Baccarat B",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-b-b8dfbe79.png"
+  },
+  {
+    "gameid": "78a8f259b57a85b7c01f9a1c5c667898",
+    "gamename": "Speed Baccarat C",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-c-2d370546.png"
+  },
+  {
+    "gameid": "441f7d75f645a3ba8c6ca6ac97766e27",
+    "gamename": "Speed Baccarat D",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-d-2391a56b.png"
+  },
+  {
+    "gameid": "b565bd61b2dd5216d910bd07feb5994e",
+    "gamename": "Speed Baccarat E",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-e-48f805b3.png"
+  },
+  {
+    "gameid": "b332c47c868946659d7de97f4157bdb3",
+    "gamename": "Speed Baccarat F",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-f-95d508df.png"
+  },
+  {
+    "gameid": "0f318059268a7522710dfa4b867005e9",
+    "gamename": "Speed Baccarat G",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-g-03822bf4.png"
+  },
+  {
+    "gameid": "08e3fac9968542e243e1b320c033b8d7",
+    "gamename": "Speed Baccarat H",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-h-5b39b1e0.png"
+  },
+  {
+    "gameid": "306416e24dc7aa7400ae46d151c3526e",
+    "gamename": "Speed Baccarat I",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-i-25e87cd8.png"
+  },
+  {
+    "gameid": "fbd7f3f9692774963341d7758aa0f439",
+    "gamename": "Speed Baccarat J",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-j-3618651a.png"
+  },
+  {
+    "gameid": "04bbac98e29afadca20019f21b2c21d2",
+    "gamename": "Speed Baccarat K",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-k-9c1e9cd3.png"
+  },
+  {
+    "gameid": "5c58dcfb54df086d00b8725a10761e03",
+    "gamename": "Speed Baccarat L",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-l-cc37cb48.png"
+  },
+  {
+    "gameid": "47a936ba7665516ecf132a2b8898b2eb",
+    "gamename": "Speed Baccarat M",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-m-f7b85e1e.png"
+  },
+  {
+    "gameid": "374b0298147823425fb0d41a6fae25ba",
+    "gamename": "Speed Baccarat N",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-n-ee6601e3.png"
+  },
+  {
+    "gameid": "cb6e4ad80df2c456cc69d7d43400ef2a",
+    "gamename": "Speed Baccarat P",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-p-1fc06190.png"
+  },
+  {
+    "gameid": "85e9ebaaec03ab8d1e579cf2d28a898e",
+    "gamename": "Speed Baccarat Q",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-q-034ef5f8.png"
+  },
+  {
+    "gameid": "44eca39b0a839bf2af75db7a5ecb3450",
+    "gamename": "Speed Baccarat R",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-r-73782d87.png"
+  },
+  {
+    "gameid": "3c4df047efd6126b12f351ad40123e40",
+    "gamename": "Speed Baccarat S",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-s-23e60353.png"
+  },
+  {
+    "gameid": "60c61989f6a8ff1a33b14c98abe83e62",
+    "gamename": "Speed Baccarat T",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-t-1759b5c5.png"
+  },
+  {
+    "gameid": "e0e8f76fa25eb2fcebf96e7b5f45e120",
+    "gamename": "Speed Baccarat U",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-u-4058a2ba.png"
+  },
+  {
+    "gameid": "ce7558886d46f01a02aade95a5127b43",
+    "gamename": "Speed Baccarat V",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-v-09e40b42.png"
+  },
+  {
+    "gameid": "239ca8da8e291b7d9e377adfcf4745dc",
+    "gamename": "Speed Baccarat W",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-w-14316881.png"
+  },
+  {
+    "gameid": "128268adb0c5c9cd62746a0a8105dc21",
+    "gamename": "Speed Baccarat X",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-x-e049e00a.png"
+  },
+  {
+    "gameid": "52a7b9d8c127b8b33f5c8d682ed40371",
+    "gamename": "Speed Baccarat Z",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/speed-baccarat-z-18472714.png"
+  },
+  {
+    "gameid": "699fff17c56ac4af07db510e86cdf6bb",
+    "gamename": "Stock Market",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/stock-market-e3560b5c.png"
+  },
+  {
+    "gameid": "699fff17c56ac4af07db510e86cdf6bb-error",
+    "gamename": "Stock Market",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/stock-market-6a5073a0.png"
+  },
+  {
+    "gameid": "f7b98e899461bdd49f92afc36b4c0db5",
+    "gamename": "Super Andar Bahar",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/super-andar-bahar-65799e48.jpg"
+  },
+  {
+    "gameid": "e39fe089ced4676b1d61bd4c4442a9f2",
+    "gamename": "Super Color Game",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/super-color-game-bc1eead8.png"
+  },
+  {
+    "gameid": "e3951a5bf624e822a22cba1cbe619df5",
+    "gamename": "Super Sic Bo",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/super-sic-bo-c3bb7217.png"
+  },
+  {
+    "gameid": "0617a82334f4f1766cf282ce906e1df7",
+    "gamename": "Teen Patti",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/teen-patti-64ff72e6.png"
+  },
+  {
+    "gameid": "0d743830cca897a7c4c9187bc7f9b812",
+    "gamename": "Texas Hold'em Bonus Poker",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/texas-hold-em-bonus-poker-afca7f97.jpg"
+  },
+  {
+    "gameid": "b7c3b022f1c2b768524523d855a58d89",
+    "gamename": "Triple Card Poker",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/triple-card-poker-f6aa9b04.jpg"
+  },
+  {
+    "gameid": "e8f217c3d554285933cb67072c897fac",
+    "gamename": "VIP Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/vip-roulette-ecedc7cf.png"
+  },
+  {
+    "gameid": "bbf570734d54910e75ee4bfc788e00df",
+    "gamename": "XXXtreme Lightning Baccarat",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/xxxtreme-lightning-baccarat-9bf6279c.jpg"
+  },
+  {
+    "gameid": "394fe6a2cde24bc487767236cc6eccd6",
+    "gamename": "XXXtreme Lightning Roulette",
+    "providerName": "Evolution Live Row",
+    "image": "https://providers.gamblly-api.com/assets/providers/EVOLIVEROW/xxxtreme-lightning-roulette-9e99e335.png"
+  }
+]

@@ -1,0 +1,236 @@
+[
+  {
+    "gameid": "2e815f80a5a87b0255c130c00d95a71e",
+    "gamename": "JetX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/jetx.webp"
+  },
+  {
+    "gameid": "b869a83fc241533c5422dad27340a0ea",
+    "gamename": "Balloon",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/balloon.webp"
+  },
+  {
+    "gameid": "0487c9d22cea1278b01503a7d15ba699",
+    "gamename": "FootballX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/footballx.webp"
+  },
+  {
+    "gameid": "e38dd01866d8e669cd032f00b8b2df8a",
+    "gamename": "PlinkoX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/plinkox.webp"
+  },
+  {
+    "gameid": "00c415d15a4cdbbca0e22f0140fb0322",
+    "gamename": "MineIsland",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/mineisland.webp"
+  },
+  {
+    "gameid": "1dde1cc0e2f8c1c7af6f2cef698e00a6",
+    "gamename": "RollX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/rollx.webp"
+  },
+  {
+    "gameid": "d2907544c24c61c35313dd1a7498a6eb",
+    "gamename": "SmashX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/smashx.webp"
+  },
+  {
+    "gameid": "6bf7173090f852c2eb4757d73cfd69f6",
+    "gamename": "HunterX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/hunterx.webp"
+  },
+  {
+    "gameid": "6030d4bfb5fa164ab1b5e10aa4a27435",
+    "gamename": "HelicopterX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/helicopterx.webp"
+  },
+  {
+    "gameid": "188e43c0545c6690800d12de5018b17f",
+    "gamename": "CricketX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/cricketx.webp"
+  },
+  {
+    "gameid": "0bf2d88c9f5811d9c514bd9a6756d7f8",
+    "gamename": "JetX3",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/jetx3.webp"
+  },
+  {
+    "gameid": "0e42e68470278b87181c16850924d438",
+    "gamename": "DoubleX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/doublex.webp"
+  },
+  {
+    "gameid": "5fa811450c40fda4caba581f6f10f2aa",
+    "gamename": "TowerX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/towerx.webp"
+  },
+  {
+    "gameid": "d901f78f875b497e577785c7e20ff99f",
+    "gamename": "Crash DuelX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/crash-duelx.webp"
+  },
+  {
+    "gameid": "cab7aee3bac4f737e21064af9b15eb3e",
+    "gamename": "4 Bonuses Bonanza",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/4-bonuses-bonanza.webp"
+  },
+  {
+    "gameid": "a3168ce2162dd8abce11220bd9f21f84",
+    "gamename": "RodeoX",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/rodeox.webp"
+  },
+  {
+    "gameid": "d14c7bee006243f2c871f948567cd6de",
+    "gamename": "MultiHot 5",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/multihot-5.webp"
+  },
+  {
+    "gameid": "d1b3c0d5a9244f091326d5b67326be29",
+    "gamename": "Multi Hot Ways",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/multi-hot-ways.webp"
+  },
+  {
+    "gameid": "80d9739d8f8c28efed374f92004aeff9",
+    "gamename": "Burning Ice",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/burning-ice.webp"
+  },
+  {
+    "gameid": "ec484f392ab823b1eda3ae165855aa62",
+    "gamename": "Burning Ice 10",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/burning-ice-10.webp"
+  },
+  {
+    "gameid": "a45fe51120ece7b82df68db517be93ef",
+    "gamename": "Burning Ice 40",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/burning-ice-40.webp"
+  },
+  {
+    "gameid": "0c6784230fa2e9a1025b94e5f922db20",
+    "gamename": "Wild & Gods",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/wild-gods.webp"
+  },
+  {
+    "gameid": "70aa2b994c771293caf6e293ad558184",
+    "gamename": "Book of Futuria",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/book-of-futuria.webp"
+  },
+  {
+    "gameid": "15aaf33fa883350f2e30e6e154da983d",
+    "gamename": "WildMultiStar",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/wildmultistar.webp"
+  },
+  {
+    "gameid": "97975f474952c6f82eca72c0dec22479",
+    "gamename": "HotSamba",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/hotsamba.webp"
+  },
+  {
+    "gameid": "3a849575e6d3df594ba83d3083260a6e",
+    "gamename": "Vampires",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/vampires.webp"
+  },
+  {
+    "gameid": "01339844968800b82b913fdbe84d57ab",
+    "gamename": "Genie's Bonanza",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/genie-s-bonanza.webp"
+  },
+  {
+    "gameid": "64baba1e8dac6b12acccb88bb945d91a",
+    "gamename": "Foxy Hot 20",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/foxy-hot-20.webp"
+  },
+  {
+    "gameid": "556c49ac0e6031cd0387bd3d8dae9e5e",
+    "gamename": "Samurai",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/samurai.webp"
+  },
+  {
+    "gameid": "b093f4f7518a4929e21df64c718edb32",
+    "gamename": "Safari Simba",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/safari-simba.webp"
+  },
+  {
+    "gameid": "8a35c9e64d05c2556035c4a04fa9cc51",
+    "gamename": "Sugar Fiesta",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/sugar-fiesta.webp"
+  },
+  {
+    "gameid": "19e72f5d7562f1129621394f6d765da7",
+    "gamename": "Dracula's Fortune",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/dracula-s-fortune.webp"
+  },
+  {
+    "gameid": "b04b18102cbf1e72c80a940b45adf0a9",
+    "gamename": "Book Of Bonanza",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/book-of-bonanza.webp"
+  },
+  {
+    "gameid": "a938075077a7d997ea53ee0570ab4223",
+    "gamename": "Mad Slot",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/mad-slot.webp"
+  },
+  {
+    "gameid": "5c4b343e08b7d06d26abce35e7ae6cfe",
+    "gamename": "Virtual Roulette",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/virtual-roulette.webp"
+  },
+  {
+    "gameid": "eff39248befc98e40125b171db58d2e0",
+    "gamename": "Virtual Burning Roulette",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/virtual-burning-roulette.webp"
+  },
+  {
+    "gameid": "bd7fd3e58b5f7b8aab5145275d79a2ef",
+    "gamename": "Virtual Classic Roulette",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/virtual-classic-roulette.webp"
+  },
+  {
+    "gameid": "d2ff19da63c7fa51b9ef41fda3ef32da",
+    "gamename": "Classic Keno",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/classic-keno.webp"
+  },
+  {
+    "gameid": "c3aea2ca240d56ae656fb4cdf008763c",
+    "gamename": "Russian Keno",
+    "providerName": "Smartsoft",
+    "image": "https://providers.gamblly-api.com/assets/providers/smartsoft/russian-keno.webp"
+  }
+]

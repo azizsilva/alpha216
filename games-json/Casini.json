@@ -1,0 +1,56 @@
+[
+  {
+    "gameid": "fc5ed3a54a0df505f7c74b7331e06a34",
+    "gamename": "RockyRush",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/rockyrush.webp"
+  },
+  {
+    "gameid": "c9adadd5f06a3123380a15d72fcae78f",
+    "gamename": "DressHerUp",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/dressherup.webp"
+  },
+  {
+    "gameid": "8ec54d5391e32f59ac771ab6216e3101",
+    "gamename": "CryptoBattle",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/cryptobattle.webp"
+  },
+  {
+    "gameid": "93d0d0839b9ce85c7750067dc70d7e86",
+    "gamename": "BelladonnasTreasure",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/belladonnastreasure.webp"
+  },
+  {
+    "gameid": "1716c792ab895d6d8e6ec6ba3410683d",
+    "gamename": "DivineConquest",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/divineconquest.webp"
+  },
+  {
+    "gameid": "905e89de165f18ca5dec0e8b0f876df7",
+    "gamename": "ClumsyInvaders",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/clumsyinvaders.webp"
+  },
+  {
+    "gameid": "0acce4efb5b147d7d48adb364dbb5715",
+    "gamename": "Cyberashi",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/cyberashi.webp"
+  },
+  {
+    "gameid": "bc2464c539ec75bfe82452fea402e420",
+    "gamename": "TheGrandKiosk",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/thegrandkiosk.webp"
+  },
+  {
+    "gameid": "fa0309791caf9a8d90400a0a28478970",
+    "gamename": "Squashy Adventures",
+    "providerName": "Casini",
+    "image": "https://providers.gamblly-api.com/assets/providers/casini/squashy-adventures.webp"
+  }
+]

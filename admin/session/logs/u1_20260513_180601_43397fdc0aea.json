@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-13T18:06:01+00:00",
+    "user_id": 1,
+    "username": "admin",
+    "role": "admin",
+    "ip": "2c0f:f698:c136:b24b:14cc:3235:dd54:b438",
+    "forwarded_for": "2c0f:f698:c136:b24b:14cc:3235:dd54:b438",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4.2 Mobile/23E261 Safari/604.1",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "os": "iOS",
+    "accept_language": "en-GB,en-US;q=0.9,en;q=0.8",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fbanking%2F",
+    "session_id_hash": "f64a8e6314505bbe9394b3ce478a527c88505aa6742a5b0019368d113a7bba5c"
+}

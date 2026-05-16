@@ -1,0 +1,368 @@
+[
+  {
+    "gameid": "f00a3ac180a30efd7670147417f3d4ec",
+    "gamename": "Candy Super Tumble",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/candy-super-tumble.png"
+  },
+  {
+    "gameid": "fe5bb309f6849942cf788d72d9b80bc5",
+    "gamename": "Jungle Quest",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/jungle-quest.png"
+  },
+  {
+    "gameid": "94a1353177b3466a67f70021893aca67",
+    "gamename": "Blade of Fortune",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/blade-of-fortune.png"
+  },
+  {
+    "gameid": "6ab9b470b5049025104d710fcc8f4091",
+    "gamename": "Wild Mafia",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/wild-mafia.png"
+  },
+  {
+    "gameid": "70ff4744e87b0124c1840e09446f9292",
+    "gamename": "Alien Smash",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/alien-smash.png"
+  },
+  {
+    "gameid": "02a6445f671a56c435d0a98cfce5f479",
+    "gamename": "Snake Treasure",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/snake-treasure.png"
+  },
+  {
+    "gameid": "dfcca5c7420280aece1ee28d94c560f8",
+    "gamename": "Guardian of the Museum",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/guardian-of-the-museum.png"
+  },
+  {
+    "gameid": "bc71e694e3e21cf662c40a95bcb88252",
+    "gamename": "Beasts of Luck",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/beasts-of-luck.png"
+  },
+  {
+    "gameid": "5603ec5b778820ddb69673626402dda3",
+    "gamename": "Pumpkins Go Lucky",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/pumpkins-go-lucky.png"
+  },
+  {
+    "gameid": "95a295cb2fed7dc72bc9552f00c1162d",
+    "gamename": "Apollo Ray of Luck",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/apollo-ray-of-luck.png"
+  },
+  {
+    "gameid": "287a6d42bff507c831c3ee53c6a519d0",
+    "gamename": "Nezha",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/nezha.png"
+  },
+  {
+    "gameid": "85802d51c1da2e7deb2b821642b8c06b",
+    "gamename": "Pai Gow Ways",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/pai-gow-ways.png"
+  },
+  {
+    "gameid": "64588f61b265819f4f37e0ce3d25ef60",
+    "gamename": "Mahjong Princess",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/mahjong-princess.png"
+  },
+  {
+    "gameid": "4295951dd153df37ceed88a2c52a7d63",
+    "gamename": "Caribbean Riches",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/caribbean-riches.png"
+  },
+  {
+    "gameid": "41eb48def69db51d75c2ba453912655d",
+    "gamename": "Farm Of Fortune",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/farm-of-fortune.png"
+  },
+  {
+    "gameid": "013badb5ea523b60f102753ee0f1f150",
+    "gamename": "Adventure To The West",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/adventure-to-the-west.png"
+  },
+  {
+    "gameid": "69ecf345b0ba235319ac9f224ba76236",
+    "gamename": "Money Dragon",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/money-dragon.png"
+  },
+  {
+    "gameid": "7c6007d9ba2db80a04a1e0a7eb46d8e8",
+    "gamename": "Ranger Showdown",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/ranger-showdown.png"
+  },
+  {
+    "gameid": "3e64439df128cc1a98dbad4a02c0935f",
+    "gamename": "Yeti Boom",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/yeti-boom.png"
+  },
+  {
+    "gameid": "5a7ba344416b8911881457b5a71da0ce",
+    "gamename": "Money Empire",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/money-empire.png"
+  },
+  {
+    "gameid": "a9ba5cde9103cf71fffbd65f2629f9cd",
+    "gamename": "Leprechaun Bonanza",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/leprechaun-bonanza.png"
+  },
+  {
+    "gameid": "6901234b0b8090c609b2f9a68281d34b",
+    "gamename": "Sweet Frenzy",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/sweet-frenzy.png"
+  },
+  {
+    "gameid": "cb5daea3e2a2a688e30b01659eea6ed2",
+    "gamename": "City of Jewels",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/city-of-jewels.png"
+  },
+  {
+    "gameid": "cb9aa4e8c9791bacc3605241cd65e4ff",
+    "gamename": "Mushroom Bandit",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/mushroom-bandit.png"
+  },
+  {
+    "gameid": "3195c50b8dac84360463008a51f4b3d5",
+    "gamename": "Mighty Sevens",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/mighty-sevens.png"
+  },
+  {
+    "gameid": "81396e48d80069867d916e51bdd4bb26",
+    "gamename": "Neko Riches",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/neko-riches.png"
+  },
+  {
+    "gameid": "0dc1fac12a21b8fd04578dc6f82e0878",
+    "gamename": "The Great Safari",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/the-great-safari.png"
+  },
+  {
+    "gameid": "283c494f7478794cd3976a57e01902e4",
+    "gamename": "Tiki Rush",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/tiki-rush.png"
+  },
+  {
+    "gameid": "5ee3d06323becb3ef562b6e43f92a96e",
+    "gamename": "Legend of Nian",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/legend-of-nian.png"
+  },
+  {
+    "gameid": "7ab4612d1866b90bd04b63a097e6b0f8",
+    "gamename": "The Nutcrackers",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/the-nutcrackers.png"
+  },
+  {
+    "gameid": "c6f0dc239b25a83e8d83404eff91b3a5",
+    "gamename": "Mining Bonanza",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/mining-bonanza.png"
+  },
+  {
+    "gameid": "dd1844c1569cbbee5a3556083f837d9b",
+    "gamename": "Heavenly Fortunes 2",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/heavenly-fortunes-2.png"
+  },
+  {
+    "gameid": "e60d78af143917d49ffedd40740cf415",
+    "gamename": "Ganesha Luck",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/ganesha-luck.png"
+  },
+  {
+    "gameid": "b3d6c98f8ce7a3f77eaa951642313258",
+    "gamename": "Heavenly Fortunes",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/heavenly-fortunes.png"
+  },
+  {
+    "gameid": "90acee06b3727368dd4ca3b85dae0d60",
+    "gamename": "Safari Blitz",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/safari-blitz.png"
+  },
+  {
+    "gameid": "fb9f0111cad5a9743c6b9ea65d9d6e33",
+    "gamename": "Goddess Of Egypt",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/goddess-of-egypt.png"
+  },
+  {
+    "gameid": "d903a8b607b6dba8839e5ef290d8830b",
+    "gamename": "The Maya Myth",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/the-maya-myth.png"
+  },
+  {
+    "gameid": "afe76d7daf71c22377722ea3e68292a2",
+    "gamename": "Spin and Win",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/spin-and-win.png"
+  },
+  {
+    "gameid": "bc04341da269a2a80113c8dad3e49972",
+    "gamename": "Fortune Lions",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/fortune-lions.png"
+  },
+  {
+    "gameid": "444c9fbcb648995eb79e99a552bbe56d",
+    "gamename": "Honey Trap",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/honey-trap.png"
+  },
+  {
+    "gameid": "43944d91d2c047fd9ee5968f7e2a723e",
+    "gamename": "Oceanic Melodies",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/oceanic-melodies.png"
+  },
+  {
+    "gameid": "7f2f5e93fdafa0003f18a17eaaff0a82",
+    "gamename": "Loki",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/loki.png"
+  },
+  {
+    "gameid": "addc875986cd01bca49aa4cb72caea9c",
+    "gamename": "Fruits Mania",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/fruits-mania.png"
+  },
+  {
+    "gameid": "f1606550cc2110be65e134be6693495f",
+    "gamename": "Ocean Carnival",
+    "providerName": "Fastspin",
+    "image": ""
+  },
+  {
+    "gameid": "5fa951b60fd3387d83b2029763193cc2",
+    "gamename": "Fishing Treasure",
+    "providerName": "Fastspin",
+    "image": ""
+  },
+  {
+    "gameid": "d63e8e598a73919eaa2c5c1491219408",
+    "gamename": "Fiery Lava",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/fiery-lava.png"
+  },
+  {
+    "gameid": "2658c844bf9d2d43ebd71b810b44d02f",
+    "gamename": "God Of Wealth",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/god-of-wealth.png"
+  },
+  {
+    "gameid": "6597ca57c907b0a8b6af4d3f7fad4287",
+    "gamename": "Legend Of Eagle",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/legend-of-eagle.png"
+  },
+  {
+    "gameid": "7480e9f0d5f9491fc57c5416038ccaf4",
+    "gamename": "Neon Fantasy",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/neon-fantasy.png"
+  },
+  {
+    "gameid": "ef30327a01710ded2e34aaf255f3825f",
+    "gamename": "Triple Happiness",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/triple-happiness.png"
+  },
+  {
+    "gameid": "5a49955d400478e90c5d71b58a3257ac",
+    "gamename": "Lucky Fortune",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/lucky-fortune.png"
+  },
+  {
+    "gameid": "75215c8e062e661a81c2fd362a588673",
+    "gamename": "Space Conquest",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/space-conquest.png"
+  },
+  {
+    "gameid": "de8088af0ae4a09599f6710ff89bf0b1",
+    "gamename": "Royale House",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/royale-house.png"
+  },
+  {
+    "gameid": "6b704ad69f470a31db78fe73c5c43df0",
+    "gamename": "Sexy Vegas",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/sexy-vegas.png"
+  },
+  {
+    "gameid": "ddd5122d58891fd7cd1e3140d5772c95",
+    "gamename": "Roma",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/roma.png"
+  },
+  {
+    "gameid": "8ab1410f2a57b3ca3a4080f28e9e18c4",
+    "gamename": "Gold Rush Cowboys",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/gold-rush-cowboys.png"
+  },
+  {
+    "gameid": "f86ce480f13b1aa0cdbf8e1ed20150c5",
+    "gamename": "Wild Wet Win",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/wild-wet-win.png"
+  },
+  {
+    "gameid": "e232d99e752305098c846fc0bb82984b",
+    "gamename": "Royal Katt",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/royal-katt.png"
+  },
+  {
+    "gameid": "650a541ce544f0cb65f948c1e2309ca5",
+    "gamename": "Rich Cai Shen",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/rich-cai-shen.png"
+  },
+  {
+    "gameid": "f7b16f5624b430ab69984da4c88c65a4",
+    "gamename": "Muay Thai Fighter",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/muay-thai-fighter.png"
+  },
+  {
+    "gameid": "3abb65a0bb24d01d03cb04822db7de5e",
+    "gamename": "Poker Ways",
+    "providerName": "Fastspin",
+    "image": "https://providers.gamblly-api.com/assets/providers/fastspin/poker-ways.png"
+  }
+]

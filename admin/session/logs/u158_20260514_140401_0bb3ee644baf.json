@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-14T14:04:01+00:00",
+    "user_id": 158,
+    "username": "cafeparis",
+    "role": "agent",
+    "ip": "41.227.59.171",
+    "forwarded_for": "41.227.59.171",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "accept_language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,ar;q=0.6",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "e398103e91835ea20064006e785421f99259698efc94e7152b00d1429b28ff39"
+}

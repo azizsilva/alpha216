@@ -1,0 +1,20 @@
+[
+  {
+    "gameid": "475a85119e0133e7b790be265fa9358a",
+    "gamename": "wcc",
+    "providerName": "Aog",
+    "image": "https://providers.gamblly-api.com/assets/providers/aog/wcc.jpg"
+  },
+  {
+    "gameid": "304947ef77b76b16f2064932d72c78ee",
+    "gamename": "wgc",
+    "providerName": "Aog",
+    "image": "https://providers.gamblly-api.com/assets/providers/aog/wgc.jpg"
+  },
+  {
+    "gameid": "4bcadf180372c12c40d0efe0517b5dc9",
+    "gamename": "wgb",
+    "providerName": "Aog",
+    "image": ""
+  }
+]

@@ -1,0 +1,740 @@
+[
+  {
+    "gameid": "0b8983224246bd92a07b2401adeb3888",
+    "gamename": "Amigo Hot 20",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-hot-20.png"
+  },
+  {
+    "gameid": "262ad2859b7f5a884a0e4fdd047c9d0f",
+    "gamename": "Slot Amigo Hot 40",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-hot-40.png"
+  },
+  {
+    "gameid": "75d342c8b3584eb5adb47d83637766b3",
+    "gamename": "Slot Amigo Hot 100",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-hot-100.png"
+  },
+  {
+    "gameid": "c66dc66fc3b9c0647ba6d947d1025f70",
+    "gamename": "Slot Amigo Fruits 5",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-fruits-5.webp"
+  },
+  {
+    "gameid": "cfdd37676bac60c95987c209c25d0273",
+    "gamename": "Slot Regal Fruits 5",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-fruits-5.png"
+  },
+  {
+    "gameid": "0d3e5218285621bf38df4f7ce12b4e1f",
+    "gamename": "Slot Regal Fruits 20",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-fruits-20.png"
+  },
+  {
+    "gameid": "384f1adef7a73ab5c108a7069a6450eb",
+    "gamename": "Slot Regal Fruits 40",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-fruits-40.png"
+  },
+  {
+    "gameid": "9cc7ffd87bba3db2a5984c48ae2ad62d",
+    "gamename": "Slot Regal Fruits 100",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-fruits-100.png"
+  },
+  {
+    "gameid": "127d7dc18804df32d2c63b578092e69d",
+    "gamename": "Slot Blazing Crown",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/blazing-crown.png"
+  },
+  {
+    "gameid": "02fa44e71a4ad8e4b12e1950078164cb",
+    "gamename": "Slot Barbarian Stash",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/barbarian-stash.png"
+  },
+  {
+    "gameid": "4f2b716ee11fc0d2d25e203bc209af4f",
+    "gamename": "Slot Book of Zeus",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/book-of-zeus.png"
+  },
+  {
+    "gameid": "1a33974ddbe512ff2675e6a6d66ec43f",
+    "gamename": "Slot Amigo Gold Classic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-gold-classic.png"
+  },
+  {
+    "gameid": "c8076f9f7263590349789f62cb70717d",
+    "gamename": "Slot Amigo Silver Classic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-silver-classic.png"
+  },
+  {
+    "gameid": "f0d464876cc29aa1de6aa8ca91b54205",
+    "gamename": "Slot Amigo Bronze Classic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-bronze-classic.png"
+  },
+  {
+    "gameid": "2cfe49555385292ab4369ad591d4d791",
+    "gamename": "Slot Amigo Double Classic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-double-classic.png"
+  },
+  {
+    "gameid": "5687e004d2e2ff306e81e1c6c2106646",
+    "gamename": "Slot Wild Coyote",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/wild-coyote.png"
+  },
+  {
+    "gameid": "a60cfa8f93a1b7a634e6acace9da3cfb",
+    "gamename": "Slot Amigo Lucky Fruits",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-lucky-fruits.png"
+  },
+  {
+    "gameid": "2d89cdfd420bc0d2e38a36908d95d206",
+    "gamename": "Slot MiamiX",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/miamix.png"
+  },
+  {
+    "gameid": "961e4b0da5b9d4fdc095e5427a6a8f32",
+    "gamename": "Slot Rainbow Lands",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/rainbow-lands.png"
+  },
+  {
+    "gameid": "5060c9e717b1cd7e7e08fffa24db16c1",
+    "gamename": "Slot Mega Crown",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/mega-crown.png"
+  },
+  {
+    "gameid": "f9e1076a0d68d5c5a8d761380f6512f8",
+    "gamename": "Slot American Spirit",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/american-spirit.png"
+  },
+  {
+    "gameid": "6ec8892beb13cad0b0df19bbc23dcf19",
+    "gamename": "Slot Viking's Quest",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/viking-s-quest.png"
+  },
+  {
+    "gameid": "bc12dbc01aa1d3fb22b15d035d5642dd",
+    "gamename": "Slot Amigo Wlld Luck",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-wlld-luck.png"
+  },
+  {
+    "gameid": "5ac2ec9c4af4f8ac83d06dd24145867e",
+    "gamename": "Slot Vasco da Gama",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/vasco-da-gama.png"
+  },
+  {
+    "gameid": "4049c576b1acecd52c75d7b9f079ffb5",
+    "gamename": "Slot Thai Charm",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/thai-charm.png"
+  },
+  {
+    "gameid": "a8fbf4c420c08e90a90dd5f47a8ea5f7",
+    "gamename": "Slot Amigo Mighty Starts",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-mighty-starts.png"
+  },
+  {
+    "gameid": "442041d1eef19547106ac39a285a2f35",
+    "gamename": "Slot Arena",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/arena.png"
+  },
+  {
+    "gameid": "9d010db13b40725c59a6881257c66e69",
+    "gamename": "Slot Wanted10",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/wanted10.png"
+  },
+  {
+    "gameid": "781e3c6dca7ae9d2335d376a2cdd986a",
+    "gamename": "Slot Fiesta de los Muertos",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fiesta-de-los-muertos.png"
+  },
+  {
+    "gameid": "56606681feb78d62af2f0e838a0f5a1b",
+    "gamename": "Slot Amigo Hot Classic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-hot-classic.png"
+  },
+  {
+    "gameid": "99d3b66b6398e6bb52effb03fc939bff",
+    "gamename": "Slot Amigo Monkey",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-monkey.png"
+  },
+  {
+    "gameid": "b033ef8fed38d7a12f21e49a1ef8dd67",
+    "gamename": "Slot Book of Amigo",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/book-of-amigo.png"
+  },
+  {
+    "gameid": "b479abb5e5c0281d164be9db447da8c3",
+    "gamename": "Slot Book of Jurassic",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/book-of-jurassic.webp"
+  },
+  {
+    "gameid": "f382cabaecb81b3a555802f698f16cf7",
+    "gamename": "Slot Amigo Gift Store",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-gift-store.png"
+  },
+  {
+    "gameid": "0a501ee48e3951c60331e995255ecb45",
+    "gamename": "Slot Carnevale di Venezia",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/carnevale-di-venezia.png"
+  },
+  {
+    "gameid": "b2d43a532671e0b403c2a97215da686d",
+    "gamename": "Slot Regal Crown 25",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-crown-25.png"
+  },
+  {
+    "gameid": "b0c6839a97761cb2b1fc096f51b7fd0d",
+    "gamename": "Slot Hearts Go Wild",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/hearts-go-wild.png"
+  },
+  {
+    "gameid": "4154056984518289b412f32c12778318",
+    "gamename": "Slot Eagle Wilds",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/eagle-wilds.png"
+  },
+  {
+    "gameid": "9701a575f008afbc13b334e3ba472032",
+    "gamename": "Slot Amigo Lucky Fruits: Pin Win",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-lucky-fruits-pin-win.png"
+  },
+  {
+    "gameid": "60a64d91a5f84c3e5a2345c0acd806e1",
+    "gamename": "Slot Elephant Splash",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/elephant-splash.png"
+  },
+  {
+    "gameid": "6e3a2d75b1237758f59420c74c59fa30",
+    "gamename": "Slot Rabbit Bonanza",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/rabbit-bonanza.png"
+  },
+  {
+    "gameid": "243313252352f78224e2b79055e5ae76",
+    "gamename": "Slot Amigo Multifruits",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-multifruits.png"
+  },
+  {
+    "gameid": "6cd2b84b53d852342c37ebeea8cb03c5",
+    "gamename": "Slot Epic Coins",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/epic-coins.png"
+  },
+  {
+    "gameid": "173e3cf3c1412b52bcbc4bee90012224",
+    "gamename": "Slot Gold of Mermaid",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/gold-of-mermaid.png"
+  },
+  {
+    "gameid": "cec241b493188a5e0f697fee822c4684",
+    "gamename": "Slot Jokers Joy",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/jokers-joy.png"
+  },
+  {
+    "gameid": "cdbd5a083b51d33aab79f5c23794a5fc",
+    "gamename": "Slot Sunshine fruits",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/sunshine-fruits.png"
+  },
+  {
+    "gameid": "6fcf7fcb934f719a2acd77e6d3a0991c",
+    "gamename": "Slot Nostradamus the Prophet",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/nostradamus-the-prophet.png"
+  },
+  {
+    "gameid": "984b3850957d9308950e979b75127264",
+    "gamename": "Slot 9 Circles of Hell",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/9-circles-of-hell.png"
+  },
+  {
+    "gameid": "eb9707e177d752619a5f3da47157f3aa",
+    "gamename": "Slot Regal Crown 50",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-crown-50.webp"
+  },
+  {
+    "gameid": "fc6f84c49079da8c35760e188f6e7e09",
+    "gamename": "Slot Burning Phoenix",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/burning-phoenix.png"
+  },
+  {
+    "gameid": "b35f113f77429014c130ffd03c800915",
+    "gamename": "Slot Wildfire Joker",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/wildfire-joker.png"
+  },
+  {
+    "gameid": "667af04d89e374ed0fcfd1aee1a1d80a",
+    "gamename": "Slot Punky Monkey",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/punky-monkey.png"
+  },
+  {
+    "gameid": "83477dbd62b73dafe296d702cd3eaeca",
+    "gamename": "Slot Book of Sorcery",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/book-of-sorcery.png"
+  },
+  {
+    "gameid": "522b6e2821ee9e72dd7fef52e48f7c25",
+    "gamename": "Slot Miss Neko",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/miss-neko.png"
+  },
+  {
+    "gameid": "d3d3ac2d52bba0090ea8a5ebbf10b947",
+    "gamename": "Slot Joker's Twist",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/joker-s-twist.png"
+  },
+  {
+    "gameid": "c9feb74b4a1cc871139c5dcb00fbf1fc",
+    "gamename": "Slot Crystal Hunters",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/crystal-hunters.png"
+  },
+  {
+    "gameid": "04ef6805ca7ae772974bfb2807874b82",
+    "gamename": "Slot Jaguar Treasures",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/jaguar-treasures.png"
+  },
+  {
+    "gameid": "7122eca2df54032f9b2aba5093b04a18",
+    "gamename": "Slot Frozen Crown",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/frozen-crown.png"
+  },
+  {
+    "gameid": "cfa128428f72b5ed3d604f6fd525aa24",
+    "gamename": "Slot Luxury Fruits",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/luxury-fruits.png"
+  },
+  {
+    "gameid": "dac77eea5137d446408eb8a1472e2883",
+    "gamename": "Slot Destiny Dragon",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/destiny-dragon.webp"
+  },
+  {
+    "gameid": "2bb0d768f59ae19e9088aabf89d7ca59",
+    "gamename": "Slot Regal Crown 100",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-crown-100.png"
+  },
+  {
+    "gameid": "176d79daf879e2b3ee9e7831c1ac11b8",
+    "gamename": "Slot Most Wanted",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/most-wanted.webp"
+  },
+  {
+    "gameid": "46de4dee7758aebe36a7afddab4fa6c8",
+    "gamename": "Slot Beat Coin",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/beat-coin.webp"
+  },
+  {
+    "gameid": "f9f91732a0d63f72a44eda1aeaf7046f",
+    "gamename": "Slot Mystery lady",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/mystery-lady.png"
+  },
+  {
+    "gameid": "550f8e61792dd93716bc0708a3b6ba96",
+    "gamename": "Slot Golden Cloverfield",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/golden-cloverfield.png"
+  },
+  {
+    "gameid": "1ad93643c97b8b79ea128af6f37b1641",
+    "gamename": "Slot Ali Baba's Bounty",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/ali-baba-s-bounty.png"
+  },
+  {
+    "gameid": "95946f3e962d8c104aecd8fef0b9552c",
+    "gamename": "Slot Golden Toro",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/golden-toro.webp"
+  },
+  {
+    "gameid": "9fd2a90ea9f4a44c2c0c25e50b149dcd",
+    "gamename": "Slot Skull Coins",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/skull-coins.webp"
+  },
+  {
+    "gameid": "3d682aa93be152794de6ba2d5cb0c75e",
+    "gamename": "Slot Sun Crown",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/sun-crown.webp"
+  },
+  {
+    "gameid": "95eabdd5e99f9c4185702670221b32f5",
+    "gamename": "Slot Lion Kingdom",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/lion-kingdom.webp"
+  },
+  {
+    "gameid": "d7f31bf8b22fa6096859a8a4cb564512",
+    "gamename": "Slot Animal Housing",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/animal-housing.webp"
+  },
+  {
+    "gameid": "35a2498861e12a2129ab436a9e03a57d",
+    "gamename": "Slot Easy Cash",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/easy-cash.webp"
+  },
+  {
+    "gameid": "794818617a07aedb3987567e8decb6e4",
+    "gamename": "Slot Olympus Blessing",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/olympus-blessing.webp"
+  },
+  {
+    "gameid": "197cad171e2672cd6eaccc02ac6e7528",
+    "gamename": "Slot Super Chili",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/super-chili.webp"
+  },
+  {
+    "gameid": "1f6b3a56c6eb08dd739577ff2cf800b1",
+    "gamename": "Slot Fruit Eruption",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fruit-eruption.webp"
+  },
+  {
+    "gameid": "eca7698042197c2f09f0cf0c88e0b478",
+    "gamename": "Slot Candy Time",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/candy-time.webp"
+  },
+  {
+    "gameid": "32ac8978d21391426eb58f0f8f35abd9",
+    "gamename": "Slot Alexander's Fortune",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/alexander-s-fortune.webp"
+  },
+  {
+    "gameid": "82907e3a3567f6c52c4f7d1872799daf",
+    "gamename": "Slot Fruit Invaders",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fruit-invaders.webp"
+  },
+  {
+    "gameid": "5934a856a17f3f872580d8e8dbf5340e",
+    "gamename": "Slot Voodoo Charms",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/voodoo-charms.webp"
+  },
+  {
+    "gameid": "4b5c832dc2ff2470aaf6087827cd7776",
+    "gamename": "Slot Penguin Holidays",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/penguin-holidays.webp"
+  },
+  {
+    "gameid": "8744a5dd3625c5b329095b1f78fe34ca",
+    "gamename": "Slot Fruits & Coins",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fruits-coins.webp"
+  },
+  {
+    "gameid": "7a6abc53766178ea042a588dcbdbd7de",
+    "gamename": "Slot Joker Empire",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/joker-empire.webp"
+  },
+  {
+    "gameid": "50246aa0a0a538561772cae3d60d9363",
+    "gamename": "Slot Kingdom Crown",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/kingdom-crown.webp"
+  },
+  {
+    "gameid": "0c5371ad31145651a83a5f28a6b904a2",
+    "gamename": "Slot El Dorado Fruits",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/el-dorado-fruits.webp"
+  },
+  {
+    "gameid": "4b882138615b7f81ac293cc1ce744dba",
+    "gamename": "Slot Amigo Monkey 2",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/amigo-monkey-2.webp"
+  },
+  {
+    "gameid": "23f4367991536a2ecc1a4d205737ff49",
+    "gamename": "Slot Vampire Joker",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/vampire-joker.webp"
+  },
+  {
+    "gameid": "99c4d3126fb4dd3f51fddf46893e7e17",
+    "gamename": "Slot Hades Power",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/hades-power.webp"
+  },
+  {
+    "gameid": "f2ff95db9e3e2ef71ed40525537502f3",
+    "gamename": "Slot Piggy Coins",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/piggy-coins.webp"
+  },
+  {
+    "gameid": "ada4f4e4da43db2c93fa6b12d2ae6047",
+    "gamename": "Slot Ocean Journey",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/ocean-journey.webp"
+  },
+  {
+    "gameid": "8ce4b1a4356f2ba303686158984163a1",
+    "gamename": "Slot Blazing Crown Deluxe",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/blazing-crown-deluxe.webp"
+  },
+  {
+    "gameid": "c5e2237c681993367d0260b66b4dd00b",
+    "gamename": "Slot Xmas Invaders",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/xmas-invaders.webp"
+  },
+  {
+    "gameid": "afed2ebaeaa5e5c5495441623cc2fdf6",
+    "gamename": "Slot Regal Fruits 1000",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/regal-fruits-1000.webp"
+  },
+  {
+    "gameid": "69fb317298c2170a186d75531bf7cdc1",
+    "gamename": "Slot Sizzling Coins",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/sizzling-coins.webp"
+  },
+  {
+    "gameid": "eb118e7c846235d432e201fb4a97c7fa",
+    "gamename": "Slot Thunder and Love",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/thunder-and-love.webp"
+  },
+  {
+    "gameid": "2759d4373dfe8c9c66e3e7a9c6540d60",
+    "gamename": "Slot Galaxy Chase",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/galaxy-chase.webp"
+  },
+  {
+    "gameid": "9781ed5f53c8b5e61dfbfac5c61d3147",
+    "gamename": "Slot Dice Club",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/dice-club.webp"
+  },
+  {
+    "gameid": "f2aa8cf17dc9fa6ce95743dcec7290af",
+    "gamename": "Slot Clover Hell",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/clover-hell.webp"
+  },
+  {
+    "gameid": "ef03e8ed0b3b4de6eaa2a86a28e0f5ba",
+    "gamename": "Slot Lamp of Wishes",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/lamp-of-wishes.webp"
+  },
+  {
+    "gameid": "24ca7e385a5e70d7d26bbfd9bd50c96d",
+    "gamename": "Slot Samurai Cats",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/samurai-cats.webp"
+  },
+  {
+    "gameid": "cb2613697f4a47ef2f5ae6e710194229",
+    "gamename": "Slot Max Fury",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/max-fury.webp"
+  },
+  {
+    "gameid": "d52b5bca962cb9022ac3946592ac46f6",
+    "gamename": "Slot Fortune Bros",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fortune-bros.webp"
+  },
+  {
+    "gameid": "30897f5b3eb47988a41f90bffd2a0bd5",
+    "gamename": "Slot 3 Fortune Souls",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-fortune-souls.webp"
+  },
+  {
+    "gameid": "92ba38ca11458091b60cd9336995719f",
+    "gamename": "Slot Blazing Crown Dice",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/blazing-crown-dice.webp"
+  },
+  {
+    "gameid": "a0b174377577d995d4a901e59db462c4",
+    "gamename": "Slot Coinboy Riches",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/coinboy-riches.webp"
+  },
+  {
+    "gameid": "581572a3f4c3a2bebe1202388e284613",
+    "gamename": "Slot 3 Tombs",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-tombs.webp"
+  },
+  {
+    "gameid": "bea7fdc755200d42a6863a2886d1a232",
+    "gamename": "Slot Fortune Bags",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/fortune-bags.webp"
+  },
+  {
+    "gameid": "b4dfca8fa2a7cd9e398383eea24ec4e2",
+    "gamename": "Slot 3 Spirit Volcanoes",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-spirit-volcanoes.webp"
+  },
+  {
+    "gameid": "97875eed38aa31ef5ed0bd11ac7098cc",
+    "gamename": "Slot Moon Girls",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/moon-girls.webp"
+  },
+  {
+    "gameid": "2e0b57719ce1d11e222d4b5585fa85f1",
+    "gamename": "Slot 5 Fruit Invaders",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/5-fruit-invaders.webp"
+  },
+  {
+    "gameid": "a99e7f2374e11660cde6f963d1b5cd62",
+    "gamename": "Slot Cube Guys",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/cube-guys.webp"
+  },
+  {
+    "gameid": "1eb8e4832dc65a8c00856cae4e2a425f",
+    "gamename": "Slot Dice Invaders",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/dice-invaders.webp"
+  },
+  {
+    "gameid": "ba074d2465230e3df726ec3578f30892",
+    "gamename": "Slot Triple Chili",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/triple-chili.png"
+  },
+  {
+    "gameid": "2abf6d0e4a7504b5be1a4682109af43f",
+    "gamename": "Slot Olympus Rivals",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/olympus-rivals.webp"
+  },
+  {
+    "gameid": "84b5aba0ea80ba1c52b152fd7ff166b8",
+    "gamename": "Slot Diamond Raid",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/diamond-raid.webp"
+  },
+  {
+    "gameid": "c42368382daa8a5cd5b09a6b34a7c86a",
+    "gamename": "Slot 3 Energy Crowns",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-energy-crowns.webp"
+  },
+  {
+    "gameid": "46f02ed72b4afe256c12a6b42ff822a2",
+    "gamename": "Slot Gods of Sand",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/gods-of-sand.webp"
+  },
+  {
+    "gameid": "773a43828f69373494f74dc3786d4817",
+    "gamename": "Slot 3 Totem Animals",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-totem-animals.webp"
+  },
+  {
+    "gameid": "470c05ad3f2802ce1788fd32083037df",
+    "gamename": "Slot 3 Muertos",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-muertos.webp"
+  },
+  {
+    "gameid": "0f044ccbd411d63f5a58fd8800b4ed4d",
+    "gamename": "Slot Crime Town",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/crime-town.webp"
+  },
+  {
+    "gameid": "21cb57619a95ceb8db688a4d8b9e7291",
+    "gamename": "Slot 3 Pharaohs",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-pharaohs.webp"
+  },
+  {
+    "gameid": "63192730ae335d27a7bf590878d3b198",
+    "gamename": "Slot 1st Cricket League",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/1st-cricket-league.webp"
+  },
+  {
+    "gameid": "aa615b85812ee1410dad3140ee30f3bc",
+    "gamename": "Slot Gift Mania",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/gift-mania.webp"
+  },
+  {
+    "gameid": "f249a9009229a682daf8c3add90faec2",
+    "gamename": "Slot 3 Frozen Crowns",
+    "providerName": "Amigo",
+    "image": "https://providers.gamblly-api.com/assets/providers/Amigo/3-frozen-crowns.webp"
+  }
+]

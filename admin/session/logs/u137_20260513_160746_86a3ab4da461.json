@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-13T16:07:46+00:00",
+    "user_id": 137,
+    "username": "Wael",
+    "role": "agent",
+    "ip": "160.157.217.133",
+    "forwarded_for": "160.157.217.133",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-G998B Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/148.0.7778.120 Mobile Safari/537.36[FBAN/EMA;FBLC/fr_FR;FBAV/510.0.0.11.323;FBCX/modulariab;]",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9,ar-TN;q=0.8,ar;q=0.7,en-US;q=0.6,en;q=0.5",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fbanking%2F%3Ffbclid%3DIwY2xjawRxgQtleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA8yNzUyNTQ2OTI1OTgyNzkAAR5m-JiOCRS4iy-gu3-cKAdA6ZiyoadH1Id-1O5GFrLiVVZH2zdHzm9N1WAp6Q_aem_46ifslGMDjUBy4uyyPCVUA",
+    "session_id_hash": "d5d735cb34865f858e45fc11411e41b194e7c48883d78153ca2872508fe8193d"
+}

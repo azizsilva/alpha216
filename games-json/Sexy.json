@@ -1,0 +1,50 @@
+[
+  {
+    "gameid": "a225b3ced269ae6545ce3750bcb15175",
+    "gamename": "Baccarat Classic",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/baccarat-classic.webp"
+  },
+  {
+    "gameid": "e2b258c3076709d5bef791b5031b7bd2",
+    "gamename": "Baccarat",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/baccarat.webp"
+  },
+  {
+    "gameid": "5956fee9c7e1524f0e6310e75a368c81",
+    "gamename": "DragonTiger",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/dragontiger.webp"
+  },
+  {
+    "gameid": "ab22f33340fac5c424ba87c259204002",
+    "gamename": "Roulette",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/roulette.webp"
+  },
+  {
+    "gameid": "2d5b06cf3cc2aa86777523de7df46a78",
+    "gamename": "Thai Hi Lo",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/thai-hi-lo.webp"
+  },
+  {
+    "gameid": "3b504cf69d3b581436eecc82eef54c4c",
+    "gamename": "Thai Fish Prawn Crab",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/thai-fish-prawn-crab.webp"
+  },
+  {
+    "gameid": "828afebe8ddb20b96b670e471262c3d1",
+    "gamename": "Extra Sicbo",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/extra-sicbo.webp"
+  },
+  {
+    "gameid": "a203874299381060b2c91fa169799031",
+    "gamename": "Sedie",
+    "providerName": "Sexy",
+    "image": "https://providers.gamblly-api.com/assets/providers/sexy/sedie.webp"
+  }
+]

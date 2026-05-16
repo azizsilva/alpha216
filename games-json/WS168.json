@@ -1,0 +1,392 @@
+[
+  {
+    "gameid": "ffca0e72767ba6be51a1c0aa3d78c55f",
+    "gamename": "Mines",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "6d5d8256f1f2da3dfb8080f5d578d1f7",
+    "gamename": "Dice",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "cf029006316c0afc83265001499456e4",
+    "gamename": "Limbo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "94fbb2876063a54fb5ec6a2e5970fbcb",
+    "gamename": "Keno",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "95b0f63d3423f9de9f55166f260030f5",
+    "gamename": "Wheel",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ce4674896484d3ae5750dd1478c352b5",
+    "gamename": "Video Poker",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "58d227d74779a53ba5c79b6a4ec6ac56",
+    "gamename": "Hilo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "725a5f502b5568648385d03e10494a44",
+    "gamename": "Plinko",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "e11cb59c7ce63643f6641b562e677539",
+    "gamename": "Crash Meteor",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "48a88f03800072b94dbda61bb8834247",
+    "gamename": "Diamonds",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "335a4861d48ec435c69a029462881e30",
+    "gamename": "Plinko Classic",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "abe37c0e403c22fd324117e07ad284de",
+    "gamename": "Mines Classic",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "0327ef94362cd21a6385d4847869a815",
+    "gamename": "Crash Classic",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "b347ac2a73a97e03f720150a8a146a19",
+    "gamename": "Limbo Classic",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "d1ca34a0be98ad1d8b124cac358a40dc",
+    "gamename": "Hilo Classic",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "852f6833b5eeb7a06cdc0811ffaa6211",
+    "gamename": "Aviator",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "b702c7995bdf42898eae0f9087e6f4dd",
+    "gamename": "Mines Neon",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "79a1cdf40c8d852d524d04657b5fc310",
+    "gamename": "Hilo Neon",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "c994a5ab1e25f701bd625319ba5c7aa8",
+    "gamename": "Multi Hilo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "d4e29b49dee59c8e58de6516a473a35b",
+    "gamename": "Crash Neon",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "30edd05ca9a48acbfab0b9d629d00bf2",
+    "gamename": "Plinko Neon",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ca7afa0bbf9a6a8da125531523c54103",
+    "gamename": "Limbo Neon",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "5b30c85d38382626531fc310305427e9",
+    "gamename": "Mines Gold Rush",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "119d4403e799bd6ff24b75c151d0f236",
+    "gamename": "Hilo Gold Rush",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "2f0c1d65ba69f15976a9037c9d25039a",
+    "gamename": "Limbo Gold Rush",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "0b784755d5a575cc4475b525e233faf2",
+    "gamename": "Crash Gold Rush",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "03468467fff691a3e1519b08f037f0e0",
+    "gamename": "Lucky Drop-Olympus",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "49e1131b6a35e89c6bfad4e0e420b177",
+    "gamename": "Plinko Gold Rush",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ffb8082005b432a681b99ec61ed299f6",
+    "gamename": "Mines Maple",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "521903555f51ee147a6c8c5efc799da1",
+    "gamename": "Lucky Drop-Coco",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ac9395d3430e015e734720959e039134",
+    "gamename": "UpDown",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "f9f2a148f101e25c381c7259ae41d9da",
+    "gamename": "Mines Raider",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "848c8a181806df336eaca3df4ab161a5",
+    "gamename": "Lucky Hilo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "a9c1c5bec41c5cc8d49dd5e2e718b5c0",
+    "gamename": "DragonTower",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "9078081e5997da47d0b7018d1d8b16d2",
+    "gamename": "Lucky Drop-Gong Xi Fa Chai",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "262dccceb9bc3d12a4b6dc3a8cd564fb",
+    "gamename": "Candy Mines",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "b4029fcec3c50e45d3e68851832e355f",
+    "gamename": "Pinoy Mines",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "7407f47edf26062fa66f68dfe53aecb3",
+    "gamename": "Aviator2-Sky Elite",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "2c4dc8fcca8c83c2bc41dbff6d197606",
+    "gamename": "Mines Soccer",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "c97af01e7c6ff9d344832b0dd91b7cf5",
+    "gamename": "Egypt Hilo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "7e15a453faf3c8d87f37b83331442f7c",
+    "gamename": "Lucky Drop-Coco 2",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ab8c86dbc3f6fded2e68937c5335c58a",
+    "gamename": "Mines Cricket",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "3b94266e766c115e2d536ee6309e9b6e",
+    "gamename": "Sky Mission",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "3d9da31400d1d1c782a82fca7291a78e",
+    "gamename": "Caribbean Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "952978f5473e05ccd6be2ca761b443e5",
+    "gamename": "Odin Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "efcfef17f3f2aefbdedf0ee0ed092f77",
+    "gamename": "Cave Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "c852a948526f013c8da4052ed4d9ea04",
+    "gamename": "Steampunk",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "aaadbb18885abcf9b1995c34a98afa3a",
+    "gamename": "Lost Ruins",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "5896a5f4c542990c269dccc50b6b3e5b",
+    "gamename": "Magic Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "49667d62de044eb29cf928b5c3165041",
+    "gamename": "Bonus Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "73c7119792f15bff67ec8c90b9d34d75",
+    "gamename": "Maple Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "e63a6cedb9ad7f7c1b18637de4da2e3d",
+    "gamename": "Arcade Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "ad83961dcc51cf075b996d6efcd47ee4",
+    "gamename": "EggHunt Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "00f18bbae75476df3382718cd20143c6",
+    "gamename": "Steampunk 2",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "5b022f14acbf657f71deac3ca389e7cd",
+    "gamename": "Bingo Bells",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "bb872d43d0760ae96eb57d498df6203d",
+    "gamename": "Golden Bingo",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "32f85035403672bee6542e8335e5aaa9",
+    "gamename": "Gold Rush: Boomers",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "455372b1e515b4a13946b2565c5a5d0e",
+    "gamename": "Forest Tea Party",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "930ba91c9116ee97fd8604f5f9778892",
+    "gamename": "Gold Rush: Wild Dig",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "54cf483aad59683bc94b286dc79b0c26",
+    "gamename": "Golden Clover",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "59b5f16edbeaaa6b8cbbe26999f89c27",
+    "gamename": "Chili Fiesta",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "f12bb4265ad8066e003b93e3982936a5",
+    "gamename": "Chicken Run",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "47c9872ab1462b10bc8e52bc1ca0f180",
+    "gamename": "Golden Horse Riches",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "90ceec91ffd4d7748c84f46cb69c5a5c",
+    "gamename": "Golden Fortunes",
+    "providerName": "WS168",
+    "image": ""
+  },
+  {
+    "gameid": "7813255c532f0115a805739dac984ec8",
+    "gamename": "WS168 Cockfight",
+    "providerName": "WS168",
+    "image": ""
+  }
+]

@@ -1,0 +1,1124 @@
+[
+  {
+    "gameid": "e391f7dbfbc9ded0ea4a487c39c1e8b8",
+    "gamename": "Mini MAC88 Lobby",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-mac88-lobby.png"
+  },
+  {
+    "gameid": "e0402c58af3c567366aa6cf0f5821980",
+    "gamename": "Mini JetX",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-jetx.png"
+  },
+  {
+    "gameid": "3845e907ece3ec94443a6aa3e49b51a8",
+    "gamename": "Poison Teenpatti 20 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poison-teenpatti-20-20.png"
+  },
+  {
+    "gameid": "a5b8acdf0e7497d37cc785e0d4f1e0d0",
+    "gamename": "Mini Aviator",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-aviator.png"
+  },
+  {
+    "gameid": "80ad35ede55f78fbd73e74505b5b6134",
+    "gamename": "Mini Dice",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-dice.png"
+  },
+  {
+    "gameid": "2c997dc6acdd89859160ee259e864afb",
+    "gamename": "Unique Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/unique-teenpatti.png"
+  },
+  {
+    "gameid": "2854446d9b0a32070e341e3dcd61ef16",
+    "gamename": "Joker Teenpatti One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/joker-teenpatti-one-day.png"
+  },
+  {
+    "gameid": "d005f9c3e7ee55784534461aace672af",
+    "gamename": "Lightning Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lightning-dragon-tiger.png"
+  },
+  {
+    "gameid": "65ee16cb356c5e8459089aeac42d11f8",
+    "gamename": "Unique Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/unique-teenpatti.png"
+  },
+  {
+    "gameid": "9a77d6f70d286588db2a5e097915d639",
+    "gamename": "Poison Teenpatti 20 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poison-teenpatti-20-20.png"
+  },
+  {
+    "gameid": "566495ad80dc35d8ebb504ffb50aa6d8",
+    "gamename": "Sexy Lucky 7 -2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-lucky-7-2.png"
+  },
+  {
+    "gameid": "7941279a8a3939b432c71d84e7e2afd2",
+    "gamename": "Sexy 2 Card Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-2-card-teenpatti.png"
+  },
+  {
+    "gameid": "e39cabdb0050effba6b7051e65665128",
+    "gamename": "Sexy Teenpatti 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-teenpatti-20-20.png"
+  },
+  {
+    "gameid": "fc46c02363cbae83f57026a6887722b3",
+    "gamename": "Sexy Lucky 7 -3",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-lucky-7-3.png"
+  },
+  {
+    "gameid": "8462efb7e3477bdbe4e7af9dc4a32f8d",
+    "gamename": "Sexy Dragon tiger 2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-dragon-tiger-2.png"
+  },
+  {
+    "gameid": "3af2f103fe4d196eb19aa3439cf74d32",
+    "gamename": "Sexy Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-dragon-tiger.png"
+  },
+  {
+    "gameid": "03a2171abc81db1bb2e3a714c95f4abe",
+    "gamename": "Sexy Lucky 7",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-lucky-7.png"
+  },
+  {
+    "gameid": "6c6d9322e3a3e023b56216a11c3bd884",
+    "gamename": "Sexy High Low",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-high-low.png"
+  },
+  {
+    "gameid": "729fdf0380e92735cff0e8b62bdac358",
+    "gamename": "Sexy Amar Akbar Anthony",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sexy-amar-akbar-anthony.png"
+  },
+  {
+    "gameid": "15bdbae0eb6d3e91430cd9cfcdc41c86",
+    "gamename": "Lucky Tiger Mines",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky-tiger-mines.png"
+  },
+  {
+    "gameid": "fba6287ee18e548bfe2af0d20cda85f0",
+    "gamename": "VR Lightning Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-lightning-roulette.png"
+  },
+  {
+    "gameid": "80d58c9cf15545f06e89f482a7872dfd",
+    "gamename": "Plane Crash",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/plane-crash.png"
+  },
+  {
+    "gameid": "29d3c28e7825e2324e683d1e2b4b2488",
+    "gamename": "CRASH MAN",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/crash-man.png"
+  },
+  {
+    "gameid": "346debe8c51d61ba12556191dd15e913",
+    "gamename": "Race Track",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/race-track.png"
+  },
+  {
+    "gameid": "8fdb4607fdcd6e9cf0458b92a98558ff",
+    "gamename": "Mini Xroulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-xroulette.png"
+  },
+  {
+    "gameid": "ca04bdb935a510f908193abef2b95b02",
+    "gamename": "Mini Crash X",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-crash-x.png"
+  },
+  {
+    "gameid": "4a368a4e7e7421a2c83fca8eaf5c07a3",
+    "gamename": "Mini Coin Flip",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-coin-flip.png"
+  },
+  {
+    "gameid": "f73d28f118be9e9ce7152be41bbcce28",
+    "gamename": "Mini Fortune Wheel",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-fortune-wheel.png"
+  },
+  {
+    "gameid": "d51a9db17cd6b8d613ef9861412d605a",
+    "gamename": "Mini Rock Paper Scissors",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-rock-paper-scissors.png"
+  },
+  {
+    "gameid": "fd01295cf73d124112b3f865738d7eab",
+    "gamename": "Mini Limbo",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mini-limbo.png"
+  },
+  {
+    "gameid": "2360ac16b63283ecd91d138cca7695ab",
+    "gamename": "Cricket Battle",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/cricket-battle.png"
+  },
+  {
+    "gameid": "f132dfac909bc7f0e27ae35555136aa2",
+    "gamename": "Teenpatti Joker 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/teenpatti-joker-20-20.png"
+  },
+  {
+    "gameid": "7df6270b1e776f1a60f59366842e7f53",
+    "gamename": "Turbo Auto Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/turbo-auto-roulette.png"
+  },
+  {
+    "gameid": "e12a9ed677050df19d5f4bf7018e690a",
+    "gamename": "Speed Auto Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/speed-auto-roulette.png"
+  },
+  {
+    "gameid": "9720272e09fb36c251a786cd53738ca5",
+    "gamename": "Lottery",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lottery.png"
+  },
+  {
+    "gameid": "e20fd1d5917c8c79d887a08d0a255374",
+    "gamename": "Worli Matka",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/worli-matka.png"
+  },
+  {
+    "gameid": "542a3cd134328c99cca94106889e140e",
+    "gamename": "Casino War",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/casino-war.png"
+  },
+  {
+    "gameid": "53e9e0eec427f802f51c0b5ff04d4688",
+    "gamename": "Race 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/race-20.png"
+  },
+  {
+    "gameid": "58753d0d9856bbc02a8aa4ca45c280c8",
+    "gamename": "Queen Race",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/queen-race.png"
+  },
+  {
+    "gameid": "1b72a33d0f799ac4dc75d01e87c51f6b",
+    "gamename": "3 Cards Judgement",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/3-cards-judgement.png"
+  },
+  {
+    "gameid": "b2002b98c6c1546fbf7d83bcd6032d62",
+    "gamename": "Amar Akbar Anthony",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/amar-akbar-anthony.png"
+  },
+  {
+    "gameid": "e29b63a8bb6376e3566c826386036baa",
+    "gamename": "Dragon Tiger Lion",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dragon-tiger-lion.png"
+  },
+  {
+    "gameid": "9970d3ec6f0d6d239f30a7c532a7fc9c",
+    "gamename": "32 Cards",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/32-cards.png"
+  },
+  {
+    "gameid": "b187b5c184a4dbd767da247a3ea0729a",
+    "gamename": "Teenpatti One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/teenpatti-one-day.png"
+  },
+  {
+    "gameid": "c57c0ced1fd67c58daa47d3b6004d6cc",
+    "gamename": "Andar Bahar",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/andar-bahar.png"
+  },
+  {
+    "gameid": "83926ba32b3cb89e542ab3dae151126a",
+    "gamename": "Lucky 7",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky-7.png"
+  },
+  {
+    "gameid": "d7f85682fe97073dbbb198cf1f3bd4da",
+    "gamename": "Poker 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poker-20-20.png"
+  },
+  {
+    "gameid": "e7ce60df355cd1b8926d36f06bb6892c",
+    "gamename": "Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/roulette.png"
+  },
+  {
+    "gameid": "1d2b93b90209e1515db2de44f166ae62",
+    "gamename": "Sic Bo",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sic-bo.png"
+  },
+  {
+    "gameid": "4911bff87b46f952d54f4cc07d51862a",
+    "gamename": "Baccarat",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/baccarat.png"
+  },
+  {
+    "gameid": "55520a99e27c2c2a8ca837cda66d59be",
+    "gamename": "Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dragon-tiger.png"
+  },
+  {
+    "gameid": "06874ecc21f7383599e28f999949693a",
+    "gamename": "Pick3 3min",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/pick3-3min.png"
+  },
+  {
+    "gameid": "f0efa0ece80ba1942c7a034992cb410e",
+    "gamename": "Pick3 1min",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/pick3-1min.png"
+  },
+  {
+    "gameid": "0a952bf0d6024f2a0ec84b9597c93399",
+    "gamename": "Sky fall",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sky-fall.png"
+  },
+  {
+    "gameid": "71a0492e34fba4262f2a8e1dc9be817d",
+    "gamename": "Fortune Wheel",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/fortune-wheel.png"
+  },
+  {
+    "gameid": "97d9e3e53ec193d7e62dd4520bdaeb3c",
+    "gamename": "Coin Flip",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/coin-flip.png"
+  },
+  {
+    "gameid": "857a7f98340d2aee65a63a60b81c3a60",
+    "gamename": "Rock Paper Scissors",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/rock-paper-scissors.png"
+  },
+  {
+    "gameid": "6ed76a12fd215a978d9fdf483d1d450d",
+    "gamename": "Jet XT",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/jet-xt.png"
+  },
+  {
+    "gameid": "3c286558bcca2aade3ded558b889f2e4",
+    "gamename": "Kitex",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/kitex.png"
+  },
+  {
+    "gameid": "deaffd5bc53b9c475e62b545a2b7d943",
+    "gamename": "Hi Lo",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/hi-lo.png"
+  },
+  {
+    "gameid": "345a42c0d84ad44d0f3ba9744f95000b",
+    "gamename": "Pushpa Rani",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/pushpa-rani.png"
+  },
+  {
+    "gameid": "bde1b1d597053bf8b71d6c451cd98c82",
+    "gamename": "Ball by Ball VR",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/ball-by-ball-vr.png"
+  },
+  {
+    "gameid": "90aabfc0872d07d348714e16c86f28ff",
+    "gamename": "X Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/x-roulette.png"
+  },
+  {
+    "gameid": "ce1b8890f42f47988a1c19d5fc339269",
+    "gamename": "Lucky 5",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky-5.png"
+  },
+  {
+    "gameid": "3eaa8bf137468144cb2c2e2b6731e82e",
+    "gamename": "Plinko",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/plinko.png"
+  },
+  {
+    "gameid": "7f0f95e35760e4d7ea6c8b132a80e618",
+    "gamename": "Diamonds",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/diamonds.png"
+  },
+  {
+    "gameid": "966251e51babbd71cfbc64534a2fce22",
+    "gamename": "Mines",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mines.png"
+  },
+  {
+    "gameid": "894d1ee7814e5894c2e859dd71d21800",
+    "gamename": "Dice",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dice.png"
+  },
+  {
+    "gameid": "196e9bdd385e9ffa123c396a6b9571a0",
+    "gamename": "Limbo",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/limbo.png"
+  },
+  {
+    "gameid": "6d437ef774817d3d20f076673a219a5b",
+    "gamename": "Crash X",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/crash-x.png"
+  },
+  {
+    "gameid": "2fa2488d4bcf013a9d92a708e831fd76",
+    "gamename": "AK47 VR",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/ak47-vr.png"
+  },
+  {
+    "gameid": "19c8f646c6fdaa65cb1da81d47174efb",
+    "gamename": "Center Card VR",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/center-card-vr.png"
+  },
+  {
+    "gameid": "bcfd8864016a39e8bc1abb9d5365aa29",
+    "gamename": "Hi Lo VR",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/hi-lo-vr.png"
+  },
+  {
+    "gameid": "70b1aa46bc98c9850de8a1b1ce8267f7",
+    "gamename": "AviatorX2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/aviatorx2.png"
+  },
+  {
+    "gameid": "0a17581fb39d78128b16ae27d1dbdf7f",
+    "gamename": "K3 Lottery 10",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/k3-lottery-10.png"
+  },
+  {
+    "gameid": "f00ec059497b059c9093475d3f43d749",
+    "gamename": "K3 Lottery 5",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/k3-lottery-5.png"
+  },
+  {
+    "gameid": "3af8adefe292ced0dd66f30c81b78d60",
+    "gamename": "K3 Lottery 3",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/k3-lottery-3.png"
+  },
+  {
+    "gameid": "59e0125cf12c8dad5d94b6ed6de35282",
+    "gamename": "K3 Lottery 1",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/k3-lottery-1.png"
+  },
+  {
+    "gameid": "010e192216c719227819f53847154783",
+    "gamename": "5D Lottery 10",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5d-lottery-10.png"
+  },
+  {
+    "gameid": "c075c4b688edfbd4cf94e7665ad2c716",
+    "gamename": "5D Lottery 5",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5d-lottery-5.png"
+  },
+  {
+    "gameid": "3c1c0b6eb9e0f61eb4ccd6a4fb3f0e60",
+    "gamename": "5D Lottery 3",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5d-lottery-3.png"
+  },
+  {
+    "gameid": "17b65eb1bb2f86a891d69e580633e0a7",
+    "gamename": "5D Lottery 1",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5d-lottery-1.png"
+  },
+  {
+    "gameid": "dbd35d66eb2c8b5277ab3ec88e92b7cf",
+    "gamename": "Aviator X",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/aviator-x.png"
+  },
+  {
+    "gameid": "35989c76d9a05bc45d564ebd73b8b098",
+    "gamename": "Lankesh",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lankesh.png"
+  },
+  {
+    "gameid": "c03a53b445f5111ce7f303b415f45a78",
+    "gamename": "VR 29 card bacarrat",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-29-card-bacarrat.png"
+  },
+  {
+    "gameid": "8fd1a7a8e220c0dc28c7d0990bbaf1a9",
+    "gamename": "VR Worli Matka",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-worli-matka.png"
+  },
+  {
+    "gameid": "19d57727e61818b68675915e2f78e0e6",
+    "gamename": "VR High low",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-high-low.png"
+  },
+  {
+    "gameid": "7f689894de729784f2d7a3dc946ab861",
+    "gamename": "VR Auto Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-auto-roulette.png"
+  },
+  {
+    "gameid": "ac9dd6afa0c262cb088192210ca43788",
+    "gamename": "VR Race T20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-race-t20.png"
+  },
+  {
+    "gameid": "52ee41ddbbb329ac9d6144d345e018fd",
+    "gamename": "VR Poker",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-poker.png"
+  },
+  {
+    "gameid": "73428f933e7a5d4d60645cd98062542d",
+    "gamename": "VR Queen Race",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-queen-race.png"
+  },
+  {
+    "gameid": "d21058fee38e22d56f1493a20ed55dca",
+    "gamename": "VR 2 Card TP",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-2-card-tp.png"
+  },
+  {
+    "gameid": "cf2b9056bf9274180256168496bd2b0b",
+    "gamename": "VR Andar Bahar",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-andar-bahar.png"
+  },
+  {
+    "gameid": "9489f8da408ac6ee09f0917b264a70fc",
+    "gamename": "VR 32 Cards",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-32-cards.png"
+  },
+  {
+    "gameid": "f6c74af6d71dbb3924148c68c92c4b88",
+    "gamename": "VR 20-20 Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-20-20-teenpatti.png"
+  },
+  {
+    "gameid": "060a26b27cdffb1bdb140fb400f811ff",
+    "gamename": "VR Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-dragon-tiger.png"
+  },
+  {
+    "gameid": "16a051a381051e852ac308f7a342eedf",
+    "gamename": "VR Amar Akbar Anthony",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-amar-akbar-anthony.png"
+  },
+  {
+    "gameid": "8d0a4b8d791e2061627b7def7ba63956",
+    "gamename": "VR Bollywood Casino",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-bollywood-casino.png"
+  },
+  {
+    "gameid": "cf18165703bd21ba2b89ccc2bbb60a00",
+    "gamename": "VR Mulfis Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-mulfis-teenpatti.png"
+  },
+  {
+    "gameid": "b4e0d67b8b733b522d4216c2d9c8ab81",
+    "gamename": "VR 20-20 DTL",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-20-20-dtl.png"
+  },
+  {
+    "gameid": "bb3d2d3255c30967738da26c6ff7329a",
+    "gamename": "VR Trio",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-trio.png"
+  },
+  {
+    "gameid": "e29b43abfe3937db533ec56354bfa4c3",
+    "gamename": "VR Lucky 7",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/vr-lucky-7.png"
+  },
+  {
+    "gameid": "749e6234d718903d8595ba3dcf16cf00",
+    "gamename": "MAC Excite Lobby",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mac-excite-lobby.png"
+  },
+  {
+    "gameid": "126c3e8b4e20b273b14e82731b81cabb",
+    "gamename": "Speed Auto Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/speed-auto-roulette.png"
+  },
+  {
+    "gameid": "9a75be5be5872cbc379d13d81adeef6b",
+    "gamename": "Turbo Auto Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/turbo-auto-roulette.png"
+  },
+  {
+    "gameid": "9968f013b601e74d6873171b888c6d96",
+    "gamename": "Teenpatti Joker One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/teenpatti-joker-one-day.png"
+  },
+  {
+    "gameid": "77e1e1f8e75fc4bcf88ee7a6399198b7",
+    "gamename": "Teenpatti Joker 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/teenpatti-joker-20-20.png"
+  },
+  {
+    "gameid": "14e1e9fff78a3efce3d110b293db50e7",
+    "gamename": "AK47 Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/ak47-teenpatti.png"
+  },
+  {
+    "gameid": "65a47c67a52cc7cb3feb4f17dbfd50fa",
+    "gamename": "Lucky 5",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky-5.png"
+  },
+  {
+    "gameid": "08f3c36deb5a2dda760f59bf99c0c0e4",
+    "gamename": "Dragon Tiger 2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dragon-tiger-2.png"
+  },
+  {
+    "gameid": "4bc3c56df613b843bf5210754b10e0a1",
+    "gamename": "20 20 Teenpatti 2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/20-20-teenpatti-2.png"
+  },
+  {
+    "gameid": "71ad561a64bb4f57ac220a466c58ecdf",
+    "gamename": "Dream Wheel",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dream-wheel.png"
+  },
+  {
+    "gameid": "ae1de4edff38c0644cfeef3ab6882d41",
+    "gamename": "Center card",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/center-card.png"
+  },
+  {
+    "gameid": "6dda02b7471f1d7c83a2f784d38ee31a",
+    "gamename": "Super Over",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/super-over.png"
+  },
+  {
+    "gameid": "4d3049fe72cf775f9cf84b49945e59ce",
+    "gamename": "Andar Bahar 50",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/andar-bahar-50.png"
+  },
+  {
+    "gameid": "ba554d37d7e77dde4a763e5c2f8a1d02",
+    "gamename": "Instant Teen Patti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/instant-teen-patti.png"
+  },
+  {
+    "gameid": "5f2b5f86af4cd6ff58d63ce6855ecf85",
+    "gamename": "Muflis Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/muflis-teenpatti.png"
+  },
+  {
+    "gameid": "386eced5c11593bc02bb7d11d8f49d67",
+    "gamename": "10 - 10 cricket",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/10-10-cricket.png"
+  },
+  {
+    "gameid": "43571703ea236608d99fa2021e5805ac",
+    "gamename": "High Low",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/high-low.png"
+  },
+  {
+    "gameid": "f4eaab0183fe2e9d905bf6a7d35b79a7",
+    "gamename": "Open Teen patti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/open-teen-patti.png"
+  },
+  {
+    "gameid": "031493eae01be1f1f6a3d77b3cb47fa2",
+    "gamename": "Cricket Match 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/cricket-match-20-20.png"
+  },
+  {
+    "gameid": "e3717b821f7b304cb9c3cb6be0bfa013",
+    "gamename": "Note Number",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/note-number.png"
+  },
+  {
+    "gameid": "0050eea7c4d25edf7503fb4111b72cb3",
+    "gamename": "Race to 17",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/race-to-17.png"
+  },
+  {
+    "gameid": "d1cdc6b019d6303cfe23a73e3a4388cd",
+    "gamename": "Instant 2 Cards Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/instant-2-cards-teenpatti.png"
+  },
+  {
+    "gameid": "8729907ee52bf7503092bff47e53c9be",
+    "gamename": "6 Player Poker",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/6-player-poker.png"
+  },
+  {
+    "gameid": "2ddda5e4529917bd1ced85e262ec3d56",
+    "gamename": "One Card One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/one-card-one-day.png"
+  },
+  {
+    "gameid": "b3c5db8cfaeacca56d3d04ddbe63ef5a",
+    "gamename": "One Card 20 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/one-card-20-20.png"
+  },
+  {
+    "gameid": "6d6a7ba2b2e13eb4a5538cca4c486d51",
+    "gamename": "Dus Ka Dum",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dus-ka-dum.png"
+  },
+  {
+    "gameid": "d9589a9453aba5c2704ffce85c1c4f1e",
+    "gamename": "1 Day Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/1-day-dragon-tiger.png"
+  },
+  {
+    "gameid": "97da0f93f35949165d4ecbe3f5599d7d",
+    "gamename": "5 Five Cricket",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5-five-cricket.png"
+  },
+  {
+    "gameid": "b11f86112aa04aae953dbd972d9334a9",
+    "gamename": "Super Over",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/super-over.png"
+  },
+  {
+    "gameid": "8e92bccb1446c8b9e8818911da28b61d",
+    "gamename": "20-20 Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/20-20-teenpatti.png"
+  },
+  {
+    "gameid": "f20073d691950a175f650f672c754b13",
+    "gamename": "Poker 1-Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poker-1-day.png"
+  },
+  {
+    "gameid": "57d4c7e7065a8d62c1e6c30b99bd6096",
+    "gamename": "Bollywood Casino B",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/bollywood-casino-b.png"
+  },
+  {
+    "gameid": "3d3cf3be7fd64df0fd3c62a1676ecc37",
+    "gamename": "Muflis Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/muflis-teenpatti.png"
+  },
+  {
+    "gameid": "2cf2f6c377e34e1e4cdc2f4cb5bc73f7",
+    "gamename": "Two Card Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/two-card-teenpatti.png"
+  },
+  {
+    "gameid": "a6748ae8ac36dfca78c3d61807cab291",
+    "gamename": "29 Baccarat",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/29-baccarat.png"
+  },
+  {
+    "gameid": "027a46d68b150fcb427beced5ec08ad3",
+    "gamename": "Lottery",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lottery.png"
+  },
+  {
+    "gameid": "53a4d12a9ecd10037ed61661b7bb869d",
+    "gamename": "Worli Matka",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/worli-matka.png"
+  },
+  {
+    "gameid": "be4651db717276b60fc7772ec26a9208",
+    "gamename": "Casino War",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/casino-war.png"
+  },
+  {
+    "gameid": "f31ba679f8271c01ddb84c42af7ac1f8",
+    "gamename": "Race 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/race-20.png"
+  },
+  {
+    "gameid": "9191937a14a2aa842e40523c06f33bcc",
+    "gamename": "Queen Race",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/queen-race.png"
+  },
+  {
+    "gameid": "7b099dd82191cdf97e93d6fb0e58e6b1",
+    "gamename": "Dream Wheel",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dream-wheel.png"
+  },
+  {
+    "gameid": "10b969e35b3d42c3a8dc8bfc666c2537",
+    "gamename": "Andar Bahar 50",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/andar-bahar-50.png"
+  },
+  {
+    "gameid": "9ea063dbac63f4918bd0e7d6793b0b21",
+    "gamename": "Instant Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/instant-teenpatti.png"
+  },
+  {
+    "gameid": "2a429c451db5f45e64bedf47cccbfbe1",
+    "gamename": "Instant Super Over",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/instant-super-over.png"
+  },
+  {
+    "gameid": "2bfa8f7774d00f0202d414c32e9ab59d",
+    "gamename": "Lucky 5",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky-5.png"
+  },
+  {
+    "gameid": "84f0bfc22e638c312d619695e9d54c9c",
+    "gamename": "Center Card",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/center-card.png"
+  },
+  {
+    "gameid": "d6f40c34e73c71ae169238e7c5ebb44c",
+    "gamename": "AK47 Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/ak47-teenpatti.png"
+  },
+  {
+    "gameid": "13a022b08657f50b41379f20ea1ca15f",
+    "gamename": "One Card One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/one-card-one-day.png"
+  },
+  {
+    "gameid": "1616ec13397aacbcf90acbdb8bd520ae",
+    "gamename": "Muflis Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/muflis-teenpatti.png"
+  },
+  {
+    "gameid": "587b934ed11359d7acc23a4480833880",
+    "gamename": "Dragon Tiger 2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dragon-tiger-2.png"
+  },
+  {
+    "gameid": "6328ab25ed935e3b6b4d26990bbc4fbb",
+    "gamename": "20 20 Teenpatti 2",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/20-20-teenpatti-2.png"
+  },
+  {
+    "gameid": "dd4c2f1b8d5f1b59ebf0e1c5798c3d12",
+    "gamename": "10 - 10 cricket",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/10-10-cricket.png"
+  },
+  {
+    "gameid": "ea75a51fa8c60d155c142007474d7152",
+    "gamename": "High Low",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/high-low.png"
+  },
+  {
+    "gameid": "c6d010abe7368e2304776b78b6d0d3af",
+    "gamename": "Open Teen patti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/open-teen-patti.png"
+  },
+  {
+    "gameid": "a9f7c358d2c1ef29406b11675f6bef9f",
+    "gamename": "Cricket Match 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/cricket-match-20-20.png"
+  },
+  {
+    "gameid": "4f5f606535e8178d7d0151e5fe40b6e8",
+    "gamename": "Note Number",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/note-number.png"
+  },
+  {
+    "gameid": "cc476d50800d73f2206ff10e49d038af",
+    "gamename": "Race to 17",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/race-to-17.png"
+  },
+  {
+    "gameid": "96109be6f6719cd2bcc6b84e488e85db",
+    "gamename": "Instant 2 Cards Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/instant-2-cards-teenpatti.png"
+  },
+  {
+    "gameid": "4afe2b70837b85ea218f458abef66b86",
+    "gamename": "6 Player Poker",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/6-player-poker.png"
+  },
+  {
+    "gameid": "90611bf67cef295595e581e99008eb39",
+    "gamename": "One Card 20 20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/one-card-20-20.png"
+  },
+  {
+    "gameid": "e7e5e1489556ab31a386e271e30c854b",
+    "gamename": "Dus Ka Dum",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dus-ka-dum.png"
+  },
+  {
+    "gameid": "f04bd72c204ebbef16d4889d9e3d1b2b",
+    "gamename": "1 Day Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/1-day-dragon-tiger.png"
+  },
+  {
+    "gameid": "8d8ba0242de74548b2bf284e01dd0c1c",
+    "gamename": "5 Five Cricket",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/5-five-cricket.png"
+  },
+  {
+    "gameid": "8da5d87d6a0c7fa19b6eaf0439c62a68",
+    "gamename": "Super Over",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/super-over.png"
+  },
+  {
+    "gameid": "0342aa81771adfc335c6c91d2b58dc4b",
+    "gamename": "20-20 Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/20-20-teenpatti.png"
+  },
+  {
+    "gameid": "0cfb79942bb7754b00e6571161f3d8d1",
+    "gamename": "Poker 1-Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poker-1-day.png"
+  },
+  {
+    "gameid": "c93d32ab8696e24b86f6ea96b415c1e7",
+    "gamename": "Bollywood Casino",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/bollywood-casino.png"
+  },
+  {
+    "gameid": "02fe8e136fe63d7f9271714b3362019a",
+    "gamename": "Muflis Teenpatti One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/muflis-teenpatti-one-day.png"
+  },
+  {
+    "gameid": "1c426805e13f435c5141507508c7491a",
+    "gamename": "3 Cards Judgement",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/3-cards-judgement.png"
+  },
+  {
+    "gameid": "565054bdeb782b5242c47bcbf65c1dc1",
+    "gamename": "Amar Akbar Anthony",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/amar-akbar-anthony.png"
+  },
+  {
+    "gameid": "30a05dd4b55482a8551b982848a34495",
+    "gamename": "DTL",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dtl.png"
+  },
+  {
+    "gameid": "908afb4cad15466560905baaf476fc7d",
+    "gamename": "32 Cards",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/32-cards.png"
+  },
+  {
+    "gameid": "29ce164e26e341769e226de3dd1ef6a6",
+    "gamename": "Mac88 Gaming Lobby",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/mac88-gaming-lobby.png"
+  },
+  {
+    "gameid": "6140ab35786aab1672d1c461adef69f8",
+    "gamename": "Teenpatti One Day",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/teenpatti-one-day.png"
+  },
+  {
+    "gameid": "61534f0355179b2f0fb658645563d05d",
+    "gamename": "Andar Bahar",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/andar-bahar.png"
+  },
+  {
+    "gameid": "a1a3795989340ccd1ae1042c8c2204ef",
+    "gamename": "Lucky7",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/lucky7.png"
+  },
+  {
+    "gameid": "64affc98d87a15e6c6a23df0f684c8b8",
+    "gamename": "Poker 20-20",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/poker-20-20.png"
+  },
+  {
+    "gameid": "54d5673e198f422b2b5c93b4399bc4de",
+    "gamename": "Roulette",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/roulette.png"
+  },
+  {
+    "gameid": "34a9fcee3f7c4cf7e39c55d3f4e630a5",
+    "gamename": "Sic Bo",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/sic-bo.png"
+  },
+  {
+    "gameid": "4e9c033b5144f2ac2bd0bce3e4e2b880",
+    "gamename": "Bacarrat",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/bacarrat.png"
+  },
+  {
+    "gameid": "e80a1a052663765f314398ac856fea88",
+    "gamename": "Two Card Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/two-card-teenpatti.png"
+  },
+  {
+    "gameid": "481e738cbb3a794d0f6565d02c5fd2c8",
+    "gamename": "29 Baccarat",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/29-baccarat.png"
+  },
+  {
+    "gameid": "a67d6dfcf398e42a0c4aa537224b3da0",
+    "gamename": "Test Teenpatti",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/test-teenpatti.png"
+  },
+  {
+    "gameid": "f46896afc7a3a4a3d1d4ff08a45a48ec",
+    "gamename": "Trio",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/trio.png"
+  },
+  {
+    "gameid": "b7edd7202a50b426e593f33963fb4a2f",
+    "gamename": "Dragon Tiger",
+    "providerName": "MAC88",
+    "image": "https://providers.gamblly-api.com/assets/providers/MAC88/dragon-tiger.png"
+  }
+]

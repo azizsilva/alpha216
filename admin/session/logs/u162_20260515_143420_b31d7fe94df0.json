@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T14:34:20+00:00",
+    "user_id": 162,
+    "username": "Olaali",
+    "role": "agent",
+    "ip": "2c0f:f698:c11e:597d:dc0d:5f0:22ac:bcec",
+    "forwarded_for": "2c0f:f698:c11e:597d:dc0d:5f0:22ac:bcec",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "ar-TN,ar;q=0.9,fr-TN;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/",
+    "session_id_hash": "2169a0702757fa92fe28240caac9e82ef730a00205ed8ec8e32f47d4bcccaba4"
+}

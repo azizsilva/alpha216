@@ -1,0 +1,236 @@
+[
+  {
+    "gameid": "85bf997d15dbf6cef1d73401d5cdbd8b",
+    "gamename": "Osiris Curse",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/osiris-curse.png"
+  },
+  {
+    "gameid": "f273236b6ebc9f65a2d57863e002a612",
+    "gamename": "The Last Gladiator",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/the-last-gladiator.png"
+  },
+  {
+    "gameid": "e40e31d9a8af008515ee2fc9570a0edb",
+    "gamename": "Moonstruck Monster 1000",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/moonstruck-monster-1000.png"
+  },
+  {
+    "gameid": "42a7310950000d302eab905b4d40cc96",
+    "gamename": "Ninja Slash 1000",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/ninja-slash-1000.png"
+  },
+  {
+    "gameid": "1840445408a422c1cf1abedf2dd60c7f",
+    "gamename": "Gold Strike Jackpot",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/gold-strike-jackpot.png"
+  },
+  {
+    "gameid": "0a9caf2469185efe1c0f6cceca36f015",
+    "gamename": "Molten Phoenix",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/molten-phoenix.png"
+  },
+  {
+    "gameid": "80861d4f01478ce6c070aa218f4c717a",
+    "gamename": "Froggy Venom",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/froggy-venom.png"
+  },
+  {
+    "gameid": "b802ce0ba307a2eb4e7f2a5616a07c55",
+    "gamename": "Furious Rhino",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/furious-rhino.png"
+  },
+  {
+    "gameid": "e29ec697bb05da0d48235fd69e6bb141",
+    "gamename": "Mega Shark Madness",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/mega-shark-madness.png"
+  },
+  {
+    "gameid": "ffe601ee7ea232ef1ce49f018193d0ed",
+    "gamename": "Tai Chi Masters",
+    "providerName": "RG",
+    "image": ""
+  },
+  {
+    "gameid": "09ddc69f3ff624a400357a399256f04a",
+    "gamename": "Caveboy Conquest",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/caveboy-conquest.png"
+  },
+  {
+    "gameid": "d79b3af020daae0bb53078d2e1d9f920",
+    "gamename": "Jester Poker",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/jester-poker.png"
+  },
+  {
+    "gameid": "6a3d158552b027fec7592a15f99b761c",
+    "gamename": "Journey to The Myth",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/journey-to-the-myth.png"
+  },
+  {
+    "gameid": "2dbd41a9d8aa3defdf0fe1f7155eae4e",
+    "gamename": "Sizzling Hotpot",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/sizzling-hotpot.png"
+  },
+  {
+    "gameid": "25cd31c3a163a957c9cdbb34b68c7f7c",
+    "gamename": "Piggy Tycoon",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/piggy-tycoon.png"
+  },
+  {
+    "gameid": "5c49403220876ef66a4ef332a46b3622",
+    "gamename": "Ways of Dragon",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/ways-of-dragon.png"
+  },
+  {
+    "gameid": "10351bbd33e8321e53351c7dfea9a14e",
+    "gamename": "Splash Frenzy",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/splash-frenzy.png"
+  },
+  {
+    "gameid": "534e3ec0852c9b9dce54fb7e9240f49a",
+    "gamename": "Railway Rumble",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/railway-rumble.png"
+  },
+  {
+    "gameid": "13847c0a2f61d6082902dad15597e790",
+    "gamename": "Celestial Creatures",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/celestial-creatures.png"
+  },
+  {
+    "gameid": "471c7b0e5e3bd0bdfed5b5851e8a7592",
+    "gamename": "Bazaar Rush",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/bazaar-rush.png"
+  },
+  {
+    "gameid": "5633f4a8e8b2a3b6e2e4b6f2a8c4e6d8",
+    "gamename": "Rise of Lotto",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/rise-of-lotto.png"
+  },
+  {
+    "gameid": "7b2e4c9f3a1d6b8e2c4f7a9b3e1d6c8",
+    "gamename": "Lotto Bounty",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/lotto-bounty.png"
+  },
+  {
+    "gameid": "9c4f7b2e1d6a3b8e2c4f7a9b3e1d6c8",
+    "gamename": "Dim Sum Twins",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/dim-sum-twins.png"
+  },
+  {
+    "gameid": "a2b4c6d8e0f1a2b3c4d5e6f7a8b9c0d",
+    "gamename": "Koi Beauty",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/koi-beauty.png"
+  },
+  {
+    "gameid": "b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e",
+    "gamename": "Dragon Boat Uprising",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/dragon-boat-uprising.png"
+  },
+  {
+    "gameid": "c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
+    "gamename": "Wealthy Kiddo",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/wealthy-kiddo.png"
+  },
+  {
+    "gameid": "d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a",
+    "gamename": "Soccer Glory",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/soccer-glory.png"
+  },
+  {
+    "gameid": "e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
+    "gamename": "Indian Mascot",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/indian-mascot.png"
+  },
+  {
+    "gameid": "f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
+    "gamename": "Tiki Valley",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/tiki-valley.png"
+  },
+  {
+    "gameid": "a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d",
+    "gamename": "Egyptian Meow",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/egyptian-meow.png"
+  },
+  {
+    "gameid": "b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e",
+    "gamename": "Rodeo Maiden",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/rodeo-maiden.png"
+  },
+  {
+    "gameid": "c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f",
+    "gamename": "Scarlet Princess",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/scarlet-princess.png"
+  },
+  {
+    "gameid": "d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a",
+    "gamename": "Treasure Miner",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/treasure-miner.png"
+  },
+  {
+    "gameid": "e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b",
+    "gamename": "Vegas Frenzy",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/vegas-frenzy.png"
+  },
+  {
+    "gameid": "f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c",
+    "gamename": "Supreme Olympus",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/supreme-olympus.png"
+  },
+  {
+    "gameid": "a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d",
+    "gamename": "Vampiric Treasures",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/vampiric-treasures.png"
+  },
+  {
+    "gameid": "b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e",
+    "gamename": "Lotto Frenzy",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/lotto-frenzy.png"
+  },
+  {
+    "gameid": "c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f",
+    "gamename": "Peacock Maiden",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/peacock-maiden.png"
+  },
+  {
+    "gameid": "d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a",
+    "gamename": "Orchard Village",
+    "providerName": "RG",
+    "image": "https://providers.gamblly-api.com/assets/providers/rg/orchard-village.png"
+  }
+]

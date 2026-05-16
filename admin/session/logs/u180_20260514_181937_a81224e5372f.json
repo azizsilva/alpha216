@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-14T18:19:37+00:00",
+    "user_id": 180,
+    "username": "Slimen",
+    "role": "agent",
+    "ip": "160.157.168.36",
+    "forwarded_for": "160.157.168.36",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; ELA-LX2 Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr,fr-TN;q=0.9,en-US;q=0.8,en;q=0.7",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fcreate-member%2F%3Fcreate_role%3Dagent",
+    "session_id_hash": "4d086cefe83dbf1f61abd2e65bf30f7ffa61cb640b8a1a2596b72b48c355106d"
+}

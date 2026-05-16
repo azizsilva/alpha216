@@ -1,0 +1,632 @@
+[
+  {
+    "gameid": "18d2ca49820914e3f1b3ca88610a16d6",
+    "gamename": "Coin Lamp",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/coin-lamp.jpg"
+  },
+  {
+    "gameid": "aad89c012611340502a5f105ca2dde40",
+    "gamename": "Rocket Wins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/rocket-wins.jpg"
+  },
+  {
+    "gameid": "88e999e8df5e2a70ec8a0481ea33b9f2",
+    "gamename": "Hawaii Riches",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/hawaii-riches.jpg"
+  },
+  {
+    "gameid": "4efa2ac563b7ae6f99fe0e11e6df9f58",
+    "gamename": "China Festival",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/china-festival.jpg"
+  },
+  {
+    "gameid": "fab4a5fc613f3b08f6b63fe3039821a2",
+    "gamename": "3 Pots of Egypt",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-pots-of-egypt.jpg"
+  },
+  {
+    "gameid": "dae33a1828602bf49c76ada0a4db5add",
+    "gamename": "Hot Fire Fruits",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/hot-fire-fruits.jpg"
+  },
+  {
+    "gameid": "a2da6132ead534376530a0cca05208ca",
+    "gamename": "Lucky Penny",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lucky-penny.jpg"
+  },
+  {
+    "gameid": "4aa6d31f8bdf2dc44405c2dd985b55e4",
+    "gamename": "Super Hot Chilli",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/super-hot-chilli.jpg"
+  },
+  {
+    "gameid": "b15df829f4c65a6d31c2b834519f443a",
+    "gamename": "Sky Coins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sky-coins.jpg"
+  },
+  {
+    "gameid": "661e5162fc87e9085c15b394313a916f",
+    "gamename": "Lamp of Wonder",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lamp-of-wonder.jpg"
+  },
+  {
+    "gameid": "8bcd327841f028a109c7706ef63560fb",
+    "gamename": "3 China Pots",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-china-pots.jpg"
+  },
+  {
+    "gameid": "96e8a53300cb8db059e3d306746594e8",
+    "gamename": "Lion Coins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lion-coins.jpg"
+  },
+  {
+    "gameid": "417656f2f7a1515bfedc35ebacf0f891",
+    "gamename": "3 Egypt Chests",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-egypt-chests.jpg"
+  },
+  {
+    "gameid": "94ca4998d75e3a2d9e86a5a2ae657409",
+    "gamename": "Sun of Egypt 4",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sun-of-egypt-4.jpg"
+  },
+  {
+    "gameid": "5db228344e2a69073981507adcd13718",
+    "gamename": "Gold Nuggets",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/gold-nuggets.jpg"
+  },
+  {
+    "gameid": "d7c1d4df446af83339e8f5b41d54928a",
+    "gamename": "Crystal Scarabs",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/crystal-scarabs.jpg"
+  },
+  {
+    "gameid": "97aad25a816bfa3cd7ba10166c6417ff",
+    "gamename": "Grab more Gold!",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/grab-more-gold.jpg"
+  },
+  {
+    "gameid": "c22f3aa1524ff13f1b2d0b85d139069c",
+    "gamename": "777 Coins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/777-coins.jpg"
+  },
+  {
+    "gameid": "465db13ea441c620a1d8e186c129c836",
+    "gamename": "Little Farm",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/little-farm.jpg"
+  },
+  {
+    "gameid": "1b9b09595e83a6acfcda32321673ad94",
+    "gamename": "Green Chilli 2",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/green-chilli-2.jpg"
+  },
+  {
+    "gameid": "9124408508309fa92ce05afc1616fe19",
+    "gamename": "Forest Spirit",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/forest-spirit.jpg"
+  },
+  {
+    "gameid": "330d984535d95d3d8bcdd680a0d14343",
+    "gamename": "Lady Fortune",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lady-fortune.jpg"
+  },
+  {
+    "gameid": "830594e296506000e87c43a12fb634c8",
+    "gamename": "Grab the Gold!",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/grab-the-gold.jpg"
+  },
+  {
+    "gameid": "0672f4d6f0053d6889ed8f0eb3b88ef7",
+    "gamename": "More Magic Apple",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/more-magic-apple.jpg"
+  },
+  {
+    "gameid": "c433923addc200f1c65ed3946003e463",
+    "gamename": "Maya Sun",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/maya-sun.jpg"
+  },
+  {
+    "gameid": "ec253493644df4a1af5ee39834f92bee",
+    "gamename": "Dragon Wealth",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/dragon-wealth.jpg"
+  },
+  {
+    "gameid": "472fc11f004fe0996a9f8c4ad0be365f",
+    "gamename": "Sunlight Princess",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sunlight-princess.jpg"
+  },
+  {
+    "gameid": "40109eee3d546e0a3a1bbe96bacd7f3a",
+    "gamename": "Hit more Gold",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/hit-more-gold.jpg"
+  },
+  {
+    "gameid": "2e66fd182be145a86ab77c634a659cbe",
+    "gamename": "Green Chilli",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/green-chilli.jpg"
+  },
+  {
+    "gameid": "2f09791f9fc7655410414e1031872a8d",
+    "gamename": "Big Heist",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/big-heist.jpg"
+  },
+  {
+    "gameid": "61a07f3c3a80f57b5ba2f5dee58de3ad",
+    "gamename": "Lotus Charm",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lotus-charm.jpg"
+  },
+  {
+    "gameid": "519940e9de34471301d505e0c3e27bc3",
+    "gamename": "Magic Apple 2",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/magic-apple-2.jpg"
+  },
+  {
+    "gameid": "d98e5c6301edbcc6f1cefb96c55ff88a",
+    "gamename": "Sun of Egypt 3",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sun-of-egypt-3.jpg"
+  },
+  {
+    "gameid": "1cb340b490fe1893b691ce6f3d343ed3",
+    "gamename": "Happy Fish",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/happy-fish.jpg"
+  },
+  {
+    "gameid": "cf850797c069431ff5a0d1c512083c19",
+    "gamename": "Queen of the Sun",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/queen-of-the-sun.jpg"
+  },
+  {
+    "gameid": "778852dd4e78cadbe8a0489e6a10ae05",
+    "gamename": "Golden Dancing Lion",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/golden-dancing-lion.jpg"
+  },
+  {
+    "gameid": "ba86d26f99b3c4612c99900220f51b13",
+    "gamename": "Candy Boom",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/candy-boom.jpg"
+  },
+  {
+    "gameid": "f527e42c6b7b1084399040df31e4f845",
+    "gamename": "Gold Express",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/gold-express.jpg"
+  },
+  {
+    "gameid": "f6668123b9128123a67b06cab274fe15",
+    "gamename": "Tiger Jungle",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/tiger-jungle.jpg"
+  },
+  {
+    "gameid": "1b9cf5e44f1041ab1ff69e0eabece2a5",
+    "gamename": "Wolf Night",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/wolf-night.jpg"
+  },
+  {
+    "gameid": "9cbcb3079913faed43b53e679db12054",
+    "gamename": "3 Coins: Egypt",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-coins-egypt.jpg"
+  },
+  {
+    "gameid": "c647432be835c78bd5a797a6a4f341c1",
+    "gamename": "Scarab Boost",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/scarab-boost.jpg"
+  },
+  {
+    "gameid": "fab8529f51cac472de6a637704b6f85c",
+    "gamename": "Hit the Gold",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/hit-the-gold.jpg"
+  },
+  {
+    "gameid": "165ea500252e86e516e04b5c60d5e768",
+    "gamename": "Magic Apple",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/magic-apple.jpg"
+  },
+  {
+    "gameid": "62bdd197cbcbe5bea67b00744b634d8f",
+    "gamename": "3 Coins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-coins.jpg"
+  },
+  {
+    "gameid": "43d5849550520632db69539717d42393",
+    "gamename": "Tiger Stone",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/tiger-stone.jpg"
+  },
+  {
+    "gameid": "366dd1f2071847e620e23567e0fbac10",
+    "gamename": "Sun of Egypt 2",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sun-of-egypt-2.jpg"
+  },
+  {
+    "gameid": "d9059b4ab34f7f3db33197a99c12a511",
+    "gamename": "Scarab Temple",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/scarab-temple.jpg"
+  },
+  {
+    "gameid": "2af796e10b525050662b8a3ef04d7c99",
+    "gamename": "Thunder of Olympus",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/thunder-of-olympus.jpg"
+  },
+  {
+    "gameid": "b46d315d49c7ba8bd9be41235414b08c",
+    "gamename": "15 Dragon Pearls",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/15-dragon-pearls.jpg"
+  },
+  {
+    "gameid": "593f0d4969a2bfff2834a731a8f3cb34",
+    "gamename": "Aztec Sun",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/aztec-sun.jpg"
+  },
+  {
+    "gameid": "9e833c88f8ca82e4f1c4669e7b18a697",
+    "gamename": "Moon Sisters",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/moon-sisters.jpg"
+  },
+  {
+    "gameid": "78216eae8dfb5a821549d68130242919",
+    "gamename": "Great Panda",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/great-panda.jpg"
+  },
+  {
+    "gameid": "a5780ab96e7fd8cfa2c399bc94b96cbb",
+    "gamename": "Tiger’s Gold",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/tiger-s-gold.jpg"
+  },
+  {
+    "gameid": "7553295566a5552550c29c80c6a2cb88",
+    "gamename": "Sun of Egypt",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sun-of-egypt.jpg"
+  },
+  {
+    "gameid": "0fbc47f2ab26fa6a5a721b42048bd16f",
+    "gamename": "Scarab Riches",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/scarab-riches.jpg"
+  },
+  {
+    "gameid": "44e6c9744d9518a80c2f98dfd1306991",
+    "gamename": "Olympian Gods",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/olympian-gods.jpg"
+  },
+  {
+    "gameid": "f80b12969aed789dcd7cf0757e61dc1b",
+    "gamename": "Book of Sun: Multichance",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/book-of-sun-multichance.jpg"
+  },
+  {
+    "gameid": "41b08038555e6f7d643b177653f4dc98",
+    "gamename": "Dragon Pearls",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/dragon-pearls.jpg"
+  },
+  {
+    "gameid": "9301226771ddc4e55ab52bcb049c5871",
+    "gamename": "3 African Drums",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-african-drums.jpg"
+  },
+  {
+    "gameid": "f12f8a6227e73123a2dd731b4b78cc77",
+    "gamename": "3 Clover Pots",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-clover-pots.jpg"
+  },
+  {
+    "gameid": "ed9a1b43a68e35fd68b12b2956b45250",
+    "gamename": "Golden Teapot",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/golden-teapot.jpg"
+  },
+  {
+    "gameid": "d8aa309f2bf9001606d96ca46a67437e",
+    "gamename": "African Spirit Sticky Wilds",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/african-spirit-sticky-wilds.jpg"
+  },
+  {
+    "gameid": "0c627b51bb9815660a05fbe92182ddcb",
+    "gamename": "Supercharged Clovers: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/supercharged-clovers-hold-and-win.jpg"
+  },
+  {
+    "gameid": "fd1b1fdc7bf3624a410eeb67d5230986",
+    "gamename": "Pink Joker: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/pink-joker-hold-and-win.jpg"
+  },
+  {
+    "gameid": "d69cebfd1f2c06aaf0950b4547db349b",
+    "gamename": "Piggy Power: Hit the Bonus",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/piggy-power-hit-the-bonus.jpg"
+  },
+  {
+    "gameid": "af0dac39ff8b27637044bac2cf16373e",
+    "gamename": "Treasures of Fire: Scatter pays",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/treasures-of-fire-scatter-pays.jpg"
+  },
+  {
+    "gameid": "2a7b5e7fc98749ce3c495adb98dce9cc",
+    "gamename": "Arizona Heist: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/arizona-heist-hold-and-win.jpg"
+  },
+  {
+    "gameid": "a592337224dc98465a3bfe2f7293b1d5",
+    "gamename": "3 Carts of Gold",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-carts-of-gold.jpg"
+  },
+  {
+    "gameid": "6b4f88c4aa7d388feff86a212d2927a3",
+    "gamename": "3 Pirate Barrels: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-pirate-barrels-hold-and-win.jpg"
+  },
+  {
+    "gameid": "dbeded96c32d7f9bc1dd2c60fd2dfd31",
+    "gamename": "3 Pots Riches Extra: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-pots-riches-extra-hold-and-win.jpg"
+  },
+  {
+    "gameid": "f05a8e7dd49bf6d97fd73e266e092a47",
+    "gamename": "Power Crown: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/power-crown-hold-and-win.jpg"
+  },
+  {
+    "gameid": "db8712a0c53069ad38db5d6cc042d0c0",
+    "gamename": "Fortune Globe",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fortune-globe.jpg"
+  },
+  {
+    "gameid": "aac9aee1b601830cc22f50d6147c8467",
+    "gamename": "3 Clover Pots Extra",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-clover-pots-extra.jpg"
+  },
+  {
+    "gameid": "6885c1d517aab1988ff8d0b3052f0c62",
+    "gamename": "Sky Pearls",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sky-pearls.jpg"
+  },
+  {
+    "gameid": "828e96e0b6c1a630f073f029e302dc85",
+    "gamename": "Lava Coins",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lava-coins.jpg"
+  },
+  {
+    "gameid": "b1e8d4893d25e8258296036ebba128af",
+    "gamename": "3 Pots Riches: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-pots-riches-hold-and-win.jpg"
+  },
+  {
+    "gameid": "500fd885fe835348b92971b0f2760c5d",
+    "gamename": "Crown and Diamonds: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/crown-and-diamonds-hold-and-win.jpg"
+  },
+  {
+    "gameid": "ef938e06ea96112998eb555e1c597e73",
+    "gamename": "Fire Temple: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fire-temple-hold-and-win.jpg"
+  },
+  {
+    "gameid": "1045f8974dd64fd22e7793a9896d1df0",
+    "gamename": "Buffalo Power 2: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/buffalo-power-2-hold-and-win.jpg"
+  },
+  {
+    "gameid": "cc3719c9d0308d9efc5b993257f57eb1",
+    "gamename": "Sherwood Coins: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/sherwood-coins-hold-and-win.jpg"
+  },
+  {
+    "gameid": "b625b5838d827bb05d4f3ff0389e85e5",
+    "gamename": "Wolf Power Megaways",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/wolf-power-megaways.jpg"
+  },
+  {
+    "gameid": "ff1670d857f35e070f56af509ccf40d3",
+    "gamename": "3 Magic Lamps: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-magic-lamps-hold-and-win.jpg"
+  },
+  {
+    "gameid": "0e8d4970ff63be7837d110cd5eb7f334",
+    "gamename": "Pirate Chest: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/pirate-chest-hold-and-win.jpg"
+  },
+  {
+    "gameid": "0eaf21f013bd18fb8c91da231fa33fc2",
+    "gamename": "Lion Gems: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/lion-gems-hold-and-win.jpg"
+  },
+  {
+    "gameid": "4bc7f49c1b59861792c1151368e8f361",
+    "gamename": "Mammoth Peak: Hold & Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/mammoth-peak-hold-win.jpg"
+  },
+  {
+    "gameid": "9633d9fde350b74656ee0b593101222b",
+    "gamename": "Buffalo Power Megaways",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/buffalo-power-megaways.jpg"
+  },
+  {
+    "gameid": "d2b46f5408188ff4bd0bf1ba9179dec5",
+    "gamename": "Pearl Ocean: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/pearl-ocean-hold-and-win.jpg"
+  },
+  {
+    "gameid": "468dbda7854233766b10a17e016ea7ce",
+    "gamename": "Luxor Gold: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/luxor-gold-hold-and-win.jpg"
+  },
+  {
+    "gameid": "c4ab8950e8945ca3c4e7626708b589ff",
+    "gamename": "Solar Queen",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/solar-queen.jpg"
+  },
+  {
+    "gameid": "4474df7c609514d8329a841f9569168c",
+    "gamename": "Energy Coins: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/energy-coins-hold-and-win.jpg"
+  },
+  {
+    "gameid": "2f23cebb7849d3c38e3088bd31b57c8e",
+    "gamename": "Fire Coins: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fire-coins-hold-and-win.jpg"
+  },
+  {
+    "gameid": "f54f430705e55ee3f530497c47304f87",
+    "gamename": "Clover Charm: Hit the Bonus",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/clover-charm-hit-the-bonus.jpg"
+  },
+  {
+    "gameid": "276a39995bf47ffc7c76254012cd462c",
+    "gamename": "Solar Temple",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/solar-temple.jpg"
+  },
+  {
+    "gameid": "0ba9b0e9614c96ecf7a1dbcc64186c4f",
+    "gamename": "3 Chillies and Joker: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-chillies-and-joker-hold-and-win.jpg"
+  },
+  {
+    "gameid": "8ac78e7bb7cb880c03a9aa754e108837",
+    "gamename": "Legend of Cleopatra Megaways",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/legend-of-cleopatra-megaways.jpg"
+  },
+  {
+    "gameid": "b0d2f93e42948182d1c78c54ad4b6ddc",
+    "gamename": "Dancing Joker",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/dancing-joker.jpg"
+  },
+  {
+    "gameid": "0c9c23eae409e499d2bf5e9662806724",
+    "gamename": "3 Super Hot Chillies : Hold",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/3-super-hot-chillies-hold.jpg"
+  },
+  {
+    "gameid": "02efe146f4106a240df01ed4f921339a",
+    "gamename": "Fruits Fever 5 lines",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fruits-fever-5-lines.jpg"
+  },
+  {
+    "gameid": "2cb83192cce2be9790e1f2e89afb07c3",
+    "gamename": "Fruits & Joker: Fever",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fruits-joker-fever.jpg"
+  },
+  {
+    "gameid": "80a459df90ff7aa8cf4f330000026c8b",
+    "gamename": "Fruits & Sevens: Fever",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/fruits-sevens-fever.jpg"
+  },
+  {
+    "gameid": "604cab5d83cdd0b469469853aa417235",
+    "gamename": "Mariachi Lock",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/mariachi-lock.jpg"
+  },
+  {
+    "gameid": "35a395e2aa2638d2d025541cd0272852",
+    "gamename": "Nights of Fire",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/nights-of-fire.jpg"
+  },
+  {
+    "gameid": "9bcbc6a2e7809d6f0b3b5a3ce24bbdca",
+    "gamename": "Space Coins: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/space-coins-hold-and-win.jpg"
+  },
+  {
+    "gameid": "7482b8d0ae75e81563dd081878c7d6c7",
+    "gamename": "Super China Pots: Hold and Win",
+    "providerName": "BNG - Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/bng-asia/super-china-pots-hold-and-win.jpg"
+  }
+]

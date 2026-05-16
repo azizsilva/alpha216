@@ -1,0 +1,686 @@
+[
+  {
+    "gameid": "b04e97612b8d35970fd35d7daa478c92",
+    "gamename": "Wild Wolf Xtreme",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wild-wolf-xtreme.png"
+  },
+  {
+    "gameid": "6b31af576678c388d95bd849482b83b7",
+    "gamename": "American Tiger",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/american-tiger.png"
+  },
+  {
+    "gameid": "d310e63957bfde5872832040166e41f2",
+    "gamename": "Aztlan Gems",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/aztlan-gems.png"
+  },
+  {
+    "gameid": "e64112c816bc962af2f3993c9c18b6a6",
+    "gamename": "Belle and Adam",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/belle-and-adam.png"
+  },
+  {
+    "gameid": "73fac12721068399cf11ce84598a3794",
+    "gamename": "Big Money Frenzy",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/big-money-frenzy.png"
+  },
+  {
+    "gameid": "981e910ec4f2072ce1dd35117566d736",
+    "gamename": "Bowls of Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/bowls-of-fortune.png"
+  },
+  {
+    "gameid": "599c7d44ca1a5deeef27e9e34e047597",
+    "gamename": "Buffalo Legend",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/buffalo-legend.png"
+  },
+  {
+    "gameid": "dcef7eb747e759507e9e9635eb82a4a0",
+    "gamename": "Builder's Frenzy",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/builder-s-frenzy.png"
+  },
+  {
+    "gameid": "3efd1050193c9d624231b616e3608b7d",
+    "gamename": "Choo Choo Riches",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/choo-choo-riches.png"
+  },
+  {
+    "gameid": "63728284f5b7788c532f948b91f2d6de",
+    "gamename": "Chunky Charms",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/chunky-charms.png"
+  },
+  {
+    "gameid": "d51c50004509276cc0dad48fee1ee4dc",
+    "gamename": "Clover Heart",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/clover-heart.png"
+  },
+  {
+    "gameid": "f315d003e83ec5958408dd4376c87712",
+    "gamename": "Cocktail City",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/cocktail-city.png"
+  },
+  {
+    "gameid": "7243b3e15dfab8104d513675244be617",
+    "gamename": "Cosmic Piggies",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/cosmic-piggies.png"
+  },
+  {
+    "gameid": "795d58b2f65385b70215f162df356e4c",
+    "gamename": "Devil's Blaze",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/devil-s-blaze.png"
+  },
+  {
+    "gameid": "0ae6f28430e692c8068e3fba0a917d39",
+    "gamename": "Dong Dong Drum",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/dong-dong-drum.png"
+  },
+  {
+    "gameid": "54cf0c90ac079fadcdd85c38d5241fb9",
+    "gamename": "Five Blessing Arrive",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/five-blessing-arrive.png"
+  },
+  {
+    "gameid": "76248f5127567e96b8efe0e8823e09e1",
+    "gamename": "Fortune God Blessing",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/fortune-god-blessing.png"
+  },
+  {
+    "gameid": "aa0191aec8d150582f5a76186dffc5f6",
+    "gamename": "Fu Wa Fa Fa",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/fu-wa-fa-fa.png"
+  },
+  {
+    "gameid": "17c1a162bfcf392790c3268eed2eb6c3",
+    "gamename": "Gold Arowana Deluxe",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/gold-arowana-deluxe.png"
+  },
+  {
+    "gameid": "9d2c9a8b7460fe79888b2d8afab04f7e",
+    "gamename": "Golden Train Deluxe",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/golden-train-deluxe.png"
+  },
+  {
+    "gameid": "ff455bdf6aa65175348c9e88741eadec",
+    "gamename": "Golden Train 2",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/golden-train-2.png"
+  },
+  {
+    "gameid": "bc7ed595e8e2a74b5e7ada158ddbba05",
+    "gamename": "Gong Xi Fa Cai",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/gong-xi-fa-cai.png"
+  },
+  {
+    "gameid": "41ad5d3d464d92c2b4f23b117fb34722",
+    "gamename": "Hammer of Thunder",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/hammer-of-thunder.png"
+  },
+  {
+    "gameid": "2e83d052f1af25de1072ef21914fb392",
+    "gamename": "Hot Flavor Chili",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/hot-flavor-chili.png"
+  },
+  {
+    "gameid": "4dacb804161ae6f2cc1aa6c16d8ad25f",
+    "gamename": "Huffin' & Puffin' Jackpot",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/huffin-puffin-jackpot.png"
+  },
+  {
+    "gameid": "ed1807e038011dbf09851f0ceb6fbc69",
+    "gamename": "Infected Zone",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/infected-zone.png"
+  },
+  {
+    "gameid": "5c3b0abff29ea0b54a02b211cc0548f8",
+    "gamename": "Jungle Roar",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/jungle-roar.png"
+  },
+  {
+    "gameid": "39f97d6ecdd6f015adfba9af748121ed",
+    "gamename": "Liberty Heroine",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/liberty-heroine.png"
+  },
+  {
+    "gameid": "19b0c9398eb8986db2f759ff997937b1",
+    "gamename": "Lord Of The Gods",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/lord-of-the-gods.png"
+  },
+  {
+    "gameid": "633acb53ede6abdd5faa2f977c81d0af",
+    "gamename": "Lucky Buddha",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/lucky-buddha.png"
+  },
+  {
+    "gameid": "0297e0e5836a431486d9a6808280424c",
+    "gamename": "Master Chef Frenzy",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/master-chef-frenzy.png"
+  },
+  {
+    "gameid": "019abd835f6f1505ddec2df2bfd4469e",
+    "gamename": "Mummy's Curse",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mummy-s-curse.png"
+  },
+  {
+    "gameid": "c65a339d5b25b5e5451cbf9e27fe290d",
+    "gamename": "Oil Tycoon",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/oil-tycoon.png"
+  },
+  {
+    "gameid": "6de5b0919feda84184d2590c63e71cfc",
+    "gamename": "Penguin Quest",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/penguin-quest.png"
+  },
+  {
+    "gameid": "15a01af033e22202cf1320c74bc9dd7b",
+    "gamename": "Piggies in Space",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/piggies-in-space.png"
+  },
+  {
+    "gameid": "a2a0a65aa5b7438bab6ca06ed1f25519",
+    "gamename": "Pompeil Blaze",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/pompeil-blaze.png"
+  },
+  {
+    "gameid": "35f07ec08b267a82dcb893a7c5389d15",
+    "gamename": "Rage T-rex",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rage-t-rex.png"
+  },
+  {
+    "gameid": "aae23a7644a3837e24d36160badb2db2",
+    "gamename": "Rampart Rhino Megaways",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rampart-rhino-megaways.png"
+  },
+  {
+    "gameid": "2c831e9917a926a0324fbcf600a63ade",
+    "gamename": "Rapid Fire Blast",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rapid-fire-blast.png"
+  },
+  {
+    "gameid": "ae85f7b8d9f0a42a9f098947df64a4d5",
+    "gamename": "Rhino Legend",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rhino-legend.png"
+  },
+  {
+    "gameid": "b894813deb08d1ca4193c0d4a470a241",
+    "gamename": "Rich Piggies",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rich-piggies.png"
+  },
+  {
+    "gameid": "6d513cd23785e896e2d2a26130acd1d3",
+    "gamename": "Rich Piggies World",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/rich-piggies-world.png"
+  },
+  {
+    "gameid": "f05f4bcfbd765794ea7d6b0315078e21",
+    "gamename": "Star Light Princess 3000",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/star-light-princess-3000.png"
+  },
+  {
+    "gameid": "127df0beb840cb16713ea8ea761da45e",
+    "gamename": "Super Gold Arowana",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/super-gold-arowana.png"
+  },
+  {
+    "gameid": "3311178eef6987e55143f56b62dc0026",
+    "gamename": "Super Heroine",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/super-heroine.png"
+  },
+  {
+    "gameid": "e4f855d638801219f77dcae07cd60701",
+    "gamename": "TaiChi Dragon",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/taichi-dragon.png"
+  },
+  {
+    "gameid": "5f6f6e9df74ae7633d50bae6cd4cdd8d",
+    "gamename": "The Flaming City",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-flaming-city.png"
+  },
+  {
+    "gameid": "61a969d9f5a00714d8812f8649b714d9",
+    "gamename": "The Great Firefighter",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-great-firefighter.png"
+  },
+  {
+    "gameid": "3351d1a632726d80dd88342e146ac2b3",
+    "gamename": "The Hottest Chili",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-hottest-chili.png"
+  },
+  {
+    "gameid": "f1b53fc774e5ac1d1fbd5027fb0e6302",
+    "gamename": "The Hottest Christmas",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-hottest-christmas.png"
+  },
+  {
+    "gameid": "e207f771a9f637c54863e5deb4e14bad",
+    "gamename": "The Penguins",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-penguins.png"
+  },
+  {
+    "gameid": "fa3ebf9bf43c14d884487514000ad905",
+    "gamename": "The Puppies in Egypt",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-puppies-in-egypt.png"
+  },
+  {
+    "gameid": "887f7330284bb755790dd7159b0e315c",
+    "gamename": "Thor's Hammer",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/thor-s-hammer.png"
+  },
+  {
+    "gameid": "c9ff1bbdd93f2d5f10e4300d1809744f",
+    "gamename": "Tiki Link Holiday",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/tiki-link-holiday.png"
+  },
+  {
+    "gameid": "7dfdb4858d46d946928c1e3ce1f90425",
+    "gamename": "Valiant of Athena",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/valiant-of-athena.png"
+  },
+  {
+    "gameid": "48f6efcfff6ec32581b158ef6f3a5d6d",
+    "gamename": "Vegas Cash Link",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/vegas-cash-link.png"
+  },
+  {
+    "gameid": "e15c9bdfb9ebaea1c1df87ed7b2dd90e",
+    "gamename": "Wicked Belle",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wicked-belle.png"
+  },
+  {
+    "gameid": "0a91ba15acca7a459e0c639530d7f23b",
+    "gamename": "Wicked Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wicked-fortune.png"
+  },
+  {
+    "gameid": "fe7317112638e32e1a2a39a6b4c95b69",
+    "gamename": "Wicked Riches",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wicked-riches.png"
+  },
+  {
+    "gameid": "4eff60ed55ca3f9c4f6b43b541aa5058",
+    "gamename": "Wild Crazy West",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wild-crazy-west.png"
+  },
+  {
+    "gameid": "4c990f680ecd3537340f3a066be9c64e",
+    "gamename": "Zeus's Power",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/zeus-s-power.png"
+  },
+  {
+    "gameid": "20b68960cac17058b8aa2324f55fc89a",
+    "gamename": "Angle vs Devil Sea Duel",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/angle-vs-devil-sea-duel.png"
+  },
+  {
+    "gameid": "b4e2bfd6f28f968233e28ecf867a9e4b",
+    "gamename": "Aztlan Gems 3",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/aztlan-gems-3.png"
+  },
+  {
+    "gameid": "d9d61028c71d59f2099d52ba32f41edb",
+    "gamename": "Jungle Kingdoms",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/jungle-kingdoms.png"
+  },
+  {
+    "gameid": "e1f40cc58cb9b4f050c32ca066dc0f76",
+    "gamename": "Aztlan Gems 2",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/aztlan-gems-2.png"
+  },
+  {
+    "gameid": "0812343b02f87477e922abe976f15d52",
+    "gamename": "Chili Chili Fire",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/chili-chili-fire.png"
+  },
+  {
+    "gameid": "ea891f4e83633202665694603da2ca49",
+    "gamename": "Mahjong Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mahjong-fortune.png"
+  },
+  {
+    "gameid": "78060d57d089a3bb0ed3b413c4eb5e3a",
+    "gamename": "Snappy Carnival",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/snappy-carnival.jpg"
+  },
+  {
+    "gameid": "7629b57f5a4ca69ad9ebc2ed5c420810",
+    "gamename": "Golden Dragon Egg",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/golden-dragon-egg.png"
+  },
+  {
+    "gameid": "f4874b0b0dacc97f432be56fdd706601",
+    "gamename": "Piggies Wealthy Angelic",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/piggies-wealthy-angelic.jpg"
+  },
+  {
+    "gameid": "bfdb8432800d73ee93e7df3576ee852c",
+    "gamename": "Big Bad Wolf",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/big-bad-wolf.png"
+  },
+  {
+    "gameid": "80f5c29403af33fe4fb1a35c0e514816",
+    "gamename": "Starlight Princess 2000",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/starlight-princess-2000.png"
+  },
+  {
+    "gameid": "762da9941d49246313983f20af789976",
+    "gamename": "Mahjong Wins",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mahjong-wins.png"
+  },
+  {
+    "gameid": "7e95dd45e66b657cb15dd5dba34fc6fe",
+    "gamename": "Bingo Meow",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/bingo-meow.png"
+  },
+  {
+    "gameid": "0b7c26df0128677977e9ebb9793d4d40",
+    "gamename": "Aztec Glory",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/aztec-glory.png"
+  },
+  {
+    "gameid": "299add4089efa8e3772e64509c1c5d96",
+    "gamename": "Fortune Sheepy",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/fortune-sheepy.png"
+  },
+  {
+    "gameid": "7071dedbe8fcab45f2fc3fd5ca1825ac",
+    "gamename": "Candy Craze",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/candy-craze.png"
+  },
+  {
+    "gameid": "e284f2ca85b40fa804d7e3a4837001cd",
+    "gamename": "Ace Master",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/ace-master.png"
+  },
+  {
+    "gameid": "f0778d7b2884bd6ae3c2304676ecd2fd",
+    "gamename": "Mahjong Bonus",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mahjong-bonus.png"
+  },
+  {
+    "gameid": "3e86e939eaf2b88aa77865600adda175",
+    "gamename": "3 Coin Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/3-coin-fortune.png"
+  },
+  {
+    "gameid": "88628a854a31d41d584360eb1ff5a979",
+    "gamename": "Magic Riches Dragon",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/magic-riches-dragon.png"
+  },
+  {
+    "gameid": "37dc679bd10a92a4ae66e5520f333c8f",
+    "gamename": "Magic Riches Tiger",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/magic-riches-tiger.png"
+  },
+  {
+    "gameid": "442370b55f2c1a35b7bb9ecaf7ebfd58",
+    "gamename": "Thunder Fire Sparkle",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/thunder-fire-sparkle.png"
+  },
+  {
+    "gameid": "3477f0ba4928f2696c9c51c2099e9c9f",
+    "gamename": "Flaming Chili Party",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/flaming-chili-party.png"
+  },
+  {
+    "gameid": "37a1b6883ac8ad48e4fe51cd95cc40f2",
+    "gamename": "Whisker Wheels Fate Kat",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/whisker-wheels-fate-kat.png"
+  },
+  {
+    "gameid": "f173a149dbf00016571a20f361269fea",
+    "gamename": "Lucky Trio Gold Rush",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/lucky-trio-gold-rush.png"
+  },
+  {
+    "gameid": "21f71e37882e2dd6f39a8c6dc13d6797",
+    "gamename": "Gold Rush",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/gold-rush.png"
+  },
+  {
+    "gameid": "248aad3ce6e381a7d29fedb622286d93",
+    "gamename": "The Hallowin Bats",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/the-hallowin-bats.png"
+  },
+  {
+    "gameid": "bd6cef1266b5e00e87b1962177f1e84f",
+    "gamename": "Dragon's Blaze Link",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/dragon-s-blaze-link.png"
+  },
+  {
+    "gameid": "922eb66531f0dd187f45aa0f76791900",
+    "gamename": "Mummy’s Treasure Quest",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mummy-s-treasure-quest.png"
+  },
+  {
+    "gameid": "1cf6a3bff8dd42a531339dcaca327fef",
+    "gamename": "Express Riches",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/express-riches.png"
+  },
+  {
+    "gameid": "be5ea9db610fe0d6c0a73cc0c2d8f62f",
+    "gamename": "Chef Panda",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/chef-panda.png"
+  },
+  {
+    "gameid": "0172ca1bf61cba3f7b56996bf36e8229",
+    "gamename": "Skeleton Thief",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/skeleton-thief.png"
+  },
+  {
+    "gameid": "9264b645515c5938ea52f03c5fd65e1b",
+    "gamename": "Treasure Train Deluxe",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/treasure-train-deluxe.png"
+  },
+  {
+    "gameid": "bcd41365ece6423a0c1c88eeafa5f0dd",
+    "gamename": "Wealth Of Aztec",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/wealth-of-aztec.png"
+  },
+  {
+    "gameid": "fecacea33f742a7bee2461d5fae2ee47",
+    "gamename": "Fuyu Phoenix",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/fuyu-phoenix.png"
+  },
+  {
+    "gameid": "76a58704cc7e04cb8ee25e82a45f1210",
+    "gamename": "Fortune Gold Pots",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/fortune-gold-pots.png"
+  },
+  {
+    "gameid": "2a21bdd77b2cefb26e45a3461f536b82",
+    "gamename": "Gems Bonanza",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/gems-bonanza.png"
+  },
+  {
+    "gameid": "5aedb5a966a6ce8690a247f4e0a8989a",
+    "gamename": "Legend Of The Ring",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/legend-of-the-ring.png"
+  },
+  {
+    "gameid": "c32ccb84ad81265e7a31c514b46a259c",
+    "gamename": "Buffalo Triple Legend",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/buffalo-triple-legend.png"
+  },
+  {
+    "gameid": "c7e31e5a0d896afb20345b75c5116d1e",
+    "gamename": "King Kong Treasure",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/king-kong-treasure.png"
+  },
+  {
+    "gameid": "3d1c81719f9b6f07d7725ce8c804963e",
+    "gamename": "Crazy Chicken",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/crazy-chicken.png"
+  },
+  {
+    "gameid": "d4105e54302d8f598e5cd8a612a82360",
+    "gamename": "Buffalo Triple Fury",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/buffalo-triple-fury.png"
+  },
+  {
+    "gameid": "20665f873b9039aec854cff4735e52ca",
+    "gamename": "Dancing Golden Drums",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/dancing-golden-drums.jpg"
+  },
+  {
+    "gameid": "549d103cfe5623ee63f3b2cc2b5c6d26",
+    "gamename": "Ore Rush Cart Collector",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/ore-rush-cart-collector.png"
+  },
+  {
+    "gameid": "07994bc94d084ed49bd791d7afcaed76",
+    "gamename": "Bao Zhu Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/bao-zhu-fortune.png"
+  },
+  {
+    "gameid": "7ec6e3c40e6963ca193765520b13b917",
+    "gamename": "Triple Super Gods",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/triple-super-gods.png"
+  },
+  {
+    "gameid": "6823d3b1a21839cc9e12b5073e7c674e",
+    "gamename": "Phoenix Link - Collection",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/phoenix-link-collection.png"
+  },
+  {
+    "gameid": "94e5e4108431e974098b685d6847439b",
+    "gamename": "Feeding Time",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/feeding-time.png"
+  },
+  {
+    "gameid": "347bc41cff15740a8946b32275a1f988",
+    "gamename": "Clucky Cash",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/clucky-cash.png"
+  },
+  {
+    "gameid": "d91d895f53c846fe6b0bf6a0f9377998",
+    "gamename": "Triple Spin Xtreme",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/triple-spin-xtreme.png"
+  },
+  {
+    "gameid": "3e0e84da3c50ddc19305bfdce50c5c67",
+    "gamename": "Money Piggies",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/money-piggies.png"
+  },
+  {
+    "gameid": "a53c6f906b29d24df00d68facacbc485",
+    "gamename": "Dragon Link Fortune",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/dragon-link-fortune.png"
+  },
+  {
+    "gameid": "d371499dc890a6dc005acfa4be44535c",
+    "gamename": "Mythic Gems: Five Realms",
+    "providerName": "VPLUS",
+    "image": "https://providers.gamblly-api.com/assets/providers/vplus/mythic-gems-five-realms.png"
+  }
+]

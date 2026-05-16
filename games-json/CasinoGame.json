@@ -1,0 +1,45 @@
+[
+  {
+    "gameid": "e83b9482d33996ecbd76be8f9360e5d9",
+    "gamename": "Baccarat Classic",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/baccarat-classic.png"
+  },
+  {
+    "gameid": "24fcbcb7757b1cd21f3e61d27e98c93f",
+    "gamename": "Dragon Tiger",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/dragon-tiger.png"
+  },
+  {
+    "gameid": "3ce7637ac17ae76a9f85718b85a04ec7",
+    "gamename": "Roulette",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/roulette.png"
+  },
+  {
+    "gameid": "b90aedfb7a785651c4f4d8199f0069a2",
+    "gamename": "Sicbo",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/sicbo.jpg"
+  },
+  {
+    "gameid": "4714464f4f680a7a9e67e3c5a43566c5",
+    "gamename": "Hoo Hey How",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/hoo-hey-how.png"
+  },
+  {
+    "gameid": "91ddf1ae8a532b72c476a7059aa45a22",
+    "gamename": "HiLo",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/hilo.png"
+  },
+  {
+    "gameid": "712cf8a2e54695cf838d2af9c3a88fc7",
+    "gamename": "Pokdeng",
+    "providerName": "Casino Game",
+    "image": "https://providers.gamblly-api.com/assets/providers/Casino_Game/pokdeng.png"
+  }
+
+]

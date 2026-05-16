@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-04-15T03:18:03+00:00",
+    "user_id": 50,
+    "username": "Amit Boss",
+    "role": "master",
+    "ip": "2407:54c0:1b29:8c78:913b:1a16:e94d:dccb",
+    "forwarded_for": "2407:54c0:1b29:8c78:913b:1a16:e94d:dccb",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+    "device_type": "desktop",
+    "browser": "Edge",
+    "os": "Windows",
+    "accept_language": "en-US,en;q=0.9",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "6428669e4b2092ab9ef671f260c5b326b0d97e681e75f8409bfe398e721e43db"
+}

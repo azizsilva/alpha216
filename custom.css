@@ -1,0 +1,9 @@
+[data-live-balance="exposure"],
+[data-translate="exp"],
+[data-translate="exposure"],
+.bal-exposure-line,
+.mk-ph-exp-row,
+.mk-hide-exposure {
+  display: none !important;
+  visibility: hidden !important;
+}

@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T18:17:00+00:00",
+    "user_id": 229,
+    "username": "Houba",
+    "role": "agent",
+    "ip": "2c0f:f698:c248:19c0:c863:4e3c:8246:af3d",
+    "forwarded_for": "2c0f:f698:c248:19c0:c863:4e3c:8246:af3d",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Mobile/15E148 Safari/604.1",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "os": "iOS",
+    "accept_language": "fr-FR,fr;q=0.9",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "9478686d8498b499b7cd0387bf240648cd6be17be192e785ce9b23356ce38786"
+}

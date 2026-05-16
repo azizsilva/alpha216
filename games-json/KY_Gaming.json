@@ -1,0 +1,164 @@
+[
+  {
+    "gameid": "286eb47a1b213dc71e7723bba7d3f1b7",
+    "gamename": "Tombola Bingo",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/bingo-tombola.webp"
+  },
+  {
+    "gameid": "67693d017d28e1ac8b9d14038a87b888",
+    "gamename": "Football Legend",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/board-legends-football.webp"
+  },
+  {
+    "gameid": "de17737b935dd7a77885d45a6dfb164e",
+    "gamename": "Dice",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-dice.webp"
+  },
+  {
+    "gameid": "fb3334b89b498706938d6bb2857adae5",
+    "gamename": "Bombing Fortune",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-fortune.webp"
+  },
+  {
+    "gameid": "320f3853ab8f0266f8731a69035326ac",
+    "gamename": "Fruit Bombs",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-fruit-bombs.webp"
+  },
+  {
+    "gameid": "b7efe84654be7e64cb2031cecf185e41",
+    "gamename": "Gladiator",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-gladiator.webp"
+  },
+  {
+    "gameid": "3a3df38a88a964504e4b0d9fe79e669f",
+    "gamename": "Looking For Gophers",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-gopher.webp"
+  },
+  {
+    "gameid": "34d8fe6f50f63e3e08909b4cffb9c96c",
+    "gamename": "King Of The Hammer",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-hammer.webp"
+  },
+  {
+    "gameid": "2cd2df27a9a6164308a0b13d04bb58b3",
+    "gamename": "Mines",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-mines.webp"
+  },
+  {
+    "gameid": "d701f5a04f96cde58b684105d06b0fb5",
+    "gamename": "Mines2",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-mines2.webp"
+  },
+  {
+    "gameid": "f1f4fd2ae86664a0eca72c18a16f88ea",
+    "gamename": "Secret Tetris",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-secret-tetris.webp"
+  },
+  {
+    "gameid": "cc2dd6301b649aa597c172132ddc486c",
+    "gamename": "Survivor",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-survivor.webp"
+  },
+  {
+    "gameid": "4b6d8a3f28ea08e921543d556b043475",
+    "gamename": "Lucky Wheel",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/original-wheel.webp"
+  },
+  {
+    "gameid": "a2c1ede663a14ce53102893000016027",
+    "gamename": "Poking Fortune",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/poke-fortune.webp"
+  },
+  {
+    "gameid": "bfd417aef228670d3285c02093a4ffc6",
+    "gamename": "Happy Encounter",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-encounter-n.webp"
+  },
+  {
+    "gameid": "797435cc84db3ccc29e7bc1c8fb3644f",
+    "gamename": "The God Of Wealth Has Arrived",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-fortune-n.webp"
+  },
+  {
+    "gameid": "bb4cc22adbcc8a44a01483d0225d8c58",
+    "gamename": "Houyi Shot The Suns",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-houyi-n.webp"
+  },
+  {
+    "gameid": "610d7e3f3f3f825cc22d36c00a88ccc6",
+    "gamename": "Mahjong God",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-mahjong-n.webp"
+  },
+  {
+    "gameid": "eb5a73350de857befecb7b5aeca51f33",
+    "gamename": "Tigerlions Lead To Auspicious",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-tigerlion-n.webp"
+  },
+  {
+    "gameid": "4ebd94eafac4533e251e372cd2a0d13f",
+    "gamename": "Great Luck In The Year Of The Dragon",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/scratch-year-of-dragon-n.webp"
+  },
+  {
+    "gameid": "042fb3347ab19a3fda2d83768df20b20",
+    "gamename": "Candle In The Tomb",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-candle-tomb.webp"
+  },
+  {
+    "gameid": "33bfdcfc4dff3c81faf1b534d2acba21",
+    "gamename": "Fortune Fafafa",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-fortune-fafafa.webp"
+  },
+  {
+    "gameid": "05f4c53f5dc0a6e13551c3b98cad0125",
+    "gamename": "Gold Digger",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-gold-digger.webp"
+  },
+  {
+    "gameid": "8b5d6fbb00064bf0dda1ef5148f606ad",
+    "gamename": "Golden Tiger",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-golden-tiger.webp"
+  },
+  {
+    "gameid": "b923f3f7990c7b308adaf8bc02f79074",
+    "gamename": "Lucky Panda",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-lucky-panda.webp"
+  },
+  {
+    "gameid": "e9781000b1ef56b1676948d95d1ffd7b",
+    "gamename": "Monkey King Black Wukong",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-monkeyking.webp"
+  },
+  {
+    "gameid": "6544c12c5213dcf4ba132a70d42de52e",
+    "gamename": "Three Kingdoms",
+    "providerName": "KY Gaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/resouse.ob.games/kygaming/prod/img/320x400/slot-three-kingdoms.webp"
+  }
+]

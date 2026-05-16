@@ -1,0 +1,218 @@
+[
+  {
+    "gameid": "66d311ff6cf531e40b61c483dd34c5c9",
+    "gamename": "Penalty Unlimited",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/penalty-unlimited.webp"
+  },
+  {
+    "gameid": "562b299961b0ec40f252a832453c67b0",
+    "gamename": "Chicken Road 2.0",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/chicken-road-2-0.webp"
+  },
+  {
+    "gameid": "458bd34bc83e34501df7e7f96626df6b",
+    "gamename": "Forest Arrow",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/forest-arrow.webp"
+  },
+  {
+    "gameid": "af95a673c8f3a420444d73421bcf0e7a",
+    "gamename": "Hamster Run",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/hamster-run.webp"
+  },
+  {
+    "gameid": "134bbc0f61b73824cf9a68411aa32dc6",
+    "gamename": "Plinko Aztec",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/plinko-aztec.webp"
+  },
+  {
+    "gameid": "3c802c686f7f9270057b6bb69567ea98",
+    "gamename": "SugarDaddy",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/sugardaddy.webp"
+  },
+  {
+    "gameid": "2126c5c458316ba1f2df65b387b60408",
+    "gamename": "Chicken Road",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/chicken-road.webp"
+  },
+  {
+    "gameid": "23d59c10bc65c3cfb6cafdf49969a2b7",
+    "gamename": "Joker Poker",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/joker-poker.webp"
+  },
+  {
+    "gameid": "a6212c1c462a2442a369a4ec25bf40d7",
+    "gamename": "Stairs",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/stairs.webp"
+  },
+  {
+    "gameid": "4169b950c7cbd0bbd392941a13e56767",
+    "gamename": "Triple",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/triple.webp"
+  },
+  {
+    "gameid": "09a138907ccf03d5c064c5ca71e9d9b3",
+    "gamename": "Jogo Do Bicho",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/jogo-do-bicho.webp"
+  },
+  {
+    "gameid": "81c4999d70b1ebbb7cf89d8e41ad493c",
+    "gamename": "Limbo",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/limbo.webp"
+  },
+  {
+    "gameid": "cb66d23b547498132598589af324d558",
+    "gamename": "AviaFly",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/aviafly.webp"
+  },
+  {
+    "gameid": "3a3affa176283107288f5da3698ffe7c",
+    "gamename": "Lucky mines",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/lucky-mines.webp"
+  },
+  {
+    "gameid": "9b48efcf6b18b12fdd7dc8efe9ae971e",
+    "gamename": "Сoinflip",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/oinflip.webp"
+  },
+  {
+    "gameid": "c81286ce4034dcf5b71d44c106f968db",
+    "gamename": "Roulette",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/roulette.webp"
+  },
+  {
+    "gameid": "f84949bd783c7395b5f3092f4d4ec600",
+    "gamename": "Bubbles",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/bubbles.webp"
+  },
+  {
+    "gameid": "e5e23d4c8f7256a1753793cba5fb5aaf",
+    "gamename": "Mines",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/mines.webp"
+  },
+  {
+    "gameid": "2c62ddc0ad8e2c175ec771882e91789b",
+    "gamename": "Sweet Keno",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/sweet-keno.webp"
+  },
+  {
+    "gameid": "6180fdaf4dfab4042194a7d595aca4bb",
+    "gamename": "Hot-mines",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/hot-mines.webp"
+  },
+  {
+    "gameid": "eb3f4260c17737e09767bc4c06796a61",
+    "gamename": "Plinko 1000",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/plinko-1000.webp"
+  },
+  {
+    "gameid": "46d14949aa244609aaa03fa58b198784",
+    "gamename": "Goblin-tower",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/goblin-tower.webp"
+  },
+  {
+    "gameid": "d0ddc8acfbc6836f0db6d270bd83243d",
+    "gamename": "Robo dice",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/robo-dice.webp"
+  },
+  {
+    "gameid": "f4fd956965b6f08ce48fee7d4407aaed",
+    "gamename": "New Hilo",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/new-hilo.webp"
+  },
+  {
+    "gameid": "d8439d6083288f9171930e60836ba505",
+    "gamename": "Double",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/double.webp"
+  },
+  {
+    "gameid": "90741c45a03fbfc800f79c3f5a23be44",
+    "gamename": "Diver",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/diver.webp"
+  },
+  {
+    "gameid": "445289d56c9ee8fa590bf6b29b13dc37",
+    "gamename": "Cryptos",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/cryptos.webp"
+  },
+  {
+    "gameid": "a51b03beafa1773484d1e9c866709589",
+    "gamename": "Tower",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/tower.webp"
+  },
+  {
+    "gameid": "757bdd7e1d8c260807bc78449258d00c",
+    "gamename": "Wheel",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/wheel.webp"
+  },
+  {
+    "gameid": "8ac6b247bd94d71ecdeaa1e62d74f382",
+    "gamename": "Crash",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/crash.webp"
+  },
+  {
+    "gameid": "2bd203129afe1059923b45d7bd5de143",
+    "gamename": "Squid Gamebler",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/squid-gamebler.webp"
+  },
+  {
+    "gameid": "c6345c538d4eb8c4f6d91373009ffc8b",
+    "gamename": "BalloniX",
+    "providerName": "InOut",
+    "image": "https://providers.gamblly-api.com/assets/providers/inout/ballonix.webp"
+  },
+  {
+    "gameid": "1eef592674667c25dfaf067feef6c1fc",
+    "gamename": "Twist",
+    "providerName": "InOut",
+    "image": ""
+  },
+  {
+    "gameid": "9ac1086c9791c979ebd0397b9b6e8e8b",
+    "gamename": "Rock Paper Scissors",
+    "providerName": "InOut",
+    "image": ""
+  },
+  {
+    "gameid": "efb14d01f5ec68e1cf49c53f30c4d476",
+    "gamename": "Rabbit Road",
+    "providerName": "InOut",
+    "image": ""
+  },
+  {
+    "gameid": "70dfc9afebaa7885950695008bcf1bbc",
+    "gamename": "Chicken Royal",
+    "providerName": "InOut",
+    "image": ""
+  }
+]

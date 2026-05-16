@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-12T19:37:31+00:00",
+    "user_id": 1,
+    "username": "admin",
+    "role": "admin",
+    "ip": "2c0f:f698:c140:5e73:c91e:697b:4c88:e155",
+    "forwarded_for": "2c0f:f698:c140:5e73:c91e:697b:4c88:e155",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/147.0.7727.99 Mobile/15E148 Safari/604.1",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "os": "iOS",
+    "accept_language": "en-GB,en-US;q=0.9,en;q=0.8",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fdashboard%2F",
+    "session_id_hash": "1d609d2b6e85d8c4125aeb2decf777ac3acb63a97baa7719ac83e9d04b0e1dd6"
+}

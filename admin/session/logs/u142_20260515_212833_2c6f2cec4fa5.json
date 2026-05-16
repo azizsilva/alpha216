@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T21:28:33+00:00",
+    "user_id": 142,
+    "username": "P2",
+    "role": "partner",
+    "ip": "197.26.100.20",
+    "forwarded_for": "197.26.100.20",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "en-US,en;q=0.9,fr;q=0.8",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "4fb6c83e8723437fa098e72807607ae697ea1843e6c34390a46ca355cd19a403"
+}

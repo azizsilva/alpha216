@@ -1,0 +1,632 @@
+[
+  {
+    "gameid": "a70e2fc86389943ca5f0119e738b9e3d",
+    "gamename": "20 Hot Fruit Delights",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "52c3522012c3861d833d3d4f522638f5",
+    "gamename": "40 Super Heated Sevens",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "8ca0e3b6e9b85d61a92ad3b4ffd0fa06",
+    "gamename": "7s and Diamonds",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "dfbe325db464f981c5257be04ad7237d",
+    "gamename": "88 Riches",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "643f4db37c7c065873c37d85d3e73312",
+    "gamename": "African Sunset",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "57ec6e7ba280def6022297e3718fbb7d",
+    "gamename": "African Sunset 2",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "bc9fb02e656418babf3638d119427d4a",
+    "gamename": "Aladdins Quest",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "91b011a873f0892570b7a23efaf365d0",
+    "gamename": "Ali Babas Riches",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "f80179d24080b231086dbc5fa492ae77",
+    "gamename": "Ancient Gong",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "2eabac2e13e30edc8898ec61c8db01b5",
+    "gamename": "Angry Dogs",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "faed97f14811dcdb939e342e5dd0d450",
+    "gamename": "Apocalypse Quest",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9054aa9df62b93abd107985b9d912247",
+    "gamename": "Atlantis World",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "04e2ce2513f0eee38f9aa3d29bc66c1b",
+    "gamename": "Awesome 7s",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "96664cc4baefeaec0d023d04ee952c30",
+    "gamename": "Baccarat",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "caf70cc65943221854fc57a4abca0658",
+    "gamename": "Battle for Atlantis",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "68ed991b0a74d1bdc94e4d1db13b1f49",
+    "gamename": "Book Of Cupigs",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "dc8ac0a63823eab4a4419a96ddad7df8",
+    "gamename": "Book of Museum",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "4ffe3b55f37d8aad38d1b24527b2f72a",
+    "gamename": "Book of Oziris",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "0a015ceb4dd4d01602e9d6d4d6f910ef",
+    "gamename": "Buffaloes Duel",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "d579a4a2806f3750ca8ecba794e5cb57",
+    "gamename": "Caligula",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "3ba60266dbb8d484fd2942832cde8f95",
+    "gamename": "Caribbean Stud Poker",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "d7c05147efd13ad96caa19903ca5a00d",
+    "gamename": "Castle Blood",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "e2b5df1b4f5014c3eb4b494d658305cf",
+    "gamename": "Chili Quest",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "cc1c9fb0d8ed44d368a008db6ef5ce9e",
+    "gamename": "Chinese Zodiac",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "c4133b611af850791eb94e39dfb4852c",
+    "gamename": "Circus of Horror",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "a1528c886b0428d5ae70fe9c9d940df5",
+    "gamename": "Dancing Lions",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "25f7a6db8f4fab5caae849a00fc624f2",
+    "gamename": "Dawn of Olympus",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "d36ff7f60dced7714d516589252a640a",
+    "gamename": "Diamond Magic",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "755227bfc81213ac799b4f3eda075bb7",
+    "gamename": "Diamond Magic Deluxe",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "f95cce94cf725a49d440f615d3da1af7",
+    "gamename": "Dolphins Dream",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "56d4e1d658d91ba56eb957e28a712f8f",
+    "gamename": "Dragon King",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "66d1d531be62179e283de4336d61a51c",
+    "gamename": "Dragon Lady",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "03c9f642d7bdda5e8c65ed4fe34644d8",
+    "gamename": "Dragon Whisperer",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "bd10f8038ea8de2697f2d8e57192d5c4",
+    "gamename": "Dynamite Fruits",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9621a8ca604976a28ec7e4598a313cff",
+    "gamename": "Dynamite Fruits Deluxe",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9c99211663ef8b6b56ccfd338617d84d",
+    "gamename": "Emperors Wealth",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "1961f8a133fbd856f910bbf3f9941070",
+    "gamename": "Cleopatra",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "099ea0d574954795a0351fe0b0968098",
+    "gamename": "GREAT BUFFALO HOLDN WIN",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "ced9144efb1f33455b9c015ed8d36bb0",
+    "gamename": "Halloween farm",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "7155ecf4ebf5d11f73c211de0f4d9150",
+    "gamename": "GREAT BUFFALO MEGAWAYS",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "fb1a2a57966748456c459e8c014bd4a3",
+    "gamename": "LUCKY PUPS",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "c7b6e70fb81abf0026ab98bf09010a1a",
+    "gamename": "JAZZ JAM JACKPOTS",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "89b80b332a532cc77595e171b8de596b",
+    "gamename": "The Way of the Dead",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "54151eadaebd090f406ec81b54b80613",
+    "gamename": "Lucky Loser",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "60875596c7b9aa05653eba2214b6b971",
+    "gamename": "Olympus Majesty",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "b94bb43566de2cd39c12876b3cb74862",
+    "gamename": "Candy Treats",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "277e27b95175df7cae287db8421a9c93",
+    "gamename": "Jungle Rave",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "a6d355595bb6b2137e78a065dc815d4c",
+    "gamename": "Empire of wealth",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "f0f024bb2fd4d884592941252601794b",
+    "gamename": "3 Headed Dragon",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "de6d4b46ab9cf85e0d4aed8389ec864c",
+    "gamename": "Totem Token",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9b3c855922384d1e3f85be7e10bc54c9",
+    "gamename": "Santas Downfall",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9d2a0a493cb6a16f91c51897fa62f1b2",
+    "gamename": "Broken Ballerina",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "1d527689e9b0068f4f1269144f8e2c3f",
+    "gamename": "Tales of the Serpent Maiden",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "932a328854f38b13edcd0d3124850ace",
+    "gamename": "OReally Lucky",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "c6cee5ac4a5348c7611dca930de3ced1",
+    "gamename": "Midgards Fortune Megaways",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "ddb77b14105c62c84379bd3d4bf004a8",
+    "gamename": "Big Snapper",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "3776bdb8e45cef5ce7ed7ea7a8b6e522",
+    "gamename": "Witchs Candy Quest Megaways",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "02774f43a445adb437912e073717b2d0",
+    "gamename": "BlackJack Gold",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "a9a5341428ebd874218a879e3df31800",
+    "gamename": "Vegas Kingmaker 100",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "501c1e9363060fdbadb9c529ea06a40b",
+    "gamename": "Helluva Slot",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "60a44174c0c7ebfde3acf17bb57dfec2",
+    "gamename": "Electric Power Play",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "d745056198a386e3bb15def343c27f8d",
+    "gamename": "Golden Dragon",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "8ff4a10d57ca7210463a8ef768666c90",
+    "gamename": "Gold Of Ra",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "895cdf4ea3b52940c855f8f4ee0247c6",
+    "gamename": "Hawaiian Christmas",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "a3df5251c154209c18fe59f36e950e8e",
+    "gamename": "Hollywoof",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "b80a3d433990d974a34a7057c5462f64",
+    "gamename": "Hot Fruit Delights",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9001dc77d9b23172ef790a0fb0b9f0ca",
+    "gamename": "Jingle Jokers",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "6e2f67e3e318be4a158dcc3d575ca54a",
+    "gamename": "Joan of Arc",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "1f75e7d723282bb823185fb369a3b4f7",
+    "gamename": "Jumpin Pot",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "78c91a1843d636e95f909b775804cf79",
+    "gamename": "Kitty Twins",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "aca95d54831b0c6b333f200aa910975c",
+    "gamename": "Lady Luck",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "6ffc265ef44657c789e343b1171f7505",
+    "gamename": "Lucky Coins",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "3f7e1915c92eae1b46922f6a75a7bebb",
+    "gamename": "Magic Dragon",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "a31242071bc9a18a5b4c5cf9c782d48e",
+    "gamename": "Magic Unicorn",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "84d9857477998b514c74e8a6700108ab",
+    "gamename": "Mariachi Fiesta",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "919389cd41a28fdf949a24e0854174ec",
+    "gamename": "Money Farm",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "ebd93b179fc318928bee8ec97f0a6d08",
+    "gamename": "Money Farm 2",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "7aac589e40fc5c4b14c10d07ab68d7fa",
+    "gamename": "More Cash",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "0b17b785063ae1c53527d3ebed260a07",
+    "gamename": "Piggy Bjorn Muspelheims Treasure",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "4bc7e0ba60b1cc6807821abfc27304e8",
+    "gamename": "Nefertitis Nile",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "8efead0c4ffaef25415f42a9a859e8bb",
+    "gamename": "Night at KTV",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "996faca3ffd871ea50dea605997ddc19",
+    "gamename": "Norns Fate",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "f576f011f1390f8ba33734764817d850",
+    "gamename": "Peters Universe",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "887ed93b15faeea0ac58604d2d96da0f",
+    "gamename": "Phoenix Princess",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "16ba66452befe1a745080b81d656ee41",
+    "gamename": "Piggy Bjorn Winter is Coming",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "1b4cbf4ba7c142df22f07e91822ca03b",
+    "gamename": "Piggy Holmes",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "79b72dd6ec797d159c533a6dff08e0e8",
+    "gamename": "Power Dragon",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "faadf54dcefa384189787000ab47d7b0",
+    "gamename": "Royal Gems",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "52c8f6d97fbf57517c60f7e8a4a59291",
+    "gamename": "Santas Factory",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "7961c859e045e0e259ecbd07d74d4d6e",
+    "gamename": "Spooky graves",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "165106313eadac2b411eb3f836894a5c",
+    "gamename": "Storming Flame",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "8d086675adc31f92e3e57211908fab19",
+    "gamename": "Striking Joker",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "04e80a60c5c9146cf43ac1589f690d3e",
+    "gamename": "Summer Jam",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "fcc3b21b564ecb66120bfba0d634a9b2",
+    "gamename": "Super Heated sevens",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "4627b8c661d9ccf33ae3edd635bebf71",
+    "gamename": "Surfin Joker",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "80fafca263b93008335de741fbdd658b",
+    "gamename": "Sushi Yatta",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "98e3214b63b30f6ef256420b3f901194",
+    "gamename": "Texas Rangers Reward",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "8c73a850d55bd1e70c5d2ffa40b7c9bf",
+    "gamename": "Three Kings",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "322cbd9dc3706e043382471b65964edc",
+    "gamename": "Tiger Heart",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "2192df3e0f070c970215d017644320ff",
+    "gamename": "Video Poker",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9f6882c77cd4d09582dbd765ef871155",
+    "gamename": "Wild Dolphin",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "7eb6fc0a8e6fedaec8545b1f75d8e829",
+    "gamename": "Wild Marmalade",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "14db31507ebde336d29686ea87f7cf82",
+    "gamename": "Wild Wild Fruit",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "d5c9c1af7bcb0f5b5ebd2e8dc4db9dbb",
+    "gamename": "Xtreme Hot",
+    "providerName": "GameArt",
+    "image": ""
+  },
+  {
+    "gameid": "9e95ee6be7700a2cfbbe1d6054b3daf6",
+    "gamename": "Xtreme Summer Hot",
+    "providerName": "GameArt",
+    "image": ""
+  }
+]

@@ -1,0 +1,638 @@
+[
+  {
+    "gameid": "8b85d249bf18b497c6d2c711206c7e9d",
+    "gamename": "Fervent Samba",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fervent-samba.png"
+  },
+  {
+    "gameid": "251ab02e05f3289609035451ead6621e",
+    "gamename": "Dragon777",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/dragon777.png"
+  },
+  {
+    "gameid": "64657e65e3693f39e8b2db62d859ab26",
+    "gamename": "Football Boys",
+    "providerName": "BtGaming",
+    "image": ""
+  },
+  {
+    "gameid": "dd64c5b3648782ce6dd85234965c8c28",
+    "gamename": "Unparalleled Phoenix Dynasty",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/unparalleled-phoenix-dynasty.png"
+  },
+  {
+    "gameid": "0a2dee7f1fe43a295805afe66accd091",
+    "gamename": "Fuwa Baoxi",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fuwa-baoxi.png"
+  },
+  {
+    "gameid": "3453f2016be66309bfdda1e9d429ed85",
+    "gamename": "X'Mas LABUBU",
+    "providerName": "BtGaming",
+    "image": ""
+  },
+  {
+    "gameid": "2ff9d61d3e56886acf5d59b4fcf504de",
+    "gamename": "Christmas 3 Surprises",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/christmas-3-surprises.png"
+  },
+  {
+    "gameid": "2df9c674591b4c20728ed9c32b731d88",
+    "gamename": "Olympus - Zeus",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/olympus-zeus.png"
+  },
+  {
+    "gameid": "f8e048aa5128bffba9ec26ae6c26a692",
+    "gamename": "BIRD'S PARADISE - FLYING TIGER",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/bird-s-paradise-flying-tiger.png"
+  },
+  {
+    "gameid": "35f72f81cca26581ae5bf0c4bfd42533",
+    "gamename": "Yuanbao Mahjong",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/yuanbao-mahjong.png"
+  },
+  {
+    "gameid": "2880c3582e5c21cad989953b56c05153",
+    "gamename": "Big Eater",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/big-eater.png"
+  },
+  {
+    "gameid": "6ba74d948a39b6ca9898eab9f8f52f5b",
+    "gamename": "ROMAN WARRIOR",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/roman-warrior.png"
+  },
+  {
+    "gameid": "2d7642c9a6b06212749e9b2664a5198c",
+    "gamename": "Riches Phoenix",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/riches-phoenix.png"
+  },
+  {
+    "gameid": "bddaeeaefd4ffaf77c0e929b2209f6f1",
+    "gamename": "EURO2024",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/euro2024.png"
+  },
+  {
+    "gameid": "3a6ad1585bcd080bd3636dc1feb04cd2",
+    "gamename": "SEAFOOD PARADISE",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/seafood-paradise.png"
+  },
+  {
+    "gameid": "89ed2a979cba0cb22b1055413d0be23c",
+    "gamename": "Fighting Academy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fighting-academy.png"
+  },
+  {
+    "gameid": "312180250195f31567bba9a713faa93d",
+    "gamename": "Songkran Festival",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/songkran-festival.png"
+  },
+  {
+    "gameid": "48c69725fb9ccaa68b5288882c899d37",
+    "gamename": "777-CLASSIC STYLE",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/777-classic-style.png"
+  },
+  {
+    "gameid": "8c7ff9483564c200c0ff71f68d147f79",
+    "gamename": "Gong Xi Fa Cai",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gong-xi-fa-cai.png"
+  },
+  {
+    "gameid": "23030285b98deb2e13adee7c9c39d696",
+    "gamename": "Rich Fortune",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/rich-fortune.png"
+  },
+  {
+    "gameid": "2ed6a06cbcb01b1b26d7a00489e15609",
+    "gamename": "GOLDEN BASIN",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/golden-basin.png"
+  },
+  {
+    "gameid": "2b5ef52ca2f8e68f5216d9653130fe19",
+    "gamename": "X'mas Gift City",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/x-mas-gift-city.png"
+  },
+  {
+    "gameid": "a3fc35b1163ee046822fa85e5e09f11e",
+    "gamename": "All for the Winner",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/all-for-the-winner.png"
+  },
+  {
+    "gameid": "14ee3b819bb070ab0bd50064f6901aaa",
+    "gamename": "Gaogashou2-MULTIPLY FUN",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gaogashou2-multiply-fun.png"
+  },
+  {
+    "gameid": "b6808e7f462928a789978fa2b1098c71",
+    "gamename": "SAFARI HEAT-MULTIPLY FUN",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/safari-heat-multiply-fun.png"
+  },
+  {
+    "gameid": "76a68f189ab6ca858fd237c1bd779fbc",
+    "gamename": "Sugar Bar",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/sugar-bar.png"
+  },
+  {
+    "gameid": "3fa5b886c6f08946329535a043174cc1",
+    "gamename": "Monkey Thunderbolt",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/monkey-thunderbolt.png"
+  },
+  {
+    "gameid": "a1b20a7c567ad88571b5f5bc2b0b207a",
+    "gamename": "Riches Phoenix",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/riches-phoenix.png"
+  },
+  {
+    "gameid": "2b5e3338acad9519d537a4bb25f78a1f",
+    "gamename": "Mayan Adventure",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/mayan-adventure.png"
+  },
+  {
+    "gameid": "2ed317813a09563d163e091a70ffa8c6",
+    "gamename": "Gods of Egypt",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gods-of-egypt.png"
+  },
+  {
+    "gameid": "f8a21c5a2ae61d1ce295082a3ee600a4",
+    "gamename": "PHOENIX WORLD",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/phoenix-world.png"
+  },
+  {
+    "gameid": "91caf941e38f74ace6cd0b04a0f49a58",
+    "gamename": "Fortunate Lion-Lucky Mix",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fortunate-lion-lucky-mix.png"
+  },
+  {
+    "gameid": "99d057317b8c6a15b2b32bf5dbbbd634",
+    "gamename": "Monkey King",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/monkey-king.png"
+  },
+  {
+    "gameid": "a0cff14fe575513ccc07f76e865a957e",
+    "gamename": "Infinity Mining",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/infinity-mining.png"
+  },
+  {
+    "gameid": "2134c799c6eb920d654960ed812640fb",
+    "gamename": "Beach Baby",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/beach-baby.png"
+  },
+  {
+    "gameid": "25273ee6e7aae11caea37e5872e77df9",
+    "gamename": "Gold Fairy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gold-fairy.png"
+  },
+  {
+    "gameid": "b635889a3c059b3d41c2448dbfa4eb90",
+    "gamename": "Deep Rising",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/deep-rising.png"
+  },
+  {
+    "gameid": "26b946419082781ef309a2db1783c422",
+    "gamename": "SEAFOOD PARADISE IV PLUS+",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/seafood-paradise-iv-plus.png"
+  },
+  {
+    "gameid": "22ed0857ee6496a41a964dd64004695b",
+    "gamename": "Weird Xmas",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/weird-xmas.png"
+  },
+  {
+    "gameid": "912a21265868f268e5a3d48138912ec9",
+    "gamename": "Belangkai",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/belangkai.png"
+  },
+  {
+    "gameid": "ce4e0d1162775b30ecec39fbd605b27f",
+    "gamename": "Slime Gem",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/slime-gem.png"
+  },
+  {
+    "gameid": "b62d500aa8481087d23429ee70423a4a",
+    "gamename": "Pokdeng",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/pokdeng.png"
+  },
+  {
+    "gameid": "091ee6a3947b154674b65720e8e3165a",
+    "gamename": "SUPER Roulette",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/super-roulette.png"
+  },
+  {
+    "gameid": "f632291362f3b89caee19908204da18d",
+    "gamename": "Ghost Mansion",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/ghost-mansion.png"
+  },
+  {
+    "gameid": "b2cd39bc04990263dd96c1af8991df9a",
+    "gamename": "Yu Yue Long Men",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/yu-yue-long-men.png"
+  },
+  {
+    "gameid": "695295dd8c5721110f4dc7abe32b5127",
+    "gamename": "Mayan Adventure",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/mayan-adventure.png"
+  },
+  {
+    "gameid": "0a702e3f1020d78914ba2f8a1fcb7a8d",
+    "gamename": "Detective Girl",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/detective-girl.png"
+  },
+  {
+    "gameid": "9189409a47fc6fabb9957e4c1ba1ee9e",
+    "gamename": "5PK",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/5pk.png"
+  },
+  {
+    "gameid": "bec01885155b6be724fcbb7d93f9e94d",
+    "gamename": "SPACE WAR",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/space-war.png"
+  },
+  {
+    "gameid": "4423ec61b326f6b8e4d99054f91502ea",
+    "gamename": "BullBullClassic",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/bullbullclassic.png"
+  },
+  {
+    "gameid": "81dea743a44cf13345c84dd82166288d",
+    "gamename": "BullBullMega",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/bullbullmega.png"
+  },
+  {
+    "gameid": "d5317d8eabfb05221445ac7f9a4f9c71",
+    "gamename": "Circus-Lucky Mix",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/circus-lucky-mix.png"
+  },
+  {
+    "gameid": "65db0cda0c470ba69905a515ff426b5d",
+    "gamename": "Wonderland",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/wonderland.png"
+  },
+  {
+    "gameid": "eff78b885ebae6bfcc5f80c0b9041737",
+    "gamename": "Beach Baby",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/beach-baby.png"
+  },
+  {
+    "gameid": "c3e95f10cdc82833d7cd2ae724d4605e",
+    "gamename": "MacauBaccarat",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/macaubaccarat.png"
+  },
+  {
+    "gameid": "81459334f804115d629e77bc7b7ad0e0",
+    "gamename": "Fortune Cat",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fortune-cat.png"
+  },
+  {
+    "gameid": "824013d86115a7826fce4df3f88a551f",
+    "gamename": "Time Machine",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/time-machine.png"
+  },
+  {
+    "gameid": "f84afd86bb4099347ebaf33e6f1ea436",
+    "gamename": "UMO",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/umo.png"
+  },
+  {
+    "gameid": "61879351feba69978e4d91041f3de056",
+    "gamename": "SHARK DANCE",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/shark-dance.png"
+  },
+  {
+    "gameid": "2787ab2d929fb842316d9211eaf1dfd8",
+    "gamename": "Treasure Hunters",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/treasure-hunters.png"
+  },
+  {
+    "gameid": "f91bf9c8d0601e876e77ee901c79658e",
+    "gamename": "Sic-bo",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/sic-bo.png"
+  },
+  {
+    "gameid": "06271ec91be94efc0e2d343d8945c7d0",
+    "gamename": "Mansion Battle Royale",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/mansion-battle-royale.png"
+  },
+  {
+    "gameid": "05036f46259ecbf92e6b7c51db4096a3",
+    "gamename": "Fire Dragon",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fire-dragon.png"
+  },
+  {
+    "gameid": "54e19e6cc2668b0b677ab6a3cbba1f99",
+    "gamename": "Water Dragon",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/water-dragon.png"
+  },
+  {
+    "gameid": "d8d0c15eebfc044a008d89ab40d26a33",
+    "gamename": "Dragon’s Treasures",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/dragon-s-treasures.png"
+  },
+  {
+    "gameid": "74c63ad177c132239ab053248b5b19dd",
+    "gamename": "Rich Fortune",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/rich-fortune.png"
+  },
+  {
+    "gameid": "45cc4b28a5817ab1705ae7c479113e3a",
+    "gamename": "CakeMatch",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/cakematch.png"
+  },
+  {
+    "gameid": "b0006d30b9ec5070311977d036e4f7da",
+    "gamename": "Snow God",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/snow-god.png"
+  },
+  {
+    "gameid": "bb0a4fd434d6de5e8ba418b12dd3fa68",
+    "gamename": "The Journey To The West",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/the-journey-to-the-west.png"
+  },
+  {
+    "gameid": "9bfd4d03d7f480f12b513a0ee303a06c",
+    "gamename": "Ennead",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/ennead.png"
+  },
+  {
+    "gameid": "54269cc4b7d3ae87be5ee5d017561ebb",
+    "gamename": "The White Snake",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/the-white-snake.png"
+  },
+  {
+    "gameid": "5430c8b7525eef3105e28886cd19c4dd",
+    "gamename": "Gods of Egypt",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gods-of-egypt.png"
+  },
+  {
+    "gameid": "0fa04748335a8df5342149768ae63d69",
+    "gamename": "Sushi Match",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/sushi-match.png"
+  },
+  {
+    "gameid": "556561669078885492a392fadd4f560b",
+    "gamename": "LUXURY WORLD",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/luxury-world.png"
+  },
+  {
+    "gameid": "297bbce460c555cc4f4c2946f5825f0a",
+    "gamename": "Little Red Riding Hood",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/little-red-riding-hood.png"
+  },
+  {
+    "gameid": "2a27065c0e7d0e71a16b2f9d98d4648a",
+    "gamename": "Three Little Pigs",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/three-little-pigs.png"
+  },
+  {
+    "gameid": "fee4c669c2b6d53387824188a00539d2",
+    "gamename": "Stonelions",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/stonelions.png"
+  },
+  {
+    "gameid": "14c5625f852dbe83c48aae5e2ba1d90e",
+    "gamename": "Weird Xmas",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/weird-xmas.png"
+  },
+  {
+    "gameid": "dbc24fa57c6d2fb0a8f09ef61b9630be",
+    "gamename": "Candy House",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/candy-house.png"
+  },
+  {
+    "gameid": "8272d2bfdb8c3dfb3e073a44b8e4945d",
+    "gamename": "Prehistoric Park",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/prehistoric-park.png"
+  },
+  {
+    "gameid": "158d347f601e98b60e4cc9843abe6a05",
+    "gamename": "Beer Carnival",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/beer-carnival.png"
+  },
+  {
+    "gameid": "e3e2c6715f8b4df8381a18dd0985f345",
+    "gamename": "Cat VS Mouse",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/cat-vs-mouse.png"
+  },
+  {
+    "gameid": "cc76206ff325f3e4d1fe9531bc243a65",
+    "gamename": "Lovecraft's Legacy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/lovecraft-s-legacy.png"
+  },
+  {
+    "gameid": "b75d887a4f5e440b515d7d6b70e7aaa0",
+    "gamename": "Happy Fruit Stand",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/happy-fruit-stand.png"
+  },
+  {
+    "gameid": "7616f5b4388e2aebf895a5799e9e3bcd",
+    "gamename": "THOR",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/thor.png"
+  },
+  {
+    "gameid": "9b921657808381be91b3428b1701206c",
+    "gamename": "Magic House",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/magic-house.png"
+  },
+  {
+    "gameid": "5268c5a9c48e21f301e6ca0e0bc87fd7",
+    "gamename": "Ninja Phantom",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/ninja-phantom.png"
+  },
+  {
+    "gameid": "cce265acbd8af9857e6b670c1e5e0f25",
+    "gamename": "Halloween Horror",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/halloween-horror.png"
+  },
+  {
+    "gameid": "4d6339c1c0024ad46c0595d70719c77b",
+    "gamename": "Ghost Zombie",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/ghost-zombie.png"
+  },
+  {
+    "gameid": "cde97d392e59c6bae7ff6f1a4ac0f27b",
+    "gamename": "Mutation fish",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/mutation-fish.png"
+  },
+  {
+    "gameid": "153c4cee05999212c48e03d77579485a",
+    "gamename": "Star Cruise",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/star-cruise.png"
+  },
+  {
+    "gameid": "45a9c78be5e2e4f34461d21ad8afdbe3",
+    "gamename": "Insect Doctor",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/insect-doctor.png"
+  },
+  {
+    "gameid": "cf18c7e48efa6a82bb0969882ba4ece2",
+    "gamename": "Bird'sParadise",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/bird-sparadise.png"
+  },
+  {
+    "gameid": "2dc3904eeb6e6244a0553f83b5127fc6",
+    "gamename": "SeaFoodParadise",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/seafoodparadise.png"
+  },
+  {
+    "gameid": "c00c5dbbd9ff91c522d7aa64bc18e06b",
+    "gamename": "Graveyard Keeper",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/graveyard-keeper.png"
+  },
+  {
+    "gameid": "058c5da884373bc7612b60bc420be900",
+    "gamename": "DR. Crazy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/dr-crazy.png"
+  },
+  {
+    "gameid": "2ba9d3b6aa1f87d7a8f6410e0ca8dd66",
+    "gamename": "Run Date",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/run-date.png"
+  },
+  {
+    "gameid": "1be50fbb6306ad37601eb2587e02d28b",
+    "gamename": "Egypt Gods",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/egypt-gods.png"
+  },
+  {
+    "gameid": "dbf30b4f8a7606657a22a8ffd360bbd8",
+    "gamename": "Live Goddess",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/live-goddess.png"
+  },
+  {
+    "gameid": "d5dcf7f421824121a52814b064b0b71a",
+    "gamename": "Wilderness Hunting",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/wilderness-hunting.png"
+  },
+  {
+    "gameid": "585eb87344b82bfee208f8a8091681d9",
+    "gamename": "Gaogashou",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gaogashou.png"
+  },
+  {
+    "gameid": "0885c9790330eefffcea4cbecbaadae2",
+    "gamename": "Three Kingdoms",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/three-kingdoms.png"
+  },
+  {
+    "gameid": "d6b43c1c6f2e9c2289e7a1d7d91450dc",
+    "gamename": "Fighting Academy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/fighting-academy.png"
+  },
+  {
+    "gameid": "dd49eb7945429677557efe3f3ced77f3",
+    "gamename": "Yakuza",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com//assets/image/game_image/btgaming.com/packs/media/images/game_icon/en/AB1006-46ba1bba807934aeb18aa95c2bcd22b2.png"
+  },
+  {
+    "gameid": "a1bd17ad085e8b509bcaf54d807245bb",
+    "gamename": "Gold Fairy",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gold-fairy.png"
+  },
+  {
+    "gameid": "ee774ff880d73f0f0dcbb1fe076d0191",
+    "gamename": "Gumiho",
+    "providerName": "BtGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/btgaming/gumiho.png"
+  }
+]

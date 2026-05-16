@@ -1,0 +1,194 @@
+[
+  {
+    "gameid": "777fffac1d578d7f53cbc67af087bf79",
+    "gamename": "777",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/777.png"
+  },
+  {
+    "gameid": "f78a5094ea0e7b814fe6d83deff09a7f",
+    "gamename": "LUCKY TIGER",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/lucky-tiger.png"
+  },
+  {
+    "gameid": "6401f84ccb430a2f94ee1c6279b5ef23",
+    "gamename": "MAHJONG WAYS 3",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/mahjong-ways-3.png"
+  },
+  {
+    "gameid": "813f04756859094753ea7507c8b8b761",
+    "gamename": "MAHJONG WAYS 3+",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/mahjong-ways-3.png"
+  },
+  {
+    "gameid": "4ac63bc1a2cb92a20ab1e74ed41c3676",
+    "gamename": "GOD OF FORTUNE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/god-of-fortune.png"
+  },
+  {
+    "gameid": "f6447102b5aaba70ab52b0514cb006d9",
+    "gamename": "GOD OF FORTUNE 2",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/god-of-fortune-2.png"
+  },
+  {
+    "gameid": "5698aee76907f03734cd3d4bd9eb7a5f",
+    "gamename": "MASTER OF GOLD MINER",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/master-of-gold-miner.png"
+  },
+  {
+    "gameid": "d57aed016a0acea027b3a0d964608fb9",
+    "gamename": "MASTER OF GOLD MINER 2",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/master-of-gold-miner-2.png"
+  },
+  {
+    "gameid": "d7716ccea068a855c91acf4436e7d8d3",
+    "gamename": "GOLDEN LEGEND",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/golden-legend.png"
+  },
+  {
+    "gameid": "a4fdf1d660efc698b3a912ccb633f67c",
+    "gamename": "MONEY TREE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/money-tree.png"
+  },
+  {
+    "gameid": "7428c66da8c23264d187fc32954c39ed",
+    "gamename": "SUPREME ACE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/supreme-ace.png"
+  },
+  {
+    "gameid": "438d1c985e269e952204dc0a7191cc6a",
+    "gamename": "CANDY GALA",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/candy-gala.png"
+  },
+  {
+    "gameid": "852f5fc6940b5fff9fa030eb428cb82f",
+    "gamename": "TREASURES OF EGYPT",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/treasures-of-egypt.png"
+  },
+  {
+    "gameid": "8690fc8779994b880f76115e78a8d5b0",
+    "gamename": "OPERA PANDA",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/opera-panda.png"
+  },
+  {
+    "gameid": "fc337a79fae20c0e3b5be8614da66ce0",
+    "gamename": "LUCKY NEKO",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/lucky-neko.png"
+  },
+  {
+    "gameid": "667f1f4104ba64cb14e0ffbd9b829c92",
+    "gamename": "GIVE ME FIRE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/give-me-fire.png"
+  },
+  {
+    "gameid": "0091e14e049a9e624038704156ee1d99",
+    "gamename": "KING'S REALM",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/king-s-realm.png"
+  },
+  {
+    "gameid": "a0d84120ecb2db3c22ef39381b3612ab",
+    "gamename": "GEMS MINER",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/gems-miner.png"
+  },
+  {
+    "gameid": "2e8c743b5c05a69400632ea795f469df",
+    "gamename": "HAMMER OF VULCAN",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/hammer-of-vulcan.png"
+  },
+  {
+    "gameid": "e1e0794f69db6b663ac7d1c2451f4593",
+    "gamename": "GOLDEN ISLAND",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/golden-island.png"
+  },
+  {
+    "gameid": "9b72722ef1dbca2fb325e6eea4aa0e10",
+    "gamename": "TAUROS GO",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/tauros-go.jpg"
+  },
+  {
+    "gameid": "7a492125a93855ebb51e700d9a69fd9c",
+    "gamename": "THRILLER TOWN",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/thriller-town.jpg"
+  },
+  {
+    "gameid": "9e971071e263e27536d4eca45aa800b0",
+    "gamename": "CRYPTO VERSE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/crypto-verse.jpg"
+  },
+  {
+    "gameid": "90398e3728c7bd69196d3d6ff0b0fb73",
+    "gamename": "PICHU PICHU",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/pichu-pichu.png"
+  },
+  {
+    "gameid": "180978cd3048c0f29e3368c3c3c1dbc7",
+    "gamename": "BATTLE OF ALLIANCE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/battle-of-alliance.jpg"
+  },
+  {
+    "gameid": "61fd1e3b87c26a457ba9aaf8b71f5f14",
+    "gamename": "G KONG",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/g-kong.jpg"
+  },
+  {
+    "gameid": "a5e3240831aa54fcd58f9854c4b26070",
+    "gamename": "GRIMOIRE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/grimoire.jpg"
+  },
+  {
+    "gameid": "b5518b5a3a6fa27ac973823d3a825254",
+    "gamename": "KUNG FU LEOPARD",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/kung-fu-leopard.jpg"
+  },
+  {
+    "gameid": "08cad21cd786fcf1ce72f5262ba681bb",
+    "gamename": "THE BIG BLUE",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/the-big-blue.jpg"
+  },
+  {
+    "gameid": "ba3960bcf6d2072bb772c37c1cf00801",
+    "gamename": "DJ SEAL",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/dj-seal.jpg"
+  },
+  {
+    "gameid": "f6c7ff4e07eac759139b1aea876d98d4",
+    "gamename": "FORTUNE TRIO",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/fortune-trio.jpg"
+  },
+  {
+    "gameid": "ed7976a855e4e36a3bbb7559699cb7b9",
+    "gamename": "WILD BOUNTY",
+    "providerName": "5gGaming",
+    "image": "https://providers.gamblly-api.com/assets/providers/5ggaming/wild-bounty.png"
+  }
+]

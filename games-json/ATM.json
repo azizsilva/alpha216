@@ -1,0 +1,38 @@
+[
+  {
+    "gameid": "e773616bd8d4c715276f0bc8cdc11380",
+    "gamename": "暗夜骑士",
+    "providerName": "ATM",
+    "image": ""
+  },
+  {
+    "gameid": "295c738df0d620fef871ddea2e5d0f6a",
+    "gamename": "Marbles 奇迹",
+    "providerName": "ATM",
+    "image": ""
+  },
+  {
+    "gameid": "1ee25707716c3c3fa5806accdcdc15af",
+    "gamename": "Marbles 龙之梦",
+    "providerName": "ATM",
+    "image": ""
+  },
+  {
+    "gameid": "fe2e59a09198ae84586bf0ea385e5919",
+    "gamename": "Marbles 弹珠28",
+    "providerName": "ATM",
+    "image": ""
+  },
+  {
+    "gameid": "079afc724e88075b8b3aecf253d7fa85",
+    "gamename": "Marbles 风云六合",
+    "providerName": "ATM",
+    "image": ""
+  },
+  {
+    "gameid": "b46e783c03055378b8978d79a74cc9a0",
+    "gamename": "Marbles 梵光之战",
+    "providerName": "ATM",
+    "image": ""
+  }
+]

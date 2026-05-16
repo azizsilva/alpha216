@@ -1,0 +1,746 @@
+[
+  {
+    "gameid": "202715df7fed47121496ead87f777c70",
+    "gamename": "6 Wild Sharks",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "a84f48e5a30029420528ba6915312f71",
+    "gamename": "Alice In Adventureland",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "6e942b33c944fbfd0199e9c651e22307",
+    "gamename": "Attila The Hun",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1ad257ba975e7bf8c867704ecdd21c3b",
+    "gamename": "Aztec Luck",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "c8b928e2c00fa0f2f5ca2a6447da3612",
+    "gamename": "Beast Mode",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "24f01721a5c9d5420ac3b4af7939233e",
+    "gamename": "Book of 99",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "9cc73530b2250a5686ce9232d4e1de49",
+    "gamename": "Book of Destiny",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5df4f9668ec1f6bafb0280e5f925fd58",
+    "gamename": "Boost it",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "f37ce10de227223f41453582bcc28cfe",
+    "gamename": "Bounty Showdown",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "07b6b170f5d6670dea0b33a90281af1e",
+    "gamename": "Caravan of Riches",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "cac55ca05f276e2d367f1f1c07e91350",
+    "gamename": "Caveman Bob",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "f5791cec452ebbeb3befd12b7c27314a",
+    "gamename": "Chip Spin",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1a8eacb9ffdf18a1b8023fcc85c8f30b",
+    "gamename": "Christmas Santa",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "07e7ab86bc0801442c43eff99a232bd6",
+    "gamename": "Clover Fortunes",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "276031cf4c6d182ac0dde2440de4ff2c",
+    "gamename": "Cluster Tumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "7963b3addd926a73a599b881ec906d72",
+    "gamename": "Crystal Golem",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "7c74df7ff8eb3196300d4ef2b105b8a1",
+    "gamename": "Dead Man's Trail",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "0894cec481afaea1c85b66992b548591",
+    "gamename": "Deep Descent",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "d83293f698af234801bac20dc508b866",
+    "gamename": "Desert Shark",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "60ab472ffaf7edc0655cd0bd531ad16b",
+    "gamename": "Dragons Awakening",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "b2ce225ef2b7e333efd00173f323f33e",
+    "gamename": "Elemento",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "94dcdcb04587ab7aca0b0a20549f659e",
+    "gamename": "Emerald's Infinity Reels",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "8475f301c0bcb3773e5ab2c34619c091",
+    "gamename": "Epic Joker",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "83de38637d1f14bba830c242fa8617a2",
+    "gamename": "Erik the Red",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "c9cd62edbd4bc5bb38955436b62aad7b",
+    "gamename": "Flower Fortunes Supreme",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "e81cea750f7152af7d71982dbc567f3c",
+    "gamename": "Frequent Flyer",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "10fa8ebebb936f67b806412decd7057f",
+    "gamename": "Fruit Strike",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "b2d996b091f292f5d51f386ba74909b0",
+    "gamename": "Golden Gods",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "86929be84fe1f0d67913a8960ed15fd0",
+    "gamename": "Hazakura Ways",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "747b8549ea241d6894c6ed81ba3aa3bc",
+    "gamename": "Helios Fury",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "a21c9e64ecadb4ac2ef6591b2d25e721",
+    "gamename": "Hellcatraz",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1041cc7ee268d01bef9167b2750a79d3",
+    "gamename": "Heroe's Gathering",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "61f666c39f980c8f502904fd33385942",
+    "gamename": "Heroes Hunt 2",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "b83138c16ca5b9f17eec6c56898a9d38",
+    "gamename": "HEX",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "bc0292df2bf187a78230ffac3da03fc0",
+    "gamename": "Ignite The Night",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "e4ca777001c387d1d0f72afc1685675b",
+    "gamename": "Iron Bank",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "c63471a52b7cc5f9d0430706558af627",
+    "gamename": "It's Time",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "6538c023e2a114c08aa6dc99a074d346",
+    "gamename": "King of Kings",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5683181337fcb0199cefa0d2a0accc61",
+    "gamename": "Kluster Krystals Megaclusters",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "bcc619fe63942c19eea3262ffeb457b5",
+    "gamename": "La Fiesta",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "713751df9feb95ec6ba3107bec478f4e",
+    "gamename": "Let's get ready to Rumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "04fa959a6d67e73c75ae914e8d8ab970",
+    "gamename": "Magikspell",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "e0afcc1e0c80717e0109f24210ad6ad9",
+    "gamename": "Marching Legions",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "9c694106c336ae752eaaf21c8294cb6f",
+    "gamename": "Maze Escape",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5228ebc61415bab98372846ad6723165",
+    "gamename": "Medallion Megaways",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "0d9c8f4c90c9ae3967010af3adf9af12",
+    "gamename": "Mega Flip",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4da9b77527b051c23d54f737a8511217",
+    "gamename": "Mega Masks",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "2e4c51b2765d93618a3f315682cbf6db",
+    "gamename": "Mega Mine",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "bd2dda321e50679e17332c84dbcff09a",
+    "gamename": "Money Cart",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "800084ab353ffbc364984ecda50f39a8",
+    "gamename": "Money Cart 2",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "fad0fd9b89d6784c6a4110b6609ff685",
+    "gamename": "Money Train",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "53e2366f625dc6ebc240a32541e93a9d",
+    "gamename": "Money Train 2",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5b69407e95f29e79f0e5aff93e83d0e4",
+    "gamename": "Multiplier Odyssey",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "bf4c0d4cac1fe23448a11017b281c93d",
+    "gamename": "Mystery Stacks",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "871e21dded538632a5c0a4accf30fc55",
+    "gamename": "Plunderland",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "a8a21cd62f27103c8f277129ca67376f",
+    "gamename": "Powerspin",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "28ab7b8ceb6a6878b024fbb2196ad310",
+    "gamename": "Ramses Revenge",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "276fab1972603f8d7e5eab2385a35259",
+    "gamename": "Rocky's Gold",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "c84f14ec356c6c9137f519675ac99506",
+    "gamename": "Royal Potato",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "8d4c17f08994b2a42903ff72fed2d75e",
+    "gamename": "Sails of Fortune",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "222fe762eec92afc6de5562b6853a322",
+    "gamename": "Santa's Stack",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "27fc5f9ebc932a75efb4b1381304c408",
+    "gamename": "Serpent Shrine",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "bd3dd93484b07041024ad23dff3da9a8",
+    "gamename": "Sherlock Bones",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "210b089dbbd0104f00c2f093e58f9dd5",
+    "gamename": "Snake Arena",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "0d7283aa7ae90cfdaea4e7982acb21db",
+    "gamename": "Space Miners",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "c9f41931cda435c0c80fbdc761b66d1e",
+    "gamename": "Spirit of The Beast",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "b4fd2cc496356a5d63e9c14160b707a9",
+    "gamename": "Splendour Forest",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "064357bd3f8a3f50350db142bee82215",
+    "gamename": "Star Pops",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "89656510874f78a6e2159e1377ec55d7",
+    "gamename": "Super Boost",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "f43d0e981d28ceb7810ba13bb2256c51",
+    "gamename": "Templar Tumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "3262fc859fa134a4a373607d6cc71fbe",
+    "gamename": "Temple Tumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5a52417f6a7fe389a7abe77cae838135",
+    "gamename": "The Golden Sail",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "8bce189551fbd9871fb19bdb35a06279",
+    "gamename": "The Great Pigsby",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "f8ccf08677de47b53e3576ff5b3a155a",
+    "gamename": "The Great Pigsby Megaways",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "17fbe4ff135f4be5451abb1fbd837c78",
+    "gamename": "Top Dawg$",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "046a747cb698fafab6727fc4bd488db5",
+    "gamename": "Tower Tumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "14fbe3ca7391d58561589a31b9b237c4",
+    "gamename": "Troll's Gold",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4cdcffd906d3e7036322ca3c660ef9ce",
+    "gamename": "Twisted Turbine",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4b279c61e4cc5d63ae3a0fe98944a9bd",
+    "gamename": "Volatile Vikings",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "5a1696874baae65ada36024621b80825",
+    "gamename": "Wild Chapo",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "0dcbaa8bfc76d8b0641df762a8649028",
+    "gamename": "Wildchemy",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "d4caa1b692e779ca3d7397b58755dade",
+    "gamename": "Zombie Circus",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "850be6892519adc3fd2a7d1fff4fc048",
+    "gamename": "Wild Buccaneers Megaways",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "336ba2b65eebd5579cf26dc81c243fbe",
+    "gamename": "Book of Power",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "6e020cf733ce4fa100a283d975ed0146",
+    "gamename": "Banana Town",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4689abeb012e12d3cc77ba03031268ba",
+    "gamename": "Reapers",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "e06790e9d0ad98dbb1e89ab64c1eaf03",
+    "gamename": "Wild Donuts",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1eb47fd8582fad7dfa2a0af789d90387",
+    "gamename": "Curse of the Mummies",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "fb2df866d5fde6f16209748d5d2d2319",
+    "gamename": "9K Kong in Vegas",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1a544f626c2e44273bd5404292be09b5",
+    "gamename": "7 Elements",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "97b766c494b5dd47ea3343bf72a41399",
+    "gamename": "4 Secret Pyramids",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "cccc2b55d9d1d48286a30c8174c7aa51",
+    "gamename": "Animal Carnival",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "71636e5a87e88915bbb0eb4b9b881a01",
+    "gamename": "Spring Heeled Jack",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "04170b86e5954530aa4e1a14c496d625",
+    "gamename": "Napoleon vs Rabbits",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "6cf2a3eb3931f13cd83511b33e2de8fe",
+    "gamename": "Leprechaun Heist",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "aa97d458e8b7972e95eaf8bbd768470d",
+    "gamename": "Dead Riders Trail",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "948d40399fe768244b1da49115812001",
+    "gamename": "Horror Hotel",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "94e2ead3b43a7e764dbfc151ed196f9e",
+    "gamename": "Hot Rod Racers",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "0f411fae236bab5a0ce98085807075fe",
+    "gamename": "Jurassic Party",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "93c4313e9579daab82af70c4080a1202",
+    "gamename": "Midnight Marauder",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "2b46799632eee0ae4f4c2439a371f659",
+    "gamename": "Money Train 3",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "701d2def2195bdd9b73d80a7cabffba7",
+    "gamename": "Net Gains",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "cf1316fcb7de58f84c002f779e851c3a",
+    "gamename": "TNT Tumble",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "3956129a8ba45d61e0b7605b64ddc833",
+    "gamename": "Wild Chapo 2",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "febbcb8cbb41467e64a99cbad3fae3ba",
+    "gamename": "Wild Hike",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "d9a3b57f97ef9c6939bdf85761f80760",
+    "gamename": "Wild Yield",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "feaeba8a1d5c0b4354c046332329a91f",
+    "gamename": "Golden Calaveras",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "7ce072743dc0c4cb1713f7271ae13ec3",
+    "gamename": "Wilds of the West",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "26257cfc263ce94e99c56fe08e47d3f5",
+    "gamename": "4 Deals With The Devil",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "3d836e4b495432d76fad6ded2b02fb07",
+    "gamename": "Hades River of Souls",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "99f44915d562d611bffdc0fbd9afa904",
+    "gamename": "Ticket To Fortune",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "059a2e1735d66bff569735b0243ff350",
+    "gamename": "Money Cart 3",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "388527cac20b50216bcddb8daacc30d6",
+    "gamename": "Holy Hand Grenade",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1288d4808b312003fdf5934f7a4233df",
+    "gamename": "Fortune Llama",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "706514c3925d5832c87055d95a713d4b",
+    "gamename": "Payday Megaways",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "655c455922a5bf93874b28dbe03d249b",
+    "gamename": "Megaways Mob",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4a06a0e6325637be0300ddcf1ca471c0",
+    "gamename": "Lucky Money",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "230036ea9bc56590c199f5bf9b1b7fcc",
+    "gamename": "Alchemy",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "adda32f36502f09ba8bfc8596bd9d79b",
+    "gamename": "Blender Blitz",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "ef7f2b616c6226f608c409d26877cec9",
+    "gamename": "Out of The Ice",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "4ac48238ef69ac39fc69a450a397162d",
+    "gamename": "Huntress: Wild Vengeance",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "1489307c3853a0413ab80752a4af4cc3",
+    "gamename": "Wins of Winter",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "deca3b5c997c5a0119824f1cae1de124",
+    "gamename": "Trail Blazer",
+    "providerName": "Relax Gaming",
+    "image": ""
+  },
+  {
+    "gameid": "faae837414b8879425fccc89a0f7f269",
+    "gamename": "Heroes Hunt",
+    "providerName": "Relax Gaming",
+    "image": ""
+  }
+]

@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-14T12:32:14+00:00",
+    "user_id": 128,
+    "username": "Monshop",
+    "role": "agent",
+    "ip": "2c0f:f698:c136:b24b:d9dd:b872:8f7d:d90b",
+    "forwarded_for": "2c0f:f698:c136:b24b:d9dd:b872:8f7d:d90b",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "f4c951f1b258051eda0fc99756619d9075ec302b35406d98293d766baa2b0862"
+}

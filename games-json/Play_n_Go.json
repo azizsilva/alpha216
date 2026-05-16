@@ -1,0 +1,1724 @@
+[
+  {
+    "gameid": "6b072dcb3eedf445e0260fc2d2e83316",
+    "gamename": "15 Crystal Roses: A Tale of Love",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/15-crystal-roses-a-tale-of-love-baacaf42.jpg"
+  },
+  {
+    "gameid": "267942a077b9fa7f55b0136a5891e983",
+    "gamename": "24k Dragon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/24k-dragon-a3fcac09.jpg"
+  },
+  {
+    "gameid": "b5aaa1a02108621aa61c6f0a603afcba",
+    "gamename": "3 Clown Monty",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/3-clown-monty-8325b5be.jpg"
+  },
+  {
+    "gameid": "ccb9025c26b09306146db1e2caf95554",
+    "gamename": "3 Clown Monty II",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/3-clown-monty-ii-8065f4dd.png"
+  },
+  {
+    "gameid": "1ca9643d1670fb1eb93f81573e15ebf5",
+    "gamename": "3Hand Casino Holdem",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/3hand-casino-holdem-de004611.jpg"
+  },
+  {
+    "gameid": "e0ad910b8979126ba55debeb31660799",
+    "gamename": "5x Magic",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/5x-magic-b9ca162b.jpg"
+  },
+  {
+    "gameid": "7e7d41f8eb68fe15c255b091963ff1ac",
+    "gamename": "7 Sins",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/7-sins-15258a07.jpg"
+  },
+  {
+    "gameid": "1bc533aa4c54abf9bf89ba162d170939",
+    "gamename": "Ace of Spades",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ace-of-spades-43277cf3.jpg"
+  },
+  {
+    "gameid": "184171a69c424755d166271db1e961f0",
+    "gamename": "Agent Destiny",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/agent-destiny-8f2bcc4f.jpg"
+  },
+  {
+    "gameid": "804aabe9788f412413ec4c932918f669",
+    "gamename": "Agent of Hearts",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/agent-of-hearts-823b6789.jpg"
+  },
+  {
+    "gameid": "4d322fc10f41306a221c63df5ac84500",
+    "gamename": "Animal Madness",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/animal-madness-0ba0a4b4.jpg"
+  },
+  {
+    "gameid": "19d4680a835a22f82269eb0895ed6b01",
+    "gamename": "Ankh of Anubis",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ankh-of-anubis-e2c4acc4.jpg"
+  },
+  {
+    "gameid": "ec726e51853dc9226257351d04068a1f",
+    "gamename": "Annihilator",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/annihilator-a509aa73.jpg"
+  },
+  {
+    "gameid": "959f257b0252ccdc9d644f91747413fb",
+    "gamename": "Athena Ascending",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/athena-ascending-25c4b132.jpg"
+  },
+  {
+    "gameid": "2fc48840792d976b0dd76d5f86aa0099",
+    "gamename": "Aztec Idols",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/aztec-idols-ba03e177.jpg"
+  },
+  {
+    "gameid": "e84be062de8fdb682e3c283a78519387",
+    "gamename": "Aztec Warrior Princess",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/aztec-warrior-princess-71de3b8a.jpg"
+  },
+  {
+    "gameid": "dbdee08845697e210245b4f68cb33f4a",
+    "gamename": "Baker's Treat",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/baker-s-treat-92a9bd16.jpg"
+  },
+  {
+    "gameid": "92d94adbe6b8f4931d68fdc057359d3a",
+    "gamename": "Banana Rock",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/banana-rock-0397022b.jpg"
+  },
+  {
+    "gameid": "64f4fe2d01110692982adf57501bc035",
+    "gamename": "Battle Royal",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/battle-royal-29941f7b.png"
+  },
+  {
+    "gameid": "ad9c45d8bed86115afea828f362b1421",
+    "gamename": "Beasts of Fire",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/beasts-of-fire-fbee1369.jpg"
+  },
+  {
+    "gameid": "221cada72ffa3f994c139f48c7924cf7",
+    "gamename": "Big Win 777",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/big-win-777-d2f3b597.jpg"
+  },
+  {
+    "gameid": "26ce9b0eb2577bfbc62e41e7ab26c62e",
+    "gamename": "Big Win Cat",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/big-win-cat-bd898ded.jpg"
+  },
+  {
+    "gameid": "1a98b587fa1988e136f44aa83acb8cc9",
+    "gamename": "Black Mamba",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/black-mamba-55d8c509.jpg"
+  },
+  {
+    "gameid": "1b5ab156fc317b30b9f6d16d9404a3de",
+    "gamename": "Blinged",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/blinged-935f0225.jpg"
+  },
+  {
+    "gameid": "988f3ed51701193da60d4928cb551238",
+    "gamename": "Boat Bonanza Christmas",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/boat-bonanza-christmas-0967fae5.png"
+  },
+  {
+    "gameid": "a5bc18b392f561bf518dfc828824d747",
+    "gamename": "Book of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/book-of-dead-6220ae29.png"
+  },
+  {
+    "gameid": "3c60ac0bff138a4cd462b4c4e9ffdc1e",
+    "gamename": "Bull in a China Shop",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/bull-in-a-china-shop-737ee532.jpg"
+  },
+  {
+    "gameid": "790c55c939b8c4beb01a5a0fd9ab9268",
+    "gamename": "Bull in a Rodeo",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/bull-in-a-rodeo-4971f955.jpg"
+  },
+  {
+    "gameid": "a682f5b5bee6c0f9f511411b350cdf0e",
+    "gamename": "Candy Island Princess",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/candy-island-princess-5736e894.jpg"
+  },
+  {
+    "gameid": "a0b7345b4699ab37d93c8815e7d99d13",
+    "gamename": "Captain Xeno's Earth Adventure",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/captain-xeno-s-earth-adventure-1da916b2.jpg"
+  },
+  {
+    "gameid": "09a2d876c28540cf122bba072f8ffb16",
+    "gamename": "Cash of Command",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cash-of-command-51bf277a.png"
+  },
+  {
+    "gameid": "bfa52db8c960aaf412d5138c35e8150d",
+    "gamename": "Cash Pump",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cash-pump-6ffe73b4.jpg"
+  },
+  {
+    "gameid": "2ed0497fdc5d9b0f974b62d3a1c8717c",
+    "gamename": "Cash Vandal",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cash-vandal-dfbdfcd9.jpg"
+  },
+  {
+    "gameid": "5253232aacf888526d12ab18f274ea0c",
+    "gamename": "Cat Wilde and the Doom of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cat-wilde-and-the-doom-of-dead-000ddfbe.jpg"
+  },
+  {
+    "gameid": "fe30f84e42e82fb4a31cffb271d73a51",
+    "gamename": "Cat Wilde and the Lost Chapter",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cat-wilde-and-the-lost-chapter-0aa1bffb.jpg"
+  },
+  {
+    "gameid": "9a1a83e60432df6c05c17b6c09a1d7aa",
+    "gamename": "Cat Wilde and the Pyramids of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cat-wilde-and-the-pyramids-of-dead-99e3a909.jpg"
+  },
+  {
+    "gameid": "c9906af57657bd4fa06fdf69bbcd5b2e",
+    "gamename": "Cat Wilde in the Eclipse of the Sun God",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cat-wilde-in-the-eclipse-of-the-sun-god-c0ac127a.jpg"
+  },
+  {
+    "gameid": "302c0d4db87fdb264c24b6219b7d4dde",
+    "gamename": "Cats and Cash",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cats-and-cash-fc028770.jpg"
+  },
+  {
+    "gameid": "65587840ef2d8d3b90c6f1cd19d278f2",
+    "gamename": "Champions of Mithrune",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/champions-of-mithrune-6d9fa9f0.jpg"
+  },
+  {
+    "gameid": "8c9d0ee21ce3c8a5c9a9d673be730a51",
+    "gamename": "Charlie Chance",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/charlie-chance-729a0efd.jpg"
+  },
+  {
+    "gameid": "f3883d409c9125e3781faddab0d09ee3",
+    "gamename": "Charlie Chance and the Curse of Cleopatra",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/charlie-chance-and-the-curse-of-cleopatra-c436a043.jpg"
+  },
+  {
+    "gameid": "7a52224201c6dac3fe9a36cd4fe4ae26",
+    "gamename": "Charlie Chance in Hell to Pay",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/charlie-chance-in-hell-to-pay-52d58ee8.jpg"
+  },
+  {
+    "gameid": "2f46ada3708186d9efa22f17985d9241",
+    "gamename": "Chinese New Year",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/chinese-new-year-a3ae6a66.jpg"
+  },
+  {
+    "gameid": "e08a9bee15f2f3406ac06fccb0df53e1",
+    "gamename": "Chronos Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/chronos-joker-e72d1550.jpg"
+  },
+  {
+    "gameid": "654891067f9ac6be23ead8502ebe1b9d",
+    "gamename": "Cloud Quest",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cloud-quest-1ec380bd.jpg"
+  },
+  {
+    "gameid": "ec50c964427c293245a1044b02ab4e95",
+    "gamename": "Coils of Cash",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/coils-of-cash-35678a26.jpg"
+  },
+  {
+    "gameid": "ddd6bd02fc4b405f660a18ba368fc0c7",
+    "gamename": "Contact",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/contact-4bcc594d.png"
+  },
+  {
+    "gameid": "444e3edf5f2452114bcd6ffb2755f4b2",
+    "gamename": "Cops'n'Robbers",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/cops-n-robbers-b20f766d.jpg"
+  },
+  {
+    "gameid": "d00cf8d584ad0bed76e2696d885a8f8f",
+    "gamename": "Coywolf Cash",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/coywolf-cash-b8f98ae1.jpg"
+  },
+  {
+    "gameid": "364b8638882e141c0daedc199cba0fda",
+    "gamename": "Crazy Cows",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/crazy-cows-4bc9e9a4.jpg"
+  },
+  {
+    "gameid": "43cb075041d662ed4cf279fc682fd5f6",
+    "gamename": "Crystal Sun",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/crystal-sun-5c560fb6.jpg"
+  },
+  {
+    "gameid": "0be161032f526804420ee5142c30baa5",
+    "gamename": "Dawn of Egypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/dawn-of-egypt-bc9b6afa.jpg"
+  },
+  {
+    "gameid": "a7e9bfd44dafdd3b42b8a8448bee3063",
+    "gamename": "Demon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/demon-059e0f57.jpg"
+  },
+  {
+    "gameid": "b92f03933a0b2ddb75f1055cbcfa0ac5",
+    "gamename": "Derby Wheel",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/derby-wheel-a376d60d.jpg"
+  },
+  {
+    "gameid": "c7c9262c5fdedaee9c5317c5bdb3170b",
+    "gamename": "Deuces Wild MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/deuces-wild-mh-6e847467.jpg"
+  },
+  {
+    "gameid": "b8c8a722b10c182e1f8dcf0b841b7e26",
+    "gamename": "Diamond Vortex",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/diamond-vortex-4e43cd93.jpg"
+  },
+  {
+    "gameid": "15a4065be06d7bbd755030fdc04993b9",
+    "gamename": "Diamonds of the Realm",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/diamonds-of-the-realm-d7c93961.jpg"
+  },
+  {
+    "gameid": "47d142aaa24ee3430eb60420966b5a05",
+    "gamename": "Disco Diamonds",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/disco-diamonds-496b8e38.jpg"
+  },
+  {
+    "gameid": "9ac1a1aa4f90d00e0e5e8bfeeff499cf",
+    "gamename": "Divine Showdown",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/divine-showdown-b90e5bd9.jpg"
+  },
+  {
+    "gameid": "4a267dcdf6321f5494303e11adccf569",
+    "gamename": "Doom of Egypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/doom-of-egypt-eb3bb963.jpg"
+  },
+  {
+    "gameid": "a2793c62d754b2fafdc50c542d3783e1",
+    "gamename": "Double Exposure BlackJack MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/double-exposure-blackjack-mh-6bc75c7d.jpg"
+  },
+  {
+    "gameid": "2f1f680aa9bcb0aefdac587b997a0689",
+    "gamename": "Dr. Toonz",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/dr-toonz-697a5768.jpg"
+  },
+  {
+    "gameid": "09f602875f7aadcb3f83af72a49511a3",
+    "gamename": "Dragon Maiden",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/dragon-maiden-9e8beb48.jpg"
+  },
+  {
+    "gameid": "154e0d834d50904e6e7d9228c46c9420",
+    "gamename": "Dragon Ship",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/dragon-ship-78cee569.jpg"
+  },
+  {
+    "gameid": "dfaeab29f9484e7fbbe9ba821575eadc",
+    "gamename": "Easter Eggs",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/easter-eggs-791ca890.jpg"
+  },
+  {
+    "gameid": "360acf911266d57af9a6c2919b3e044f",
+    "gamename": "Enchanted Crystals",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/enchanted-crystals-9c2359e2.jpg"
+  },
+  {
+    "gameid": "4d7835de678319b0edff27049d56f163",
+    "gamename": "Enchanted Meadow",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/enchanted-meadow-a4aca6bc.jpg"
+  },
+  {
+    "gameid": "9c2c11f94b6936d639db2aefc0281385",
+    "gamename": "Energoonz",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/energoonz-d9b87757.jpg"
+  },
+  {
+    "gameid": "c6a052bffc2eab26dea316aae1c964bd",
+    "gamename": "European BlackJack MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/european-blackjack-mh-2008f4ec.jpg"
+  },
+  {
+    "gameid": "ecee536ddc458df92cb4ac74c0d2d3a9",
+    "gamename": "European Roulette Pro",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/european-roulette-pro-a434a9cb.jpg"
+  },
+  {
+    "gameid": "62766fe321045f1637fcbd925ad1fb63",
+    "gamename": "Eye of Atum",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/eye-of-atum-2658b041.jpg"
+  },
+  {
+    "gameid": "cd94cd4152636279d25aaf717bcdd6f8",
+    "gamename": "Eye of the Kraken",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/eye-of-the-kraken-2aff85c0.jpg"
+  },
+  {
+    "gameid": "d9da996edfe9cd68b32fd2e7cde00fd4",
+    "gamename": "Fat Frankies",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fat-frankies-966f540c.jpg"
+  },
+  {
+    "gameid": "1b1d54cd260990058a880734bd621d83",
+    "gamename": "Feline Fury",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/feline-fury-9871b8bf.jpg"
+  },
+  {
+    "gameid": "edddfb67bf1851bd07afc3565b54d9e1",
+    "gamename": "Fire Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fire-joker-75eb7f72.jpg"
+  },
+  {
+    "gameid": "e2cab56a5fa0afc7dc5f82830f0c7095",
+    "gamename": "Fire Joker Freeze",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fire-joker-freeze-05888020.jpg"
+  },
+  {
+    "gameid": "d332041fb7162a5774178774d7a51a79",
+    "gamename": "Fire Toad",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fire-toad-0c190964.jpg"
+  },
+  {
+    "gameid": "c66701f9dbaf117f290aac0c3f8730e8",
+    "gamename": "Firefly Frenzy",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/firefly-frenzy-4ec29e3f.jpg"
+  },
+  {
+    "gameid": "acb0775f641f765421de58f48a4a4de0",
+    "gamename": "Forge of Fortunes",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/forge-of-fortunes-b66c5a95.jpg"
+  },
+  {
+    "gameid": "0932ea849be274ff5ae4da3a7c44cffa",
+    "gamename": "Forge of Gems",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/forge-of-gems-7e7b13f0.jpg"
+  },
+  {
+    "gameid": "a56191619b35626ad2e62ced9e840173",
+    "gamename": "Fortune Rewind",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fortune-rewind-30b123df.jpg"
+  },
+  {
+    "gameid": "724bd9a9f657cffd38be5579c2d6406b",
+    "gamename": "Fortune Teller",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fortune-teller-b565a10c.jpg"
+  },
+  {
+    "gameid": "c8ab9afb873d7135f4cdd51447e93047",
+    "gamename": "Fortunes of Ali Baba",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fortunes-of-ali-baba-ca6cf548.jpg"
+  },
+  {
+    "gameid": "ddde140684b30d41c0ca8d5eee5bb35a",
+    "gamename": "Free Reelin' Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/free-reelin-joker-35cb0f3d.jpg"
+  },
+  {
+    "gameid": "e5ff051c80173036b4cb204b430616d9",
+    "gamename": "Frozen Gems",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/frozen-gems-eef89b0a.jpg"
+  },
+  {
+    "gameid": "eb79d0bccb7bb2490ab4c7627012f05f",
+    "gamename": "FU ER DAI",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/fu-er-dai-73918945.jpg"
+  },
+  {
+    "gameid": "e73fc1a388044ca1e0c8a8cf65892fab",
+    "gamename": "Game of Gladiators",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/game-of-gladiators-8879f6ce.jpg"
+  },
+  {
+    "gameid": "1f33db1a0f4ca4699dd7cdb427f2b57a",
+    "gamename": "Gates of Troy",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gates-of-troy-5849af4a.jpg"
+  },
+  {
+    "gameid": "a1f641e1740c59df483c1bb3cc509b87",
+    "gamename": "Gemix",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gemix-9194f4c4.jpg"
+  },
+  {
+    "gameid": "0cd9304ac9b473a06b84830786cc252e",
+    "gamename": "Gemix 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gemix-2-4bdfaffc.jpg"
+  },
+  {
+    "gameid": "f6b7f03507bdbdb9930cf6353a02d31c",
+    "gamename": "Ghost of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ghost-of-dead-ffa102ba.jpg"
+  },
+  {
+    "gameid": "8650281b7cb4e707acad09774b45b84a",
+    "gamename": "Gigantoonz",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gigantoonz-23be20b3.jpg"
+  },
+  {
+    "gameid": "55894afe4590f28b6775f5c0eed74351",
+    "gamename": "Gold King",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gold-king-43fd7a64.jpg"
+  },
+  {
+    "gameid": "cbdad9c233e5b05fde3f6e7685e77ddd",
+    "gamename": "Gold Volcano",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/gold-volcano-95ba3ece.jpg"
+  },
+  {
+    "gameid": "3af7c7161e5a71eb645bdf95f75d924b",
+    "gamename": "Golden Caravan",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-caravan-776b7ce8.jpg"
+  },
+  {
+    "gameid": "af3835e95209ace6967688a73775e4a0",
+    "gamename": "Golden Colts",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-colts-0abff188.jpg"
+  },
+  {
+    "gameid": "fa2b737caf78e8525814e4032a4b2064",
+    "gamename": "Golden Legend",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-legend-3022392c.jpg"
+  },
+  {
+    "gameid": "b5b97b2f0faa8278ffeca2c595bc783e",
+    "gamename": "Golden Osiris",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-osiris-396e78f2.jpg"
+  },
+  {
+    "gameid": "ecfbed6fc2a41f607eb489f7f07d8010",
+    "gamename": "Golden Ticket",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-ticket-41dacad2.jpg"
+  },
+  {
+    "gameid": "363a8d93595f145e84a6d39a049d7b4d",
+    "gamename": "Golden Ticket 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/golden-ticket-2-3857fba8.jpg"
+  },
+  {
+    "gameid": "bdbcbfb1a65b28a3792df2315b0ea378",
+    "gamename": "Grim Muerto",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/grim-muerto-6bb476de.jpg"
+  },
+  {
+    "gameid": "754376213554eb667107abc02377a2e9",
+    "gamename": "Happy Halloween",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/happy-halloween-d73f7530.jpg"
+  },
+  {
+    "gameid": "e09b831c8074bf70c2a6ea309986feac",
+    "gamename": "Holiday Season",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/holiday-season-9e142373.jpg"
+  },
+  {
+    "gameid": "e9e4ee2e0326d7c0a55e25d4d1ebb4b8",
+    "gamename": "Holiday Spirits",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/holiday-spirits-8ceef044.jpg"
+  },
+  {
+    "gameid": "10f0a57213c2b54d79f97f7f10538704",
+    "gamename": "Honey Rush",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/honey-rush-9bdbf1d0.jpg"
+  },
+  {
+    "gameid": "8e3e1afd890266cb34e2a8994bd38ed2",
+    "gamename": "Hooligan Hustle",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/hooligan-hustle-626a452f.jpg"
+  },
+  {
+    "gameid": "9cf8b513a3cdf989778957ed55d7ef05",
+    "gamename": "Hotel Yeti-Way",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/hotel-yeti-way-3de267af.jpg"
+  },
+  {
+    "gameid": "968d480c5cf034f7e919eae44b76f736",
+    "gamename": "House of Doom",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/house-of-doom-552139ba.jpg"
+  },
+  {
+    "gameid": "671db2516216e107936b58f050f46304",
+    "gamename": "House of Doom 2 The Crypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/house-of-doom-2-the-crypt-2b16fc99.jpg"
+  },
+  {
+    "gameid": "28348e1003596c311d0de98d877b2df0",
+    "gamename": "Ice Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ice-joker-6c32686c.jpg"
+  },
+  {
+    "gameid": "ba6566bce43702a5398decb1fcc01b59",
+    "gamename": "Idol of Fortune",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/idol-of-fortune-bc422c69.jpg"
+  },
+  {
+    "gameid": "c9c6e4e64cb322cbdf4488f110ab577a",
+    "gamename": "Immortails of Egypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/immortails-of-egypt-c7df62b1.png"
+  },
+  {
+    "gameid": "0a0145a62ff89cd92a39fe70ace31e99",
+    "gamename": "Imperial Opera",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/imperial-opera-bd47842a.jpg"
+  },
+  {
+    "gameid": "c88bd51e0b3e0743db3971e244bc9bd6",
+    "gamename": "Inferno Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/inferno-joker-f08e2b67.jpg"
+  },
+  {
+    "gameid": "8cfa5114a78b7e606bcce4b4301b34de",
+    "gamename": "Inferno Star",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/inferno-star-dd2b4a12.jpg"
+  },
+  {
+    "gameid": "671b59f63fa828fb7cf1d6466e537aa5",
+    "gamename": "Invading Vegas Revenge on Mars",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/invading-vegas-revenge-on-mars-76f605a4.png"
+  },
+  {
+    "gameid": "74c2d2e8fc0ba9191dbf2300d752f059",
+    "gamename": "Irish Gold",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/irish-gold-a2c361f5.jpg"
+  },
+  {
+    "gameid": "090e669c9b40bfd3879516f34e33b72d",
+    "gamename": "Iron Girl",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/iron-girl-d3a36de3.jpg"
+  },
+  {
+    "gameid": "3a4d78d5342d86d528c8688340dbad48",
+    "gamename": "Jacks or Better MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/jacks-or-better-mh-158e412e.jpg"
+  },
+  {
+    "gameid": "3972451063ff413eb9dbea9336d6f1b4",
+    "gamename": "Jade Magician",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/jade-magician-91c572b5.jpg"
+  },
+  {
+    "gameid": "26fd8eb81649f1ac7db3c10658b22a15",
+    "gamename": "Jewel Box",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/jewel-box-cc6d49b2.jpg"
+  },
+  {
+    "gameid": "4930f98adb3d84a7008e70a720094f91",
+    "gamename": "Joker Poker MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/joker-poker-mh-fb505bc8.jpg"
+  },
+  {
+    "gameid": "11bd8134d43b9566ebf18b004a317a7e",
+    "gamename": "Jolly Roger",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/jolly-roger-b0f35177.jpg"
+  },
+  {
+    "gameid": "210bf85121d325dfeff6bb843188a8f9",
+    "gamename": "Jolly Roger 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/jolly-roger-2-de569a9f.jpg"
+  },
+  {
+    "gameid": "9f669200117e0685f4b9efc88794f5bb",
+    "gamename": "Keno",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/keno-038e6681.png"
+  },
+  {
+    "gameid": "0dbcfb1dae8c1ca0f6adcb37abad5318",
+    "gamename": "King's Mask",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/king-s-mask-ecab3234.jpg"
+  },
+  {
+    "gameid": "102240504920532e155b5e57943034ac",
+    "gamename": "Lady of Fortune",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/lady-of-fortune-6f0b52c0.jpg"
+  },
+  {
+    "gameid": "7f5dff9722e6d4f1f43fa90ede37379a",
+    "gamename": "Legacy of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/legacy-of-dead-4b8468e8.png"
+  },
+  {
+    "gameid": "8c87c69116421e858444cc21c094e89c",
+    "gamename": "Legacy of Egypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/legacy-of-egypt-19ef4eb7.jpg"
+  },
+  {
+    "gameid": "ac1d9584b31de3aa82450c448b48353a",
+    "gamename": "Legend of the Ice Dragon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/legend-of-the-ice-dragon-59bacd2d.jpg"
+  },
+  {
+    "gameid": "02401eb4126058d08e519c93754c0d43",
+    "gamename": "Legion Gold and the Sphinx of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/legion-gold-and-the-sphinx-of-dead-9202b5d4.png"
+  },
+  {
+    "gameid": "37011c3aaffd890976ae2440c3c76fe2",
+    "gamename": "Leprechaun goes Egypt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/leprechaun-goes-egypt-6c070af2.jpg"
+  },
+  {
+    "gameid": "9b4b08846bf9cd3b93e94f490cc679cc",
+    "gamename": "Leprechaun Goes Wild",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/leprechaun-goes-wild-71ae5c2a.jpg"
+  },
+  {
+    "gameid": "18bdfc9546627412b6f9e1c00343589c",
+    "gamename": "Leprechaun's Vault",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/leprechaun-s-vault-28305f80.jpg"
+  },
+  {
+    "gameid": "6fa984c43c70f651d7a13fc18da4ac34",
+    "gamename": "Lord Merlin and The Lady of The Lake",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/lord-merlin-and-the-lady-of-the-lake-5ca57d0d.jpg"
+  },
+  {
+    "gameid": "dd40b1b10dc69ed698ebc55d3f0dc567",
+    "gamename": "Love Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/love-joker-da5451d1.jpg"
+  },
+  {
+    "gameid": "376b56a86b912e6b4c9f923fc59f09c9",
+    "gamename": "Lucky Diamonds",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/lucky-diamonds-da20e49b.jpg"
+  },
+  {
+    "gameid": "457e92720e858c2e10f57dc08f2782e9",
+    "gamename": "Madame Ink",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/madame-ink-9fec5b17.jpg"
+  },
+  {
+    "gameid": "5e9ba83749938f679015ab52792bbc83",
+    "gamename": "Mahjong 88",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mahjong-88-20cbd47c.jpg"
+  },
+  {
+    "gameid": "9b9a74922ea873d8db1f987e6d8b76fa",
+    "gamename": "Matsuri",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/matsuri-eafa89ba.jpg"
+  },
+  {
+    "gameid": "14acbf2ef6569c68794675241665bd28",
+    "gamename": "Mega Don",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mega-don-ff7b36bb.jpg"
+  },
+  {
+    "gameid": "82be129aa1a06d7cfa6cb8dfe68d2645",
+    "gamename": "Merlin and the Ice Queen Morgana",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/merlin-and-the-ice-queen-morgana-a85ab80e.jpg"
+  },
+  {
+    "gameid": "d20b52e4181bb272739d66ae00c6d809",
+    "gamename": "Merlin's Grimoire",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/merlin-s-grimoire-0dceae98.png"
+  },
+  {
+    "gameid": "387f787d34fc84d8e3236e0c33558511",
+    "gamename": "Mermaid's Diamond",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mermaid-s-diamond-479cc8b3.jpg"
+  },
+  {
+    "gameid": "d7be07be70a39404eb1fbf6d517865ec",
+    "gamename": "Merry Xmas",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/merry-xmas-6323afac.jpg"
+  },
+  {
+    "gameid": "855ca302b5ca62dfd64f5d76f811c726",
+    "gamename": "Miner Donkey Trouble",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/miner-donkey-trouble-14dc40fc.jpg"
+  },
+  {
+    "gameid": "ff75660f803e68717a350116bcf89210",
+    "gamename": "Mini Baccarat",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mini-baccarat-e9b8262d.jpg"
+  },
+  {
+    "gameid": "128ee561dbb06edd7b479e7f252c5c65",
+    "gamename": "Mission Cash",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mission-cash-1239de9e.jpg"
+  },
+  {
+    "gameid": "bf51f1f27c4843e8ca690fb18e61daf5",
+    "gamename": "Money Wheel",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/money-wheel-1f298596.jpg"
+  },
+  {
+    "gameid": "d11b2c8c5c06dc4eabc23365e518b4df",
+    "gamename": "Moon Princess",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/moon-princess-db0820c3.jpg"
+  },
+  {
+    "gameid": "b723f5238f1ff6816c725c0ecb400c67",
+    "gamename": "Moon Princess 100",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/moon-princess-100-b5043d19.jpg"
+  },
+  {
+    "gameid": "ea6ee43262e53deb1990393fa9a06103",
+    "gamename": "Moon Princess: Christmas Kingdom",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/moon-princess-christmas-kingdom-6150f6a1.jpg"
+  },
+  {
+    "gameid": "687aacc4e3d7812942c26cc04af557ff",
+    "gamename": "Mount M",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mount-m-d01acd27.jpg"
+  },
+  {
+    "gameid": "f5a5294357d78653567c392b8f386bf6",
+    "gamename": "Muerto en Mictlan",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/muerto-en-mictlan-8cdcb9e5.jpg"
+  },
+  {
+    "gameid": "569689cfad567afc13dd99809a0a2ff3",
+    "gamename": "MULTIFRUIT 81",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/multifruit-81-4e0b47ce.jpg"
+  },
+  {
+    "gameid": "21f746a85bc239242ad3529a78e69c6c",
+    "gamename": "Mystery Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mystery-joker-5b832cfe.jpg"
+  },
+  {
+    "gameid": "a55167bb3d55a534aa9ecbffe6a51bae",
+    "gamename": "Mystery Joker 6000",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/mystery-joker-6000-4373230b.jpg"
+  },
+  {
+    "gameid": "cbaa3f8d449de40ed8457a16609ef607",
+    "gamename": "Myth",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/myth-de321818.jpg"
+  },
+  {
+    "gameid": "ccf5d45719e201153d37ceb455f7ca09",
+    "gamename": "Naughty Nicks Book",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/naughty-nicks-book-99a95324.jpg"
+  },
+  {
+    "gameid": "da8632f2897f882b983a5eff5bd6165e",
+    "gamename": "New Year Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/new-year-riches-f1623c18.jpg"
+  },
+  {
+    "gameid": "fff93759288e8a576c447f2d308f1f35",
+    "gamename": "Ninja Fruits",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ninja-fruits-0038f57d.jpg"
+  },
+  {
+    "gameid": "d17dfa2381a6f6842d68e8a03a7998f4",
+    "gamename": "Octopus Treasure",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/octopus-treasure-81297edb.jpg"
+  },
+  {
+    "gameid": "f311ab89f3e00004b95e45755920c3e0",
+    "gamename": "Odin: Protector of Realms",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/odin-protector-of-realms-fd5a5e62.jpg"
+  },
+  {
+    "gameid": "4beb5c6773fbb942231abf8e68beff17",
+    "gamename": "Pearl Lagoon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/pearl-lagoon-dc9f5d50.jpg"
+  },
+  {
+    "gameid": "5cafd62da791635aa14aa8fcd0f3d195",
+    "gamename": "Pearls of India",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/pearls-of-india-eff6e7c5.jpg"
+  },
+  {
+    "gameid": "6d2db5e48cfc255e6ba7ff96710b96c2",
+    "gamename": "Perfect Gems",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/perfect-gems-ea59ea0e.jpg"
+  },
+  {
+    "gameid": "866678489c4ed1fa0e48e7d1a8289bb9",
+    "gamename": "Phoenix Reborn",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/phoenix-reborn-b39ae831.jpg"
+  },
+  {
+    "gameid": "3d8a33273521e7e5f4c5cd0b9a7199d1",
+    "gamename": "Photo Safari",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/photo-safari-4720e82e.jpg"
+  },
+  {
+    "gameid": "836155eb67c7beb3e4c37ff087c98e37",
+    "gamename": "Piggy Bank Farm",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/piggy-bank-farm-27680d2d.jpg"
+  },
+  {
+    "gameid": "39ec581019087fa9bb756f1416d51e2c",
+    "gamename": "Pimped",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/pimped-f9af0190.png"
+  },
+  {
+    "gameid": "7063e1200e59749586e1e1769066a78d",
+    "gamename": "Planet Fortune",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/planet-fortune-002eab27.jpg"
+  },
+  {
+    "gameid": "82ad9793dc6ab9fd4360f93497fc5648",
+    "gamename": "Prism of Gems",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/prism-of-gems-2d01cdb9.jpg"
+  },
+  {
+    "gameid": "dda85dfb264c41ef2a853c68ab3e42d7",
+    "gamename": "Prissy Princess",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/prissy-princess-095de056.jpg"
+  },
+  {
+    "gameid": "1ed3f5bb7e9490a85d79c64af10c712c",
+    "gamename": "Prosperity Palace",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/prosperity-palace-9219360b.jpg"
+  },
+  {
+    "gameid": "824a43d254bf89ebec0c2e3800713a35",
+    "gamename": "Puebla Parade",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/puebla-parade-a11dc9ed.jpg"
+  },
+  {
+    "gameid": "f732889b38329ee27b10a9069c5ad5da",
+    "gamename": "Queen's Day Tilt",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/queen-s-day-tilt-9c04b5d2.jpg"
+  },
+  {
+    "gameid": "65f70ee0082c12e8a600cc2daf087b55",
+    "gamename": "Rabbit Hole Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rabbit-hole-riches-74b497c3.jpg"
+  },
+  {
+    "gameid": "118791235917848fe0f1642177f17421",
+    "gamename": "Rabbit Hole Riches - Court of Hearts",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rabbit-hole-riches-court-of-hearts-4e600d8a.jpg"
+  },
+  {
+    "gameid": "6efd92e1fc1e73c0308124bf29d71c43",
+    "gamename": "Rage to Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rage-to-riches-76fcf6be.jpg"
+  },
+  {
+    "gameid": "4d3b755fe2cbe61e4100e2ab41c4bd70",
+    "gamename": "Raging Rex",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/raging-rex-0f232c58.jpg"
+  },
+  {
+    "gameid": "9cf7b04a911896e8e13aac62ef1682ba",
+    "gamename": "Raging Rex 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/raging-rex-2-a11eaea7.png"
+  },
+  {
+    "gameid": "531d5337e2ee4c45eaeb94e7827fe151",
+    "gamename": "Rainforest Magic",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rainforest-magic-9183ae9b.jpg"
+  },
+  {
+    "gameid": "36d7e88e03e4ba8a417d7898cf9e6098",
+    "gamename": "Rainforest Magic Bingo",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rainforest-magic-bingo-321a32e3.jpg"
+  },
+  {
+    "gameid": "7c446d9bb64727944100b88d56587fc4",
+    "gamename": "Rally 4 Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rally-4-riches-86d588e5.jpg"
+  },
+  {
+    "gameid": "9220e3bd183d3204a73752291d97c5c4",
+    "gamename": "Reactoonz",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/reactoonz-3a626b97.jpg"
+  },
+  {
+    "gameid": "7ef90eda3f2dced06109fa49ed7b47cc",
+    "gamename": "Reactoonz 100",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/reactoonz-100-4dc67796.png"
+  },
+  {
+    "gameid": "c18ee1f9e4ca0daa4f0e96e5ae7d3e28",
+    "gamename": "Reactoonz 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/reactoonz-2-bc5ae49f.jpg"
+  },
+  {
+    "gameid": "24e794bf4e8e08a2eb6817c610394af7",
+    "gamename": "Return of The Green Knight",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/return-of-the-green-knight-9896b099.jpg"
+  },
+  {
+    "gameid": "51ff0d5b0b0b8a69b1162ef3fec53604",
+    "gamename": "Rich Wilde and the Amulet of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rich-wilde-and-the-amulet-of-dead-6f08ff0c.jpg"
+  },
+  {
+    "gameid": "d911b8fb095fa74d1cc8e0ae7ff01415",
+    "gamename": "Rich Wilde and the Tome of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rich-wilde-and-the-tome-of-dead-1119357d.png"
+  },
+  {
+    "gameid": "f69a0960ccef91dc090a5c00b89ff9ce",
+    "gamename": "Rich Wilde and the Tome of Insanity",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rich-wilde-and-the-tome-of-insanity-e8d2920d.png"
+  },
+  {
+    "gameid": "293e793ec2649bfc67d1b806bfdf8841",
+    "gamename": "Rich Wilde and the Wandering City",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rich-wilde-and-the-wandering-city-9cd3ade9.jpg"
+  },
+  {
+    "gameid": "fbd35b5ef4f56acb078a0cd46f4369c9",
+    "gamename": "Riches of RA",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/riches-of-ra-79c12372.jpg"
+  },
+  {
+    "gameid": "b115e9196717d84a0b7855194f4e25aa",
+    "gamename": "Riches of Robin",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/riches-of-robin-260e8bb8.jpg"
+  },
+  {
+    "gameid": "3e8f0789c1da6058e89bc4f6d23b2d36",
+    "gamename": "Riddle Reels A Case of Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/riddle-reels-a-case-of-riches-8b4ff6bc.jpg"
+  },
+  {
+    "gameid": "f6d3f838144e3c9d4dc0d163c8fcc809",
+    "gamename": "Ring of Odin",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ring-of-odin-ff9ba8a3.jpg"
+  },
+  {
+    "gameid": "50c982a411168606347e74d6a3b6113e",
+    "gamename": "Rise of Athena",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-athena-d315ba5a.jpg"
+  },
+  {
+    "gameid": "d9387a2cc35967b4db9dbb303fc29e53",
+    "gamename": "Rise of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-dead-d071caeb.jpg"
+  },
+  {
+    "gameid": "aef56e577f1dccf354f6a169a3530598",
+    "gamename": "Rise of Gods Reckoning",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-gods-reckoning-93077895.jpg"
+  },
+  {
+    "gameid": "3de84274a7f86f60b1cb91e4b9d62f3e",
+    "gamename": "Rise of Merlin",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-merlin-dd01223d.jpg"
+  },
+  {
+    "gameid": "39148292c460e1672c4e7842d8219720",
+    "gamename": "Rise of Olympus",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-olympus-fb74d66b.jpg"
+  },
+  {
+    "gameid": "5d32c3d0ad50cca0000e929677aa62d9",
+    "gamename": "Rise of Olympus 100",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-olympus-100-83f9613d.png"
+  },
+  {
+    "gameid": "25df21152add5823dfa07c1574d1e87f",
+    "gamename": "Rise of Olympus Extreme",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-olympus-extreme-46ec90b3.png"
+  },
+  {
+    "gameid": "6b2dff0ea283a10bb0c7b53317121e29",
+    "gamename": "Rise of Orpheus",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rise-of-orpheus-986458fd.png"
+  },
+  {
+    "gameid": "2a794cf7ae13615fd7cfd451f5b3258a",
+    "gamename": "Rocco Gallo",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rocco-gallo-6b06b7c6.jpg"
+  },
+  {
+    "gameid": "6262aa13e29b12b17ecf8c5ee241288d",
+    "gamename": "Ronins Honour",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ronins-honour-7ae45fa6.jpg"
+  },
+  {
+    "gameid": "3c2cfddbd0ba381ca8813f01e55f545e",
+    "gamename": "Rosy Orbit Treasure Turn",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rosy-orbit-treasure-turn-53a508e7.png"
+  },
+  {
+    "gameid": "7f93fcd9ec460b49bbfa9e78fff0f3e3",
+    "gamename": "Rotiki",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/rotiki-d0f659c7.jpg"
+  },
+  {
+    "gameid": "18e369e8b2b16f09a1dc4d1cc3a13502",
+    "gamename": "Royal Masquerade",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/royal-masquerade-12145a86.jpg"
+  },
+  {
+    "gameid": "e4790ab3f5788930ecaf1f8533dd7f8f",
+    "gamename": "Ruff Heist",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ruff-heist-cce70fd1.jpg"
+  },
+  {
+    "gameid": "070807f4b82eb5d4c21ee85308065c8f",
+    "gamename": "Sabaton",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sabaton-faf5eb36.jpg"
+  },
+  {
+    "gameid": "278389ee41407bab6092e388257346b9",
+    "gamename": "Safari of Wealth",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/safari-of-wealth-2062cf11.jpg"
+  },
+  {
+    "gameid": "6ed6f085297156a56d544037fd9263a8",
+    "gamename": "Sails of Gold",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sails-of-gold-d6a9dcb5.jpg"
+  },
+  {
+    "gameid": "ecb2b02085050eaa1e089ab5682eba96",
+    "gamename": "Samba Carnival",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/samba-carnival-06faa41e.png"
+  },
+  {
+    "gameid": "ad5d4137196cbb05d06ccde542e12d52",
+    "gamename": "Saxon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/saxon-6fd0c810.jpg"
+  },
+  {
+    "gameid": "aba87c1c07071366c25cc86a77fa6ee0",
+    "gamename": "Scales of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/scales-of-dead-07b505ee.jpg"
+  },
+  {
+    "gameid": "a66475aaa5f2227bed805928c0269391",
+    "gamename": "Scroll of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/scroll-of-dead-508980e0.jpg"
+  },
+  {
+    "gameid": "4d14980a0a089e6e68b42a0ec04ecc11",
+    "gamename": "Scroll of Seth",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/scroll-of-seth-d56cc94f.jpg"
+  },
+  {
+    "gameid": "cc9bf4003089471c01f3be2a33dbc4a4",
+    "gamename": "Sea Hunter",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sea-hunter-5225b536.jpg"
+  },
+  {
+    "gameid": "ea30e0dc6c93bc21459f7c45a371ab91",
+    "gamename": "Secret of Dead",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/secret-of-dead-698c39ad.jpg"
+  },
+  {
+    "gameid": "1336aa63edee224629ae817739ea05ee",
+    "gamename": "Shamrock Miner",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/shamrock-miner-9a38861c.jpg"
+  },
+  {
+    "gameid": "b19aeea877aee34e2ff67f0a86e05278",
+    "gamename": "Sherwood Gold",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sherwood-gold-9c1b7815.jpg"
+  },
+  {
+    "gameid": "a67e45c327a54e1b447ce9df9ebcded9",
+    "gamename": "Single Deck BlackJack MH",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/single-deck-blackjack-mh-ac80991e.jpg"
+  },
+  {
+    "gameid": "e37cfb15acec9fbd084d80758e5a8e64",
+    "gamename": "Sisters of the Sun",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sisters-of-the-sun-34b4cb55.jpg"
+  },
+  {
+    "gameid": "cb18c403baa1515b0e6d45f39af33ec1",
+    "gamename": "Sizzling Spins",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sizzling-spins-8ba470be.jpg"
+  },
+  {
+    "gameid": "4bb1a06af7f5f097ce2125ce94ac798b",
+    "gamename": "Slashimi",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/slashimi-ebe2d035.jpg"
+  },
+  {
+    "gameid": "3ca032aa0292f0371391b5e76989a3e8",
+    "gamename": "Sobeks Godly Spins",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sobeks-godly-spins-b9d4b481.png"
+  },
+  {
+    "gameid": "a1f4c36bb7126aebc401aef3e6535175",
+    "gamename": "Space Race",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/space-race-4dba7691.jpg"
+  },
+  {
+    "gameid": "2c66a3120cfaaa434bc8e601edc3028b",
+    "gamename": "Spark of Genius",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/spark-of-genius-e853741e.jpg"
+  },
+  {
+    "gameid": "48d521ab0e1f117871c8e7b65b133234",
+    "gamename": "Spin Party",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/spin-party-c0c639c7.jpg"
+  },
+  {
+    "gameid": "9c4660fa89211395bfa417313efe67a1",
+    "gamename": "Spinnin Records Into the Beat",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/spinnin-records-into-the-beat-ccef4fb6.png"
+  },
+  {
+    "gameid": "f48f717a9ed323039289d78c7d0c1a86",
+    "gamename": "Star Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/star-joker-f4f56c14.png"
+  },
+  {
+    "gameid": "2c2f403b525e99f8db2021e2353876dc",
+    "gamename": "Stepping Diamonds",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/stepping-diamonds-7f92d008.png"
+  },
+  {
+    "gameid": "630dd59d66c7a23209ba3b677e4bb710",
+    "gamename": "Sticky Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sticky-joker-1f196680.jpg"
+  },
+  {
+    "gameid": "4978b77aa90c14e1262a65824386ad7c",
+    "gamename": "Street Magic",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/street-magic-31b5ef37.jpg"
+  },
+  {
+    "gameid": "be08ef2e30142d83b586e604be1d9009",
+    "gamename": "Super Flip",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/super-flip-03dfb642.jpg"
+  },
+  {
+    "gameid": "623b334e698332878fe3d0222d03055f",
+    "gamename": "Super Wheel",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/super-wheel-6fabe8e5.jpg"
+  },
+  {
+    "gameid": "653d256db484dfa0b3f40908b038fa72",
+    "gamename": "Sweet 27",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sweet-27-a524bce5.png"
+  },
+  {
+    "gameid": "ba7e69ff8543333c5b783583c0dd7172",
+    "gamename": "Sweet Alchemy",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sweet-alchemy-d3a18de2.jpg"
+  },
+  {
+    "gameid": "62862f67b7945f471f48e18863609b74",
+    "gamename": "Sweet Alchemy 100",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sweet-alchemy-100-6e0ba04a.jpg"
+  },
+  {
+    "gameid": "8b8d433e20388ad7acbfd1c367aa6830",
+    "gamename": "Sweet Alchemy 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sweet-alchemy-2-8a165df5.jpg"
+  },
+  {
+    "gameid": "149acebbe9b01239230936a004c4d0c3",
+    "gamename": "Sweet Alchemy Bingo",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/sweet-alchemy-bingo-289391a6.jpg"
+  },
+  {
+    "gameid": "bc82afddb6d24ef891f70d7b1c9a3106",
+    "gamename": "Tale of Kyubiko",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tale-of-kyubiko-269ab236.jpg"
+  },
+  {
+    "gameid": "a2942bb4945ef9b8170acf713177a721",
+    "gamename": "Tales of Asgard: Freya's Wedding",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tales-of-asgard-freya-s-wedding-76853d87.jpg"
+  },
+  {
+    "gameid": "4b01e889a1082dfb374d46ab5204d8d3",
+    "gamename": "Tales of Mithrune Syns Fortune",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tales-of-mithrune-syns-fortune-2ec6004c.png"
+  },
+  {
+    "gameid": "9ced2ae449b6b8f50cfd955dca29ee7b",
+    "gamename": "Temple of Prosperity",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/temple-of-prosperity-c580e209.jpg"
+  },
+  {
+    "gameid": "1f979097a7a1e83ec2f081676ad55621",
+    "gamename": "Temple of Tollan",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/temple-of-tollan-8762c794.png"
+  },
+  {
+    "gameid": "b842393be9c01466205360513726d7bc",
+    "gamename": "Ternion",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/ternion-d0efdcc8.jpg"
+  },
+  {
+    "gameid": "cce54088bb159d2f46f50c0e6522cb0f",
+    "gamename": "Testament",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/testament-0764a9fc.jpg"
+  },
+  {
+    "gameid": "fddc670fd964b2b873ee8c0a86d8acc9",
+    "gamename": "The Faces of Freya",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-faces-of-freya-557d4f99.jpg"
+  },
+  {
+    "gameid": "297daf7e9af8b0bf89d6c1ff53bde644",
+    "gamename": "The Green Knight",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-green-knight-a3aab2cb.jpg"
+  },
+  {
+    "gameid": "6b25e6256ad0c5539981c7c4402b7371",
+    "gamename": "The Last Sundown",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-last-sundown-01e63b59.jpg"
+  },
+  {
+    "gameid": "e86ecf340fa34e0608e02b6094ef6d00",
+    "gamename": "The Paying Piano Club",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-paying-piano-club-85d5da18.jpg"
+  },
+  {
+    "gameid": "4394d5c7975bc1c789bee39468026dda",
+    "gamename": "The Sword and The Grail",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-sword-and-the-grail-eda4093a.jpg"
+  },
+  {
+    "gameid": "3d3bc19e7ada8789a67b9a9e74e6fa34",
+    "gamename": "The Wild Class",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/the-wild-class-91b0be0a.jpg"
+  },
+  {
+    "gameid": "8e0eaf3d1f0eea0e89087f9591ef50d4",
+    "gamename": "Thunder Screech",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/thunder-screech-fdc1f2af.jpg"
+  },
+  {
+    "gameid": "f42f159f5df27939b8bf16cad87ec15b",
+    "gamename": "Tomb of Gold",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tomb-of-gold-c8a76ce0.jpg"
+  },
+  {
+    "gameid": "7848119e111136077c7097e2a9acb1bb",
+    "gamename": "Tower Quest",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tower-quest-6d35d331.jpg"
+  },
+  {
+    "gameid": "e030dfe0514f999090f0b2e9aadd02f6",
+    "gamename": "Tower Quest Legacy",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/tower-quest-legacy-64889b31.png"
+  },
+  {
+    "gameid": "237b50f3791116ddafe1d0e12a9aafe1",
+    "gamename": "Treasures of Kongar",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/treasures-of-kongar-cda5c5ca.png"
+  },
+  {
+    "gameid": "f203c2b1195429ada211a647b97fd993",
+    "gamename": "Treats of Terror",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/treats-of-terror-9552b587.png"
+  },
+  {
+    "gameid": "c036de27a24ab576d9a5275294334be5",
+    "gamename": "Troll Hunters",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/troll-hunters-c00cc05d.jpg"
+  },
+  {
+    "gameid": "ecde39fa25b8ff89cc8da7b99cab8735",
+    "gamename": "Troll Hunters 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/troll-hunters-2-2a520eb2.jpg"
+  },
+  {
+    "gameid": "bab63fda19940f00081a3ac29eda1ce4",
+    "gamename": "Twisted Sister",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/twisted-sister-8ed6e5d4.jpg"
+  },
+  {
+    "gameid": "ead36f71e18cc7875715a9caad83d6a5",
+    "gamename": "Undefeated Xerxes",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/undefeated-xerxes-3bd3b064.png"
+  },
+  {
+    "gameid": "c08bd0624bf0c80a4a10fc80329047f8",
+    "gamename": "USA Flip",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/usa-flip-16398e65.jpg"
+  },
+  {
+    "gameid": "007610add2180ee4dc572bab5e9a717d",
+    "gamename": "Viking Runecraft",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/viking-runecraft-eaa6f05b.png"
+  },
+  {
+    "gameid": "b9f1cbc728bbd43b06d44cb9eab2dd22",
+    "gamename": "Viking Runecraft 100",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/viking-runecraft-100-8ef0e19a.jpg"
+  },
+  {
+    "gameid": "5e77e2c96bb58d63b1d1cbbe1fd0312f",
+    "gamename": "Viking Runecraft Bingo",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/viking-runecraft-bingo-db8a9b23.jpg"
+  },
+  {
+    "gameid": "3b7a8c9d80daa7f6dcf7f5843038bf83",
+    "gamename": "Whispering Winds",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/whispering-winds-58fc1667.png"
+  },
+  {
+    "gameid": "e451bbcecf5483492ca79323e80d8cca",
+    "gamename": "Wild Bandolier",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-bandolier-c919fb32.jpg"
+  },
+  {
+    "gameid": "a116393817177afbaf3cb5d0856fabcf",
+    "gamename": "Wild Blood",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-blood-5c144163.jpg"
+  },
+  {
+    "gameid": "4d74a247928c8ce8eec0e1ed5b668fe1",
+    "gamename": "Wild Blood 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-blood-2-1eee66e9.jpg"
+  },
+  {
+    "gameid": "c351ef2a518bbd2a88fa4cdf6b04497a",
+    "gamename": "Wild Falls",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-falls-b1ffd0b7.jpg"
+  },
+  {
+    "gameid": "42852827c9b35f75233a43ba29dea07a",
+    "gamename": "Wild Falls 2",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-falls-2-ea6a9f54.jpg"
+  },
+  {
+    "gameid": "cfc6061f0ddc27f0d47a218428b06d84",
+    "gamename": "Wild Frames",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-frames-fde0e324.jpg"
+  },
+  {
+    "gameid": "5b4eaf7d140411d6f48b50df4cb554a0",
+    "gamename": "Wild Melon",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-melon-95d7ea2f.jpg"
+  },
+  {
+    "gameid": "afc96cdda740f8d26254cdf4b7d3300f",
+    "gamename": "Wild North",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-north-b973a268.jpg"
+  },
+  {
+    "gameid": "3b37471c573e1160dacb61a66dc4427a",
+    "gamename": "Wild Rails",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-rails-3a9092c5.jpg"
+  },
+  {
+    "gameid": "22873a41f5929baca8bfa66378bf8398",
+    "gamename": "Wild Survivor",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-survivor-f6be5645.jpg"
+  },
+  {
+    "gameid": "91995943db984215aede2586e88e2be4",
+    "gamename": "Wild Trigger",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wild-trigger-b6470b36.jpg"
+  },
+  {
+    "gameid": "3ff437265d9373b21d4c6e7a5f497478",
+    "gamename": "Wildhound Derby",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wildhound-derby-f3c9b204.jpg"
+  },
+  {
+    "gameid": "06b2162941ad881d2a1e09b9ed19a279",
+    "gamename": "Win-A-Beest",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/win-a-beest-c055a0be.jpg"
+  },
+  {
+    "gameid": "0c70e3948e240c49a85752f11ac4b1a0",
+    "gamename": "Wizard of Gems",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/wizard-of-gems-6a28968f.jpg"
+  },
+  {
+    "gameid": "9150986fe0151f255531e0d4dd18fb8d",
+    "gamename": "Xmas Joker",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/xmas-joker-7ca2c62a.jpg"
+  },
+  {
+    "gameid": "4335c2a67991dc9337479caf6020f140",
+    "gamename": "Xmas Magic",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/xmas-magic-2d142032.jpg"
+  },
+  {
+    "gameid": "8378eb958f4e62f4b6df651325eb5ded",
+    "gamename": "ZZ Top Roadside Riches",
+    "providerName": "playngo",
+    "image": "https://providers.gamblly-api.com/assets/providers/PLAYNGO/zz-top-roadside-riches-94283c2e.jpg"
+  }
+]

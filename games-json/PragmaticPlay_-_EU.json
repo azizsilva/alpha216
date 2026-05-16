@@ -1,0 +1,3404 @@
+[
+  {
+    "gameid": "b7f5590ec64882148207e646949d005f",
+    "gamename": "3 Buzzing Wilds",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/3-buzzing-wilds-f75e958f.webp"
+  },
+  {
+    "gameid": "ac700413f2a4f9241e306e622a5bf935",
+    "gamename": "3 Dancing Monkeys",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/3-dancing-monkeys-1f5f0d84.webp"
+  },
+  {
+    "gameid": "6ceed907bb1461cb78c5244bf8dfe2d5",
+    "gamename": "3 Genie Wishes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/3-genie-wishes-aa71fd00.webp"
+  },
+  {
+    "gameid": "df031f0444447df88d09c485222fac7f",
+    "gamename": "3 Kingdoms - Battle of Red Cliffs",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/3-kingdoms-battle-of-red-cliffs-c18cd7e1.webp"
+  },
+  {
+    "gameid": "f034e949cdd794c93db07636af5adce2",
+    "gamename": "3 Magic Eggs",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/3-magic-eggs-97e2cd91.webp"
+  },
+  {
+    "gameid": "d3e7be9440400e644859dba882daec79",
+    "gamename": "5 Frozen Charms Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-frozen-charms-megaways-00fb1f36.webp"
+  },
+  {
+    "gameid": "074d93f1cdf8aa749052140efa04d8c0",
+    "gamename": "5 Lions",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-lions-04aa2532.webp"
+  },
+  {
+    "gameid": "c0f716eee2bc4cd2d0b796d281514988",
+    "gamename": "5 Lions Dance",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-lions-dance-6b0be9c9.webp"
+  },
+  {
+    "gameid": "ab1838c12ae2c6def3f898efb12a09cf",
+    "gamename": "5 Lions Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-lions-gold-cc959576.png"
+  },
+  {
+    "gameid": "30535756ecf42673db61eca89df50bc3",
+    "gamename": "5 Lions Megaways 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-lions-megaways-2-65375aeb.webp"
+  },
+  {
+    "gameid": "b00d127ba0c5f8439f94646887f1fd4d",
+    "gamename": "5 Lions Reborn",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/5-lions-reborn-0a22e665.webp"
+  },
+  {
+    "gameid": "cab1a52c8ae4d3c9b5650396d231345a",
+    "gamename": "6 Jokers",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/6-jokers-b8ed809f.webp"
+  },
+  {
+    "gameid": "1e93f95916665108cb61065274cb46a4",
+    "gamename": "7 Clovers of Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/7-clovers-of-fortune-3a030556.webp"
+  },
+  {
+    "gameid": "5ec616ca8fcb4702d8cf8cbc7b9acf16",
+    "gamename": "7 Piggies",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/7-piggies-9ec486e3.webp"
+  },
+  {
+    "gameid": "7b804cb7f8b13a93dd24a75eb37712dd",
+    "gamename": "777 Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/777-rush-4051df33.webp"
+  },
+  {
+    "gameid": "6622a2e83f83ba36c64ac90bd0ccf071",
+    "gamename": "8 Dragons",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/8-dragons-adf8837b.webp"
+  },
+  {
+    "gameid": "9b8db256da26b54e7b8a0766ac7d904d",
+    "gamename": "8 Golden Dragon Challenge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/8-golden-dragon-challenge-8746a310.webp"
+  },
+  {
+    "gameid": "50fb95404b19b978a8983f2ff6eafc6d",
+    "gamename": "888 Dragons",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/888-dragons-554b0bb7.webp"
+  },
+  {
+    "gameid": "ff7e7b722b146607e4d2f71d6a1a62ac",
+    "gamename": "888 Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/888-gold-c554d895.webp"
+  },
+  {
+    "gameid": "c47e7fda3a1d706d21fc215b4f080551",
+    "gamename": "African Elephant",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/african-elephant-ce723205.webp"
+  },
+  {
+    "gameid": "da84df20357e880c2fd6058165534cf8",
+    "gamename": "Aladdin and the Sorcerer",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aladdin-and-the-sorcerer-eef5e107.webp"
+  },
+  {
+    "gameid": "8afaa529b72a3f8451552d79774eeb89",
+    "gamename": "Alien Invaders",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/alien-invaders-1efd0c95.webp"
+  },
+  {
+    "gameid": "67ad028a5b9fdc3a1af99351e3bd07ee",
+    "gamename": "Amazing Money Machine",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/amazing-money-machine-ef99ffbc.webp"
+  },
+  {
+    "gameid": "bf91fbba325bbc02698a07ddd902fec4",
+    "gamename": "American Blackjack",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/american-blackjack-80a05ee8.webp"
+  },
+  {
+    "gameid": "ca5caf33bdba23d92641ea946cfd5a85",
+    "gamename": "Anaconda Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/anaconda-gold-1e40d134.webp"
+  },
+  {
+    "gameid": "ed25af2d1a4744a55e5087112bf23eec",
+    "gamename": "Ancient Egypt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ancient-egypt-1c2ef4db.webp"
+  },
+  {
+    "gameid": "40047e7a073753a94889a242c911a695",
+    "gamename": "Ancient Egypt Classic",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ancient-egypt-classic-a7f48bdc.webp"
+  },
+  {
+    "gameid": "914c41ff6ce7c680e2a110d35420b1be",
+    "gamename": "Ancient Island Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ancient-island-megaways-83fee404.webp"
+  },
+  {
+    "gameid": "5e5c9899b53b60510a2b61a00c46f9be",
+    "gamename": "Angel vs Sinner",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/angel-vs-sinner-803bf8e1.webp"
+  },
+  {
+    "gameid": "fab80339033327c607eaa5227ec1f418",
+    "gamename": "Argonauts",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/argonauts-c586d9df.webp"
+  },
+  {
+    "gameid": "8d843e1cee6faf50a2cc6261e1b3b9b6",
+    "gamename": "Asgard",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/asgard-a4c95519.webp"
+  },
+  {
+    "gameid": "f1f14da82af4fa8bd821dd830a9edc12",
+    "gamename": "Aztec Blaze",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-blaze-a3fb8067.webp"
+  },
+  {
+    "gameid": "e6eaed7085796b0c706cbde5221d05cf",
+    "gamename": "Aztec Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-bonanza-2513c45c.webp"
+  },
+  {
+    "gameid": "05d693169ee6aeec45d6328c7fc57a43",
+    "gamename": "Aztec Gems",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-gems-975593df.webp"
+  },
+  {
+    "gameid": "4e88eb8562a4a9fff6d8673b61153a8d",
+    "gamename": "Aztec Gems Deluxe",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-gems-deluxe-1370cf79.webp"
+  },
+  {
+    "gameid": "ba3dc54ad1f451262910dda6c61001ce",
+    "gamename": "Aztec Gems Megaways™",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-gems-megaways-4b30e816.webp"
+  },
+  {
+    "gameid": "224479ab56371d6f6a5f1733ad14623c",
+    "gamename": "Aztec Powernudge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-powernudge-89a0077f.webp"
+  },
+  {
+    "gameid": "f53103b500a4c918eeb82de810152301",
+    "gamename": "Aztec Smash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-smash-24a103f0.webp"
+  },
+  {
+    "gameid": "c3d9125886cdd573a4404e6121877754",
+    "gamename": "Aztec Treasure Hunt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/aztec-treasure-hunt-a7ceb739.webp"
+  },
+  {
+    "gameid": "df30d3730d30e22c1d56bb5665fdbbf4",
+    "gamename": "Badge Blitz",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/badge-blitz-820dab7a.webp"
+  },
+  {
+    "gameid": "de19dcca7f6fbfa5cc5807e786b6b617",
+    "gamename": "Bandit Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bandit-megaways-8e6ac6c5.webp"
+  },
+  {
+    "gameid": "d0ef313796cb3e2da7844984cd95b726",
+    "gamename": "Barn Festival",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/barn-festival-38f7aac5.webp"
+  },
+  {
+    "gameid": "17905b61e70edc1cb0e90bd84669dd73",
+    "gamename": "Barnyard Megahays Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/barnyard-megahays-megaways-1624ad21.webp"
+  },
+  {
+    "gameid": "cc19f896b3d01e7d2904c0049c30d802",
+    "gamename": "Beware The Deep Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/beware-the-deep-megaways-892e3980.webp"
+  },
+  {
+    "gameid": "aaea3a95f3e5ce36e4beea92c71ed912",
+    "gamename": "Big Bass - Secrets of the Golden Lake",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-secrets-of-the-golden-lake-0235ef1a.webp"
+  },
+  {
+    "gameid": "5807b1f2837f709f692fc1b65f51cefc",
+    "gamename": "Big Bass Amazon Xtreme",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-amazon-xtreme-3db3d33b.png"
+  },
+  {
+    "gameid": "327fa121c295ee87c7e2c60611d064bc",
+    "gamename": "Big Bass Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-bonanza-b578e4df.png"
+  },
+  {
+    "gameid": "383490651852a945360146cdcf59b93f",
+    "gamename": "Big Bass Bonanza - Reel Action",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-bonanza-reel-action-dc41706b.webp"
+  },
+  {
+    "gameid": "00d1836f3a1200cb6754a61be4c39160",
+    "gamename": "Big Bass Bonanza 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-bonanza-1000-bc75c969.png"
+  },
+  {
+    "gameid": "0e7383431bae567b88fd9be7bf652b45",
+    "gamename": "Big Bass Bonanza 3 Reeler",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-bonanza-3-reeler-029980e8.webp"
+  },
+  {
+    "gameid": "96810fa8cb383014cda377b5a04b829a",
+    "gamename": "Big Bass Bonanza Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-bonanza-megaways-35176181.webp"
+  },
+  {
+    "gameid": "0b6df3ffc8f38d0e39fccee31e1edf2b",
+    "gamename": "Big Bass Boxing Bonus Round",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-boxing-bonus-round-dc645f22.webp"
+  },
+  {
+    "gameid": "d78b41ecb69fe8370a561d2d478d980f",
+    "gamename": "Big Bass Christmas Bash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-christmas-bash-6bfe5096.webp"
+  },
+  {
+    "gameid": "b3441ece8fc94ddaafe01be3f3483273",
+    "gamename": "Big Bass Christmas Frozen Lake",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-christmas-frozen-lake-439f83b8.webp"
+  },
+  {
+    "gameid": "9fd858734e7329e7716363be6b610658",
+    "gamename": "Big Bass Day at the Races",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-day-at-the-races-d5ffc347.webp"
+  },
+  {
+    "gameid": "a9e06a4e22f2825ce71e3b5de41030c1",
+    "gamename": "Big Bass Dice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-dice-bd025658.webp"
+  },
+  {
+    "gameid": "64d75dfe52f40c443aeae3c5e9d5f4d8",
+    "gamename": "Big Bass Floats My Boat",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-floats-my-boat-f714861a.webp"
+  },
+  {
+    "gameid": "950764651894d3ec34431c4423f23ebb",
+    "gamename": "Big Bass Halloween",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-halloween-d7f149a5.webp"
+  },
+  {
+    "gameid": "045f290df6c578256adb632ea1da485f",
+    "gamename": "Big Bass Halloween 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-halloween-2-cfe40599.webp"
+  },
+  {
+    "gameid": "c608ddff076c981fa470d70fba530869",
+    "gamename": "Big Bass Halloween 3",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-halloween-3-20d351dc.webp"
+  },
+  {
+    "gameid": "af7a31b3324bbe5c97a808b7603feeec",
+    "gamename": "Big Bass Hold & Spinner Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-hold-spinner-megaways-d5547341.webp"
+  },
+  {
+    "gameid": "e302e6030d750c678a0ddd351d6d8ec9",
+    "gamename": "Big Bass Mission Fishin'",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-mission-fishin-56c0e030.webp"
+  },
+  {
+    "gameid": "484738db6afa7e068cfe3828bee77d4b",
+    "gamename": "Big Bass Raceday Repeat",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-raceday-repeat-666db62c.webp"
+  },
+  {
+    "gameid": "9481c021ff210415c25f99073ed90df6",
+    "gamename": "Big Bass Reel Repeat",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-reel-repeat-a074960a.webp"
+  },
+  {
+    "gameid": "9f4e61bc4ef7ebffd8637dd1db5202f1",
+    "gamename": "Big Bass Return to the Races",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-return-to-the-races-8b6d3f16.webp"
+  },
+  {
+    "gameid": "a1dfe25af8aa67b40e3f5c2b090a7f66",
+    "gamename": "Big Bass Splash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-splash-960d26be.png"
+  },
+  {
+    "gameid": "be2096f4afa0d1731851c3a96deb362b",
+    "gamename": "Big Bass Splash 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-splash-1000-88211edc.webp"
+  },
+  {
+    "gameid": "c843b4951bd9821873e4bab374b67452",
+    "gamename": "Big Bass Trophy Catch",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-trophy-catch-f2969e3f.webp"
+  },
+  {
+    "gameid": "6f18f146e6bb8c9291a3144ebf5e4ca5",
+    "gamename": "Big Bass Xmas Xtreme",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-bass-xmas-xtreme-672d8726.webp"
+  },
+  {
+    "gameid": "ee6844b10cc2295104d72c0554af94b3",
+    "gamename": "Big Burger Load it up with Xtra cheese",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-burger-load-it-up-with-xtra-cheese-1cb0d26e.webp"
+  },
+  {
+    "gameid": "7cdac8e7102f1d8959650c5a76aa9370",
+    "gamename": "Big Juan",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/big-juan-b8419735.webp"
+  },
+  {
+    "gameid": "6204fe7f30c5c56146f201218ee3ea5e",
+    "gamename": "Bigger Barn House Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bigger-barn-house-bonanza-24d4adee.webp"
+  },
+  {
+    "gameid": "98f093dcaa2b0fa713d35f4594e9451e",
+    "gamename": "Bigger Bass Blizzard - Christmas Catch",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bigger-bass-blizzard-christmas-catch-d8fb28bf.webp"
+  },
+  {
+    "gameid": "533b95b0d17cda431521139970d39073",
+    "gamename": "Bigger Bass Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bigger-bass-bonanza-b76074f8.webp"
+  },
+  {
+    "gameid": "1944eb208471b5dfd960f26e80cc3715",
+    "gamename": "Bigger Bass Splash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bigger-bass-splash-9a96f3ca.webp"
+  },
+  {
+    "gameid": "7de938fd86a4cd93ecf5d5602ee7569c",
+    "gamename": "Bingo Mania",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bingo-mania-9b203e97.webp"
+  },
+  {
+    "gameid": "7ebe1e90ae4c91d57b7b30e23dfd6db7",
+    "gamename": "Black Bull",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/black-bull-81f3ffe8.webp"
+  },
+  {
+    "gameid": "98875a7c55c236d138916cd59cde1eea",
+    "gamename": "Blade & Fangs",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/blade-fangs-3d60ba1b.webp"
+  },
+  {
+    "gameid": "32a9b5e9958d37e859f8ae6f0705c095",
+    "gamename": "Blazing Wilds Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/blazing-wilds-megaways-0b716314.webp"
+  },
+  {
+    "gameid": "d1f8f611d448510a487271b818eabe2f",
+    "gamename": "Blitz Super Wheel",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/blitz-super-wheel-5a8f03dd.webp"
+  },
+  {
+    "gameid": "5fbf5c08a4c79c5b95e29b663c7a4dc0",
+    "gamename": "Bloody Dawn",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bloody-dawn-614d908b.webp"
+  },
+  {
+    "gameid": "1a7933f4e5a83533018aafa754af8457",
+    "gamename": "Bomb Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bomb-bonanza-8ba66061.webp"
+  },
+  {
+    "gameid": "73af5e80348d3b609d7948497512e391",
+    "gamename": "Book of Golden Sands",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/book-of-golden-sands-c58996cb.webp"
+  },
+  {
+    "gameid": "9186d388bb0eaec935e5c324d9220422",
+    "gamename": "Book of Kingdoms",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/book-of-kingdoms-a7fec3e8.webp"
+  },
+  {
+    "gameid": "34cb1fb87c318a4923fc7b7b4e31d53e",
+    "gamename": "Book of Monsters",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/book-of-monsters-a888e3e9.webp"
+  },
+  {
+    "gameid": "9b19140970cfefc081033d4e35d0b360",
+    "gamename": "Book of Tut Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/book-of-tut-megaways-023792b8.webp"
+  },
+  {
+    "gameid": "0e4b1e960d8cc8427ddd733328df9362",
+    "gamename": "Book of Vikings",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/book-of-vikings-dfaec0f5.webp"
+  },
+  {
+    "gameid": "74ad5ad66f45a9d1b8136ef704bbdf26",
+    "gamename": "Bounty Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bounty-gold-442a1d6d.jpg"
+  },
+  {
+    "gameid": "96c03b1b9d99b78b06e2f99ecef038e2",
+    "gamename": "Bow of Artemis",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/bow-of-artemis-1b18e041.webp"
+  },
+  {
+    "gameid": "953182d14bc438f502e277812dc452c4",
+    "gamename": "Brick House Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/brick-house-bonanza-8a0dac91.webp"
+  },
+  {
+    "gameid": "eb2d846b9948bf6779fa0c68ad2f0c23",
+    "gamename": "Buffalo King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/buffalo-king-3e3f8c18.webp"
+  },
+  {
+    "gameid": "43397368de7455764195f0097e72a626",
+    "gamename": "Buffalo King Untamed Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/buffalo-king-untamed-megaways-2cd4e725.webp"
+  },
+  {
+    "gameid": "71382cb9cad6b853a2e8f6975798aff0",
+    "gamename": "Caishen's Cash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/caishen-s-cash-bd57e24e.webp"
+  },
+  {
+    "gameid": "635fe7b019b4dfbc89f71f87f8fb5997",
+    "gamename": "Caishen's Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/caishen-s-gold-62ba4a4d.webp"
+  },
+  {
+    "gameid": "3f90b6a8e9b089615d514a25c1b29323",
+    "gamename": "Candy Blitz",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/candy-blitz-e97129f6.webp"
+  },
+  {
+    "gameid": "5c5ecf28395360512e10ba9b12eb736d",
+    "gamename": "Candy Blitz Bombs",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/candy-blitz-bombs-ad1d7add.webp"
+  },
+  {
+    "gameid": "c6f5ee2ea499da7f10b4ce92e434bb9e",
+    "gamename": "Candy Corner",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/candy-corner-7752d19e.webp"
+  },
+  {
+    "gameid": "1584763738f901c73e643c55c7f2de24",
+    "gamename": "Candy Jar Clusters",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/candy-jar-clusters-e5b8c3da.webp"
+  },
+  {
+    "gameid": "7b0d86eef80df55b6fe0b40af454a14d",
+    "gamename": "Candy Stars",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/candy-stars-ca2aefc9.webp"
+  },
+  {
+    "gameid": "4eae6d615c766a30fe3df1df57018607",
+    "gamename": "Captain Kraken Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/captain-kraken-megaways-e35150e9.webp"
+  },
+  {
+    "gameid": "8b6de15508037d99adba63f2009e4d0c",
+    "gamename": "Cash Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-bonanza-d247695f.webp"
+  },
+  {
+    "gameid": "1a75acc43d2f431841df864c2d4629d4",
+    "gamename": "Cash Box",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-box-3b539859.webp"
+  },
+  {
+    "gameid": "b1258e0b4f6ebb00a5ebb41a6cb7bc26",
+    "gamename": "Cash Chips",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-chips-300b4d0c.webp"
+  },
+  {
+    "gameid": "d48746b0f5aa3677812f76269597b5c1",
+    "gamename": "Cash Elevator",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-elevator-79ce7268.webp"
+  },
+  {
+    "gameid": "6913e0936dc7a1a6355a125d79d1c4b4",
+    "gamename": "Cash Patrol",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-patrol-55eacfae.webp"
+  },
+  {
+    "gameid": "de109cef80306297f2a7522a5283dd18",
+    "gamename": "Cash Surge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cash-surge-7d5ca46e.webp"
+  },
+  {
+    "gameid": "2c70f8e2670dd2b13417ae5228d85375",
+    "gamename": "Castle of Fire",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/castle-of-fire-9684bb79.webp"
+  },
+  {
+    "gameid": "ee95520197282d10c4d0420db30bb686",
+    "gamename": "Chase for Glory",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chase-for-glory-07adc0bc.webp"
+  },
+  {
+    "gameid": "d7c6f416bfff4113677afc25d050bf33",
+    "gamename": "Chests of Cai Shen",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chests-of-cai-shen-82116fdd.webp"
+  },
+  {
+    "gameid": "697a1c901dd57f98b293027e8af62e2d",
+    "gamename": "Chests of Cai Shen 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chests-of-cai-shen-2-59e26f54.webp"
+  },
+  {
+    "gameid": "85c42fe280b53f00702b07b3335356b4",
+    "gamename": "Chicken Drop",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chicken-drop-324bb5be.webp"
+  },
+  {
+    "gameid": "b017d5551df1239f732860fa45f77fc7",
+    "gamename": "Chicken+",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chicken-61ba57dd.webp"
+  },
+  {
+    "gameid": "b04cda159e4fcca273ca5f00e34f883f",
+    "gamename": "Chilli Heat",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chilli-heat-dc923310.webp"
+  },
+  {
+    "gameid": "7361d621d9c309724411620f049e715b",
+    "gamename": "Chilli Heat Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chilli-heat-megaways-c87d50c2.webp"
+  },
+  {
+    "gameid": "46927737435a3571647b457c10cd7a8e",
+    "gamename": "Chilli Heat Spicy Spins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/chilli-heat-spicy-spins-0e67198e.webp"
+  },
+  {
+    "gameid": "5b22ab96368a5d3aed8a1f541ead932f",
+    "gamename": "Christmas Big Bass Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/christmas-big-bass-bonanza-9ffe75b2.webp"
+  },
+  {
+    "gameid": "5af5b5da3e6b88f6396c3cc19dce7d37",
+    "gamename": "Christmas Carol Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/christmas-carol-megaways-d7c2fea9.webp"
+  },
+  {
+    "gameid": "6dd63841677a36bf07ce069ec54bc456",
+    "gamename": "Cleocatra",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cleocatra-5b81d1b9.webp"
+  },
+  {
+    "gameid": "5ef2e439010aeca067f3a6916c901f07",
+    "gamename": "Clover Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/clover-gold-edb886d1.webp"
+  },
+  {
+    "gameid": "ec96e7f4cf81c39a29127a7a475fc3af",
+    "gamename": "Club Tropicana",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/club-tropicana-b5e10224.webp"
+  },
+  {
+    "gameid": "ecd5138b81f23063f5024a9675c6bc5a",
+    "gamename": "Club Tropicana - Happy Hour",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/club-tropicana-happy-hour-898715d5.webp"
+  },
+  {
+    "gameid": "702c45c74023dd88cef625ccd4e78bbe",
+    "gamename": "Code of Cairo",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/code-of-cairo-6aea3d12.webp"
+  },
+  {
+    "gameid": "50f573ae28732a404e4a1d5e43349db9",
+    "gamename": "Colossal Cash Zone",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/colossal-cash-zone-b55e659e.webp"
+  },
+  {
+    "gameid": "031f433c91b6b997d406773a7385df0f",
+    "gamename": "Congo Cash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/congo-cash-1c016893.webp"
+  },
+  {
+    "gameid": "10cd0742a6692ef9c27a4320e3883c4e",
+    "gamename": "Congo Cash XL",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/congo-cash-xl-dfe098f8.webp"
+  },
+  {
+    "gameid": "b986c1fc6e5d8fb9ed1c22e2e520d96c",
+    "gamename": "Cosmic Cash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cosmic-cash-b955c0e5.webp"
+  },
+  {
+    "gameid": "ea74dd2d834178a631d8743b8ff6b0d9",
+    "gamename": "Country Farming",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/country-farming-ebf58812.webp"
+  },
+  {
+    "gameid": "d92892b4f0cf9e5549d6e8219799a58c",
+    "gamename": "Cowboy Coins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cowboy-coins-a9e664b7.webp"
+  },
+  {
+    "gameid": "18d7dbff8fd377f709d0aa0655e45522",
+    "gamename": "Cowboys Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cowboys-gold-13b744f4.jpg"
+  },
+  {
+    "gameid": "cc0dd70f3e00c73df28585f552298928",
+    "gamename": "Crank It Up",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/crank-it-up-966712e9.webp"
+  },
+  {
+    "gameid": "2b04a4b657245ce3d792074c9f644551",
+    "gamename": "Crown of Fire",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/crown-of-fire-7a97610c.webp"
+  },
+  {
+    "gameid": "dec38f3053ba56c1d78eb170fae4b94d",
+    "gamename": "Crystal Caverns Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/crystal-caverns-megaways-6665c18c.webp"
+  },
+  {
+    "gameid": "9297664682018d584f5a7650362e2420",
+    "gamename": "CULT.",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cult-c7791f5f.webp"
+  },
+  {
+    "gameid": "5fcc23cf91acd1f355201351b7a3f26e",
+    "gamename": "Curse of the Werewolf Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/curse-of-the-werewolf-megaways-3f55e288.webp"
+  },
+  {
+    "gameid": "a9cf71127c39c8fb7289cdac9cf94703",
+    "gamename": "Cyberheist City",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cyberheist-city-9295ff4a.webp"
+  },
+  {
+    "gameid": "eba8270a8a2ebe09311a5491b798566d",
+    "gamename": "Cyclops Smash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/cyclops-smash-f42ce902.webp"
+  },
+  {
+    "gameid": "ec93c88133566994657c4d9eac73443a",
+    "gamename": "Dance Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dance-party-1fb86434.webp"
+  },
+  {
+    "gameid": "39e5d6e45fce6f88c23be485d0eff5f9",
+    "gamename": "Day of Dead",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/day-of-dead-79d7a6fd.webp"
+  },
+  {
+    "gameid": "315a7c0ff22e9b9c8f000ba72626b1eb",
+    "gamename": "Demon Pots",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/demon-pots-8bd51750.webp"
+  },
+  {
+    "gameid": "9938b97371ca02e104e109990b8f9329",
+    "gamename": "Devilicious",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/devilicious-36b915e9.webp"
+  },
+  {
+    "gameid": "daec52818a6b49138cc584cef0b3a028",
+    "gamename": "Diamond Cascade",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/diamond-cascade-7e4b806f.webp"
+  },
+  {
+    "gameid": "a2c7dd829aa83dc2115e969471da9eda",
+    "gamename": "Diamond Strike",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/diamond-strike-34bbdb4a.webp"
+  },
+  {
+    "gameid": "ac7e4abe509cbfe467f884bb18d338b2",
+    "gamename": "Diamonds are Forever 3 Lines",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/diamonds-are-forever-3-lines-e7ccfc9f.webp"
+  },
+  {
+    "gameid": "5743a2300cc3c54855838cef2af0fc99",
+    "gamename": "Diamonds of Egypt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/diamonds-of-egypt-8b4c78ea.webp"
+  },
+  {
+    "gameid": "5e9b76b4907aa68bb519ddb416446e27",
+    "gamename": "Ding Dong Christmas Bells",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ding-dong-christmas-bells-004a6de7.webp"
+  },
+  {
+    "gameid": "64884a62c09a115c26aa5c494eb3850a",
+    "gamename": "Dino Drop",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dino-drop-d118a4bc.webp"
+  },
+  {
+    "gameid": "6ee88cd8d45a5abc5797f14ec19137be",
+    "gamename": "DJ Neko",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dj-neko-aaa6f88d.webp"
+  },
+  {
+    "gameid": "245d25c8d5b9bf6ac800a75b34626578",
+    "gamename": "Down the Rails",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/down-the-rails-b5c6ed21.webp"
+  },
+  {
+    "gameid": "46679fbc1601f8dccb63c64d775ce5a9",
+    "gamename": "Drago - Jewels of Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/drago-jewels-of-fortune-9c48695e.webp"
+  },
+  {
+    "gameid": "bc5c4d595345cbd9e888695ffc2e43b2",
+    "gamename": "Dragon Gold 88",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-gold-88-b72cb6e9.webp"
+  },
+  {
+    "gameid": "7213d6d23f67e21cb0843c95ef4d5614",
+    "gamename": "Dragon Hero",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-hero-c25c0d5e.webp"
+  },
+  {
+    "gameid": "5d4e138370cc6a446e28a4730c9fe3f5",
+    "gamename": "Dragon Hot Hold and Spin",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-hot-hold-and-spin-e440388b.webp"
+  },
+  {
+    "gameid": "c070b94e25d02cbacaea7531830ee790",
+    "gamename": "Dragon King Hot Pots",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-king-hot-pots-28282408.webp"
+  },
+  {
+    "gameid": "2d4bdde60b24d1fccafdcaff37e52ab8",
+    "gamename": "Dragon Kingdom",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-kingdom-9577fdb4.webp"
+  },
+  {
+    "gameid": "97122d567e55a7dbb08e9dfc7ac5e9b7",
+    "gamename": "Dragon Kingdom - Eyes of Fire",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-kingdom-eyes-of-fire-2dec95ec.webp"
+  },
+  {
+    "gameid": "17d5012513410f5e9b0708f481b532c3",
+    "gamename": "Dragon Pots Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-pots-megaways-582a660a.webp"
+  },
+  {
+    "gameid": "7bb3ed619877f2b2b78d4a5279cdf23a",
+    "gamename": "Dragon Tiger Fortunes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dragon-tiger-fortunes-d005d0e3.webp"
+  },
+  {
+    "gameid": "10b2e9cc6503ce91881cd78772e08a53",
+    "gamename": "Drill that Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/drill-that-gold-65a1ed31.webp"
+  },
+  {
+    "gameid": "cec529661c565cef5ac0c9b199467445",
+    "gamename": "Duel of Night & Day",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/duel-of-night-day-20295af1.webp"
+  },
+  {
+    "gameid": "34e8a791c7b048d5fb708b58a4266944",
+    "gamename": "Dwarf & Dragon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dwarf-dragon-56f07141.webp"
+  },
+  {
+    "gameid": "058e47691b7ce09959a73ca237523e4c",
+    "gamename": "Dwarven Gold Deluxe",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dwarven-gold-deluxe-e7c0728a.webp"
+  },
+  {
+    "gameid": "0a97dccc9a6230fb3c9eea3220c02d9e",
+    "gamename": "Dynamite Diggin Doug",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/dynamite-diggin-doug-d7088abf.webp"
+  },
+  {
+    "gameid": "e20027b755b02a3939f3136315e97aba",
+    "gamename": "Egyptian Fortunes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/egyptian-fortunes-77d41a56.webp"
+  },
+  {
+    "gameid": "b83d0a110632be33daadc8c2eb8bca54",
+    "gamename": "Elemental Gems Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/elemental-gems-megaways-a94f4351.webp"
+  },
+  {
+    "gameid": "97c448a2fafe0a1cdbff7c7831f9dd4a",
+    "gamename": "Emerald King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/emerald-king-30db74a6.webp"
+  },
+  {
+    "gameid": "684d8a2f786feaac73a84b0499d88ccd",
+    "gamename": "Emerald King - Wheel of Wealth",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/emerald-king-wheel-of-wealth-bce19843.webp"
+  },
+  {
+    "gameid": "77d20f8e6ff87397200f694026914bbf",
+    "gamename": "Emerald King Rainbow Road",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/emerald-king-rainbow-road-eab53e27.webp"
+  },
+  {
+    "gameid": "744b6048621f596bf17e9b215243c079",
+    "gamename": "Emotiwins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/emotiwins-9167a256.webp"
+  },
+  {
+    "gameid": "6f0279bab4e1e4812280743ea720b549",
+    "gamename": "Empty the Bank",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/empty-the-bank-5d9c438b.webp"
+  },
+  {
+    "gameid": "ce7cd8d59599fec6326d5da24f9847ef",
+    "gamename": "Escape the Pyramid Fire & Ice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/escape-the-pyramid-fire-ice-e93bf0a8.webp"
+  },
+  {
+    "gameid": "7e20b309f0e0bf88a751b41f54e35545",
+    "gamename": "Eternal Empress – Freeze Time",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/eternal-empress-freeze-time-4c1e628c.webp"
+  },
+  {
+    "gameid": "65f80fc41945b953333ee709a58e0152",
+    "gamename": "Excalibur Unleashed",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/excalibur-unleashed-b2811fbc.webp"
+  },
+  {
+    "gameid": "d54b53239e52679436d9fd4776545ff4",
+    "gamename": "Extra Juicy",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/extra-juicy-0c44c0d5.webp"
+  },
+  {
+    "gameid": "c2a96f6772a34d1351c09bb3e2eb0a79",
+    "gamename": "Extra Juicy Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/extra-juicy-megaways-76223421.webp"
+  },
+  {
+    "gameid": "5ab0adaae59c7d17204e03e6d16ae9a9",
+    "gamename": "Eye of Cleopatra",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/eye-of-cleopatra-b33253c3.webp"
+  },
+  {
+    "gameid": "b9ee66020af593bf5c5145c1b2b24a34",
+    "gamename": "Eye of the Storm",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/eye-of-the-storm-b9b3a529.webp"
+  },
+  {
+    "gameid": "c15c84757d0bcee112913fa03c56aa0c",
+    "gamename": "Fairytale Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fairytale-fortune-86885c59.webp"
+  },
+  {
+    "gameid": "3cde6f0025377dd4725f37a7e5e72ead",
+    "gamename": "Fangtastic Freespins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fangtastic-freespins-c2a06a85.webp"
+  },
+  {
+    "gameid": "24fc30acc61053509c271a0eaf1782a9",
+    "gamename": "Fat Panda",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fat-panda-2fc34e88.webp"
+  },
+  {
+    "gameid": "fc263087951d1b7406c8a2f3bbedc363",
+    "gamename": "Fiesta Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fiesta-fortune-b40f54e3.webp"
+  },
+  {
+    "gameid": "aa861b71cc3c5dbab1fd7073d5c1c452",
+    "gamename": "Finger Lick’n Free Spins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/finger-lick-n-free-spins-412d5e72.webp"
+  },
+  {
+    "gameid": "dc28fc48a87636549f9298e4dcd25b53",
+    "gamename": "Fire 88",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-88-3e99e9ed.webp"
+  },
+  {
+    "gameid": "5afb80c4615f2910c9fdf14e78c2b2d7",
+    "gamename": "Fire Archer",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-archer-33a6217b.webp"
+  },
+  {
+    "gameid": "cd2e009dc209f21934d8b32c26df7b9c",
+    "gamename": "Fire Hot 100",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-hot-100-f4efddcf.webp"
+  },
+  {
+    "gameid": "29890bc4f33992795f14615886c8ad09",
+    "gamename": "Fire Hot 20",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-hot-20-736e63c3.webp"
+  },
+  {
+    "gameid": "961f052a9dbd7cef955eea61235d1c2e",
+    "gamename": "Fire Hot 40",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-hot-40-3f7f52d6.webp"
+  },
+  {
+    "gameid": "eb80337eaf68ca4dc74dbc78242056d1",
+    "gamename": "Fire Hot 5",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-hot-5-8f8fc2c5.webp"
+  },
+  {
+    "gameid": "563f07d59be196ad3cec2533d7c2fbd0",
+    "gamename": "Fire Portals",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-portals-f749f58e.webp"
+  },
+  {
+    "gameid": "39f34ced7888fd518c18262a6bab409d",
+    "gamename": "Fire Stampede",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-stampede-203e35c7.webp"
+  },
+  {
+    "gameid": "fc6291b0e79009fc18a1dfdbddefdd1a",
+    "gamename": "Fire Stampede 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-stampede-2-aa7085bc.webp"
+  },
+  {
+    "gameid": "b04d9cd89be5d93602d9a484f8bfe575",
+    "gamename": "Fire Strike",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-strike-5310c385.webp"
+  },
+  {
+    "gameid": "f4aa37276d97543e2b7707940c88ec2d",
+    "gamename": "Fire Strike 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fire-strike-2-437f0193.webp"
+  },
+  {
+    "gameid": "ff0ca0ef8c05956e517df50e7b3ca4ba",
+    "gamename": "Firebird Spirit",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/firebird-spirit-38a01383.webp"
+  },
+  {
+    "gameid": "8666f814f931135eb824726af1217bcd",
+    "gamename": "Fish Eye",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fish-eye-94b46087.webp"
+  },
+  {
+    "gameid": "1ee85d001705ebaf63cc0ccae61538ca",
+    "gamename": "Fishin Reels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fishin-reels-dccc474f.webp"
+  },
+  {
+    "gameid": "1be0946d4cdc5c26c5922b96c7e154f0",
+    "gamename": "Floating Dragon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/floating-dragon-3ff38533.webp"
+  },
+  {
+    "gameid": "6d2c3f62aed12608973fad7fcb8263d0",
+    "gamename": "Floating Dragon - Dragon Boat Festival",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/floating-dragon-dragon-boat-festival-b468c5e7.webp"
+  },
+  {
+    "gameid": "acacbc8afd513f03e2ebbbdf2c879a4c",
+    "gamename": "Floating Dragon – Year of the Snake",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/floating-dragon-year-of-the-snake-adc194ec.webp"
+  },
+  {
+    "gameid": "a2a79af10baaf8cbe4f51fb067e1297b",
+    "gamename": "Floating Dragon New Year Festival Ultra Megaways Hold & Spin",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/floating-dragon-new-year-festival-ultra-megaways-hold-spin-a3595490.webp"
+  },
+  {
+    "gameid": "3033b9874c74298ba36aa8c27d05044e",
+    "gamename": "Floating Dragon Wild Horses",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/floating-dragon-wild-horses-c59dbc83.webp"
+  },
+  {
+    "gameid": "bd2201cc0e94ca82e519e4210feb9780",
+    "gamename": "Fonzo’s Feline Fortunes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fonzo-s-feline-fortunes-5f07fadb.webp"
+  },
+  {
+    "gameid": "5ac3ad3f0072e0b114a8301f556a8bc5",
+    "gamename": "Forge of Olympus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/forge-of-olympus-43a32b3f.webp"
+  },
+  {
+    "gameid": "9353352cfedd5e6bdeebbc62db84a061",
+    "gamename": "Forging Wilds",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/forging-wilds-1938af55.webp"
+  },
+  {
+    "gameid": "b210bf0a7ae17ae28c9ca2ebd6f76b05",
+    "gamename": "Fortune Hit’n Roll",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fortune-hit-n-roll-5db16cdc.webp"
+  },
+  {
+    "gameid": "f377a33d22b964f452711641a09caa96",
+    "gamename": "Fortune of Aztec",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fortune-of-aztec-e72d16a7.webp"
+  },
+  {
+    "gameid": "8060b9627603e47cd5381997bf8e54e9",
+    "gamename": "Fortune of Giza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fortune-of-giza-f5795988.webp"
+  },
+  {
+    "gameid": "c2d07f40a0f6315629e88b3d644773d0",
+    "gamename": "Fortune of Olympus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fortune-of-olympus-a9c26c29.webp"
+  },
+  {
+    "gameid": "bfb8b9e84ff096a54adffb8688a2bf45",
+    "gamename": "Fortunes of Aztec",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fortunes-of-aztec-bf99ba79.webp"
+  },
+  {
+    "gameid": "561eedfc4980bcac887eba24f5a6c3fe",
+    "gamename": "Frightening Frankie",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/frightening-frankie-0f486d65.webp"
+  },
+  {
+    "gameid": "3df26cdfe9500ab174c05367573af3da",
+    "gamename": "Frozen Tropics",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/frozen-tropics-99990eab.webp"
+  },
+  {
+    "gameid": "05a9876c537ff79898d661c5c01c5f9d",
+    "gamename": "Fruit Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fruit-party-407b649e.png"
+  },
+  {
+    "gameid": "6be857d19ef7b4fac0ba9c375538a7d9",
+    "gamename": "Fruit Party 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fruit-party-2-a7837263.webp"
+  },
+  {
+    "gameid": "369a2383e2bba7509748f15b4c407e5f",
+    "gamename": "Fruit Rainbow",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fruit-rainbow-6e134a53.webp"
+  },
+  {
+    "gameid": "72d078c9385c5a92f1de8344ac43915d",
+    "gamename": "Fruity Treats",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fruity-treats-a37d5332.webp"
+  },
+  {
+    "gameid": "756d339c5748f3c294ff9af12b1569f4",
+    "gamename": "Fury of Odin Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/fury-of-odin-megaways-269bf724.webp"
+  },
+  {
+    "gameid": "9afa884f169dfd11a5cd39da32bd4df1",
+    "gamename": "Gates of Olympus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gates-of-olympus-8c16c07d.png"
+  },
+  {
+    "gameid": "4ae52ed2e1a8c353878ba65ed7791ac4",
+    "gamename": "Gates of Olympus 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gates-of-olympus-1000-11a6f858.png"
+  },
+  {
+    "gameid": "b696ce6e67b7d6386903a3a88d48b4d9",
+    "gamename": "Gates of Olympus Xmas 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gates-of-olympus-xmas-1000-34e0701a.webp"
+  },
+  {
+    "gameid": "95273f38148f66e09a93de2c6337b15d",
+    "gamename": "Gates of Valhalla",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gates-of-valhalla-9f80fb8b.jpg"
+  },
+  {
+    "gameid": "8895e06c770c160e3a864b31e01fd285",
+    "gamename": "Gears of Horus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gears-of-horus-e93c28a0.webp"
+  },
+  {
+    "gameid": "c4fc4643a2307e4a5390667c21484c50",
+    "gamename": "Gem Elevator",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gem-elevator-08d4bcfb.webp"
+  },
+  {
+    "gameid": "8a0b30eb466a8a07027cbddc19369d0f",
+    "gamename": "Gem Fire Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gem-fire-fortune-4d2aabce.webp"
+  },
+  {
+    "gameid": "de42f032cd46070828850af2ab651fdd",
+    "gamename": "Gem Trio",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gem-trio-fe12bd68.webp"
+  },
+  {
+    "gameid": "27cdc3e5e12964d38df093e9c65569eb",
+    "gamename": "Gems Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gems-bonanza-a3a3ec48.png"
+  },
+  {
+    "gameid": "c338b56623046b9cb3fd5f70b8eee923",
+    "gamename": "Gems of Serengeti",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gems-of-serengeti-00004de4.webp"
+  },
+  {
+    "gameid": "db9b48adb0db83131d1568968c64f8c1",
+    "gamename": "Goblin Heist Powernudge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/goblin-heist-powernudge-6929f7ca.webp"
+  },
+  {
+    "gameid": "8568e9c3c1355b30aaf8771df6c7b749",
+    "gamename": "Gods of Giza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gods-of-giza-ed1a82a2.webp"
+  },
+  {
+    "gameid": "1607b049d8a796222fc273ffab91b5d3",
+    "gamename": "Gold Oasis",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gold-oasis-b65a5a62.webp"
+  },
+  {
+    "gameid": "fb6886b6f0ee1379fcadbdda398d3dc7",
+    "gamename": "Gold Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gold-party-3fc41e75.png"
+  },
+  {
+    "gameid": "e1d2da140286507e851fde1cb2fdd4ba",
+    "gamename": "Gold Party 2 – After Hours",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gold-party-2-after-hours-8f39298b.webp"
+  },
+  {
+    "gameid": "2a5d731e0fd60f52873a24ece11f2c0b",
+    "gamename": "Gold Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/jili/gold-rush.png"
+  },
+  {
+    "gameid": "63a19510c7ab63562b631c97a4604d6d",
+    "gamename": "Gold Train",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gold-train-d31372aa.webp"
+  },
+  {
+    "gameid": "59a4562710480f67693cff6e6cdcef8c",
+    "gamename": "Good Luck & Good Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/good-luck-good-fortune-ea1cb38f.webp"
+  },
+  {
+    "gameid": "92c36d2e1d02816f9c5048a878abefa8",
+    "gamename": "Gorilla Mayhem",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gorilla-mayhem-0688abcd.webp"
+  },
+  {
+    "gameid": "43f280df4cdb1b1489d6744d7b1d6332",
+    "gamename": "Gravity Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/gravity-bonanza-dc1472b1.webp"
+  },
+  {
+    "gameid": "a5e9012bc9821e0a7f061adbb4e8d527",
+    "gamename": "Great Ghosts!",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/great-ghosts-aab398f3.webp"
+  },
+  {
+    "gameid": "397959b20dd458657eb10f177884c25c",
+    "gamename": "Great Reef",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/great-reef-e420d483.webp"
+  },
+  {
+    "gameid": "a5d72bf4818f1461cb4c7eac8111dc2d",
+    "gamename": "Great Rhino",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/great-rhino-ba614706.webp"
+  },
+  {
+    "gameid": "f4203cff9058051d2ce6459c8d750683",
+    "gamename": "Great Rhino Deluxe",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/great-rhino-deluxe-83ae8860.webp"
+  },
+  {
+    "gameid": "2fc23901b649abfd9bad2ff2fa5dbdc4",
+    "gamename": "Great Rhino Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/great-rhino-megaways-dcf8c639.webp"
+  },
+  {
+    "gameid": "200d25646470d5cca20d0dd408d7957a",
+    "gamename": "Greedy Fortune Pig",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/greedy-fortune-pig-71fd7bc5.webp"
+  },
+  {
+    "gameid": "f6ac7090e2eda2d579dc6650acec42ad",
+    "gamename": "Greedy Wolf",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/greedy-wolf-484e0df5.webp"
+  },
+  {
+    "gameid": "5191554cb700b8418f1821527f66a5c7",
+    "gamename": "Greek Gods",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/greek-gods-beeee4d5.webp"
+  },
+  {
+    "gameid": "982f8ac34ca69e49fa5c470fbd53eb03",
+    "gamename": "Hammerstorm",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hammerstorm-e44ac892.webp"
+  },
+  {
+    "gameid": "04e9ce4628bf5032d5f003343df6b8d4",
+    "gamename": "Hand of Midas 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hand-of-midas-2-3f7146c9.webp"
+  },
+  {
+    "gameid": "89c606eb379dbdfae1c88d9daa58a0db",
+    "gamename": "Happy Dragon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/happy-dragon-92d16fe1.webp"
+  },
+  {
+    "gameid": "eda576386ab2dc72f20fd1ee9620fd85",
+    "gamename": "Happy Hooves",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/happy-hooves-d3531d18.webp"
+  },
+  {
+    "gameid": "9438170762baae7b28aa15975d28acee",
+    "gamename": "Happy Nets",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/happy-nets-306cf05f.webp"
+  },
+  {
+    "gameid": "e863f19c6f997f1edc598d87400c5593",
+    "gamename": "Haunted Crypt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/haunted-crypt-a148bff5.webp"
+  },
+  {
+    "gameid": "d097220b342873db6fa2fd007a150916",
+    "gamename": "Heart of Cleopatra",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/heart-of-cleopatra-791ffbd0.webp"
+  },
+  {
+    "gameid": "9e749c8762ff58417e45b2330ac805cb",
+    "gamename": "Heart of Rio",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/heart-of-rio-c49b0de3.webp"
+  },
+  {
+    "gameid": "7d09a0335b51fd879867402be7f80a43",
+    "gamename": "Heist for the Golden Nuggets",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/heist-for-the-golden-nuggets-34c850a2.webp"
+  },
+  {
+    "gameid": "34d1a5a6cf7970a3fd7d915cdd7a058f",
+    "gamename": "Hellvis Wild",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hellvis-wild-69fa31ae.webp"
+  },
+  {
+    "gameid": "c4d39983d1058da54ecdc773b7b3203e",
+    "gamename": "Hercules and Pegasus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hercules-and-pegasus-31b694f3.webp"
+  },
+  {
+    "gameid": "a45e9955733a64f20f4fdf051166026a",
+    "gamename": "Hercules Son Of Zeus",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hercules-son-of-zeus-3b34962d.webp"
+  },
+  {
+    "gameid": "8e0755ec28b776e7c8d8763924152920",
+    "gamename": "Heroic Spins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/heroic-spins-b39299be.webp"
+  },
+  {
+    "gameid": "cbf9e465f33f7abb892e8a3286b2af79",
+    "gamename": "Himalayan Wild",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/himalayan-wild-568dec0c.webp"
+  },
+  {
+    "gameid": "3c61adb9dab9d17e9ff5af76f9a1a221",
+    "gamename": "Honey Honey Honey",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/honey-honey-honey-b8fab26e.webp"
+  },
+  {
+    "gameid": "c845960c81d27d7880a636424e53964d",
+    "gamename": "Hot Chilli",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/jili/hot-chilli.png"
+  },
+  {
+    "gameid": "57217d124ca0f93d331ed5e0691deb3b",
+    "gamename": "Hot Fiesta",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-fiesta-da901f5e.png"
+  },
+  {
+    "gameid": "5a279ab989b4722a649af9e9cd9bad68",
+    "gamename": "Hot Pepper",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-pepper-a15f4585.webp"
+  },
+  {
+    "gameid": "b9ce78f7e39d12557a194f9ef4d87998",
+    "gamename": "Hot Safari",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-safari-3b640ae7.webp"
+  },
+  {
+    "gameid": "9ae32c564eb98c3c00d2f20fe1f1c2d9",
+    "gamename": "Hot to Burn",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-to-burn-61b70ee8.webp"
+  },
+  {
+    "gameid": "9fdac2b52d638ecd12d7e17aa51c6ab4",
+    "gamename": "Hot to Burn – 7 Deadly Free Spins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-to-burn-7-deadly-free-spins-c3d63e67.webp"
+  },
+  {
+    "gameid": "1a05258e8736462d926bb7d07ee291cb",
+    "gamename": "Hot to Burn Extreme",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-to-burn-extreme-732f4a7b.webp"
+  },
+  {
+    "gameid": "7b99b6b9bd2b31e5b4ea44fab1269c48",
+    "gamename": "Hot to Burn Hold and Spin",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-to-burn-hold-and-spin-291747dd.webp"
+  },
+  {
+    "gameid": "e6eccf00e6147a91e4d2c679f79b8166",
+    "gamename": "Hot to Burn Multiplier",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-to-burn-multiplier-2ac9d0cb.webp"
+  },
+  {
+    "gameid": "8ad6278cee6507810be85c68357784e9",
+    "gamename": "Hot Tuna",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/hot-tuna-f0ede266.webp"
+  },
+  {
+    "gameid": "07b39ef4436dea6438ac2b7d5cfad996",
+    "gamename": "Ice Lobster",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ice-lobster-205cca8e.webp"
+  },
+  {
+    "gameid": "f48a01ce6d9183c8c8869529757b172a",
+    "gamename": "Ice Mints",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ice-mints-445b44db.webp"
+  },
+  {
+    "gameid": "c49c72cf79fdd6a416f714141e38043e",
+    "gamename": "Idol Pop Fever",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/idol-pop-fever-4ee1b255.webp"
+  },
+  {
+    "gameid": "590ba53eb376995a2cf897f38ed3b378",
+    "gamename": "Inca Queen",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/inca-queen-12c1404d.webp"
+  },
+  {
+    "gameid": "b9a9503f3580f443d83ba709c5f332f9",
+    "gamename": "Infective Wild",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/infective-wild-0f9fcab5.webp"
+  },
+  {
+    "gameid": "6afdacbabb9207724df04a4ba94e2f1c",
+    "gamename": "Irish Charms",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/irish-charms-e8920f15.webp"
+  },
+  {
+    "gameid": "3a6bb0239060b0acf471ab2671ca74db",
+    "gamename": "Irish Crown",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/irish-crown-52bd47d3.webp"
+  },
+  {
+    "gameid": "404fb133175258416b1abd71324beb97",
+    "gamename": "Jackpot Blaze",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jackpot-blaze-8ac697e8.webp"
+  },
+  {
+    "gameid": "9dac235c0ee7406bcb06df11fdc35faa",
+    "gamename": "Jackpot Hunter",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jackpot-hunter-5e783c48.webp"
+  },
+  {
+    "gameid": "1bf6fd4cd34c99c1f169bb0370354d76",
+    "gamename": "Jade Butterfly",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jade-butterfly-05d6648a.webp"
+  },
+  {
+    "gameid": "8bbe5db9292401a1949370cdc622d361",
+    "gamename": "Jane Hunter and the Mask of Montezuma",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jane-hunter-and-the-mask-of-montezuma-9630a0b8.webp"
+  },
+  {
+    "gameid": "e71997252ce1d047424f9fd5a0a064e2",
+    "gamename": "Jasmine Dreams",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jasmine-dreams-c7e9fff1.webp"
+  },
+  {
+    "gameid": "ffdc78f4f1f0fe015817228f9fa4d240",
+    "gamename": "Jelly Candy",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jelly-candy-6bbb9ac2.webp"
+  },
+  {
+    "gameid": "1265cf0a758c2cfa36b0fbe6db314588",
+    "gamename": "Jelly Express",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jelly-express-07c01a43.webp"
+  },
+  {
+    "gameid": "bd44e960f4ef716c0ad0702c4a8beee8",
+    "gamename": "Jewel Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jewel-rush-32f849ae.webp"
+  },
+  {
+    "gameid": "0518b5e45a9953982e1c1e77206c2755",
+    "gamename": "John Hunter and Galileo’s Secrets",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-galileo-s-secrets-9e290077.webp"
+  },
+  {
+    "gameid": "6bb91619b093e2f21d555c94303f376e",
+    "gamename": "John Hunter and the Aztec Treasure",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-the-aztec-treasure-14797b1c.webp"
+  },
+  {
+    "gameid": "96b06f36e0c200eea05b00d566d220c8",
+    "gamename": "John Hunter and the Book of Tut",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-the-book-of-tut-5d111728.webp"
+  },
+  {
+    "gameid": "df5b1181bad0795df7f991750e97a09d",
+    "gamename": "John Hunter and the Mayan Gods",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-the-mayan-gods-4caa02ee.webp"
+  },
+  {
+    "gameid": "c04352fedef3908ac580d4e1ad8a30d0",
+    "gamename": "John Hunter and the Quest for Bermuda Riches",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-the-quest-for-bermuda-riches-24e55e81.webp"
+  },
+  {
+    "gameid": "6ea631cad8e04b5596da2ab771a81198",
+    "gamename": "John Hunter and the Tomb of the Scarab Queen",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/john-hunter-and-the-tomb-of-the-scarab-queen-c45a6196.webp"
+  },
+  {
+    "gameid": "b81b86263b26a2dfe287ca8c22750329",
+    "gamename": "Joker King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-king-f6a75712.webp"
+  },
+  {
+    "gameid": "97bd5b1e85dcd00b3cc141a5f3527529",
+    "gamename": "Joker's Jewels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-s-jewels-40232b09.png"
+  },
+  {
+    "gameid": "db243d8097f9e469dd308699dfad5c6a",
+    "gamename": "Joker's Jewels Hot",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-s-jewels-hot-562dd434.webp"
+  },
+  {
+    "gameid": "00ab11e01d9f85c9b74e0e52233e9a85",
+    "gamename": "Joker's Jewels Wild",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-s-jewels-wild-9670e477.png"
+  },
+  {
+    "gameid": "fcb9a4dabb068f060d3701be9fc6a0f0",
+    "gamename": "Joker’s Jewels Cash",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-s-jewels-cash-ef0640e9.webp"
+  },
+  {
+    "gameid": "a2c2639979c00578c08a3d3158ce5757",
+    "gamename": "Joker’s Jewels Hold & Spin",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/joker-s-jewels-hold-spin-ff4451ba.webp"
+  },
+  {
+    "gameid": "b8e890effbd62cec2ee8379b54054410",
+    "gamename": "Journey to the West",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/journey-to-the-west-2e65e2e1.webp"
+  },
+  {
+    "gameid": "77e051470b364993d017c7cede10120e",
+    "gamename": "Juicy Fruits",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/juicy-fruits-7dd52d6d.webp"
+  },
+  {
+    "gameid": "fb356bd005fb1294952f7f56db50141d",
+    "gamename": "Juicy Fruits Multihold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/juicy-fruits-multihold-4ca63ba7.webp"
+  },
+  {
+    "gameid": "223147051fc0a47a6d90ebe3e3a0e9c6",
+    "gamename": "Jumbo Safari",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jumbo-safari-42955d2f.webp"
+  },
+  {
+    "gameid": "39371d94a147acda0ae347028f9f9ec4",
+    "gamename": "Jungle Gorilla",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/jungle-gorilla-ac7ac88d.webp"
+  },
+  {
+    "gameid": "b2bb144d10b6c0ecc70290bac9c46b37",
+    "gamename": "Kingdom of The Dead",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/kingdom-of-the-dead-f1134956.webp"
+  },
+  {
+    "gameid": "f7f10653ddc4b30609f2b3ec53c60510",
+    "gamename": "Knight Hot Spotz",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/knight-hot-spotz-7c4a097e.webp"
+  },
+  {
+    "gameid": "549186988b8645615ab222c7170e866b",
+    "gamename": "Knights vs Barbarians",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/knights-vs-barbarians-d72e1ef2.webp"
+  },
+  {
+    "gameid": "0e511a855cd1a0f4ad2a2474de83e8f6",
+    "gamename": "Lady Godiva",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lady-godiva-fa2f6ee8.webp"
+  },
+  {
+    "gameid": "df097d9daa1685b9985e1eb39e61a1e7",
+    "gamename": "Lamp Of Infinity",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lamp-of-infinity-632dcc0f.webp"
+  },
+  {
+    "gameid": "0887ca4815a3fd960d89fdebe5e30f34",
+    "gamename": "Lava Balls",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lava-balls-d85d6c99.webp"
+  },
+  {
+    "gameid": "3fdf115b63a60711c18d55c39371a68d",
+    "gamename": "Leprechaun Carol",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/leprechaun-carol-8b5bcce7.webp"
+  },
+  {
+    "gameid": "927d144709664384b785a7b5a738654a",
+    "gamename": "Leprechaun Song",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/leprechaun-song-29fd5171.webp"
+  },
+  {
+    "gameid": "4c2f18fa61c0becd4706a6da1961b020",
+    "gamename": "Limbo+",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/limbo-b6f29378.webp"
+  },
+  {
+    "gameid": "36a7683cd2428224526a5f30c75297c8",
+    "gamename": "Little Gem",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/little-gem-21bece17.webp"
+  },
+  {
+    "gameid": "787e0dd629df674a400b212e9125369a",
+    "gamename": "Lobster Bob's Crazy Crab Shack",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lobster-bob-s-crazy-crab-shack-81ad7f6e.webp"
+  },
+  {
+    "gameid": "75490d7675a731a6f7197ff860df1f5b",
+    "gamename": "Lobster Bob's Sea Food and Win It",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lobster-bob-s-sea-food-and-win-it-df476292.webp"
+  },
+  {
+    "gameid": "d659ed2db71ee2f6603998a57f8df6ab",
+    "gamename": "Loki's Riches",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/loki-s-riches-3f01cdd2.webp"
+  },
+  {
+    "gameid": "9090b970107aba8a42748c52c6e33b63",
+    "gamename": "Lucky Dice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-dice-1aa1b478.webp"
+  },
+  {
+    "gameid": "0d241578a8fe23f743ab5003321fac85",
+    "gamename": "Lucky Dog",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-dog-103a90db.webp"
+  },
+  {
+    "gameid": "6ed7c1fa8021f2834ede376afd20e4c5",
+    "gamename": "Lucky Dragons",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-dragons-298fabaa.webp"
+  },
+  {
+    "gameid": "29180923d6e56fdbb4f95ea56ba47241",
+    "gamename": "Lucky Fortune Tree",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-fortune-tree-779bb0e9.webp"
+  },
+  {
+    "gameid": "b992e0dcdcb8d20d4b2305a13471ce3d",
+    "gamename": "Lucky Lightning",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-lightning-f758f1ea.webp"
+  },
+  {
+    "gameid": "7bb5fa3556c5cec875d8887a12efb26c",
+    "gamename": "Lucky Monkey",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-monkey-689ac12c.webp"
+  },
+  {
+    "gameid": "d64563c0afd930f39be01d6c8d9fb91b",
+    "gamename": "Lucky Mouse",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-mouse-31257bc1.webp"
+  },
+  {
+    "gameid": "d8d02a9f7b7411e87c58234236c70c4e",
+    "gamename": "Lucky New Year",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-new-year-424ec6e5.webp"
+  },
+  {
+    "gameid": "5ce0e0ad05cb028ebac6a84a677fd678",
+    "gamename": "Lucky Ox",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-ox-030cf195.webp"
+  },
+  {
+    "gameid": "3e513a54acd691a8925127cb3f359c48",
+    "gamename": "Lucky Panda",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-panda-45816090.webp"
+  },
+  {
+    "gameid": "cc8cf6e6be3e19d344b7101ca186383f",
+    "gamename": "Lucky Phoenix",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-phoenix-32ef5d89.webp"
+  },
+  {
+    "gameid": "8007344e017bdd5c2d5d0d4eb43c3b2b",
+    "gamename": "Lucky Tiger",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-tiger-cac073c6.webp"
+  },
+  {
+    "gameid": "ec84348a2bdee18aa147f62d1fe91ea2",
+    "gamename": "Lucky Tiger 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-tiger-1000-232f30ae.webp"
+  },
+  {
+    "gameid": "bffb4c3b5d8c0f64893539635afd7cfa",
+    "gamename": "Lucky Tiger Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-tiger-gold-e1ed3c18.webp"
+  },
+  {
+    "gameid": "58bcfeb1a79a4d3d9c2b7753c2d25b9c",
+    "gamename": "Lucky, Grace And Charm",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-grace-and-charm-46d30566.webp"
+  },
+  {
+    "gameid": "fbe795aa609d23d09688d82498d38f50",
+    "gamename": "Lucky’s Wild Pub",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-s-wild-pub-739b2aab.webp"
+  },
+  {
+    "gameid": "f79a8b107c27c5601751a04579cae19b",
+    "gamename": "Lucky’s Wild Pub 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/lucky-s-wild-pub-2-33a4f4b4.webp"
+  },
+  {
+    "gameid": "88bc3e497f424df40b0f72989e2b57fe",
+    "gamename": "Madame Destiny",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/madame-destiny-49f3e0af.webp"
+  },
+  {
+    "gameid": "63c8f96398e1f798e40d44e44282b0fc",
+    "gamename": "Madame Destiny Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/madame-destiny-megaways-b1d0c978.png"
+  },
+  {
+    "gameid": "8dba2e619f5881a85d698746b8a39942",
+    "gamename": "Magic Journey",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/magic-journey-1bb8c3a2.webp"
+  },
+  {
+    "gameid": "d3b6d44e567dd9d65040e72372a9af48",
+    "gamename": "Magic Money Maze",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/magic-money-maze-cecf166e.webp"
+  },
+  {
+    "gameid": "a0545098047c96b4a8487e90b3fb15c9",
+    "gamename": "Magician's Secrets",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/magician-s-secrets-7a2b60b9.webp"
+  },
+  {
+    "gameid": "259ad8e105ef217dad404bffe0fff257",
+    "gamename": "Mahjong Wins Super Scatter",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mahjong-wins-super-scatter-22eb6ab7.webp"
+  },
+  {
+    "gameid": "ba642e78eca4b9ac43f1a56f8c824705",
+    "gamename": "Majestic Express – Gold Run",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/majestic-express-gold-run-38778d1e.webp"
+  },
+  {
+    "gameid": "bb02b8ec08f419f736dcd5a05dec7e11",
+    "gamename": "Mammoth Gold Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mammoth-gold-megaways-fd105da9.webp"
+  },
+  {
+    "gameid": "cd8babe80669b3f4b2ad6499948a2d28",
+    "gamename": "Master Chen's Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/master-chen-s-fortune-e291c6fd.webp"
+  },
+  {
+    "gameid": "28e338399ec8155da47eab5d57c9adf8",
+    "gamename": "Master Gems",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/master-gems-deda141c.webp"
+  },
+  {
+    "gameid": "dfd9384b354f1ed44ed70fa69866e196",
+    "gamename": "Master Joker",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/master-joker-1ada10e3.webp"
+  },
+  {
+    "gameid": "c652da89a1d5352ee30cff7c56ece838",
+    "gamename": "Medusa's Stone",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/medusa-s-stone-b3b7045b.webp"
+  },
+  {
+    "gameid": "78b425dd73ed6af262dbafaf6da89fcc",
+    "gamename": "Might of Freya Megaways™",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/might-of-freya-megaways-cf7005af.webp"
+  },
+  {
+    "gameid": "002ccc80cfff9b1563814f7cd2a6d0fe",
+    "gamename": "Might of Ra",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/might-of-ra-0f23df67.jpg"
+  },
+  {
+    "gameid": "f682eec1fc2a3075d1be80a5cea9c206",
+    "gamename": "Mighty Kong",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mighty-kong-470496db.webp"
+  },
+  {
+    "gameid": "018cd71c3da7eaecf4c707fe93df0983",
+    "gamename": "Mighty Munching Melons",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mighty-munching-melons-85e58a2c.webp"
+  },
+  {
+    "gameid": "c4f954079d20b7eb6da49c9fce1f9b08",
+    "gamename": "Mines+",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mines-2aaf195c.webp"
+  },
+  {
+    "gameid": "1e7a27b5a565c6c132a13d05f14d127a",
+    "gamename": "Mining Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mining-rush-5d195d89.webp"
+  },
+  {
+    "gameid": "94ff937e0ce81bb47aa57f48270a7706",
+    "gamename": "Mochimon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mochimon-02b85837.webp"
+  },
+  {
+    "gameid": "3293f239dccef44f742e8d5241eb89c0",
+    "gamename": "Moleionaire",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/moleionaire-60dc7297.webp"
+  },
+  {
+    "gameid": "cc2744737c9ea3d8a192f375af176b09",
+    "gamename": "Money Mouse",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/money-mouse-e78ce8c6.webp"
+  },
+  {
+    "gameid": "376b046e39b206c5e1d021e68f8cdc78",
+    "gamename": "Money Stacks Dice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/money-stacks-dice-e8617698.webp"
+  },
+  {
+    "gameid": "556e56808e1b687474439204cc378e8a",
+    "gamename": "Money Stacks Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/money-stacks-megaways-852a8634.webp"
+  },
+  {
+    "gameid": "a24ff258a3900048358b680ca710be53",
+    "gamename": "Monkey Madness",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/monkey-madness-036f63c1.webp"
+  },
+  {
+    "gameid": "2d9f6a48204137fbeaca92e979e75666",
+    "gamename": "Monkey Warrior",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/monkey-warrior-27a62cad.webp"
+  },
+  {
+    "gameid": "74ca460589928e25b1f0767e15611f3f",
+    "gamename": "Monster Superlanche",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/monster-superlanche-79f50aed.webp"
+  },
+  {
+    "gameid": "867879954da25a3b1f685bb23fd313be",
+    "gamename": "Muertos Multiplier Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/muertos-multiplier-megaways-e9f18b2d.webp"
+  },
+  {
+    "gameid": "af6c67dcbe8cdcb706c947855cc3b125",
+    "gamename": "Multihand Blackjack",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/multihand-blackjack-79e85c1b.webp"
+  },
+  {
+    "gameid": "f30340fa76609f5220055eae27ab881e",
+    "gamename": "Mummy’s Jewels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mummy-s-jewels-3372a6e4.webp"
+  },
+  {
+    "gameid": "c9ce7efdde0fb64d1a7bfb5f3f2ff131",
+    "gamename": "Mummy’s Jewels 100",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mummy-s-jewels-100-021d0d3b.webp"
+  },
+  {
+    "gameid": "12afb282e7568a94bd22aeb7e87a29ec",
+    "gamename": "Mustang Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mustang-gold-24b2394f.png"
+  },
+  {
+    "gameid": "2cd0ed283355e539bced7ae90d4f2f6e",
+    "gamename": "Mustang Gold Megaways™",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mustang-gold-megaways-5496c837.webp"
+  },
+  {
+    "gameid": "e378a7f46eef2b738d9737c54c645656",
+    "gamename": "Mustang Trail",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mustang-trail-36292543.webp"
+  },
+  {
+    "gameid": "13b568ca10943393f4c9b88669ab45c8",
+    "gamename": "Mysterious",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mysterious-ad932597.webp"
+  },
+  {
+    "gameid": "0a7e8a1a1618d4afe64d83899a84d630",
+    "gamename": "Mysterious Egypt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mysterious-egypt-d7056b54.webp"
+  },
+  {
+    "gameid": "389d3ed341890bca57ebe191241bf521",
+    "gamename": "Mystery Mice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mystery-mice-0dd8681f.webp"
+  },
+  {
+    "gameid": "cb7e319f72c9b39a2f8c92e6d585557d",
+    "gamename": "Mystery Of The Orient",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mystery-of-the-orient-98d1490f.webp"
+  },
+  {
+    "gameid": "22b9cf05f4d62fec02aca39fb60030c4",
+    "gamename": "Mystic Chief",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mystic-chief-03a5da4f.webp"
+  },
+  {
+    "gameid": "c143812a6e91309d6f2c2dd74dfd80b3",
+    "gamename": "Mystic Wishes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/mystic-wishes-f5f8025e.webp"
+  },
+  {
+    "gameid": "cc4dc803cc5ff595cb81ce52ee259eea",
+    "gamename": "Nile Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/nile-fortune-5a28f7ee.webp"
+  },
+  {
+    "gameid": "76ef9aa9b70594ccf793b4be02d7d05d",
+    "gamename": "North Guardians",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/north-guardians-d75ef316.webp"
+  },
+  {
+    "gameid": "27ac78d33471d4406de187759ebe4729",
+    "gamename": "Octobeer Fortunes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/octobeer-fortunes-22eea708.webp"
+  },
+  {
+    "gameid": "3f055f6e73acd6c3b4da3a7193885151",
+    "gamename": "Olympus Wins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/olympus-wins-e60c8876.webp"
+  },
+  {
+    "gameid": "dfdef0baca51fd11a62636cc9a197e5a",
+    "gamename": "Oodles of Noodles",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/oodles-of-noodles-ade1cc39.webp"
+  },
+  {
+    "gameid": "752b270e6a7c2fe69fe7ffd1ba8278d3",
+    "gamename": "Oracle of Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/oracle-of-gold-73eb518b.webp"
+  },
+  {
+    "gameid": "4d530e5363907c3799f15bee86023202",
+    "gamename": "Panda's Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/panda-s-fortune-ecb5c707.webp"
+  },
+  {
+    "gameid": "dc15dfa9b05d50075a763f9867b38f32",
+    "gamename": "Pandemic Rising",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pandemic-rising-ef78443c.webp"
+  },
+  {
+    "gameid": "14ca4e22f87ef9c06452a6aa3208c3c3",
+    "gamename": "Peak Power",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/peak-power-45541cf5.webp"
+  },
+  {
+    "gameid": "684bc8f6b763fdc92ae2fcdbf2ed213c",
+    "gamename": "Peking Luck",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/peking-luck-02bfb923.webp"
+  },
+  {
+    "gameid": "e330d77b3eb2cfae299f981c692f18af",
+    "gamename": "Penguins Christmas Party Time",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/penguins-christmas-party-time-f2d12085.webp"
+  },
+  {
+    "gameid": "395891d339277b24073f5a1ca46cce3c",
+    "gamename": "Peppe’s Pepperoni Pizza Plaza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/peppe-s-pepperoni-pizza-plaza-97ddf600.webp"
+  },
+  {
+    "gameid": "62527f128b508c7a7bdb660d8f327232",
+    "gamename": "Phoenix Forge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/phoenix-forge-bb88ea51.webp"
+  },
+  {
+    "gameid": "eb17a6d8839c7a44e059411d6e63bc2c",
+    "gamename": "Pig Farm",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pig-farm-629b5f0d.webp"
+  },
+  {
+    "gameid": "3f61bad3beddd15d117e01d18b6a44b8",
+    "gamename": "Piggy Bank Bills",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/piggy-bank-bills-9914eeda.webp"
+  },
+  {
+    "gameid": "c47913d1477cf25524760a3a07dbeedd",
+    "gamename": "Piggy Bankers",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/piggy-bankers-0c536b07.webp"
+  },
+  {
+    "gameid": "4a0363f5a77c31cada471326ae1470f0",
+    "gamename": "Pinup Girls",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pinup-girls-b9c266de.webp"
+  },
+  {
+    "gameid": "e2d420462a8875bb96bf72148cbfd599",
+    "gamename": "Pirate Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pirate-gold-c9cbf60f.webp"
+  },
+  {
+    "gameid": "c1c1f92d0bb2134efda172b6d221a1bb",
+    "gamename": "Pirate Gold Deluxe",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pirate-gold-deluxe-735e4ba9.png"
+  },
+  {
+    "gameid": "7473e246b5a2fdedc5a40487540c19f9",
+    "gamename": "Pirate Golden Age",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pirate-golden-age-31e9d0e3.webp"
+  },
+  {
+    "gameid": "60f7646eb66ad7af6f8ab36ff13723ad",
+    "gamename": "Pirates Pub",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pirates-pub-64a82cb7.webp"
+  },
+  {
+    "gameid": "9bd44b5c84d9abb96eb7ecc9d5500f11",
+    "gamename": "Pixie Wings",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pixie-wings-a1e1548f.webp"
+  },
+  {
+    "gameid": "41a153f648c94ed3a6f8562f39eb039d",
+    "gamename": "PIZZA! PIZZA? PIZZA!",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pizza-pizza-pizza-e5bf32d2.webp"
+  },
+  {
+    "gameid": "8846d85cc630cd9364938eff549a4d25",
+    "gamename": "Plinko+",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/plinko-5996af9a.webp"
+  },
+  {
+    "gameid": "cc76cd19442f8ac49c03d88b66954e53",
+    "gamename": "Plushie Wins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/plushie-wins-95dba629.webp"
+  },
+  {
+    "gameid": "eedae4fa7847b2d1e050c9fac07b08d6",
+    "gamename": "Pompeii Megareels Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pompeii-megareels-megaways-d5262dd2.webp"
+  },
+  {
+    "gameid": "a0f906347522869dbbbd377a0461995e",
+    "gamename": "Pot of Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pot-of-fortune-ef10b6a1.webp"
+  },
+  {
+    "gameid": "7550347957cc9a63b8c782718bc7bbc1",
+    "gamename": "Power of Merlin Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/power-of-merlin-megaways-c4a8cca7.webp"
+  },
+  {
+    "gameid": "37676e6e80e6c023f03d48f1ee3befc8",
+    "gamename": "Power of Thor Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/power-of-thor-megaways-41686e65.webp"
+  },
+  {
+    "gameid": "1bf67bfe1e66d5dee133f69542501e5b",
+    "gamename": "Pub Kings",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pub-kings-1570fd32.webp"
+  },
+  {
+    "gameid": "cc917be61e0ae94a5bfbdb02effc1ec5",
+    "gamename": "Pyramid King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/pyramid-king-2da6d56d.webp"
+  },
+  {
+    "gameid": "b6f65caf1829c8546707a16e00c4251c",
+    "gamename": "Queen of Gods",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/queen-of-gods-161d0bd0.webp"
+  },
+  {
+    "gameid": "4e6b3295ce7e64395124d7e29ff9347c",
+    "gamename": "Queenie",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/queenie-8380b479.webp"
+  },
+  {
+    "gameid": "c708cac68bf68fa5de05977fe7f11153",
+    "gamename": "Rabbit Garden",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rabbit-garden-53d9bf2f.webp"
+  },
+  {
+    "gameid": "497d313c846b303aa1aeea495a4a44b3",
+    "gamename": "Raging Waterfall Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/raging-waterfall-megaways-fc670240.webp"
+  },
+  {
+    "gameid": "8c355c92481f747e2e7a040c0a288212",
+    "gamename": "Rainbow Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rainbow-gold-512c14b6.jpg"
+  },
+  {
+    "gameid": "5f969b7d1b8027ea52ba96d92d5c6948",
+    "gamename": "Rainbow Reels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rainbow-reels-b9321ab6.webp"
+  },
+  {
+    "gameid": "0afd6c16b5b6bb0df073ccd9098ad114",
+    "gamename": "Red Hot Luck",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/red-hot-luck-661a6b47.webp"
+  },
+  {
+    "gameid": "77022f0e153bb46b43ef08d83b0499ea",
+    "gamename": "Reel Banks",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/reel-banks-2e219cdd.webp"
+  },
+  {
+    "gameid": "c5730a06691426e313095ac0380106f1",
+    "gamename": "Release the Bison",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/release-the-bison-71358a1e.webp"
+  },
+  {
+    "gameid": "b776755b597c497bee6fc4e414d72915",
+    "gamename": "Release the Kraken",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/release-the-kraken-c537c467.jpg"
+  },
+  {
+    "gameid": "115e96e8d19b357dfa846d552ddb3c4e",
+    "gamename": "Release the Kraken 2",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/release-the-kraken-2-143b9d69.webp"
+  },
+  {
+    "gameid": "01e4cb8a338a238c044d7cc69d26000f",
+    "gamename": "Release the Kraken Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/release-the-kraken-megaways-3e10293e.webp"
+  },
+  {
+    "gameid": "dec331c52aade0f61e5f7dd4bbedfde9",
+    "gamename": "Resurrecting Riches",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/resurrecting-riches-9aa226c9.webp"
+  },
+  {
+    "gameid": "1d9209102c387f85b38f2ee0f1fd6d60",
+    "gamename": "Return of the Dead",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/return-of-the-dead-d5182d49.webp"
+  },
+  {
+    "gameid": "efa2b0e8f55413648daa4aa2b34bdbec",
+    "gamename": "Revenge of Loki Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/revenge-of-loki-megaways-47603d4b.webp"
+  },
+  {
+    "gameid": "c4ed86503269c27ef923b68ef0040bb6",
+    "gamename": "Ripe Rewards",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ripe-rewards-24f4c841.webp"
+  },
+  {
+    "gameid": "5e7203a0b4da86defb2ba59eb29b3ca3",
+    "gamename": "Rise of Giza PowerNudge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rise-of-giza-powernudge-f877b700.webp"
+  },
+  {
+    "gameid": "3c8c57d806e01d6b76dc5cf138a56f4c",
+    "gamename": "Rise of Pyramids",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rise-of-pyramids-41d6180a.webp"
+  },
+  {
+    "gameid": "87f49701824163c963d2ca41c11cccab",
+    "gamename": "Rocket Blast Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rocket-blast-megaways-937987de.webp"
+  },
+  {
+    "gameid": "e51e58fc2b070ed7a801e2ed8a97cb77",
+    "gamename": "Rolling in Treasures",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/rolling-in-treasures-05e95d88.webp"
+  },
+  {
+    "gameid": "c75a2632e60c6fad859d8228bfb31c08",
+    "gamename": "Roulette",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/roulette-9b2dd2fd.webp"
+  },
+  {
+    "gameid": "31aa32bdf9e65b3d12435fdfc0bfb901",
+    "gamename": "Running Sushi",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/running-sushi-d83fbdb6.webp"
+  },
+  {
+    "gameid": "cddafd802c3df5592fa22cfc1bccf57d",
+    "gamename": "Safari King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/safari-king-35663c9f.webp"
+  },
+  {
+    "gameid": "0950740961fbb11cb8e3425ee97f3bc3",
+    "gamename": "Samurai Code",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/samurai-code-3850e23c.webp"
+  },
+  {
+    "gameid": "27bc99906b89b77408654d25d40d9f1a",
+    "gamename": "Santa",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/santa-fd41b064.webp"
+  },
+  {
+    "gameid": "4e28ca15834bfdf2a7cd031971dcaff4",
+    "gamename": "Santa's Great Gifts",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/santa-s-great-gifts-c260db75.webp"
+  },
+  {
+    "gameid": "68108c0dbecf2e15cc641fe932b43342",
+    "gamename": "Santa's Slay",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/santa-s-slay-5e931030.webp"
+  },
+  {
+    "gameid": "d327a0dea94bd8a5fc090b4855051dff",
+    "gamename": "Santa's Wonderland",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/santa-s-wonderland-01be7129.webp"
+  },
+  {
+    "gameid": "ecbea4416112629c154998398bf8bd7c",
+    "gamename": "Santa's Xmas Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/santa-s-xmas-rush-ae1b697f.webp"
+  },
+  {
+    "gameid": "69866a02334ebe58c3d69c0a4d59255a",
+    "gamename": "Savannah Legend",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/savannah-legend-0d7734a5.webp"
+  },
+  {
+    "gameid": "1a572faa53b45bd8cd1b576aa2717e0d",
+    "gamename": "Secret City Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/secret-city-gold-e85ed8d4.webp"
+  },
+  {
+    "gameid": "afec8fc55162675f8812b17accaffc92",
+    "gamename": "Shield of Sparta",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/shield-of-sparta-f37af48b.webp"
+  },
+  {
+    "gameid": "6dd17073841d7248ada5c7648fe8e9f6",
+    "gamename": "Shining Hot 100",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/shining-hot-100-30894746.webp"
+  },
+  {
+    "gameid": "7aa04b0b3a719bb6e8856dbd06af594e",
+    "gamename": "Shining Hot 20",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/shining-hot-20-093b839c.webp"
+  },
+  {
+    "gameid": "a76a101fcc084cfa9e8c2803636291b2",
+    "gamename": "Shining Hot 40",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/shining-hot-40-9514575c.webp"
+  },
+  {
+    "gameid": "4427edf67298a1ba7f12a88e0867ffb3",
+    "gamename": "Shining Hot 5",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/shining-hot-5-8c9ed09b.webp"
+  },
+  {
+    "gameid": "4a67372025a83767178a6c5fc6c4c8d4",
+    "gamename": "Sleeping Dragon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sleeping-dragon-bce5896b.webp"
+  },
+  {
+    "gameid": "00c3f19ee51d2c52a20a7b88fe8c6d9c",
+    "gamename": "Smugglers Cove",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/smugglers-cove-3daa8976.webp"
+  },
+  {
+    "gameid": "9e8d8ceea596eeaeba008dd9615e4ee8",
+    "gamename": "Snow Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/snow-party-166fe4f8.webp"
+  },
+  {
+    "gameid": "c0c132efaa8a52d4c5808613f27a51a0",
+    "gamename": "Spartan King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/spartan-king-e781e798.webp"
+  },
+  {
+    "gameid": "dcd84d9b162d2949cd8afd949c3bc77e",
+    "gamename": "Spellbinding Mystery",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/spellbinding-mystery-331755fb.webp"
+  },
+  {
+    "gameid": "bf03791befae5af547d91bbe8c544010",
+    "gamename": "Spin & Score Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/spin-score-megaways-f9ab5282.webp"
+  },
+  {
+    "gameid": "4940f52f7aae79bc85acd936b372bd77",
+    "gamename": "Spire+",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/spire-cb775a28.webp"
+  },
+  {
+    "gameid": "bf51fadccb42972a514bc45373a73e55",
+    "gamename": "Spirit of Adventure",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/spirit-of-adventure-09d58691.webp"
+  },
+  {
+    "gameid": "03e022cf43928af26cfb8bfce18fd8e8",
+    "gamename": "Star Bounty",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/star-bounty-8d7dcd2b.webp"
+  },
+  {
+    "gameid": "5279cdfc3e2ba15abf92cf6d7bdbba38",
+    "gamename": "Star Pirates Code",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/star-pirates-code-f2348d8f.webp"
+  },
+  {
+    "gameid": "3140a7726214521c34804325fe35f7a1",
+    "gamename": "Starlight Christmas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-christmas-8d6ee59e.webp"
+  },
+  {
+    "gameid": "be6b6890587ed84289fad941d99a3613",
+    "gamename": "Starlight Princess",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-princess-5c71f3d6.png"
+  },
+  {
+    "gameid": "09d08939279289a03b89f2f146a7f817",
+    "gamename": "Starlight Princess 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-princess-1000-8b550752.png"
+  },
+  {
+    "gameid": "583ee8a3096dbefe4ee4053730a07d04",
+    "gamename": "Starlight Princess Pachi",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-princess-pachi-89100524.webp"
+  },
+  {
+    "gameid": "b192b1f67b7f27cebd774684cf68284d",
+    "gamename": "Starlight Princess Super Scatter",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-princess-super-scatter-d00a33c7.webp"
+  },
+  {
+    "gameid": "38aafb12492db07ffc0b1e156076d2b5",
+    "gamename": "Starlight Wins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starlight-wins-9e61ef30.webp"
+  },
+  {
+    "gameid": "c829549200d90e7a6b7a48eee41e5a3c",
+    "gamename": "Starz Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/starz-megaways-3a1cea71.webp"
+  },
+  {
+    "gameid": "ed711bdbf63b2256648de689594363df",
+    "gamename": "Steamin’ Reels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/steamin-reels-ca6f8aad.webp"
+  },
+  {
+    "gameid": "5829781f73f9ba200a16a41b09f4b548",
+    "gamename": "Sticky Bees",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sticky-bees-24155fcc.webp"
+  },
+  {
+    "gameid": "2ae4e08329f8acd0834b289e2348af02",
+    "gamename": "Strawberry Cocktail",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/strawberry-cocktail-5d620820.webp"
+  },
+  {
+    "gameid": "5ecabbfd86af974d3807dd15f157f40f",
+    "gamename": "Street Racer",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/street-racer-765d430e.webp"
+  },
+  {
+    "gameid": "4824f69228c301b1336d6bd7b133bc4e",
+    "gamename": "Striking Hot 5",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/striking-hot-5-41cb0c90.webp"
+  },
+  {
+    "gameid": "6aeb8420d03722cfd4b66d91e17758ba",
+    "gamename": "Sugar Rush",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sugar-rush-b3f6c124.png"
+  },
+  {
+    "gameid": "3b2630042452d3e6b79054e4e96a2bf3",
+    "gamename": "Sugar Rush 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sugar-rush-1000-504413db.png"
+  },
+  {
+    "gameid": "3e852870675170f0fd62ae330b807275",
+    "gamename": "Sugar Rush Super Scatter",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sugar-rush-super-scatter-f12fb75e.webp"
+  },
+  {
+    "gameid": "8170339cc716c66d5b52779119fd718f",
+    "gamename": "Sugar Rush Xmas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sugar-rush-xmas-7113b861.webp"
+  },
+  {
+    "gameid": "ae20ea3685a6fa25b6489f03489bd83b",
+    "gamename": "Sugar Supreme Powernudge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sugar-supreme-powernudge-46d76cd6.webp"
+  },
+  {
+    "gameid": "9428409f076a8b0f8f8202620b1a48ef",
+    "gamename": "Sumo Supreme Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sumo-supreme-megaways-16aba428.webp"
+  },
+  {
+    "gameid": "0e7af06b6ab7fb5dfee3631d2d7ba7a6",
+    "gamename": "Super 7s ",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/super-7s-28e1e1a3.webp"
+  },
+  {
+    "gameid": "dcb62f6846307158bcabb1664f2f30ed",
+    "gamename": "Super Gummy Strike",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/super-gummy-strike-60c629b2.webp"
+  },
+  {
+    "gameid": "9568158adcd8e1242e5fb05b7624de22",
+    "gamename": "Super Joker",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/super-joker-fadca8ab.webp"
+  },
+  {
+    "gameid": "0a10c0f42d84880d19d1c2c542dac038",
+    "gamename": "Super Tiki Strike",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/super-tiki-strike-03df4d04.webp"
+  },
+  {
+    "gameid": "b9929767817a3ec8032d389be803bc93",
+    "gamename": "Super X",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/super-x-ba4516bc.webp"
+  },
+  {
+    "gameid": "6dcaf78e4e23929cbe2deb3d1210928c",
+    "gamename": "Sweet Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-6462940f.png"
+  },
+  {
+    "gameid": "e3f45e2f03388056aba660b7e737ecf0",
+    "gamename": "Sweet Bonanza 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-1000-a24e114a.png"
+  },
+  {
+    "gameid": "d208e055b5c61b94ede0a695a7ee3033",
+    "gamename": "Sweet Bonanza 2500",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-2500-d7348db1.webp"
+  },
+  {
+    "gameid": "2c39d0d7684c6562da4c1fc5b3c07990",
+    "gamename": "Sweet Bonanza Dice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-dice-ce0ad7a0.webp"
+  },
+  {
+    "gameid": "9df61b72f50981af0da4455e6cd0a974",
+    "gamename": "Sweet Bonanza Super Scatter",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-super-scatter-ed1d9518.png"
+  },
+  {
+    "gameid": "be44f1e2c7d4dd7ba95f39abcef2cb62",
+    "gamename": "Sweet Bonanza Xmas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-bonanza-xmas-b410910c.webp"
+  },
+  {
+    "gameid": "daf9c5f59921bd25b0812989b82b402f",
+    "gamename": "Sweet Burst",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-burst-17ab1ad4.webp"
+  },
+  {
+    "gameid": "7353af1836a0e8dd61aac0e94745d97b",
+    "gamename": "Sweet Craze",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-craze-bb41008f.webp"
+  },
+  {
+    "gameid": "e342b8ebea1dae1e7dc78a6b6edd7e3b",
+    "gamename": "Sweet Kingdom",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-kingdom-13b8f845.webp"
+  },
+  {
+    "gameid": "e56351f07bf54902c0dd24eb398ad008",
+    "gamename": "Sweet Powernudge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-powernudge-e767cbf8.webp"
+  },
+  {
+    "gameid": "afd1bca7ba85bf072edb2618281381e7",
+    "gamename": "Sweet Rush Bonanza",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sweet-rush-bonanza-362a518d.webp"
+  },
+  {
+    "gameid": "48ac2e881e15291c39a8304f9aeb6e8c",
+    "gamename": "Sword of Ares",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/sword-of-ares-c55f39a8.webp"
+  },
+  {
+    "gameid": "d333e6e0316422a0d5ffb7eae28fd3b7",
+    "gamename": "Temple Guardians",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/temple-guardians-4272eef0.webp"
+  },
+  {
+    "gameid": "5db987318a3bd9fc4be76f04bcb89555",
+    "gamename": "Temujin Treasures",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/temujin-treasures-a59aba29.webp"
+  },
+  {
+    "gameid": "7162afaab597e1e6b2e8726143a327ba",
+    "gamename": "The Alter Ego",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-alter-ego-81b9efdd.webp"
+  },
+  {
+    "gameid": "49bf22f2c40ab90ff3933574f53bbe6d",
+    "gamename": "The Big Dawgs",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-big-dawgs-c82e0381.webp"
+  },
+  {
+    "gameid": "c182b3e577b60ec8d4e411bcbca3f81d",
+    "gamename": "The Dog House",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-1a216209.png"
+  },
+  {
+    "gameid": "82bead4e84621b9b553f6b7c0c5faa73",
+    "gamename": "The Dog House - Dog or Alive",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-dog-or-alive-d1faf8f7.webp"
+  },
+  {
+    "gameid": "b079ae5505eac4356bf4432efe3e4687",
+    "gamename": "The Dog House – Muttley Crew",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-muttley-crew-2bb10f54.webp"
+  },
+  {
+    "gameid": "102fb01e01cbb7528c6ac803bbd9dd13",
+    "gamename": "The Dog House – Royal Hunt",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-royal-hunt-ff1887b8.png"
+  },
+  {
+    "gameid": "7d53869b99737ebb4c24975a763be669",
+    "gamename": "The Dog House Dice Show",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-dice-show-e9fd0f23.webp"
+  },
+  {
+    "gameid": "553b3622cad4fa40e351055005915a98",
+    "gamename": "The Dog House Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-megaways-42d80fbb.png"
+  },
+  {
+    "gameid": "9198d01543114fa961ad20f0aff63672",
+    "gamename": "The Dog House Multihold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dog-house-multihold-797ed2f6.webp"
+  },
+  {
+    "gameid": "65cf9a7d8b5af42714ad4bf507740af2",
+    "gamename": "The Dragon Tiger",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-dragon-tiger-087464d1.webp"
+  },
+  {
+    "gameid": "749e78a2062d25c3541cd998eac730c8",
+    "gamename": "The Great Chicken Escape",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-great-chicken-escape-eacf9e1c.webp"
+  },
+  {
+    "gameid": "b9b2a9b296042d6190edd89b25e1c5fa",
+    "gamename": "The Great Stick-Up",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-great-stick-up-00d281d2.webp"
+  },
+  {
+    "gameid": "297941ba67e1ad5a3fb13b3da888a2a7",
+    "gamename": "The Hand of Midas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-hand-of-midas-8aaa141a.webp"
+  },
+  {
+    "gameid": "beb6945fb6425f850f4758ee63785a9e",
+    "gamename": "The Knight King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-knight-king-791aeff2.webp"
+  },
+  {
+    "gameid": "ef907480a0cebef4e072c9d15ceb1d84",
+    "gamename": "The Money Men Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-money-men-megaways-488d9328.webp"
+  },
+  {
+    "gameid": "7112b25f15d34e49eaab3951356bb9a6",
+    "gamename": "The Red Queen",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-red-queen-70320106.webp"
+  },
+  {
+    "gameid": "148da0b08792407895f5c96ecbafd29b",
+    "gamename": "The Ultimate 5",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-ultimate-5-bc944395.webp"
+  },
+  {
+    "gameid": "b17af566fd988c3d7a06ee12facf0c60",
+    "gamename": "The Wild Gang",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-wild-gang-39104103.webp"
+  },
+  {
+    "gameid": "1d920015f841a5c3b43df24188570a2f",
+    "gamename": "The Wild Machine",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/the-wild-machine-4271388d.webp"
+  },
+  {
+    "gameid": "55180df7fa1b780975c9c0a19b54d8ee",
+    "gamename": "Three Star Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/three-star-fortune-b2620a2b.webp"
+  },
+  {
+    "gameid": "4e93012ec2a4ea0a907d96c40bf1f14a",
+    "gamename": "Tic Tac Take",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/tic-tac-take-73bdb8bc.webp"
+  },
+  {
+    "gameid": "cfe86bd54a5ab5caeeeff12cd333c47e",
+    "gamename": "Timber Stacks",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/timber-stacks-d21337fa.webp"
+  },
+  {
+    "gameid": "459a9079909b284ff898e5e4d8b26fd6",
+    "gamename": "Tiny Toads",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/tiny-toads-40aaac42.webp"
+  },
+  {
+    "gameid": "5dc2b639da63de5072fb09681fb28dc9",
+    "gamename": "Towering Fortunes",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/towering-fortunes-3896e154.webp"
+  },
+  {
+    "gameid": "09edd9fdd6b7306f7e52fad516a0a866",
+    "gamename": "Treasure Horse",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/treasure-horse-eb30ea15.webp"
+  },
+  {
+    "gameid": "dea1429c68719c72c690d001cf73d9b6",
+    "gamename": "Treasure Wild",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/treasure-wild-f6055651.webp"
+  },
+  {
+    "gameid": "25af131fa95bfd1b9bf14aade403493a",
+    "gamename": "Treasures of Osiris",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/treasures-of-osiris-3bdd1a76.webp"
+  },
+  {
+    "gameid": "e90c55a65b2d48bf31d0c411b643245f",
+    "gamename": "Tree of Riches",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/tree-of-riches-1b633a48.webp"
+  },
+  {
+    "gameid": "33173c718311b3f3e2277204b7a7dbe2",
+    "gamename": "Trees of Treasure",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/trees-of-treasure-30d7eea3.webp"
+  },
+  {
+    "gameid": "12c7a1d1d24a0055efdc8c44e9ed1c6a",
+    "gamename": "Triple Dragons",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/triple-dragons-1d247a1d.webp"
+  },
+  {
+    "gameid": "31e4cc56c0a96c36ffd5ea06ab268da4",
+    "gamename": "Triple Pot Diamond",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/triple-pot-diamond-f0c40d7d.webp"
+  },
+  {
+    "gameid": "241e7aaee249b053cb53f7f3e0edf578",
+    "gamename": "Triple Pot Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/triple-pot-gold-c3d3927e.webp"
+  },
+  {
+    "gameid": "be0c7e72bfc9b2a9186793e005e57ee6",
+    "gamename": "Triple Tigers",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/triple-tigers-0c3ad2cb.webp"
+  },
+  {
+    "gameid": "4dda8aba195fc38dc6464f35f4538ae2",
+    "gamename": "Tundra’s Fortune",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/tundra-s-fortune-252dfef4.webp"
+  },
+  {
+    "gameid": "6fe75c9049186c7888a80a49a09c84b2",
+    "gamename": "Tut’s Treasure Tower",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/tut-s-treasure-tower-009a63c5.webp"
+  },
+  {
+    "gameid": "078375547c790a2ad08aabe0427f800c",
+    "gamename": "Twilight Princess",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/twilight-princess-906177f3.webp"
+  },
+  {
+    "gameid": "4a7e158a0c40fa00d7421b34f6a696c7",
+    "gamename": "Ultra Burn",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ultra-burn-542252cb.webp"
+  },
+  {
+    "gameid": "2f42ef84333961841928d92c029d204f",
+    "gamename": "Ultra Hold and Spin",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/ultra-hold-and-spin-b002dfbb.webp"
+  },
+  {
+    "gameid": "2f1c795668c251660ab797e951859dd2",
+    "gamename": "Vampires VS Wolves",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/vampires-vs-wolves-c7bd46b4.webp"
+  },
+  {
+    "gameid": "0ab1d901b6cc731b48bc3b2cd07b3cf1",
+    "gamename": "Vampy Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/vampy-party-a1e2aab3.webp"
+  },
+  {
+    "gameid": "1329417dfec2ff1842468c5de8c3ea92",
+    "gamename": "Vegas Magic",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/vegas-magic-46e5d736.webp"
+  },
+  {
+    "gameid": "1ad222e9a7940fbb51c603458a1d9aff",
+    "gamename": "Viking Forge",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/viking-forge-67d976fe.webp"
+  },
+  {
+    "gameid": "276582955d8f162b3379939a3eb5b038",
+    "gamename": "Volcano Goddess",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/volcano-goddess-556160cc.webp"
+  },
+  {
+    "gameid": "1c92aa197397ff9f742121bc1d179efc",
+    "gamename": "Voodoo Magic",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/voodoo-magic-82e30a07.webp"
+  },
+  {
+    "gameid": "e30cd08c54817096e863975e309bb457",
+    "gamename": "Waves of Poseidon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/waves-of-poseidon-5b846f77.webp"
+  },
+  {
+    "gameid": "44ab0ddf84f32cc79f6bdcf6309b9710",
+    "gamename": "Wheel O'Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wheel-o-gold-1e9780c5.webp"
+  },
+  {
+    "gameid": "def8517cd170398159c6dd1b56e6aa8e",
+    "gamename": "Wheel of Happiness",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wheel-of-happiness-159d50ac.webp"
+  },
+  {
+    "gameid": "97d3638d9503b0ade2d467983add7f0d",
+    "gamename": "Wild Beach Party",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-beach-party-383527a3.webp"
+  },
+  {
+    "gameid": "13193d9b62a51811db4dc5da940d9a02",
+    "gamename": "Wild Booster",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-booster-f4f5398d.webp"
+  },
+  {
+    "gameid": "f2123a67dd61d022e892ccf306f035d0",
+    "gamename": "Wild Celebrity Bus Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-celebrity-bus-megaways-c8651330.webp"
+  },
+  {
+    "gameid": "96a059605c65d1af8fb1553a8ee14ccf",
+    "gamename": "Wild Depths",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-depths-ca0bcdce.webp"
+  },
+  {
+    "gameid": "5ffaacab7e6808fd3b84e8d054c51c7c",
+    "gamename": "Wild Hop & Drop",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-hop-drop-6c05f044.webp"
+  },
+  {
+    "gameid": "61a6d88cd41af562e7eaf682e1725bb6",
+    "gamename": "Wild Pixies",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-pixies-ef5fdc65.webp"
+  },
+  {
+    "gameid": "aaaddb727da6ad990cdf8bbec376b961",
+    "gamename": "Wild Skullz",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-skullz-f7454369.webp"
+  },
+  {
+    "gameid": "384eac35bfcf5d6857f8a2c692cdbb8a",
+    "gamename": "Wild Spells",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-spells-a49273d8.webp"
+  },
+  {
+    "gameid": "f3b587a499b79c46adc9d1ee2e279c0a",
+    "gamename": "Wild Walker",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-walker-0c2196a3.webp"
+  },
+  {
+    "gameid": "584ceb7bf9bf98841294c8da4f9b7705",
+    "gamename": "Wild West Duels",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-west-duels-0340facd.webp"
+  },
+  {
+    "gameid": "16ed3068536a6bdae156e3d98bb9a365",
+    "gamename": "Wild West Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-west-gold-1aab8b18.png"
+  },
+  {
+    "gameid": "91cd6233551cd56e70d900794ed728e3",
+    "gamename": "Wild West Gold Blazing Bounty",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-west-gold-blazing-bounty-0b5ad99a.webp"
+  },
+  {
+    "gameid": "f0f54e0bbb300845990c0586fabd9bed",
+    "gamename": "Wild West Gold Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-west-gold-megaways-bf964685.png"
+  },
+  {
+    "gameid": "1ff5d508e3503952a59200e991f084fb",
+    "gamename": "Wild Wild Bananas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wild-bananas-f9210980.webp"
+  },
+  {
+    "gameid": "45a1f0f25c0b7c3ab56c1993f9e6e03b",
+    "gamename": "Wild Wild Joker",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wild-joker-320d1556.webp"
+  },
+  {
+    "gameid": "69b91ecb2d7ba33c804ceba3ac81956a",
+    "gamename": "Wild Wild Pearls",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wild-pearls-ae75b949.webp"
+  },
+  {
+    "gameid": "c00114a78ba7062de33f78405c7cac5d",
+    "gamename": "Wild Wild Riches",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wild-riches-3da426f6.webp"
+  },
+  {
+    "gameid": "8dbc6b550d9684f5a4d03d62ff6cd0c5",
+    "gamename": "Wild Wild Riches Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wild-riches-megaways-5bf70cad.webp"
+  },
+  {
+    "gameid": "5f096f82cd6cf67f3f3f030a0bb89542",
+    "gamename": "Wild Wildebeest Wins",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wild-wildebeest-wins-0e64d566.webp"
+  },
+  {
+    "gameid": "aaa56510aaf9b54e51cda7ee7ccff609",
+    "gamename": "Wildies",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wildies-b794ca6d.webp"
+  },
+  {
+    "gameid": "bda320d9d63d12432d578b1f97855087",
+    "gamename": "Wisdom of Athena",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wisdom-of-athena-6e2d2b26.webp"
+  },
+  {
+    "gameid": "97a7bed99262b8c950be4bf1b173e23d",
+    "gamename": "Wisdom of Athena 1000",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wisdom-of-athena-1000-f60098c5.png"
+  },
+  {
+    "gameid": "5fc84330832564bfdef55db77be42779",
+    "gamename": "Wisdom of Athena 1000 Xmas",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wisdom-of-athena-1000-xmas-b6a9ff38.webp"
+  },
+  {
+    "gameid": "a47148d4858a7f4599dfc00c68a2c141",
+    "gamename": "Witch Heart Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/witch-heart-megaways-9660fa80.webp"
+  },
+  {
+    "gameid": "edfe77c093e19c861d8424b90ce7653b",
+    "gamename": "Wolf Gold",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wolf-gold-5e8fafa3.png"
+  },
+  {
+    "gameid": "bb6e4a7b6d2f56d8478d38c74dd2c68c",
+    "gamename": "Wolf Gold 4 Pack",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wolf-gold-4-pack-c21238d2.webp"
+  },
+  {
+    "gameid": "8bc2593695c8eba8138d446bc288e2ab",
+    "gamename": "Wolf Gold Dice",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wolf-gold-dice-b3c12515.webp"
+  },
+  {
+    "gameid": "7605e4f0d6ed5812280f6ce3a20fd7d3",
+    "gamename": "Wolf Gold Ultimate",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/wolf-gold-ultimate-3fb0dc9f.webp"
+  },
+  {
+    "gameid": "7eaed38a7a14080e8f2fa46ac298084c",
+    "gamename": "Year of the Dragon King",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/year-of-the-dragon-king-4376ba55.webp"
+  },
+  {
+    "gameid": "901b9cfd5c94c5679dacbb343181b915",
+    "gamename": "Yeti Quest",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/yeti-quest-d532957d.webp"
+  },
+  {
+    "gameid": "ff03df07647e9005f46982c5bb9d26b5",
+    "gamename": "You Can Piggy Bank On It",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/you-can-piggy-bank-on-it-fd2dd836.webp"
+  },
+  {
+    "gameid": "9560ce847f99d7411ff4bee8fb503b9e",
+    "gamename": "Yum Yum Powerways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/yum-yum-powerways-aa29caa3.webp"
+  },
+  {
+    "gameid": "df0492724f0fc4ae4ec183d0c0176d46",
+    "gamename": "Zeus vs Hades - Gods of War",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/zeus-vs-hades-gods-of-war-9bf98fd1.png"
+  },
+  {
+    "gameid": "a9f2f1bc3dc8711f045210302d3f6e68",
+    "gamename": "Zeus vs Hades – Gods of War 250",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/zeus-vs-hades-gods-of-war-250-e380f36d.webp"
+  },
+  {
+    "gameid": "bc50831ebfc92032a26764da1bbecbc4",
+    "gamename": "Zeus vs Typhon",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/zeus-vs-typhon-17bd431e.webp"
+  },
+  {
+    "gameid": "b66957542324a360e19b6f7b7415ef0d",
+    "gamename": "Zombie Carnival",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/zombie-carnival-03f09b41.webp"
+  },
+  {
+    "gameid": "8fa2b1e8c24857095efd18ed3a5f2738",
+    "gamename": "Zombie School Megaways",
+    "providerName": "PP",
+    "image": "https://providers.gamblly-api.com/assets/providers/PP/zombie-school-megaways-b0063878.webp"
+  }
+]

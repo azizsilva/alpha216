@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-14T17:01:29+00:00",
+    "user_id": 175,
+    "username": "Saber",
+    "role": "master",
+    "ip": "197.3.161.37",
+    "forwarded_for": "197.3.161.37",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-TN,fr;q=0.9,ar-TN;q=0.8,ar;q=0.7,en-US;q=0.6,en;q=0.5",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fcreate-member%2F%3Fcreate_role%3Dmaster",
+    "session_id_hash": "d7ae05df647d0747449bfb52d4141f77dfe7448f91973c5a270daaae6050d55a"
+}

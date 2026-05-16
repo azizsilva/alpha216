@@ -1,0 +1,146 @@
+[
+  {
+    "gameid": "3ade1805c90ac5796bff28c33a5e1b2c",
+    "gamename": "Mr First Live",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/mr-first-live.gif"
+  },
+  {
+    "gameid": "97d11cf3d948ee1f32d49a18dc7b8bb5",
+    "gamename": "Kickoff Roulette",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/kickoff-roulette.gif"
+  },
+  {
+    "gameid": "fb72517679e96f6034150f4ddf4503fa",
+    "gamename": "Roulette Aurum",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/roulette-aurum.gif"
+  },
+  {
+    "gameid": "b7d922d261e65792dfb236d434c4a4c6",
+    "gamename": "Richie Wheel",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/richie-wheel.gif"
+  },
+  {
+    "gameid": "be319e671beaab2d1598414f1dbf0ff2",
+    "gamename": "Richie Fruits Roulette",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/richie-fruits-roulette.png"
+  },
+  {
+    "gameid": "d944fe3b77e1a697cf0e08417f2d2624",
+    "gamename": "Roulette VIP",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/roulette-vip.png"
+  },
+  {
+    "gameid": "fc0efa4185dabdb3a9967bc48683f57d",
+    "gamename": "BlackJack VISION D",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-vision-d.png"
+  },
+  {
+    "gameid": "09ecb45997b5b4dd7a45748758316c68",
+    "gamename": "BlackJack Free Seat",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-free-seat.png"
+  },
+  {
+    "gameid": "7839b791ca84cf6798c63073ed16eecf",
+    "gamename": "Teen Patti",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/teen-patti.png"
+  },
+  {
+    "gameid": "4d888c0df6d175f5a2cefbc06db68cf9",
+    "gamename": "Baccarat A",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/baccarat-a.png"
+  },
+  {
+    "gameid": "b83cdf42796a17c661aeaf5e36b4ce6f",
+    "gamename": "BlackJack Creed A",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-creed-a.png"
+  },
+  {
+    "gameid": "fb4631345dfda34b71f8c47402827c2d",
+    "gamename": "Turkish Roulette",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/turkish-roulette.png"
+  },
+  {
+    "gameid": "be10a0ba64dd9977771ba4802a2b6c64",
+    "gamename": "Andar Bahar",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/andar-bahar.png"
+  },
+  {
+    "gameid": "196935ee36b9f20b61e55d49d908d0ae",
+    "gamename": "Auto Roulette",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/auto-roulette.png"
+  },
+  {
+    "gameid": "42090aca23df12a9bed0d0c77effb096",
+    "gamename": "BlackJack VIP A",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-vip-a.png"
+  },
+  {
+    "gameid": "3e97a3b44acb4cdd114fd03df4dc903c",
+    "gamename": "Baccarat B",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/baccarat-b.png"
+  },
+  {
+    "gameid": "f5b83bdcdb80f1bb6386a71eabf2d137",
+    "gamename": "Free Bet BlackJack Fiesta",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/free-bet-blackjack-fiesta.png"
+  },
+  {
+    "gameid": "9fd901a5b24ced5e03daecd1d6adfe31",
+    "gamename": "BlackJack A",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-a.png"
+  },
+  {
+    "gameid": "5f3de8298a6b8095d28608e4486d2439",
+    "gamename": "Roulette A",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/roulette-a.png"
+  },
+  {
+    "gameid": "0bff3e82e0253925c4e8cfe85a11cb1e",
+    "gamename": "BlackJack VIP B",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-vip-b.png"
+  },
+  {
+    "gameid": "3e9add7b9ec176f798b316122ebb9c22",
+    "gamename": "Persian Blackjack",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/persian-blackjack.png"
+  },
+  {
+    "gameid": "d48180a5ffd2428b8cc4268875f6c432",
+    "gamename": "Aurum Roulette Persian",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/aurum-roulette-persian.png"
+  },
+  {
+    "gameid": "8adcbed99e56dc0af54f48f534859d90",
+    "gamename": "Baccarat C",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/baccarat-c.png"
+  },
+  {
+    "gameid": "44f8b33d27449f4b80bf44da42e162ef",
+    "gamename": "BlackJack VIP C",
+    "providerName": "CreedRoomz",
+    "image": "https://providers.gamblly-api.com/assets/providers/CreedRoomz/blackjack-vip-c.png"
+  }
+]

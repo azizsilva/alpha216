@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-14T12:03:10+00:00",
+    "user_id": 156,
+    "username": "Mas1",
+    "role": "super_master",
+    "ip": "2c0f:f698:c11a:394c:18af:6ca9:2f3e:2f22",
+    "forwarded_for": "2c0f:f698:c11a:394c:18af:6ca9:2f3e:2f22",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-TN,fr;q=0.9,ar-AE;q=0.8,ar;q=0.7,fr-FR;q=0.6,en-US;q=0.5,en;q=0.4",
+    "host": "www.tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fbanking%2F",
+    "session_id_hash": "8435cb5de923a6c9c8d923b2771fa71420189f3c3a921a77ee7c8c4b322006e2"
+}

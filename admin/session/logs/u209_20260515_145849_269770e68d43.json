@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T14:58:49+00:00",
+    "user_id": 209,
+    "username": "Aziz",
+    "role": "super_master",
+    "ip": "160.159.205.242",
+    "forwarded_for": "160.159.205.242",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,ar;q=0.6",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "5fffe8f15a21e74b22a16cb912c3cde451c3e7f4e7fe3a0b4ae585a556d48bd5"
+}

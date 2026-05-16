@@ -1,0 +1,416 @@
+[
+  {
+    "gameid": "1e4a798a827b6e7313eb2436fdb0aaf9",
+    "gamename": "Subway Runner",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/subway-runner.png"
+  },
+  {
+    "gameid": "434abad94921b0fbfe6ba55084cc44f3",
+    "gamename": "The Monkey King",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/the-monkey-king.png"
+  },
+  {
+    "gameid": "9c9c08b81ca3ff14290f85af0875e07f",
+    "gamename": "Blessing of the Dragon",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/blessing-of-the-dragon.png"
+  },
+  {
+    "gameid": "030e184b83cfdb7a68ce48a6d9ee420a",
+    "gamename": "Mahjong Legend Xmas",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mahjong-legend-xmas.png"
+  },
+  {
+    "gameid": "80921ab127d90477074e0428b4f70e2d",
+    "gamename": "Alice's Wonders",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/alice-s-wonders.png"
+  },
+  {
+    "gameid": "9058c289c960b6f8ec35edbe56ae32c4",
+    "gamename": "Mahjong Legend",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mahjong-legend.png"
+  },
+  {
+    "gameid": "bb50bbe5532aa07244a398afc53c106c",
+    "gamename": "Epic of Aztec",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/epic-of-aztec.png"
+  },
+  {
+    "gameid": "b6a53a6058d4f2da657ae018bb4fc627",
+    "gamename": "Blessing of the Tiger",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/blessing-of-the-tiger.png"
+  },
+  {
+    "gameid": "0c9210de63772a1bed1d2b6fa8d53a2b",
+    "gamename": "Dino Gems",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/dino-gems.png"
+  },
+  {
+    "gameid": "6721e100ec5a4201fe3afdee641baadd",
+    "gamename": "Moe Moe Cute",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/moe-moe-cute.png"
+  },
+  {
+    "gameid": "64959bcf679f4dea4484ad6029a73301",
+    "gamename": "Fishing's Paradise",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/fishing-s-paradise.png"
+  },
+  {
+    "gameid": "c79edd6dd53f90eb7df94fe8922fa73a",
+    "gamename": "Government Disco",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/government-disco.png"
+  },
+  {
+    "gameid": "ec5b85515d1e011fbadaaa631ae8b410",
+    "gamename": "Mafia Ways",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mafia-ways.png"
+  },
+  {
+    "gameid": "b7ba959dcc716a53885546e3d8a1ee0f",
+    "gamename": "Mermaid's Market",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mermaid-s-market.png"
+  },
+  {
+    "gameid": "9be1e9b4c41afeabfe47388b9e600d3b",
+    "gamename": "Veggies Bonanza",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/veggies-bonanza.png"
+  },
+  {
+    "gameid": "a15463482f45e9fe04692c26750e6c84",
+    "gamename": "Kingdom Z",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/kingdom-z.png"
+  },
+  {
+    "gameid": "a09cde75fce2c3bd9bdab4c1b2cdbcdf",
+    "gamename": "Roma Plus",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/roma-plus.png"
+  },
+  {
+    "gameid": "15e0c451ae144bd194f1eb962e5692f6",
+    "gamename": "Centillion Gods",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/centillion-gods.png"
+  },
+  {
+    "gameid": "aeac5ffd4fa95b08d37a69bdab26aa0c",
+    "gamename": "Wonder Cuisine",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/wonder-cuisine.png"
+  },
+  {
+    "gameid": "6ee035f975bbf0f4f8f4a6b53ea8e2bd",
+    "gamename": "Cupid Garden",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/cupid-garden.png"
+  },
+  {
+    "gameid": "ec4a1742678313f6628a563d859ce6b5",
+    "gamename": "Royal Thai Dessert",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/royal-thai-dessert.png"
+  },
+  {
+    "gameid": "66ccc401462c48a14d4bad666d4b3938",
+    "gamename": "Lucky Nangkwak",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/lucky-nangkwak.png"
+  },
+  {
+    "gameid": "bb60ee695a23bbfe52f1040597c36929",
+    "gamename": "Lab 19 Mania",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/lab-19-mania.png"
+  },
+  {
+    "gameid": "92f5d59a0151c9d7afcd60b5c206ce58",
+    "gamename": "Pet Ranger",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/pet-ranger.png"
+  },
+  {
+    "gameid": "bfd2fec7b3a251efe1d62475f1ef79ff",
+    "gamename": "Squid Toon",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/squid-toon.png"
+  },
+  {
+    "gameid": "b24ad8434416851a96d85e233b76a91b",
+    "gamename": "Punk Star",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/punk-star.png"
+  },
+  {
+    "gameid": "75e5500fe0c338ed93f057f5b0c2eff8",
+    "gamename": "Dino Pops",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/dino-pops.png"
+  },
+  {
+    "gameid": "f39f62409202ad2e4d042b333a7d6d4d",
+    "gamename": "Blessing of the Ox",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/blessing-of-the-ox.png"
+  },
+  {
+    "gameid": "3e43dab2da77898ffdb8d49d49012846",
+    "gamename": "Wrath of Egypt",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/wrath-of-egypt.png"
+  },
+  {
+    "gameid": "8d89fcecb55b214fd58837ac1aed3c3c",
+    "gamename": "Kraken Treasure",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/kraken-treasure.png"
+  },
+  {
+    "gameid": "890f7eed22d07d50982726b3a1d64296",
+    "gamename": "Grand Shine",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/grand-shine.png"
+  },
+  {
+    "gameid": "fda62dfafd0baa8aaab654207e887728",
+    "gamename": "Shiba Mogul",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/shiba-mogul.png"
+  },
+  {
+    "gameid": "cdd60431c3592531402e076ae3dd1cd0",
+    "gamename": "Zushi Prime",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/zushi-prime.png"
+  },
+  {
+    "gameid": "6eafa053458efd9190cf8ecb30295f8b",
+    "gamename": "Rich Rich Water",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/rich-rich-water.png"
+  },
+  {
+    "gameid": "2e73adc77233655f65870b319d9fc219",
+    "gamename": "Hungry Krahung",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/hungry-krahung.png"
+  },
+  {
+    "gameid": "82c0a0865d87444063e0fd932604b161",
+    "gamename": "The King Joker",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/the-king-joker.png"
+  },
+  {
+    "gameid": "334ccee202b1fc9e1564ed52b39a4032",
+    "gamename": "Vampire Hunter",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/vampire-hunter.png"
+  },
+  {
+    "gameid": "fb0129d8c513f8b35d900859e0972958",
+    "gamename": "Little Monster",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/little-monster.png"
+  },
+  {
+    "gameid": "508d92c800255ac103d5b8fef5450852",
+    "gamename": "Ghost House",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/ghost-house.png"
+  },
+  {
+    "gameid": "83afe7e98999e1908a863baec926068e",
+    "gamename": "Wizard Dice",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/wizard-dice.png"
+  },
+  {
+    "gameid": "99735a1ba996ba5059332705f6effedc",
+    "gamename": "Rabbit Mines",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/rabbit-mines.png"
+  },
+  {
+    "gameid": "82f6097bad1c3d63aa7968ff70171f8f",
+    "gamename": "Baccarat",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/baccarat.png"
+  },
+  {
+    "gameid": "4f5bcfd8913d93570951ab5073bf3114",
+    "gamename": "Scoop Blessing",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/scoop-blessing.png"
+  },
+  {
+    "gameid": "abee874bb8c9974ccc2825f63ab0ac67",
+    "gamename": "Ring of Hopeful",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/ring-of-hopeful.png"
+  },
+  {
+    "gameid": "db5936c0b2ed1e048fa6045e986b8263",
+    "gamename": "Dart Fest",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/dart-fest.png"
+  },
+  {
+    "gameid": "81d01d5503551519be532d3f29ff46e1",
+    "gamename": "Drop Racing",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/drop-racing.png"
+  },
+  {
+    "gameid": "19548e544f0004ba6ad353ba4d7a25c3",
+    "gamename": "Bomb Defusal",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/bomb-defusal.png"
+  },
+  {
+    "gameid": "d8d4775978bffc4067303c09407d7d5f",
+    "gamename": "Real Slap",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/real-slap.png"
+  },
+  {
+    "gameid": "90d7e9a50e849f25ec6044562562294e",
+    "gamename": "Head or Tail Arcade",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/head-or-tail-arcade.png"
+  },
+  {
+    "gameid": "6c025643a789ac76c011e88d70668e29",
+    "gamename": "Horse Racing",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/horse-racing.png"
+  },
+  {
+    "gameid": "25f85519591f81361e51cc3a7f6049e2",
+    "gamename": "Fruit Roulette Slots",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/fruit-roulette-slots.png"
+  },
+  {
+    "gameid": "08daea85d88264772b6f833c909816bc",
+    "gamename": "Legend of Shooter",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/legend-of-shooter.png"
+  },
+  {
+    "gameid": "4b325c50f516f07696edfd0585a02f73",
+    "gamename": "Dragon Tiger",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/dragon-tiger.png"
+  },
+  {
+    "gameid": "84cda04205d949e967be0009ae421d6c",
+    "gamename": "Treasure of Pirate",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/treasure-of-pirate.png"
+  },
+  {
+    "gameid": "0a763d4a59d935f90370cf649782fd77",
+    "gamename": "Ghost Busters",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/ghost-busters.png"
+  },
+  {
+    "gameid": "0aff3783f6eaae91ad19640ef0080f43",
+    "gamename": "Treasureland",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/treasureland.png"
+  },
+  {
+    "gameid": "469e29228adb444979d092ae026787b7",
+    "gamename": "Guardian Wealth",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/guardian-wealth.png"
+  },
+  {
+    "gameid": "b398ccf1e4e0b29064450fb14107b6b5",
+    "gamename": "Golden Blackjack 21",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/golden-blackjack-21.png"
+  },
+  {
+    "gameid": "5b9b584da3e51005b82de2f51f9bddb4",
+    "gamename": "Mafia Ways II: Metro Haven Heist",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mafia-ways-ii-metro-haven-heist.png"
+  },
+  {
+    "gameid": "4c8935c9fcb5a8bac4da70349637faf5",
+    "gamename": "Nova Crash : The Legends of Power",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/nova-crash-the-legends-of-power.png"
+  },
+  {
+    "gameid": "6586cc2f90a773f3a3b2aa12344b8b34",
+    "gamename": "Tiki Paradise",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/tiki-paradise.png"
+  },
+  {
+    "gameid": "2fc0855e314cec69ce7a318138f2eaeb",
+    "gamename": "Clash of War",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/clash-of-war.png"
+  },
+  {
+    "gameid": "8da30500c507e3677dfa88ad61830e2b",
+    "gamename": "Natural Ace",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/natural-ace.png"
+  },
+  {
+    "gameid": "871d3bfb11b67c8c6368e5c7f05608f7",
+    "gamename": "Aztec Legend",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/aztec-legend.png"
+  },
+  {
+    "gameid": "470bdd6cbf3f1c41a368cc403177b35b",
+    "gamename": "Mahjong Legacy",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mahjong-legacy.png"
+  },
+  {
+    "gameid": "7c6f4f5b4a5d35b09779d1752b9c2f2d",
+    "gamename": "Super Ace X",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/super-ace-x.png"
+  },
+  {
+    "gameid": "08126b53bfe634a8952b672d0522819c",
+    "gamename": "Mahjong of the Phoenix",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/mahjong-of-the-phoenix.png"
+  },
+  {
+    "gameid": "d4eab95a587 8c1046e2c4dd36ee72d0c",
+    "gamename": "Aztec Empire",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/aztec-empire.png"
+  },
+  {
+    "gameid": "148c587bfcaa220fc98a2a33d62577a5",
+    "gamename": "Neko Reborn",
+    "providerName": "Askmeslot",
+    "image": "https://providers.gamblly-api.com/assets/providers/askmeslot/neko-reborn.png"
+  }
+]

@@ -1,0 +1,1226 @@
+[
+  {
+    "gameid": "206b98759b35412a1ecf0cc0fa42b29a",
+    "gamename": "3 Kings Scratch",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/3-kings-scratch-b46bbe99.jpg"
+  },
+  {
+    "gameid": "a946620a26ac3819d528bf0bab838034",
+    "gamename": "Alice WonderLuck",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/alice-wonderluck-9292aa03.png"
+  },
+  {
+    "gameid": "32bb0d3d65638efaf0e5efe17728bff9",
+    "gamename": "Alien Fruits",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/alien-fruits-1db838b7.png"
+  },
+  {
+    "gameid": "8e672d4494c81a04d183d02c0ac928d8",
+    "gamename": "Alien Fruits 2 ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/alien-fruits-2-790e89a0.png"
+  },
+  {
+    "gameid": "9d3b395c382da05c442cd4a9207d80e0",
+    "gamename": "All-Star Fruits ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/all-star-fruits-c83d34ff.png"
+  },
+  {
+    "gameid": "0130408795db8977e89b3780debe7ed6",
+    "gamename": "Aloha King Elvis",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aloha-king-elvis-68149c36.jpg"
+  },
+  {
+    "gameid": "c1f8c17562f9e24de0318d57d4255602",
+    "gamename": "American Roulette",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/american-roulette-fb1c1799.jpg"
+  },
+  {
+    "gameid": "82529ab37ac1c56c317f453f428b0061",
+    "gamename": "Arrow Slot",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/arrow-slot-f51a3b80.png"
+  },
+  {
+    "gameid": "d30ad267baefa5c0366bf47909b74a9c",
+    "gamename": "Avalon: The Lost Kingdom",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/avalon-the-lost-kingdom-77d36adc.jpg"
+  },
+  {
+    "gameid": "d3c7985229b2e4651fa7889445a5bfd8",
+    "gamename": "Aviamasters",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aviamasters-932a172a.png"
+  },
+  {
+    "gameid": "868039d91b7a3986d04f0178fbadefe2",
+    "gamename": "Aviamasters 2",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aviamasters-2-e73311f2.png"
+  },
+  {
+    "gameid": "3456adfa0634790de65d5edbb0ebd9a4",
+    "gamename": "Aviamasters X-mas",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aviamasters-x-mas-862513e9.png"
+  },
+  {
+    "gameid": "ebdc5bc54ce398aa8d1a7466a4e68d21",
+    "gamename": "Aztec Clusters",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aztec-clusters-993832de.png"
+  },
+  {
+    "gameid": "9ba70f6585cc9f2a63629bae2f3c4c6a",
+    "gamename": "Aztec Magic Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aztec-magic-bonanza-9e519cc0.jpg"
+  },
+  {
+    "gameid": "313e50780d6faa5245dbb2e1f56d6250",
+    "gamename": "Aztec Magic Deluxe",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aztec-magic-deluxe-b08584b7.jpg"
+  },
+  {
+    "gameid": "bee501170b0ca23237863675aa164c7c",
+    "gamename": "Aztec Magic Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aztec-magic-megaways-23866e47.jpg"
+  },
+  {
+    "gameid": "107be31f7f1acd063a3848d9ab8faaab",
+    "gamename": "Aztec's Claw Wild Dice",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/aztec-s-claw-wild-dice-2060f174.png"
+  },
+  {
+    "gameid": "d78d7c0bb2467908d3aeee9c8ecc2ccf",
+    "gamename": "Balloon Mania",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/balloon-mania-293b6225.png"
+  },
+  {
+    "gameid": "354e70824d5468eae2ae3f629c22deca",
+    "gamename": "Beast Band ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/beast-band-674a8907.jpg"
+  },
+  {
+    "gameid": "ba016ab1146511e9a071fc1f358e8103",
+    "gamename": "Beer Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/beer-bonanza-aa1e7feb.jpg"
+  },
+  {
+    "gameid": "a290e7d0adc3f98fb3020ac6f260d704",
+    "gamename": "Big Atlantis Frenzy",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/big-atlantis-frenzy-576d8a93.jpg"
+  },
+  {
+    "gameid": "ff980d64c382ed55c1b07e4de82abb20",
+    "gamename": "Big Bucks Saloon",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/big-bucks-saloon-3eaadb14.png"
+  },
+  {
+    "gameid": "b501a4676ec6334c28b5ed9f7628577b",
+    "gamename": "Bonanza Billion",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/bonanza-billion-9804f830.png"
+  },
+  {
+    "gameid": "9a8eb718d5489673e4948b870334cec8",
+    "gamename": "Bonanza Trillion",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/bonanza-trillion-4c33806b.png"
+  },
+  {
+    "gameid": "7d05837c55942cf0f36e2597b7e0ae76",
+    "gamename": "Bone Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/bone-bonanza-0ae1aa3f.jpg"
+  },
+  {
+    "gameid": "6d28e412a45a2d9dfcd3dfcdc26ca89c",
+    "gamename": "Book of Cats",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/book-of-cats-97f87bb5.jpg"
+  },
+  {
+    "gameid": "a296a0daa935a213165679d34e8a0522",
+    "gamename": "Book of Cats Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/book-of-cats-megaways-59a80f54.jpg"
+  },
+  {
+    "gameid": "431eb425b953b75fc4c9162c72bbc8b2",
+    "gamename": "Book of Kemet",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/book-of-kemet-544bf6e9.jpg"
+  },
+  {
+    "gameid": "81c648af2d38be5fd6bd735f672f35b6",
+    "gamename": "Book of Panda Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/book-of-panda-megaways-b403b026.jpg"
+  },
+  {
+    "gameid": "e084f88df2eff2de5fda7331d6ac1bcd",
+    "gamename": "Book of Pyramids",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/book-of-pyramids-b8d9386f.jpg"
+  },
+  {
+    "gameid": "8f5601adfc12e006ff12cd626e994b2a",
+    "gamename": "Burning Chilli 243",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/burning-chilli-243-a8317ff2.png"
+  },
+  {
+    "gameid": "070a0e2b5c08f1181160cae8ddacea5b",
+    "gamename": "Burning Chilli X",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/burning-chilli-x-e9c5c14b.png"
+  },
+  {
+    "gameid": "0365a29dce7b1b0aeef2746222eca571",
+    "gamename": "Candy Monsta",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/candy-monsta-df0476f5.png"
+  },
+  {
+    "gameid": "1709447d71bc8e313f35ba35b0033845",
+    "gamename": "Capymania Green",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/capymania-green-33e6d8a5.jpg"
+  },
+  {
+    "gameid": "02207f5732e5b39e0c1fbe435ebb1b26",
+    "gamename": "Capymania Orange",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/capymania-orange-3ceba39f.jpg"
+  },
+  {
+    "gameid": "7e4b004c6fc0c64537050447e2965ef9",
+    "gamename": "Capymania Yellow",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/capymania-yellow-2805ad5e.jpg"
+  },
+  {
+    "gameid": "3872e9e145ed83caabc13a45fb731eaa",
+    "gamename": "Carnival Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/carnival-bonanza-9a60841b.png"
+  },
+  {
+    "gameid": "1b767ea3e2e44ca4de9ee97357a86dac",
+    "gamename": "Cat's Soup",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/cat-s-soup-135dabab.png"
+  },
+  {
+    "gameid": "c15396a5ca8b7bb0336d9823e7d70599",
+    "gamename": "Catch the Gold Hold and Win",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/catch-the-gold-hold-and-win-38f3b710.png"
+  },
+  {
+    "gameid": "384b3a3daaea2fa88474b0ada8ad1ef2",
+    "gamename": "Catdiana ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/catdiana-7d9cc7aa.png"
+  },
+  {
+    "gameid": "7df9dde49a097fe9b62222ba12f606df",
+    "gamename": "Chicken Rush ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/chicken-rush-9da13c27.jpg"
+  },
+  {
+    "gameid": "6fc7ef26506ef3b13198d4bd96982dec",
+    "gamename": "Clover Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/clover-bonanza-db24cb81.jpg"
+  },
+  {
+    "gameid": "33db732152834e3753f56c854fcd7752",
+    "gamename": "Clucking Hell",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/clucking-hell-0f82f7a2.png"
+  },
+  {
+    "gameid": "1d752cf7d57dc93e28a923dbb54483ca",
+    "gamename": "Crystal Clusters",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/crystal-clusters-afbf8a37.png"
+  },
+  {
+    "gameid": "1b1f7e3a2654f0c36b58c0b12151bef2",
+    "gamename": "Deep Sea",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/deep-sea-72d97d3f.jpg"
+  },
+  {
+    "gameid": "163940b133daf4662a23ac3642698eea",
+    "gamename": "Diamond of Jungle",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/diamond-of-jungle-21916686.jpg"
+  },
+  {
+    "gameid": "7806e2ca21a05eb927da4afad816fdeb",
+    "gamename": "Dice Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dice-bonanza-e37e3a3f.jpg"
+  },
+  {
+    "gameid": "46ffd224ee8960ceb02d5d7cb6c3ec88",
+    "gamename": "Dice Clash",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dice-clash-dc3c6f37.png"
+  },
+  {
+    "gameid": "7caaf05ebb3220afa82d1282ebb32599",
+    "gamename": "Dice Million",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dice-million-fbf7928c.jpg"
+  },
+  {
+    "gameid": "1cf4882a138653735ae2d841472f5574",
+    "gamename": "Dig Dig Digger",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dig-dig-digger-5ee78e1a.jpg"
+  },
+  {
+    "gameid": "89caee27264db78d1833de7446bdf0a7",
+    "gamename": "Disco Party ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/disco-party-c540c6a5.png"
+  },
+  {
+    "gameid": "910ccefc4b2847a8cd73bca5d9be5ea5",
+    "gamename": "Divine Queen: Heart of Ice",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/divine-queen-heart-of-ice-e2cf2392.png"
+  },
+  {
+    "gameid": "875d5e9c681d6149d94593b72d2d9069",
+    "gamename": "Domnitor's Treasure",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/domnitor-s-treasure-bf219724.jpg"
+  },
+  {
+    "gameid": "2fef3a48c2e3fd0ef1f7d09f5bc2ea33",
+    "gamename": "Doomsday Saloon",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/doomsday-saloon-f74a20f3.png"
+  },
+  {
+    "gameid": "c57deae72a50bf1e00d254693bea7434",
+    "gamename": "Dragon Queen MEGAWAYS ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dragon-queen-megaways-ec34a7f6.png"
+  },
+  {
+    "gameid": "fc81d13da9be4741f1897b7142c1e43a",
+    "gamename": "Dragon's Crash",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dragon-s-crash-56846a31.png"
+  },
+  {
+    "gameid": "ba6960ff34c8119ea91250827df81ca4",
+    "gamename": "Dragon's Gold 100",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/dragon-s-gold-100-377a6903.jpg"
+  },
+  {
+    "gameid": "bd04425acaf41195a31a2950e6ab006e",
+    "gamename": "Easter Heist",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/easter-heist-5c21c9b9.jpg"
+  },
+  {
+    "gameid": "4f0f7204c7aa6d5ff46f151a4449774f",
+    "gamename": "Easter Plinko",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/easter-plinko-8f136971.jpg"
+  },
+  {
+    "gameid": "1d11b2535ca4d3da2c326de0e0919765",
+    "gamename": "Elvis Frog in Vegas",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/elvis-frog-in-vegas-c297b4d3.jpg"
+  },
+  {
+    "gameid": "6a9ccecd930dd79a75fddefa78e55bf3",
+    "gamename": "Elvis Frog TRUEWAYS",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/elvis-frog-trueways-ba06dea8.jpg"
+  },
+  {
+    "gameid": "9d6ce0c274b50e7f243e07af7e8a22a7",
+    "gamename": "European Roulette",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/european-roulette-c3c3bf1f.jpg"
+  },
+  {
+    "gameid": "07912c58687a05d19760038a3faae6d0",
+    "gamename": "Face Off",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/face-off-695009fb.png"
+  },
+  {
+    "gameid": "11caaa917826376ab59096e73d5d4ad4",
+    "gamename": "Fiesta Clusters",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fiesta-clusters-5ec7f8ce.png"
+  },
+  {
+    "gameid": "d4a162045682e5787abd11d3ad9b2a81",
+    "gamename": "Fire Lightning",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fire-lightning-44efe775.jpg"
+  },
+  {
+    "gameid": "1a6331cb34de981ca1e88592ef06c752",
+    "gamename": "Fishing Club",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fishing-club-5bf172de.png"
+  },
+  {
+    "gameid": "5692803026f0040a9d205b5f2859303d",
+    "gamename": "Forgotten",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/forgotten-99ed4b5a.png"
+  },
+  {
+    "gameid": "096cff957fbb194d2b6600af093d32bb",
+    "gamename": "Fortuna TRUEWAYS",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fortuna-trueways-d8e168d0.png"
+  },
+  {
+    "gameid": "e7de9a522a3d51e4aebd7a0f9e6c9a29",
+    "gamename": "Fortune Bells",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fortune-bells-7e11efcb.png"
+  },
+  {
+    "gameid": "f47d7fec5e314d740c193b9bafedced8",
+    "gamename": "Forty Fruity Million",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/forty-fruity-million-93eb3309.jpg"
+  },
+  {
+    "gameid": "da83c32ee026a2e4fe3b9e498e7ed12a",
+    "gamename": "Four Lucky Clover",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/four-lucky-clover-e4a69d50.jpg"
+  },
+  {
+    "gameid": "676edaa48653759173ace53d4b3ba020",
+    "gamename": "Four Lucky Diamonds",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/four-lucky-diamonds-ad383238.jpg"
+  },
+  {
+    "gameid": "a9d50e65a8e5d1298f376e1850c353b5",
+    "gamename": "French Roulette",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/french-roulette-b24a9648.jpg"
+  },
+  {
+    "gameid": "d62e9db2cf3d15d7c777a0850fa0e38f",
+    "gamename": "Frozen Fruit",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/frozen-fruit-e453f8a4.png"
+  },
+  {
+    "gameid": "bcb695d70d160959fa9889627fcde5e1",
+    "gamename": "Fruit Million",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/fruit-million-b76f64d1.png"
+  },
+  {
+    "gameid": "29ff279423340a546adb2d452162b565",
+    "gamename": "Gangsterz",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gangsterz-d000bd3c.jpg"
+  },
+  {
+    "gameid": "732eeaaa34330f7d4b3629c0e1f717d6",
+    "gamename": "Gemhalla",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gemhalla-99ca8313.png"
+  },
+  {
+    "gameid": "3f61a021f0d55f041ff714d16bc4ac17",
+    "gamename": "Gemza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gemza-4086ff4e.jpg"
+  },
+  {
+    "gameid": "0dcf130d571ab41d0cf1e4236daaa041",
+    "gamename": "Gift Rush",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gift-rush-c9a0a0fa.jpg"
+  },
+  {
+    "gameid": "e0a7754ad24321587b40915d6f391070",
+    "gamename": "Gift X",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gift-x-0c4df258.jpg"
+  },
+  {
+    "gameid": "0a8bae754cd2dba41b5998fcce9d5b37",
+    "gamename": "God of Wealth Hold And Win",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/god-of-wealth-hold-and-win-17845b87.jpg"
+  },
+  {
+    "gameid": "4330b56250e3e12d42a333a54cf53252",
+    "gamename": "Gold Magnate",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gold-magnate-990186ea.png"
+  },
+  {
+    "gameid": "33017959e334dc1c7b0b1b5436951838",
+    "gamename": "Gold of Minos",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gold-of-minos-ab5a6fd9.png"
+  },
+  {
+    "gameid": "c85996149a518981e5ec641bd33936c9",
+    "gamename": "Gold Rush with Johnny Cash",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/gold-rush-with-johnny-cash-b2723e4b.jpg"
+  },
+  {
+    "gameid": "bf32001416811e34b7770c60e8965fb1",
+    "gamename": "Golden Pinata Hold and Win",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/golden-pinata-hold-and-win-4a375c71.png"
+  },
+  {
+    "gameid": "8f40c8ef8402c35f0489c2e867307365",
+    "gamename": "Golden Pride",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/golden-pride-4cebff68.png"
+  },
+  {
+    "gameid": "38a4d04f3cf9dbd5529857eaac6be3fd",
+    "gamename": "Grand Mustang",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/grand-mustang-c0881ca3.png"
+  },
+  {
+    "gameid": "1de21a609d4ff294a2dcf5b54f11247e",
+    "gamename": "Grand Patron",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/grand-patron-ed0b8b6d.png"
+  },
+  {
+    "gameid": "3a62ca00bf4534a60c74efe380ebe307",
+    "gamename": "Halloween Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/halloween-bonanza-97d346f9.jpg"
+  },
+  {
+    "gameid": "acf9940b57dfc5c17dae1683546254f8",
+    "gamename": "Haunted Reels",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/haunted-reels-d36aacf0.png"
+  },
+  {
+    "gameid": "dd2a0948e157ed7329b5c084b2ad9a9f",
+    "gamename": "Heads and Tails",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/heads-and-tails-6e481ac7.jpg"
+  },
+  {
+    "gameid": "863bb7621c9909ef5483108f85750b39",
+    "gamename": "Heads and Tails XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/heads-and-tails-xy-54941738.jpg"
+  },
+  {
+    "gameid": "a68354c6f9edcd754619f993638c2c9f",
+    "gamename": "Hit The Route",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/hit-the-route-85f32c00.jpg"
+  },
+  {
+    "gameid": "288450a790da0c5f80c32d5fdabac2b8",
+    "gamename": "Hot Chilli Bells",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/hot-chilli-bells-9b7fe641.png"
+  },
+  {
+    "gameid": "9568278f10bfbb78253db073bb816e4f",
+    "gamename": "Hottest 666",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/hottest-666-ec410712.jpg"
+  },
+  {
+    "gameid": "e51c959e79559583f491fcfea1ab68b7",
+    "gamename": "Ice Scratch Bronze",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/ice-scratch-bronze-3055c0f4.jpg"
+  },
+  {
+    "gameid": "a01aa8b7e5d3058d109db68af8ac4bd0",
+    "gamename": "Ice Scratch Gold",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/ice-scratch-gold-7a38ef66.jpg"
+  },
+  {
+    "gameid": "b596d059279938f1ab74ed3eaeebdc8e",
+    "gamename": "Ice Scratch Silver",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/ice-scratch-silver-a4bf45be.jpg"
+  },
+  {
+    "gameid": "0ae34d612c95cbd3a33d02b86a88a083",
+    "gamename": "Infinity Pull",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/infinity-pull-057fc21c.png"
+  },
+  {
+    "gameid": "3c2b79b7b29a90e2ded84265c7f8fb44",
+    "gamename": "Jewel Boom Super Drop",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/jewel-boom-super-drop-8aa797e4.png"
+  },
+  {
+    "gameid": "d580c3edeb9c33046a4edaaa3c15ff9d",
+    "gamename": "Jogo Do Bicho",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/jogo-do-bicho-6bbb5b2e.jpg"
+  },
+  {
+    "gameid": "fb3076decdcb1278e12331ed94b9a61e",
+    "gamename": "Johnny Cash",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/johnny-cash-4941fbc4.jpg"
+  },
+  {
+    "gameid": "5f2a21d29552a20346014fe0f4406334",
+    "gamename": "Joker Queen",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/joker-queen-d21e4163.jpg"
+  },
+  {
+    "gameid": "27fb714e20b72367e3ec1eb5ae7a5798",
+    "gamename": "Joker vs Joker",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/joker-vs-joker-771fc926.png"
+  },
+  {
+    "gameid": "e8c653572f1d81a0a68757cc6a4f3761",
+    "gamename": "Joker X Love",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/joker-x-love-ed19775e.png"
+  },
+  {
+    "gameid": "b4be581561b48f8bea5183720ff70d46",
+    "gamename": "Jungle Queen",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/jungle-queen-799ace32.png"
+  },
+  {
+    "gameid": "e85b9a6b6d7bf1f41ba0e4a320585d62",
+    "gamename": "Keepers Of The Secret",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/keepers-of-the-secret-12ebb2e5.jpg"
+  },
+  {
+    "gameid": "f798b5e34e30ec1d707bbad93275de66",
+    "gamename": "Kraken's Hunger ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/kraken-s-hunger-431fad4a.png"
+  },
+  {
+    "gameid": "af937ed4d220a8e123bdabe1d978a2d7",
+    "gamename": "Lady Wolf Moon",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lady-wolf-moon-0e3d3679.jpg"
+  },
+  {
+    "gameid": "994b39d2a09a9adef5a4a906cae22ce5",
+    "gamename": "Lady Wolf Moon Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lady-wolf-moon-megaways-0dcbd51c.jpg"
+  },
+  {
+    "gameid": "30d87795acb9b55c740eb99699fcb0ea",
+    "gamename": "Limbo XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/limbo-xy-eb87b378.jpg"
+  },
+  {
+    "gameid": "e8a2fedff5f5941e2ebebf6cb8ae10f1",
+    "gamename": "Lucky 8 Merge Up",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-8-merge-up-24cf5f1a.png"
+  },
+  {
+    "gameid": "ce7ce12fc51d197681ec98b8fd51fc3e",
+    "gamename": "Lucky Crew",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-crew-3442b948.jpg"
+  },
+  {
+    "gameid": "3c3d16bd5de830f417e9dc0fe453031b",
+    "gamename": "Lucky Dama Muerta",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-dama-muerta-5c86386b.jpg"
+  },
+  {
+    "gameid": "1f580513685cdfd29b3c6cd1493211a8",
+    "gamename": "Lucky Dragon MultiDice X ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-dragon-multidice-x-49236ed1.jpg"
+  },
+  {
+    "gameid": "dc8ea25297973df93c68689ec997b1e4",
+    "gamename": "Lucky Ducky",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-ducky-23d0fd06.png"
+  },
+  {
+    "gameid": "a0fb85138588c143d2a496dd018b8874",
+    "gamename": "Lucky Farm Bonanza",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-farm-bonanza-4e229f5a.png"
+  },
+  {
+    "gameid": "670fea32c1726d48aea782c42bb82188",
+    "gamename": "Lucky Lady's Clover",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-lady-s-clover-729e14e3.jpg"
+  },
+  {
+    "gameid": "2b2880bc87a1d93f44142ce1deaf3355",
+    "gamename": "Lucky Lager x9990",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-lager-x9990-37241225.png"
+  },
+  {
+    "gameid": "5848bfd9f3eea357d89822c568873553",
+    "gamename": "Lucky Lu",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-lu-e1942868.png"
+  },
+  {
+    "gameid": "248e5efc4ef196ae0544413d919153f6",
+    "gamename": "Lucky Oak",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/lucky-oak-49738563.jpg"
+  },
+  {
+    "gameid": "05d6232a3336a2b4bb2ee83b4b6bcf7d",
+    "gamename": "Maneki 88 Fortunes",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/maneki-88-fortunes-9cff9693.jpg"
+  },
+  {
+    "gameid": "7ad352371599bf26cdb06088fe5a79ab",
+    "gamename": "Maneki 88 Gold",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/maneki-88-gold-195e3653.jpg"
+  },
+  {
+    "gameid": "b4a62dee8b5391e0c6780d778bb93b4b",
+    "gamename": "Mechanical Clover",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/mechanical-clover-23abdcd3.jpg"
+  },
+  {
+    "gameid": "22aeab95aef5b3f01b7b7f563dc36ac7",
+    "gamename": "Merge Up",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/merge-up-f4ea9427.png"
+  },
+  {
+    "gameid": "eb970b3068b73d4c9b4f76cd808816de",
+    "gamename": "Merge Up 2",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/merge-up-2-d045ba5a.png"
+  },
+  {
+    "gameid": "caf101eea60fb8976d2b08cbc4ac57db",
+    "gamename": "Mine Gems",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/mine-gems-f634ad1a.png"
+  },
+  {
+    "gameid": "307b1ea5fb296d2e23e0d56eae875333",
+    "gamename": "Minesweeper",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/minesweeper-3d03281a.jpg"
+  },
+  {
+    "gameid": "0ff664578bfb50141faf64a66c348c7e",
+    "gamename": "Minesweeper XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/minesweeper-xy-e87c7166.jpg"
+  },
+  {
+    "gameid": "b99dcebc4914fb3ee188ccb553c56609",
+    "gamename": "Miss Cherry Fruits",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/miss-cherry-fruits-1f7ced74.jpg"
+  },
+  {
+    "gameid": "e8b58f6c315f13ca2656c8223b424c83",
+    "gamename": "Miss Cherry Fruits Jackpot Party",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/miss-cherry-fruits-jackpot-party-dae1c87e.jpg"
+  },
+  {
+    "gameid": "eff2df94539988f3468e687a7d7cea30",
+    "gamename": "Monster Hunt",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/monster-hunt-9e5cea83.jpg"
+  },
+  {
+    "gameid": "408c5496fc987c122efda2db45225b29",
+    "gamename": "Multihand Blackjack",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/multihand-blackjack-f72de66a.jpg"
+  },
+  {
+    "gameid": "ca382c6fb34221994a9b39251c7c32c0",
+    "gamename": "Multihand Blackjack Pro",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/multihand-blackjack-pro-810e4a30.jpg"
+  },
+  {
+    "gameid": "b6384dbf8b67d61543789864a0ff75b6",
+    "gamename": "Multihand Blackjack Pro 2",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/multihand-blackjack-pro-2-fea36b85.png"
+  },
+  {
+    "gameid": "4afaea9e17bbc75d26d92cc7c7d2ec65",
+    "gamename": "Mummy's Gold",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/mummy-s-gold-853493b4.jpg"
+  },
+  {
+    "gameid": "d1f67794a6a23fe46cbdb04f27722dab",
+    "gamename": "Mystery Garden",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/mystery-garden-0b7b3583.png"
+  },
+  {
+    "gameid": "ae268d75d9d5f7ee2f93b473631f6160",
+    "gamename": "Mystery Heist",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/mystery-heist-6a01d731.png"
+  },
+  {
+    "gameid": "96da7b41a5092a2ba6d80c02d54d8e4e",
+    "gamename": "OOF The Goldmine Planet ",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/oof-the-goldmine-planet-a13140c9.jpg"
+  },
+  {
+    "gameid": "b99a67ab0200f30b0b6eb4a66c8ad964",
+    "gamename": "Open It!",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/open-it-be0d815b.png"
+  },
+  {
+    "gameid": "ae09663fb727565cc8754b6b33637b4d",
+    "gamename": "Panda Luck",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/panda-luck-7c43ed54.jpg"
+  },
+  {
+    "gameid": "9df741a8256a7d2a11d6c9e3be618195",
+    "gamename": "Penalty Duel",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/penalty-duel-09e78c6e.png"
+  },
+  {
+    "gameid": "064f8c5df69877fd0aba492071151248",
+    "gamename": "Penny Pelican",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/penny-pelican-56b0b14f.jpg"
+  },
+  {
+    "gameid": "f2ee57d8231e3229d13a698c63f0ac26",
+    "gamename": "Platinum Lightning",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/platinum-lightning-8cd11ca9.jpg"
+  },
+  {
+    "gameid": "a80b179957b6cb518cd26664fd5e4ab3",
+    "gamename": "Platinum Lightning Deluxe",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/platinum-lightning-deluxe-65a8d1e5.jpg"
+  },
+  {
+    "gameid": "a96dfb1480cef6d6674b7bfb18c26c9a",
+    "gamename": "Plinko",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/plinko-2381f580.jpg"
+  },
+  {
+    "gameid": "8ba9650ac64b99202e9ecbda761d92c1",
+    "gamename": "Plinko 2",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/plinko-2-a2e79013.png"
+  },
+  {
+    "gameid": "8e5a2fd3f6766fe1aaeef2a921aefe87",
+    "gamename": "Plinko 2 Halloween",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/plinko-2-halloween-716ce40f.png"
+  },
+  {
+    "gameid": "538f2edc211771749b64250e35d78192",
+    "gamename": "Plinko XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/plinko-xy-421270d3.jpg"
+  },
+  {
+    "gameid": "fe31a3383c140b2389eec2c09b95f641",
+    "gamename": "Pop Zen",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/pop-zen-51588e68.jpg"
+  },
+  {
+    "gameid": "46ab8a26c3c1e89ea3a42c50eafb6b73",
+    "gamename": "Potion Spells",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/potion-spells-be7923ef.jpg"
+  },
+  {
+    "gameid": "36a2e12039e4cbd1f2f1af2d306f44b2",
+    "gamename": "Retro Trader",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/retro-trader-06217162.png"
+  },
+  {
+    "gameid": "07eebacc4d38cc64ff241aa7bbb44ced",
+    "gamename": "Road 2 Riches",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/road-2-riches-7e70bd30.png"
+  },
+  {
+    "gameid": "21dbf27bf1926124b306bc5659c47883",
+    "gamename": "Robospin",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/robospin-3f43c2f0.png"
+  },
+  {
+    "gameid": "a658fb5632d81e6f0a2cbea638839903",
+    "gamename": "Rocket Dice",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/rocket-dice-bb1d9abe.png"
+  },
+  {
+    "gameid": "433d2d917da4c87ffabecc17d4cea2ee",
+    "gamename": "Rocket Dice XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/rocket-dice-xy-c157d70f.png"
+  },
+  {
+    "gameid": "312e294c95f438e0c2a53edc16f42dd1",
+    "gamename": "Rotating Element",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/rotating-element-7af0a7b3.png"
+  },
+  {
+    "gameid": "9c85548c5a5682fb75b97d93f9bf6ba1",
+    "gamename": "Royal Fruits MultiLines",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/royal-fruits-multilines-0ed3ca02.png"
+  },
+  {
+    "gameid": "958d6a70afac2422d0f97fc81bea4c15",
+    "gamename": "Royal High-Road",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/royal-high-road-1d1559e6.jpg"
+  },
+  {
+    "gameid": "07fedcb179802ee8bd4e5f5c178c85d0",
+    "gamename": "Sakura Riches 60",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/sakura-riches-60-bd3f0f21.png"
+  },
+  {
+    "gameid": "91c359dcfe71d0390fc39a2b6b6ded66",
+    "gamename": "Savage Buffalo Spirit",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/savage-buffalo-spirit-222757e2.jpg"
+  },
+  {
+    "gameid": "042f069ea08ab7fb50af2027b2d93725",
+    "gamename": "Savage Buffalo Spirit Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/savage-buffalo-spirit-megaways-929110c9.jpg"
+  },
+  {
+    "gameid": "8664b8269de1a8b4a91d45fb375bcfb0",
+    "gamename": "Scratch Alpaca Bronze",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/scratch-alpaca-bronze-fad79cb6.jpg"
+  },
+  {
+    "gameid": "a584912bbe94b034018b3f7dc9794d9e",
+    "gamename": "Scratch Alpaca Gold",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/scratch-alpaca-gold-aac057ff.jpg"
+  },
+  {
+    "gameid": "58e06f5e2ce49a695a51e1636f4095bf",
+    "gamename": "Scratch Alpaca Silver",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/scratch-alpaca-silver-f09b7a90.jpg"
+  },
+  {
+    "gameid": "cf694ba4fab3d1537c1e4dc4ea21d1e4",
+    "gamename": "Scratch Dice",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/scratch-dice-6d996126.jpg"
+  },
+  {
+    "gameid": "de10c5031eba2a70c3ef056df6a301a0",
+    "gamename": "Secret Bar Multidice X",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/secret-bar-multidice-x-9b693c95.png"
+  },
+  {
+    "gameid": "2ade52905d4104a302def8149910b664",
+    "gamename": "Slot Machine",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/machine-b7470f16.jpg"
+  },
+  {
+    "gameid": "42c10ec14f7bed81dd8948bcc9ff3d79",
+    "gamename": "Snoop Dogg Dollars",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/snoop-dogg-dollars-9b470938.png"
+  },
+  {
+    "gameid": "7686d2d00e23ca7e3e93ac01ec779c15",
+    "gamename": "Soccermania",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/soccermania-f1b99fd2.jpg"
+  },
+  {
+    "gameid": "7cdeb5f832384a97e6544ca86e918734",
+    "gamename": "Space XY",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/space-xy-96c6a950.png"
+  },
+  {
+    "gameid": "c2bf1b6911d6a0c0cb34292a37fa4648",
+    "gamename": "Spin And Spell",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/spin-and-spell-e35358f5.jpg"
+  },
+  {
+    "gameid": "634875f2598be4204a3f4a1ae8c7363b",
+    "gamename": "Star Trek The Next Generation",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/star-trek-the-next-generation-c228bee4.png"
+  },
+  {
+    "gameid": "c1bde325f7f9ebb6dd8eb8bdc2701e89",
+    "gamename": "Street Power",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/street-power-d028fa43.png"
+  },
+  {
+    "gameid": "32215bc896d03c8e3c8cf3fec2134083",
+    "gamename": "Sugar Mix",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/sugar-mix-96c07f89.png"
+  },
+  {
+    "gameid": "d4ddeb54e12721e85968794aa36e2935",
+    "gamename": "Surrender Multihand Blackjack",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/surrender-multihand-blackjack-81c4576e.png"
+  },
+  {
+    "gameid": "110431082a41df5e51d0abc773886d79",
+    "gamename": "Sweet Rush Megaways",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/sweet-rush-megaways-8e07461b.jpg"
+  },
+  {
+    "gameid": "825d2733fb62278c486dfcacbbb16a6d",
+    "gamename": "Tile Master",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/tile-master-eacee4e9.png"
+  },
+  {
+    "gameid": "2eceb69abe28088ebd587e3d20e42132",
+    "gamename": "Top Eagle",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/top-eagle-294df5a6.png"
+  },
+  {
+    "gameid": "f893dc44f02fe5a909e7f461304c7306",
+    "gamename": "Totally Hot",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/totally-hot-58237b37.png"
+  },
+  {
+    "gameid": "7d9fcac036458ee987df0963fa23fbe0",
+    "gamename": "Train to Rio Grande",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/train-to-rio-grande-59b9b23c.png"
+  },
+  {
+    "gameid": "0c8fffd494b172256607a79ec4fb7acd",
+    "gamename": "Tramp Day",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/tramp-day-cee304f3.jpg"
+  },
+  {
+    "gameid": "c4f6add472cac2894c54ea7a9c1feb67",
+    "gamename": "Tramp Day TRUEWAYS",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/tramp-day-trueways-684203c1.png"
+  },
+  {
+    "gameid": "ea23b11e603c0feca79511c605f46f69",
+    "gamename": "Treasure Explorer",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/treasure-explorer-92e8ae45.png"
+  },
+  {
+    "gameid": "bdf4b36fa3b73913a110d884dd03adbc",
+    "gamename": "Treasure of Anubis",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/treasure-of-anubis-efd83c59.png"
+  },
+  {
+    "gameid": "3771b3dea1ceec7f5038531f06648d69",
+    "gamename": "UFO Pyramids",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/ufo-pyramids-7250d5b8.png"
+  },
+  {
+    "gameid": "362714f8384ac625c50da8def330e897",
+    "gamename": "Voodoo People",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/voodoo-people-e3803d6f.png"
+  },
+  {
+    "gameid": "5072a1237d8a94b75d80d46c7d614ccd",
+    "gamename": "WBC Ring Of Riches",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wbc-ring-of-riches-2c364d88.jpg"
+  },
+  {
+    "gameid": "df7673e31347e5674fd5669d6bbb7b4d",
+    "gamename": "West Town",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/west-town-abf9bcd6.jpg"
+  },
+  {
+    "gameid": "e92b8e26457beecf772b9f15f16368a6",
+    "gamename": "Wild Card Gang",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-card-gang-69c1fa49.png"
+  },
+  {
+    "gameid": "be8b9cd2c900644f953fc3ec1dde20e3",
+    "gamename": "Wild Cash",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-cash-f3b1672b.png"
+  },
+  {
+    "gameid": "94783ae2695c2546da00bec3213fcfa0",
+    "gamename": "Wild Cash Dice",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-cash-dice-94f9d896.jpg"
+  },
+  {
+    "gameid": "72d2fe00c6d3695653e21618eff3bf78",
+    "gamename": "Wild Cash x9990",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-cash-x9990-c8422801.jpg"
+  },
+  {
+    "gameid": "207fc056bea06ee353baeaadd6f3b8f4",
+    "gamename": "Wild Chicago",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-chicago-0c4da6b9.jpg"
+  },
+  {
+    "gameid": "65077b9df58ca36f2b6c607f56b807ce",
+    "gamename": "Wild Clusters",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-clusters-ef042b4a.png"
+  },
+  {
+    "gameid": "9ea3ced80f0706d9d6d25994092b3cd4",
+    "gamename": "Wild Heart",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-heart-a06241d8.jpg"
+  },
+  {
+    "gameid": "1f8561a1ebfe69197eb04c87b6f8edee",
+    "gamename": "Wild Million",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-million-37bab77d.png"
+  },
+  {
+    "gameid": "33c32eae8f0dffe5dafe462f42201735",
+    "gamename": "Wild Moon Thieves",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-moon-thieves-413d66e0.png"
+  },
+  {
+    "gameid": "a1de8d30de1e8795221e0cbcea462141",
+    "gamename": "Wild Tiger",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-tiger-6f0e8715.png"
+  },
+  {
+    "gameid": "f33eddce4bafda5f3abc9180f54d28eb",
+    "gamename": "Wild Tiger 2",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-tiger-2-c9a37890.png"
+  },
+  {
+    "gameid": "29b092dc73646c8ad1e68a89160e837c",
+    "gamename": "Wild West TRUEWAYS",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-west-trueways-5d2bb25e.png"
+  },
+  {
+    "gameid": "4e392c5c38d6a9cb79286338d29eb3a5",
+    "gamename": "Wild Wick",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/wild-wick-1182439a.png"
+  },
+  {
+    "gameid": "5b2884b89644bc83f79cb0fd2fb99c84",
+    "gamename": "Winter Fishing Club",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/winter-fishing-club-272c0d73.png"
+  },
+  {
+    "gameid": "35df5376484b73fcd28e684a45817bc0",
+    "gamename": "Zeus Goes Wild",
+    "providerName": "BG",
+    "image": "https://providers.gamblly-api.com/assets/providers/BG/zeus-goes-wild-c77f53e1.png"
+  }
+]

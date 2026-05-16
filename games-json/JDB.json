@@ -1,0 +1,902 @@
+[
+  {
+    "gameid": "9341a18d096ad901ef77338998f29098",
+    "gamename": "Dragon Soar",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/dragon-soar.png"
+  },
+  {
+    "gameid": "fde142e65f14da39f784e9e5325e0a77",
+    "gamename": "Slot Game Pop Pop Candy",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-pop-pop-candy.png"
+  },
+  {
+    "gameid": "cb5e57be0354264c6c7ea0cdf4eb18b3",
+    "gamename": "Slot Game Open Sesame Mega",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-open-sesame-mega.png"
+  },
+  {
+    "gameid": "f5d6b418b755f3aefe3b9828f3112c9c",
+    "gamename": "Slot Game Fruity Bonanza",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-fruity-bonanza.png"
+  },
+  {
+    "gameid": "45ecec5dd5077785e7a09988b95bbd24",
+    "gamename": "Slot Game Caishen Coming",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-caishen-coming.png"
+  },
+  {
+    "gameid": "d1f17fd51e474b0e72892332ea551ba1",
+    "gamename": "Slot Game Coocoo Farm",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-coocoo-farm.png"
+  },
+  {
+    "gameid": "b84274cdfa5731945a34bfd0db1ddeea",
+    "gamename": "Slot Game Elemental Link Water",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-elemental-link-water.png"
+  },
+  {
+    "gameid": "46016a772b92c7f47dfdc5873f184ef1",
+    "gamename": "Slot Game Elemental Link Fire",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-elemental-link-fire.png"
+  },
+  {
+    "gameid": "786d1cd7f4fa9905c825378292f1204c",
+    "gamename": "Slot Game Birdsparty Deluxe",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-birdsparty-deluxe.png"
+  },
+  {
+    "gameid": "33c862e7db9e0e59ab3f8fe770f797da",
+    "gamename": "Slot Game Moneybags Man 2",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-moneybags-man-2.png"
+  },
+  {
+    "gameid": "96c010fc4a95792401e903213d7add44",
+    "gamename": "Slot Game Trump Card",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-trump-card.png"
+  },
+  {
+    "gameid": "49b706ccfe7c53727ee6760cd9a8721a",
+    "gamename": "Slot Game Fortune Neko",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-fortune-neko.png"
+  },
+  {
+    "gameid": "13072a6eb2111c1b5202fe6155227e94",
+    "gamename": "Slot Game Book Of Mystery",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-book-of-mystery.png"
+  },
+  {
+    "gameid": "1d704bbb187a113229f3fdaa3b5406fe",
+    "gamename": "Slot Game Prosperitytiger",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-prosperitytiger.png"
+  },
+  {
+    "gameid": "2663e14e5b455525252a25d9bd99e840",
+    "gamename": "Slot Game Glamorous Girl",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-glamorous-girl.png"
+  },
+  {
+    "gameid": "ed6fbaeb7a104dd7ed96fa1683a48669",
+    "gamename": "Slot Game Blossom Of Wealth",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-blossom-of-wealth.png"
+  },
+  {
+    "gameid": "1ffb31ff605f1a7862a138f5cd712056",
+    "gamename": "Slot Game Boom Fiesta",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-boom-fiesta.png"
+  },
+  {
+    "gameid": "600c338d3fca2da208f1bba2c9d29059",
+    "gamename": "Slot Game Big Three Dragons",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-big-three-dragons.png"
+  },
+  {
+    "gameid": "6c8009d165293759bb218b72ba3c380f",
+    "gamename": "Slot Game Mayagoldcrazy",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-mayagoldcrazy.png"
+  },
+  {
+    "gameid": "f2f2eae301311f0320ef669b68935546",
+    "gamename": "Slot Game Lantern Wealth",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lantern-wealth.png"
+  },
+  {
+    "gameid": "126cf2bfe8a8e606b362d23de02c0d5e",
+    "gamename": "Slot Game Marvelous Iv",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-marvelous-iv.png"
+  },
+  {
+    "gameid": "540da2ba4c849fc1c315f43ae74df220",
+    "gamename": "Slot Game Wonder Elephant",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-wonder-elephant.png"
+  },
+  {
+    "gameid": "f6e9fd31cbc3be8cd3bd95486177377b",
+    "gamename": "Slot Game Kong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-kong.png"
+  },
+  {
+    "gameid": "6f6867ad1956a04b174c92629cab7f54",
+    "gamename": "Slot Game Lucky Diamond",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-diamond.png"
+  },
+  {
+    "gameid": "05dc8c7a43305c3fcb43574c570d6378",
+    "gamename": "Slot Game Spindrift 2",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-spindrift-2.png"
+  },
+  {
+    "gameid": "6c5fe548bd6e09b683566298b29510ea",
+    "gamename": "Slot Game Jungle Jungle",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-jungle-jungle.png"
+  },
+  {
+    "gameid": "feaba603992f26633116fb54562e3693",
+    "gamename": "Slot Game Dragons Gate",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-dragons-gate.png"
+  },
+  {
+    "gameid": "b624d1917ef5a740c151e4904a7cf0dd",
+    "gamename": "Slot Game Spindrift",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-spindrift.png"
+  },
+  {
+    "gameid": "7bd5233c83de0669336ee649e6c8d2b5",
+    "gamename": "Slot Game Double Wilds",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-double-wilds.png"
+  },
+  {
+    "gameid": "c4fdebb24ff26fffb3a65d018da8ae92",
+    "gamename": "Slot Game Moneybags Man",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-moneybags-man.png"
+  },
+  {
+    "gameid": "e705514fdd4f9bea5f82bbd0b2c0a353",
+    "gamename": "Slot Game Miner Babe",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-miner-babe.png"
+  },
+  {
+    "gameid": "5d940d11c48b64ec1e6a3c8be5228250",
+    "gamename": "Slot Game Super Niubi Deluxe",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-super-niubi-deluxe.png"
+  },
+  {
+    "gameid": "cdea2d0670bc40309b4a9b6f942a218a",
+    "gamename": "Slot Game Funky King Kong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-funky-king-kong.png"
+  },
+  {
+    "gameid": "dfb8a198ce0e821560cf543387a2acc2",
+    "gamename": "Slot Game Golden Disco",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-golden-disco.png"
+  },
+  {
+    "gameid": "0651af3e73c7600633522ffe15cc175b",
+    "gamename": "Slot Game Treasure Bowl X-Huge",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-treasure-bowl-x-huge.png"
+  },
+  {
+    "gameid": "e270f0674dff538b181499d18ab47845",
+    "gamename": "Slot Game Mjolnir",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-mjolnir.png"
+  },
+  {
+    "gameid": "bfb3241e64953f731e72bc833f2fa79a",
+    "gamename": "Slot Game Pirate Treasure",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-pirate-treasure.png"
+  },
+  {
+    "gameid": "5a55a19d9cfbead5e64b8169e96bd27a",
+    "gamename": "Slot Game Fortune Treasure",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-fortune-treasure.png"
+  },
+  {
+    "gameid": "b7f39e861e2e02633cb5cb08958f1041",
+    "gamename": "Slot Game Egypt Treasure",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-egypt-treasure.png"
+  },
+  {
+    "gameid": "4042e5d0c777e1d3c3bd481dac0a867e",
+    "gamename": "Slot Game Super Niubi",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-super-niubi.png"
+  },
+  {
+    "gameid": "00b886803f3d067f7028872468e84745",
+    "gamename": "Slot Game Dragons World",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-dragons-world.png"
+  },
+  {
+    "gameid": "a3584394182e8abce362d90c2f048c75",
+    "gamename": "Slot Game Go Lai Fu",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-go-lai-fu.png"
+  },
+  {
+    "gameid": "7b497c4d19f87c86ea29910c12129edc",
+    "gamename": "Slot Game Birds Party",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-birds-party.png"
+  },
+  {
+    "gameid": "a9f60e017f2765c74e1ec80473ac4ffa",
+    "gamename": "Slot Game Triple King Kong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-triple-king-kong.png"
+  },
+  {
+    "gameid": "bdb0459f7e116a20839a3b2a0063a2ff",
+    "gamename": "Slot Game Orient Animals",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-orient-animals.png"
+  },
+  {
+    "gameid": "b560b7c42bd29f7d0cda06485a3c4af5",
+    "gamename": "Slot Game Lucky Seven",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-seven.png"
+  },
+  {
+    "gameid": "8b51a987c5c536a894b592ae361d655d",
+    "gamename": "Slot Game Lucky Racing",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-racing.png"
+  },
+  {
+    "gameid": "a26bdb5af2cf4964dfb241fbaec09252",
+    "gamename": "Slot Game Mining Upstart",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-mining-upstart.png"
+  },
+  {
+    "gameid": "55bfa979698650a3580d169c1469f79c",
+    "gamename": "Slot Game Rolling In Money",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-rolling-in-money.png"
+  },
+  {
+    "gameid": "2254bbebab4925c0df6a98d9edcfeec4",
+    "gamename": "Slot Game Daji",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-daji.png"
+  },
+  {
+    "gameid": "55e3b4d064b014a403be6ffba8c4343e",
+    "gamename": "Slot Game Kingsman",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-kingsman.png"
+  },
+  {
+    "gameid": "528e5d4fda0a34e233a28930783d2c63",
+    "gamename": "Slot Game Street Fighter",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-street-fighter.png"
+  },
+  {
+    "gameid": "735fcdbf9f5e6042132cc01e9860723f",
+    "gamename": "Slot Game Dragon",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-dragon.png"
+  },
+  {
+    "gameid": "29135c91125ae1655f8c91eb29617705",
+    "gamename": "Slot Game Dragon Warrior",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-dragon-warrior.png"
+  },
+  {
+    "gameid": "5aa472006c8698cf6f59dd0548129cda",
+    "gamename": "Slot Game One Punch Man",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-one-punch-man.png"
+  },
+  {
+    "gameid": "16b1418fe87a6fa5628eec8cb40da056",
+    "gamename": "Slot Game Billionaire",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-billionaire.png"
+  },
+  {
+    "gameid": "8c4681d49251042820069339dee4250c",
+    "gamename": "Slot Game Mr. Bao",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-mr-bao.png"
+  },
+  {
+    "gameid": "6652927614dccaf87d8965c509e96f82",
+    "gamename": "Slot Game Panda Panda",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-panda-panda.png"
+  },
+  {
+    "gameid": "04a3be36bbf1110345d53e07df9c9cc3",
+    "gamename": "Slot Game Legendary 5",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-legendary-5.png"
+  },
+  {
+    "gameid": "078a7876afc6553fd0c0c9d1cbe0b04a",
+    "gamename": "Slot Game Chef Panda",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-chef-panda.png"
+  },
+  {
+    "gameid": "55946533d07080972b83c4aae1d4be2f",
+    "gamename": "Slot Game Lucky Fuwa",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-fuwa.png"
+  },
+  {
+    "gameid": "5ecca33d3cabee8cbab8897ce2843459",
+    "gamename": "Slot Game Monkey King",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-monkey-king.png"
+  },
+  {
+    "gameid": "2f24019dc8abbe05b984611462a1f01c",
+    "gamename": "Slot Game Rooster In Love",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-rooster-in-love.png"
+  },
+  {
+    "gameid": "f1496f1b49981a63e6064ac84517b5ae",
+    "gamename": "Slot Game Xi Yang Yang",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-xi-yang-yang.png"
+  },
+  {
+    "gameid": "ca6e7b621b13077debbf1bf9d5a6c031",
+    "gamename": "Slot Game Fortune Horse",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-fortune-horse.png"
+  },
+  {
+    "gameid": "857d3426c220b4003cd0e4521c07e94b",
+    "gamename": "Slot Game Flirting Scholar Tang Ii",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-flirting-scholar-tang-ii.png"
+  },
+  {
+    "gameid": "558ca5b101d1be5bd7a08c6d01422c4f",
+    "gamename": "Slot Game Open Sesameii",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-open-sesameii.png"
+  },
+  {
+    "gameid": "955ab46e30fcda3b2446169409848fa7",
+    "gamename": "Slot Game Winning Mask Ii",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-winning-mask-ii.png"
+  },
+  {
+    "gameid": "90bfd55dcf41709d27f1f38fd4a314a9",
+    "gamename": "Slot Game Guan Gong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-guan-gong.png"
+  },
+  {
+    "gameid": "478d2e337f0d0a1b40e0e3521f89f1ba",
+    "gamename": "Slot Game Beauty And The Kingdom",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-beauty-and-the-kingdom.png"
+  },
+  {
+    "gameid": "8244e0afc46b2b8a3446ec18ae0e129a",
+    "gamename": "Slot Game Lucky Phoenix",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-phoenix.png"
+  },
+  {
+    "gameid": "8146db6ded1ef29540d262650817d090",
+    "gamename": "Slot Game Lucky Miner",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-miner.png"
+  },
+  {
+    "gameid": "ca11d9830495d2888d7e50770353ce32",
+    "gamename": "Slot Game Olympian Temple",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-olympian-temple.png"
+  },
+  {
+    "gameid": "e9d4b66c06a43e73ec8f1b2055f83c3a",
+    "gamename": "Slot Game Mahjong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-mahjong.png"
+  },
+  {
+    "gameid": "77f407b50f00ec4569249b008a5adca0",
+    "gamename": "Slot Game Banana Saga",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-banana-saga.png"
+  },
+  {
+    "gameid": "d5cede7b6800bd9cd266cde8c4f73dc6",
+    "gamename": "Slot Game Open Sesame",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-open-sesame.png"
+  },
+  {
+    "gameid": "d53f82ab4fbb353480e012fd763bc339",
+    "gamename": "Slot Game Four Treasures",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-four-treasures.png"
+  },
+  {
+    "gameid": "e4b973ece238c954fbcdf30fdfeae969",
+    "gamename": "Slot Game Napoleon",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-napoleon.png"
+  },
+  {
+    "gameid": "319fb2a372755ff47f6adc4f36e67b0f",
+    "gamename": "Slot Game New Year",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-new-year.png"
+  },
+  {
+    "gameid": "85e29fa6b578c6bf131ad4fdff750acb",
+    "gamename": "Slot Game Moonlight Treasure",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-moonlight-treasure.png"
+  },
+  {
+    "gameid": "c1557ea0fad63c5e07b32d9f62ef1899",
+    "gamename": "Slot Game Lucky Lion",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-lion.png"
+  },
+  {
+    "gameid": "f2298bcf0de0dccdd767d30b6e4f811a",
+    "gamename": "Slot Game Lucky Qilin",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-qilin.png"
+  },
+  {
+    "gameid": "e0afed167c1ef4c9a35c527a52419f0a",
+    "gamename": "Slot Game Formosa Bear",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-formosa-bear.png"
+  },
+  {
+    "gameid": "6800ef74e2b33c9a9155848f1328c8e5",
+    "gamename": "Slot Game The Llama Adventure",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-the-llama-adventure.png"
+  },
+  {
+    "gameid": "59acc6ad72fd6fb6cf30eb58cd9bedb8",
+    "gamename": "Slot Game Wukong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-wukong.png"
+  },
+  {
+    "gameid": "4aebce625a1495532a25344f0e4ac584",
+    "gamename": "Slot Game Winning Mask",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-winning-mask.png"
+  },
+  {
+    "gameid": "07df172c089e29e576aa41eeb0cbeb2b",
+    "gamename": "Slot Game Flirting Scholar Tang",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-flirting-scholar-tang.png"
+  },
+  {
+    "gameid": "c32fff242e09a234f7350bb9aaa055cc",
+    "gamename": "Slot Game Lucky Dragons",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-lucky-dragons.png"
+  },
+  {
+    "gameid": "638d38491dad4a6562713143b1fc6cc1",
+    "gamename": "Slot Game Spirit Tide Legend",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/game-spirit-tide-legend.png"
+  },
+  {
+    "gameid": "e453b811fd1782fd2ade1f93ee0dee32",
+    "gamename": "Fish Game Fishing Disco",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-fishing-disco.png"
+  },
+  {
+    "gameid": "f691d904ea681ce449263f7e9cc47c35",
+    "gamename": "Fish Game Dragon Master",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-dragon-master.png"
+  },
+  {
+    "gameid": "877c97367d24925a11d342726eb0320f",
+    "gamename": "Fish Game Fishing Yilufa",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-fishing-yilufa.png"
+  },
+  {
+    "gameid": "89e967a8336fb8caad2c1b6d735588fe",
+    "gamename": "Fish Game Shade Dragons Fishing",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-shade-dragons-fishing.png"
+  },
+  {
+    "gameid": "6df463eabe5fcdaa033e1c89b9ffd162",
+    "gamename": "Fish Game Cai Shen Fishing",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-cai-shen-fishing.png"
+  },
+  {
+    "gameid": "6cef8d8ea517d86602db60fe9781b01b",
+    "gamename": "Fish Game Dragon Fishing Ii",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-dragon-fishing-ii.png"
+  },
+  {
+    "gameid": "1145d7cd96518a5ba2f77cb14cb363c4",
+    "gamename": "Fish Game Dragon Fishing",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-dragon-fishing.png"
+  },
+  {
+    "gameid": "cb54272cd536cf77eb6093bae2513095",
+    "gamename": "Fish Game Plinko",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-plinko.png"
+  },
+  {
+    "gameid": "9ffbc085919e5e19f93a682fd3a737bb",
+    "gamename": "Arcade Game Hilo",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-hilo.png"
+  },
+  {
+    "gameid": "0160b30b64598290365f61211fb84a7b",
+    "gamename": "Arcade Game Goal",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-goal.png"
+  },
+  {
+    "gameid": "19f082ffb4656934e80459a73ab73037",
+    "gamename": "Arcade Game Firework Burst",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-firework-burst.png"
+  },
+  {
+    "gameid": "45a2a92108634508e5c47c690eb01c0b",
+    "gamename": "Arcade Game Mines",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-mines.png"
+  },
+  {
+    "gameid": "37ca0b32e1908480e03db00cdc1bc2cf",
+    "gamename": "Arcade Game Galaxy Burst",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-galaxy-burst.png"
+  },
+  {
+    "gameid": "0e8432be6bc0cab304b41bc964aaf154",
+    "gamename": "Arcade Game Jogo Do Bicho",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-jogo-do-bicho.png"
+  },
+  {
+    "gameid": "6437f1794f0753b268b2badbd69ef156",
+    "gamename": "Arcade Game Caishen Party",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-caishen-party.png"
+  },
+  {
+    "gameid": "5708005e9f2340dbd719567a94ba44b4",
+    "gamename": "Arcade Game Lucky Color Game",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-lucky-color-game.png"
+  },
+  {
+    "gameid": "4088c7ed9db461f990d9514d6b9f7537",
+    "gamename": "Arcade Game King Of Football",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-king-of-football.png"
+  },
+  {
+    "gameid": "c2c611f87d47faae8e4b285fe8145d41",
+    "gamename": "Arcade Game Crazy King Kong",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-crazy-king-kong.png"
+  },
+  {
+    "gameid": "a9899c045de7873e620e0ef330f3fc73",
+    "gamename": "Arcade Game Super Super Fruit",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-super-super-fruit.png"
+  },
+  {
+    "gameid": "6ff786580f7d9453728b9a8a3d1c3499",
+    "gamename": "Arcade Game Huaguoshan Legends",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-huaguoshan-legends.png"
+  },
+  {
+    "gameid": "b133cf4f3c32b80344b381cc9f26442a",
+    "gamename": "Arcade Game Beer Tycoon",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-beer-tycoon.png"
+  },
+  {
+    "gameid": "db93ffd7164953bb1eb4c86b68542ed6",
+    "gamename": "Arcade Game Birds And Animals",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-birds-and-animals.png"
+  },
+  {
+    "gameid": "d0b0d503d3d553643f665d5d2fdab138",
+    "gamename": "Arcade Game Happy New Year",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-happy-new-year.png"
+  },
+  {
+    "gameid": "627148e0dd36ff12df432fc920a0c59f",
+    "gamename": "Arcade Game Classic Mario",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-classic-mario.png"
+  },
+  {
+    "gameid": "d6cd29e274d066e2e8f0cb171e7583a8",
+    "gamename": "Arcade Game Happy Lottery",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-happy-lottery.png"
+  },
+  {
+    "gameid": "2f3361619ef9520214c08fd2aecf33da",
+    "gamename": "Lottery Game Gold Rooster Lottery",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/lottery-game-gold-rooster-lottery.png"
+  },
+  {
+    "gameid": "f3629935719cf04d6b689933486177ce",
+    "gamename": "Lottery Game Cai Shen Bingo",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/lottery-game-cai-shen-bingo.png"
+  },
+  {
+    "gameid": "3ecfba28c6c8f3ffce6c8134478a6bfa",
+    "gamename": "Lottery Game Tongits Rush",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/lottery-game-tongits-rush.png"
+  },
+  {
+    "gameid": "6996a44ebff8fc97ce19cf791f4916cc",
+    "gamename": "Card Game Tongits Fight",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/card-game-tongits-fight.png"
+  },
+  {
+    "gameid": "f03953d954b4ac3809efbedd5dfabec2",
+    "gamename": "Card Game Pusoy Rush",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/card-game-pusoy-rush.png"
+  },
+  {
+    "gameid": "067d540d7ece7e7dfcfcadf11f25a71d",
+    "gamename": "Card Game Dragon Tiger - Joker Bonus",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/card-game-dragon-tiger-joker-bonus.png"
+  },
+  {
+    "gameid": "47614f18718c2f911b89f00fd053b527",
+    "gamename": "Card Game Tongits",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/card-game-tongits.png"
+  },
+  {
+    "gameid": "f436610d0255b4e3646603a1e42793b7",
+    "gamename": "Card Game Pusoy",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/card-game-pusoy.png"
+  },
+  {
+    "gameid": "ff83699bef9b2e773857ed1a9eedc5fb",
+    "gamename": "棋牌游戏 Fighter Fire",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fighter-fire.png"
+  },
+  {
+    "gameid": "6aa921aebc8d7e170740cfc8e88426f6",
+    "gamename": "Fish Game Dice",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/fish-game-dice.png"
+  },
+  {
+    "gameid": "a170eb308c8fab8f2a5cdac5b427acbd",
+    "gamename": "Arcade Game Mole Crash",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-mole-crash.png"
+  },
+  {
+    "gameid": "b1ad7a48e4d4839dbe53fcadf7eb5183",
+    "gamename": "Arcade Game Mines2",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-mines2.png"
+  },
+  {
+    "gameid": "524ff2b54801f94ada51a1e2b37c593e",
+    "gamename": "Arcade Game Pusoy",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-game-pusoy.png"
+  },
+  {
+    "gameid": "7d21ecdabd01130a22326115d3967ffa",
+    "gamename": "arcade Piggy Bank",
+    "providerName": "JDB",
+    "image": "https://providers.gamblly-api.com/assets/providers/jdb/arcade-piggy-bank.png"
+  },
+  {
+    "gameid": "226b63d399440f774ce384c0f020387d",
+    "gamename": "Slot Game Fishin' Fever X-Huge",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "b87763aef6ce72c565302a377676d16e",
+    "gamename": "Slot Game Pop Pop Candy 1000",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "a34e49e1d90c2e5f4e93e366836ba5ae",
+    "gamename": "Slot Game Fruity Bonanza Combo",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "03c2cd347f0600cc87601e0d0af3b2f4",
+    "gamename": "Slot Game Fortune Jewel",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "e5e26fa480a5c256d8a6361122635da9",
+    "gamename": "Slot Game Magic Ace WILD LOCK",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "48d1aaad7b3c4e25ad1d0320c461aa9c",
+    "gamename": "Slot Game Bull Treasure X-Huge",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "a7c3e0e49972128da40ef7ff03925651",
+    "gamename": "Slot Game Dragon Soar - Hyper Wild",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "5634d86cb6d36e67bb686e7349efa95c",
+    "gamename": "Slot Game Ragnarok : Thor VS Loki",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "60f7634877928ae6fc7de2262e45d9d3",
+    "gamename": "Slot Game Lucky Elephant X-Huge",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "36d1db0afc55e149119f89e5c10e5ae5",
+    "gamename": "Slot Game Cricket Burst",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "6e6fa6dba69ca95e81b1ff4fe3592ead",
+    "gamename": "Arcade Game Teen Patti 20-20",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "c35a9edab6fef481c60851d6ea7c6fec",
+    "gamename": "Card Game Andar Bahar",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "160186998b6d8e1723980f7332582f0b",
+    "gamename": "Card Game Rummy",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "2cb0f27d6690031bf682bc1703792738",
+    "gamename": "Card Game Aviator Extra Bet",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "dcf9970165a8991c915fb6185f8f995a",
+    "gamename": "Arcade Game Koi Trio",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "f110691f927f86e7f1ace67ce5ffe331",
+    "gamename": "Slot Magic Ace",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "dfa84de00ebc583e8b485e864b2bfb63",
+    "gamename": "Slot Dragon of Demons",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "9dba332c462d80423ce4d15a2a3a041b",
+    "gamename": "Fish Piggy Bank TapTap",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "892af2fa3627269cabfd5ce894f6f00e",
+    "gamename": "Arcade Game Olympig",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "3d97f2073a05873b428be0ff20df724c",
+    "gamename": "Slot Wealthway",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "046f8dce34ee2a53c86d0a54e0bb89d2",
+    "gamename": "Slot Tongits Go",
+    "providerName": "JDB",
+    "image": ""
+  },
+  {
+    "gameid": "d73aa0a49f4702fd7785250906aaaba0",
+    "gamename": "Card Game Pusoy Go",
+    "providerName": "JDB",
+    "image": ""
+  }
+]

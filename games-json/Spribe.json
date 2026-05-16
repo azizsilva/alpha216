@@ -1,0 +1,62 @@
+[
+  {
+    "gameid": "a04d1f3eb8ccec8a4823bdf18e3f0e84",
+    "gamename": "Aviator",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/aviator.png"
+  },
+  {
+    "gameid": "8a87aae7a3624d284306e9c6fe1b3e9c",
+    "gamename": "Dice",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/dice.png"
+  },
+  {
+    "gameid": "c68a515f0b3b10eec96cf6d33299f4e2",
+    "gamename": "Goal",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/goal.png"
+  },
+  {
+    "gameid": "a669c993b0e1f1b7da100fcf95516bdf",
+    "gamename": "Hi Lo",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/hi-lo.png"
+  },
+  {
+    "gameid": "b31720b3cd65d917a1a96ef61a72b672",
+    "gamename": "Hotline",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/hotline.png"
+  },
+  {
+    "gameid": "c311eb4bbba03b105d150504931f2479",
+    "gamename": "Keno",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/keno.png"
+  },
+  {
+    "gameid": "5c4a12fb0a9b296d9b0d5f9e1cd41d65",
+    "gamename": "Mines",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/mines.png"
+  },
+  {
+    "gameid": "9dc7ac6155c5a19c1cc204853e426367",
+    "gamename": "Mini Roulette",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/mini-roulette.png"
+  },
+  {
+    "gameid": "6ab7a4fe5161936012d6b06143918223",
+    "gamename": "Plinko",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/plinko.png"
+  },
+  {
+    "gameid": "de88f202c5a8beeaccabbd944f8acfbf",
+    "gamename": "Balloon",
+    "providerName": "Spribe",
+    "image": "https://providers.gamblly-api.com/assets/providers/spribe/balloon.png"
+  }
+]

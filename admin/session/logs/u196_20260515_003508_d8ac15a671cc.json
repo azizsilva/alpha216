@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T00:35:08+00:00",
+    "user_id": 196,
+    "username": "Rafik1",
+    "role": "master",
+    "ip": "2c0f:f698:c241:30cd:18af:934e:392f:a700",
+    "forwarded_for": "2c0f:f698:c241:30cd:18af:934e:392f:a700",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fcreate-member%2F%3Fcreate_role%3Dpartner",
+    "session_id_hash": "896a7185cb53f48e2f6fe383fc06ff562a8f1abb0b76d834b566ec7db63868bc"
+}

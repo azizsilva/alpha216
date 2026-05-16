@@ -1,0 +1,944 @@
+[
+  {
+    "gameid": "c1299ac40cd31435588f42f0f4503380",
+    "gamename": "15 Dragon Pearls: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/15-dragon-pearls-hold-and-win.webp"
+  },
+  {
+    "gameid": "18675fbfc8dfe19ba4f65b385565c419",
+    "gamename": "3 African Drums",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-african-drums.webp"
+  },
+  {
+    "gameid": "4e62a6d0de1240dc08515447d84e0fc2",
+    "gamename": "3 Aztec Temples",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-aztec-temples.webp"
+  },
+  {
+    "gameid": "435bb24e5c8cca7f7349bf276c47fbb9",
+    "gamename": "3 Chillies and Joker: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "564c91f73586b42eaaf3a71ff547cef8",
+    "gamename": "3 China Pots",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-china-pots.webp"
+  },
+  {
+    "gameid": "82f0d2a319a4dd0661e324da00202393",
+    "gamename": "3 Clover Pots",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-clover-pots.webp"
+  },
+  {
+    "gameid": "6ac7bd11fd57d241105a6ae26dcd6799",
+    "gamename": "3 Clover Pots Extra",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-clover-pots-extra.webp"
+  },
+  {
+    "gameid": "ecc0247d4a244446f3a9dcab7ccb0eec8",
+    "gamename": "3 Coin Volcanoes",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-coin-volcanoes.webp"
+  },
+  {
+    "gameid": "694c7bdbb85df573c6328615c3fe18c2",
+    "gamename": "3 Coins",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-coins.webp"
+  },
+  {
+    "gameid": "a79ee32c95fadf13ac778c74e57861e8",
+    "gamename": "3 Coins: Egypt",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-coins-egypt.webp"
+  },
+  {
+    "gameid": "f26466bb371f22b662f7d59361742475",
+    "gamename": "3 Egypt Chests",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-egypt-chests.webp"
+  },
+  {
+    "gameid": "08813d8bbdbfebb338600e34463f8c2c",
+    "gamename": "3 Hot Chillies",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-hot-chillies.webp"
+  },
+  {
+    "gameid": "15c89f2bdef48eb5d4cb3ab11b774866",
+    "gamename": "3 Hungry Pandas",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "871f873afef2f172f6eb6a2dd9974bb7",
+    "gamename": "3 Luxor Pots: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "03a2e6d0da3b732afd1efd8cf4a4a17d",
+    "gamename": "3 Magic Lamps: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "bbbee207b499816221759779e8e6e2c3",
+    "gamename": "3 Pirate Barrels: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "a6d68a2c31c693fc0043cbeaa839fc4a",
+    "gamename": "3 Pots of Egypt",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-pots-of-egypt.webp"
+  },
+  {
+    "gameid": "41a7eca7597e7d9712d4b32e362dbd7c",
+    "gamename": "3 Super Hot Chillies",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/3-super-hot-chillies.webp"
+  },
+  {
+    "gameid": "bad19fc456085ac2d3aef43011741beb",
+    "gamename": "3 Carts of Gold: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "20ea0a12131c87306c23a4afd422667a",
+    "gamename": "3 Pots Riches Extra: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "4ca1de3f1312767b8394708b146a6978",
+    "gamename": "3 Pots Riches: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "d4db811f178f0a50ee61582ac685a91f",
+    "gamename": "777 Coins",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/777-coins.webp"
+  },
+  {
+    "gameid": "26bebc44826ba5ed16923432475001aa",
+    "gamename": "777 Sizzling Wins: 5 lines",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "1b518634b836bb580827983908b50928",
+    "gamename": "African Spirit Sticky Wilds",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "04da76c3374dfd8cbd9d41651f674989",
+    "gamename": "Arizona Heist: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "57270957335cbb7c61aba225973e69d8",
+    "gamename": "Aztec Fire",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/aztec-fire.webp"
+  },
+  {
+    "gameid": "18b83f9efb39c7320e135d5d4075530e",
+    "gamename": "Aztec Fire 2",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/aztec-fire-2.webp"
+  },
+  {
+    "gameid": "ad41cfab1038f9f277481cbbc1256f04",
+    "gamename": "Aztec Sun: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/aztec-sun-hold-and-win.webp"
+  },
+  {
+    "gameid": "3b92195a5204642223ae6117d49bc01f",
+    "gamename": "Big Heist",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/big-heist.webp"
+  },
+  {
+    "gameid": "7a516f6cebfd394365fffe23e96ddba1",
+    "gamename": "Black Wolf",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "55bd2ad2e0f3b0d7f5be542dc1e5837f",
+    "gamename": "Black Wolf 2",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/black-wolf-2.webp"
+  },
+  {
+    "gameid": "6fdd412758e811ea342c01133289b1fe",
+    "gamename": "Blazing Wins: 5 lines",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "0cee5cf4945a7b095afa305bb5369cbd",
+    "gamename": "Book of Gold Multichance",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "8aba9faf8fb2203cd70a4d3644274685",
+    "gamename": "Book of Sun Multichance",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/book-of-sun-multichance.webp"
+  },
+  {
+    "gameid": "9fc8ea3f4167fc9d15dd7c672198b676",
+    "gamename": "Boom! Boom! Gold!",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/boom-boom-gold.webp"
+  },
+  {
+    "gameid": "cb48d2e19cbae90e59c925d1c3e73dc0",
+    "gamename": "Buffalo Power Megaways",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "b160397d55f7c355635baeb119767973",
+    "gamename": "Buffalo Power: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "1b71480a96c97b63c12c051be1396799",
+    "gamename": "Buffalo Power 2: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c03a386efec0920cedf4fb52a8f987c9",
+    "gamename": "Buffalo Power Christmas",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "ddfe3fdf59bcbf793a3cbe4abbdc8cd3",
+    "gamename": "Candy Boom",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "1bb81eecce4c9d106440da086477f237",
+    "gamename": "China Festival",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/china-festival.webp"
+  },
+  {
+    "gameid": "57ae563a610331d208304ca8a22c987d",
+    "gamename": "Clover Charm: Hit the Bonus",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "2b2369ed25bb2e90756515afb176f297",
+    "gamename": "Coin Lamp",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/coin-lamp.webp"
+  },
+  {
+    "gameid": "d00b5e2d0e85471e70fb36a86f8bbfa6",
+    "gamename": "Coin Up: Lightning",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/coin-up-lightning.webp"
+  },
+  {
+    "gameid": "878db182564a93d1c7f5239fed0f5c74",
+    "gamename": "Coin Strike: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c6dd32759312a23210809ebbb3e36a6d",
+    "gamename": "Coin Up",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/coin-up.webp"
+  },
+  {
+    "gameid": "f58f7074ac4e8a98c682117d3b134703",
+    "gamename": "Coin Volcano",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/coin-volcano.webp"
+  },
+  {
+    "gameid": "f1ce8f9b69297fa2830eb386ccf36389",
+    "gamename": "Crown and Diamonds: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "97ae71e0444af7f8dc02f7c3ef59fb80",
+    "gamename": "Crystal Scarabs",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/crystal-scarabs.webp"
+  },
+  {
+    "gameid": "ba373b0713bcd5eb5cb887a8cd858653",
+    "gamename": "Dancing Joker",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/dancing-joker.webp"
+  },
+  {
+    "gameid": "01e00b0e29aba064e96beb0ab5ef6c7e",
+    "gamename": "Diamond Fortunator: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "b2778951e2562f39d194cfb109f116da",
+    "gamename": "Diamond Wins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "063413f1cea3e12c394e3e695e34bb38",
+    "gamename": "Diamonds Power: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c7e3dd4d614d5af73061ec8d8291d4c8",
+    "gamename": "Divine Dragon: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "f6ade98f61f54a043573d59fbaccc409",
+    "gamename": "Dragon Pearls: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/dragon-pearls-hold-and-win.webp"
+  },
+  {
+    "gameid": "2f77dd73d1bbf1ac4b708d790f988922",
+    "gamename": "Dragon Wealth",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/dragon-wealth.webp"
+  },
+  {
+    "gameid": "3040b6056bd63a63919cf6b2ea7bbdcb",
+    "gamename": "Eagle Power: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "2186d3c693d9b44e8abf7a4e37e3c166",
+    "gamename": "Egypt Fire",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/egypt-fire.webp"
+  },
+  {
+    "gameid": "7ab6093aea13407ce43615304097aa68",
+    "gamename": "Empire Gold: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "be47f0e17076d845548d9d79cbdef130",
+    "gamename": "Energy Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e69bc07f6486d1e69c4afc50c0593cdf",
+    "gamename": "Energy Joker: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "cb5764c94a62301d0c6d8507dc1991d6",
+    "gamename": "Fire Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "81681a7249ffa43a7d12e3b2edd91c6b",
+    "gamename": "Fire Temple: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "142173860d701d82b06b7bee59c7c5cc",
+    "gamename": "Fishin Bear",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/fishin-bear.webp"
+  },
+  {
+    "gameid": "9c362e138fe66028a5deefc9fb9b0e90",
+    "gamename": "Forest Spirit",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "3711061fb8e17978ba90b5c24fd45e55",
+    "gamename": "Fortune Globe",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/fortune-globe.webp"
+  },
+  {
+    "gameid": "4639549dbac19819f4228fa71660876f",
+    "gamename": "Fruits & Joker Fever",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "8d465abde02aafebde15408a1563b9be",
+    "gamename": "Fruits & Sevens: Fever",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e4bf990ba3f9694003e0e1c1238f46dc",
+    "gamename": "Fruits Fever 5 lines",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "b02343d5286ddd76c7375f2a1e74f5f8",
+    "gamename": "Goddess of Egypt",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "506d4b25783a410f2183273c2d55f770",
+    "gamename": "Gold Express",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/gold-express.webp"
+  },
+  {
+    "gameid": "1b972417edf19b66fbe65c651c8eda6a",
+    "gamename": "Gold Nuggets",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/gold-nuggets.webp"
+  },
+  {
+    "gameid": "a9862b8db8b5413f11a14a4804ac1d5f",
+    "gamename": "Golden Dancing Lion",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c00218991a1f7a28c9271327d060ba12",
+    "gamename": "Golden Teapot",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/golden-teapot.webp"
+  },
+  {
+    "gameid": "7c4ef81cd579e78af503c152e052bddc",
+    "gamename": "Grab more Gold",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/grab-more-gold.webp"
+  },
+  {
+    "gameid": "fc21e5f8dcd1d99c7b61af3f8202935d",
+    "gamename": "Grab the Gold",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/grab-the-gold.webp"
+  },
+  {
+    "gameid": "e38af4bf3a6ece6a12357703c3de5ff4",
+    "gamename": "Great Panda",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "86ccb8cc36d2ab661f260834ec8ed516",
+    "gamename": "Green Chilli",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/green-chilli.webp"
+  },
+  {
+    "gameid": "41436e61689b11f079caac2b64f53439",
+    "gamename": "Green Chilli 2",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/green-chilli-2.webp"
+  },
+  {
+    "gameid": "ddc972e93e547b4376f6c9987e7d94f5",
+    "gamename": "Happy Fish",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "0d8bb9176a3caa0173dfa79ca2805e8f",
+    "gamename": "Hawaii Riches",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "3e99c1605f58b99d2db5ea6b32492c05",
+    "gamename": "Hit more Gold!",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/hit-more-gold.webp"
+  },
+  {
+    "gameid": "264f7c490463e5756f95cf940ad23bce",
+    "gamename": "Hit the Gold!",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/hit-the-gold.webp"
+  },
+  {
+    "gameid": "860007b28d00f18dadf0810c97eec49d",
+    "gamename": "Hot Fire Fruits",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "bb030c1ee370b98d32b124e3ba8a76e4",
+    "gamename": "Jingle Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c755134a1533764a46e5a0d0713ab294",
+    "gamename": "Joker's Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "55d5824cf10a072ab6414e585feac3da",
+    "gamename": "Lady Fortune",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/lady-fortune.webp"
+  },
+  {
+    "gameid": "3aaad4fc7d6b44ce9c17e39809337b63",
+    "gamename": "Lamp of Wonder",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "055419e8f314a9e9beb0b21dfe125f87",
+    "gamename": "Lava Coins",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "797c4d6c84fc134680410915707a2d7f",
+    "gamename": "Legend of Cleopatra Megaways",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e4e02a5276be9e5d6d094efdaff6f9c0",
+    "gamename": "Lightning Clovers: Hit the Bonus",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "7198dcb6a16076d14c6733ec997c091d",
+    "gamename": "Lion Coins",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/lion-coins.webp"
+  },
+  {
+    "gameid": "79fe9091e3895d6d178bdf034207b1b2",
+    "gamename": "Lion Gems: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "75ca516101ad5b5b81c4bb88610b812e",
+    "gamename": "Little Farm",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/little-farm.webp"
+  },
+  {
+    "gameid": "1fa58ff0fd82a23624a67456a1b80b9e",
+    "gamename": "Lotus Charm",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "06f6c88909481f077199867b29e31186",
+    "gamename": "Lucky Penny",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/lucky-penny.webp"
+  },
+  {
+    "gameid": "c37fce90f525402e9e710ce6e458b58b",
+    "gamename": "Luxor Gold: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "b1d4273bd5b935a9989fc5fee1dc1a38",
+    "gamename": "Magic Apple",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/magic-apple.webp"
+  },
+  {
+    "gameid": "7809ea44d36e6b54d67003e17cc2b02c",
+    "gamename": "Magic Apple 2",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/magic-apple-2.webp"
+  },
+  {
+    "gameid": "334a86bb5ff2dbbbab917c427284f0c9",
+    "gamename": "Mammoth Peak: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "49fbfaaa7aff1cab60f4266f5e573ac8",
+    "gamename": "Mariachi Lock",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "922719be5fb5eca473066f22e185b20e",
+    "gamename": "Maya Sun",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/maya-sun.webp"
+  },
+  {
+    "gameid": "25d772d951bda7a3d593a73cb121d91a",
+    "gamename": "Merry Giftmas: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "39d7ee6a721a9c05567db546d6a4f9f5",
+    "gamename": "Moon Sisters",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/moon-sisters.webp"
+  },
+  {
+    "gameid": "bfaf761ed3ff87aa025c72bef861dee0",
+    "gamename": "More Magic Apple",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/more-magic-apple.webp"
+  },
+  {
+    "gameid": "9557edd75d79af7538fc9074cde77236",
+    "gamename": "Nights of Fire",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "fc61b954c71ec608a5f4c0c1e581c1c5",
+    "gamename": "Olympian Gods",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/olympian-gods.webp"
+  },
+  {
+    "gameid": "d6a6ec9dd4b9e6e38b79b0fd295f531a",
+    "gamename": "Pearl Diver",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "74f34f5ce550e73b3f316c3d38e15120",
+    "gamename": "Pearl Diver 2 Treasure Chest",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/pearl-diver-2-treasure-chest.webp"
+  },
+  {
+    "gameid": "40b52f512ac4844043f1a66031540f24",
+    "gamename": "Pearl Ocean: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c4a53eed935286a719c3d40a2f445507",
+    "gamename": "Piggy Power: Hit the Bonus",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "7d9b0308224f703e5d8a713158abc89f",
+    "gamename": "Pink Joker: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "35d75a83c611fc48494e9a284ff0f3a6",
+    "gamename": "Pirate Chest: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "f64118f8a0c5dd503184028079daa010",
+    "gamename": "Power Crown: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e54e6799ba3ffc6a74c2a6082cec0760",
+    "gamename": "Power Sun",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/power-sun.webp"
+  },
+  {
+    "gameid": "0c1e638a27ad755dbbb893cae1c9b8a7",
+    "gamename": "Queen of the Sun",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/queen-of-the-sun.webp"
+  },
+  {
+    "gameid": "a48bc000d5bea5a4ded790fef77b66dc",
+    "gamename": "Rio Gems",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/rio-gems.webp"
+  },
+  {
+    "gameid": "06e3a86b239334d0939f4e75c4576f1a",
+    "gamename": "Rocket Wins",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/rocket-wins.webp"
+  },
+  {
+    "gameid": "bbcb20bfe2b1f7a48d73f771e625ccba",
+    "gamename": "Royal Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e9b83325a3a19093f731477017a73e70",
+    "gamename": "Royal Coins 2: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "5f50f53c4f16ed6e05760c219638fd8b",
+    "gamename": "Royal Express: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "38dafe74e93cd83ba203dde07855d0eb",
+    "gamename": "Royal Fortunator: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "05cc709c670c495903e92fd6b0033a91",
+    "gamename": "Royal Joker: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "5fb548c6de311d81a611b28debcada22",
+    "gamename": "Ruby Hit: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "0132a9330ae432c4a97827dbc3f44f46",
+    "gamename": "Scarab Boost",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/scarab-boost.webp"
+  },
+  {
+    "gameid": "71fae935f6c6b441a16c1f1adedddfa9",
+    "gamename": "Scarab Riches",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/scarab-riches.webp"
+  },
+  {
+    "gameid": "28acf3916d6185c3fed550ccf7b47439",
+    "gamename": "Scarab Temple",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/scarab-temple.webp"
+  },
+  {
+    "gameid": "a8e2d3a26d4c7a03ec1d2e21e7010f76",
+    "gamename": "Supercharged Clovers: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "72be27efcc51c444724616f2ade434b4",
+    "gamename": "Sherwood Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "2be9e50067065f61e59f8457308e7415",
+    "gamename": "Sky Coins",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "e9bb6ce89da2f5904dc1856b55e76c55",
+    "gamename": "Sky Pearls",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sky-pearls.webp"
+  },
+  {
+    "gameid": "005a2d2059b56991f314a92667ee9bfc",
+    "gamename": "Solar Queen",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "5f60a91fb7e876179f9ca75d13baa92e",
+    "gamename": "Solar Temple",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "b0464cd2049923b326c3d79f08690d40",
+    "gamename": "Spirit of Egypt: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "283ae8613615fbb186b8066a99ac55bb",
+    "gamename": "Sticky Piggy",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "4c31923b099aa6414cb5e185e7d667ad",
+    "gamename": "Sun of Egypt",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sun-of-egypt.webp"
+  },
+  {
+    "gameid": "25dbf864880697f029587ec163ef4f55",
+    "gamename": "Sun of Egypt 2",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sun-of-egypt-2.webp"
+  },
+  {
+    "gameid": "20c0e9950761c62b81ef1666a51f02d2",
+    "gamename": "Sun of Egypt 3",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sun-of-egypt-3.webp"
+  },
+  {
+    "gameid": "c68b984f9f2437539b1b72a20513bc36",
+    "gamename": "Sun of Egypt 4",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sun-of-egypt-4.webp"
+  },
+  {
+    "gameid": "ea065d457d321ab3bf80a73d3df464b0",
+    "gamename": "Sunlight Princess",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/sunlight-princess.webp"
+  },
+  {
+    "gameid": "15075dee539ea4ec7b39f6b57e00951c",
+    "gamename": "Sunny Fruits 2: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "7587dec3c60c9b3d26aa0af60725cd38",
+    "gamename": "Super Hot Chilli",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/super-hot-chilli.webp"
+  },
+  {
+    "gameid": "938503ed31ea808542271dfd31374b46",
+    "gamename": "Super Sticky Piggy",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/super-sticky-piggy.webp"
+  },
+  {
+    "gameid": "9ef4b9b59c534b4b2cdeb40ed57ab62e",
+    "gamename": "Super Sunny Fruits",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "eaa497103b46d1dcfb6c16bd51d71467",
+    "gamename": "Thunder Coins: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "9d604a686836cba41cfa4bb25fbf794b",
+    "gamename": "Thunder of Olympus",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "6e92bdacfa0284a89181a86eeb24388b",
+    "gamename": "Tiger Gems",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/tiger-gems.webp"
+  },
+  {
+    "gameid": "d9586406d73fef095420e061c77fe7c2",
+    "gamename": "Tiger Jungle",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/tiger-jungle.webp"
+  },
+  {
+    "gameid": "7921f562c559cd52ee9268ae94abef92",
+    "gamename": "Tiger Stone",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "648cb8d1b1f15f16e9cbdbd857da4a30",
+    "gamename": "Tigers Gold",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "a1188401fb8c7e7b36cb7d5b23e3c5ed",
+    "gamename": "Treasures of Fire: Scatter Pays",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "c340bf218d9bb993d9bcb55825dee50c",
+    "gamename": "Wolf Land: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "44b34379f35deb4fed696dfd8b4f31e6",
+    "gamename": "Wolf Night",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/wolf-night.webp"
+  },
+  {
+    "gameid": "c75f837f9650b7a0dfd218f2a71fd874",
+    "gamename": "Wolf Power: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "6a13ac3dd1fca9001d30796325e9afa8",
+    "gamename": "Wolf Power Megaways",
+    "providerName": "3oks - ROW",
+    "image": ""
+  },
+  {
+    "gameid": "5410c83f285a6c6643895f40e9bb0f6e",
+    "gamename": "Wolf Saga",
+    "providerName": "3oks - ROW",
+    "image": "https://providers.gamblly-api.com/assets/providers/3oks-row/wolf-saga.webp"
+  },
+  {
+    "gameid": "a1cdb9784b685859f237fe751257ca75",
+    "gamename": "Super Pink Joker: Hold and Win",
+    "providerName": "3oks - ROW",
+    "image": ""
+  }
+]

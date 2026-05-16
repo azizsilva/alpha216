@@ -1,0 +1,368 @@
+[
+  {
+    "gameid": "d58b1c2dd6456da42b2c1a33c70c1630",
+    "gamename": "Emperor Qin",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/emperor-qin.png"
+  },
+  {
+    "gameid": "b6668f2abcfff3f7f78ae92fe908f99f",
+    "gamename": "Slot Game Cracker",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-cracker.png"
+  },
+  {
+    "gameid": "017c1edeaf54d4684d675055c44a6f7e",
+    "gamename": "Slot Game FaFaFa",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fafafa.png"
+  },
+  {
+    "gameid": "654155802c34cee717e943c4e2bb6bfe",
+    "gamename": "Slot Game Gold Toad",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-gold-toad.png"
+  },
+  {
+    "gameid": "eb8dd621ea38d742ff846362a9b1085d",
+    "gamename": "Slot Game Lion Legend",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-lion-legend.png"
+  },
+  {
+    "gameid": "697993800419bf160901aa9133cde524",
+    "gamename": "Slot Game Goblin's Gold",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-goblin-s-gold.png"
+  },
+  {
+    "gameid": "bf0ae3c404807429451d088725ae5377",
+    "gamename": "Slot Game The Unsurpassed Grace",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-the-unsurpassed-grace.png"
+  },
+  {
+    "gameid": "8249b0e703ceb0816f3645dbac0a83ce",
+    "gamename": "Slot Game Arctic King",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-arctic-king.png"
+  },
+  {
+    "gameid": "f23ad5acc6c690a45f1280ba49d28266",
+    "gamename": "Slot Game Jalapeno",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-jalapeno.png"
+  },
+  {
+    "gameid": "484025f23c821e32fc6ac31ff75613d6",
+    "gamename": "Slot Game Ice Age Mammoths",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-ice-age-mammoths.png"
+  },
+  {
+    "gameid": "e2a8a030f69553e9dd8f287c11bed399",
+    "gamename": "Slot Game Zorro",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-zorro.png"
+  },
+  {
+    "gameid": "316aa38ad4468a2ab757ff5a8836ab59",
+    "gamename": "Slot Game Three Kings",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-three-kings.png"
+  },
+  {
+    "gameid": "96b1f087066664f4bbf547719f4ce562",
+    "gamename": "Slot Game Panda Warrior",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-panda-warrior.png"
+  },
+  {
+    "gameid": "1ae2dd4a2b6b520ea618e49734114cc2",
+    "gamename": "Slot Game Pirate Attack",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-pirate-attack.png"
+  },
+  {
+    "gameid": "b242216f35f89856685b923ea29033d5",
+    "gamename": "Slot Game Crazy Penguin",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-crazy-penguin.png"
+  },
+  {
+    "gameid": "a1149d0f9c50430ae060b026f09e4c7a",
+    "gamename": "Slot Game Fortune Cat",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-cat.png"
+  },
+  {
+    "gameid": "32d3a212089035386a95a21d6582d368",
+    "gamename": "Slot Game Toy Soldiers",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-toy-soldiers.png"
+  },
+  {
+    "gameid": "324d92fb13d0d6228279b4f7792a75ac",
+    "gamename": "Slot Game Power of Thor",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-power-of-thor.png"
+  },
+  {
+    "gameid": "ba653f265134f4662d05363515e5c510",
+    "gamename": "Slot Game Dragon Tiles",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-dragon-tiles.png"
+  },
+  {
+    "gameid": "18bd994afe332e7ac903f511d485644e",
+    "gamename": "Slot Game Fortune Gate",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-gate.png"
+  },
+  {
+    "gameid": "c5d0d421f875023cbf927692da2009d9",
+    "gamename": "Slot Game Shining Diamond",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-shining-diamond.png"
+  },
+  {
+    "gameid": "182d8051c14f15943b8362f809bb23f0",
+    "gamename": "Slot Game Gold Miner",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-gold-miner.png"
+  },
+  {
+    "gameid": "466cbf64cf586706eddbc2dd89e2d5b0",
+    "gamename": "Slot Game Foxy Heist",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-foxy-heist.png"
+  },
+  {
+    "gameid": "a38019da304f80b536e9677aba84ec9e",
+    "gamename": "Slot Game Treasure Mine",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-treasure-mine.png"
+  },
+  {
+    "gameid": "a1353a355a096a5d7d15fb2636f19f0a",
+    "gamename": "Slot Game God of Fortune",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-god-of-fortune.png"
+  },
+  {
+    "gameid": "1eedbd0f491dd245a7e325f200d94834",
+    "gamename": "Slot Game Fortune Koi",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-koi.png"
+  },
+  {
+    "gameid": "4bca928196d945e72b3826e8077ba69f",
+    "gamename": "Slot Game Viking Age",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-viking-age.png"
+  },
+  {
+    "gameid": "4e17695dcfeb6f29e97d392f209f6035",
+    "gamename": "Slot Game Fortune Boy",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-boy.png"
+  },
+  {
+    "gameid": "ce8cc0acf6790e96586cd18e2911c9fc",
+    "gamename": "Slot Game Fortune Panda",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-panda.png"
+  },
+  {
+    "gameid": "a6edba75571a6e2ad7627bb3c3fbf1aa",
+    "gamename": "Slot Game Gold Rush",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-gold-rush.png"
+  },
+  {
+    "gameid": "96972e9e911bcff850e2447d4e659378",
+    "gamename": "Slot Game Train Robber",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-train-robber.png"
+  },
+  {
+    "gameid": "eaa49c574b992a6fb3f45c94b9fb4e80",
+    "gamename": "Slot Game Jalapeno 2",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-jalapeno-2.png"
+  },
+  {
+    "gameid": "1532bc4df58dc85a1be5117db62675c5",
+    "gamename": "Slot Game Mystery Show",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-mystery-show.png"
+  },
+  {
+    "gameid": "1d6dbb878939ef9da13b6b8874eb922b",
+    "gamename": "Slot Game Pirate Treasure",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-pirate-treasure.png"
+  },
+  {
+    "gameid": "b96cb5a9b96659e7697cd854e201cf3b",
+    "gamename": "Slot Game Royale Expedition",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-royale-expedition.png"
+  },
+  {
+    "gameid": "b0112c09fd807bfe0c1d839b6f002948",
+    "gamename": "Slot Game Eagle Parade",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-eagle-parade.png"
+  },
+  {
+    "gameid": "aca500c0066dbf7668bba2ebf63e0ae4",
+    "gamename": "Slot Game The King Of Olympus",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-the-king-of-olympus.png"
+  },
+  {
+    "gameid": "58f09506283d7a0832dfcab0327ae379",
+    "gamename": "Slot Game Mahjong Gold",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-mahjong-gold.png"
+  },
+  {
+    "gameid": "dffdfcc2b41ec5672c30b88bbb2e92b7",
+    "gamename": "Slot Game Candy Burst",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-candy-burst.png"
+  },
+  {
+    "gameid": "0c78c20229def7d837cbb6bf2d8ae73d",
+    "gamename": "Slot Game Leprechaun",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-leprechaun.png"
+  },
+  {
+    "gameid": "98a25fb8528bd23ab8f88c1ccf1c92ce",
+    "gamename": "Slot Game Fortune Neko",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-neko.png"
+  },
+  {
+    "gameid": "6c50989ecf5860cc47279d5ee858037e",
+    "gamename": "Slot Game Legend of Aztec",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-legend-of-aztec.png"
+  },
+  {
+    "gameid": "d7102fbb62d30b0e9e951c49ad376bfd",
+    "gamename": "Slot Game Almighty Zeus",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-almighty-zeus.png"
+  },
+  {
+    "gameid": "d15afcbd55b16b6b21d6612ea7f09869",
+    "gamename": "Slot Game Gemstone Princess",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-gemstone-princess.png"
+  },
+  {
+    "gameid": "77d52f4b95fdc6c04828bd9605e7d1c0",
+    "gamename": "Slot Game Mahjong Gold 2",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-mahjong-gold-2.png"
+  },
+  {
+    "gameid": "322742d014aca4cb302d86fb3029aba2",
+    "gamename": "Slot Game Lucky Witch",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-lucky-witch.png"
+  },
+  {
+    "gameid": "35970ef5302ee2f20b9de877d6727448",
+    "gamename": "Slot Game Fishing Tycoon",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fishing-tycoon.png"
+  },
+  {
+    "gameid": "db2e28711729f50609629a9d38de6f9f",
+    "gamename": "Slot Game Jade Emperor",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-jade-emperor.png"
+  },
+  {
+    "gameid": "992092a828098028e7de260f937aa4da",
+    "gamename": "Slot Game Crazy Thieves",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-crazy-thieves.png"
+  },
+  {
+    "gameid": "124c8e22d59b3fc448265a1e9b32620c",
+    "gamename": "Slot Game Spooky Halloween",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-spooky-halloween.png"
+  },
+  {
+    "gameid": "3d014cc72ef954a49db85f8c04ab2a2a",
+    "gamename": "Slot Game Fortune Bull",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-fortune-bull.png"
+  },
+  {
+    "gameid": "943e0f1c86ebcad476815003a2084147",
+    "gamename": "Slot Game Pharaoh Treasures",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-pharaoh-treasures.png"
+  },
+  {
+    "gameid": "f10b39257abb364e56df597f9e07a090",
+    "gamename": "Slot Game Thanksgiving Blast",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-thanksgiving-blast.png"
+  },
+  {
+    "gameid": "5cb1f73869693063dc0aa1ec4ab4756e",
+    "gamename": "Slot Game Kokushimusou",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-kokushimusou.png"
+  },
+  {
+    "gameid": "6cdbaee9633f74e049259494e1eb33f2",
+    "gamename": "Slot Game Buffalo",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-buffalo.png"
+  },
+  {
+    "gameid": "ac813b4b69128a3732d78fb975752a6a",
+    "gamename": "Slot Game Tiger Master",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-tiger-master.png"
+  },
+  {
+    "gameid": "5bdacaf675d2f94258102e2cbc8d2254",
+    "gamename": "Slot Game Xiangqi Warfare",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-xiangqi-warfare.png"
+  },
+  {
+    "gameid": "d760f79443978cce11af6c13c34d9c29",
+    "gamename": "Slot Game Huangdi Legend",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-huangdi-legend.png"
+  },
+  {
+    "gameid": "979c421948f713a2e52dcde7c04bfb4f",
+    "gamename": "Slot Game Prosperity 168",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-prosperity-168.png"
+  },
+  {
+    "gameid": "8abb0acf4faa451ea4b51eb5e18e3d8b",
+    "gamename": "Slot Game King Gummy Bear",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-king-gummy-bear.png"
+  },
+  {
+    "gameid": "28a9308652063ba362472e2bd1a1f913",
+    "gamename": "Slot Game Mahjong Infinity",
+    "providerName": "iDeal",
+    "image": "https://providers.gamblly-api.com/assets/providers/ideal/game-mahjong-infinity.png"
+  }
+]

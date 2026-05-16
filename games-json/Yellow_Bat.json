@@ -1,0 +1,356 @@
+[
+  {
+    "gameid": "20aa10f2b67c90bb5c88c5b4211d18ac",
+    "gamename": "TIGER BOOM",
+    "providerName": "Yellow Bat",
+    "image": "https://providers.gamblly-api.com/assets/providers/Yellow_Bat/tiger-boom.webp"
+  },
+  {
+    "gameid": "525da2aff3f024427cd835dd39f46f54",
+    "gamename": "MEGA BANDIT",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "523b42cba75f4a921f3693599fe19b15",
+    "gamename": "DRAGON GEMS CLASH",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "3baaabd7aba57cc624b750963ec57e38",
+    "gamename": "SEXY JOKER",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "8cf94a7d8ff72bf9bec96181c964841a",
+    "gamename": "GOLDEN X ACE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "373d724d07dc77f6a70b9eba9874373d",
+    "gamename": "FORTUNE X ACE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "dfb3e6b1be062d000dcf921a2d920502",
+    "gamename": "DRAGON GEMS SUPER BUY",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "ce14de9132bb6bb37c3eb023b5d397f8",
+    "gamename": "DRAGON GEMS WHEEL",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "5d847eb14cbeb4d2b314c18c58ad3b96",
+    "gamename": "MAGICAL ALCHEMIST",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "8792317eb381a2c2af382ff08f502da8",
+    "gamename": "PIRATE LEGENDS",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "6ed5b05887d25b2e1c55ec2ed6bf595b",
+    "gamename": "LIGHT OF APOLLO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "1ca5757354156d977fbac8faa0448168",
+    "gamename": "DRAGON GEMS",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "cce17f4c76a6c508387ccc76f3dd9e59",
+    "gamename": "ZHAO CAI PAO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "c84438e13280fe69ef63a4b31dc9d6e7",
+    "gamename": "ROYAL HUNTER",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "094371abc62e9eb06a71e7b8eef9302b",
+    "gamename": "CRAZY MONEY",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "fe6656613d8448e90289b07494118e07",
+    "gamename": "LUCKY MEOW",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "e8bbe788dd7c98105c648a4f54c4c8e8",
+    "gamename": "SUGAR CRUSH",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "70c0a64d3bbad16b6d9ccb0cc3e0a53d",
+    "gamename": "SUPER EGYPT",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "7c958031c8a2e0f2ae4be75fc03b8e18",
+    "gamename": "GOLDEN AZTEC MEGA",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "72fe6190dbe7cb90ef7e3d82a95e235f",
+    "gamename": "ROYAL ACE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "7c7be1d5c3e97c5a0413535b3bbb90fe",
+    "gamename": "MERMAID SLINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "5ed8daae2c7818f8134542890138290f",
+    "gamename": "GOLDEN AZTEC",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "dc13d2ed8c50e4018de643b2d742bd70",
+    "gamename": "KING ARTHUR GOLD",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "a854747968b9dbbb333496ecc6745400",
+    "gamename": "BOOM BOOM MARMOT",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "d76fb92e640059bbd46cbfde58904801",
+    "gamename": "GLADIATOR JP",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "51604f8f90e09276d5117ca8b7242319",
+    "gamename": "MAGIC LAMP JP",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "c2c3a4982d554238013dcaca299fac8d",
+    "gamename": "FORTUNE CAT",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "4427f5e188ee0a5bbb8b830931a55166",
+    "gamename": "GOLDEN BUNNY",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "daec82993bf8bb6fa39588c576a6df4f",
+    "gamename": "ROLLING FORTUNE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "be4b102f2a328661d0ca1076aebb2477",
+    "gamename": "FANCY EGYPT",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "ad7559bc9030f4627e28c7dbeb749f06",
+    "gamename": "THOR FORTUNE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "64eb359af37621df19d33e328e0d9f15",
+    "gamename": "LUCKY STAR",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "13aa93bf3492f4bf17c1a55f30fb9848",
+    "gamename": "ROLLING 7",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "2ee6675ed3d7b68f103deae77176b0e1",
+    "gamename": "FAFA DRAGON",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "30a7426423b8898141d0a4355554cf1e",
+    "gamename": "GLADIATOR",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "0c3ad795669e55493a30d78eb6577b9e",
+    "gamename": "MAGIC LAMP",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "4fd47bb9f46e402071381e0d02a84c12",
+    "gamename": "POWER MASK",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "46262622b2271a32caac1b0ceb92d92a",
+    "gamename": "POWER LION",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "2eeaeca2b5a3437ee07a96c945989ce8",
+    "gamename": "CASINO FANTASY",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "4f52de113e58c49536786e706fc50d23",
+    "gamename": "MONEY HORSE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "0e1c539d4d10cf152e9340966ab3e1ac",
+    "gamename": "FORTUNE TREASURE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "2df0f54a0620bd62b18580f54e0e8a27",
+    "gamename": "POWER FORTUNE",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "ae59cbd0fde24553e77bc0c87ced9c62",
+    "gamename": "DRAGONOVA",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "5e7e8f19c674da22d98eff58086dc21c",
+    "gamename": "OCEAN PHOENIX",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "ec37a3c10f988bd752a99093e311257b",
+    "gamename": "SUPER 30 BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "104f2901efcfde1523f4017600312721",
+    "gamename": "EZ BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "a702e98d0fe26de709a9d31ce32403b5",
+    "gamename": "JOY BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "1bdf50f6c3a5ac00e7982397631b47d5",
+    "gamename": "LIGHTNING BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "9b4d7bdd4e2633f1271ebc4572eeb86f",
+    "gamename": "HEAT BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "d806267fc9bca6c6da3cc0a37b81d773",
+    "gamename": "MONEY BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "304f900291fe84eb28db24ecd4227524",
+    "gamename": "BEASTY BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "beef57ce49e4fa465c9993b299e87b70",
+    "gamename": "BINGO BONANZA",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "09741e6e098722a6b862146705872a5e",
+    "gamename": "ATLANTIS",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "fe1868c583942b818f3ba860b4ea0bfb",
+    "gamename": "BINGO BINGO",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "9fe84780ed3cfc2d42dc221bd507e86c",
+    "gamename": "OPEN SESAME",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "5ad0b30a79190e0991f6180da7675d11",
+    "gamename": "WIN CAI SHEN",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "1cb688431755787292560caaa7d12677",
+    "gamename": "MONEY BLAST",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "9fba26a8c17a3bc4ae86ded2ef9f029f",
+    "gamename": "DIAMOND MINES",
+    "providerName": "Yellow Bat",
+    "image": ""
+  },
+  {
+    "gameid": "c3a0e967c5ff6f0d0aa54e2cf847e9a8",
+    "gamename": "CRAZY COLOR",
+    "providerName": "Yellow Bat",
+    "image": ""
+  }
+]

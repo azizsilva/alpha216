@@ -1,0 +1,92 @@
+[
+  {
+    "gameid": "6ea62512f56992192db7146abc67805c",
+    "gamename": "Apollo Pays",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/apollo-pays-8afa99f7.jpg"
+  },
+  {
+    "gameid": "b2839e4ec2c341b619843043a6459602",
+    "gamename": "Beef Lightning",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/beef-lightning-2a5f18fc.jpg"
+  },
+  {
+    "gameid": "6ebb79c5bd09cf7d7797b175c5bd94da",
+    "gamename": "Bonanza",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/bonanza-0a9cc729.jpg"
+  },
+  {
+    "gameid": "3c0b6cb10eab3f4eb00e02a8489fb5b0",
+    "gamename": "Danger High Voltage",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/danger-high-voltage-242e6ed0.svg"
+  },
+  {
+    "gameid": "5173cd430af81c256495a29b79f10e27",
+    "gamename": "Diamond Fruits",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/diamond-fruits-7f239a5c.jpg"
+  },
+  {
+    "gameid": "15f3879287bf19f43fcede71fd95ca9d",
+    "gamename": "Extra Chilli",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/extra-chilli-5a2b7d31.svg"
+  },
+  {
+    "gameid": "f6051a48715468e36dac80265d9229d1",
+    "gamename": "Gold Megaways",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/gold-megaways-f212c168.jpg"
+  },
+  {
+    "gameid": "37874d631b9cf61a47670854de27a882",
+    "gamename": "Golden Catch",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/golden-catch-385845bb.jpg"
+  },
+  {
+    "gameid": "7327aa0c2e8a8b732dd337cbd98922cd",
+    "gamename": "Max Megaways 2",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/max-megaways-2-f38fc612.jpg"
+  },
+  {
+    "gameid": "6ecca7ad30e8f4d752f4d9111cf65e1e",
+    "gamename": "Millionaire Rush",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/millionaire-rush-1c7bea0b.jpg"
+  },
+  {
+    "gameid": "b92aabe41a517118a52992d9ee9e6777",
+    "gamename": "Pop",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/pop-0c270837.jpg"
+  },
+  {
+    "gameid": "a29f2c6e45a1828fd5a2fc1e57e1082a",
+    "gamename": "The Race",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/the-race-d969c63d.jpg"
+  },
+  {
+    "gameid": "901690d65e333df923e2789381b370ca",
+    "gamename": "Vegas Megaways",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/vegas-megaways-f983d3ad.jpg"
+  },
+  {
+    "gameid": "e179e1dd404a31cc7c448f803c735685",
+    "gamename": "Vegas Rush",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/vegas-rush-440d41d5.jpg"
+  },
+  {
+    "gameid": "899e976973928593627bc7f1e16da941",
+    "gamename": "Wild Flower",
+    "providerName": "Evolution-BTG Asia",
+    "image": "https://providers.gamblly-api.com/assets/providers/BTGASIA/wild-flower-fbdea68f.jpg"
+  }
+]

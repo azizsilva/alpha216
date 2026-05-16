@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-08T19:36:56+00:00",
+    "user_id": 96,
+    "username": "Wa",
+    "role": "agent",
+    "ip": "160.156.14.59",
+    "forwarded_for": "160.156.14.59",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_4_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/147.0.7727.99 Mobile/15E148 Safari/604.1",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "os": "iOS",
+    "accept_language": "fr-FR,fr;q=0.9",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fdashboard%2F",
+    "session_id_hash": "e09a63aa3c6fab30eb846637220aa5dc8b0a8f914a23cd9c3314543a317a236b"
+}

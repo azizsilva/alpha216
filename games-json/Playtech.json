@@ -1,0 +1,3530 @@
+[
+  {
+    "gameid": "44f6e08965a602e68952f49658b7d3f8",
+    "gamename": "1-Of-A-Kind",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d4a6819ce811b1b97c07a8818a64690d",
+    "gamename": "28 Mansions",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "394dd26b789d93bd041fca2d86ea8820",
+    "gamename": "A Night Out",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "93aeecbe8381554300edf97c1e4b855e",
+    "gamename": "Absolutely Mammoth",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "89bafa7a264f7f527c5e1f536a609ca4",
+    "gamename": "Absolutely Mammoth PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9d8735f9017706dc1d19ac5111606490",
+    "gamename": "Age of Egypt",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "edd09602fa948f670900b908058c71a3",
+    "gamename": "Age of the Gods : Epic Troy",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "aaf255e782ce1fbb275ed5ac0ca0e887",
+    "gamename": "Age of the Gods God of Storms 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9587e5573b6ddafac4cd0c43ffef437d",
+    "gamename": "Age of the Gods God of Storms 3",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6c3fd84bcfa35635ae538fc305b2bc39",
+    "gamename": "Age of the Gods Norse: Book of Dwarves",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d9d4e07b04a071cd63b602fa9c464041",
+    "gamename": "Age of the Gods Norse: Gods and Giants",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "eae4d44fd7200da9e0d1b91545976515",
+    "gamename": "Age of the Gods Norse: King of Asgard",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "82b859cec9fc3f510492c2653062eb9c",
+    "gamename": "Age of the Gods Norse: Norse Legends",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fd75d31cb3fc132afd3d19bf58a75aeb",
+    "gamename": "Age of the Gods Norse: Ways of Thunder",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "37a974d2647ac14e5b517736f5e12022",
+    "gamename": "Age of the Gods Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "842569ffeaf7c8062e5c37ef34a3cbb5",
+    "gamename": "Age of the Gods: Age of the Gods",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a0067014ed52d964947c03729362f706",
+    "gamename": "Age of the Gods: Apollo Power",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b48124c128f849cb6af5523d6273fa03",
+    "gamename": "Age of the Gods: Book of Oracle",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "747974c975cd480f6daf275ee495b3bd",
+    "gamename": "Age of the Gods: Fate Sisters",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7c1f9dac0a9b08ba4ef4db64913989e1",
+    "gamename": "Age of the Gods: Furious Four",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "26d05f670d5004297c29bca37c5d2a18",
+    "gamename": "Age of the Gods: Glorious Griffin",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "98a322361ea9fb0a50263e4fcb525c4b",
+    "gamename": "Age of the Gods: God of Storms",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5d1d43200792ac696842baabeedc57ef",
+    "gamename": "Age of the Gods: Goddess of Wisdom",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ddddd3322ef4d339d9d1f07b5db2fa53",
+    "gamename": "Age of the Gods: Helios",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b56ffe98a1d3b561b4e50fce74c3db4a",
+    "gamename": "Age of the Gods: King of Olympus",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6afaba62b54e68a826ec5250536e0324",
+    "gamename": "Age of the Gods: King of Olympus Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d88d866f0f0b56b43a55c840ae735c99",
+    "gamename": "Age of the Gods: Maze Keeper",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "bc4140175092f25ce45e69cc46c1d917",
+    "gamename": "Age of the Gods: Medusa & Monsters",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b7b7ab09f7413cc43a8e47632875a7a7",
+    "gamename": "Age of the Gods: Mighty Midas",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "761da27537daa09466a46dd0309305f5",
+    "gamename": "Age of the Gods: Prince of Olympus",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "68ed2f1d7e1ee7c4bec470c53c16be67",
+    "gamename": "Age of the Gods: Ruler of the Dead",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "125c404f620b166fcafef667d6e3e34c",
+    "gamename": "Age of the Gods: Ruler of the Seas",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f33f8c97901234ef019f637869090e63",
+    "gamename": "Age of the Gods: Ruler of the Sky",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "251d16f7e6db74914dc68cffbaff76ee",
+    "gamename": "Age of the Gods: Rulers of Olympus",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "728584710964fbb11ecf74162a589f9b",
+    "gamename": "Age of the Gods: Wheels of Olympus",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "83d6b08599236ba5bc2d64d722b2da01",
+    "gamename": "Age of the Gods: Wonder Warriors",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "914ee555a5e788c9e6fe597552fdbbaf",
+    "gamename": "Alohawaii: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "004dc1692ccbb8d46dd44f3480228606",
+    "gamename": "Anaconda Uncoiled",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2399d4cd23a97be3b0970175593f92b3",
+    "gamename": "Anaconda Wild",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4739dde37c2560bb4f1aa6263bb2b8cb",
+    "gamename": "Anaconda Wild 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "735b5a5886aac3c90d863ddd46751363",
+    "gamename": "Anaconda Wild 2 PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "547a08381481e55198a0efffa9819b7e",
+    "gamename": "Anaconda Wild Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6e159c1f57dc867f9a88030bb928dc5c",
+    "gamename": "Animal Instinct",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "19eb221686f726fe8ab00a523f43d0fc",
+    "gamename": "Archer",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ff01c1c608d0aa974e9badd014b77374",
+    "gamename": "Arowana's Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c57101e7f9b96f9cdd36f3aee28a6703",
+    "gamename": "Asian Fantasy",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "951e0c7f0a7a8aa92aacfb6dff571a93",
+    "gamename": "Atlantis: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2b8c4e7c12b095785947cfee9c1ce4a9",
+    "gamename": "Aztec Expedition",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4a4153c592a056728fb27e545abafe98",
+    "gamename": "Azteca: Bonus Lines",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1d2f6b8d66fb5ab0382a76216e76d6fa",
+    "gamename": "Azteca: Bonus Lines PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e388e3d3028d8743eab4c164075c1822",
+    "gamename": "Azteca: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "09316ab17daf79adcca3b4d10f93c98b",
+    "gamename": "Bai Shi",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6327914a72dfff84b0b20b21f761398e",
+    "gamename": "Beach Life",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "24cfafc2cd7e62ac72868a52359a95b7",
+    "gamename": "Bee Frenzy",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "81e1a871550be8048acf0c613c635ef6",
+    "gamename": "Bermuda Triangle",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "97446e62c7e272b7517d1646b6bcc2a4",
+    "gamename": "Berry Berry Bonanza",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7d7fdd3b5f66243fd47f6c5a6005860c",
+    "gamename": "Better Wilds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "badd47fea6f9905ad9d1530488be7652",
+    "gamename": "Better Wilds PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "77001fa326967eebe080cb3a00138641",
+    "gamename": "Big Shots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "40abe020b930dff62e78631dfbe9b804",
+    "gamename": "Blazing Bells",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2a1e5cf43bd2e4af720890ab84cb1567",
+    "gamename": "Blazing Bells PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "293bce168517eaef129e34b5447dc748",
+    "gamename": "Blitz Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fdacfaf60feb36a4486a06acfec403b8",
+    "gamename": "Bonus Bears",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "58b40612830758e0d935aa71cf413846",
+    "gamename": "Bonus Train Bandits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1e7cdce727feb9e3aa26bc83975f5b42",
+    "gamename": "Book of Kings",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2c5ee48be3076a9bb2ad2a4b2e6aa6e7",
+    "gamename": "Book of Kings 2 PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fcb5376fbf76222726ca7397ea1b408c",
+    "gamename": "Book of Kings PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d1e017cdbb39cc3c8bad8c6da2285396",
+    "gamename": "Breakout Bob",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "437dc99dcbe1fde5702230fe87873d8b",
+    "gamename": "Buccaneer Blast",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "88345110d352b7d1564fad2af96ae1d2",
+    "gamename": "Buckle Up",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "583980481641bb8b81ba09040ec9f601",
+    "gamename": "Buffalo Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c02588d591e45b7597c8ee83a28b1f8f",
+    "gamename": "Buffalo Blitz II",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "036dec753eceb504fd6d1947b863ab1b",
+    "gamename": "Buffalo Blitz: Mega Merge",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2028e710c4adf5beb711c58b56eb13bf",
+    "gamename": "Buffalo Blitz: Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c82ff06c2880737fdd3c2e8eb388572f",
+    "gamename": "Caishen Ways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9c3670b0262c888062f56cfcd6ce61ed",
+    "gamename": "Captain's Treasure",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d1a0c0684480a4b24e43682b638412d1",
+    "gamename": "Cascading Cave",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d8a027bd7771b3d63efd5dd0849138ad",
+    "gamename": "Cash Collect Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "45ad7d84b2617514243069e5e8a39e23",
+    "gamename": "Casino Charms",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "40bf1b10f980832a55c8ff081f2eb5ae",
+    "gamename": "Cat in Vegas",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dc564752cb510be414ff6b91c3555397",
+    "gamename": "Cat Queen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dc945c9902ce93e1545ce3eb28f2d4ef",
+    "gamename": "Chaoji 888",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f663ebf41d9b25879aac682533837a14",
+    "gamename": "Chili Eruption",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fe9826c0ab49698f3ec793517d10917c",
+    "gamename": "Chilli Xtreme",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8091e1defb185188a97b2abb7e5f9e76",
+    "gamename": "Chilli Xtreme PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "587a7771006aac6a9d8861168ee0d29a",
+    "gamename": "Chinese Kitchen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5ade8e34513d710ef42fefd698bc4b83",
+    "gamename": "Christmas Jackpot Bells",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7df78aa996469bcadb4af0f27a734c3f",
+    "gamename": "Coin! Coin! Coin!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7b1fd24c79ec2365fbc5e5fab20385e2",
+    "gamename": "Crazy 7",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "57e8c8decfa57343de38b2b473ab3b15",
+    "gamename": "Crocodile Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "613619e95d83fc92f8ef721587354dd6",
+    "gamename": "Curse of Anubis",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b16bca6f4a24ddbbdedb1781161f0c76",
+    "gamename": "Da Vinci's Vault",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "02f64a68f9a5dd0ea16dc5b94b3c8537",
+    "gamename": "Desert Treasure",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c8e189f34433a8ff8c556fad649eee20",
+    "gamename": "Devil Wilds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "db9e11b3ce2268f3e544369fd9647c20",
+    "gamename": "Diamond Match",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "91b470fb1dc5101da46aee6ed7f58355",
+    "gamename": "Diamond Rise",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c2c704a623cdc644465104951bc7c290",
+    "gamename": "Divine 9",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "633eb943b57251892784c032705b4312",
+    "gamename": "Djinn of Storms PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "83e3a9468364e039e5a354982044481b",
+    "gamename": "Dolphin Reef",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "077737d636728907f9a3b40b4eb716f1",
+    "gamename": "Dragon Champions",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "87ce02a15b8079595bf8bc1881f8f0d2",
+    "gamename": "Dragon Chi",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9eb07e6c232e74cdf7cd4c4e28b18ade",
+    "gamename": "Dragon Spark",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1e4bb0751fd95f7b484e739a77ae7efb",
+    "gamename": "Dragon's Hall: Thundershots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0c78e8c3db9f2c113c46b9291ff5e41b",
+    "gamename": "Easter Surprise",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6e7512964ad0578154bf9dfbaf29507f",
+    "gamename": "Egyptian Emeralds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "157b37c06dc6b078116ebd6f596977ed",
+    "gamename": "Egyptian Emeralds PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9db5c1d5b9f63bce7c03419aa5447b90",
+    "gamename": "Eliminators",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "20da9c0420ff0ab829254a1a6fea138f",
+    "gamename": "Empire Treasures Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d9364c98f592d84ae07034c4dedadcb3",
+    "gamename": "Epic Ape",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "43e9124da0d56217f8dc9e1ab6a1a0e1",
+    "gamename": "Epic Ape 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "60558b80d2a2f3d6d75adc8ed57cceb7",
+    "gamename": "Esmeralda",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7798f481ed1afd0a35ea5bab9d82374a",
+    "gamename": "Everybody's Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cdb30d7643651f7e3b1d0b2c2ed7deb2",
+    "gamename": "Extreme Fruits Ultimate Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a8402c531379d6ffc2bc503d261edecf",
+    "gamename": "Eye of Anubis",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "daf2840938f7646a79a52c6b6771e6da",
+    "gamename": "Fairground Fortunes Ghost Train",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "71748a091972549f7f3f82a95ceeabb3",
+    "gamename": "Fairy Gathering: Thundershots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "04c267168735e9ddd08589a79d834dab",
+    "gamename": "Fei Cui Gong Zhu",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9e1e471d8ebba1851ef9fd970db55f6f",
+    "gamename": "Feng Kuang Ma Jiang",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0dd37f753c896363b659648697854cdb",
+    "gamename": "Fire 4: Cash Collect Quattro",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e898f5a103e1ede15cb83003ec5fb09c",
+    "gamename": "Fire Blaze Golden: Amazing Factory",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "69f7bdf3c085a57b42a0495676107560",
+    "gamename": "Fire Blaze Golden: Buccaneer Bells",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "69cf377ce60fc0afa39184e91986793a",
+    "gamename": "Fire Blaze Quattro: Celtic Charm",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8a0cca79504cc8df2a1b07240e2f5687",
+    "gamename": "Fire Blaze Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1b1c4626c2150a4d4ffd400a0e846cb8",
+    "gamename": "Fire Blaze: Adventure Trail",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d199f1ab80d427be2e64b1646a8974c4",
+    "gamename": "Fire Blaze: Blue Wizard",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ab9ab11156f84d1a3d269de2aa98f696",
+    "gamename": "Fire Blaze: Blue Wizard Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4067d656b2d7f768c6da183466fc04ea",
+    "gamename": "Fire Blaze: Blue Wizard PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "bd6002c9bb742fc1b2150977132c4a3b",
+    "gamename": "Fire Blaze: Eternal Lady",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1591d9387b6c0fc0480ed61fa1516eb2",
+    "gamename": "Fire Blaze: Fire Fighter",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "19be2973b86e4e69aa92d59e4e18f328",
+    "gamename": "Fire Blaze: Golden Macaque",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4025b2cc866df61a8879eeb23686240f",
+    "gamename": "Fire Blaze: Green Wizard",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f7d07315a249de5a147c4a34c628a1d9",
+    "gamename": "Fire Blaze: Jinns Moon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c340505dfa37b6fa1a33c2303b54b1f4",
+    "gamename": "Fire Blaze: Pearls Pearls Pearls",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "828be599b6c58f3f9f2335c13382db6c",
+    "gamename": "Fire Blaze: Pharaoh's Daughter",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7c799c2414622adcbd4f968eceb3d337",
+    "gamename": "Fire Blaze: Red Wizard",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "71307cf80547c8f956626c100fd495fd",
+    "gamename": "Fire Blaze: River Empress",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "53f3ccf5ad021bad61ab2064380f3955",
+    "gamename": "Fire Blaze: Sisters Gift",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "56fd36a2382c26bb93947e21f091b827",
+    "gamename": "Fire Blaze: Sky Queen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "88c786e69e3fcfdc9327fcb2f0a561af",
+    "gamename": "Fire Blaze: Toltec Blocks",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f2d826f2c73cb4955ebf142495b07a80",
+    "gamename": "Fire Blaze: Tsai Shen's Gift",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4e54fa5416a31fe2c00d28ddd465c4c3",
+    "gamename": "Fire Blaze: Tundra Wolf",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a38900b6fa2a0f17b297f8d0af7cfa28",
+    "gamename": "Fishin' Bonanza",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4b1a6f69a7bd4810add56b3ffd979900",
+    "gamename": "Five Tiger Generals",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e91aafd3cf585868cabff9bc84b0e2c2",
+    "gamename": "Flaming Bars",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "89ff0309fcaf5c381be458e2998b1d0d",
+    "gamename": "Football Rules",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3e4726b05740e0afdfc379720d3da4f3",
+    "gamename": "Football Scratch PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c7b3b67b31cb3ed3ad2eca953c821e6c",
+    "gamename": "Football! Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4f139e0452d3a6123e23465b022101f1",
+    "gamename": "Forest Prince",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c696a40f43d38261e29f84ca066e0190",
+    "gamename": "Fortunate Five",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "446d65ef3a497f6bef79826efbfefc36",
+    "gamename": "Fortune Day",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3f42f75d233e345ed057b5a760db6caa",
+    "gamename": "Fortune Fortune: Thundershots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "96abc8e3143f17045f4f9796b8e2debd",
+    "gamename": "Fortune Lions",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e8db2b77152e9f7c2e6fc5f979b17c50",
+    "gamename": "Fortunes of the Fox",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c6ce75b166fe8c9a9a8c26d2a8321beb",
+    "gamename": "Frog's Gift",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d35feae72c78d5752a48ef80a1824a8c",
+    "gamename": "Fruity Showers",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8e80c3919b0ac72eb5abed7432a1b9f2",
+    "gamename": "Full Moon: White Panda",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "21d32a995db5e675fbd740beebdd25d6",
+    "gamename": "Full Moon: Wild Track",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f26ff053fcefdcbea7b8e4416f90c68b",
+    "gamename": "Funky Fruits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "566949d711213070ffdc6c867299dcda",
+    "gamename": "Funky Monkey",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "604b8e409ff850b28bb11e0f085f2997",
+    "gamename": "Funky Monkey JP",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a4bc6f03755c125b10ab91ce3599051b",
+    "gamename": "Gaelic Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "94a39101b9cbf180bc55dbf9effa9b59",
+    "gamename": "Galactic Streak",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b13103089258a4800e85a0fbc1a1eba6",
+    "gamename": "Geisha Story",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c736488473948e5e5752581b5341241e",
+    "gamename": "Gem Heat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b5840059b2cf513f92a962f0dc59ebd0",
+    "gamename": "Gem Queen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e7913e7a1f4c12e77cfb0603e6ff84a4",
+    "gamename": "Gem Splash: Kings Court",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b59ddc8a961683e5aaaedbb837516545",
+    "gamename": "Gem Splash: Rainbows Gift",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ad145bad0f1ccc515b81695a46bc7697",
+    "gamename": "Glorious Guardians",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c80f52d0b39e0a76f4b518a95d3b3d59",
+    "gamename": "Gold Hit & Link: JP Bacon & Co",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "43080866fb8c94e45494a0cd5322e4a5",
+    "gamename": "Gold Hit: Dragon Bonanza",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3d86eba3c49372e0b834c6dd8d0880d6",
+    "gamename": "Gold Hit: O'Reilly's Riches",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ec972d67781e1a4279825992024b3338",
+    "gamename": "Gold Hit: Shrine of Anubis",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1739f9ef96ec8fec47f5df9c0f498875",
+    "gamename": "Gold Pile: Orangutan!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1257f43828d7e54eccf3921629905a7f",
+    "gamename": "Gold Pile: Tigers Pride",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "21348f97f2f7213faf77ccc747472306",
+    "gamename": "Gold Pile: Toltec Treasure",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d4623fdbe34b109dc73837ed19305406",
+    "gamename": "Gold Rally",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "83a0f8107e07780146bf17a5661c00e5",
+    "gamename": "Gold Splash: Toots Froots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1c91e63ae285ec1cb500dcb73d29f52f",
+    "gamename": "Gold Trio: Sinbad's Riches",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4e61ff4534bd27a2db3bbf6abe330b0d",
+    "gamename": "Golden Tour",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0e6087b1356f93458ea847d954efbe78",
+    "gamename": "Grand Junction: Enchanted Inca",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "55590c56845fefb3102b61266dabca56",
+    "gamename": "Grand Junction: Golden Guns",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2a8995128a0c211ba4ab084fc46eb869",
+    "gamename": "Grand Junction: Mountain Express",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3b92c97f15daa15946fb9b30c480b8f5",
+    "gamename": "Great Blue",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "309ca814422a4927e481e74900f46b52",
+    "gamename": "Great Blue Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ae633bc84e09e7eaf26c1c77843a2948",
+    "gamename": "Hainan Ice",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "33e0219b34d1da2976703164a308e18b",
+    "gamename": "Halloween Fortune",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6aa2823b7626f8ebce7746e9a5ff5b1c",
+    "gamename": "Halloween Fortune 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ba64ef4da5b142e9432879f8000dedbc",
+    "gamename": "Halloween Fortune Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d710cde48c38c8dd647083829d8b8586",
+    "gamename": "Haunted House",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "44893f6676eb290f1d6e36e4a6d717a3",
+    "gamename": "Heart of the Frontier",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "641cce6c867d08872bf34b59beaba2d2",
+    "gamename": "Heavenly Ruler",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a99644c6e18138cece8e5bfa0cb2d6c8",
+    "gamename": "Heroes Arrow",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "29fc8990cb09c7ed7f475ee8569be064",
+    "gamename": "Highway Kings",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6b99638ce0f1bb5e3764298bcf9ae3a2",
+    "gamename": "Hi-Lo Premium",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a42854765ec82fec84320783d19698c2",
+    "gamename": "Hit Bar",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "932a0291c21757e3bd8b238c7321b897",
+    "gamename": "Hit Bar PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9478e0c01cee9a0f629caa929170766f",
+    "gamename": "Hit Bar: Gold",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "72ec883e917457a7e88e11c2a54f836f",
+    "gamename": "Hit Bar: Gold PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8b7bc177f81d0819e1ba7f5052a98185",
+    "gamename": "Hologram Wilds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e6cc14c60fdbfb1403d16be56563f3e0",
+    "gamename": "Honey Gems",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f7fae4e17c87cf81dd72a941af131022",
+    "gamename": "Honey Gems PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7c633894588749291c52463db08c79d5",
+    "gamename": "Hot Crown Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1fc4ade542e9262af13209db4a9cfa8e",
+    "gamename": "Hot Gems Xtreme",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d9946eb797ae0818db8ab02468fcf67a",
+    "gamename": "Hot Gems Xtreme PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b2f168b7a4a4560a861460dc6e13af35",
+    "gamename": "Hot Gems Xtreme Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "769f8c727e8602fcfad6d5615d4330f8",
+    "gamename": "Hot KTV",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e0f42100db58213e964ead5cdb35af4f",
+    "gamename": "Inca Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "208670c8eb450459c4a3c7d0c24d2ab5",
+    "gamename": "Infinity Dragon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a12ea302e6c521d45d3471bd2909be98",
+    "gamename": "Irish Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "69614fc4e61db499ff2d0a7a7e96509f",
+    "gamename": "Jackpot Bells",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2318727a1856d35f76172f9033033768",
+    "gamename": "Jackpot Giant",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b49fc09979b235f59c9dce4b26013de8",
+    "gamename": "Jane Jones in Book of Kings 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4e829c9d244ef1b22ac151ad4293d01b",
+    "gamename": "Jin Qian Wa",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b6df44cf2bc6ce411ebcfac748a3e634",
+    "gamename": "Joker Hot Reels",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1e9dedddf9f0c4d9b27d1a668aecb5b2",
+    "gamename": "Joker Rush",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "07a18321dd08c83896ec495bc361d356",
+    "gamename": "Joker Rush PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5ccd7770eedb511df0234fd567c59bb5",
+    "gamename": "Joker Rush: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f6adc115cc5107cc3063cea58da46477",
+    "gamename": "Juego de la oca",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b9fb1081d23fc0851aae8af927d60f86",
+    "gamename": "Jungle Giants",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8ba42e8a5dcbee4989d14cd7e322f162",
+    "gamename": "Jurassic Island 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c167992a35139d3c5b942d13f7d888f1",
+    "gamename": "King Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f86a7ddefce50b10120e88e90bf5f20b",
+    "gamename": "Kingdoms Rise: Battle Beast",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "27ebfb953cb5af1c7b57489b5ad915ee",
+    "gamename": "Kingdoms Rise: Captains Treasure",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "19a230ce70c4eeaef41b7de8c502fe44",
+    "gamename": "Kingdoms Rise: Chasm of Fear",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "be122d0d602e3ff0bb0cb92e10cdf991",
+    "gamename": "Kingdoms Rise: Forbidden Forest",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "30f5bdf187943b7690293676e60d2be7",
+    "gamename": "Kingdoms Rise: Guardians of the Abyss",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "75283b5a5ee8724af68ce8ae5a3486f6",
+    "gamename": "Kingdoms Rise: Legend of Elvenstone",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9f493fbf25374c93b1de3ccffa1caed8",
+    "gamename": "Kingdoms Rise: Legion Uprising",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1d33d8e649ad9f3825515b0c27e7e94b",
+    "gamename": "Kingdoms Rise: Reign of Ice",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "237a517561430932373eb9b13f99ed8c",
+    "gamename": "Kingdoms Rise: Sands of Fury",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "350f401e21d83f8fbf09e1211756f3c8",
+    "gamename": "Kingdoms Rise: Shadow Queen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "08174c7ec622941a85179e4ca808960c",
+    "gamename": "Land of Gold",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a1543c33b37b36fb779b45bdc18854da",
+    "gamename": "Legacy of the Wild",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a6819ec6e3503dae7ba180c1cad59adb",
+    "gamename": "Legacy of the Wilds 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "12116fb146c0c69e4b2774346813d3bd",
+    "gamename": "Leprechaun's Luck: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9c6849d0214625116b19c0b1284823d3",
+    "gamename": "Lie Yan Zuan Shi",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3d1dccc65832f487e30a0b18687f3edf",
+    "gamename": "Liu Fu Shou",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a648e3f787e7a1365838baac87ee28db",
+    "gamename": "Lock & Hit: Red Knight",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "61356d707e94af28cbc6540cac3b8342",
+    "gamename": "Lockdown Loot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6409af2c138f9f57d97cf53a63f6c889",
+    "gamename": "Long Long Long",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fdd37bb1dc832533a5f0eb3395537b49",
+    "gamename": "Lotto Madness",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2d95c03b7dcdd548ed32f8c893ad7fe6",
+    "gamename": "Lovefool",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4e5f0f51c800eaf975b5771f86f1a3ae",
+    "gamename": "Lucky Emeralds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d8ec0c13d2b2233289bc38f13d1b25db",
+    "gamename": "Luminous Life",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "15c330d54b37db6ee9be4ade023cd671",
+    "gamename": "Lunar Link: Sky King",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4f9e475c973eff14fa5ad7ef3bb0bfbe",
+    "gamename": "Magical Stacks",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ec7147dda959868ea7c7f431baaa9dc9",
+    "gamename": "Maji Wilds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2a597d354c04f422ef760c626a92e5be",
+    "gamename": "Mayan Blocks",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "40636284ee4c0ff02880aa591a7e478b",
+    "gamename": "Mayan Blocks PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0c4c1b2095de1bfb9054c1057ee2eb89",
+    "gamename": "Mega Fire Blaze: Big Circus!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3020a864e7d94d01d3c3e182b8727a8b",
+    "gamename": "Mega Fire Blaze: Emperor of Rome",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f478fc576f29b549ad2fea767dd792f3",
+    "gamename": "Mega Fire Blaze: Khonsu God of Moon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "768806ebb2fce2cd4bf0614bbee61d1b",
+    "gamename": "Mega Fire Blaze: Khonsu God of Moon PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "71ca6a327558689481efff1a326cf15a",
+    "gamename": "Mega Fire Blaze: Legacy of the Tiger",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "73ad651ba2f895981fd00da00bde6a25",
+    "gamename": "Mega Fire Blaze: Piggies and the Bank",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9e01e71be20b6c24ada9d5cf3e31dee8",
+    "gamename": "Mega Fire Blaze: Wild Pistolero",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "24a1e16a29b5364ea2c8d79a269d83de",
+    "gamename": "Midnight Wilds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2cd5389099cda57758bd5d4f7af42f8f",
+    "gamename": "Mighty Hat: Lamp of Gold",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "627b2c8459fa36661495ac5923c97b02",
+    "gamename": "Mighty Hat: Mine O' Mine",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2bca3467e2642e7efa7d91e62c29d457",
+    "gamename": "Mighty Hat: Mystic Tales",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b5dda25e306883bf8e6c781f01c9b105",
+    "gamename": "Miss Fortune",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "15fd9e2a82c3a12a680be417ad1f21a2",
+    "gamename": "Monkey and Rat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9f5cdc6ea917ea160ba751cdbec609a8",
+    "gamename": "Monkey Mania",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5de47b8f0011af1187db721529391a9d",
+    "gamename": "Monster Multipliers",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9f8257e2286a6be7720de2ac1d86aaa8",
+    "gamename": "Mr. Cashback",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "51f6a7adc46e13a0a868c3b2686bf103",
+    "gamename": "Murder Mystery",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "24741259946352ef3d9777f87dea35c0",
+    "gamename": "Neptune's Kingdom",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6fe051d6865e9349479fa3b4011c1758",
+    "gamename": "New Year's Bonanza",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c95a03963b959d071e6b9c87366b1ba5",
+    "gamename": "Ni Shu Shen Me",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8d8fb2302027662c1a368808872032a8",
+    "gamename": "Nian Nian You Yu",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ba6f78623a6d660d3c1c8fc1ed48f63f",
+    "gamename": "Ox Riches",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6a6c558b7a81eb9f1cfe43632448e274",
+    "gamename": "Panda Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "adb7e75c3c59734910dafdd78d299fad",
+    "gamename": "Panda Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "91c0619c5f811116d1f8fb116a624aaf",
+    "gamename": "Panther Moon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6832f35e232b7689b584eab3cf2f11e0",
+    "gamename": "Panther Pays",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b16ab02398bd1b3eab15bdf4cd81b141",
+    "gamename": "Panther Pays PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "29b6025c600a8243e274d4b051c698a1",
+    "gamename": "Penguin Vacation",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4b9091fcb2085c24336ab7446a2ff51c",
+    "gamename": "Pharaoh's Secrets",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9230054bed275a725cbeb602da05797b",
+    "gamename": "Pharaoh's Treasure Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "995b97cbaea0b3c828d74a1947cf34a4",
+    "gamename": "Pigeons From Space!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ed02686dd823b80014e5a9b8cf5cd3a7",
+    "gamename": "Piggies and the Wolf",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "17929befedee4766048be94eb84b7d10",
+    "gamename": "Pixel Samurai",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "28394f26ea509b78fca3463d00d457d9",
+    "gamename": "Plunder Ahoy!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dd61582866d9de12c48b91346116ca70",
+    "gamename": "Power Zones: Ishtar",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b5ea422c60e8b5a3e3f10d7966e668ec",
+    "gamename": "Power Zones: Legend of Hydra",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cf61ab0484062dd0de1ecc54744cb161",
+    "gamename": "Power Zones: Pyramid Valley",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "de35e4099745e2d229634d3452346e8b",
+    "gamename": "Power Zones: Stallion Strike",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "324ef7edb41cb3b0e0aa3424bc26585f",
+    "gamename": "Power Zones: Thunder Birds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "384f76add94662f0acee1b2547a98101",
+    "gamename": "Pride of Persia: Empire Treasures",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3070504377e19ff9366c4dba88d0a09e",
+    "gamename": "Pumpkin Bonanza",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "face88d7551854f1b73a9042033d3ced",
+    "gamename": "Purple Hot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "203de928da300db8fb24068ea715b1a8",
+    "gamename": "Pyramid Linx",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dd10279395606722cded08de861a0864",
+    "gamename": "Qin's Empire: Caishen's Temple",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "52a75fcb489c3048b26317deadc0afa2",
+    "gamename": "Qin's Empire: Celestial Guardians",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d84e6271d8dfe7479fcc890be298f5f8",
+    "gamename": "Queen of the Pyramids: Mega Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b3324734523e2f960ab48b46409f15d7",
+    "gamename": "Queen of Wands",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "77f7602a812e8d2cea1e081f3207a787",
+    "gamename": "Quest West",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f945fa95532421e99bbb9ea19c7660ec",
+    "gamename": "Ready to Blow: Thundershots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4ad49e9c6a8600cd34edd0c566acfb0c",
+    "gamename": "Record Riches!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "33341a2803fb6dd1e61f17cf1d966d79",
+    "gamename": "Retro Rush",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "34f15dfb24635086b4aaeab395e06e3a",
+    "gamename": "Rhino Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "791e18449f3dd43bee6d7f436b2689ba",
+    "gamename": "Ri Ri Jin Cai",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2c06f4b5a939a1f266ee6ac72cffce9e",
+    "gamename": "Ri Ri Sheng Cai",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ec25ac15fbe2eac3886c7700a8e58688",
+    "gamename": "Rich Roll: Lust for Gold!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cb301e7bb3339072d2a102a8a443215c",
+    "gamename": "Rogues Draw",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "336efd2e161d72cf905627525b1dd0e2",
+    "gamename": "Rome and Glory",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0997626291314b18bac6b182c6ddf5cb",
+    "gamename": "Royal Respin Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "52ab7ea829b151eefddba98d059bd940",
+    "gamename": "Rulers of the World: Empire Treasures",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c774b7bc30ef39c268a11fa8b5dc25d6",
+    "gamename": "Sacred Stones",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "51b4d02ef15fb7eea6c960f7fac0a7d4",
+    "gamename": "Safari Heat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e75afc2979465cb1c84ace4ce6be0d07",
+    "gamename": "Sahara Riches Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c7acf22040b86f1bd0b77d387522326a",
+    "gamename": "Sahara Riches MegaWays: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "28cafeda238965a19e0affadc46dc1d3",
+    "gamename": "Santa Surprise",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9a772bafa2b027327ec0ef161f18e72b",
+    "gamename": "Savage Jungle",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b2e9c364d08bab5fc946ebcfca86b1c0",
+    "gamename": "Secrets of the Amazon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "97aff534143ebf7a1ca00ebd33fde91f",
+    "gamename": "Shark Blitz",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ea245310064d46624a503c758b80cf8e",
+    "gamename": "Sherlock Mystery",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4c0fcfbe7e6c6c1e09e7f2b959f0a4d7",
+    "gamename": "Shields of Rome",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "13dbe38ac5d61b0f3a100c0ecba7b28b",
+    "gamename": "Si Xiang",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e5bb2d8c58feed5280a23677416aec2c",
+    "gamename": "Silent Samurai",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "19ca4b6960585ca1586471685c48c510",
+    "gamename": "Silver Bullet",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6805547da385cefdf0491389b0b72021",
+    "gamename": "Silver Bullet Bandit: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c57a76fd0f3f124d3166eb358a34fb46",
+    "gamename": "Solar Eclipse: Jaguar's Lair",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f655df9ae765a1f7ec4fda015612213a",
+    "gamename": "Sorcerer's Guild of Magic",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e3b0b76e30657a7ce173fe18a172ce59",
+    "gamename": "Stallion Strike PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "27da990dfe26efbf9f821a902cc00d76",
+    "gamename": "Starmada Exiles",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "160e150f8264df2e580b04bd2880d96d",
+    "gamename": "Stars Ablaze",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b3fc93a7599db83861740678fc2760ed",
+    "gamename": "Stars Awakening",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b0dc8aaf1ea916d55c772b7434ab6047",
+    "gamename": "Storms of Ice PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b1e462c70dc77e043051d9b344a524ff",
+    "gamename": "Streak of Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ce822c5dacc756083834f038c4f18b55",
+    "gamename": "Super Lion",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6421e51381b5018d99868c549cf216dc",
+    "gamename": "Sweet Party",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "987c85be57d22ca4d6d7f26903f8cd36",
+    "gamename": "Thai Paradise",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9276035d93598db2ef34914987e5fd71",
+    "gamename": "Thai Temple",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "03aaed0d95adc2255f6dc14513ef8284",
+    "gamename": "The Queen's Curse: Empire Treasures",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "53e1a2883a20db9c04cdfe4bf5ba98ba",
+    "gamename": "The Riches of Don Quixote",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7c24af4eb42e34ea67d62a945dc2d17c",
+    "gamename": "Tiger Claw",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "008b7307a491bd2355e363385509bd76",
+    "gamename": "Tiger Stacks",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "527e302ab05e37ecb611c48a2c3c59f0",
+    "gamename": "Tiger Turtle Dragon Phoenix",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9cf3117fcef68936716552ea75e46f12",
+    "gamename": "Tip Top Totem PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "02b7814b314fd364f27c30dfb94e609d",
+    "gamename": "Tip Top Totems",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f7239188d876f58753326dae2e428946",
+    "gamename": "Toad's Gift",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "96b0dc32253ea87956b299df5f5da038",
+    "gamename": "Treasures of the Lamps",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f7bb5ec211d21aa3d9d2a13cda1a5b2f",
+    "gamename": "Triple Monkey",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c24e4e8389451715cba419755ca0deba",
+    "gamename": "Triple Stop: Hercules Rules",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "df831f469abffbfa63fe371f7bd80595",
+    "gamename": "Triple Stop: Mermaids Find",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "391db24bf14f5e970938728c6dddc9ab",
+    "gamename": "True Love",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "191cb8f8fd2f5fd518e8c4a26b7927f1",
+    "gamename": "Ugga Bugga",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8efd1a752c1fd56b282adcc30485b506",
+    "gamename": "Vacation Station",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a4a1e2b9aa4e3e2ef9a0855fe40943fb",
+    "gamename": "Vacation Station Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c0f13c2d0fb1471d295800fc587e6158",
+    "gamename": "Vampire Princess of Darkness",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a5e1d3ebcf9237af9e272d60bc36354c",
+    "gamename": "Vikings: Empire Treasures",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7ac0d0b6058c14be2d36d6def86a2ee7",
+    "gamename": "Wall Street Fever",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1446956c552e84385d2b27e295999e0f",
+    "gamename": "Ways of the Genie",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e9ab61e7029d7286244866dfc49c19c9",
+    "gamename": "Ways of the Phoenix",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c6ffb52d04059c8be23f5cff6d550e42",
+    "gamename": "Wheels of Flame",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dd89c3175430408c1bcf491210f540bd",
+    "gamename": "White King",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4cb5842be342349e191926fb256feae8",
+    "gamename": "White King II",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "69ea8bf0b6d366806a5324a639566096",
+    "gamename": "Wild Crusade: Empire Treasures",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d3c5b0b9e8c6663a9cbd717853e0375f",
+    "gamename": "Wild Lava",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a2751120e0ef4bfd384215bd2ac804c2",
+    "gamename": "Wild Lava Scratch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9e21da597c885e4ed37d7a6839214631",
+    "gamename": "Wild LinX",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "26c823c3c6c3907145d9ebbcfdd2cb3f",
+    "gamename": "Wild LinX PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2d849a97e74f34072569c985dedd1ec1",
+    "gamename": "Wild West Wilds!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4a216721856e3da5eb5978bae59b38d1",
+    "gamename": "Witches: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "302403eee06ba814894854309fc6ad1a",
+    "gamename": "Wolves! Wolves! Wolves!",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b1b1311edc02e505083a3fe43655eaae",
+    "gamename": "Wu Long",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6de5c8fa14ad51f07e7ff0816223f846",
+    "gamename": "Wu Lu Cai Shen",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "514c8dc5cba8a227b90a902349a9702e",
+    "gamename": "Wushu Punch",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2d3666b5384355c9a3dad3e7393f8acc",
+    "gamename": "Xuan Pu Lian Huan",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0778aff9a8e2879e3a1353f792b820d6",
+    "gamename": "Yu Tu Jin Cai: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cc6a40f828e38da5de541654665d0cb1",
+    "gamename": "Yun Cong Long",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0e2f4bb4ee3265b4b81678a735abb01e",
+    "gamename": "Zhao Cai Jin Bao",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "364c5073e8149a5af45498aee2310b36",
+    "gamename": "Zhao Cai Jin Bao Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d402fec1c1bc8c6fc990c411dbff1fcc",
+    "gamename": "Zhao Cai Tong Zi",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ece004ca2f18fc543e034e0dba017117",
+    "gamename": "Zodiac Charms",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8c584666239a5fcc1f4ad85ccfe97e11",
+    "gamename": "Goood Heavens",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6ff8777f4e0dd7466bbda305906d8f6a",
+    "gamename": "Gummy Giga Match",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b6bb718d43d549f479b00f4949c79c80",
+    "gamename": "Immortal Ways Lady Moon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7832c49c8e632a034744b6464e576eed",
+    "gamename": "Diamond Explosion 7s",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "288f4d401dae356488dd083fa6b44f4e",
+    "gamename": "Go High Panda",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8f367013c5d5af52c62578bbd2e6d476",
+    "gamename": "Shields of Lambda",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f0d20437b82e2157ae192de8f0533bc2",
+    "gamename": "Temple of paw",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5b5f7ddbe74469045bd415dc89a6e38c",
+    "gamename": "Epic Fish adventure 96",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "15be800f94da55ad1f933043f5892f9a",
+    "gamename": "Sakura Fortune Epic Bloom 96",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9adb18b30a36e945e512495e75ed57ef",
+    "gamename": "Lights of luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "11e7bbab92968968c6f5ec2ddc4dd0b4",
+    "gamename": "Lunar Link: The Legend of King Arthur",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "20f2123c089d0c528361f15ad9c76bbe",
+    "gamename": "Bulls Eye Bandits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b9992eb3aed77d6fd08099b0b7eda26c",
+    "gamename": "Drop for Top",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "461e9866babdcde258f17733185313ab",
+    "gamename": "El Ranchero Cash Collect Diamond Path",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e5b681bc77d8a9b218d4bf36a7e75638",
+    "gamename": "Gold Trio: Leprechaun's Luck BF",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "de867ed6619dc561b5141412b5c1aa14",
+    "gamename": "Reaction Link",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d62f99f1a0830273976ec26423f0a91e",
+    "gamename": "Wild Roll",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "650126962694be4f6feaa020bd0dd6dc",
+    "gamename": "Mad Hit Savannah",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "734cf7fa1b077a6386c8456a3310742f",
+    "gamename": "Rush Fever Soda Pop",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "25f6c254dbad68a481d71cde4aa8d292",
+    "gamename": "Ten Ton Ways Luck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4dccc357945c0e30bd04bf01a21810cb",
+    "gamename": "Pearl o' Plinko - Mermaid Cove",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1cdf81a0f49ab6d74a13646ce9908bb8",
+    "gamename": "Age of the Gods: King of Olympus Fire Blaze Xtreme A1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "519d5dcecfd95b3590c53ed99077e16d",
+    "gamename": "Aztec Fruits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e3e3d0f3153e73dfcc0b108d9ac5140b",
+    "gamename": "Lil Sphinx",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "bdb8ed528755bd9cb20091a2c0f0648f",
+    "gamename": "Piggies and the Bank: Cash Collect & Link",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "37bae698846706b40b7a10a0571da955",
+    "gamename": "Fluffy Favourites: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "de99fc3d39c9d2d432a83b38270bb9be",
+    "gamename": "Immortal Ways Cleopatra",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "84121c7d74004998920c39a2eda499e1",
+    "gamename": "Go High Puppy Love",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "92626ff9f93c36988d625d05aad19d7f",
+    "gamename": "He He Yang",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0d1ffb91994d7c523d1cecd032fb2ca9",
+    "gamename": "Reel Nightmare",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dcb60047b1d91ae313c72079ef1dcf68",
+    "gamename": "Age of the Gods: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c0c19fde199d2b5ed47aed402e219909",
+    "gamename": "Age of the Gods: Hercules Rules",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e4e80665e38d521c4e878793ff774613",
+    "gamename": "Breach the Vault",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7278559057e542ba77dbb5bceec76760",
+    "gamename": "Bulls Eye Alice",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "608982fab1158358bdfd28cc9fe0581a",
+    "gamename": "Bulls Eye Bells",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8505403d8c0b6dfcf838b5c39990ed11",
+    "gamename": "Candy Roll",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7bd0ac2e0618437e579e5ea3b0b5bea4",
+    "gamename": "Circuit Shock",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d87ddb4fc376a2e379265701c7bb1b7a",
+    "gamename": "Diamond Match Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d234a9c54f3ccdd67a123dbb61d42472",
+    "gamename": "Double Digger B1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cd22e5d7fe416de7f7d0ebdbe2e72b70",
+    "gamename": "Double Heat: Crown",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "40199f4bbf318e6fa493651e03730ccc",
+    "gamename": "Elephant Riches",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f14ee1d68dcf1a9bf8e653c075ba05f3",
+    "gamename": "Fei Long Zai Tian",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2b10597671bba189b3b2c5e7f46035b4",
+    "gamename": "Feng Shui Flip",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4fd0058c08b26baa039bb5f76510116e",
+    "gamename": "Fire Blaze: Sky Queen Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c992a0098607b41bcd47a0d33baab2c1",
+    "gamename": "Fruit Harvest",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1803b01f5703c4f51f305629e5ba4d4f",
+    "gamename": "Full Moon: White King",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a7160456767854c38c2e29df18db76f5",
+    "gamename": "Gates of Camelot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ea74b35ed8d9bf6a804036ebdbd20769",
+    "gamename": "Go Joker Go",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5417301f0ae5df886fb7a233d006a285",
+    "gamename": "Gold Hit & Link: Tiger Jones",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0fcb3c827d1d25950a42dba1e0e21a91",
+    "gamename": "Gold Hit: Lil Demon B1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "befca87a853aad6f527e85aac2add227",
+    "gamename": "Gold Trio",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a715bfbd19af7cfdfc420ef8f1fa9108",
+    "gamename": "Hot Gems",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2f3d12977a99ab8bc89b61647c143191",
+    "gamename": "Lil Demon: Mega Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7de3b32011b7c0c5b99cdc1ef64ff88b",
+    "gamename": "Long Jia Xiang Yun",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ca821a33ec2b77c64d2923ad04f776c2",
+    "gamename": "Lucky Bass: Mega Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "72949be97c53dfbe7f368b9b15f0693f",
+    "gamename": "Lunar Link: Nile Moon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d8b0dc96587cc16270abe44accbc9cdf",
+    "gamename": "Lunar Link: Phoenix Moons",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c471f943daf12ab4ac6d15276a5960d8",
+    "gamename": "Macabra Linx PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5dccb83772dd9025eafeaea1ad8bff97",
+    "gamename": "Mega Fire Blaze: Dwarves and Goblins",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3b082c720bf29183381a2f80a31cfb4b",
+    "gamename": "Panther Moon: Bonus Lines",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "200e1617b5c19f60b12b6395b02ebc68",
+    "gamename": "Quad Link Count",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "eae331a47c9c628f2568c701762cfea9",
+    "gamename": "Quad Link Red",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "bc0054ddd7b9ece569389711631f582e",
+    "gamename": "Queen's Mystery",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f613f9a1827c662f5be7b7a6100e055e",
+    "gamename": "Roman Fruits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4296861bd9046cdc4a0fab3db415a77f",
+    "gamename": "Samurai Fury",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "37e3be051af0f235a68fba71fa5fc728",
+    "gamename": "Sinbad's Golden Voyage",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e148fbec11cbd31c0a2f3919bd2bbd11",
+    "gamename": "Spin 'Em Round! B1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3fd689a37540a7f9dc90c96557361d33",
+    "gamename": "Sweet N Juicy",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8b100e5c9844bbe2281b5798f8accacf",
+    "gamename": "Triple Money Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "32f18f0e936e30b3ff77f60591ae098a",
+    "gamename": "Wheels of Flame PowerPlay Jackpot",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "de635eeb21d26a4c61c465cc9f736db7",
+    "gamename": "Wolves! Cash Collect & Link",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "39c752a4e618ca3ca40d9deb66442b87",
+    "gamename": "Big Bad Wolf",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "08281568020a1c9efa0333c6d136ee96",
+    "gamename": "Big Bad Wolf Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c053383c320010dab496756c5e9ca161",
+    "gamename": "Big Bad Wolf: Pigs of Steel",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e6b2fb97a5109f9a436fd9a7b20a68c5",
+    "gamename": "Book of Duat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b57783fd55e70993e19d5df8cf8fb8d6",
+    "gamename": "Brawler's Bar Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "827b6007594301a37ccc74a9e6666f4d",
+    "gamename": "Brooklyn Bootleggers",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4082ecb08c98a665acf4c5cfcab94ba5",
+    "gamename": "Cash Truck",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0092fd98a411241b8c99a0450ede0487",
+    "gamename": "Cash Truck 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b325f54f8f3279cac00d78b9bdcb0f7e",
+    "gamename": "Cash Truck 3 Turbo",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "63204820f9f0a40aedb36e97d95e40f7",
+    "gamename": "Cash Truck Xmas Delivery",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "321a0f5c6726da0e86d23e96d43e78ff",
+    "gamename": "Catrina's Coins",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e09cad2588d43695e100bf3fa6dfa5cc",
+    "gamename": "Dog Town Deal",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "990b55463c0f24c2495819464d2536d0",
+    "gamename": "Dragon Shrine",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "61e686c1e73cc3a944a463687780c677",
+    "gamename": "Eastern Emeralds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a9ec305c08e1afb829c45ea9c508f807",
+    "gamename": "Eastern Emeralds Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cc2fa0e2ca3168506cdb3b14d9cccff7",
+    "gamename": "Feasting Fox",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "588a9ffcd89866d10f6040f672ab2697",
+    "gamename": "Golden Glyph",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d1e40efee013b0db0e2fb8ae31fdd7f1",
+    "gamename": "Golden Glyph 3",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c8dfa428be30baac76f1b948e975fd0e",
+    "gamename": "Hammer of Vulcan",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9b3825c169153e97cf09466371b7a863",
+    "gamename": "Raven Rising",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0ef26ba423acf5414a68f28e603ab256",
+    "gamename": "Sakura Fortune",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4644eb9d6c7c95b99c9ef8600fc1e4a6",
+    "gamename": "Sakura Fortune 2",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "29d7a12e1f0f5e525d72808e3e0461ef",
+    "gamename": "Sticky Bandits Unchained",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b1a86ca4b9a85a12e37dc3a30fcba3ca",
+    "gamename": "Warp Wreckers Power Glyph",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4353d21c33442f0e88e55e97ee428935",
+    "gamename": "Wild Harlequin",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "425dffa906838b02376f57720d58635b",
+    "gamename": "Wins of Fortune",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6997e561969b08331cbb01b33d4d14ad",
+    "gamename": "Leprechaun's Luck: Cash Collect: Megaways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c505006333c4a424c505de1c02502061",
+    "gamename": "Macabra Linx",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "2b65406279ce4ad13c091eaccf0f89be",
+    "gamename": "Oink Oink Oink",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a14507010c40e9764cf1cf8f5bb51cfd",
+    "gamename": "Veils of Venice",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "920d81937427c654f9f20ff046171150",
+    "gamename": "Dragon Bond",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3ca822d2ced8e9649f0c5b6159ecda03",
+    "gamename": "Fat Choy Choy Sun",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e56dae34b614da224ae795493d062b94",
+    "gamename": "Gold Pile: New Years Gold",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e9c4e2da12196a17effeb860d672480a",
+    "gamename": "Golden Ways",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6633942da9db4ca4ca1f15c6dc7fafd8",
+    "gamename": "Jinfu Long",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e0291755f8df9c3f635091ee56d8ae97",
+    "gamename": "Jinfu Xingyun",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f3be5689746b75da363d6b24a57fde22",
+    "gamename": "Koi Harmony",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9771c98900555514c3fe500a55d2d7a6",
+    "gamename": "Age of the Gods: Keno",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "285c9f7cfb648199e7e1fa66731ca523",
+    "gamename": "Gold Hit: O'Reilly's Charms",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ecfe4525d5853fa9d78c4cdb179bbe38",
+    "gamename": "Kraken Spins",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3497898b9f1fa15c1e5dc92a9c85ff7c",
+    "gamename": "Lucky Gift: Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "003a5080eeca4d60f5065394be54b07f",
+    "gamename": "Mega Fire Blaze: 3 Wizards",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0f6e65a61ba9475849166fca60c8ddc5",
+    "gamename": "Silent Samurai: Mega Cash Collect",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f8dc6228b91d3861627962bbc82451c4",
+    "gamename": "Solar Eclipse: Northern Winds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "40e7f11e7a64afb8304eb33bb42e8f97",
+    "gamename": "The Great Genie",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "85d6cd7b9da6f44bb96b70f18cf0a0da",
+    "gamename": "81 Joker Hot Reels",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d8ef6ebfd94e684ce60e6841c5321bc8",
+    "gamename": "Ocean Frenzy",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "012398f992fff6acfcc0523b7cda5563",
+    "gamename": "Blue Wizard: Cash Collect & Link",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8751fd4b8dfe3e4c78bbc121c8645a4b",
+    "gamename": "Stampede Rush Trident",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9b39fd50ccc5f7e88c12749ee7c9d588",
+    "gamename": "Giga Match Bunny",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "51b66cd61ba611739526745224f54dc2",
+    "gamename": "Mad Hit Diamonds",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9e8e74124960244919f1a225fbb23b85",
+    "gamename": "Adventures Beyond Wonderland Magical Maze",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c86b77cec511da289eeb8e9058a56b94",
+    "gamename": "Azticons Chaos Clusters",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f7e7fe4a2b121f523d0ebee482b2fee3",
+    "gamename": "Betty Bonkers",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "acc1897d1fef952b853e18c59267d643",
+    "gamename": "Piggy Mania™",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "22cfee7e5f1b9287895d0f9959ec8339",
+    "gamename": "Mega Fire Blaze: Lucky Bass™",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a11a4f3226ef501a335a763b135e8a3f",
+    "gamename": "Buffalo Blitz: Cash Collect™",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cd266fdd042d678942d55582169a74db",
+    "gamename": "Oink Oink Oink: Pharaohs™",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "eada741f2df821b8000825315b63c7f4",
+    "gamename": "Lil Demon: Double Heat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "ead142e5148e792a1f5312fa5e81b755",
+    "gamename": "Immortal Ways Gallina Harvest",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4c2def79dd7dec2f5593b9adee6e7830",
+    "gamename": "J Mania 3 Buffalo",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "252147cd2d931e1fcea52696d7d08a04",
+    "gamename": "J Mania Loco Habanero",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "534865a7d1d19069d34fe6520720513e",
+    "gamename": "Beastwood",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a9194454ef261ff63c8f2804cd16796a",
+    "gamename": "Sticky Bandits Thunder Rail",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c38efc51028bd65f42396fa079c125d6",
+    "gamename": "Playtech Lobby",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f6afb5edb029a2c3ece6139970ea6c24",
+    "gamename": "Bet On Baccarat",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3d0a528c4e7283af595f3ca3c71f5793",
+    "gamename": "Quantum Baccarat Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d4dcf5d139cfe5bc113d65c7b898531e",
+    "gamename": "Age Of The Gods Bonus Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b18f8b12d186f80d85d6842cab300570",
+    "gamename": "American Speed Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1e611d9a4004507331580042ea5ba061",
+    "gamename": "Auto Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "cb2bbeee0e50eed2099a6518ac1a1094",
+    "gamename": "K-Pop Roulette Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c1d117393b57ff9b287117a313ada4c2",
+    "gamename": "Football French Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "455629a978723d3d01c90bbf95363ea6",
+    "gamename": "Football Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "04c94180ba111ff4180c7389e1565446",
+    "gamename": "French Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b9c4bd2ae467d8445b9937773900a684",
+    "gamename": "Lucky Ball Roulette Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e00d386ae2bf9756e6fb1e095781abe1",
+    "gamename": "Mega Fire Blaze Roulette Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e8af0101545a33d8df65afab18de0e9f",
+    "gamename": "Quantum Roulette Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fd28f48e344d6ad4485c450fecf8af2c",
+    "gamename": "Spread Bet Roulette",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4f510ffe9dee83958c36ede1f6500ea0",
+    "gamename": "Cash Collect Roulette Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "450c2b91bf6b007d2380483a378330cd",
+    "gamename": "All Bet Blackjack",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "758e8e184f125c7745037d1fc22b197a",
+    "gamename": "Blackjack 1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "8952503a9316a7bdc80a930110a8e580",
+    "gamename": "Italian Cashback Blackjack",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4eec0cbf65d88a3b9f6632b0fc763709",
+    "gamename": "Mega Fire Blaze Blackjack Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a61ddc339cc0a9c7af1965240b510047",
+    "gamename": "Quantum Blackjack Plus",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1e71714fa938d1384839fe6f926bb02d",
+    "gamename": "Unlimited Blackjack",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "629e9c98ecb8e6b67d7161178ddc46ab",
+    "gamename": "Sette e Mezzo Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "15428e34c157a6656a29f03c3a7eff96",
+    "gamename": "Blackjack VZN 1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "fc8e880860aed598cc35665cd191aec4",
+    "gamename": "Speed Blackjack 1",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7bef2f5ffdac2ec024db9b1ea90d1195",
+    "gamename": "Sicbo Deluxe",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "400d029734aa6121de5d18d09d7be084",
+    "gamename": "Speed SicBo",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "7c1f35091de391e02f4a0fb3146a09d5",
+    "gamename": "Dragon Tiger",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "18fc072227482162cdf58ccfb41c5039",
+    "gamename": "Bet On Dragon Tiger",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0633f8e4f38bb87a6ac9caa7db4e2151",
+    "gamename": "Andar Bahar",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "6a40d2ecb8f05248d218055d88869585",
+    "gamename": "Adventure Beyond Wonderland Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "31cc96e15bed96d0ca18eb4eef5294e5",
+    "gamename": "Buffalo Blitz Live Slots",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "84ab198a5f4790551d3f94cdbc452b64",
+    "gamename": "The Greatest Cards Show Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c0b564354e8bb17d915ecc3369775dee",
+    "gamename": "Spin A Win",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "831995cca8a58bfbdebb6ff2588b9c7a",
+    "gamename": "Spin a Win Wild Brasileiro",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "325e99271fc8b381236b35bdc1721f8c",
+    "gamename": "Mega Fire Blaze Lucky Ball Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c33a64c0c823c8e0f857324156ac4e27",
+    "gamename": "Busted Or Bailed",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "afb70353c060a8508848ced3dfe6e6f1",
+    "gamename": "Sakura Fortune Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "4e70ac2a8c8e77667a70a9cefab94665",
+    "gamename": "Bet on Poker",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a2edd17baf20fb65208f6a108327e1c0",
+    "gamename": "Casino Hold'em",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e5aad7c4c565c5201b32310afcd9b170",
+    "gamename": "Casino Stud Poker",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1041e1bce5dbdea43e65b511aff04b3f",
+    "gamename": "3 Card Brag",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a146e8950eb211eb3c8eadd3ae6738af",
+    "gamename": "Hi-Lo Western Live",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "945e7e13fa0a5e31a239f1533accb9b8",
+    "gamename": "Giga Match Gems",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "21ce4f3eab79deda554496c9daa3be63",
+    "gamename": "Mad Hit Gorillatron",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "1f03eed4a7ff249b83d1c3e7ebfac391",
+    "gamename": "Mad Hit Jokester",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "aec6e04f6084265a5040aad059f0506c",
+    "gamename": "20 Stars Ablaze",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "0b3f639dc0ea6709151c3e4131484cbc",
+    "gamename": "Book of Inferno",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "c905883fae9c1b60e85031acb156b8ac",
+    "gamename": "Lil Demon: Blazing Lava",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "06cf59a6a9155ea76b1005f560b99287",
+    "gamename": "Gold Trio: Lil Demon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "28a2210c6e4e2bf7498159dfc5d080ee",
+    "gamename": "Solar Eclipse: Desert Treasure",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "53c5b5e076c6bf6598cd733df1d87755",
+    "gamename": "Joker Spin & Roll",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5b601e47e5c588fff6a5728904ec6fd1",
+    "gamename": "Immortal Ways Volcano",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f559835962494770498ce6c8efaae268",
+    "gamename": "Giga Match Egypt",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "44bdb05867a334a14576988b01eb9044",
+    "gamename": "Ten Ton Ways Stampede",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a17d08a67a904a967b6600030ab0bee9",
+    "gamename": "Flip Royale",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "9e7f47ecf9014fb2e1bf70a6bda645a6",
+    "gamename": "Cash Truck Begins",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "dba85f9f78d3fb2dda65b9271560b9f2",
+    "gamename": "Cash Reveal - Credits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "033799ae3687f00ad7217bbba85bd502",
+    "gamename": "Sahara Riches: Cash Collect Max",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d5055259af3e7aa3b6b32752ac6e5a4d",
+    "gamename": "Wizzy Trix",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "15479e0e8eab01c46db7d1bf4127880d",
+    "gamename": "The Racaroon",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f319e972938b27c7cc496238a7be1df7",
+    "gamename": "Bubblegum Burst",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "bdead0fc5fb48e432ef0341fc4a325a8",
+    "gamename": "Mine & Melt",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "69b5dd00f5549df28b1cf0727546e2cf",
+    "gamename": "Primal Spirits",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "3351aa76013ca31d0b91380a16830ac9",
+    "gamename": "Toucan Mania",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "a3e89a953a3a600f309e3038bbc4c462",
+    "gamename": "Blackbeard's Hoard Cash Sacks",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "52b0ba4b504371b9f461c5e88b94a752",
+    "gamename": "Spinions Game Day",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "f729e5dd411191e72ba3f5e2159e2796",
+    "gamename": "Scatter Monsters",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e3d3a7a9278e3eccd72232334c40085c",
+    "gamename": "Go High Safari",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "aee033a92b16778a7e7b7fe1be13c975",
+    "gamename": "Giga Match Moolah",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "d23215be90beb7fe4ec163d13c5b13cb",
+    "gamename": "J Mania Hot Asses",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "007ffec507de998ad28634fbf5787ba6",
+    "gamename": "Mystic Mines",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "679490667188931bab7ef248db0af202",
+    "gamename": "Ka Ching Boom",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "671b25c534ebd0f557c8035e0287858b",
+    "gamename": "Deuces Wild Multi-Hand",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "b0fae05a56cd53e8cab098f0e8929a55",
+    "gamename": "Jacks or Better Multi-hand",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "e529270d2052521b0b52d13078cd8838",
+    "gamename": "Jacks or Better: Multi-Hand 25",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "5cdb75f11b0b056b50c2e438615ac091",
+    "gamename": "Virtual! Dog Racing",
+    "providerName": "Playtech",
+    "image": ""
+  },
+  {
+    "gameid": "97e53211e081a882491e12d456e42364",
+    "gamename": "Aces and Faces Multi-hand",
+    "providerName": "Playtech",
+    "image": ""
+  }
+]

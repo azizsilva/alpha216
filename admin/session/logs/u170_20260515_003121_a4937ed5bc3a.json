@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T00:31:21+00:00",
+    "user_id": 170,
+    "username": "Akrem7",
+    "role": "master",
+    "ip": "197.240.27.61",
+    "forwarded_for": "197.240.27.61",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Mobile Safari/537.36",
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "os": "Android",
+    "accept_language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php",
+    "session_id_hash": "70329e1d1092f41127ce42e9be34d2182b8887f625f4513b837b04021bebaa7f"
+}

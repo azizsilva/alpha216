@@ -1,0 +1,16 @@
+
+Field	Type	Description
+member_account	string	Your player ID (we add prefix/suffix based on your config)
+game_uid	string	Game UID from the Game Catalog API
+credit_amount	string	Optional. Start balance (default "0" if not sent)
+currency_code	string	Optional. If missing we use your account currency
+language	string	Optional. Defaults to "en" if not provided
+platform	int	Optional. Platform flag (e.g. 1=web, 2=H5)
+api_key	string	Your Gamblly agency_uid (API key)
+home_url	string	Required. URL to return to your lobby when the game closes
+Response Fields
+Field	Type	Description
+success	bool	Indicates if game launch was successful
+game_url	string	URL to open in iframe / redirect for the game
+transfer_id	string	Internal launch/transaction identifier
+msg	string	Human-readable message

@@ -1,0 +1,608 @@
+[
+  {
+    "gameid": "df196b6df7af6da164fdca33adfebb95",
+    "gamename": "WhackAMole",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/whackamole.webp"
+  },
+  {
+    "gameid": "a739521e60a1b22fb58cb9568518a61b",
+    "gamename": "MouseTower",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/mousetower.webp"
+  },
+  {
+    "gameid": "b9f3f1ef3da5e20eed37be71662ed4b4",
+    "gamename": "MagicLamp",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/magiclamp.webp"
+  },
+  {
+    "gameid": "f8cbbe2385c03d99f65c0ce8e28e51b5",
+    "gamename": "Plinko",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/plinko.webp"
+  },
+  {
+    "gameid": "9e75688264cf2e10f93504bfce9ae880",
+    "gamename": "Mines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/mines.webp"
+  },
+  {
+    "gameid": "37c0948df16dd376002c465891c38a32",
+    "gamename": "Dice",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/dice.webp"
+  },
+  {
+    "gameid": "452deea1aa0148308ff6f5cacde45efc",
+    "gamename": "Limbo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/limbo.webp"
+  },
+  {
+    "gameid": "926ae3eebad16451ad1905ba6c24b00d",
+    "gamename": "Dragon Tower",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/dragon-tower.webp"
+  },
+  {
+    "gameid": "e744d7ca13a668df6572bedab278c93e",
+    "gamename": "Crash",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/crash.webp"
+  },
+  {
+    "gameid": "2dfe6b27bff3ff84894294d6524e7b8f",
+    "gamename": "MultiplayerKeno",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/multiplayerkeno.webp"
+  },
+  {
+    "gameid": "63e6a91c2036975c0242e721bed4572a",
+    "gamename": "Wheel",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/wheel.webp"
+  },
+  {
+    "gameid": "390145ebab971345d41bb8d91e09c0c5",
+    "gamename": "Hilo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hilo.webp"
+  },
+  {
+    "gameid": "1661f96a09d4b4836db80557c4094b51",
+    "gamename": "Blackjack",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/blackjack.webp"
+  },
+  {
+    "gameid": "15f493c9823adb523e2504f25ab4b903",
+    "gamename": "Diamonds",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/diamonds.webp"
+  },
+  {
+    "gameid": "2adc3b75f14c5d427e69ca6f8ad8bb67",
+    "gamename": "Slide",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/slide.webp"
+  },
+  {
+    "gameid": "767bb7ada651a444e2c5c1c15d80f98e",
+    "gamename": "MultiplayerRoulette",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/multiplayerroulette.webp"
+  },
+  {
+    "gameid": "b36de3f246c8695d6ca27ba8a28abb9c",
+    "gamename": "Aviator",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/aviator.webp"
+  },
+  {
+    "gameid": "d0ecadcba50bfeb6de958bb42ba700bc",
+    "gamename": "MultiplayerMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/multiplayermines.webp"
+  },
+  {
+    "gameid": "9c81a2acb3eb54f48bf497f7405ed5dc",
+    "gamename": "Dice",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/dice.webp"
+  },
+  {
+    "gameid": "fb20d21f04d607baf4f19268af77bcfa",
+    "gamename": "MiniRoulette",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/miniroulette.webp"
+  },
+  {
+    "gameid": "e96286feee969f34da10cd3331e3861a",
+    "gamename": "Hilo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hilo.webp"
+  },
+  {
+    "gameid": "2b42f9099fca962308c4e5c3363b56b3",
+    "gamename": "Plinko",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/plinko.webp"
+  },
+  {
+    "gameid": "fed66cee9b16edc2fa0f99289c111526",
+    "gamename": "Goal",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/goal.webp"
+  },
+  {
+    "gameid": "ea77e05f00979e7a927ff8f40b665244",
+    "gamename": "Keno",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/keno.webp"
+  },
+  {
+    "gameid": "2ef5d8c2b12857b38c2e1c097f94f9cc",
+    "gamename": "Hotline",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hotline.webp"
+  },
+  {
+    "gameid": "de9c60259ffc8134a675242fdabb3cd6",
+    "gamename": "LostTreasure",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/losttreasure.webp"
+  },
+  {
+    "gameid": "20562eb57af225275ebe5a3ebec30138",
+    "gamename": "SushiMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/sushimines.webp"
+  },
+  {
+    "gameid": "54efbbd43d011fe38457e565eb2159e6",
+    "gamename": "FootballX",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/footballx.webp"
+  },
+  {
+    "gameid": "f7ce119539b4487ffb0e3189da6d7b20",
+    "gamename": "PandaCrash",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/pandacrash.webp"
+  },
+  {
+    "gameid": "04b0eaf0a7a2c2ee2231d8577406577c",
+    "gamename": "NinjaCrash",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/ninjacrash.webp"
+  },
+  {
+    "gameid": "663a9584acac897575d09b334286f7e9",
+    "gamename": "Limbo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/limbo.webp"
+  },
+  {
+    "gameid": "212f17ea1dd06f2ffeb039b423738b39",
+    "gamename": "LuckyTanks",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/luckytanks.webp"
+  },
+  {
+    "gameid": "9e54edcc6fcb6fb6750eca43e3fa1a98",
+    "gamename": "Mines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/mines.webp"
+  },
+  {
+    "gameid": "fd378d996097e6903ade1b69db1b6d2d",
+    "gamename": "TreasureHuntMoles",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/treasurehuntmoles.webp"
+  },
+  {
+    "gameid": "9aa84e4ef2d60dd7a4f7eb8784a8d488",
+    "gamename": "ColorGame",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/colorgame.webp"
+  },
+  {
+    "gameid": "d9bc2ab75ecce6bc77cdab8407e5590e",
+    "gamename": "MultiplayerMonopoly",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/multiplayermonopoly.webp"
+  },
+  {
+    "gameid": "80f46cf174b529e293489c253ca44f6c",
+    "gamename": "BankHeist",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/bankheist.webp"
+  },
+  {
+    "gameid": "9e2af0dbda8ef7d7b82b6e17073d5aa9",
+    "gamename": "FastFurious",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/fastfurious.webp"
+  },
+  {
+    "gameid": "8340db263b410b2cb756eb2afc42ff8d",
+    "gamename": "MultiplayerRing",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/multiplayerring.webp"
+  },
+  {
+    "gameid": "5ae9aeba07c628ba49d0f70a31559bb1",
+    "gamename": "Keno",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/keno.webp"
+  },
+  {
+    "gameid": "10d6dd3895bd125881dc6719e4bdce6f",
+    "gamename": "Dice",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/dice.webp"
+  },
+  {
+    "gameid": "aef4dfea245e3796fe7fea0ca09362dd",
+    "gamename": "FieryBot",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/fierybot.webp"
+  },
+  {
+    "gameid": "2020e1f416f44a4920b3a2b244e9fc97",
+    "gamename": "GoForGold",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/goforgold.webp"
+  },
+  {
+    "gameid": "3940c014a492bced4c322de1238dd27c",
+    "gamename": "SuperDouble",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/superdouble.webp"
+  },
+  {
+    "gameid": "114091a9c1bf4af78d830a53c51ca5b3",
+    "gamename": "GoBananas",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/gobananas.webp"
+  },
+  {
+    "gameid": "78d476a502c5f5232974bcb66b2ea9e2",
+    "gamename": "LuckyFootball",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/luckyfootball.webp"
+  },
+  {
+    "gameid": "c98b8a60baef298d5e33c34be8e6eb8d",
+    "gamename": "SlapShot",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/slapshot.webp"
+  },
+  {
+    "gameid": "f23786ff750e1a8fb67e2a74246c02ba",
+    "gamename": "BlackJack",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/blackjack.webp"
+  },
+  {
+    "gameid": "3393f57cf4d84a6bacc535afc5b28bfb",
+    "gamename": "DrShocker",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/drshocker.webp"
+  },
+  {
+    "gameid": "5e1d3c647f9015a0cb8347d20d11068b",
+    "gamename": "TowerRush",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/towerrush.webp"
+  },
+  {
+    "gameid": "7de21f7616ddb4f9486641d2d99dcaf5",
+    "gamename": "TurboMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/turbomines.webp"
+  },
+  {
+    "gameid": "988a40d3fdea68e6764a4250f430e8a8",
+    "gamename": "Plinkoman",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/plinkoman.webp"
+  },
+  {
+    "gameid": "223b8d6d039d68f661e305bb2d646e4e",
+    "gamename": "HamsterMania",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hamstermania.webp"
+  },
+  {
+    "gameid": "e4441f18ea7133e5b341e5f516bef35c",
+    "gamename": "CosmoSaga",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/cosmosaga.webp"
+  },
+  {
+    "gameid": "838a1f101ba94a4a1611c419a6e8ca33",
+    "gamename": "Atlantis",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/atlantis.webp"
+  },
+  {
+    "gameid": "f99a723c1fb1083fc226ca98dffee15d",
+    "gamename": "HotGear",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hotgear.webp"
+  },
+  {
+    "gameid": "fc246b7b9e396a4471a35c8a1fbc1d26",
+    "gamename": "Totem",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/totem.webp"
+  },
+  {
+    "gameid": "a45abfe967f4aa60c47fa8cacf4f8b56",
+    "gamename": "Roulette",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/roulette.webp"
+  },
+  {
+    "gameid": "d27a8c6ec6aefa6bbaa9ebdaf8e4ddb9",
+    "gamename": "LimboCrash",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/limbocrash.webp"
+  },
+  {
+    "gameid": "534ff8786c847789c054fd7447e5c1b1",
+    "gamename": "CoinFlip",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/coinflip.webp"
+  },
+  {
+    "gameid": "7b7dff4328b11a95174600c395665f89",
+    "gamename": "Thimble",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/thimble.webp"
+  },
+  {
+    "gameid": "08b30c8b511005b4d591b602e1fcf301",
+    "gamename": "ScratchMap",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/scratchmap.webp"
+  },
+  {
+    "gameid": "739af76b486105ca8dc6b49447bd9706",
+    "gamename": "PlayMe",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/playme.webp"
+  },
+  {
+    "gameid": "a7f65a7e2bac849aa21ed92d70589fc0",
+    "gamename": "AviatorJerry",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/aviatorjerry.webp"
+  },
+  {
+    "gameid": "b8530fdbbfa8fd0fe48c87b2c2536d2c",
+    "gamename": "LoveGift",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/lovegift.webp"
+  },
+  {
+    "gameid": "1b5bb74c93b1d8e026dc4828ebce0238",
+    "gamename": "PowerBall",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/powerball.webp"
+  },
+  {
+    "gameid": "44943fcb2b973e8fbd346934570e25fc",
+    "gamename": "BingoMega",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/bingomega.webp"
+  },
+  {
+    "gameid": "bf7e52d75550723d05ad0401302f6dff",
+    "gamename": "BingoRush",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/bingorush.webp"
+  },
+  {
+    "gameid": "ac3b55fd9339d0bcc5dda839f10ed322",
+    "gamename": "BingoBoom",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/bingoboom.webp"
+  },
+  {
+    "gameid": "135103c66220afbd9a20ee1eac21ca89",
+    "gamename": "MTD",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/mtd.webp"
+  },
+  {
+    "gameid": "25795082b3c347b996b8032d52953919",
+    "gamename": "DragonTiger",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/dragontiger.webp"
+  },
+  {
+    "gameid": "fc3d8ecd0a7ae360bbb2a5538dc1315c",
+    "gamename": "OverUnder",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/overunder.webp"
+  },
+  {
+    "gameid": "1f31f881b928bb49c04488f4d69dc711",
+    "gamename": "TossACoin",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/tossacoin.webp"
+  },
+  {
+    "gameid": "315200ece9ad897d8c4845c4c5baecc8",
+    "gamename": "OneMRace",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/onemrace.webp"
+  },
+  {
+    "gameid": "889c8e03d2d164bdb5cd99b974e54f75",
+    "gamename": "SicBo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/sicbo.webp"
+  },
+  {
+    "gameid": "dabaf34d67f40de28ff5b9d9304dddab",
+    "gamename": "OneMWinGo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/onemwingo.webp"
+  },
+  {
+    "gameid": "6750d75d4267a0b6534580c0ab054051",
+    "gamename": "Pump",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/pump.webp"
+  },
+  {
+    "gameid": "5782816b72d4cf7aaa64271432ab29cf",
+    "gamename": "Cases",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/cases.webp"
+  },
+  {
+    "gameid": "39048a4c366ea90deb9be399912a6f0f",
+    "gamename": "VideoPoker",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/videopoker.webp"
+  },
+  {
+    "gameid": "51011e68d428e23170a6bb0d848de34b",
+    "gamename": "Baccarat",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/baccarat.webp"
+  },
+  {
+    "gameid": "c962d8776420b24d31ab023c3c4b503a",
+    "gamename": "Balloon",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/balloon.webp"
+  },
+  {
+    "gameid": "a8b59a577778524c4fa3559fc9bf10aa",
+    "gamename": "GoLabubu",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/golabubu.webp"
+  },
+  {
+    "gameid": "b85a9d7e385e3ad9da1d4026f0e4e180",
+    "gamename": "LabubuForSugar",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/labubuforsugar.webp"
+  },
+  {
+    "gameid": "c84b71693b838f5ba24356ee1be275ec",
+    "gamename": "RockPaperScissors",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/rockpaperscissors.webp"
+  },
+  {
+    "gameid": "b8e1bedc6f600980cb9065ff9637c9a1",
+    "gamename": "LabubuMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/labubumines.webp"
+  },
+  {
+    "gameid": "923abacf5ac67523d76d6c8213a708f0",
+    "gamename": "GoCryBaby",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/gocrybaby.webp"
+  },
+  {
+    "gameid": "2256257006a2c16aae14cb13dde3ea90",
+    "gamename": "GoMolly",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/gomolly.webp"
+  },
+  {
+    "gameid": "7eaa64c24469b0db6423c53cff4d4caf",
+    "gamename": "LabubuCarnival",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/labubucarnival.webp"
+  },
+  {
+    "gameid": "4bd14ae4ff5ddebf4516695676890928",
+    "gamename": "ChickenRoadTwo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/chickenroadtwo.webp"
+  },
+  {
+    "gameid": "b269566aad409214c338f0cc4ed20e8b",
+    "gamename": "ChickenRoad",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/chickenroad.webp"
+  },
+  {
+    "gameid": "60fbf9c812a11d8c9ad04b141c5704ec",
+    "gamename": "Stairs",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/stairs.webp"
+  },
+  {
+    "gameid": "b12c2f419c8148b35686e48781255c32",
+    "gamename": "JokerPoker",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/jokerpoker.webp"
+  },
+  {
+    "gameid": "680f7453f0278f3da62cb91b212245e3",
+    "gamename": "PenaltyUnlimited",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/penaltyunlimited.webp"
+  },
+  {
+    "gameid": "b32ecd59bb034621ead58ddc48a85e3e",
+    "gamename": "Coinflip",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/coinflip.webp"
+  },
+  {
+    "gameid": "af15c581a0cdafe9fa3a56d0b3d6c477",
+    "gamename": "PlatformMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/platformmines.webp"
+  },
+  {
+    "gameid": "bbc504d41d028ec679197d2d5d2ec29d",
+    "gamename": "Bubbles",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/bubbles.webp"
+  },
+  {
+    "gameid": "872379660132d7924f56249e3a45d969",
+    "gamename": "Keno",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/keno.webp"
+  },
+  {
+    "gameid": "b930fe411a27adec15e82b489b2d07c4",
+    "gamename": "LuckyMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/luckymines.webp"
+  },
+  {
+    "gameid": "e6638819f0f5804d2f27c62d9b36b27b",
+    "gamename": "Limbo",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/limbo.webp"
+  },
+  {
+    "gameid": "0de6ef0da684db897221edec3b520b9c",
+    "gamename": "HotMines",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/hotmines.webp"
+  },
+  {
+    "gameid": "a8ca85536ff3597144b74fb8325e1215",
+    "gamename": "Plinko",
+    "providerName": "Mini",
+    "image": "https://providers.gamblly-api.com/assets/providers/mini/plinko.webp"
+  }
+]

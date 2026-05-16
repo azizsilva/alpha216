@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-15T18:01:42+00:00",
+    "user_id": 227,
+    "username": "Ihebjhiin",
+    "role": "master",
+    "ip": "2c0f:f698:c248:19c0:c863:4e3c:8246:af3d",
+    "forwarded_for": "2c0f:f698:c248:19c0:c863:4e3c:8246:af3d",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Mobile/15E148 Safari/604.1",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "os": "iOS",
+    "accept_language": "fr-FR,fr;q=0.9",
+    "host": "tanitbet216.com",
+    "request_uri": "/admin/index.php?r=%2Fadmin%2Fcreate-member%2F%3Fcreate_role%3Dpartner",
+    "session_id_hash": "cc2a6e351cc146213290505930c2d8bc23d4f2acb58fd75abea41fc0fe3fb64a"
+}
