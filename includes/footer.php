@@ -65,7 +65,7 @@ if ($mk_fragment) {
         <div class="fc-providers-section">
             <h4 class="fc-section-title">FOURNISSEURS DE CASINOS</h4>
             <div class="fc-providers-grid">
-                <!-- Row 1 -->
+                <!-- Row 1 (Cleaned) -->
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/pragmratic.png" alt="Pragmatic Play"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1658314_evolution_logo_online_250x100-white.png" alt="Evolution"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654603_Amatic%20250x100.png" alt="Amatic"></div>
@@ -73,7 +73,6 @@ if ($mk_fragment) {
                 <div class="provider-box"><span class="provider-text-logo">3 OAKS</span></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654685_Spribe-250x100.png" alt="Spribe"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1659107_habanero-white-250x100.png" alt="Habanero"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1770316_Pragmatic20Live.png" alt="Pragmatic Live"></div>
 
                 <!-- Row 2 -->
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1655807_Ruby-Play-250x100.png" alt="Ruby Play"></div>
@@ -363,7 +362,7 @@ if ($mk_fragment) {
 
 @media (max-width: 767px) {
     .fc-providers-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
     .fc-footer-main-links {
         flex-direction: column;
