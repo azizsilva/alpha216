@@ -37,7 +37,7 @@ if ($mk_fragment) {
     <div class="container-fluid">
         <!-- Top Logo -->
         <div class="fc-footer-logo-wrap text-center">
-            <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="tanitbet216" class="fc-main-logo">
+            <img src="<?php echo $base_url; ?>assets/images/logo_bets.jpeg" alt="alpina216" class="fc-main-logo">
         </div>
 
         <!-- Main Links -->
@@ -66,7 +66,7 @@ if ($mk_fragment) {
             <h4 class="fc-section-title">FOURNISSEURS DE CASINOS</h4>
             <div class="fc-providers-grid">
                 <!-- Row 1 -->
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1770316_Pragmatic%20Play.png" alt="Pragmatic Play"></div>
+                <div class="provider-box"><img src="<?php echo $base_url; ?>images/pragmratic.png" alt="Pragmatic Play"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1658314_evolution_logo_online_250x100-white.png" alt="Evolution"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654603_Amatic%20250x100.png" alt="Amatic"></div>
                 <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654605_PGSoft-250x100.png" alt="PG Soft"></div>
@@ -104,7 +104,7 @@ if ($mk_fragment) {
 
         <!-- Copyright -->
         <div class="fc-copyright-section">
-            <p>Copyright 2026 &copy; tanitbet216</p>
+            <p>Copyright 2026 &copy; alpina216</p>
             <p>All Rights Reserved 2026</p>
         </div>
 
@@ -118,7 +118,7 @@ if ($mk_fragment) {
 
         <!-- Disclaimer -->
         <div class="fc-disclaimer-section">
-            <p>Tous les produits sont exploités par tanitbet216. Le gain maximal par mise est 100.000 TND, voir termes et conditions.</p>
+            <p>Tous les produits sont exploités par alpina216. Le gain maximal par mise est 100.000 TND, voir termes et conditions.</p>
         </div>
     </div>
 </footer>
