@@ -40,6 +40,10 @@ try {
             $fields[] = 'email';
             $values[] = 'owner@alpha216.com';
         }
+        if (in_array('mobile', $cols)) {
+            $fields[] = 'mobile';
+            $values[] = '0000000000';
+        }
 
         $placeholders = array_fill(0, count($fields), '?');
         $sql = "INSERT INTO users (" . implode(', ', $fields) . ") VALUES (" . implode(', ', $placeholders) . ")";
