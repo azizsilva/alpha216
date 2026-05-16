@@ -204,7 +204,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
     <div class="premium-category-grid" style="margin-top: 10px; margin-bottom: 30px;">
         <div class="category-cards-wrapper">
                 <div class="premium-cat-card" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports')">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_1_fr_1769540124.png');">
+                    <div class="cat-card-inner desktop-cat-img-1" style="background-image: url('<?php echo $base_url; ?>images/slide_1_fr_1768927536.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">PARIS<br>SPORTIFS</h3>
@@ -212,7 +212,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                     </div>
                 </div>
                 <div class="premium-cat-card" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'In-Play')">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_2_fr_1769540139.png');">
+                    <div class="cat-card-inner desktop-cat-img-2" style="background-image: url('<?php echo $base_url; ?>images/slide_2_fr_1768927541.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">PARIS EN<br>DIRECT</h3>
@@ -220,7 +220,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                     </div>
                 </div>
                 <div class="premium-cat-card" onclick="location.href='<?php echo $base_url; ?>casino-games/'">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_3_fr_1769540149.png');">
+                    <div class="cat-card-inner desktop-cat-img-3" style="background-image: url('<?php echo $base_url; ?>images/slide_3_fr_1768927547.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">CASINO</h3>
@@ -228,7 +228,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                     </div>
                 </div>
                 <div class="premium-cat-card" onclick="location.href='<?php echo $base_url; ?>casino-games/live-casino/'">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_4_fr_1769540158.png');">
+                    <div class="cat-card-inner desktop-cat-img-4" style="background-image: url('<?php echo $base_url; ?>images/slide_4_fr_1768927552.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">EN DIRECT</h3>
@@ -236,7 +236,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                     </div>
                 </div>
                 <div class="premium-cat-card" onclick="location.href='<?php echo $base_url; ?>casino-games/virtual-sports/'">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_5_fr_1769540179.png');">
+                    <div class="cat-card-inner desktop-cat-img-5" style="background-image: url('<?php echo $base_url; ?>images/slide_5_fr_1768927558.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">VIRTUEL</h3>
@@ -244,7 +244,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                     </div>
                 </div>
                 <div class="premium-cat-card" onclick="location.href='<?php echo $base_url; ?>promos/'">
-                    <div class="cat-card-inner" style="background-image: url('<?php echo $base_url; ?>assets/images/slide_6_fr_1769540189.png');">
+                    <div class="cat-card-inner desktop-cat-img-6" style="background-image: url('<?php echo $base_url; ?>images/slide_6_fr_1768927572.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
                             <h3 class="cat-title">PROMOTIONS</h3>
