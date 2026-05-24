@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.23';
+  var newHref = base + 'sportsbook/style.css?v=20260524.24';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -2760,21 +2760,26 @@ function renderMatchDetail(m, markets) {
   markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
   out += '</div>';
 
-  // ── Bet Builder sticky footer (fixed at bottom while scrolling markets)
-  // Hidden until at least 1 selection is made — matches fcbet UX exactly
+  // ── Bet Builder sticky footer — shown once 1+ selection made ──────────────
+  var matchTitle = h((m.home ? m.home.name : '') + ' vs. ' + (m.away ? m.away.name : ''));
   out += '<div class="md-bb-sticky" id="md-bb-sticky" style="display:none">';
   out += '<div class="md-bb-header">';
-  out += '<div class="md-bb-title">'
-    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>'
-    + ' <span>Bet Builder</span>';
-  out += '</div>';
-  out += '<span class="md-bb-count" id="md-bb-count">0 sél.</span>';
+  out += '<div class="md-bb-match-row">'
+    + '<span class="md-bb-sport-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></span>'
+    + '<span class="md-bb-badge">BB</span>'
+    + '<button class="md-bb-close-btn" onclick="document.getElementById(\'md-bb-sticky\').style.display=\'none\'">&times;</button>'
+    + '</div>';
+  out += '<div class="md-bb-match-title">'
+    + (isLive ? '<span class="md-bb-live-badge">EN DIRECT</span> ' : '')
+    + matchTitle
+    + '<span class="md-bb-combined-val" id="md-bb-combined-val"> 1.00</span>'
+    + '</div>';
   out += '</div>';
   out += '<div class="md-bb-legs" id="md-bb-legs"></div>';
   out += '<div class="md-bb-foot">';
-  out += '<div class="md-bb-combined">'
-    + '<span class="md-bb-combined-lbl">Cote combinée</span>'
-    + '<span class="md-bb-combined-val" id="md-bb-combined-val">1.00</span>'
+  out += '<div class="md-bb-stake-row">'
+    + '<input type="number" class="md-bb-stake-input" id="md-bb-stake" value="10" min="1" oninput="window.sbBBRefreshStake()">'
+    + '<span class="md-bb-gagner-lbl">Gagner: <strong id="md-bb-gagner">0.00</strong></span>'
     + '</div>';
   out += '<button type="button" class="md-bb-add-btn" onclick="window.sbBBAddToSlip()">Ajouter au slip</button>';
   out += '</div></div>';
@@ -2791,14 +2796,24 @@ function renderMatchDetail(m, markets) {
 }
 
 function renderMarketGroup(mkt, m, expanded, bbMode) {
-  var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + '">';
+  var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + (bbMode ? ' bb-mode' : '') + '">';
   out += '<div class="md-mkt-hdr" onclick="this.parentNode.classList.toggle(\'collapsed\')">';
   out += '<span class="md-mkt-star">' + ICON.star + '</span>';
   out += '<span class="md-mkt-name">' + h(mkt.name) + '</span>';
-  out += '<span class="md-mkt-bb">BB</span>';
+  // Grid icons only for Total / Handicap in normal mode
+  if (!bbMode && /^(total|handicap)$/i.test(mkt.name)) {
+    out += '<span class="md-mkt-grid-icons">'
+      + '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg>'
+      + '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="4" x2="15" y2="4"/><line x1="1" y1="8" x2="15" y2="8"/><line x1="1" y1="12" x2="15" y2="12"/></svg>'
+      + '</span>';
+  }
+  out += '<span class="md-mkt-bb' + (bbMode ? ' md-mkt-bb-active' : '') + '">BB</span>';
   out += '<span class="md-mkt-ctrl">' + ICON.minus + '</span>';
   out += '</div>';
   out += '<div class="md-mkt-body">';
+
+  // Give renderMktBtn access to the current market name for BB leg labeling
+  renderMktBtn._curMkt = mkt.name || '';
 
   var sels  = mkt.selections || [];
   var n     = sels.length;
@@ -2807,7 +2822,6 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
   var is3x3    = /mi-temps.*fin|marge|dc.*mi-temps/i.test(mkt.name);
 
   if (isHc1x2) {
-    // Handicap 1x2: group by handicap label (Débuts X:Y) — 3 cols per row
     var groups = {}, gord = [];
     sels.forEach(function(s) {
       var hc = s.handicap || '';
@@ -2817,34 +2831,32 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
     gord.forEach(function(hc) {
       if (hc) out += '<div class="md-hc-label">' + h(hc) + '</div>';
       out += '<div class="md-mkt-row md-row-3">';
-      groups[hc].forEach(function(s) { out += renderMktBtn(s, m); });
+      groups[hc].forEach(function(s) { out += renderMktBtn(s, m, bbMode); });
       out += '</div>';
     });
   } else if (is3x3 && n === 9) {
-    // 3x3 grid (Mi-temps/Fin de match, DC combos)
     for (var i = 0; i < n; i += 3) {
       out += '<div class="md-mkt-row md-row-3">';
-      out += renderMktBtn(sels[i], m);
-      if (sels[i+1]) out += renderMktBtn(sels[i+1], m);
-      if (sels[i+2]) out += renderMktBtn(sels[i+2], m);
+      out += renderMktBtn(sels[i], m, bbMode);
+      if (sels[i+1]) out += renderMktBtn(sels[i+1], m, bbMode);
+      if (sels[i+2]) out += renderMktBtn(sels[i+2], m, bbMode);
       out += '</div>';
     }
   } else if (n <= 3) {
     out += '<div class="md-mkt-row">';
-    sels.forEach(function(s) { out += renderMktBtn(s, m); });
+    sels.forEach(function(s) { out += renderMktBtn(s, m, bbMode); });
     out += '</div>';
   } else {
-    // Pairs (2 per row) — most markets
     for (var i = 0; i < n; i += 2) {
       out += '<div class="md-mkt-row">';
-      out += renderMktBtn(sels[i], m);
-      if (sels[i+1]) out += renderMktBtn(sels[i+1], m);
+      out += renderMktBtn(sels[i], m, bbMode);
+      if (sels[i+1]) out += renderMktBtn(sels[i+1], m, bbMode);
       out += '</div>';
     }
   }
 
-  // Slider for Total market
-  if (hasRange && sels.length >= 2) {
+  // Slider for Total market (only non-BB mode to keep BB clean)
+  if (!bbMode && hasRange && sels.length >= 2) {
     var lineVal = parseFloat(sels[0].handicap || 2.5);
     out += '<div class="md-slider-wrap">';
     out += '<span class="md-slider-val">' + lineVal + '</span>';
@@ -2863,18 +2875,20 @@ function renderMktBtn(sel, m, bbMode) {
   var bid    = h(m.id) + '_md_' + h(String(sel.id || sel.name));
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
   var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
+  // Market name for BB leg display — stored in the button's data-mkt attr if available
+  var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
     return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + '" onclick="window.sbBBToggle(\''
-      + bid + '\',\'' + h(sel.name) + '\',' + val + ')">'
+      + bid + '\',\'' + h(sel.name) + '\',' + val + ',\'' + h(mktName) + '\')">'
       + '<span class="md-o-name">' + lbl + '</span>'
-      + '<span class="md-o-val">' + val.toFixed(2) + '</span>'
+      + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
       + '</button>';
   }
   return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + '" onclick="window.sbAddBet(\''
     + bid + '\',\'' + h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''))
     + '\',\'' + h(sel.name) + '\',' + val + ')">'
     + '<span class="md-o-name">' + lbl + '</span>'
-    + '<span class="md-o-val">' + val.toFixed(2) + '</span>'
+    + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
     + '</button>';
 }
 
@@ -3038,18 +3052,18 @@ window.sbMdQuickFilter = function(btn, filter) {
 // ── Bet Builder ──────────────────────────────────────────────
 window._bbSelections = [];
 
-window.sbBBToggle = function(id, name, odds) {
+window.sbBBToggle = function(id, name, odds, market) {
   var idx = window._bbSelections.findIndex(function(s){ return s.id === id; });
   if (idx >= 0) {
     window._bbSelections.splice(idx, 1);
   } else {
-    window._bbSelections.push({ id: id, name: name, odds: odds });
+    window._bbSelections.push({ id: id, name: name, odds: odds, market: market || '' });
   }
   sbBBRefresh();
-  // Highlight/unhighlight button
+  // Highlight/unhighlight clicked button
   document.querySelectorAll('.md-bb-btn').forEach(function(btn){
-    var onclick = btn.getAttribute('onclick') || '';
-    if (onclick.indexOf("'" + id + "'") !== -1) {
+    var oc = btn.getAttribute('onclick') || '';
+    if (oc.indexOf("'" + id + "'") !== -1) {
       btn.classList.toggle('sel', idx < 0);
     }
   });
@@ -3059,7 +3073,6 @@ function sbBBRefresh() {
   var legs    = document.getElementById('md-bb-legs');
   var sticky  = document.getElementById('md-bb-sticky');
   var combVal = document.getElementById('md-bb-combined-val');
-  var countEl = document.getElementById('md-bb-count');
   if (!legs) return;
 
   var sels = window._bbSelections || [];
@@ -3074,21 +3087,34 @@ function sbBBRefresh() {
   var out = '';
   sels.forEach(function(s){
     out += '<div class="md-bb-leg">'
+      + '<span class="md-bb-leg-dot"></span>'
+      + '<div class="md-bb-leg-info">'
+      + '<span class="md-bb-leg-mkt">' + h(s.market || '') + '</span>'
       + '<span class="md-bb-leg-name">' + h(s.name) + '</span>'
-      + '<span class="md-bb-leg-odds">' + s.odds.toFixed(2) + '</span>'
-      + '<button type="button" class="md-bb-leg-del" onclick="window.sbBBToggle(\'' + s.id + '\',\'' + s.name.replace(/'/g,"\\'") + '\',' + s.odds + ')">&times;</button>'
+      + '</div>'
+      + '<button type="button" class="md-bb-leg-del" onclick="window.sbBBToggle(\'' + s.id + '\',\'' + s.name.replace(/'/g,"\\'") + '\',' + s.odds + ',\'' + (s.market||'').replace(/'/g,"\\'") + '\')">&times;</button>'
       + '</div>';
   });
   legs.innerHTML = out;
   if (combVal) combVal.textContent = combined.toFixed(2);
-  if (countEl) countEl.textContent = sels.length + ' sél.';
 
-  // Show sticky footer whenever there are selections (in BB mode or even if user switched tab)
+  // Update stake/gagner
+  window.sbBBRefreshStake();
+
+  // Show sticky footer
   if (sticky) sticky.style.display = '';
-  // Keep bottom padding so markets aren't hidden behind the sticky panel
   var mktBody = document.getElementById('md-markets-body');
-  if (mktBody) mktBody.style.paddingBottom = '130px';
+  if (mktBody) mktBody.style.paddingBottom = '160px';
 }
+
+window.sbBBRefreshStake = function() {
+  var sels = window._bbSelections || [];
+  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var stakeEl = document.getElementById('md-bb-stake');
+  var gagnerEl = document.getElementById('md-bb-gagner');
+  var stake = stakeEl ? (parseFloat(stakeEl.value) || 10) : 10;
+  if (gagnerEl) gagnerEl.textContent = (stake * combined).toFixed(2);
+};
 
 window.sbBBAddToSlip = function() {
   var sels = window._bbSelections;
