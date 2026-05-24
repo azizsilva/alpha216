@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.14';
+  var newHref = base + 'sportsbook/style.css?v=20260524.15';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -2106,7 +2106,7 @@ window.sbSelectLeague = function(lg, sid) {
   window.sbOpenLeague(null, lg, getFlag(guessCountry(lg)), sid);
 };
 
-window.sbOpenLeague = function(id, name, flag, sid) {
+window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   S.homeLeagueFilter = name;
   S.activeLeagueId   = id;
   S.activeLeagueName = name;
@@ -2114,6 +2114,9 @@ window.sbOpenLeague = function(id, name, flag, sid) {
   S.activeSportId    = sid || 1;
   S.viewMode         = 'championship';
   S.mobLeagueTab     = 'best';
+  if (!_skipPush) {
+    sbPushUrl('championship', {championshipIds: id||'', sportId: sid||1, name: name||'', flag: flag||''});
+  }
 
   // Hide homepage-only sections when entering championship view
   var enDirect = document.getElementById('sb-en-direct-cards');
@@ -2320,6 +2323,9 @@ window.sbBackToMain = function() {
   clearInterval(window._mdTimerInterval);
   var viewer = document.getElementById('sb-match-viewer');
   if (viewer) viewer.style.display = 'none';
+
+  // Clear URL back to base path
+  sbPushUrl('main');
 
   // Restore homepage sections
   var enDirect = document.getElementById('sb-en-direct-cards');
@@ -2532,6 +2538,17 @@ window.sbSwitchTab = function(btn, action, sportId) {
   S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
   S.activeLeagueId = null;
   S.activeDateOffset = (action === 'upcoming') ? 1 : 0; // Default to tomorrow for upcoming if clicked from nav
+  // Reset match/league state and clear URL when switching tabs
+  S.activeLeagueName = null; S.activeLeagueFlag = null;
+  S.activeMatchId    = null; S.viewMode         = 'main';
+  S.champMatches     = [];
+  clearInterval(window._mdTimerInterval);
+  var _v = document.getElementById('sb-match-viewer');
+  if (_v) _v.style.display = 'none';
+  var _e = document.getElementById('sb-en-direct-cards');
+  var _b = document.getElementById('sb-boost-section');
+  if (_e) _e.style.display = ''; if (_b) _b.style.display = '';
+  sbPushUrl('main');
 
   if (btn && btn.classList.contains('sb-sport-item')) {
      document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
@@ -2562,9 +2579,12 @@ window.sbToggleMc = function(mid) {
   if (btn) btn.classList.toggle('mc-chevron-up', el.classList.contains('mc-collapsed'));
 };
 
-window.sbOpenMatch = function(mid) {
+window.sbOpenMatch = function(mid, _skipPush) {
   S.activeMatchId = mid;
   S.viewMode = 'matchDetail';
+  if (!_skipPush) {
+    sbPushUrl('liveEvent', {eventId: mid, sportId: S.activeSportId || 1});
+  }
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildMatchDetailSkeleton();
 
@@ -3190,12 +3210,86 @@ function markLiveSidebarLeagues(matches) {
   });
 }
 
+/* ── URL-based routing ────────────────────────────────────────
+   Mirrors fcbet216 URL scheme:
+   - Main:         /sportsbook/
+   - Championship: /sportsbook/?page=championship&championshipIds=ID&sportId=SID&name=NAME
+   - Match detail: /sportsbook/?page=liveEvent&eventId=ID&sportId=SID
+   This means refreshing the page keeps you on the correct view.
+────────────────────────────────────────────────────────────── */
+function sbPushUrl(pageType, params) {
+  var base = window.location.pathname;
+  if (!pageType || pageType === 'main') {
+    history.pushState({page: 'main'}, '', base);
+    return;
+  }
+  var qs = '?page=' + encodeURIComponent(pageType);
+  Object.keys(params || {}).forEach(function(k) {
+    if (params[k] != null && params[k] !== '') {
+      qs += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }
+  });
+  var state = {page: pageType};
+  Object.keys(params || {}).forEach(function(k) { state[k] = params[k]; });
+  history.pushState(state, '', base + qs);
+}
+
+function sbRestoreFromUrl() {
+  var sp = new URLSearchParams(window.location.search);
+  var page = sp.get('page');
+  if (page === 'championship') {
+    var id   = sp.get('championshipIds') || null;
+    var name = sp.get('name') ? decodeURIComponent(sp.get('name')) : '';
+    var flag = sp.get('flag') ? decodeURIComponent(sp.get('flag')) : '';
+    var sid  = parseInt(sp.get('sportId') || '1') || 1;
+    if (id || name) {
+      if (!flag && name) flag = getFlag(guessCountry(name));
+      window.sbOpenLeague(id, name, flag, sid, true /* skipPush */);
+      return true;
+    }
+  } else if (page === 'liveEvent') {
+    var eventId  = sp.get('eventId');
+    var sportId2 = parseInt(sp.get('sportId') || '1') || 1;
+    if (eventId) {
+      S.activeSportId = sportId2;
+      window.sbOpenMatch(eventId, true /* skipPush */);
+      return true;
+    }
+  }
+  return false;
+}
+
+window.addEventListener('popstate', function(e) {
+  var st = e.state || {};
+  if (st.page === 'championship') {
+    window.sbOpenLeague(st.championshipIds || null, st.name || '', st.flag || '', parseInt(st.sportId||1)||1, true);
+  } else if (st.page === 'liveEvent') {
+    if (st.sportId) S.activeSportId = parseInt(st.sportId) || 1;
+    window.sbOpenMatch(st.eventId || '', true);
+  } else {
+    // main — restore without pushing another entry
+    S.activeLeagueId = null; S.activeLeagueName = null; S.activeLeagueFlag = null;
+    S.activeMatchId  = null; S.viewMode = 'main'; S.champMatches = [];
+    clearInterval(window._mdTimerInterval);
+    var viewer = document.getElementById('sb-match-viewer');
+    if (viewer) viewer.style.display = 'none';
+    var enDirect  = document.getElementById('sb-en-direct-cards');
+    var boostedSec = document.getElementById('sb-boost-section');
+    if (enDirect)  enDirect.style.display  = '';
+    if (boostedSec) boostedSec.style.display = '';
+    loadAndFilter(S.activeAction || 'inplay', S.activeSportId || 1, null);
+  }
+});
+
 /* ── Init ─────────────────────────────────────────────────── */
-loadAndFilter('inplay', 1, null);
 loadCounts();
 startPolling();
 renderSidebar();
 renderBetSlip();
 renderPopularBets();
+// Restore from URL params on load, else start fresh
+if (!sbRestoreFromUrl()) {
+  loadAndFilter('inplay', 1, null);
+}
 
 })();
