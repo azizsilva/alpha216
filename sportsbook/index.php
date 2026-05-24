@@ -447,69 +447,49 @@ for($i=0;$i<7;$i++){
 <!-- ══ RIGHT SIDEBAR ══ -->
 <aside class="sb-right" id="sb-right">
 
-  <!-- Match en direct viewer — shown when a match is opened -->
-  <div class="sb-match-viewer" id="sb-match-viewer" style="display:none">
-    <div class="sb-pitch-wrap">
-      <div class="sb-pitch" id="sb-pitch">
-        <div class="sb-pitch-line-center"></div>
-        <div class="sb-pitch-circle"></div>
-        <div class="sb-pitch-box left"></div>
-        <div class="sb-pitch-box right"></div>
-        <div class="sb-pitch-label" id="sb-pitch-label"></div>
-      </div>
-    </div>
-    <div class="sb-viewer-tabs">
-      <button class="sb-vt active" onclick="window.sbViewerTab(this,'live')">
-        <i class="fa fa-play"></i> EN DIRECT
-      </button>
-      <button class="sb-vt" onclick="window.sbViewerTab(this,'h2h')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M3 20c0-4.4 2.7-8 6-8M21 20c0-4.4-2.7-8-6-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> FACE-À-FACE
-      </button>
-      <button class="sb-vt" onclick="window.sbViewerTab(this,'incidents')">
-        <i class="fa fa-list"></i> INCIDENTS
-      </button>
-      <button class="sb-vt" onclick="window.sbViewerTab(this,'stats')">
-        <i class="fa fa-bar-chart"></i> STATS
-      </button>
-    </div>
-  </div>
-
-  <div class="sb-widget">
-    <div class="sb-widget-hdr">Code rapide <i class="fa fa-info-circle"></i></div>
-    <div class="sb-widget-body">
-      <input type="text" class="sb-dark-inp" placeholder="Entrez le code rapide">
-      <label class="sb-quick-toggle">
-        <input type="checkbox"> <span>Utilisez le mode rapide</span>
-      </label>
-    </div>
-  </div>
-
-  <div class="sb-widget">
-    <div class="sb-widget-hdr">Rechercher des paris</div>
-    <div class="sb-widget-body">
-      <div class="sb-search-row">
-        <select class="sb-dark-sel"><option>Bet Code</option></select>
-        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d...">
-      </div>
-    </div>
-  </div>
-
-  <!-- Drag handle (mobile drawer) -->
+  <!-- Drag handle (mobile) — tap to close -->
   <div class="sb-drawer-handle" onclick="window.sbToggleRight()"></div>
 
+  <!-- ═══ FICHE DE PARI — always first ═══ -->
   <div class="sb-slip-panel">
     <div class="sb-slip-hdr">
       <span class="sb-slip-hdr-title">FICHE DE PARI</span>
       <span class="sb-slip-hdr-badge" id="sb-slip-count" style="display:none">0</span>
       <button class="sb-slip-hdr-close" onclick="window.sbToggleRight()">&#8212;</button>
     </div>
-    <div id="sb-slip-body" style="overflow-y:auto;flex:1;"></div>
+    <div id="sb-slip-body"></div>
   </div>
 
-  <div class="sb-widget">
-    <div class="sb-widget-hdr">Paris populaires</div>
-    <div id="sb-popular-bets"></div>
-  </div>
+  <!-- ═══ Secondary widgets (below bet slip) ═══ -->
+  <div class="sb-right-secondary">
+
+    <div class="sb-widget">
+      <div class="sb-widget-hdr">Code rapide <i class="fa fa-info-circle"></i></div>
+      <div class="sb-widget-body">
+        <input type="text" class="sb-dark-inp" placeholder="Entrez le code rapide">
+        <label class="sb-quick-toggle">
+          <input type="checkbox"> <span>Utilisez le mode rapide</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="sb-widget">
+      <div class="sb-widget-hdr">Rechercher des paris</div>
+      <div class="sb-widget-body">
+        <div class="sb-search-row">
+          <select class="sb-dark-sel"><option>Bet Code</option></select>
+          <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d...">
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-widget">
+      <div class="sb-widget-hdr">Paris populaires</div>
+      <div id="sb-popular-bets"></div>
+    </div>
+
+  </div><!-- end sb-right-secondary -->
+
 </aside>
 
 </div>
