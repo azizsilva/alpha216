@@ -967,8 +967,9 @@ function matchCard(m) {
   var mname = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
   var out = '<div class="mc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-  /* ── Row 1: BB | EN DIRECT | time/min | spacer | ☆ star (matches fcbet216 exactly) ── */
-  out += '<div class="mc-info-row">';
+  /* ── Row 1: BB | EN DIRECT | time/min | spacer | ☆ star ── */
+  out += '<div class="mc-hdr-live">';
+  out += '<div class="mc-hl-left">';
   out += '<span class="mc-badge-bb">BB</span>';
   if (isLive) {
     out += '<span class="mc-live-badge">EN DIRECT</span>';
@@ -976,19 +977,16 @@ function matchCard(m) {
   } else {
     out += '<span class="mc-date">' + h(timeStr) + ' ' + h(dateStr) + '</span>';
   }
-  out += '<span class="mc-row-spacer"></span>';
+  out += '</div>';
+  out += '<div class="mc-hl-right">';
   out += '<button class="mc-star" onclick="event.stopPropagation()" aria-label="Favori">' + ICON.star + '</button>';
   out += '</div>';
+  out += '</div>';
 
-  /* ── Row 2: flag | league · country | stats/EN DIRECT badge ── */
+  /* ── Row 2: flag | league · country ── */
   out += '<div class="mc-league-row">';
   out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
   out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
-  if (!isLive) {
-    out += '<span class="mc-live-badge outlined" style="margin-left:auto;flex-shrink:0">EN DIRECT</span>';
-  } else {
-    out += '<button class="mc-stats-icon" onclick="event.stopPropagation()" style="margin-left:auto" aria-label="Statistiques">' + ICON.stats + '</button>';
-  }
   out += '</div>';
 
   /* ── Body row: teams/scores | odds | chevron ── */
@@ -1107,9 +1105,11 @@ function matchCard(m) {
     out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
   }
-  out += '<button class="mc-more-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Voir marchés">' + ICON.chevronDown + '</button>';
-  out += '</div>'; // close mc-odds-bot
+  
+  // Right chevron button for additional markets
+  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Voir marchés">' + ICON.chevronDown + '</button>';
 
+  out += '</div>'; // close mc-odds-bot
   out += '</div>'; // close body col
   out += '</div>'; // mc
   return out;
@@ -2083,31 +2083,34 @@ window.sbSwitchLive = function(btn) {
   loadAndFilter('inplay', 1, null);
 };
 
-/* Mobile top bar tab switcher — handles home ⇄ EN DIRECT toggle
-   Home clicked:       home = green (default state)  |  EN DIRECT = red (default state)
-   EN DIRECT clicked:  home = dark gray (inactive)   |  EN DIRECT = green (active/selected)
-   This mirrors FCBet216 exactly: images 2 (default) and 3 (EN DIRECT active) */
 window.sbSwitchTab = function(btn, action, sportId) {
   var topbar = document.querySelector('.sb-mobile-topbar');
-  if (!topbar) return;
-  var homeBtn = topbar.querySelector('.sb-btn-home');
-  var liveBtn = topbar.querySelector('.sb-btn-live');
-
-  if (action === 'live') {
-    // EN DIRECT clicked → turn EN DIRECT green, home gray
-    if (liveBtn)  { liveBtn.classList.add('active'); }
-    if (homeBtn)  { homeBtn.classList.add('inactive'); }
-  } else {
-    // Home clicked → home back to green, EN DIRECT back to red (default)
-    if (liveBtn)  { liveBtn.classList.remove('active'); }
-    if (homeBtn)  { homeBtn.classList.remove('inactive'); }
+  if (topbar) {
+    var homeBtn = topbar.querySelector('.sb-btn-home');
+    var liveBtn = topbar.querySelector('.sb-btn-live');
+    if (action === 'live') {
+      if (liveBtn) liveBtn.classList.add('active');
+      if (homeBtn) homeBtn.classList.add('inactive');
+    } else if (action === 'home') {
+      if (liveBtn) liveBtn.classList.remove('active');
+      if (homeBtn) homeBtn.classList.remove('inactive');
+    }
   }
 
   S.activeSportId = sportId || 1;
-  S.activeAction  = action === 'live' ? 'inplay' : 'inplay';
+  // If 'home' or 'live', we actually want 'inplay' internally, UNLESS 'upcoming' is clicked
+  S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
   S.activeLeagueId = null;
-  S.activeDateOffset = 0;
-  loadAndFilter('inplay', S.activeSportId, null);
+  S.activeDateOffset = (action === 'upcoming') ? 1 : 0; // Default to tomorrow for upcoming if clicked from nav
+
+  if (btn && btn.classList.contains('sb-sport-item')) {
+     document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
+     btn.classList.add('active');
+  } else {
+     renderSportNav();
+  }
+
+  loadAndFilter(S.activeAction, S.activeSportId, null);
 };
 
 // Scroll the sport nav
@@ -2442,11 +2445,7 @@ window.sbMdTab = function(btn) {
   btn.classList.add('active');
 };
 
-window.sbSwitchTab = function(btn, action, sid) {
-  S.activeAction = action; S.activeSportId = sid; S.activeLeagueId = null;
-  renderSportNav();
-  loadAndFilter(action, sid, null);
-};
+// Removed duplicate sbSwitchTab
 
 window.sbSetUpcomingTab = function(sportId, btn) {
   S.activeUpcomingTab = sportId;

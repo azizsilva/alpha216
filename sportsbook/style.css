@@ -1004,20 +1004,28 @@ body {
 
 /* Top info row — compact, matches fcbet216 reference */
 /* ── Row 1: BB | EN DIRECT | time | spacer | ☆ ── */
-.mc-info-row {
+.mc-hdr-live {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 12px 3px;
+  justify-content: space-between;
+  padding: 10px 12px 6px;
   font-size: 11px;
-  flex-wrap: nowrap;
 }
-.mc-row-spacer { flex: 1; }
+.mc-hl-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mc-hl-right {
+  display: flex;
+  align-items: center;
+}
+
 /* ── Row 2: flag | league · country | right badge/icon ── */
 .mc-league-row {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   padding: 0 12px 6px;
   overflow: hidden;
 }
@@ -1248,25 +1256,25 @@ body {
 }
 
 /* Chevron / more button — bordered cell to match */
-.sb-root button.mc-more-btn {
+.sb-root button.mc-chevron-btn {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
   border-radius: 4px;
-  width: 32px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--sb-text-2);
-  font-size: 11px;
+  font-size: 14px;
   flex-shrink: 0;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   outline: none;
 }
-.sb-root button.mc-more-btn:hover { 
-  background: var(--sb-bg-odd-hover);
-  border-color: #444;
+.sb-root button.mc-chevron-btn:hover { 
+  background: #303030;
+  border-color: var(--sb-border);
   color: #fff; 
 }
 
