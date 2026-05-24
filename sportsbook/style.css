@@ -2849,16 +2849,40 @@ body {
 }
 
 /* Market tabs */
-.md-tabs-row {
+/* Tab bar wrapper + scroll arrow buttons — fcbet style */
+.md-tabs-wrap {
   display: flex;
-  overflow-x: auto;
+  align-items: stretch;
   background: #111;
   border-bottom: 1px solid var(--sb-border);
-  padding: 0 6px;
   flex-shrink: 0;
   position: sticky;
   top: 37px;
-  z-index: 9;
+  z-index: 10;
+}
+.md-tab-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  padding: 0 10px;
+  outline: none;
+  flex-shrink: 0;
+  border-right: 1px solid var(--sb-border);
+  transition: color 0.12s;
+}
+.md-tab-arrow-r { border-right: none; border-left: 1px solid var(--sb-border); }
+.md-tab-arrow:hover { color: #fff; }
+.md-tabs-row {
+  display: flex;
+  overflow-x: auto;
+  flex: 1;
+  padding: 0 2px;
+  scroll-behavior: smooth;
+  background: #111;
 }
 .md-tabs-row::-webkit-scrollbar { height: 0; }
 .md-tab-icon-btn {
@@ -2890,7 +2914,15 @@ body {
   transition: color 0.12s, border-color 0.12s;
 }
 .md-tab:hover { color: var(--sb-text-1); }
-.md-tab.active { color: var(--sb-text-1); border-bottom-color: var(--sb-green); font-weight: 600; }
+.md-tab.active {
+  background: var(--sb-green) !important;
+  color: #000 !important;
+  border-bottom-color: transparent !important;
+  border-radius: 4px;
+  font-weight: 700;
+  margin: 4px 2px;
+  padding: 5px 12px;
+}
 
 /* Markets area */
 .md-markets { padding: 6px 8px 20px; background: #0f0f0f; }
@@ -2954,7 +2986,12 @@ body {
   gap: 6px;
 }
 .md-odd-btn:hover { background: var(--sb-bg-odd-hover); border-color: var(--sb-border-light); }
-.md-odd-btn.sel { background: rgba(112,246,105,0.10); border-color: var(--sb-green); }
+.md-odd-btn.sel {
+  background: var(--sb-green) !important;
+  border-color: var(--sb-green) !important;
+}
+.md-odd-btn.sel .md-o-name { color: #000 !important; }
+.md-odd-btn.sel .md-o-val  { color: #000 !important; font-weight: 800 !important; }
 .md-o-name { font-size: 12px; color: var(--sb-text-2); flex: 1; text-align: left; }
 .md-o-val  { font-size: 13px; font-weight: 700; color: var(--sb-green); flex-shrink: 0; }
 .md-hc     { color: var(--sb-text-3); font-size: 10px; }

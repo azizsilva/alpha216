@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.25';
+  var newHref = base + 'sportsbook/style.css?v=20260524.26';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1741,11 +1741,11 @@ var SLIP_COMBI_STAKE = 10;
 var SLIP_SYS_SINGLES_STAKE = 0;
 var SLIP_SYS_COMBO_STAKE = 0;
 
-window.sbAddBet = function(id, match, sel, val) {
+window.sbAddBet = function(id, match, sel, val, market) {
   id = String(id).replace(/'/g, '');
   var idx = S.betSlip.findIndex(function(b) { return b.id === id; });
   if (idx !== -1) S.betSlip.splice(idx, 1);
-  else S.betSlip.push({ id: id, match: match, sel: sel, val: parseFloat(val), isLive: false, market: '1x2', stake: SLIP_STAKE });
+  else S.betSlip.push({ id: id, match: match, sel: sel, val: parseFloat(val), isLive: false, market: market || '1x2', stake: SLIP_STAKE });
   renderBetSlip();
   updateFloatingBetBadge();
   // Update button highlights
@@ -2766,12 +2766,20 @@ function renderMatchDetail(m, markets) {
   out += '<button class="md-qt" data-filter="all" onclick="window.sbMdQuickFilter(this,\'all\')">Marchés rapides</button>';
   out += '</div>';
 
-  // ── Main market category tabs (Principaux is default active)
+  // ── Main market category tabs — fcbet style with scroll arrows
   var TABS = ['Tout','Principaux','Bet Builder','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals'];
-  out += '<div class="md-tabs-row">';
+  out += '<div class="md-tabs-wrap">';
+  out += '<button class="md-tab-arrow md-tab-arrow-l" onclick="window.sbTabsScroll(-1)" title="Précédent">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>'
+    + '</button>';
+  out += '<div class="md-tabs-row" id="md-tabs-inner">';
   TABS.forEach(function(t, i) {
     out += '<button type="button" class="md-tab' + (i === 1 ? ' active' : '') + '" onclick="window.sbMdTab(this,\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
   });
+  out += '</div>';
+  out += '<button class="md-tab-arrow md-tab-arrow-r" onclick="window.sbTabsScroll(1)" title="Suivant">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>'
+    + '</button>';
   out += '</div>';
 
   // ── Markets list (always visible; markets switch to BB-mode when tab is active)
@@ -2907,9 +2915,9 @@ function renderMktBtn(sel, m, bbMode) {
       + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
       + '</button>';
   }
+  var matchStr = h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''));
   return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + '" onclick="window.sbAddBet(\''
-    + bid + '\',\'' + h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''))
-    + '\',\'' + h(sel.name) + '\',' + val + ')">'
+    + bid + '\',\'' + matchStr + '\',\'' + h(sel.name) + '\',' + val + ',\'' + h(mktName) + '\')">'
     + '<span class="md-o-name">' + lbl + '</span>'
     + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
     + '</button>';
@@ -3008,6 +3016,22 @@ var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les de
 var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
 
 window._bbModeActive = false;
+
+window.sbTabsScroll = function(dir) {
+  var row = document.getElementById('md-tabs-inner');
+  if (!row) return;
+  // If direction is -1/+1, try to activate the adjacent tab
+  var tabs = Array.from(row.querySelectorAll('.md-tab'));
+  var activeIdx = tabs.findIndex(function(t){ return t.classList.contains('active'); });
+  var next = tabs[activeIdx + dir];
+  if (next) {
+    next.click();
+    next.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  } else {
+    // Just scroll the row
+    row.scrollBy({ left: dir * 120, behavior: 'smooth' });
+  }
+};
 
 window.sbMdTab = function(btn, tabName) {
   document.querySelectorAll('.md-tab').forEach(function(b){ b.classList.remove('active'); });
