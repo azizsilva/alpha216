@@ -953,9 +953,9 @@ body {
   padding: 8px 12px;
   background: #1e1e1e;
   border: 1px solid var(--sb-border);
-  border-bottom: none;
-  border-radius: var(--sb-radius) var(--sb-radius) 0 0;
+  border-radius: var(--sb-radius);
   margin-top: 14px;
+  margin-bottom: 4px;
 }
 .sb-lh-star {
   color: var(--sb-text-2);
@@ -988,16 +988,15 @@ body {
 .mc {
   background: var(--sb-bg-card);
   border: 1px solid var(--sb-border);
-  border-top: none;
+  border-radius: var(--sb-radius);
   display: flex;
   flex-direction: column;
-  margin-bottom: 0;
+  margin-bottom: 4px;
   transition: background 0.12s;
   cursor: pointer;
   overflow: hidden;
 }
 .mc:last-of-type {
-  border-radius: 0 0 var(--sb-radius) var(--sb-radius);
   margin-bottom: 0;
 }
 .mc:hover { background: #212121; }
