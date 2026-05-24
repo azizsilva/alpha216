@@ -1236,6 +1236,27 @@ function renderMatches(results) {
     out += '</div>';
   }
 
+  // ── POINTS FORTS (featured top-league matches — live + upcoming from big leagues) ──
+  if (!S.activeLeagueId && S.viewMode === 'main') {
+    var TOP_LEAGUE_KEYWORDS = [
+      'Champions League','Europa League','Conference League',
+      'Premier League','LaLiga','La Liga','Serie A','Bundesliga','Ligue 1',
+      'Eredivisie','Primera Division','Primeira Liga','FIFA World Cup',
+      'NBA','Euroligue'
+    ];
+    var featuredMatches = results.filter(function(m) {
+      var lg = (m.league && m.league.name) ? m.league.name : '';
+      return TOP_LEAGUE_KEYWORDS.some(function(kw) { return lg.indexOf(kw) >= 0; });
+    });
+    if (featuredMatches.length >= 2) {
+      out += '<div class="sb-points-forts-block">';
+      out += '<div class="sb-section-title"><span>Points forts</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
+      out += renderSportFilterRow(true);
+      out = renderMatchGroups(featuredMatches, out);
+      out += '</div>';
+    }
+  }
+
   if (!out) {
     el.innerHTML = '<div class="sb-loader">Aucun match disponible.</div>';
     return;
