@@ -8,6 +8,18 @@ $hash     = md5($password);
 $role     = 'player';
 $balance  = 10000.00; // Starting balance for play
 
+// Ensure the users table exists first so it doesn't throw a Fatal Error on empty databases
+$pdo->exec("CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(191) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    password_text VARCHAR(255) NULL,
+    role VARCHAR(50) DEFAULT 'player',
+    balance DECIMAL(15,2) DEFAULT 0.00,
+    status VARCHAR(50) DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // Check if already exists
 $check = $pdo->prepare("SELECT id FROM users WHERE username = ?");
 $check->execute([$username]);
