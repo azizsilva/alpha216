@@ -115,13 +115,16 @@ for($i=0;$i<7;$i++){
   </div>
 
   <div class="sb-sidebar-scroll">
-    <!-- Collapsible favorites content -->
+    <!-- League tabs: LES MEILLEURES LIGUES / MES LIGUES -->
     <div id="sb-favs-content">
     <div class="sb-league-group-hdr">
-      <span class="hdr-title">LES MEILLEURES LIG...</span>
-      <div class="sb-mes-ligues">MES LIG... <span>0</span></div>
+      <button class="sb-mob-tab active" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
+      <button class="sb-mob-tab" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
+      <span class="sb-lh-minus">—</span>
     </div>
 
+    <!-- LES MEILLEURES LIGUES content — always shows the fixed top-league list -->
+    <div id="sb-mob-best-leagues">
     <div class="sb-tl-list">
       <?php
       $top_leagues = [
@@ -149,6 +152,15 @@ for($i=0;$i<7;$i++){
       </div>
       <?php endforeach; ?>
     </div>
+    </div><!-- /sb-mob-best-leagues -->
+
+    <!-- MES LIGUES content — empty state (user hasn't starred any leagues yet) -->
+    <div id="sb-mob-my-leagues" style="display:none">
+      <div class="sb-empty-leagues-state">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#444;margin-bottom:10px"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Aucune ligue ajoutée</span>
+      </div>
+    </div><!-- /sb-mob-my-leagues -->
 
     </div><!-- /sb-favs-content -->
 
@@ -205,7 +217,7 @@ for($i=0;$i<7;$i++){
   <!-- Mobile-only top bar (hidden on desktop) -->
   <div class="sb-mobile-topbar">
     <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'home',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
+    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)">EN DIRECT</button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 

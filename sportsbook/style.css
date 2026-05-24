@@ -1663,9 +1663,46 @@ body {
   color: var(--sb-text-2);
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 .sb-mob-tab.active {
   color: var(--sb-text-1);
+}
+.sb-mob-tab .sb-mes-cnt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sb-green);
+  color: #000;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 9px;
+  font-weight: 800;
+  margin-left: 4px;
+}
+.sb-lh-minus {
+  margin-left: auto;
+  color: var(--sb-text-2);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* Empty state for MES LIGUES */
+.sb-empty-leagues-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: var(--sb-text-2);
+  font-size: 13px;
+  text-align: center;
 }
 .sb-mob-collapse {
   margin-left: auto;

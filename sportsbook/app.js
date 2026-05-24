@@ -1051,12 +1051,10 @@ function matchCard(m) {
   var xVal = parseFloat(o.x) || 0;
 
   if (cat === 'populaire') {
-    // Default: 1x2 + O/U
+    // Default: 1x2 only — matches fcbet216 "En direct maintenant" 3-button layout
     out += oddBtn(mid, mname, '1', o.h);
     out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
-    out += ouBtn(mid, mname, 'Plus de ' + ouLine, ouOver, 'ou_over');
-    out += ouBtn(mid, mname, 'Moins de ' + ouLine, ouUnder, 'ou_under');
   } else if (cat === '1x2') {
     out += oddBtn(mid, mname, '1', o.h);
     out += oddBtn(mid, mname, 'X', o.x);
