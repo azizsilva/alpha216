@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.31';
+  var newHref = base + 'sportsbook/style.css?v=20260524.33';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -224,6 +224,17 @@ function getMatchPeriod(m) {
   return '1ère mi-temps';
 }
 
+/* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ── */
+function formatLiveMinute(m) {
+  if (!m || !m.timer) return '';
+  var md = String(m.timer.md || m.timer.MD || '');
+  if (md === '1') return 'Mi-temps';
+  var tm = m.timer.tm;
+  if (tm === undefined || tm === null || tm === '') tm = m.timer.TM;
+  if (tm === undefined || tm === null || tm === '') return '';
+  return String(tm) + "'";
+}
+
 /* ── Live counting timer (counts up from API snapshot) ─── */
 function startMatchTimer(m) {
   clearInterval(window._mdTimerInterval);
@@ -245,6 +256,70 @@ function startMatchTimer(m) {
     var ss = curr % 60;
     el.textContent = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
   }, 1000);
+}
+
+/* ── Match detail live poll (score + timer + odds every 5s) ── */
+function startMatchDetailPoll(mid) {
+  if (S._mdPollInterval) clearInterval(S._mdPollInterval);
+  S._mdPollInterval = setInterval(function() {
+    if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) {
+      clearInterval(S._mdPollInterval);
+      S._mdPollInterval = null;
+      return;
+    }
+    fetch(BASE + 'sportsbook/api.php?action=match_live&match_id=' + encodeURIComponent(mid))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d || !d.success || !d.match) return;
+        patchMatchDetailLive(d.match, d.markets || []);
+      })
+      .catch(function() {});
+  }, 5000);
+}
+
+function patchMatchDetailLive(m, markets) {
+  window._mdMatch = m;
+
+  // Score
+  var scoreEl = document.getElementById('md-score-display') || document.querySelector('.md-score-live');
+  if (scoreEl && m.ss) {
+    var sp = String(m.ss).split('-');
+    scoreEl.textContent = (sp[0] || '0').trim() + ' : ' + (sp[1] || '0').trim();
+  }
+
+  // Timer / half-time
+  var timerEl = document.getElementById('md-timer-display');
+  if (timerEl && m.timer) {
+    var isHT = (m.timer.md === '1' || m.timer.MD === '1');
+    if (isHT) {
+      timerEl.textContent = 'Mi-temps';
+      clearInterval(window._mdTimerInterval);
+    } else {
+      var tm = m.timer.tm || m.timer.TM || '0';
+      var ts = m.timer.ts || m.timer.TS || '0';
+      timerEl.textContent = String(tm).padStart(2, '0') + ':' + String(ts).padStart(2, '0');
+      startMatchTimer(m);
+    }
+  }
+
+  // Sync into main match list
+  var lm = S.matches.find(function(x) { return String(x.id) === String(m.id); });
+  if (lm) {
+    if (m.ss) lm.ss = m.ss;
+    if (m.timer) lm.timer = m.timer;
+    if (m.live_odds) { lm.live_odds = m.live_odds; lm._o = null; }
+    if (m.time_status) lm.time_status = m.time_status;
+  }
+
+  // Refresh market odds if API returned updated markets
+  if (markets && markets.length) {
+    window._mdMarkets = markets;
+    var activeTab = document.querySelector('.md-tab.active');
+    if (activeTab && typeof window.sbMdTab === 'function') {
+      var tabName = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
+      window.sbMdTab(activeTab, tabName);
+    }
+  }
 }
 
 /* ── Stats bar (goals, cards, corners, shots) ─────────── */
@@ -802,6 +877,41 @@ function loadCounts() {
     .finally(function() { if (tid) clearTimeout(tid); });
 }
 
+/* ── Apply live_refresh payload to in-memory match list ── */
+function applyLiveRefresh(ids, targetList) {
+  if (!ids || !ids.length || !targetList) return Promise.resolve(false);
+  return fetch(BASE + 'sportsbook/api.php?action=live_refresh&ids=' + ids.join(','))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d || !d.refreshed) return false;
+      var updated = false;
+      Object.keys(d.refreshed).forEach(function(mid) {
+        var upd = d.refreshed[mid];
+        var m = targetList.find(function(x) { return String(x.id) === String(mid); });
+        if (!m) return;
+        if (upd.ss !== undefined && upd.ss !== null && m.ss !== upd.ss) {
+          m.ss = upd.ss;
+          updated = true;
+        }
+        if (upd.timer && JSON.stringify(m.timer) !== JSON.stringify(upd.timer)) {
+          m.timer = upd.timer;
+          updated = true;
+        }
+        if (upd.live_odds && upd.live_odds.h) {
+          m.live_odds = upd.live_odds;
+          m._o = null;
+          updated = true;
+        }
+        if (upd.time_status && m.time_status !== upd.time_status) {
+          m.time_status = upd.time_status;
+          updated = true;
+        }
+      });
+      return updated;
+    })
+    .catch(function() { return false; });
+}
+
 /* ── Real-time polling: updates scores, odds, timer, time_status ───────────
    Polls every 20s. Works for both main view (sport list) and championship view.
    Updates ALL live match fields — not just score.
@@ -810,10 +920,10 @@ function startPolling() {
   if (S.pollingInterval) clearInterval(S.pollingInterval);
 
   function doPoll() {
-    // Skip re-rendering when viewing match detail — just update data silently
+    // Match detail page uses dedicated faster poll (startMatchDetailPoll)
     if (S.viewMode === 'matchDetail') return;
 
-    var url, targetList, isChamp;
+    var url, targetList, isChamp, liveRefreshP = Promise.resolve(false);
 
     if (S.viewMode === 'championship' && S.activeLeagueName) {
       // Championship view: poll league_matches endpoint for this league
@@ -824,17 +934,25 @@ function startPolling() {
       targetList = S.champMatches;
       isChamp = true;
 
-      // For live matches in championship view, also trigger a direct BetsAPI refresh
-      // so scores/odds update even between sync_daemon runs (max 5 live matches)
+      // For live matches in championship view, trigger direct BetsAPI refresh
       var liveIds = S.champMatches
         .filter(isMatchLive)
         .map(function(m) { return m.id; })
-        .slice(0, 5);
-      if (liveIds.length > 0) {
-        fetch(BASE + 'sportsbook/api.php?action=live_refresh&ids=' + liveIds.join(','))
-          .catch(function() {}); // fire-and-forget; DB update picked up by next league_matches poll
+        .slice(0, 8);
+      if (liveIds.length) {
+        liveRefreshP = applyLiveRefresh(liveIds, S.champMatches);
       }
     } else {
+      // Main inplay view — refresh visible live matches every poll cycle
+      if (S.activeAction === 'inplay' || S.activeDateOffset === 0) {
+        var liveIdsMain = S.matches
+          .filter(isMatchLive)
+          .map(function(m) { return m.id; })
+          .slice(0, 8);
+        if (liveIdsMain.length > 0) {
+          liveRefreshP = applyLiveRefresh(liveIdsMain, S.matches);
+        }
+      }
       // Main view: poll inplay or upcoming based on date
       // If on upcoming view but some matches have already started, switch to inplay automatically
       var hasStarted = S.activeDateOffset > 0 && S.matches.some(function(m) {
@@ -851,10 +969,21 @@ function startPolling() {
       isChamp = false;
     }
 
+    liveRefreshP.then(function(refreshedEarly) {
     fetch(url)
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (!d || !d.results) return;
+        if (!d || !d.results) {
+          if (refreshedEarly) {
+            if (isChamp) {
+              renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+            } else {
+              renderMatches(S.matches);
+              markLiveSidebarLeagues(S.matches);
+            }
+          }
+          return;
+        }
         // Always filter out finished matches from fresh API response
         var newResults = d.results.filter(function(m) { return m.time_status !== '3'; });
         var updated = false;
@@ -879,14 +1008,18 @@ function startPolling() {
           // ── Score update ──────────────────────────────────────────
           if (m.ss !== nm.ss) { m.ss = nm.ss; updated = true; }
 
-          // ── Live odds update (always accept newer timestamp) ──────
+          // ── Live odds update (accept when values or timestamp changed) ──
           var newOdds = nm.live_odds;
           if (newOdds && newOdds.h) {
+            var oldOdds = m.live_odds || {};
             var newTs = parseInt(newOdds.ts || 0);
-            var oldTs = parseInt((m.live_odds && m.live_odds.ts) || 0);
-            if (newTs >= oldTs) {
+            var oldTs = parseInt(oldOdds.ts || 0);
+            var oddsChanged = oldOdds.h !== newOdds.h || oldOdds.x !== newOdds.x || oldOdds.a !== newOdds.a
+              || oldOdds.ou_over !== newOdds.ou_over || oldOdds.ou_under !== newOdds.ou_under
+              || oldOdds.ou_line !== newOdds.ou_line;
+            if (oddsChanged || newTs >= oldTs) {
               m.live_odds = newOdds;
-              m._o = null; // Clear cached computed odds
+              m._o = null;
               updated = true;
             }
           }
@@ -926,7 +1059,17 @@ function startPolling() {
           markLiveSidebarLeagues(S.matches);
         }
       })
-      .catch(function() {});
+      .catch(function() {
+        if (refreshedEarly) {
+          if (isChamp) {
+            renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+          } else {
+            renderMatches(S.matches);
+            markLiveSidebarLeagues(S.matches);
+          }
+        }
+      });
+    });
   }
 
   // 5s for live/inplay so odds appear on the very next cycle after async fetch fills cache.
@@ -1306,14 +1449,7 @@ function matchCard(m) {
   var dateTimeLabel = dateStr + ' \u2022 ' + timeStr;
 
   // Live timer — "Mi-temps" for half-time, otherwise "45'"
-  var liveMin = '';
-  if (isLive && m.timer) {
-    var tm = m.timer.tm || m.timer.TM || '';
-    var ts = m.timer.ts || m.timer.TS || '';
-    // md=1 means half-time pause
-    if (m.timer.md === '1' || m.timer.MD === '1') liveMin = 'Mi-temps';
-    else liveMin = tm ? (tm + '\'') : '';
-  }
+  var liveMin = isLive ? formatLiveMinute(m) : '';
 
   // Team logos
   var FALLBACK = BASE + 'assets/images/logo.png';
@@ -1621,11 +1757,7 @@ function renderEnDirectCards(matches) {
     var isLive  = isMatchLive(m);
 
     var scores = m.ss ? m.ss.split('-') : ['',''];
-    var timerMin = '';
-    if (isLive && m.timer) {
-      var tm = m.timer.tm || ''; var tmd = m.timer.md || '';
-      timerMin = tmd === '1' ? 'Mi-temps' : (tm ? tm + '\'' : '');
-    }
+    var timerMin = isLive ? formatLiveMinute(m) : '';
 
     // Pick sport icon (small 14px)
     var sid = parseInt(m.sport_id || 1);
@@ -2383,6 +2515,7 @@ window.sbBackToMain = function() {
   S.champMatches     = [];
   if (prevLeague) S.homeLeagueFilter = prevLeague;
   clearInterval(window._mdTimerInterval);
+  if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
   var viewer = document.getElementById('sb-match-viewer');
   if (viewer) viewer.style.display = 'none';
 
@@ -2652,7 +2785,10 @@ window.sbOpenMatch = function(mid, _skipPush) {
     .then(function(d) {
       var m = (d && d.match) ? d.match : S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
       var mkts = (d && d.markets) ? d.markets : [];
-      if (m) renderMatchDetail(m, mkts);
+      if (m) {
+        renderMatchDetail(m, mkts);
+        startMatchDetailPoll(mid);
+      }
     })
     .catch(function() {
       var m = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
@@ -2758,7 +2894,7 @@ function renderMatchDetail(m, markets) {
   // Score center
   out += '<div class="md-score-col">';
   if (isLive && scoreH !== '' && scoreA !== '') {
-    out += '<div class="md-score-live">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
+    out += '<div class="md-score-live" id="md-score-display">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
     if (htScoreH !== '' && htScoreA !== '') {
       out += '<div class="md-ht-score">' + h(htScoreH) + ' : ' + h(htScoreA) + '</div>';
     }
