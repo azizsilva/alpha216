@@ -704,6 +704,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Streaming item — with LIVE dot badge */

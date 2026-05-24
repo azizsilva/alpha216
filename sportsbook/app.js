@@ -862,9 +862,16 @@ function renderMatches(results) {
     return;
   }
 
-  if (S.activeAction !== 'inplay' && !S.activeLeagueId) {
-    renderEnDirectCards(results.slice(0, 6));   // horizontal upcoming matches at top
-    renderBoosted(results.slice(6, 10));        // COTES BOOSTÉES promotional cards
+  // Always update the en-direct horizontal cards row (clears skeletons)
+  if (!S.activeLeagueId) {
+    if (S.activeAction === 'inplay') {
+      // For inplay: show the first 6 live matches as en-direct cards
+      renderEnDirectCards(results.slice(0, 6));
+    } else {
+      // For upcoming: show upcoming matches as en-direct cards + cotes boostées
+      renderEnDirectCards(results.slice(0, 6));
+      renderBoosted(results.slice(6, 10));
+    }
   }
 
   // Group by league
