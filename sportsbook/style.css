@@ -8,7 +8,8 @@
   --sb-green:       #70f669;   /* primary-color from reference */
   --sb-green-dark:  #5bc355;
   --sb-green-font:  rgba(0,0,0,0.87); /* text on green backgrounds */
-  --sb-red:         #e02424;
+  --sb-red:         #e02424;  /* kept for other uses; EN DIRECT uses green below */
+  --sb-live-green:  rgb(113, 246, 105); /* EN DIRECT badge color per user spec */
   /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
   --sb-bg-root:     #0f0f0f;   /* page root — near black */
   --sb-bg-card:     #313131;   /* match cards — rgb(49,49,49) from fcbet DevTools */
@@ -140,10 +141,10 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* The red badge label inside EN DIRECT button */
+/* The green badge label inside EN DIRECT button */
 .sb-btn-live .sb-live-badge {
-  background: var(--sb-red);
-  color: #fff;
+  background: var(--sb-live-green);
+  color: rgba(0,0,0,0.87);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -238,8 +239,8 @@ body {
 .sb-flag-icon { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
 /* Live EN DIRECT badge for sidebar leagues */
 .sb-tl-live-badge {
-  background: var(--sb-red);
-  color: #fff;
+  background: var(--sb-live-green);
+  color: rgba(0,0,0,0.87);
   font-size: 8px;
   font-weight: 800;
   padding: 2px 5px;
@@ -373,8 +374,8 @@ body {
 .sb-sport-name { flex: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
 .sb-sport-cnt  { font-size: 12px; color: var(--sb-text-2); flex-shrink: 0; font-weight: 600; }
 .sb-en-direct-badge {
-  background: var(--sb-red) !important;
-  color: #fff !important;
+  background: var(--sb-live-green) !important;
+  color: rgba(0,0,0,0.87) !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   padding: 2px 5px !important;
@@ -1129,10 +1130,10 @@ body {
   flex-shrink: 0;
   white-space: nowrap;
 }
-/* EN DIRECT badge — solid red for live matches */
+/* EN DIRECT badge — green matches fcbet live indicator */
 .mc-live-badge {
-  background: var(--sb-red);
-  color: #fff;
+  background: rgb(113, 246, 105);
+  color: rgba(0,0,0,0.87);
   border: none;
   font-size: 9px;
   font-weight: 800;
@@ -1846,8 +1847,8 @@ body {
 }
 /* EN DIRECT badge inside button when NOT active */
 .sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge {
-  background: #e02424 !important;
-  color: #fff !important;
+  background: rgb(113, 246, 105) !important;
+  color: rgba(0,0,0,0.87) !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   letter-spacing: 0.8px !important;
@@ -3420,7 +3421,8 @@ body {
    FEATURED CARD — EN DIRECT badge in header
    ════════════════════════════════════════════════════════════ */
 .slc-live-badge {
-  background: var(--sb-red);
+  background: var(--sb-live-green);
+  color: rgba(0,0,0,0.87);
   color: #fff;
   font-size: 8px;
   font-weight: 800;
@@ -3620,6 +3622,63 @@ body {
   margin-bottom: 6px !important;
 }
 
+/* ── Live section market dropdown (En direct maintenant) ── */
+.sb-live-mkt-wrap {
+  margin: 6px 0 4px;
+  position: relative;
+}
+.sb-live-mkt-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2a2a2a;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--sb-text-1);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sb-live-mkt-btn:hover { background: #333; }
+.sb-lmb-arrow { color: var(--sb-text-2); transition: transform 0.2s; }
+.sb-lmb-arrow.rotated svg { transform: rotate(180deg); }
+.sb-live-mkt-drop {
+  background: #2a2a2a;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+}
+.sb-lmk-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  color: var(--sb-text-1);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.sb-lmk-item:hover { background: rgba(255,255,255,0.05); }
+.sb-lmk-item.active { font-weight: 600; }
+.sb-lmk-minus { font-size: 18px; color: var(--sb-text-2); line-height: 1; }
+
+/* "Market not available" message in match card */
+.mc-no-market {
+  flex: 1;
+  font-size: 12px;
+  color: var(--sb-text-2);
+  padding: 4px 0;
+  font-style: italic;
+}
+
 /* Collapse/expand odds row via chevron toggle */
 .sb-root .mc.mc-collapsed .mc-odds-bot {
   display: none !important;
@@ -3634,8 +3693,8 @@ body {
 }
 
 .sb-root .mc-live-badge {
-  background: #e02424 !important;
-  color: #fff !important;
+  background: rgb(113, 246, 105) !important;
+  color: rgba(0,0,0,0.87) !important;
   border: none !important;
 }
 
@@ -3812,10 +3871,10 @@ body {
   line-height: 1.4 !important;
 }
 
-/* EN DIRECT red badge */
+/* EN DIRECT green badge — rgb(113, 246, 105) per user spec */
 .sb-root .mc-live-badge {
-  background: #e02424 !important;
-  color: #fff !important;
+  background: rgb(113, 246, 105) !important;
+  color: rgba(0,0,0,0.87) !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   padding: 2px 6px !important;

@@ -355,7 +355,8 @@ var S = {
   champMatches: [],     // matches shown in championship/league view
   activeMarketCat: 'populaire', // active market category in championship view
   mobLeagueTab: 'best',         // 'best' | 'my' — mobile inline league tabs
-  homeLeagueFilter: null        // filter "En direct maintenant" after league pick
+  homeLeagueFilter: null,       // filter "En direct maintenant" after league pick
+  activeLiveCat: 'populaire'    // active market category for live section dropdown
 };
 
 /* ── SVG Icons (extracted from reference site shadow DOM) ─ */
@@ -1060,6 +1061,97 @@ function renderMatchGroups(matches, out) {
 }
 
 // showMarkets=false for live section (pills only), true for upcoming (pills + market selectors)
+/* ── Live section market-type dropdown (matches fcbet "En direct maintenant") ── */
+var LIVE_MKT_OPTIONS = [
+  {key: 'populaire',    label: '1x2'},
+  {key: 'total',        label: 'Total'},
+  {key: 'double_chance',label: 'Double chance'},
+  {key: 'btts',         label: 'Les deux équipes qui marquent'},
+  {key: 'handicap',     label: 'Handicap'},
+  {key: '1x2_ht',       label: '1ère mi-temps - 1x2'},
+  {key: 'total_ht',     label: '1ère mi-temps - total'}
+];
+
+function renderLiveMarketDropdown() {
+  var active = LIVE_MKT_OPTIONS.find(function(o){ return o.key === (S.activeLiveCat||'populaire'); });
+  var label  = active ? active.label : '1x2';
+  var out = '<div class="sb-live-mkt-wrap" id="sb-live-mkt-wrap">';
+  out += '<button type="button" class="sb-live-mkt-btn" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
+  out += '<span id="sb-live-mkt-lbl">' + h(label) + '</span>';
+  out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + ICON.chevronDown + '</span>';
+  out += '</button>';
+  out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop" style="display:none">';
+  LIVE_MKT_OPTIONS.forEach(function(o) {
+    var isCur = (o.key === (S.activeLiveCat || 'populaire'));
+    out += '<button type="button" class="sb-lmk-item' + (isCur ? ' active' : '') + '" onclick="window.sbSetLiveCat(\'' + o.key + '\',\'' + h(o.label) + '\')">';
+    out += h(o.label);
+    out += isCur ? '<span class="sb-lmk-minus">&minus;</span>' : '';
+    out += '</button>';
+  });
+  out += '</div>';
+  out += '</div>';
+  return out;
+}
+
+window.sbToggleLiveMktDrop = function() {
+  var drop = document.getElementById('sb-live-mkt-drop');
+  var arrow = document.getElementById('sb-lmb-arrow');
+  if (!drop) return;
+  var open = drop.style.display !== 'none';
+  drop.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.classList.toggle('rotated', !open);
+};
+
+window.sbSetLiveCat = function(key, label) {
+  S.activeLiveCat = key;
+  var lbl = document.getElementById('sb-live-mkt-lbl');
+  if (lbl) lbl.textContent = label;
+  var drop = document.getElementById('sb-live-mkt-drop');
+  if (drop) drop.style.display = 'none';
+  var arrow = document.getElementById('sb-lmb-arrow');
+  if (arrow) arrow.classList.remove('rotated');
+  // Re-render only the live match groups (fast — no API call)
+  var liveList = (S.matches || []).filter(isMatchLive);
+  liveList = sortLiveMatches(liveList);
+  var liveBody = document.getElementById('sb-live-groups-body');
+  if (liveBody) {
+    var html = '';
+    html = renderMatchGroups(liveList, html);
+    liveBody.innerHTML = html;
+  }
+};
+
+/* Sort live matches: Football first (sport_id=1), then by league priority */
+var LEAGUE_PRIORITY_MAP = {
+  'UEFA Champions League': 1, 'UEFA Europa League': 2, 'UEFA Conference League': 3,
+  'England Premier League': 4, 'Spain LaLiga': 5, 'Germany Bundesliga': 6,
+  'Italy Serie A': 7, 'France Ligue 1': 8, 'Netherlands Eredivisie': 9,
+  'Portugal Primeira Liga': 10, 'Belgium First Division A': 11,
+  'Turkey Super Lig': 12, 'Russia Premier League': 13,
+  'Brazil Brasileiro Serie A': 14, 'Argentina Liga Profesional': 15,
+  'FIFA World Cup 2026': 0
+};
+function getLeaguePriority(league) {
+  if (!league || !league.name) return 99;
+  var n = league.name;
+  for (var k in LEAGUE_PRIORITY_MAP) {
+    if (n.indexOf(k) >= 0 || k.indexOf(n) >= 0) return LEAGUE_PRIORITY_MAP[k];
+  }
+  return 50;
+}
+function sortLiveMatches(list) {
+  return list.slice().sort(function(a, b) {
+    var sa = parseInt(a.sport_id || 1);
+    var sb2 = parseInt(b.sport_id || 1);
+    if (sa !== sb2) {
+      if (sa === 1) return -1;
+      if (sb2 === 1) return 1;
+      return sa - sb2;
+    }
+    return getLeaguePriority(a.league) - getLeaguePriority(b.league);
+  });
+}
+
 function renderSportFilterRow(showMarkets) {
   var liveSports = SPORTS.filter(function(sp) { return sp.live !== false; }).slice(0, 8);
   var out = '<div class="sb-upcoming-tabs">';
@@ -1116,13 +1208,17 @@ function renderMatches(results) {
   // ── EN DIRECT MAINTENANT (live cards with jerseys, scores, green odds) ──
   if (isTodayInplay && (liveList.length || liveOnlyTab)) {
     var showLive = liveOnlyTab ? liveList : liveList;
+    var sortedLive = sortLiveMatches(showLive);
     out += '<div id="sb-live-now-block" class="sb-live-now-block">';
     out += '<div class="sb-section-title"><span>En direct maintenant</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
-    out += renderSportFilterRow(false); // live: sport pills only, no market selects
-    if (!showLive.length) {
+    out += renderSportFilterRow(false); // live: sport pills only
+    out += renderLiveMarketDropdown();  // market-type selector (1x2, Total, etc.)
+    if (!sortedLive.length) {
       out += '<div class="sb-loader">Aucun match en direct pour le moment.</div>';
     } else {
-      out = renderMatchGroups(showLive, out);
+      out += '<div id="sb-live-groups-body">';
+      out = renderMatchGroups(sortedLive, out);
+      out += '</div>';
     }
     out += '</div>';
   }
@@ -1259,7 +1355,7 @@ function matchCard(m) {
     return shirtSVG(tName, 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), 24);
   }
 
-  out += '<div class="mc-teams-wrap" onclick="window.sbOpenMatch(\'' + mid + '\')">';
+  out += '<div class="mc-teams-wrap" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
   out += '<div class="mc-teams-stacked">';
   out += '<div class="mc-team-row">';
   out += getShirtSVG(hn);
@@ -1276,7 +1372,25 @@ function matchCard(m) {
 
   // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)
   out += '<div class="mc-odds-bot" onclick="event.stopPropagation()">';
-  var cat = (S.viewMode === 'championship') ? (S.activeMarketCat || 'populaire') : 'populaire';
+  var cat = (S.viewMode === 'championship')
+    ? (S.activeMarketCat || 'populaire')
+    : (S.activeLiveCat || 'populaire');
+  // Check if we have ANY real odds for this card — if not, show "market not available" message
+  var hasAnyRealOdds = (parseFloat(o.h) >= 1.01 || parseFloat(o.a) >= 1.01 || parseFloat(o.x) >= 1.01 ||
+                        parseFloat(o.ov) >= 1.01 || parseFloat(o.un) >= 1.01);
+  // For non-default categories (not populaire), also check if the specific market has odds
+  var catHasOdds = hasAnyRealOdds;
+  if (cat === 'total' || cat === 'handicap') {
+    catHasOdds = (parseFloat(o.ov) >= 1.01 || parseFloat(o.un) >= 1.01);
+  }
+  if (!catHasOdds && cat !== 'populaire') {
+    out += '<div class="mc-no-market">Le marché que vous avez sélectionné n\'est pas disponible</div>';
+    out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Masquer cotes">' + ICON.chevronDown + '</button>';
+    out += '</div>';
+    out += '</div>';
+    out += '</div>';
+    return out;
+  }
   var hVal = parseFloat(o.h) || 0;
   var aVal = parseFloat(o.a) || 0;
   var xVal = parseFloat(o.x) || 0;
