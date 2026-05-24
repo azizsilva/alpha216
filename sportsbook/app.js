@@ -232,7 +232,7 @@ function formatLiveMinute(m) {
   var tm = m.timer.tm;
   if (tm === undefined || tm === null) tm = m.timer.TM;
   var tmn = parseInt(tm, 10);
-  if (!tmn || tmn < 1) return '';
+  if (isNaN(tmn) || tmn < 0) return '';
   return tmn + "'";
 }
 
@@ -1190,7 +1190,9 @@ function renderSportNav() {
 }
 
 /* ── Match Rendering ─────────────────────────────────────── */
-function renderMatchGroups(matches, out) {
+function renderMatchGroups(matches, out, opts) {
+  opts = opts || {};
+  var showLeagueHeader = (opts.showLeagueHeader !== false);
   var groups = {}, order = [];
   matches.forEach(function(m) {
     var k = (m.league && m.league.name) ? m.league.name : 'Autre championnat';
@@ -1198,20 +1200,22 @@ function renderMatchGroups(matches, out) {
     groups[k].push(m);
   });
   order.forEach(function(lg) {
-    var country = guessCountry(lg);
-    var flag = getFlag(country);
-    var countryLabel = (country && country !== 'International') ? (' · ' + h(country)) : '';
-    out += '<div class="sb-league-block">';
-    out += '<div class="sb-league-section-hdr">';
-    out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
-    out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
-    out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg) || lg) + countryLabel + '</span>';
-    out += '<span class="sb-lh-gift" title="Offres spéciales" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
-    out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
-    out += '</div>';
-    out += '<div class="sb-league-matches">';
+    if (showLeagueHeader) {
+      var country = guessCountry(lg);
+      var flag = getFlag(country);
+      var countryLabel = (country && country !== 'International') ? (' · ' + h(country)) : '';
+      out += '<div class="sb-league-block">';
+      out += '<div class="sb-league-section-hdr">';
+      out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
+      out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
+      out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg) || lg) + countryLabel + '</span>';
+      out += '<span class="sb-lh-gift" title="Offres spéciales" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
+      out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
+      out += '</div>';
+      out += '<div class="sb-league-matches">';
+    }
     groups[lg].forEach(function(m) { out += matchCard(m); });
-    out += '</div></div>';
+    if (showLeagueHeader) out += '</div></div>';
   });
   return out;
 }
@@ -1288,7 +1292,7 @@ window.sbSetLiveCat = function(key, label) {
   var liveBody = document.getElementById('sb-live-groups-body');
   if (liveBody) {
     var html = '';
-    html = renderMatchGroups(liveList, html);
+    html = renderMatchGroups(liveList, html, { showLeagueHeader: false });
     liveBody.innerHTML = html;
   }
 };
@@ -1388,7 +1392,7 @@ function renderMatches(results) {
       out += '<div class="sb-loader">Aucun match en direct pour le moment.</div>';
     } else {
       out += '<div id="sb-live-groups-body">';
-      out = renderMatchGroups(sortedLive, out);
+      out = renderMatchGroups(sortedLive, out, { showLeagueHeader: false });
       out += '</div>';
     }
     out += '</div>';
@@ -1481,19 +1485,21 @@ function matchCard(m) {
   // Detect 2-way sports (basketball, tennis, volleyball, etc.) — no draw column
   var sportId = parseInt(m.sport_id || (S.activeSportId) || 0);
   var isTwoWay = (sportId !== 0 && sportId !== 1); // sport_id 1 = football/soccer
+  var spObj = SPORTS.filter(function(s){ return s.id === sportId; })[0];
+  var spIcon = spObj ? spObj.icon : ICON.football;
+  var spIconSm = spIcon.replace(/width="20" height="20"/g, 'width="13" height="13"');
   var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" id="mc-' + mid + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
   /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
   if (isLive) {
-    // LIVE Match Card Header (fcbet-like single compact row)
+    // LIVE Match Card Header (fcbet-style single compact line)
     out += '<div class="mc-hdr-live mc-hdr-live--inline">';
     out += '<div class="mc-hl-left mc-hl-left--inline">';
+    out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
-    if (liveMin) {
-      out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
-      out += '<span class="mc-live-sep">&bull;</span>';
-    }
+    if (liveMin) out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
+    if (liveMin) out += '<span class="mc-live-sep">&bull;</span>';
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
     out += '</div>';
