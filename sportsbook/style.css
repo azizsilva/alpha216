@@ -1700,13 +1700,20 @@ body {
   .sb-mobile-sidebar-content { display: flex; }
 
   /* ── Single-scroll mobile layout ── */
-  /* Make .sb-root the scroll container so body overflow:hidden doesn't block us */
-  .sb-root { height: 100vh; overflow-y: auto !important; overflow-x: hidden; }
+  /* Override the parent app shell (mk-app-shell / #mkApp) which locks height+overflow */
+  #mkApp, .mk-app-shell {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    position: relative !important;
+  }
+  .sb-root { height: auto; min-height: 100vh; overflow: visible; }
   .sb-center { width: 100%; height: auto; overflow: visible; }
   .sb-center-header { overflow: visible; position: sticky; top: 48px; z-index: 100; background: var(--sb-bg-root); }
   .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; }
 
-  /* Mobile top bar sticky at top of sb-root scroll */
+  /* Mobile top bar sticky */
   .sb-mobile-topbar {
     position: sticky;
     top: 0;
