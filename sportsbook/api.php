@@ -666,22 +666,66 @@ if ($action === 'inplay') {
 // ═══ UPCOMING ══════════════════════════════════════════════════════════════
 if ($action === 'upcoming' || $action === 'all_upcoming') {
     $results = [];
+    $up_cache_dir = __DIR__ . '/cache';
 
     if ($db_connected) {
         $results = db_fetch_matches($pdo, "sport_id=? AND status!='ended'", [$sport_id], 1000, $sport_id);
     }
 
+    // Fallback: fetch from BetsAPI (all pages up to 5) if DB empty
     if (empty($results)) {
-        $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id]);
-        if ($data && !empty($data['results'])) {
+        for ($pg = 1; $pg <= 5; $pg++) {
+            $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => $pg]);
+            if (!$data || empty($data['results'])) break;
             foreach ($data['results'] as $m) {
                 if (isset($m['home']['name']) && $m['home']['name'] !== '') {
                     $results[] = $m;
                 }
             }
-            if (!empty($results) && $db_connected) {
-                cache_to_db($pdo, $results, $sport_id);
+            // Stop if last page
+            if (!isset($data['pager']['page']) || $data['pager']['page'] >= ($data['pager']['total_pages'] ?? 1)) break;
+        }
+        if (!empty($results) && $db_connected) {
+            cache_to_db($pdo, $results, $sport_id);
+        }
+    }
+
+    // ── Inject odds from cache (same as inplay Step 4.5) ──────────────────
+    $odds_cache_up = $up_cache_dir . '/odds_' . $sport_id . '.json';
+    $up_odds = file_exists($odds_cache_up)
+        ? (json_decode(@file_get_contents($odds_cache_up), true) ?: [])
+        : [];
+
+    // Also check per-match ev_ cache files
+    foreach ($results as &$m_up) {
+        $mid_up = (string)($m_up['id'] ?? '');
+        if (!$mid_up) continue;
+        // Already has odds from DB live_odds field?
+        if (!empty($m_up['live_odds']) && ($m_up['live_odds']['h'] ?? 0) > 1.01) continue;
+        // Try the odds cache
+        if (!empty($up_odds[$mid_up]) && ($up_odds[$mid_up]['h'] ?? 0) > 1.01) {
+            $m_up['live_odds'] = $up_odds[$mid_up];
+        } else {
+            // Try per-match ev_ file
+            $ev_file_up = $up_cache_dir . '/ev_' . $mid_up . '.json';
+            if (file_exists($ev_file_up) && (time() - filemtime($ev_file_up)) < 120) {
+                $ev_data_up = json_decode(@file_get_contents($ev_file_up), true);
+                if (!empty($ev_data_up['live_odds'])) $m_up['live_odds'] = $ev_data_up['live_odds'];
             }
+        }
+    }
+    unset($m_up);
+
+    // ── Trigger bg_sync if odds cache stale (same threshold as inplay) ──────
+    $odds_cache_age_up = file_exists($odds_cache_up) ? (time() - filemtime($odds_cache_up)) : 9999;
+    if ($odds_cache_age_up > 90 && !empty($results)) {
+        $lock_up = $up_cache_dir . '/bgsync_' . $sport_id . '.lock';
+        $lock_age_up = file_exists($lock_up) ? (time() - filemtime($lock_up)) : 9999;
+        if ($lock_age_up > 60) {
+            touch($lock_up);
+            $host_up  = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
+            $path_up  = parse_url($_SERVER['REQUEST_URI'] ?? '/sportsbook/api.php', PHP_URL_PATH);
+            fire_and_forget('http://' . $host_up . $path_up . '?action=bg_sync_upcoming&sport_id=' . $sport_id . '&_k=sbodds');
         }
     }
 
@@ -1544,6 +1588,96 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
 
     @unlink($lock_f);
     echo json_encode(['success' => 1, 'fetched' => count($new_odds)]);
+    exit;
+}
+
+// ═══ BG_SYNC_UPCOMING — async odds fetch for upcoming matches ══════════════
+// Same as bg_sync but loads from DB upcoming matches (not just live cache)
+if ($action === 'bg_sync_upcoming' && ($_GET['_k'] ?? '') === 'sbodds') {
+    $bgu_cache_dir = __DIR__ . '/cache';
+    if (!is_dir($bgu_cache_dir)) @mkdir($bgu_cache_dir, 0755, true);
+    $lock_bgu       = $bgu_cache_dir . '/bgsync_' . $sport_id . '.lock';
+    $odds_cache_bgu = $bgu_cache_dir . '/odds_' . $sport_id . '.json';
+
+    set_time_limit(90);
+    ignore_user_abort(true);
+
+    $cached_bgu = file_exists($odds_cache_bgu) ? (json_decode(file_get_contents($odds_cache_bgu), true) ?: []) : [];
+
+    // Load upcoming matches from DB (not just live cache)
+    $up_matches = [];
+    if ($db_connected) {
+        $up_matches = db_fetch_matches($pdo, "sport_id=? AND status IN('upcoming','inplay')", [$sport_id], 200, $sport_id);
+    }
+
+    // Also load from BetsAPI if DB empty
+    if (empty($up_matches)) {
+        for ($pg_bgu = 1; $pg_bgu <= 3; $pg_bgu++) {
+            $d_bgu = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => $pg_bgu]);
+            if (!$d_bgu || empty($d_bgu['results'])) break;
+            foreach ($d_bgu['results'] as $mb) {
+                if (isset($mb['home']['name']) && $mb['home']['name'] !== '') $up_matches[] = $mb;
+            }
+            if (!isset($d_bgu['pager']['page']) || $d_bgu['pager']['page'] >= ($d_bgu['pager']['total_pages'] ?? 1)) break;
+        }
+    }
+
+    $new_bgu = [];
+    $budget_bgu = microtime(true);
+    foreach ($up_matches as $bmu) {
+        if (microtime(true) - $budget_bgu > 55.0) break;
+        $mid_bgu = (string)($bmu['id'] ?? '');
+        if (!$mid_bgu) continue;
+        // Skip if already cached
+        $ex_bgu = $cached_bgu[$mid_bgu] ?? null;
+        if ($ex_bgu && isset($ex_bgu['h']) && $ex_bgu['h'] > 1.01) continue;
+
+        $fi_bgu = $bmu['r_id'] ?? $mid_bgu;
+        $pm_bgu = null;
+        $is_live_bgu = (($bmu['time_status'] ?? '') === '1');
+
+        if ($is_live_bgu) {
+            $or_ev_bgu = betsapi_get('/v1/bet365/event', ['FI' => $fi_bgu]);
+            if (!empty($or_ev_bgu['results'])) {
+                $pm_bgu = parse_event_stream_odds($or_ev_bgu['results']);
+                if (!$pm_bgu) $pm_bgu = api_parse_prematch_odds($or_ev_bgu);
+            }
+        }
+        if (!$pm_bgu) {
+            $or_bgu = betsapi_get('/v1/bet365/prematch', ['FI' => $fi_bgu]);
+            if (!$or_bgu || empty($or_bgu['results'])) {
+                $or_bgu = betsapi_get('/v1/bet365/event', ['FI' => $fi_bgu]);
+            }
+            $pm_bgu = ($or_bgu && !empty($or_bgu['results'])) ? api_parse_prematch_odds($or_bgu) : null;
+            if (!$pm_bgu && $or_bgu && !empty($or_bgu['results'])) {
+                $pm_bgu = parse_event_stream_odds($or_bgu['results']);
+            }
+        }
+        if ($pm_bgu && $pm_bgu['h'] > 1.01) {
+            $new_bgu[$mid_bgu] = $pm_bgu;
+            if ($db_connected) {
+                try {
+                    $rq_bgu = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=? LIMIT 1");
+                    $rq_bgu->execute([$mid_bgu]);
+                    $raw_bgu = $rq_bgu->fetchColumn();
+                    if ($raw_bgu) {
+                        $md_bgu = json_decode($raw_bgu, true) ?: [];
+                        $md_bgu['live_odds'] = $pm_bgu;
+                        $pdo->prepare("UPDATE sb_matches SET raw_json=?, updated_at=CURRENT_TIMESTAMP WHERE id=?")->execute([json_encode($md_bgu), $mid_bgu]);
+                    }
+                } catch (Exception $e) {}
+            }
+        }
+    }
+
+    if (!empty($new_bgu)) {
+        $merged_bgu = $new_bgu + $cached_bgu;
+        if (count($merged_bgu) > 600) $merged_bgu = array_slice($merged_bgu, -500, 500, true);
+        @file_put_contents($odds_cache_bgu, json_encode($merged_bgu));
+    }
+
+    @unlink($lock_bgu);
+    echo json_encode(['success' => 1, 'fetched' => count($new_bgu)]);
     exit;
 }
 
