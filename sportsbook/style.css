@@ -1785,7 +1785,7 @@ body {
   display: none;
   gap: 6px;
   padding: 8px 10px;
-  background: rgb(49, 49, 49);
+  background: rgb(49, 49, 49) !important;
 }
 
 /* Mobile-only sidebar content (search, leagues, tabs) — hidden on desktop */
