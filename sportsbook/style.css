@@ -7,9 +7,8 @@
 :root {
   --sb-green:       #70f669;   /* primary-color from reference */
   --sb-green-dark:  #5bc355;
-  --sb-green-font:  rgba(0,0,0,0.87); /* text on green backgrounds */
-  --sb-red:         #e02424;  /* kept for other uses; EN DIRECT uses green below */
-  --sb-live-green:  rgb(113, 246, 105); /* EN DIRECT badge color per user spec */
+  --sb-red:         #e02424;
+  --sb-live-red:    #e02424; /* EN DIRECT badge — red = live */
   /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
   --sb-bg-root:     #0f0f0f;   /* page root — near black */
   --sb-bg-card:     #313131;   /* match cards — rgb(49,49,49) from fcbet DevTools */
@@ -141,10 +140,10 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* The green badge label inside EN DIRECT button */
+/* The EN DIRECT badge label inside EN DIRECT button */
 .sb-btn-live .sb-live-badge {
-  background: var(--sb-live-green);
-  color: rgba(0,0,0,0.87);
+  background: #e02424;
+  color: #fff;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -239,8 +238,8 @@ body {
 .sb-flag-icon { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
 /* Live EN DIRECT badge for sidebar leagues */
 .sb-tl-live-badge {
-  background: var(--sb-live-green);
-  color: rgba(0,0,0,0.87);
+  background: #e02424;
+  color: #fff;
   font-size: 8px;
   font-weight: 800;
   padding: 2px 5px;
@@ -374,8 +373,8 @@ body {
 .sb-sport-name { flex: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
 .sb-sport-cnt  { font-size: 12px; color: var(--sb-text-2); flex-shrink: 0; font-weight: 600; }
 .sb-en-direct-badge {
-  background: var(--sb-live-green) !important;
-  color: rgba(0,0,0,0.87) !important;
+  background: #e02424 !important;
+  color: #fff !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   padding: 2px 5px !important;
@@ -1130,10 +1129,10 @@ body {
   flex-shrink: 0;
   white-space: nowrap;
 }
-/* EN DIRECT badge — green matches fcbet live indicator */
+/* EN DIRECT badge */
 .mc-live-badge {
-  background: rgb(113, 246, 105);
-  color: rgba(0,0,0,0.87);
+  background: #e02424;
+  color: #fff;
   border: none;
   font-size: 9px;
   font-weight: 800;
@@ -1847,8 +1846,8 @@ body {
 }
 /* EN DIRECT badge inside button when NOT active */
 .sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge {
-  background: rgb(113, 246, 105) !important;
-  color: rgba(0,0,0,0.87) !important;
+  background: #e02424 !important;
+  color: #fff !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   letter-spacing: 0.8px !important;
@@ -1857,10 +1856,10 @@ body {
   border-radius: 4px !important;
   white-space: nowrap !important;
 }
-/* EN DIRECT badge when ACTIVE — plain text on green */
+/* EN DIRECT badge when ACTIVE — transparent on green button */
 .sb-mobile-topbar .sb-btn-live.active .sb-live-badge {
   background: transparent !important;
-  color: rgba(0,0,0,0.87) !important;
+  color: #fff !important;
   font-size: 11px !important;
   font-weight: 800 !important;
   letter-spacing: 1px !important;
@@ -3421,8 +3420,7 @@ body {
    FEATURED CARD — EN DIRECT badge in header
    ════════════════════════════════════════════════════════════ */
 .slc-live-badge {
-  background: var(--sb-live-green);
-  color: rgba(0,0,0,0.87);
+  background: #e02424;
   color: #fff;
   font-size: 8px;
   font-weight: 800;
@@ -3693,8 +3691,8 @@ body {
 }
 
 .sb-root .mc-live-badge {
-  background: rgb(113, 246, 105) !important;
-  color: rgba(0,0,0,0.87) !important;
+  background: #e02424 !important;
+  color: #fff !important;
   border: none !important;
 }
 
@@ -3871,10 +3869,10 @@ body {
   line-height: 1.4 !important;
 }
 
-/* EN DIRECT green badge — rgb(113, 246, 105) per user spec */
+/* EN DIRECT red badge — live matches */
 .sb-root .mc-live-badge {
-  background: rgb(113, 246, 105) !important;
-  color: rgba(0,0,0,0.87) !important;
+  background: #e02424 !important;
+  color: #fff !important;
   font-size: 9px !important;
   font-weight: 800 !important;
   padding: 2px 6px !important;
@@ -3932,3 +3930,4 @@ body {
   padding: 0 0 0 0 !important;
   gap: 0 !important;
 }
+

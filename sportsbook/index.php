@@ -63,9 +63,9 @@ for($i=0;$i<7;$i++){
   .sb-mobile-topbar .sb-btn-live.active{
     background:#70f669!important;color:rgba(0,0,0,0.87)!important;
   }
-  /* EN DIRECT green badge (shown when button is NOT active) */
+  /* EN DIRECT red badge (shown when button is NOT active) */
   .sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge{
-    background:rgb(113,246,105)!important;color:rgba(0,0,0,.87)!important;
+    background:#e02424!important;color:#fff!important;
     font-size:9px!important;font-weight:800!important;letter-spacing:0.8px!important;
     text-transform:uppercase!important;padding:3px 7px!important;border-radius:4px!important;
     white-space:nowrap!important;
@@ -96,7 +96,7 @@ for($i=0;$i<7;$i++){
 .sb-root .mc{background:rgb(49,49,49)!important;border-width:0!important;border-color:transparent!important;border-radius:6px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
 .sb-root .mc-hdr-live{display:flex!important;justify-content:space-between!important;padding:10px 12px 4px!important}
 .sb-root .mc-badge-bb{background:#71f669!important;color:rgba(0,0,0,.87)!important;font-size:10px!important;font-weight:700!important;padding:2px 5px!important;border-radius:3px!important}
-.sb-root .mc-live-badge{background:rgb(113,246,105)!important;color:rgba(0,0,0,.87)!important;font-size:9px!important;font-weight:800!important;padding:2px 7px!important;border-radius:4px!important;border:none!important}
+.sb-root .mc-live-badge{background:#e02424!important;color:#fff!important;font-size:9px!important;font-weight:800!important;padding:2px 7px!important;border-radius:4px!important;border:none!important}
 .sb-root .mc-live-min{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
 .sb-root .mc-league-row{padding:0 12px 8px!important;display:flex!important;align-items:center!important}
 .sb-root .mc-league-name{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
