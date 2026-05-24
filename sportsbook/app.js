@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.18';
+  var newHref = base + 'sportsbook/style.css?v=20260524.19';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1383,22 +1383,23 @@ function matchCard(m) {
 
   out += '<div class="mc-body-col">';
 
-  // ── Stacked layout: [jersey][name][score] per row (matches fcbet216 reference) ──
+  // ── Stacked layout: [⬤ jersey][name flex-1][score] per row (matches fcbet216 reference) ──
   function getShirtSVG(tName) {
-    return shirtSVG(tName, 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), 22);
+    var opacity = isLive ? '' : ' mc-jersey-up';
+    return '<div class="mc-jersey-wrap' + opacity + '">' + shirtSVG(tName, 'mc-jersey-svg', 20) + '</div>';
   }
 
   out += '<div class="mc-teams-wrap" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
   out += '<div class="mc-teams-stacked">';
 
-  // Home row: [jersey] [name] | [score]
+  // Home row: [⬤ jersey] [name flex-1] [score]
   out += '<div class="mc-team-row">';
   out += getShirtSVG(m.home ? m.home.name : '');
   out += '<span class="mc-t-name">' + hn + '</span>';
   if (isLive) out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
   out += '</div>';
 
-  // Away row: [jersey] [name] | [score]
+  // Away row: [⬤ jersey] [name flex-1] [score]
   out += '<div class="mc-team-row">';
   out += getShirtSVG(m.away ? m.away.name : '');
   out += '<span class="mc-t-name">' + an + '</span>';
@@ -1589,9 +1590,9 @@ function renderEnDirectCards(matches) {
   var out = '';
   var shown = matches.slice(0, 6); // max 6 live cards
 
-  // SVG Shirt helper — uses real kit colors from kits.json
+  // SVG Shirt helper — round circle container, same style as main match cards
   function getShirtSVG(tName) {
-    return shirtSVG(tName, 'slc-team-logo', 16);
+    return '<div class="mc-jersey-wrap slc-jersey-wrap">' + shirtSVG(tName, 'mc-jersey-svg', 18) + '</div>';
   }
 
   shown.forEach(function(m) {

@@ -2201,13 +2201,10 @@ body {
   align-items: center !important;
   gap: 6px !important;
 }
-.slc-team-row .mc-jersey-svg,
-.slc-team-logo {
-  width: 20px !important;
-  height: 20px !important;
-  flex-shrink: 0 !important;
-}
+/* Carousel jersey round wrap — inherits .mc-jersey-wrap with .slc-jersey-wrap override */
+.slc-team-row .mc-jersey-wrap { flex-shrink: 0 !important; }
 .slc-tname {
+  flex: 1 !important;
   font-size: 12px !important;
   font-weight: 600 !important;
   color: #fff !important;
@@ -2218,11 +2215,12 @@ body {
   min-width: 0 !important;
 }
 .slc-score {
-  font-size: 13px !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
   color: #fff !important;
   flex-shrink: 0 !important;
-  min-width: 14px !important;
+  min-width: 18px !important;
+  text-align: right !important;
   text-align: right !important;
 }
 .slc-stats-ico { flex-shrink: 0 !important; color: rgba(255,255,255,0.45) !important; display: flex !important; align-items: center !important; }
@@ -3659,8 +3657,13 @@ body {
   touch-action: manipulation !important;
   user-select: none !important;
 }
+.sb-root .mc-odd-btn .mc-odd-lbl {
+  color: rgba(255,255,255,0.60) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
 .sb-root .mc-odd-btn .mc-odd-val {
-  color: rgb(113, 246, 105) !important;  /* fcbet216 .jgpuF exact */
+  color: rgb(113, 246, 105) !important;  /* fcbet216 exact green */
   font-size: 14px !important;
   font-weight: 700 !important;
 }
@@ -3798,13 +3801,30 @@ body {
 /* ══ FCBET216 MATCH CARD v6 — Stacked layout, fcbet .jgpuF odds CSS
    These rules are the final authority. They win every specificity battle.    */
 
-/* Jersey SVG — stacked layout */
-.sb-root .mc-jersey-svg {
-  display: inline-block !important;
-  width: 22px !important;
-  height: 22px !important;
+/* ── Round jersey container — matches fcbet216 circular shirt ── */
+.sb-root .mc-jersey-wrap {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,0.07) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   flex-shrink: 0 !important;
-  vertical-align: middle !important;
+  overflow: hidden !important;
+}
+.sb-root .mc-jersey-wrap.mc-jersey-up { opacity: 0.50 !important; }
+/* Smaller wrap for carousel cards */
+.sb-root .slc-jersey-wrap {
+  width: 26px !important;
+  height: 26px !important;
+}
+/* Jersey SVG inside the round wrapper */
+.sb-root .mc-jersey-svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
   overflow: visible !important;
 }
 /* Stacked teams container */
@@ -3812,17 +3832,18 @@ body {
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 6px !important;
+  gap: 7px !important;
   min-width: 0 !important;
 }
 .sb-root .mc-team-row {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  min-height: 24px !important;
+  min-height: 26px !important;
 }
-/* Team name */
+/* Team name — flex:1 pushes the score to far right */
 .sb-root .mc-t-name {
+  flex: 1 !important;
   min-width: 0 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -3830,15 +3851,14 @@ body {
   font-size: 13px !important;
   font-weight: 500 !important;
   color: #fff !important;
-  flex: 1 !important;
 }
-/* Score */
+/* Score — far right, bold white */
 .sb-root .mc-t-score {
   flex-shrink: 0 !important;
   font-size: 15px !important;
   font-weight: 700 !important;
   color: #fff !important;
-  min-width: 16px !important;
+  min-width: 18px !important;
   text-align: right !important;
 }
 /* Teams wrap */
