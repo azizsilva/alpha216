@@ -3405,3 +3405,214 @@ body {
   padding: 0 10px !important;
   font-size: 12px !important;
 }
+
+/* ══ FCBET216 MATCH CARD v5 — Complete Bootstrap 3 Isolation ══════════════
+   These rules are the final authority. They win every specificity battle.    */
+
+/* Jersey SVG — Bootstrap 3 can set img{border:0} which affects inline SVG display */
+.sb-root .mc-jersey-svg {
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+  overflow: visible !important;
+}
+
+/* Team row: jersey + name fills space + score hugs right */
+.sb-root .mc-team-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 26px !important;
+}
+.sb-root .mc-t-name {
+  flex: 1 !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+.sb-root .mc-t-score {
+  flex-shrink: 0 !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  min-width: 16px !important;
+  text-align: right !important;
+}
+
+/* Teams stacked column */
+.sb-root .mc-teams-stacked {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+
+/* Teams wrap — horizontal container (stacked teams + optional side element) */
+.sb-root .mc-teams-wrap {
+  display: flex !important;
+  align-items: center !important;
+  padding: 2px 12px 10px !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+/* League row split: info left, actions right */
+.sb-root .mc-league-row--split {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 12px 6px !important;
+  gap: 8px !important;
+}
+.sb-root .mc-league-info {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+.sb-root .mc-league-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-league-name {
+  font-size: 11px !important;
+  color: #979797 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.sb-root .mc-league-flag {
+  width: 16px !important;
+  height: 11px !important;
+  flex-shrink: 0 !important;
+  object-fit: cover !important;
+  border: none !important;
+}
+
+/* Stats icon button — in league row actions */
+.sb-root button.mc-stats-icon,
+.sb-root .mc-stats-icon {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 2px !important;
+  color: #979797 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+.sb-root .mc-stats-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+}
+
+/* Live header row */
+.sb-root .mc-hdr-live {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 12px 4px !important;
+}
+.sb-root .mc-hl-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+.sb-root .mc-hl-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.sb-root .mc-live-min {
+  font-size: 11px !important;
+  color: #979797 !important;
+  font-weight: 500 !important;
+}
+
+/* BB badge */
+.sb-root .mc-badge-bb {
+  background: #70f669 !important;
+  color: rgba(0,0,0,.87) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  padding: 1px 4px !important;
+  border-radius: 2px !important;
+  line-height: 1.4 !important;
+}
+
+/* EN DIRECT red badge */
+.sb-root .mc-live-badge {
+  background: #e02424 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  border: none !important;
+  letter-spacing: .3px !important;
+  line-height: 1.5 !important;
+}
+
+/* Odds row */
+.sb-root .mc-odds-bot {
+  display: flex !important;
+  gap: 5px !important;
+  padding: 0 12px 12px !important;
+  width: 100% !important;
+}
+
+/* Chevron button */
+.sb-root button.mc-chevron-btn,
+.sb-root .mc-chevron-btn {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  background: #2a2a2a !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #979797 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Star button */
+.sb-root button.mc-star,
+.sb-root .mc-star {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 2px !important;
+  color: #979797 !important;
+  cursor: pointer !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Body column (teams + odds) */
+.sb-root .mc-body-col {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 0 0 0 !important;
+  gap: 0 !important;
+}

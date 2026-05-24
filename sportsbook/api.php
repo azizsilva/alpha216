@@ -186,9 +186,20 @@ function cache_to_db($pdo, $matches, $sport_id_fallback = 1) {
     if (!$pdo || empty($matches)) return 0;
     $count = 0;
     try {
+        // Preserve live_odds written by sync_daemon: if the existing row has live_odds
+        // in raw_json, merge them back into the fresh data so they are never wiped out.
         $stmt = $pdo->prepare("INSERT INTO sb_matches (id,sport_id,league_name,home_team,away_team,start_time,status,score,raw_json)
             VALUES (?,?,?,?,?,?,?,?,?)
-            ON DUPLICATE KEY UPDATE status=VALUES(status),score=VALUES(score),start_time=VALUES(start_time),raw_json=VALUES(raw_json),updated_at=CURRENT_TIMESTAMP");
+            ON DUPLICATE KEY UPDATE
+              status=VALUES(status),
+              score=VALUES(score),
+              start_time=VALUES(start_time),
+              raw_json = IF(
+                JSON_EXTRACT(raw_json,'$.live_odds') IS NOT NULL,
+                JSON_SET(VALUES(raw_json),'$.live_odds',JSON_EXTRACT(raw_json,'$.live_odds')),
+                VALUES(raw_json)
+              ),
+              updated_at=CURRENT_TIMESTAMP");
         $pdo->beginTransaction();
         foreach ($matches as $m) {
             if (!isset($m['id']) || !isset($m['home']['name'])) continue;
@@ -525,14 +536,16 @@ if ($action === 'inplay') {
         $inl  = _extract_inplay_match_odds($m);
         $db_lo= $db_odds[$mid] ?? $db_odds[$rid] ?? null;
 
-        $h = $sdat['h'] ?? $inl['h'] ?? $db_lo['h'] ?? null;
-        $x = $sdat['x'] ?? $inl['x'] ?? $db_lo['x'] ?? null;
-        $a = $sdat['a'] ?? $inl['a'] ?? $db_lo['a'] ?? null;
+        // Priority: DB (sync_daemon continuously writes live_odds) → stream → inline API
+        // Stream is more real-time when r_id mapping works; DB is the reliable fallback.
+        $h = $db_lo['h'] ?? $sdat['h'] ?? $inl['h'] ?? null;
+        $x = $db_lo['x'] ?? $sdat['x'] ?? $inl['x'] ?? null;
+        $a = $db_lo['a'] ?? $sdat['a'] ?? $inl['a'] ?? null;
 
-        // OU: prefer live stream OU; fall back to prematch DB OU
+        // OU: stream gives real-time line changes, DB is fallback
         $ou_line  = $sdat['ou_line']  ?? $db_lo['ou_line']  ?? 2.5;
-        $ou_over  = $sdat['ou_over']  ?? $db_lo['ou_over']  ?? null;
-        $ou_under = $sdat['ou_under'] ?? $db_lo['ou_under'] ?? null;
+        $ou_over  = $db_lo['ou_over']  ?? $sdat['ou_over']  ?? null;
+        $ou_under = $db_lo['ou_under'] ?? $sdat['ou_under'] ?? null;
 
         if ($h) {
             $m['live_odds'] = ['h'=>$h,'x'=>$x,'a'=>$a,
@@ -542,34 +555,29 @@ if ($action === 'inplay') {
     unset($m);
 
     // ── Step 5.5: Per-event odds cache for live matches still missing odds ────
-    // Uses sportsbook/cache/ev_{id}.json (60s TTL).
-    // If no cache → fires fire-and-forget to fetch_event_odds so NEXT poll gets it.
-    $host_ev  = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    // Reads ev_{id}.json (60s TTL). Fires async for every match still missing odds,
+    // so the NEXT poll (5s) will have fresh data. No arbitrary cap on fire-and-forget.
+    $host_ev   = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $script_ev = parse_url($_SERVER['REQUEST_URI'] ?? '/sportsbook/api.php', PHP_URL_PATH);
-    $fired_ev = 0;
     foreach ($results as &$mr5) {
-        if (isset($mr5['live_odds'])) continue;                       // already has odds
-        if (($mr5['time_status'] ?? '0') !== '1') continue;          // only live matches
+        if (isset($mr5['live_odds'])) continue;
+        if (($mr5['time_status'] ?? '0') !== '1') continue;
         $mid_ev = (string)($mr5['id'] ?? '');
         $rid_ev = (string)($mr5['r_id'] ?? $mid_ev);
-        // Try per-event cache
-        $ev_cache_f = $cache_dir . '/ev_' . $rid_ev . '.json';
-        if (file_exists($ev_cache_f) && (time() - filemtime($ev_cache_f)) < 60) {
-            $evo = json_decode(file_get_contents($ev_cache_f), true);
-            if ($evo && isset($evo['h']) && $evo['h'] > 1.01) { $mr5['live_odds'] = $evo; continue; }
-        }
-        // Also try mid-based cache
-        if ($rid_ev !== $mid_ev) {
-            $ev_cache_m = $cache_dir . '/ev_' . $mid_ev . '.json';
-            if (file_exists($ev_cache_m) && (time() - filemtime($ev_cache_m)) < 60) {
-                $evo2 = json_decode(file_get_contents($ev_cache_m), true);
-                if ($evo2 && isset($evo2['h']) && $evo2['h'] > 1.01) { $mr5['live_odds'] = $evo2; continue; }
+        // Try per-event cache (r_id key first, then id key)
+        foreach ([$rid_ev, $mid_ev] as $eck) {
+            if (!$eck) continue;
+            $ev_cache_f = $cache_dir . '/ev_' . $eck . '.json';
+            if (file_exists($ev_cache_f) && (time() - filemtime($ev_cache_f)) < 60) {
+                $evo = json_decode(file_get_contents($ev_cache_f), true);
+                if ($evo && ($evo['h'] ?? 0) > 1.01) { $mr5['live_odds'] = $evo; break; }
             }
         }
-        // Fire async fetch (limits concurrent fetches to avoid overloading)
-        if ($fired_ev < 4 && $rid_ev) {
+        if (isset($mr5['live_odds'])) continue;
+        // Fire async fetch for EVERY live match without odds — 5s poll interval means
+        // the result will arrive on the very next request.
+        if ($rid_ev) {
             fire_and_forget('http://' . $host_ev . $script_ev . '?action=fetch_event_odds&id=' . urlencode($rid_ev));
-            $fired_ev++;
         }
     }
     unset($mr5);

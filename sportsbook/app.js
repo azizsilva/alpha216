@@ -10,7 +10,7 @@
 // Fixes "CSS cached/disappears" issue on SPA navigation
 (function injectCSS() {
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  var newHref = base + 'sportsbook/style.css?v=' + Date.now() + '&sb=fcbet216v4';
+  var newHref = base + 'sportsbook/style.css?v=' + Date.now() + '&sb=fcbet216v5';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -760,7 +760,10 @@ function startPolling() {
       .catch(function() {});
   }
 
-  S.pollingInterval = setInterval(doPoll, 15000); // 15s for responsive real-time
+  // 5s for live/inplay so odds appear on the very next cycle after async fetch fills cache.
+  // 15s for upcoming — less urgency, saves bandwidth.
+  var pollMs = (S.activeAction === 'inplay') ? 5000 : 15000;
+  S.pollingInterval = setInterval(doPoll, pollMs);
 }
 
 /* ── Sidebar Rendering ───────────────────────────────────── */
@@ -1050,9 +1053,15 @@ function matchCard(m) {
     out += '</div>';
     out += '</div>';
 
-    out += '<div class="mc-league-row">';
+    // League row: flag+name left, stats icon right (matching reference)
+    out += '<div class="mc-league-row mc-league-row--split">';
+    out += '<div class="mc-league-info">';
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
+    out += '</div>';
+    out += '<div class="mc-league-actions">';
+    out += '<button type="button" class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    out += '</div>';
     out += '</div>';
   } else {
     // UPCOMING Match Card Header
@@ -1110,9 +1119,6 @@ function matchCard(m) {
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[1]) + '</span>';
   out += '</div>';
   out += '</div>';
-  if (isLive) {
-    out += '<button type="button" class="mc-stats-icon mc-stats-side" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
-  }
   out += '</div>';
 
   // Odds buttons — full width bottom row
@@ -2204,6 +2210,7 @@ window.sbSwitchLive = function(btn) {
     if (lb) lb.classList.add('active');
   }
   loadAndFilter('inplay', 1, null);
+  startPolling(); // 5s poll for live view
 };
 
 window.sbSwitchTab = function(btn, action, sportId) {
@@ -2234,6 +2241,7 @@ window.sbSwitchTab = function(btn, action, sportId) {
   }
 
   loadAndFilter(S.activeAction, S.activeSportId, null);
+  startPolling(); // restart with correct interval (5s live / 15s upcoming)
 };
 
 // Scroll the sport nav
