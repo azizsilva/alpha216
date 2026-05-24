@@ -227,38 +227,49 @@ if ($action === 'counts') {
     header('Content-Type: application/json');
     header('Cache-Control: no-store');
 
-    $cache_path = $cache_dir . '/sb_counts_' . floor(time() / 180) . '.json';
-    $stale_glob = glob($cache_dir . '/sb_counts_*.json');
-    $stale_path = $stale_glob ? end($stale_glob) : null;
-
-    // Fresh cache — instant
+    // Fresh cache: 90s bucket
+    $cache_path = $cache_dir . '/sb_counts_' . floor(time() / 90) . '.json';
     if (file_exists($cache_path)) {
         echo file_get_contents($cache_path);
         exit;
     }
 
-    // Stale cache — return immediately (prevents 504), refresh in background next request
-    if ($stale_path && file_exists($stale_path)) {
+    // Stale cache — only serve if < 8 minutes old (prevents stale 0-live data from dawn)
+    $stale_glob = glob($cache_dir . '/sb_counts_*.json');
+    $stale_path = $stale_glob ? end($stale_glob) : null;
+    if ($stale_path && file_exists($stale_path) && (time() - filemtime($stale_path)) < 480) {
         echo file_get_contents($stale_path);
         exit;
+    }
+    // Delete stale files older than 8 min so they don't block fresh counts
+    if ($stale_glob) {
+        foreach ($stale_glob as $sf) {
+            if ((time() - filemtime($sf)) >= 480) @unlink($sf);
+        }
     }
 
     $all_sports = [1,18,13,91,107,17,151,16,78,45,117,36,83,66,56,48,92,40,19,94,10,90,46,14,75,110,152,153,154];
     $counts = [];
-    $api_sports = [1, 18, 13]; // only top 3 hit BetsAPI live (fast); rest from cache/DB
+    // Top 5 sports: call BetsAPI inplay_filter for real pager.total (the true worldwide live count)
+    $api_sports = [1, 18, 13, 91, 107];
 
     foreach ($all_sports as $sid) {
         $live_cnt = 0;
         $upcoming_cnt = 0;
 
+        // Step 1: Local live cache (populated every ~15s by cron) — fast, no API call
+        $lc = $cache_dir . '/live_' . $sid . '.json';
+        $lc_age = file_exists($lc) ? (time() - filemtime($lc)) : 9999;
+        if ($lc_age < 120 && file_exists($lc)) {
+            $lj = json_decode(@file_get_contents($lc), true);
+            $live_cnt = is_array($lj) ? count($lj) : 0;
+        }
+
+        // Step 2: For top sports, get BetsAPI pager.total (real worldwide count like fcbet 999+)
+        // This gives the TRUE live match count, not just what's locally cached
         if (in_array($sid, $api_sports, true)) {
-            $live_cnt = betsapi_live_count($sid);
-        } else {
-            $lc = $cache_dir . '/live_' . $sid . '.json';
-            if (file_exists($lc)) {
-                $lj = json_decode(@file_get_contents($lc), true);
-                $live_cnt = is_array($lj) ? count($lj) : 0;
-            }
+            $api_live = betsapi_live_count($sid);
+            if ($api_live > $live_cnt) $live_cnt = $api_live; // take the higher value
         }
 
         $sport_cache = $cache_dir . '/upcoming_' . $sid . '.json';

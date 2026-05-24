@@ -10,7 +10,9 @@
 // Fixes "CSS cached/disappears" issue on SPA navigation
 (function injectCSS() {
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  var newHref = base + 'sportsbook/style.css?v=' + Date.now() + '&sb=fcbet216v5';
+  // Static version = no FOUC (browser caches the file between refreshes)
+  // Bump this string manually only when style.css actually changes.
+  var newHref = base + 'sportsbook/style.css?v=20260524.6';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -777,10 +779,10 @@ function renderSidebar() {
 
   SPORTS.forEach(function(sp) {
     var isOpen = (S.openSport === sp.id);
-    var cnt = S.sportCounts[sp.id] || '';
     var liveCnt = S.sportLiveCounts[sp.id] || 0;
     var isLive = liveCnt > 0;
-    // Format count: 999+ for large numbers
+    // Show live count when live; otherwise show total. Cap at 999+.
+    var cnt = isLive ? liveCnt : (S.sportCounts[sp.id] || '');
     if (cnt > 999) cnt = '999+';
 
     // When open, show minus icon; otherwise show chevron
@@ -1088,7 +1090,8 @@ function matchCard(m) {
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' - ' + countryLabel : '') + '</span>';
     out += '</div>';
     out += '<div class="mc-league-actions">';
-    out += '<span class="mc-live-badge outlined">EN DIRECT</span>';
+    // Only show EN DIRECT if this upcoming match has actually just gone live
+    // (time_status flipped but card re-render hasn't happened yet — handled by polling)
     out += '<button class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     out += '</div>';
     out += '</div>';

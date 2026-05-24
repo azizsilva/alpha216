@@ -368,15 +368,18 @@ body {
 .sb-sport-name { flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
 .sb-sport-cnt  { font-size: 11px; color: var(--sb-text-2); flex-shrink: 0; }
 .sb-en-direct-badge {
-  background: var(--sb-red);
-  color: #fff;
-  font-size: 8px;
-  font-weight: 800;
-  padding: 2px 5px;
-  border-radius: 3px;
+  background: var(--sb-red) !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
   letter-spacing: 0.3px;
-  flex-shrink: 0;
-  white-space: nowrap;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  line-height: 1.6 !important;
+  vertical-align: middle;
 }
 .sb-countries-sub {
   background: #353535;
