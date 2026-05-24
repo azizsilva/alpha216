@@ -2004,8 +2004,10 @@ body {
   .mc-o-lbl-cell { padding: 0 6px; font-size: 11px; height: 32px; }
   .sb-root button.mc-o-val-cell { padding: 0 6px; font-size: 11px; height: 32px; min-width: 38px; }
   .sb-root button.mc-more-btn { width: 28px; height: 32px; }
-  /* Championship grid — 2 cols on mobile */
-  .sb-champ-cat-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Championship grid — 2 cols on mobile, Bootstrap-proof */
+  .sb-champ-cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .sb-root .sb-champ-cat-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
+  .sb-root .sb-ccg-btn { height: 36px !important; min-height: 36px !important; padding: 0 8px !important; box-sizing: border-box !important; }
   .sb-champ-col-sel { flex-direction: column; }
   .sb-champ-breadcrumb { flex-wrap: wrap; }
   /* Sport nav smaller */
@@ -2964,13 +2966,16 @@ body {
 
 /* Market type tabs (horizontal scroll) */
 .sb-champ-mkt-tabs {
-  display: flex;
+  display: flex !important;
+  flex-wrap: nowrap !important;
   align-items: center;
   gap: 4px;
-  overflow-x: auto;
+  overflow-x: auto !important;
+  overflow-y: hidden;
   padding-bottom: 4px;
   margin-bottom: 10px;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .sb-champ-mkt-tabs::-webkit-scrollbar { display: none; }
 .sb-cmt {
@@ -3015,15 +3020,24 @@ body {
 .sb-ccg-btn {
   background: var(--sb-bg-alt);
   border: 1px solid var(--sb-border);
-  border-radius: 4px;
-  padding: 10px 8px;
+  border-radius: 6px;
+  padding: 0 8px;
+  height: 36px;
+  min-height: 36px;
   font-size: 11px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: var(--sb-text-2);
   cursor: pointer;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
   transition: background 0.12s, border-color 0.12s, color 0.12s;
+  /* prevent Bootstrap from adding extra height or padding */
+  box-shadow: none;
+  outline: none;
 }
 .sb-ccg-btn.active {
   background: var(--sb-green);

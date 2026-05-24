@@ -48,20 +48,19 @@ for($i=0;$i<7;$i++){
     background:#101010!important;
     border-bottom:1px solid #2a2a2a!important;
   }
-  /* All 3 buttons — default: 48px dark gray compact */
+  /* All 3 topbar buttons — equal flex share, consistent height */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats{
-    flex:none!important;width:48px!important;min-width:48px!important;
+    flex:1!important;min-width:0!important;
     height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;
     border:none!important;border-radius:8px!important;cursor:pointer!important;
     background:#252525!important;color:#979797!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
-  /* ACTIVE button — expands (flex:1), turns GREEN */
+  /* ACTIVE: only change color — size stays equal */
   .sb-mobile-topbar .sb-btn-home.active,
   .sb-mobile-topbar .sb-btn-live.active{
-    flex:1!important;width:auto!important;min-width:0!important;
     background:#70f669!important;color:rgba(0,0,0,0.87)!important;
   }
   /* EN DIRECT red badge (shown when button is NOT active) */
@@ -113,6 +112,13 @@ for($i=0;$i<7;$i++){
 .sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:#2a2a2a!important;border:1px solid #3a3a3a!important;border-radius:6px!important}
 .sb-root .sb-league-section-hdr{background:#1e1e1e!important;border-radius:10px!important;margin:12px 0 6px!important;padding:10px 12px!important;display:flex!important;align-items:center!important}
 .sb-root .sb-league-block{margin-bottom:8px!important}
+/* Championship market tabs — must scroll horizontally, never wrap */
+.sb-root .sb-champ-mkt-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;gap:4px!important;padding-bottom:4px!important;margin-bottom:10px!important;scrollbar-width:none!important;}
+/* Market category grid — always 2-col on narrow screens, Bootstrap-proof */
+@media(max-width:600px){
+  .sb-root .sb-champ-cat-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;}
+  .sb-root .sb-ccg-btn{height:36px!important;min-height:36px!important;padding:0 8px!important;font-size:11px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;line-height:1.2!important;}
+}
 </style>
 
 <div class="sb-root">
