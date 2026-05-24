@@ -1727,10 +1727,11 @@ body {
   /* Use CSS Grid for the top bar — 100% guaranteed to work on all mobile browsers */
   .sb-mobile-topbar {
     display: grid !important;
-    grid-template-columns: 54px 1fr 44px !important;
+    grid-template-columns: 54px 1fr 54px !important;
     grid-template-rows: 40px !important;
     gap: 0 8px !important;
     align-items: stretch !important;
+    padding: 8px 10px !important;
   }
   /* Reset individual button flex/width set elsewhere */
   .sb-mobile-topbar .sb-btn-home,
