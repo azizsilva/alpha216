@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.21';
+  var newHref = base + 'sportsbook/style.css?v=20260524.22';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1650,21 +1650,25 @@ function renderEnDirectCards(matches) {
     out += '<span class="slc-lg">' + lgName + '</span>';
     out += '</div>';
 
-    // ── Teams: jersey inline per row + score + stats icon on row 1 ──
+    // ── Teams: overlapping jerseys LEFT + stacked names/scores RIGHT (fcbet reference) ──
     out += '<div class="slc-mid">';
+
+    // Left: two overlapping jersey circles
+    out += '<div class="slc-jerseys-overlap">';
+    out += getShirtSVG(hn);
+    out += getShirtSVG(an);
+    out += '</div>';
+
+    // Right: stacked team rows (name + score)
     out += '<div class="slc-teams">';
 
-    // Home team row
     out += '<div class="slc-team-row">';
-    out += getShirtSVG(hn);
     out += '<span class="slc-tname">' + hn + '</span>';
     out += '<span class="slc-score">' + h(isLive && scores[0] !== '' ? scores[0] : (isLive ? '0' : '')) + '</span>';
     out += '<span class="slc-stats-ico">' + ICON.stats + '</span>';
     out += '</div>';
 
-    // Away team row
     out += '<div class="slc-team-row">';
-    out += getShirtSVG(an);
     out += '<span class="slc-tname">' + an + '</span>';
     out += '<span class="slc-score">' + h(isLive && scores[1] !== '' ? scores[1] : (isLive ? '0' : '')) + '</span>';
     out += '</div>';
