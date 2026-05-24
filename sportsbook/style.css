@@ -121,19 +121,23 @@ body {
 .sb-btn-home svg  { width: 16px; height: 16px; stroke: currentColor; }
 
 .sb-btn-live  {
-  background: var(--sb-red);
-  color: #fff;
+  background: var(--sb-bg-alt); /* dark gray bg like fcbet216 reference */
+  color: var(--sb-red); /* red text, not red background */
   flex: 1;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  border: 1px solid #3a3a3a;
 }
+.sb-btn-live:hover { background: #2e2e2e; }
 .sb-btn-stats {
   background: var(--sb-bg-alt);
   color: var(--sb-text-2);
-  width: 38px;
+  width: 42px; /* match home button width */
+  min-width: 42px;
   font-size: 13px;
+  border: 1px solid #3a3a3a;
 }
 .sb-btn-stats:hover { background: var(--sb-border); color: #fff; }
 .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }
@@ -1607,20 +1611,22 @@ body {
 }
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 .sb-mobile-topbar .sb-btn-live {
-  background: var(--sb-red);
-  color: #fff;
-  flex: 1; /* fills all remaining width — matches fcbet216 */
+  background: var(--sb-bg-alt); /* dark gray bg matching fcbet216 reference exactly */
+  color: var(--sb-red); /* red text not red background */
+  flex: 1;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
+  border: 1px solid #3a3a3a;
 }
+.sb-mobile-topbar .sb-btn-live:hover { background: #2e2e2e; }
 .sb-mobile-topbar .sb-btn-stats {
   background: var(--sb-bg-alt);
-  border: none;
+  border: 1px solid #3a3a3a;
   color: var(--sb-text-2);
-  width: 44px;
-  min-width: 44px;
+  width: 54px;  /* same as home — equal squares */
+  min-width: 54px;
 }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }
 

@@ -28,7 +28,7 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_18" id="sb-css-link">
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_19" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -36,10 +36,10 @@ for($i=0;$i<7;$i++){
 <!-- CRITICAL MOBILE CSS — inline to bypass all server/browser caching -->
 <style id="sb-critical-mobile">
 @media (max-width:1100px){
-  /* TOP BAR: CSS Grid — home|EN DIRECT|stats */
+  /* TOP BAR: CSS Grid — home|EN DIRECT|stats — equal outer buttons */
   .sb-mobile-topbar{
     display:grid!important;
-    grid-template-columns:54px 1fr 44px!important;
+    grid-template-columns:54px 1fr 54px!important;
     grid-template-rows:40px!important;
     gap:0 8px!important;
     align-items:stretch!important;
@@ -56,12 +56,15 @@ for($i=0;$i<7;$i++){
     width:auto!important;min-width:0!important;
     height:40px!important;flex:none!important;
     display:flex!important;align-items:center!important;justify-content:center!important;
-    border:none!important;border-radius:6px!important;cursor:pointer!important;
+    border-radius:6px!important;cursor:pointer!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
-  .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;}
-  .sb-mobile-topbar .sb-btn-live{background:#e02424!important;color:#fff!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;}
-  .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;}
+  /* Home — green square */
+  .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;border:none!important;}
+  /* EN DIRECT — DARK GRAY background with RED TEXT (matching fcbet216 exactly) */
+  .sb-mobile-topbar .sb-btn-live{background:#252525!important;color:#e02424!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;border:1px solid #3a3a3a!important;}
+  /* Stats — dark gray equal to home */
+  .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;border:1px solid #3a3a3a!important;}
   /* SCROLL FIX */
   body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
   .sb-root{height:auto!important;min-height:100%!important;overflow:visible!important;}
@@ -409,7 +412,7 @@ for($i=0;$i<7;$i++){
 <!-- Mobile Bar — 5 items matching fcbet216 -->
 <div class="sb-mob-footer">
   <button class="sb-mob-btn" onclick="window.location.href='/'">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.5"/></svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="7.5" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><circle cx="16.5" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 19c0-3.3 2.7-6 6-6h8c3.3 0 6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 17c.5-1.5 1.5-2.5 3-3M17 17c-.5-1.5-1.5-2.5-3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
     <span class="sb-mob-lbl">Casino</span>
   </button>
   <button class="sb-mob-btn active">
@@ -417,7 +420,7 @@ for($i=0;$i<7;$i++){
     <span class="sb-mob-lbl">Paris sportifs</span>
   </button>
   <button class="sb-mob-btn" onclick="window.location.href='/'">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" stroke="currentColor" stroke-width="1.5"/><path d="M16 3l-4 4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 8v13M3 12h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     <span class="sb-mob-lbl">Promos</span>
   </button>
   <button class="sb-mob-btn" onclick="document.querySelector('.sb-sidebar-search') && document.querySelector('.sb-sidebar-search').focus()">
