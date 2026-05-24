@@ -118,8 +118,8 @@ for($i=0;$i<7;$i++){
     <!-- League tabs: LES MEILLEURES LIGUES / MES LIGUES -->
     <div id="sb-favs-content">
     <div class="sb-league-group-hdr">
-      <button class="sb-mob-tab active" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
-      <button class="sb-mob-tab" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
+      <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
+      <button class="sb-mob-tab" data-tab="my" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
       <span class="sb-lh-minus">—</span>
     </div>
 
@@ -287,8 +287,46 @@ for($i=0;$i<7;$i++){
       <div class="sb-sk-boost-card"></div>
     </div>
 
+    <!-- ══ MOBILE INLINE LEAGUE SECTION ══
+         Search bar + LES MEILLEURES LIGUES / MES LIGUES tabs
+         Visible on mobile only (hidden on desktop via CSS)
+         Appears inline in the main scroll — matches fcbet216 mobile layout -->
+    <div class="sb-mob-inline-leagues">
+      <!-- Search bar -->
+      <div class="sb-search-wrap">
+        <div class="sb-search-box">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
+        </div>
+      </div>
 
+      <!-- League tabs header -->
+      <div class="sb-league-group-hdr">
+        <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
+        <button class="sb-mob-tab" data-tab="my" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
+        <span class="sb-lh-minus">—</span>
+      </div>
 
+      <!-- LES MEILLEURES LIGUES content -->
+      <div id="sb-inline-best-leagues">
+        <div class="sb-tl-list">
+          <?php foreach($top_leagues as $l): ?>
+          <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
+            <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon" alt="<?=$l['name']?>">
+            <span class="sb-league-name"><?=$l['name']?></span>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+
+      <!-- MES LIGUES empty state -->
+      <div id="sb-inline-my-leagues" style="display:none">
+        <div class="sb-empty-leagues-state">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#444;margin-bottom:10px"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Aucune ligue ajoutée</span>
+        </div>
+      </div>
+    </div><!-- /sb-mob-inline-leagues -->
 
     <!-- Match listings — richer skeleton until JS renders -->
     <div id="sb-matches-body">

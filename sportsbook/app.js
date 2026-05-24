@@ -1943,20 +1943,26 @@ window.sbBackToMain = function() {
   loadAndFilter(S.activeAction, S.activeSportId, null);
 };
 
-/* Mobile league tab switcher (LES MEILLEURES LIGUES / MES LIGUES) */
+/* Mobile league tab switcher — syncs BOTH sidebar + inline league sections */
 window.sbMobLeagueTab = function(el, tab) {
-  var parent = el.closest('.sb-league-group-hdr');
-  parent.querySelectorAll('.sb-mob-tab').forEach(function(t) { t.classList.remove('active'); });
-  el.classList.add('active');
-  var bestEl = document.getElementById('sb-mob-best-leagues');
-  var myEl = document.getElementById('sb-mob-my-leagues');
-  if (tab === 'best') {
-    if (bestEl) bestEl.style.display = '';
-    if (myEl) myEl.style.display = 'none';
-  } else {
-    if (bestEl) bestEl.style.display = 'none';
-    if (myEl) myEl.style.display = '';
-  }
+  // Sync all tab buttons (sidebar + inline) by data-tab attribute
+  document.querySelectorAll('.sb-mob-tab[data-tab]').forEach(function(t) {
+    t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+  });
+
+  // Toggle sidebar league sections
+  var sidebarBest = document.getElementById('sb-mob-best-leagues');
+  var sidebarMy   = document.getElementById('sb-mob-my-leagues');
+  // Toggle inline league sections
+  var inlineBest  = document.getElementById('sb-inline-best-leagues');
+  var inlineMy    = document.getElementById('sb-inline-my-leagues');
+
+  [sidebarBest, inlineBest].forEach(function(e) {
+    if (e) e.style.display = (tab === 'best') ? '' : 'none';
+  });
+  [sidebarMy, inlineMy].forEach(function(e) {
+    if (e) e.style.display = (tab === 'my') ? '' : 'none';
+  });
 };
 
 window.sbToggleFavs = function() {

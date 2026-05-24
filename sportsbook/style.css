@@ -1089,16 +1089,12 @@ body {
   min-width: 0;
 }
 
-/* Match time / period badge — red bg pill matching fcbet216 "Mi-temps" style */
+/* Match live minute — plain text (e.g. "78'") matching fcbet216 reference */
 .mc-live-min {
-  background: var(--sb-red);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 3px;
+  color: var(--sb-text-2);
+  font-size: 11px;
+  font-weight: 500;
   flex-shrink: 0;
-  letter-spacing: 0.2px;
   white-space: nowrap;
 }
 /* EN DIRECT badge — solid red for live matches */
@@ -1918,6 +1914,14 @@ body {
     min-width: 0 !important;
   }
   .sb-mobile-sidebar-content { display: flex !important; }
+  /* Show inline league section on mobile */
+  .sb-mob-inline-leagues { display: flex !important; }
+  /* Match cards full width on mobile */
+  .mc { width: 100%; margin-bottom: 6px; }
+  .mc-odds-bot { gap: 4px; }
+  .mc-odd-btn { height: 36px; padding: 0 8px; }
+  .mc-t-name { font-size: 12px; }
+  .sb-center-scroll { padding: 8px 8px 80px !important; }
 
   /* ── Single-scroll: ONLY override overflow-y, keep position:fixed for SPA ── */
   /* body.mk-game-no-chrome #mkApp has position:fixed; height:100vh; overflow:hidden */
@@ -3079,6 +3083,39 @@ body {
 }
 /* Remove old hidden logo rule */
 .mc-t-logo { display: none; }
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE INLINE LEAGUES SECTION
+   Inline search + league list in center scroll (mobile only)
+   ════════════════════════════════════════════════════════════ */
+.sb-mob-inline-leagues {
+  display: none; /* hidden on desktop — shown on mobile via media query */
+  flex-direction: column;
+  background: var(--sb-bg-root);
+  border-bottom: 1px solid var(--sb-border);
+  margin-bottom: 8px;
+}
+.sb-mob-inline-leagues .sb-search-wrap {
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--sb-border);
+}
+.sb-mob-inline-leagues .sb-league-group-hdr {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sb-border);
+  gap: 12px;
+}
+.sb-mob-inline-leagues .sb-tl-list {
+  padding: 0;
+}
+.sb-mob-inline-leagues .sb-tl-item {
+  background: var(--sb-bg-card);
+  border-bottom: 1px solid var(--sb-border);
+  padding: 12px 14px;
+  border-radius: 0;
+}
+.sb-mob-inline-leagues .sb-tl-item:last-child {
+  border-bottom: none;
+}
 
 /* ════════════════════════════════════════════════════════════
    FEATURED CARD — EN DIRECT badge in header
