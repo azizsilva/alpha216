@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.16';
+  var newHref = base + 'sportsbook/style.css?v=20260524.17';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -2120,6 +2120,7 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   }
 
   // Hide homepage-only sections when entering championship view
+  sbSetHomepanelVisible(false);
   var enDirect = document.getElementById('sb-en-direct-cards');
   var boostedSec = document.getElementById('sb-boost-section');
   if (enDirect)   enDirect.style.display   = 'none';
@@ -2328,7 +2329,8 @@ window.sbBackToMain = function() {
   // Clear URL back to base path
   sbPushUrl('main');
 
-  // Restore homepage sections
+  // Restore homepage panels
+  sbSetHomepanelVisible(true);
   var enDirect = document.getElementById('sb-en-direct-cards');
   var boostedSec = document.getElementById('sb-boost-section');
   if (enDirect)   enDirect.style.display   = '';
@@ -2549,6 +2551,7 @@ window.sbSwitchTab = function(btn, action, sportId) {
   var _e = document.getElementById('sb-en-direct-cards');
   var _b = document.getElementById('sb-boost-section');
   if (_e) _e.style.display = ''; if (_b) _b.style.display = '';
+  sbSetHomepanelVisible(true);
   sbPushUrl('main');
 
   if (btn && btn.classList.contains('sb-sport-item')) {
@@ -2586,6 +2589,8 @@ window.sbOpenMatch = function(mid, _skipPush) {
   if (!_skipPush) {
     sbPushUrl('liveEvent', {eventId: mid, sportId: S.activeSportId || 1});
   }
+  // Hide the leagues panel and top nav — full viewport for the match
+  sbSetHomepanelVisible(false);
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildMatchDetailSkeleton();
 
@@ -3211,6 +3216,20 @@ function markLiveSidebarLeagues(matches) {
   });
 }
 
+/* ── Hide/show the mobile leagues panel + search bar ───────────
+   On fcbet216, entering a championship or match detail page hides
+   the left leagues panel completely so the full viewport is used.
+─────────────────────────────────────────────────────────────── */
+function sbSetHomepanelVisible(show) {
+  var panels = document.querySelectorAll('.sb-mob-inline-leagues, .sb-mob-leagues-panel');
+  panels.forEach(function(el) {
+    el.style.display = show ? '' : 'none';
+  });
+  // Also hide/show the sport nav bar + live-now section
+  var sportNav = document.querySelector('.sb-sport-nav');
+  if (sportNav) sportNav.style.display = show ? '' : 'none';
+}
+
 /* ── URL-based routing ────────────────────────────────────────
    Mirrors fcbet216 URL scheme:
    - Main:         /sportsbook/
@@ -3274,6 +3293,7 @@ window.addEventListener('popstate', function(e) {
     clearInterval(window._mdTimerInterval);
     var viewer = document.getElementById('sb-match-viewer');
     if (viewer) viewer.style.display = 'none';
+    sbSetHomepanelVisible(true);
     var enDirect  = document.getElementById('sb-en-direct-cards');
     var boostedSec = document.getElementById('sb-boost-section');
     if (enDirect)  enDirect.style.display  = '';
