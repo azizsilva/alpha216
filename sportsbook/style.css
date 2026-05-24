@@ -9,18 +9,18 @@
   --sb-green-dark:  #5bc355;
   --sb-green-font:  rgba(0,0,0,0.87); /* text on green backgrounds */
   --sb-red:         #e02424;
-  /* ── Backgrounds — extracted precisely from fcbet216 DOM ── */
-  --sb-bg-root:     #0f0f0f;   /* page root */
-  --sb-bg-card:     #191919;   /* match cards, panels */
-  --sb-bg-boost:    #2a2a2a;   /* boosted odds card bg */
-  --sb-bg-alt:      #212121;   /* slightly elevated surfaces */
-  --sb-bg-mkt:      #1c1c1c;   /* market grid cells in championship */
-  --sb-bg-odd-btn:  #242424;   /* odd buttons */
-  --sb-bg-odd-hover:#2d2d2d;
-  /* ── Borders — very subtle, rgba-based like reference ── */
-  --sb-border:      rgba(255,255,255,0.07);
-  --sb-border-light:rgba(255,255,255,0.12);
-  --sb-border-card: rgba(255,255,255,0.06);  /* card-level border */
+  /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
+  --sb-bg-root:     #0f0f0f;   /* page root — near black */
+  --sb-bg-card:     #1d1d1d;   /* match cards — visible against root */
+  --sb-bg-boost:    #252525;   /* boosted odds card bg */
+  --sb-bg-alt:      #222222;   /* slightly elevated surfaces */
+  --sb-bg-mkt:      #1c1c1c;   /* market grid cells (championship) */
+  --sb-bg-odd-btn:  #242424;   /* odd buttons in cards */
+  --sb-bg-odd-hover:#2e2e2e;
+  /* ── Borders — visible but not harsh, based on DevTools rgb(120,118,118) */
+  --sb-border:      rgba(255,255,255,0.10);
+  --sb-border-light:rgba(255,255,255,0.15);
+  --sb-border-card: rgba(255,255,255,0.08);
   --sb-text-1:      #ffffff;
   --sb-text-2:      #979797;
   --sb-text-3:      #555555;
@@ -764,6 +764,7 @@ body {
 .sb-boost-section {
   margin-bottom: 12px;
   padding: 0 2px;
+  display: block !important;   /* always visible — never hide */
 }
 .sb-boost-header {
   display: flex;
@@ -788,8 +789,8 @@ body {
 .sb-boost-row::-webkit-scrollbar { height: 3px; }
 
 .sb-boost-card {
-  background: var(--sb-bg-boost);  /* #313131 */
-  border: 1px solid #3e3e3e;
+  background: #252525;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
   min-width: 270px;
   max-width: 300px;
@@ -2709,8 +2710,8 @@ body {
 .md-markets { padding: 6px 8px 20px; background: #0f0f0f; }
 
 .md-market-group {
-  background: #181818;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: #1d1d1d;
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: var(--sb-radius);
   margin-bottom: 4px;
   overflow: hidden;
@@ -2752,8 +2753,8 @@ body {
 
 .md-odd-btn {
   flex: 1;
-  background: #222222;
-  border: 1px solid rgba(255,255,255,0.09);
+  background: #242424;
+  border: 1px solid rgba(255,255,255,0.13);
   border-radius: 4px;
   padding: 9px 10px;
   display: flex;
@@ -3580,8 +3581,8 @@ body {
 /* Odds row — fcbet216: label grey left, value green right */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
-  background: #222222 !important;
-  border: 1px solid rgba(255,255,255,0.09) !important;
+  background: #242424 !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
   border-radius: 6px !important;
   height: 40px !important;
   min-height: 40px !important;
@@ -3607,8 +3608,8 @@ body {
 }
 
 .sb-root .mc {
-  background: #181818 !important;
-  border: 1px solid rgba(255,255,255,0.07) !important;
+  background: #1d1d1d !important;
+  border: 1px solid rgba(255,255,255,0.11) !important;
   border-radius: 10px !important;
 }
 
@@ -3624,20 +3625,21 @@ body {
 }
 
 .sb-root .sb-league-section-hdr {
-  background: #151515 !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
   border-radius: 10px !important;
 }
 
 .sb-root .sb-market-sel {
   flex: 1;
   height: 36px;
-  background: #181818 !important;
-  border: 1px solid rgba(255,255,255,0.09) !important;
-  border-radius: 6px !important;
-  color: #fff !important;
+  background: #4a4a4a !important;
+  border: 1px solid #787676 !important;
+  border-radius: 4px !important;
+  color: rgba(255,255,255,0.87) !important;
   padding: 0 10px !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
 }
 
 /* ══ FCBET216 MATCH CARD v5 — Complete Bootstrap 3 Isolation ══════════════

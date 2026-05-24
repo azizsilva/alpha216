@@ -1101,19 +1101,14 @@ function renderMatches(results) {
   var isTodayInplay = (S.activeAction === 'inplay' && S.activeDateOffset === 0);
   var liveOnlyTab = (S.activeTab === 'live');
 
-  // Carousel + boosted (homepage only)
+  // Carousel + boosted — always shown on main homepage (matches fcbet behaviour)
   var boostSec = document.getElementById('sb-boost-section');
   if (!S.activeLeagueId && S.viewMode === 'main') {
     var carouselSrc = liveList.length ? liveList : results;
     renderEnDirectCards(carouselSrc.slice(0, 6));
-    if (isTodayInplay && !liveOnlyTab) {
-      if (boostSec) boostSec.style.display = 'none';
-    } else if (!isTodayInplay) {
-      if (boostSec) boostSec.style.display = '';
-      renderBoosted(results.slice(0, 4));
-    } else {
-      if (boostSec) boostSec.style.display = 'none';
-    }
+    // Always show the Cotes Boostées section on the main page
+    if (boostSec) boostSec.style.display = '';
+    renderBoosted(results.slice(0, 4));
   }
 
   var out = '';
