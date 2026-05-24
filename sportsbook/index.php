@@ -28,7 +28,8 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=time()?>" id="sb-css-link">
+<?php $sb_css_v = @filemtime(__DIR__ . '/style.css') ?: time(); ?>
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -92,6 +93,26 @@ for($i=0;$i<7;$i++){
   .sb-right{right:0!important;transform:translateX(100%)!important;width:320px!important;}
   .sb-right.open{transform:translateX(0)!important;box-shadow:-10px 0 40px rgba(0,0,0,0.9)!important;}
 }
+/* ── Match cards — beat Bootstrap 3 from parent site ── */
+.sb-root .mc{background:#1c1c1c!important;border:1px solid #2a2a2a!important;border-radius:10px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
+.sb-root .mc-hdr-live{display:flex!important;justify-content:space-between!important;padding:10px 12px 4px!important}
+.sb-root .mc-badge-bb{background:#70f669!important;color:rgba(0,0,0,.87)!important;font-size:10px!important;font-weight:700!important;padding:2px 5px!important;border-radius:3px!important}
+.sb-root .mc-live-badge{background:#e02424!important;color:#fff!important;font-size:9px!important;font-weight:800!important;padding:2px 7px!important;border-radius:4px!important;border:none!important}
+.sb-root .mc-live-min{color:#979797!important;font-size:11px!important}
+.sb-root .mc-league-row{padding:0 12px 8px!important;display:flex!important;align-items:center!important}
+.sb-root .mc-league-name{color:#979797!important;font-size:11px!important}
+.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;gap:8px!important;padding:0 12px!important}
+.sb-root .mc-teams-stacked{flex:1!important;display:flex!important;flex-direction:column!important;gap:8px!important}
+.sb-root .mc-team-row{display:flex!important;align-items:center!important;gap:8px!important}
+.sb-root .mc-t-name{color:#fff!important;font-size:13px!important;font-weight:600!important;flex:1!important}
+.sb-root .mc-live-on .mc-t-score{color:#fff!important;font-size:15px!important;font-weight:800!important}
+.sb-root .mc-odds-bot{display:flex!important;gap:6px!important;padding:0 12px 12px!important}
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:#2a2a2a!important;border:1px solid #3a3a3a!important;border-radius:6px!important;height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important}
+.sb-root .mc-odd-lbl{color:#979797!important;font-size:11px!important;font-weight:500!important}
+.sb-root .mc-odd-val{color:#70f669!important;font-size:14px!important;font-weight:700!important}
+.sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:#2a2a2a!important;border:1px solid #3a3a3a!important;border-radius:6px!important}
+.sb-root .sb-league-section-hdr{background:#1e1e1e!important;border-radius:10px!important;margin:12px 0 6px!important;padding:10px 12px!important;display:flex!important;align-items:center!important}
+.sb-root .sb-league-block{margin-bottom:8px!important}
 </style>
 
 <div class="sb-root">
@@ -479,4 +500,4 @@ for($i=0;$i<7;$i++){
   </button>
 </div>
 
-<script src="<?=$base?>sportsbook/app.js?v=<?=time()?>"></script>
+<script src="<?=$base?>sportsbook/app.js?v=<?=$sb_css_v?>"></script>

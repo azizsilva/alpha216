@@ -10,7 +10,7 @@
 // Fixes "CSS cached/disappears" issue on SPA navigation
 (function injectCSS() {
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  var newHref = base + 'sportsbook/style.css?v=' + Date.now();
+  var newHref = base + 'sportsbook/style.css?v=' + Date.now() + '&sb=fcbet216v4';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -612,25 +612,35 @@ function guessCountry(l) {
 
 /* ── Data Fetching ───────────────────────────────────────── */
 function loadCounts() {
-  fetch(BASE + 'sportsbook/api.php?action=counts')
-    .then(function(r) { return r.json(); })
+  var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var tid = ctrl ? setTimeout(function() { ctrl.abort(); }, 8000) : null;
+  var opts = ctrl ? { signal: ctrl.signal } : {};
+  fetch(BASE + 'sportsbook/api.php?action=counts', opts)
+    .then(function(r) { if (!r.ok) throw new Error('counts'); return r.json(); })
     .then(function(d) {
       if (d && d.counts) {
         Object.keys(d.counts).forEach(function(sid) {
           var val = d.counts[sid];
-          // New format: {total: N, live: N} — old format: just a number
           if (typeof val === 'object' && val !== null) {
             S.sportCounts[parseInt(sid)] = val.total || 0;
             S.sportLiveCounts[parseInt(sid)] = val.live || 0;
           } else {
             S.sportCounts[parseInt(sid)] = val;
-            S.sportLiveCounts[parseInt(sid)] = val; // legacy: assume all are live
+            S.sportLiveCounts[parseInt(sid)] = val;
           }
         });
         renderSidebar();
         renderSportNav();
       }
-    }).catch(function() {});
+    })
+    .catch(function() {
+      SPORTS.forEach(function(sp) {
+        if (!S.sportCounts[sp.id]) S.sportCounts[sp.id] = 0;
+      });
+      renderSidebar();
+      renderSportNav();
+    })
+    .finally(function() { if (tid) clearTimeout(tid); });
 }
 
 /* ── Real-time polling: updates scores, odds, timer, time_status ───────────
@@ -873,6 +883,7 @@ function renderMatchGroups(matches, out) {
     var country = guessCountry(lg);
     var flag = getFlag(country);
     var countryLabel = (country && country !== 'International') ? (' · ' + h(country)) : '';
+    out += '<div class="sb-league-block">';
     out += '<div class="sb-league-section-hdr">';
     out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
     out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
@@ -880,7 +891,9 @@ function renderMatchGroups(matches, out) {
     out += '<span class="sb-lh-gift" title="Offres spéciales" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
     out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
     out += '</div>';
+    out += '<div class="sb-league-matches">';
     groups[lg].forEach(function(m) { out += matchCard(m); });
+    out += '</div></div>';
   });
   return out;
 }
@@ -1037,12 +1050,9 @@ function matchCard(m) {
     out += '</div>';
     out += '</div>';
 
-    out += '<div class="mc-league-row mc-league-row--split">';
-    out += '<div class="mc-league-info">';
+    out += '<div class="mc-league-row">';
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
-    out += '</div>';
-    out += '<div class="mc-league-actions"><button class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>';
     out += '</div>';
   } else {
     // UPCOMING Match Card Header
@@ -1068,12 +1078,11 @@ function matchCard(m) {
     out += '</div>';
   }
 
-  /* ── Body row: teams/scores | odds | chevron ── */
   out += '<div class="mc-body-col" onclick="event.stopPropagation()">';
 
   // SVG Shirt helper (uses seeded colors based on team name)
   function getShirtSVG(tName) {
-    if (!isLive) return ''; // No shirts for upcoming matches
+    if (!isLive) return '';
     var c1 = ['#e02424','#2563eb','#16a34a','#ca8a04','#7c3aed','#db2777','#ffffff','#000000','#f97316','#0ea5e9'];
     var c2 = ['#ffffff','#ffffff','#ffffff','#000000','#ffffff','#ffffff','#e02424','#ffffff','#ffffff','#ffffff'];
     var seed = 0;
@@ -1088,7 +1097,7 @@ function matchCard(m) {
       + '</svg>';
   }
 
-  // Teams column — vertically stacked
+  out += '<div class="mc-teams-wrap">';
   out += '<div class="mc-teams-stacked">';
   out += '<div class="mc-team-row">';
   out += getShirtSVG(hn);
@@ -1100,6 +1109,10 @@ function matchCard(m) {
   out += '<span class="mc-t-name">' + an + '</span>';
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[1]) + '</span>';
   out += '</div>';
+  out += '</div>';
+  if (isLive) {
+    out += '<button type="button" class="mc-stats-icon mc-stats-side" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+  }
   out += '</div>';
 
   // Odds buttons — full width bottom row
@@ -1200,7 +1213,7 @@ function oddBtn(mid, match, sel, val) {
   var onclick = hasOdds
     ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(sel) + '\',' + v + ')"'
     : '';
-  return '<button class="' + valCls + '"' + onclick + '>'
+  return '<button type="button" class="' + valCls + '"' + onclick + '>'
     + '<span class="mc-odd-lbl">' + sel + '</span>'
     + '<span class="mc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
     + '</button>';
@@ -1215,7 +1228,7 @@ function slcOddBtn(mid, match, sel, val) {
   var onclick = hasOdds
     ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(sel) + '\',' + v + ')"'
     : '';
-  return '<button class="' + valCls + '"' + onclick + '>'
+  return '<button type="button" class="' + valCls + '"' + onclick + '>'
     + '<span class="slc-odd-lbl">' + sel + '</span>'
     + '<span class="slc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
     + '</button>';
@@ -1230,7 +1243,7 @@ function ouBtn(mid, match, label, val, key) {
   var onclick = hasOdds
     ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(label) + '\',' + v + ')"'
     : '';
-  return '<button class="' + valCls + '"' + onclick + '>'
+  return '<button type="button" class="' + valCls + '"' + onclick + '>'
     + '<span class="mc-odd-lbl">' + h(label) + '</span>'
     + '<span class="mc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
     + '</button>';

@@ -212,31 +212,49 @@ function cache_to_db($pdo, $matches, $sport_id_fallback = 1) {
 // ═══ COUNTS ════════════════════════════════════════════════════════════════
 // ═══ COUNTS — real live counts via BetsAPI pager.total (90s file cache) ═════
 if ($action === 'counts') {
-    // 3-minute file cache — reduces API load while staying reasonably fresh
+    @set_time_limit(12);
+    header('Content-Type: application/json');
+    header('Cache-Control: no-store');
+
     $cache_path = $cache_dir . '/sb_counts_' . floor(time() / 180) . '.json';
+    $stale_glob = glob($cache_dir . '/sb_counts_*.json');
+    $stale_path = $stale_glob ? end($stale_glob) : null;
+
+    // Fresh cache — instant
     if (file_exists($cache_path)) {
-        header('Content-Type: application/json');
-        header('Cache-Control: no-store');
         echo file_get_contents($cache_path);
+        exit;
+    }
+
+    // Stale cache — return immediately (prevents 504), refresh in background next request
+    if ($stale_path && file_exists($stale_path)) {
+        echo file_get_contents($stale_path);
         exit;
     }
 
     $all_sports = [1,18,13,91,107,17,151,16,78,45,117,36,83,66,56,48,92,40,19,94,10,90,46,14,75,110,152,153,154];
     $counts = [];
+    $api_sports = [1, 18, 13]; // only top 3 hit BetsAPI live (fast); rest from cache/DB
 
     foreach ($all_sports as $sid) {
-        $live_cnt = betsapi_live_count($sid);
-        // Get upcoming count from BetsAPI pager.total (the REAL total across all pages)
-        $upcoming_cnt = betsapi_upcoming_count($sid);
-        // Fallback: check local cache file
-        if ($upcoming_cnt === 0) {
-            $sport_cache = $cache_dir . '/upcoming_' . $sid . '.json';
-            if (file_exists($sport_cache)) {
-                $sc = json_decode(@file_get_contents($sport_cache), true);
-                $upcoming_cnt = is_array($sc) ? count($sc) : 0;
+        $live_cnt = 0;
+        $upcoming_cnt = 0;
+
+        if (in_array($sid, $api_sports, true)) {
+            $live_cnt = betsapi_live_count($sid);
+        } else {
+            $lc = $cache_dir . '/live_' . $sid . '.json';
+            if (file_exists($lc)) {
+                $lj = json_decode(@file_get_contents($lc), true);
+                $live_cnt = is_array($lj) ? count($lj) : 0;
             }
         }
-        // Fallback: check DB for upcoming count
+
+        $sport_cache = $cache_dir . '/upcoming_' . $sid . '.json';
+        if (file_exists($sport_cache)) {
+            $sc = json_decode(@file_get_contents($sport_cache), true);
+            $upcoming_cnt = is_array($sc) ? count($sc) : 0;
+        }
         if ($upcoming_cnt === 0 && $db_connected) {
             try {
                 $st = $pdo->prepare("SELECT COUNT(*) FROM sb_matches WHERE sport_id=? AND status IN('upcoming','inplay')");
@@ -244,15 +262,16 @@ if ($action === 'counts') {
                 $upcoming_cnt = (int)$st->fetchColumn();
             } catch (Exception $e) {}
         }
+        if ($upcoming_cnt === 0 && in_array($sid, $api_sports, true)) {
+            $upcoming_cnt = betsapi_upcoming_count($sid);
+        }
+
         $total = $live_cnt + $upcoming_cnt;
-        $counts[$sid] = ['total' => max($total, $live_cnt), 'live' => $live_cnt];
+        $counts[$sid] = ['total' => max($total, $live_cnt, $upcoming_cnt), 'live' => $live_cnt];
     }
 
     $payload = json_encode(['success' => 1, 'counts' => $counts]);
     @file_put_contents($cache_path, $payload);
-
-    header('Content-Type: application/json');
-    header('Cache-Control: no-store');
     echo $payload;
     exit;
 }
