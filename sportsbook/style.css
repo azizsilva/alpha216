@@ -1923,7 +1923,7 @@ body {
   flex: none !important;
   width: 48px !important;
   min-width: 48px !important;
-  background: rgb(49, 49, 49) !important;
+ /* background: rgb(49, 49, 49) !important; */
   color: #979797 !important;
   border: none !important;
 }
@@ -2053,7 +2053,7 @@ body {
     gap: 8px !important;
     padding: 8px 10px !important;
     align-items: stretch !important;
-    background: rgb(49, 49, 49) !important;
+  /*  background: rgb(49, 49, 49) !important; */
   }
   /* All buttons default: fixed 48px */
   .sb-mobile-topbar .sb-btn-home,
@@ -2167,10 +2167,10 @@ body {
 .slc {
   position: relative !important;
   background: #282828 !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
   border-radius: 10px !important;
-  min-width: 230px !important;
-  max-width: 265px !important;
+  min-width: 240px !important;
+  max-width: 275px !important;
   flex-shrink: 0 !important;
 }
 .slc:hover { background: #333 !important; }
@@ -2194,8 +2194,8 @@ body {
 .slc-sport-badge svg { width: 13px !important; height: 13px !important; }
 
 /* Odds in carousel cards */
-.slc-odd-lbl { font-size: 11px !important; font-weight: 500 !important; color: rgba(255,255,255,0.55) !important; }
-.slc-odd-val { font-size: 13px !important; font-weight: 700 !important; color: rgb(113,246,105) !important; }
+.slc-odd-lbl { font-size: 10px !important; font-weight: 500 !important; color: rgba(255,255,255,0.50) !important; }
+.slc-odd-val { font-size: 14px !important; font-weight: 700 !important; color: rgb(113,246,105) !important; }
 
 /* Header row */
 .slc-hdr {
@@ -2236,8 +2236,8 @@ body {
 .slc-mid {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding: 8px 10px 6px !important;
+  gap: 10px !important;
+  padding: 6px 10px 8px !important;
 }
 /* Left: two overlapping jersey circles */
 .slc-jerseys-overlap {
@@ -2246,7 +2246,12 @@ body {
   align-items: center !important;
 }
 .slc-jerseys-overlap .mc-jersey-wrap:last-child {
-  margin-left: -10px !important;  /* overlap effect */
+  margin-left: -14px !important;  /* deeper overlap — matches fcbet reference */
+}
+/* Make jersey SVG bigger inside carousel circles */
+.slc-jerseys-overlap .mc-jersey-svg {
+  width: 26px !important;
+  height: 26px !important;
 }
 /* Right: stacked team rows */
 .slc-teams {
@@ -2254,7 +2259,7 @@ body {
   display: flex !important;
   min-width: 0 !important;
   flex-direction: column !important;
-  gap: 5px !important;
+  gap: 6px !important;
 }
 .slc-team-row {
   display: flex !important;
@@ -2269,16 +2274,14 @@ body {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  flex: 1 !important;
   min-width: 0 !important;
 }
 .slc-score {
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 800 !important;
   color: #fff !important;
   flex-shrink: 0 !important;
   min-width: 18px !important;
-  text-align: right !important;
   text-align: right !important;
 }
 .slc-stats-ico { flex-shrink: 0 !important; color: rgba(255,255,255,0.45) !important; display: flex !important; align-items: center !important; }
@@ -2295,14 +2298,14 @@ body {
 .slc-odds {
   display: flex !important;
   gap: 4px !important;
-  padding: 6px 10px 10px !important;
+  padding: 4px 10px 10px !important;
 }
 .slc-odd-btn {
   flex: 1 !important;
-  background: rgb(49,49,49) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  border-radius: 4px !important;
-  height: 40px !important;
+  background: #3a3a3a !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-radius: 6px !important;
+  height: 42px !important;
   padding: 0 8px !important;
   display: flex !important;
   flex-direction: row !important;
@@ -3879,11 +3882,12 @@ body {
   overflow: hidden !important;
 }
 .sb-root .mc-jersey-wrap.mc-jersey-up { opacity: 0.50 !important; }
-/* Smaller wrap for carousel cards — white border, larger for visibility */
+/* Carousel jersey circles — 38px to match fcbet reference */
 .sb-root .slc-jersey-wrap {
-  width: 30px !important;
-  height: 30px !important;
+  width: 38px !important;
+  height: 38px !important;
   border: 2px solid rgba(255,255,255,0.22) !important;
+  background: rgba(30,30,30,0.9) !important;
 }
 /* Jersey SVG inside the round wrapper */
 .sb-root .mc-jersey-svg {
