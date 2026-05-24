@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.26';
+  var newHref = base + 'sportsbook/style.css?v=20260524.27';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -24,7 +24,9 @@
   }
 })();
 
-var MARGIN = 0; // No additional margin — BetsAPI provides real Bet365 odds directly
+var MARGIN = 0; // BetsAPI provides real Bet365 odds directly; margin is in Bet365's overround
+// Bet Builder correlation factor per number of legs (matches fcbet/Altenar model)
+var BB_CORR = { 1: 1.0, 2: 0.90, 3: 0.85, 4: 0.80 }; // 4+ uses 0.80
 // Dynamic base path calculation
 var scriptPath = window.location.pathname;
 var BASE = '/';
@@ -453,6 +455,14 @@ function isMatchLive(m) {
 }
 function margin(v) { return Math.max(1.01, +(parseFloat(v) * (1 - MARGIN)).toFixed(2)); }
 function rand(a, b) { return (a + Math.random() * (b - a)).toFixed(2); }
+
+// Bet Builder combined odds with correlation discount (matches fcbet/Altenar)
+function bbCombinedOdds(sels) {
+  if (!sels || !sels.length) return 1.0;
+  var raw = sels.reduce(function(acc, s) { return acc * (parseFloat(s.odds) || 1.0); }, 1.0);
+  var corr = BB_CORR[sels.length] !== undefined ? BB_CORR[sels.length] : BB_CORR[4];
+  return Math.max(1.01, parseFloat((raw * corr).toFixed(2)));
+}
 
 // Stable seeded random — same match always shows same odds
 function seedRand(seed, min, max) {
@@ -3130,7 +3140,7 @@ function sbBBRefresh() {
     return;
   }
 
-  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var combined = bbCombinedOdds(sels);
   var out = '';
   sels.forEach(function(s){
     out += '<div class="md-bb-leg">'
@@ -3156,7 +3166,7 @@ function sbBBRefresh() {
 
 window.sbBBRefreshStake = function() {
   var sels = window._bbSelections || [];
-  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var combined = bbCombinedOdds(sels);
   var stakeEl = document.getElementById('md-bb-stake');
   var gagnerEl = document.getElementById('md-bb-gagner');
   var stake = stakeEl ? (parseFloat(stakeEl.value) || 10) : 10;
@@ -3166,7 +3176,7 @@ window.sbBBRefreshStake = function() {
 window.sbBBAddToSlip = function() {
   var sels = window._bbSelections;
   if (!sels.length) return;
-  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var combined = bbCombinedOdds(sels);
   var bid = 'bb_' + Date.now();
   var matchName = (window._mdMatch ? (window._mdMatch.home ? window._mdMatch.home.name : '') + ' vs. ' + (window._mdMatch.away ? window._mdMatch.away.name : '') : 'Bet Builder');
   var isLive = window._mdMatch ? isMatchLive(window._mdMatch) : false;
