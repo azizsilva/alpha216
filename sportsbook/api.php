@@ -761,55 +761,64 @@ if ($action === 'league_matches') {
         } catch (Exception $e) {}
     }
 
-    // ── Step 2: Query matches — exclude ended AND filter time_status ──────
-    if ($db_connected && $league_q !== '') {
+    // ── Step 2: Query matches — use league_id first (precise), then name ──
+    $league_id_q = trim($_GET['league_id'] ?? '');
+    $now = time();
+
+    if ($db_connected) {
         try {
-            $patt = '%' . $league_q . '%';
-            $stmt_exact = $pdo->prepare("SELECT COUNT(*) FROM sb_matches WHERE sport_id=? AND status!='ended' AND league_name=?");
-            $stmt_exact->execute([$sport_id, $league_q]);
-            $exact_count = (int)$stmt_exact->fetchColumn();
+            // Try by league_id first (most precise — avoids wrong-sport/country fallbacks)
+            // Uses JSON_EXTRACT so no schema change needed; sport_id index keeps it fast
+            if ($league_id_q !== '') {
+                $stmt = $pdo->prepare(
+                    "SELECT raw_json, start_time, status FROM sb_matches
+                      WHERE sport_id=? AND status!='ended'
+                        AND JSON_EXTRACT(raw_json,'$.league.id') = ?
+                      ORDER BY start_time ASC LIMIT 200"
+                );
+                $stmt->execute([$sport_id, $league_id_q]);
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $d = json_decode($row['raw_json'], true);
+                    if (!$d || empty($d['home']['name']) || empty($d['away']['name'])) continue;
+                    $ts = $d['time_status'] ?? '0';
+                    if ($ts === '3') continue;
+                    $st = (int)($d['time'] ?? $row['start_time'] ?? 0);
+                    if ($st > 0 && $ts !== '1' && ($st + 10800) < $now) continue;
+                    $results[] = $d;
+                }
+            }
 
-            $where_cond = $exact_count > 0 ? "league_name=?" : "league_name LIKE ?";
-            $where_val  = $exact_count > 0 ? $league_q : $patt;
+            // Fallback: league name search (only if league_id query returned nothing)
+            if (empty($results) && $league_q !== '') {
+                $patt = '%' . $league_q . '%';
+                $stmt_exact = $pdo->prepare("SELECT COUNT(*) FROM sb_matches WHERE sport_id=? AND status!='ended' AND league_name=?");
+                $stmt_exact->execute([$sport_id, $league_q]);
+                $exact_count = (int)$stmt_exact->fetchColumn();
 
-            $stmt = $pdo->prepare(
-                "SELECT raw_json, start_time, status FROM sb_matches
-                  WHERE sport_id=? AND status!='ended'
-                    AND $where_cond
-                  ORDER BY start_time ASC LIMIT 200"
-            );
-            $stmt->execute([$sport_id, $where_val]);
-            $now = time();
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $d = json_decode($row['raw_json'], true);
-                if (!$d || empty($d['home']['name']) || empty($d['away']['name'])) continue;
+                $where_cond = $exact_count > 0 ? "league_name=?" : "league_name LIKE ?";
+                $where_val  = $exact_count > 0 ? $league_q : $patt;
 
-                // Skip finished matches (time_status=3 = ended)
-                $ts = $d['time_status'] ?? '0';
-                if ($ts === '3') continue;
-
-                // Skip matches that started > 3 hours ago and aren't currently live
-                $st = (int)($d['time'] ?? $row['start_time'] ?? 0);
-                if ($st > 0 && $ts !== '1' && ($st + 10800) < $now) continue;
-
-                $results[] = $d;
+                $stmt = $pdo->prepare(
+                    "SELECT raw_json, start_time, status FROM sb_matches
+                      WHERE sport_id=? AND status!='ended'
+                        AND $where_cond
+                      ORDER BY start_time ASC LIMIT 200"
+                );
+                $stmt->execute([$sport_id, $where_val]);
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $d = json_decode($row['raw_json'], true);
+                    if (!$d || empty($d['home']['name']) || empty($d['away']['name'])) continue;
+                    $ts = $d['time_status'] ?? '0';
+                    if ($ts === '3') continue;
+                    $st = (int)($d['time'] ?? $row['start_time'] ?? 0);
+                    if ($st > 0 && $ts !== '1' && ($st + 10800) < $now) continue;
+                    $results[] = $d;
+                }
             }
         } catch (Exception $e) {}
     }
-
-    // If nothing by name, try fetching all non-ended for this sport
-    if (empty($results) && $db_connected) {
-        $results = db_fetch_matches($pdo, "sport_id=? AND status!='ended'", [$sport_id], 500, $sport_id);
-        // Also filter these by time
-        $now = time();
-        $results = array_values(array_filter($results, function($d) use ($now) {
-            $ts = $d['time_status'] ?? '0';
-            if ($ts === '3') return false;
-            $st = (int)($d['time'] ?? 0);
-            if ($st > 0 && $ts !== '1' && ($st + 10800) < $now) return false;
-            return true;
-        }));
-    }
+    // NOTE: No fallback to "all sport matches" — shows empty championship if no matches found,
+    // which is correct behaviour (avoids LaLiga click showing Premier League data)
 
     // ── ON-DEMAND prematch odds fetch (for matches missing live_odds) ──────
     // Fetches odds for up to 5 upcoming matches without odds — max ~2.5s added latency
@@ -906,6 +915,15 @@ function api_parse_prematch_odds($resp) {
 
 // ═══ LEAGUES — return available leagues for a sport from DB (with live_cnt) ══
 if ($action === 'leagues') {
+    // 30s cache per sport — makes sidebar "Chargement..." near-instant
+    $leagues_cache = $cache_dir . '/leagues_' . $sport_id . '.json';
+    $leagues_ttl   = 30;
+    if (file_exists($leagues_cache) && (time() - filemtime($leagues_cache)) < $leagues_ttl) {
+        header('Content-Type: application/json');
+        echo @file_get_contents($leagues_cache);
+        exit;
+    }
+
     $leagues = [];
     if ($db_connected) {
         try {
@@ -931,7 +949,9 @@ if ($action === 'leagues') {
             }
         } catch (Exception $e) {}
     }
-    echo json_encode(['success' => 1, 'leagues' => $leagues]);
+    $out = json_encode(['success' => 1, 'leagues' => $leagues]);
+    @file_put_contents($leagues_cache, $out);
+    echo $out;
     exit;
 }
 

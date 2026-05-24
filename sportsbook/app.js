@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.7';
+  var newHref = base + 'sportsbook/style.css?v=20260524.8';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -668,7 +668,8 @@ function startPolling() {
       // Championship view: poll league_matches endpoint for this league
       var searchTerm = LEAGUE_DB_SEARCH[S.activeLeagueName] || S.activeLeagueName;
       url = BASE + 'sportsbook/api.php?action=league_matches&sport_id=' + S.activeSportId
-          + '&league=' + encodeURIComponent(searchTerm);
+          + '&league=' + encodeURIComponent(searchTerm)
+          + (S.activeLeagueId ? '&league_id=' + encodeURIComponent(S.activeLeagueId) : '');
       targetList = S.champMatches;
       isChamp = true;
 
@@ -1854,20 +1855,21 @@ window.sbOpenLeague = function(id, name, flag, sid) {
 
   var searchTerm = LEAGUE_DB_SEARCH[name] || name;
   var url = BASE + 'sportsbook/api.php?action=league_matches&sport_id=' + (sid || 1)
-          + '&league=' + encodeURIComponent(searchTerm);
+          + '&league=' + encodeURIComponent(searchTerm)
+          + (id ? '&league_id=' + encodeURIComponent(id) : '');
 
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var res = (d && d.results) ? d.results : [];
 
-      // Client-side precision filter
-      if (res.length > 0) {
-        var refined = res.filter(function(m) {
-          return m.league && isLeagueMatch(name, m.league.name);
-        });
-        if (refined.length > 0) res = refined;
-      }
+      // Client-side precision filter — ALWAYS apply, return empty if none match
+      // This prevents showing all-sport fallback matches when a specific league has no games today
+      var refined = res.filter(function(m) {
+        return m.league && isLeagueMatch(name, m.league.name);
+      });
+      // Only use refined if we had results to filter; avoids discarding all on mismatch
+      if (res.length > 0) res = refined;
 
       // Date filter if a future date is selected
       if (S.activeDateOffset > 0) {
