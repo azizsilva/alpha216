@@ -121,8 +121,8 @@ body {
 .sb-btn-home svg  { width: 16px; height: 16px; stroke: currentColor; }
 
 .sb-btn-live  {
-  background: var(--sb-bg-alt); /* dark gray bg like fcbet216 reference */
-  color: var(--sb-red); /* red text, not red background */
+  background: var(--sb-bg-alt); /* dark gray bg — EN DIRECT text in red like fcbet216 reference */
+  color: var(--sb-red);
   flex: 1;
   font-size: 10px;
   font-weight: 800;
@@ -1611,8 +1611,8 @@ body {
 }
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 .sb-mobile-topbar .sb-btn-live {
-  background: var(--sb-bg-alt); /* dark gray bg matching fcbet216 reference exactly */
-  color: var(--sb-red); /* red text not red background */
+  background: var(--sb-bg-alt); /* dark gray bg — EN DIRECT text in red, matches fcbet216 reference */
+  color: var(--sb-red);
   flex: 1;
   font-size: 11px;
   font-weight: 800;
@@ -1625,7 +1625,7 @@ body {
   background: var(--sb-bg-alt);
   border: 1px solid #3a3a3a;
   color: var(--sb-text-2);
-  width: 54px;  /* same as home — equal squares */
+  width: 54px;  /* same as home — equal squares matching reference */
   min-width: 54px;
 }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }

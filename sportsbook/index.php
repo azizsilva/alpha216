@@ -28,7 +28,7 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_19" id="sb-css-link">
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_21" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -56,14 +56,14 @@ for($i=0;$i<7;$i++){
     width:auto!important;min-width:0!important;
     height:40px!important;flex:none!important;
     display:flex!important;align-items:center!important;justify-content:center!important;
-    border-radius:6px!important;cursor:pointer!important;
+    border:none!important;border-radius:6px!important;cursor:pointer!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
   /* Home — green square */
-  .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;border:none!important;}
-  /* EN DIRECT — DARK GRAY background with RED TEXT (matching fcbet216 exactly) */
+  .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;}
+  /* EN DIRECT — DARK GRAY bg + RED text (matching fcbet216 reference image exactly) */
   .sb-mobile-topbar .sb-btn-live{background:#252525!important;color:#e02424!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;border:1px solid #3a3a3a!important;}
-  /* Stats — dark gray equal to home */
+  /* Stats — dark gray, same width as home (54px via grid) */
   .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;border:1px solid #3a3a3a!important;}
   /* SCROLL FIX */
   body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
@@ -412,7 +412,14 @@ for($i=0;$i<7;$i++){
 <!-- Mobile Bar — 5 items matching fcbet216 -->
 <div class="sb-mob-footer">
   <button class="sb-mob-btn" onclick="window.location.href='/'">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="7.5" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><circle cx="16.5" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 19c0-3.3 2.7-6 6-6h8c3.3 0 6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 17c.5-1.5 1.5-2.5 3-3M17 17c-.5-1.5-1.5-2.5-3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <!-- Cherry/Casino icon matching fcbet216 reference -->
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cherries: two circles with a stem -->
+      <circle cx="8" cy="16" r="4" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 12C8 12 9 7 13 5C13 5 16 8 16 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13 5C13 5 11 3 12 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
     <span class="sb-mob-lbl">Casino</span>
   </button>
   <button class="sb-mob-btn active">
