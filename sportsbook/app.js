@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.12';
+  var newHref = base + 'sportsbook/style.css?v=20260524.13';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1370,42 +1370,29 @@ function matchCard(m) {
 
   out += '<div class="mc-body-col">';
 
-  // ── H2H layout: [jersey home | name] [score / VS] [name | jersey away] ──
-  var jerseySize = 26;
-  var hJersey = shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), jerseySize);
-  var aJersey = shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), jerseySize);
+  // ── Stacked layout: [jersey][name][score] per row (matches fcbet216 reference) ──
+  function getShirtSVG(tName) {
+    return shirtSVG(tName, 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), 22);
+  }
 
   out += '<div class="mc-teams-wrap" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-  out += '<div class="mc-h2h">';
+  out += '<div class="mc-teams-stacked">';
 
-  // Home side
-  out += '<div class="mc-h2h-home">';
-  out += hJersey;
+  // Home row: [jersey] [name] | [score]
+  out += '<div class="mc-team-row">';
+  out += getShirtSVG(m.home ? m.home.name : '');
   out += '<span class="mc-t-name">' + hn + '</span>';
+  if (isLive) out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
   out += '</div>';
 
-  // Center: score (live) or VS (upcoming)
-  out += '<div class="mc-h2h-score">';
-  if (hasScore) {
-    out += '<span class="mc-sv">' + h(scores[0]) + '</span>';
-    out += '<span class="mc-sc-sep">-</span>';
-    out += '<span class="mc-sv">' + h(scores[1]) + '</span>';
-  } else if (isLive) {
-    out += '<span class="mc-sv">0</span>';
-    out += '<span class="mc-sc-sep">-</span>';
-    out += '<span class="mc-sv">0</span>';
-  } else {
-    out += '<span class="mc-vs-lbl">VS</span>';
-  }
-  out += '</div>';
-
-  // Away side
-  out += '<div class="mc-h2h-away">';
+  // Away row: [jersey] [name] | [score]
+  out += '<div class="mc-team-row">';
+  out += getShirtSVG(m.away ? m.away.name : '');
   out += '<span class="mc-t-name">' + an + '</span>';
-  out += aJersey;
+  if (isLive) out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
   out += '</div>';
 
-  out += '</div>';// close mc-h2h
+  out += '</div>';// close mc-teams-stacked
   out += '</div>';// close mc-teams-wrap
 
   // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)

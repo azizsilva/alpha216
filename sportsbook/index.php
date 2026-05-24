@@ -22,10 +22,10 @@ for($i=0;$i<7;$i++){
 <!-- Fonts: preconnect + swap for zero render blocking -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
 <noscript>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
 <?php $sb_css_v = @filemtime(__DIR__ . '/style.css') ?: time(); ?>
@@ -100,24 +100,22 @@ for($i=0;$i<7;$i++){
 .sb-root .mc-live-min{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
 .sb-root .mc-league-row{padding:0 12px 8px!important;display:flex!important;align-items:center!important}
 .sb-root .mc-league-name{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
-/* H2H teams layout */
-.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;padding:2px 12px 10px!important;width:100%!important;cursor:pointer!important}
-.sb-root .mc-h2h{display:flex!important;align-items:center!important;gap:6px!important;width:100%!important}
-.sb-root .mc-h2h-home,.sb-root .mc-h2h-away{flex:1!important;display:flex!important;align-items:center!important;gap:6px!important;min-width:0!important}
-.sb-root .mc-h2h-away{flex-direction:row-reverse!important}
-.sb-root .mc-h2h-score{display:flex!important;align-items:center!important;gap:3px!important;flex-shrink:0!important;min-width:48px!important;justify-content:center!important}
-.sb-root .mc-sv{font-size:17px!important;font-weight:800!important;color:#fff!important;line-height:1!important}
-.sb-root .mc-sc-sep{font-size:12px!important;color:rgba(255,255,255,0.4)!important}
-.sb-root .mc-vs-lbl{font-size:11px!important;font-weight:700!important;color:rgba(255,255,255,0.4)!important}
-.sb-root .mc-t-name{color:#fff!important;font-size:12px!important;font-weight:600!important;flex:1!important;min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.sb-root .mc-h2h-home .mc-t-name{text-align:left!important}
-.sb-root .mc-h2h-away .mc-t-name{text-align:right!important}
-.sb-root .mc-jersey-svg{width:26px!important;height:26px!important;flex-shrink:0!important;display:inline-block!important;overflow:visible!important}
-.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important}
-.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.22)!important;border-radius:6px!important;height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important}
-.sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:500!important}
-.sb-root .mc-odd-val{color:#71f669!important;font-size:14px!important;font-weight:700!important}
-.sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.22)!important;border-radius:6px!important}
+/* Global font — Roboto matches alpina216.com */
+.sb-root,.sb-root *{font-family:'Roboto',sans-serif!important}
+/* Stacked teams layout */
+.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;padding:4px 12px 8px!important;width:100%!important;cursor:pointer!important}
+.sb-root .mc-teams-stacked{flex:1!important;display:flex!important;flex-direction:column!important;gap:6px!important;min-width:0!important}
+.sb-root .mc-team-row{display:flex!important;align-items:center!important;gap:8px!important;min-height:24px!important}
+.sb-root .mc-t-name{color:#fff!important;font-size:13px!important;font-weight:500!important;flex:1!important;min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.sb-root .mc-t-score{color:#fff!important;font-size:15px!important;font-weight:700!important;flex-shrink:0!important;min-width:16px!important;text-align:right!important}
+.sb-root .mc-jersey-svg{width:22px!important;height:22px!important;flex-shrink:0!important;display:inline-block!important;overflow:visible!important}
+/* Odds row — fcbet216 .jgpuF exact */
+.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important;align-items:center!important}
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important}
+.sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:400!important}
+.sb-root .mc-odd-val{color:rgb(113,246,105)!important;font-size:14px!important;font-weight:700!important}
+/* Chevron button — matches reference style */
+.sb-root button.mc-chevron-btn{width:38px!important;height:40px!important;background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;box-shadow:none!important;flex-shrink:0!important}
 .sb-root .sb-league-section-hdr{background:#1e1e1e!important;border-width:0!important;border-radius:6px!important;margin:12px 0 6px!important;padding:10px 12px!important;display:flex!important;align-items:center!important}
 .sb-root .sb-league-block{margin-bottom:8px!important}
 /* Championship market tabs — must scroll horizontally, never wrap */

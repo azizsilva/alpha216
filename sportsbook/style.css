@@ -6,17 +6,18 @@
 
 :root {
   --sb-green:       #70f669;   /* primary-color from reference */
+  --sb-green-font:  rgba(0,0,0,0.87);
   --sb-green-dark:  #5bc355;
   --sb-red:         #e02424;
-  --sb-live-red:    #e02424; /* EN DIRECT badge — red = live */
+  --sb-live-red:    #e02424;
   /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
-  --sb-bg-root:     #0f0f0f;   /* page root — near black */
-  --sb-bg-card:     #313131;   /* match cards — rgb(49,49,49) from fcbet DevTools */
-  --sb-bg-boost:    #313131;   /* boosted odds card bg */
-  --sb-bg-alt:      #3a3a3a;   /* slightly elevated surfaces */
-  --sb-bg-mkt:      #272727;   /* market grid cells (championship) */
-  --sb-bg-odd-btn:  #3d3d3d;   /* odd buttons in cards */
-  --sb-bg-odd-hover:#484848;
+  --sb-bg-root:     #0f0f0f;
+  --sb-bg-card:     #313131;
+  --sb-bg-boost:    #313131;
+  --sb-bg-alt:      #3a3a3a;
+  --sb-bg-mkt:      #272727;
+  --sb-bg-odd-btn:  rgb(74,74,74);  /* fcbet216 exact: .jgpuF background */
+  --sb-bg-odd-hover:#5a5a5a;
   /* ── Borders — visible but not harsh, based on DevTools rgb(120,118,118) */
   --sb-border:      rgba(255,255,255,0.10);
   --sb-border-light:rgba(255,255,255,0.15);
@@ -36,9 +37,13 @@
 body {
   background: var(--sb-bg-root);
   color: var(--sb-text-1);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   overflow: hidden;
+}
+/* Global font override — Roboto matches alpina216.com */
+.sb-root, .sb-root * {
+  font-family: 'Roboto', sans-serif !important;
 }
 
 /* Scoped reset — prevents Bootstrap from touching sportsbook elements */
@@ -1308,22 +1313,27 @@ body {
 }
 
 .mc-odd-btn {
-  background: var(--sb-bg-odd-btn);
-  border: 1px solid rgba(255,255,255,0.22);
-  border-radius: 6px;
+  background: rgb(74, 74, 74);      /* fcbet216 .jgpuF exact */
+  border: 1px solid rgba(255,255,255,0);  /* transparent — no visible border */
+  border-radius: 4px;               /* fcbet216 .jgpuF exact */
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
+  transition: background 0.12s;
   outline: none;
+  box-shadow: none;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  position: relative;
+  touch-action: manipulation;
+  user-select: none;
 }
-.mc-odd-btn:hover:not(.no-odds) { background: #404040; border-color: rgba(255,255,255,0.35); }
+.mc-odd-btn:hover:not(.no-odds) { background: #5a5a5a; }
 .mc-odd-btn.sel {
   background: var(--sb-green);
   border-color: var(--sb-green);
@@ -3624,12 +3634,12 @@ body {
   gap: 0;
 }
 
-/* Odds row — fcbet216: label grey left, value green right, visible border */
+/* Odds row — fcbet216 .jgpuF exact CSS */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
-  background: rgb(49, 49, 49) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-  border-radius: 6px !important;
+  background: rgb(74, 74, 74) !important;
+  border: 1px solid rgba(255,255,255,0) !important;
+  border-radius: 4px !important;
   height: 40px !important;
   min-height: 40px !important;
   display: flex !important;
@@ -3639,9 +3649,14 @@ body {
   padding: 0 10px !important;
   width: auto !important;
   flex: 1 1 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  user-select: none !important;
 }
 .sb-root .mc-odd-btn .mc-odd-val {
-  color: #70f669 !important;
+  color: rgb(113, 246, 105) !important;  /* fcbet216 .jgpuF exact */
   font-size: 14px !important;
   font-weight: 700 !important;
 }
@@ -3763,51 +3778,62 @@ body {
   font-weight: 400 !important;
 }
 
-/* ══ FCBET216 MATCH CARD v5 — Complete Bootstrap 3 Isolation ══════════════
+/* ══ FCBET216 MATCH CARD v6 — Stacked layout, fcbet .jgpuF odds CSS
    These rules are the final authority. They win every specificity battle.    */
 
-/* Jersey SVG in h2h card */
+/* Jersey SVG — stacked layout */
 .sb-root .mc-jersey-svg {
   display: inline-block !important;
-  width: 26px !important;
-  height: 26px !important;
+  width: 22px !important;
+  height: 22px !important;
   flex-shrink: 0 !important;
   vertical-align: middle !important;
   overflow: visible !important;
 }
-
-/* Team name in h2h */
+/* Stacked teams container */
+.sb-root .mc-teams-stacked {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+.sb-root .mc-team-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 24px !important;
+}
+/* Team name */
 .sb-root .mc-t-name {
   min-width: 0 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
   color: #fff !important;
   flex: 1 !important;
 }
-
-/* H2H layout */
-.sb-root .mc-h2h {
+/* Score */
+.sb-root .mc-t-score {
+  flex-shrink: 0 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  min-width: 16px !important;
+  text-align: right !important;
+}
+/* Teams wrap */
+.sb-root .mc-teams-wrap {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  padding: 4px 12px 8px !important;
   width: 100% !important;
+  cursor: pointer !important;
 }
-.sb-root .mc-h2h-home,
-.sb-root .mc-h2h-away {
-  flex: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  min-width: 0 !important;
-}
-.sb-root .mc-h2h-away {
-  flex-direction: row-reverse !important;
-}
-.sb-root .mc-h2h-home .mc-t-name { text-align: left !important; }
-.sb-root .mc-h2h-away .mc-t-name { text-align: right !important; }
+/* H2H classes — kept so no JS errors, display none */
+.sb-root .mc-h2h { display: flex !important; align-items: center !important; gap: 6px !important; width: 100% !important; }
 .sb-root .mc-h2h-score {
   display: flex !important;
   align-items: center !important;
@@ -3956,19 +3982,20 @@ body {
 }
 
 /* Chevron button */
+/* Chevron button — matches fcbet216: same style as odds buttons */
 .sb-root button.mc-chevron-btn,
 .sb-root .mc-chevron-btn {
-  width: 40px !important;
-  min-width: 40px !important;
+  width: 38px !important;
+  min-width: 38px !important;
   height: 40px !important;
-  background: #2a2a2a !important;
-  border: 1px solid #3a3a3a !important;
-  border-radius: 6px !important;
+  background: rgb(74, 74, 74) !important;
+  border: 1px solid rgba(255,255,255,0) !important;
+  border-radius: 4px !important;
   box-shadow: none !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  color: #979797 !important;
+  color: rgba(255,255,255,0.65) !important;
   flex-shrink: 0 !important;
 }
 
