@@ -9,22 +9,7 @@ if ($mk_fragment) {
 }
 ?>
 </main>
-<!-- Mobile Bottom Navigation (Hidden on Desktop) -->
-<div class="mobile-bottom-nav">
-    <a href="/casino" class="mbn-item">
-        <span style="font-size: 24px;">🍒</span>
-        <span>Casino</span>
-    </a>
-    <a href="#" onclick="mkSafeLaunch('6260', 'Sports'); return false;" class="mbn-item">
-        <span style="font-size: 24px;">⚽</span>
-        <span>Paris sportifs</span>
-    </a>
 
-    <div class="mbn-item" onclick="document.getElementById('mobileLeftSidebar').classList.toggle('active')">
-        <span style="font-size: 24px;">🍔</span>
-        <span>Menu</span>
-    </div>
-</div>
  
 <footer class="premium-footer">
     <div class="container-fluid">
