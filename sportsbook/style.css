@@ -1617,7 +1617,7 @@ body {
 }
 .sb-mobile-topbar .sb-btn-stats {
   background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
+  border: none;
   color: var(--sb-text-2);
   width: 44px;
   min-width: 44px;
