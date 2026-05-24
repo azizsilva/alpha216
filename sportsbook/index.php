@@ -303,7 +303,7 @@ for($i=0;$i<7;$i++){
          Search bar + LES MEILLEURES LIGUES / MES LIGUES tabs
          Visible on mobile only (hidden on desktop via CSS)
          Appears inline in the main scroll — matches fcbet216 mobile layout -->
-    <div class="sb-mob-inline-leagues">
+    <div class="sb-mob-inline-leagues sb-mob-leagues-panel">
       <!-- Search bar -->
       <div class="sb-search-wrap">
         <div class="sb-search-box">

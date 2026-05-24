@@ -150,7 +150,7 @@ function mdStat(h, icon, a) {
 function showMatchViewer(m) {
   var viewer = document.getElementById('sb-match-viewer');
   if (!viewer) return;
-  var isLive = m && m.time_status === '1';
+  var isLive = m && isMatchLive(m);
   viewer.style.display = isLive ? 'block' : 'none';
 
   if (!isLive) return;
@@ -211,7 +211,9 @@ var S = {
   activeDateOffset: 0,  // 0 = today, 1 = tomorrow, etc.
   viewMode: 'main',     // 'main' | 'championship' — tracks which view is shown
   champMatches: [],     // matches shown in championship/league view
-  activeMarketCat: 'populaire' // active market category in championship view
+  activeMarketCat: 'populaire', // active market category in championship view
+  mobLeagueTab: 'best',         // 'best' | 'my' — mobile inline league tabs
+  homeLeagueFilter: null        // filter "En direct maintenant" after league pick
 };
 
 /* ── SVG Icons (extracted from reference site shadow DOM) ─ */
@@ -293,6 +295,12 @@ var PREMIUM_LEAGUES = [
 /* ── Utils ───────────────────────────────────────────────── */
 function h(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/** Live match — BetsAPI uses string or number time_status */
+function isMatchLive(m) {
+  if (!m) return false;
+  return String(m.time_status) === '1' || m.status === 'inplay';
 }
 function margin(v) { return Math.max(1.01, +(parseFloat(v) * (1 - MARGIN)).toFixed(2)); }
 function rand(a, b) { return (a + Math.random() * (b - a)).toFixed(2); }
@@ -649,7 +657,7 @@ function startPolling() {
       // For live matches in championship view, also trigger a direct BetsAPI refresh
       // so scores/odds update even between sync_daemon runs (max 5 live matches)
       var liveIds = S.champMatches
-        .filter(function(m) { return m.time_status === '1'; })
+        .filter(isMatchLive)
         .map(function(m) { return m.id; })
         .slice(0, 5);
       if (liveIds.length > 0) {
@@ -713,6 +721,7 @@ function startPolling() {
           // ── Status update (match going live) ──────────────────────
           if (m.time_status !== nm.time_status) {
             m.time_status = nm.time_status;
+            m._o = null;
             updated = true;
           }
         });
@@ -853,69 +862,17 @@ function renderSportNav() {
 }
 
 /* ── Match Rendering ─────────────────────────────────────── */
-function renderMatches(results) {
-  var el = document.getElementById('sb-matches-body');
-  if (!el) return;
-
-  if (!results || !results.length) {
-    el.innerHTML = '<div class="sb-loader">Aucun match disponible.</div>';
-    return;
-  }
-
-  // Always update the en-direct horizontal cards row (clears skeletons)
-  var boostSec = document.getElementById('sb-boost-section');
-  if (!S.activeLeagueId) {
-    var liveOnly = results.filter(function(m) { return m.time_status === '1'; });
-    var featured = liveOnly.length ? liveOnly : results;
-    renderEnDirectCards(featured.slice(0, 6));
-    if (S.activeAction === 'inplay') {
-      if (boostSec) boostSec.style.display = 'none';
-    } else {
-      if (boostSec) boostSec.style.display = '';
-      renderBoosted(results.slice(0, 4));
-    }
-  }
-
-  // Group by league
+function renderMatchGroups(matches, out) {
   var groups = {}, order = [];
-  results.forEach(function(m) {
+  matches.forEach(function(m) {
     var k = (m.league && m.league.name) ? m.league.name : 'Autre championnat';
     if (!groups[k]) { groups[k] = []; order.push(k); }
     groups[k].push(m);
   });
-
-  var out = '';
-
-  // Section title — "En direct maintenant" for live, "Prochainement" for upcoming
-  var sectionLabel = (S.activeAction === 'inplay') ? 'En direct maintenant' : 'Prochainement';
-  out += '<div class="sb-section-title">';
-  out += '<span>' + sectionLabel + '</span>';
-  out += '<div class="sb-section-icon">' + ICON.football + '</div>';
-  out += '</div>';
-
-  // Sport tabs for Prochainement
-  out += '<div class="sb-upcoming-tabs">';
-  SPORTS.slice(0, 8).forEach(function(sp, i) {
-    var isActive = (sp.id === S.activeUpcomingTab);
-    out += '<button class="sb-upcoming-tab' + (isActive ? ' active' : '') + '" onclick="window.sbSetUpcomingTab(' + sp.id + ',this)">';
-    out += '<div class="sb-tab-icon">' + sp.icon + '</div>';
-    out += h(sp.name);
-    out += '</button>';
-  });
-  out += '</div>';
-
-  // Market selectors
-  out += '<div class="sb-market-row">';
-  out += '<select class="sb-market-sel"><option>1x2</option><option>Handicap</option><option>Double Chance</option></select>';
-  out += '<select class="sb-market-sel"><option>Total</option><option>Corners</option><option>Cartons</option></select>';
-  out += '</div>';
-
-  // Match groups
   order.forEach(function(lg) {
     var country = guessCountry(lg);
     var flag = getFlag(country);
     var countryLabel = (country && country !== 'International') ? (' · ' + h(country)) : '';
-    // Section header: ☆ [flag] League · Country   [BB] —  (matching reference exactly)
     out += '<div class="sb-league-section-hdr">';
     out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
     out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
@@ -925,13 +882,100 @@ function renderMatches(results) {
     out += '</div>';
     groups[lg].forEach(function(m) { out += matchCard(m); });
   });
+  return out;
+}
+
+function renderSportFilterRow() {
+  var out = '<div class="sb-upcoming-tabs">';
+  SPORTS.slice(0, 8).forEach(function(sp) {
+    var isActive = (sp.id === S.activeUpcomingTab);
+    out += '<button class="sb-upcoming-tab' + (isActive ? ' active' : '') + '" onclick="window.sbSetUpcomingTab(' + sp.id + ',this)">';
+    out += '<div class="sb-tab-icon">' + sp.icon + '</div>';
+    out += h(sp.name);
+    out += '</button>';
+  });
+  out += '</div>';
+  out += '<div class="sb-market-row">';
+  out += '<select class="sb-market-sel" onchange="event.stopPropagation()"><option>1x2</option><option>Handicap</option><option>Double chance</option></select>';
+  out += '<select class="sb-market-sel" onchange="event.stopPropagation()"><option>Total</option><option>Corners</option><option>Cartons</option></select>';
+  out += '</div>';
+  return out;
+}
+
+function renderMatches(results) {
+  var el = document.getElementById('sb-matches-body');
+  if (!el) return;
+
+  results = results || [];
+
+  // Home league filter (after returning from a league or picking from list)
+  if (S.homeLeagueFilter && S.viewMode === 'main' && !S.activeLeagueId) {
+    results = results.filter(function(m) {
+      return m.league && isLeagueMatch(S.homeLeagueFilter, m.league.name);
+    });
+  }
+
+  var liveList = results.filter(isMatchLive);
+  var upcomingList = results.filter(function(m) { return !isMatchLive(m); });
+  var isTodayInplay = (S.activeAction === 'inplay' && S.activeDateOffset === 0);
+  var liveOnlyTab = (S.activeTab === 'live');
+
+  // Carousel + boosted (homepage only)
+  var boostSec = document.getElementById('sb-boost-section');
+  if (!S.activeLeagueId && S.viewMode === 'main') {
+    var carouselSrc = liveList.length ? liveList : results;
+    renderEnDirectCards(carouselSrc.slice(0, 6));
+    if (isTodayInplay && !liveOnlyTab) {
+      if (boostSec) boostSec.style.display = 'none';
+    } else if (!isTodayInplay) {
+      if (boostSec) boostSec.style.display = '';
+      renderBoosted(results.slice(0, 4));
+    } else {
+      if (boostSec) boostSec.style.display = 'none';
+    }
+  }
+
+  var out = '';
+
+  // ── EN DIRECT MAINTENANT (live cards with jerseys, scores, green odds) ──
+  if (isTodayInplay && (liveList.length || liveOnlyTab)) {
+    var showLive = liveOnlyTab ? liveList : liveList;
+    out += '<div id="sb-live-now-block" class="sb-live-now-block">';
+    out += '<div class="sb-section-title"><span>En direct maintenant</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
+    out += renderSportFilterRow();
+    if (!showLive.length) {
+      out += '<div class="sb-loader">Aucun match en direct pour le moment.</div>';
+    } else {
+      out = renderMatchGroups(showLive, out);
+    }
+    out += '</div>';
+  }
+
+  // ── PROCHAINEMENT (upcoming — date/time header style) ──
+  var showUpcoming = upcomingList;
+  if (!isTodayInplay) showUpcoming = results;
+  else if (liveOnlyTab) showUpcoming = [];
+
+  if (showUpcoming.length) {
+    out += '<div class="sb-upcoming-block">';
+    out += '<div class="sb-section-title"><span>Prochainement</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
+    if (!isTodayInplay || !liveList.length) out += renderSportFilterRow();
+    out = renderMatchGroups(showUpcoming, out);
+    out += '</div>';
+  }
+
+  if (!out) {
+    el.innerHTML = '<div class="sb-loader">Aucun match disponible.</div>';
+    return;
+  }
 
   el.innerHTML = out;
+  highlightHomeLeagueFilter();
 }
 
 function matchCard(m) {
   var o = odds(m);
-  var isLive = m.time_status === '1';
+  var isLive = isMatchLive(m);
   var hn = h(m.home ? m.home.name : '');
   var an = h(m.away ? m.away.name : '');
   var mid = h(m.id);
@@ -977,7 +1021,7 @@ function matchCard(m) {
   var ouUnder = (o.un && parseFloat(o.un) >= 1.01) ? o.un : null;
 
   var mname = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
-  var out = '<div class="mc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
+  var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
   /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
   if (isLive) {
@@ -993,9 +1037,12 @@ function matchCard(m) {
     out += '</div>';
     out += '</div>';
 
-    out += '<div class="mc-league-row">';
+    out += '<div class="mc-league-row mc-league-row--split">';
+    out += '<div class="mc-league-info">';
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
+    out += '</div>';
+    out += '<div class="mc-league-actions"><button class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>';
     out += '</div>';
   } else {
     // UPCOMING Match Card Header
@@ -1255,7 +1302,7 @@ function renderEnDirectCards(matches) {
     var lgName  = h(m.league ? m.league.name : '');
     var country = guessCountry(m.league ? m.league.name : '');
     var flagUrl = getFlag(country);
-    var isLive  = m.time_status === '1';
+    var isLive  = isMatchLive(m);
 
     var scores = m.ss ? m.ss.split('-') : ['',''];
     var timerMin = '';
@@ -1744,11 +1791,13 @@ window.sbSelectLeague = function(lg, sid) {
 };
 
 window.sbOpenLeague = function(id, name, flag, sid) {
+  S.homeLeagueFilter = name;
   S.activeLeagueId   = id;
   S.activeLeagueName = name;
   S.activeLeagueFlag = flag;
   S.activeSportId    = sid || 1;
   S.viewMode         = 'championship';
+  S.mobLeagueTab     = 'best';
 
   // Hide homepage-only sections when entering championship view
   var enDirect = document.getElementById('sb-en-direct-cards');
@@ -1941,12 +1990,14 @@ window.sbChampDateFilter = function(btn, offset) {
 };
 
 window.sbBackToMain = function() {
+  var prevLeague = S.activeLeagueName;
   S.activeLeagueId   = null;
   S.activeLeagueName = null;
   S.activeLeagueFlag = null;
   S.activeMatchId    = null;
   S.viewMode         = 'main';
   S.champMatches     = [];
+  if (prevLeague) S.homeLeagueFilter = prevLeague;
   clearInterval(window._mdTimerInterval);
   var viewer = document.getElementById('sb-match-viewer');
   if (viewer) viewer.style.display = 'none';
@@ -1961,16 +2012,24 @@ window.sbBackToMain = function() {
 };
 
 /* Mobile league tab switcher — syncs BOTH sidebar + inline league sections */
+function highlightHomeLeagueFilter() {
+  if (!S.homeLeagueFilter) return;
+  document.querySelectorAll('.sb-tl-item').forEach(function(el) {
+    var nameEl = el.querySelector('.sb-league-name');
+    if (!nameEl) return;
+    var match = isLeagueMatch(S.homeLeagueFilter, nameEl.textContent.trim());
+    el.classList.toggle('sb-tl-selected', match);
+  });
+}
+
 window.sbMobLeagueTab = function(el, tab) {
-  // Sync all tab buttons (sidebar + inline) by data-tab attribute
+  S.mobLeagueTab = tab;
   document.querySelectorAll('.sb-mob-tab[data-tab]').forEach(function(t) {
     t.classList.toggle('active', t.getAttribute('data-tab') === tab);
   });
 
-  // Toggle sidebar league sections
   var sidebarBest = document.getElementById('sb-mob-best-leagues');
   var sidebarMy   = document.getElementById('sb-mob-my-leagues');
-  // Toggle inline league sections
   var inlineBest  = document.getElementById('sb-inline-best-leagues');
   var inlineMy    = document.getElementById('sb-inline-my-leagues');
 
@@ -1980,6 +2039,13 @@ window.sbMobLeagueTab = function(el, tab) {
   [sidebarMy, inlineMy].forEach(function(e) {
     if (e) e.style.display = (tab === 'my') ? '' : 'none';
   });
+
+  // Returning to "LES MEILLEURES LIGUES" — show matches filtered by last league if any
+  if (tab === 'best' && S.homeLeagueFilter && S.viewMode === 'main') {
+    renderMatches(S.matches);
+    var liveBlock = document.getElementById('sb-live-now-block');
+    if (liveBlock) liveBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };
 
 window.sbToggleFavs = function() {
@@ -2088,9 +2154,9 @@ window.sbTimeFilter = function(btn, range) {
 
   var filtered = S.matches.filter(function(m) {
     var ts = parseInt(m.time || m.start_time || 0) || 0;
-    if (!ts) return m.time_status === '1'; // always include live
+    if (!ts) return isMatchLive(m);
     var inRange = (!minTs || ts >= minTs) && (!maxTs || ts <= maxTs);
-    return inRange || m.time_status === '1'; // always include live
+    return inRange || isMatchLive(m);
   });
   renderMatches(filtered);
 };
@@ -2114,9 +2180,16 @@ window.sbFilterByDate = function(btn, dayOffset) {
 // Switch to live view (En direct button)
 window.sbSwitchLive = function(btn) {
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   S.activeTab = 'live';
   S.activeSportId = 1; S.activeAction = 'inplay'; S.activeLeagueId = null; S.activeDateOffset = 0;
+  S.viewMode = 'main';
+  var topbar = document.querySelector('.sb-mobile-topbar');
+  if (topbar) {
+    topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
+    var lb = topbar.querySelector('.sb-btn-live');
+    if (lb) lb.classList.add('active');
+  }
   loadAndFilter('inplay', 1, null);
 };
 
@@ -2125,16 +2198,15 @@ window.sbSwitchTab = function(btn, action, sportId) {
   if (topbar) {
     var homeBtn = topbar.querySelector('.sb-btn-home');
     var liveBtn = topbar.querySelector('.sb-btn-live');
+    topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
     if (action === 'live') {
       if (liveBtn) liveBtn.classList.add('active');
-      if (homeBtn) homeBtn.classList.add('inactive');
-    } else if (action === 'home') {
-      if (liveBtn) liveBtn.classList.remove('active');
-      if (homeBtn) homeBtn.classList.remove('inactive');
+    } else {
+      if (homeBtn) homeBtn.classList.add('active');
     }
   }
 
-  S.activeTab = action;
+  S.activeTab = (action === 'live') ? 'live' : 'home';
   S.activeSportId = sportId || 1;
   // If 'home' or 'live', we actually want 'inplay' internally, UNLESS 'upcoming' is clicked
   S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
@@ -2205,7 +2277,7 @@ function renderMatchDetail(m, markets) {
   var el = document.getElementById('sb-matches-body');
   if (!el || !m) return;
 
-  var isLive  = m.time_status === '1';
+  var isLive  = isMatchLive(m);
   var hn      = h(m.home ? m.home.name : '');
   var an      = h(m.away ? m.away.name : '');
   var scores  = m.ss ? m.ss.split('-') : ['',''];
@@ -2520,7 +2592,7 @@ function loadAndFilter(action, sid, lid) {
 
       // Filter out invalid and ended matches
       res = res.filter(function(m) {
-        if (S.activeTab === 'live' && m.time_status !== '1') return false; // En direct tab must only show Live
+        if (S.activeTab === 'live' && !isMatchLive(m)) return false;
         return m && m.id
           && m.home && m.home.name && m.home.name !== ''
           && m.away && m.away.name && m.away.name !== ''
@@ -2547,6 +2619,7 @@ function loadAndFilter(action, sid, lid) {
         });
       }
 
+      res.forEach(function(m) { m._o = null; });
       S.matches = res;
       renderMatches(S.matches);
       markLiveSidebarLeagues(res);
@@ -2559,7 +2632,7 @@ function markLiveSidebarLeagues(matches) {
   // Build set of live league names from current results
   var liveApiLeagues = [];
   matches.forEach(function(m) {
-    if (m.time_status === '1' && m.league && m.league.name) {
+    if (isMatchLive(m) && m.league && m.league.name) {
       liveApiLeagues.push(m.league.name);
     }
   });

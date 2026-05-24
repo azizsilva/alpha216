@@ -1192,6 +1192,12 @@ body {
   font-size: 14px;
   flex-shrink: 0;
 }
+/* Live list: white scores like fcbet216 reference */
+.mc-live-on .mc-t-score {
+  color: var(--sb-text-1);
+  font-weight: 800;
+  font-size: 15px;
+}
 
 /* Odds container — full width row at the bottom */
 .mc-odds-bot {
@@ -1935,8 +1941,8 @@ body {
     min-width: 0 !important;
   }
   .sb-mobile-sidebar-content { display: flex !important; }
-  /* Leagues live in the menu drawer — not in center scroll (fcbet216 prelive) */
-  .sb-mob-inline-leagues { display: none !important; }
+  /* Leagues panel visible on mobile (fcbet216: LES MEILLEURES / MES LIGUES) */
+  .sb-mob-inline-leagues { display: flex !important; }
   /* Match cards full width on mobile */
   .mc { width: 100%; margin-bottom: 6px; }
   .mc-odds-bot { gap: 4px; }
@@ -3121,8 +3127,34 @@ body {
   display: none; /* hidden on desktop — shown on mobile via media query */
   flex-direction: column;
   background: var(--sb-bg-root);
+  margin-bottom: 10px;
+}
+.sb-mob-leagues-panel {
+  background: var(--sb-bg-card);
+  border: 1px solid var(--sb-border);
+  border-radius: var(--sb-radius-card);
+  overflow: hidden;
+  margin: 0 2px 12px;
+}
+.sb-mob-leagues-panel .sb-search-wrap {
   border-bottom: 1px solid var(--sb-border);
-  margin-bottom: 8px;
+}
+.sb-mob-leagues-panel .sb-league-group-hdr {
+  background: var(--sb-bg-root);
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--sb-border);
+}
+.sb-tl-item.sb-tl-selected {
+  background: #2a2a2a;
+  box-shadow: inset 3px 0 0 var(--sb-green);
+}
+.sb-live-now-block {
+  margin-top: 4px;
+}
+.sb-upcoming-block {
+  margin-top: 8px;
 }
 .sb-mob-inline-leagues .sb-search-wrap {
   padding: 10px 12px 8px;
