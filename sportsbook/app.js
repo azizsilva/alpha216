@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.17';
+  var newHref = base + 'sportsbook/style.css?v=20260524.18';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1208,13 +1208,12 @@ function renderMatches(results) {
   var liveOnlyTab = (S.activeTab === 'live');
 
   // Carousel + boosted — always shown on main homepage (matches fcbet behaviour)
-  var boostSec = document.getElementById('sb-boost-section');
   if (!S.activeLeagueId && S.viewMode === 'main') {
     var carouselSrc = liveList.length ? liveList : results;
     renderEnDirectCards(carouselSrc.slice(0, 6));
-    // Always show the Cotes Boostées section on the main page
-    if (boostSec) boostSec.style.display = '';
     renderBoosted(results.slice(0, 4));
+    // Ensure homepage panels are visible (may have been hidden from a previous sub-view)
+    sbSetHomepanelVisible(true);
   }
 
   var out = '';
@@ -2121,10 +2120,6 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
 
   // Hide homepage-only sections when entering championship view
   sbSetHomepanelVisible(false);
-  var enDirect = document.getElementById('sb-en-direct-cards');
-  var boostedSec = document.getElementById('sb-boost-section');
-  if (enDirect)   enDirect.style.display   = 'none';
-  if (boostedSec) boostedSec.style.display  = 'none';
 
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildSkeleton(4);
@@ -2329,12 +2324,8 @@ window.sbBackToMain = function() {
   // Clear URL back to base path
   sbPushUrl('main');
 
-  // Restore homepage panels
+  // Restore all homepage panels
   sbSetHomepanelVisible(true);
-  var enDirect = document.getElementById('sb-en-direct-cards');
-  var boostedSec = document.getElementById('sb-boost-section');
-  if (enDirect)   enDirect.style.display   = '';
-  if (boostedSec) boostedSec.style.display  = '';
 
   loadAndFilter(S.activeAction, S.activeSportId, null);
 };
@@ -2548,9 +2539,6 @@ window.sbSwitchTab = function(btn, action, sportId) {
   clearInterval(window._mdTimerInterval);
   var _v = document.getElementById('sb-match-viewer');
   if (_v) _v.style.display = 'none';
-  var _e = document.getElementById('sb-en-direct-cards');
-  var _b = document.getElementById('sb-boost-section');
-  if (_e) _e.style.display = ''; if (_b) _b.style.display = '';
   sbSetHomepanelVisible(true);
   sbPushUrl('main');
 
@@ -3221,13 +3209,24 @@ function markLiveSidebarLeagues(matches) {
    the left leagues panel completely so the full viewport is used.
 ─────────────────────────────────────────────────────────────── */
 function sbSetHomepanelVisible(show) {
-  var panels = document.querySelectorAll('.sb-mob-inline-leagues, .sb-mob-leagues-panel');
-  panels.forEach(function(el) {
-    el.style.display = show ? '' : 'none';
+  // Must use setProperty with 'important' priority to override
+  // the media-query rule that sets display:flex !important
+  var selectors = [
+    '.sb-mob-inline-leagues',
+    '.sb-mob-leagues-panel',
+    '.sb-sport-nav',
+    '#sb-en-direct-cards',   // carousel
+    '#sb-boost-section'      // cotes boostées
+  ];
+  selectors.forEach(function(sel) {
+    var el = document.querySelector(sel);
+    if (!el) return;
+    if (show) {
+      el.style.removeProperty('display');
+    } else {
+      el.style.setProperty('display', 'none', 'important');
+    }
   });
-  // Also hide/show the sport nav bar + live-now section
-  var sportNav = document.querySelector('.sb-sport-nav');
-  if (sportNav) sportNav.style.display = show ? '' : 'none';
 }
 
 /* ── URL-based routing ────────────────────────────────────────
@@ -3294,10 +3293,6 @@ window.addEventListener('popstate', function(e) {
     var viewer = document.getElementById('sb-match-viewer');
     if (viewer) viewer.style.display = 'none';
     sbSetHomepanelVisible(true);
-    var enDirect  = document.getElementById('sb-en-direct-cards');
-    var boostedSec = document.getElementById('sb-boost-section');
-    if (enDirect)  enDirect.style.display  = '';
-    if (boostedSec) boostedSec.style.display = '';
     loadAndFilter(S.activeAction || 'inplay', S.activeSportId || 1, null);
   }
 });
