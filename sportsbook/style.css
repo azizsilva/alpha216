@@ -1698,15 +1698,43 @@ body {
   .sb-mob-footer { display: flex; }
   .sb-mobile-topbar { display: flex; }
   .sb-mobile-sidebar-content { display: flex; }
+
+  /* ── Single-scroll mobile layout ── */
+  body { overflow-y: auto; overflow-x: hidden; }
+  .sb-root { height: auto; min-height: 100vh; overflow: visible; }
+  .sb-center { width: 100%; height: auto; overflow: visible; }
+  .sb-center-header { overflow: visible; position: sticky; top: 48px; z-index: 100; background: var(--sb-bg-root); }
+  .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; }
+
+  /* Mobile top bar sticky */
+  .sb-mobile-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--sb-bg-root);
+  }
+
+  /* Off-canvas sidebars */
   .sb-left, .sb-right { position: fixed; top: 0; bottom: 0; z-index: 2000; }
   .sb-left { left: 0; transform: translateX(-100%); width: 280px; }
   .sb-left.open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,0.9); }
   .sb-right { right: 0; transform: translateX(100%); width: 320px; }
   .sb-right.open { transform: translateX(0); box-shadow: -10px 0 40px rgba(0,0,0,0.9); }
-  .sb-root { height: 100vh; }
-  .sb-center { width: 100%; }
+
   /* Championship grid — 3 cols on tablet */
   .sb-champ-cat-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Mobile sidebar content — full width block, no max-height constraint */
+  .sb-mobile-sidebar-content {
+    flex-direction: column;
+    width: 100%;
+    background: var(--sb-bg-root);
+  }
+  /* League list full height — scrolls with page, no cap */
+  .sb-mob-best-leagues .sb-tl-list {
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 
 @media (max-width: 768px) {

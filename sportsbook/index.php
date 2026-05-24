@@ -192,43 +192,6 @@ for($i=0;$i<7;$i++){
     </div>
   </div>
 
-  <!-- Mobile-only: Sidebar content (search, leagues, sport tabs) shown inline -->
-  <div class="sb-mobile-sidebar-content">
-    <div class="sb-search-wrap">
-      <div class="sb-search-box">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
-      </div>
-    </div>
-
-    <!-- LES MEILLEURES LIGUES / MES LIGUES tabs -->
-    <div class="sb-mob-league-tabs">
-      <div class="sb-league-group-hdr">
-        <span class="hdr-title sb-mob-tab active" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</span>
-        <span class="sb-mob-tab" onclick="window.sbMobLeagueTab(this,'my')"><strong>MES LIGUES</strong> <span class="sb-badge-green">0</span></span>
-        <span class="sb-mob-collapse" onclick="this.closest('.sb-mob-league-tabs').classList.toggle('collapsed')">—</span>
-      </div>
-      <!-- Best leagues list -->
-      <div class="sb-mob-best-leagues" id="sb-mob-best-leagues">
-        <div class="sb-tl-list">
-          <?php foreach($top_leagues as $l): ?>
-          <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
-            <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
-            <span class="sb-league-name"><?=$l['name']?></span>
-          </div>
-          <?php endforeach; ?>
-        </div>
-      </div>
-      <!-- My leagues (empty state) -->
-      <div class="sb-mob-my-leagues" id="sb-mob-my-leagues" style="display:none">
-        <div class="sb-mob-empty-state">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="4" width="32" height="40" rx="4" stroke="var(--sb-text-3)" stroke-width="1.5"/><path d="M16 16h16M16 24h16M16 32h8" stroke="var(--sb-text-3)" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <p>Aucune ligue ajoutée</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="sb-center-scroll">
     <!-- EN DIRECT live match cards (horizontal scroll, above Cotes boostées) -->
     <div class="sb-en-direct-row" id="sb-en-direct-cards">
@@ -239,6 +202,40 @@ for($i=0;$i<7;$i++){
     </div>
 
 
+
+    <!-- Mobile-only: Search + Leagues inline (inside scroll so they scroll with matches) -->
+    <div class="sb-mobile-sidebar-content">
+      <div class="sb-search-wrap">
+        <div class="sb-search-box">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
+        </div>
+      </div>
+      <!-- LES MEILLEURES LIGUES / MES LIGUES tabs -->
+      <div class="sb-mob-league-tabs">
+        <div class="sb-league-group-hdr">
+          <span class="hdr-title sb-mob-tab active" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</span>
+          <span class="sb-mob-tab" onclick="window.sbMobLeagueTab(this,'my')"><strong>MES LIGUES</strong> <span class="sb-badge-green">0</span></span>
+          <span class="sb-mob-collapse" onclick="this.closest('.sb-mob-league-tabs').classList.toggle('collapsed')">—</span>
+        </div>
+        <div class="sb-mob-best-leagues" id="sb-mob-best-leagues">
+          <div class="sb-tl-list">
+            <?php foreach($top_leagues as $l): ?>
+            <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
+              <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
+              <span class="sb-league-name"><?=$l['name']?></span>
+            </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+        <div class="sb-mob-my-leagues" id="sb-mob-my-leagues" style="display:none">
+          <div class="sb-mob-empty-state">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="4" width="32" height="40" rx="4" stroke="var(--sb-text-3)" stroke-width="1.5"/><path d="M16 16h16M16 24h16M16 32h8" stroke="var(--sb-text-3)" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <p>Aucune ligue ajoutée</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Match listings — richer skeleton until JS renders -->
     <div id="sb-matches-body">
