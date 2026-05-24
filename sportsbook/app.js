@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.30';
+  var newHref = base + 'sportsbook/style.css?v=20260524.31';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -3145,16 +3145,19 @@ window.sbBBToggle = function(id, name, odds, market) {
 };
 
 function sbBBRefresh() {
-  var legs    = document.getElementById('md-bb-legs');
+  var sels    = window._bbSelections || [];
   var sticky  = document.getElementById('md-bb-sticky');
+  var legs    = document.getElementById('md-bb-legs');
   var combVal = document.getElementById('md-bb-combined-val');
-  if (!legs) return;
 
-  var sels = window._bbSelections || [];
+  // If no sticky panel rendered yet (e.g. match not opened), ignore
+  if (!sticky) return;
 
   if (!sels.length) {
-    legs.innerHTML = '';
-    if (sticky) sticky.style.display = 'none';
+    if (legs) legs.innerHTML = '';
+    sticky.style.display = 'none';
+    var mktBody = document.getElementById('md-markets-body');
+    if (mktBody) mktBody.style.paddingBottom = '';
     return;
   }
 
@@ -3170,16 +3173,16 @@ function sbBBRefresh() {
       + '<button type="button" class="md-bb-leg-del" onclick="window.sbBBToggle(\'' + s.id + '\',\'' + s.name.replace(/'/g,"\\'") + '\',' + s.odds + ',\'' + (s.market||'').replace(/'/g,"\\'") + '\')">&times;</button>'
       + '</div>';
   });
-  legs.innerHTML = out;
+  if (legs) legs.innerHTML = out;
   if (combVal) combVal.textContent = combined.toFixed(2);
 
-  // Update stake/gagner
   window.sbBBRefreshStake();
 
-  // Show sticky footer
-  if (sticky) sticky.style.display = '';
+  // Show the sticky BB footer panel
+  sticky.style.removeProperty('display');
+  sticky.style.display = 'block';
   var mktBody = document.getElementById('md-markets-body');
-  if (mktBody) mktBody.style.paddingBottom = '160px';
+  if (mktBody) mktBody.style.paddingBottom = '170px';
 }
 
 window.sbBBRefreshStake = function() {
