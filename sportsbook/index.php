@@ -119,6 +119,21 @@ for($i=0;$i<7;$i++){
   .sb-root .sb-champ-cat-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;}
   .sb-root .sb-ccg-btn{height:36px!important;min-height:36px!important;padding:0 8px!important;font-size:11px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;line-height:1.2!important;}
 }
+/* Sport nav tiles — Bootstrap 3 overrides button bg; force transparent */
+.sb-root .sb-sport-item{background:transparent!important;border:none!important;box-shadow:none!important;display:flex!important;flex-direction:column!important;align-items:center!important;}
+.sb-root .sb-sport-item.active{background:#70f669!important;color:rgba(0,0,0,.87)!important;}
+.sb-root .sb-sport-item .sb-sport-icon,.sb-root .sb-sport-item .sb-sport-icon svg{display:flex!important;width:20px!important;height:20px!important;overflow:visible!important;}
+.sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1)!important;opacity:.55!important;}
+.sb-root .sb-sport-item.active .sb-sport-icon svg{filter:brightness(0)!important;opacity:1!important;}
+/* Sport filter pills — Bootstrap 3 collapses SVG icons */
+.sb-root .sb-upcoming-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:4px!important;padding-bottom:8px!important;}
+.sb-root .sb-upcoming-tab{display:inline-flex!important;align-items:center!important;gap:6px!important;height:30px!important;white-space:nowrap!important;flex-shrink:0!important;background:#252525!important;border:1px solid #2a2a2a!important;border-radius:20px!important;padding:0 12px!important;font-size:12px!important;color:#fff!important;box-shadow:none!important;}
+.sb-root .sb-upcoming-tab.active{background:#70f669!important;border-color:#70f669!important;color:rgba(0,0,0,.87)!important;}
+.sb-root .sb-upcoming-tab .sb-tab-icon{display:inline-flex!important;align-items:center!important;width:16px!important;height:16px!important;flex-shrink:0!important;overflow:visible!important;}
+.sb-root .sb-upcoming-tab .sb-tab-icon svg{display:block!important;width:16px!important;height:16px!important;filter:brightness(0) invert(1)!important;opacity:.8!important;overflow:visible!important;}
+.sb-root .sb-upcoming-tab.active .sb-tab-icon svg{filter:brightness(0)!important;opacity:1!important;}
+/* Championship top tabs — horizontal scroll */
+.sb-root .sb-champ-top-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:0!important;scrollbar-width:none!important;}
 </style>
 
 <div class="sb-root">

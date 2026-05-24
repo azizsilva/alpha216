@@ -901,20 +901,27 @@ function renderMatchGroups(matches, out) {
   return out;
 }
 
-function renderSportFilterRow() {
+// showMarkets=false for live section (pills only), true for upcoming (pills + market selectors)
+function renderSportFilterRow(showMarkets) {
+  var liveSports = SPORTS.filter(function(sp) { return sp.live !== false; }).slice(0, 8);
   var out = '<div class="sb-upcoming-tabs">';
-  SPORTS.slice(0, 8).forEach(function(sp) {
-    var isActive = (sp.id === S.activeUpcomingTab);
-    out += '<button class="sb-upcoming-tab' + (isActive ? ' active' : '') + '" onclick="window.sbSetUpcomingTab(' + sp.id + ',this)">';
+  liveSports.forEach(function(sp) {
+    var isActive = showMarkets ? (sp.id === S.activeUpcomingTab) : (sp.id === S.activeSportId);
+    var onClick = showMarkets
+      ? 'window.sbSetUpcomingTab(' + sp.id + ',this)'
+      : 'window.sbSwitchTab(null,\'inplay\',' + sp.id + ')';
+    out += '<button type="button" class="sb-upcoming-tab' + (isActive ? ' active' : '') + '" onclick="' + onClick + '">';
     out += '<div class="sb-tab-icon">' + sp.icon + '</div>';
-    out += h(sp.name);
+    out += '<span class="sb-tab-name">' + h(sp.name) + '</span>';
     out += '</button>';
   });
   out += '</div>';
-  out += '<div class="sb-market-row">';
-  out += '<select class="sb-market-sel" onchange="event.stopPropagation()"><option>1x2</option><option>Handicap</option><option>Double chance</option></select>';
-  out += '<select class="sb-market-sel" onchange="event.stopPropagation()"><option>Total</option><option>Corners</option><option>Cartons</option></select>';
-  out += '</div>';
+  if (showMarkets) {
+    out += '<div class="sb-market-row">';
+    out += '<select class="sb-market-sel" autocomplete="off" onchange="event.stopPropagation()"><option>1x2</option><option>Handicap</option><option>Double chance</option></select>';
+    out += '<select class="sb-market-sel" autocomplete="off" onchange="event.stopPropagation()"><option>Total</option><option>Corners</option><option>Cartons</option></select>';
+    out += '</div>';
+  }
   return out;
 }
 
@@ -958,7 +965,7 @@ function renderMatches(results) {
     var showLive = liveOnlyTab ? liveList : liveList;
     out += '<div id="sb-live-now-block" class="sb-live-now-block">';
     out += '<div class="sb-section-title"><span>En direct maintenant</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
-    out += renderSportFilterRow();
+    out += renderSportFilterRow(false); // live: sport pills only, no market selects
     if (!showLive.length) {
       out += '<div class="sb-loader">Aucun match en direct pour le moment.</div>';
     } else {
@@ -975,7 +982,7 @@ function renderMatches(results) {
   if (showUpcoming.length) {
     out += '<div class="sb-upcoming-block">';
     out += '<div class="sb-section-title"><span>Prochainement</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
-    if (!isTodayInplay || !liveList.length) out += renderSportFilterRow();
+    if (!isTodayInplay || !liveList.length) out += renderSportFilterRow(true); // upcoming: pills + market selects
     out = renderMatchGroups(showUpcoming, out);
     out += '</div>';
   }
@@ -1887,9 +1894,10 @@ function renderChampionship(id, name, flag, matches) {
   out += '<button class="sb-bc-pill sb-bc-active">' + h(displayName) + '</button>';
   out += '</div>';
 
-  // ── Top tabs: Cotes de match | Cotes boostées ─────────────────────
+  // ── Top tabs: Cotes de match | Victoire finale | Cotes boostées ─────────────
   out += '<div class="sb-champ-top-tabs">';
   out += '<span class="sb-ctt active">Cotes de match</span>';
+  out += '<span class="sb-ctt">Victoire finale</span>';
   out += '<span class="sb-ctt">Cotes boostées</span>';
   out += '</div>';
 
