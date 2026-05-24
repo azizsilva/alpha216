@@ -238,16 +238,7 @@ for($i=0;$i<7;$i++){
       <div class="sb-sk-boost-card"></div>
     </div>
 
-    <!-- Cotes boostées (promotional) -->
-    <div class="sb-boost-header">
-      <i class="fa fa-bolt"></i> Cotes boostées
-    </div>
 
-    <div class="sb-boost-row" id="sb-boosted-odds">
-      <!-- Skeleton boosted cards -->
-      <div class="sb-sk-boost-card"></div>
-      <div class="sb-sk-boost-card"></div>
-    </div>
 
     <!-- Match listings — richer skeleton until JS renders -->
     <div id="sb-matches-body">
@@ -358,11 +349,6 @@ for($i=0;$i<7;$i++){
 
 </div>
 
-<!-- Mobile Bar — 3 items matching fcbet216 mobile footer -->
-<div class="sb-mob-footer">
-  <button class="sb-mob-btn" onclick="window.location.href='<?=$base?>'"><span class="sb-mob-icon">🍒</span><span class="sb-mob-lbl">Casino</span></button>
-  <button class="sb-mob-btn active" onclick="window.location.href='<?=$base?>sportsbook/'"><span class="sb-mob-icon">⚽</span><span class="sb-mob-lbl">Paris sportifs</span></button>
-  <button class="sb-mob-btn" onclick="window.sbToggleLeft()"><span class="sb-mob-icon">☰</span><span class="sb-mob-lbl">Menu</span></button>
-</div>
+
 
 <script src="<?=$base?>sportsbook/app.js?v=<?=time()?>"></script>

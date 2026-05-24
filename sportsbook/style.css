@@ -1703,7 +1703,7 @@ body {
   .sb-left.open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,0.9); }
   .sb-right { right: 0; transform: translateX(100%); width: 320px; }
   .sb-right.open { transform: translateX(0); box-shadow: -10px 0 40px rgba(0,0,0,0.9); }
-  .sb-root { height: calc(100vh - 56px); }
+  .sb-root { height: 100vh; }
   .sb-center { width: 100%; }
   /* Championship grid — 3 cols on tablet */
   .sb-champ-cat-grid { grid-template-columns: repeat(3, 1fr); }
