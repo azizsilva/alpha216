@@ -1135,15 +1135,18 @@ if ($action === 'match_detail') {
         $fi = $match_data['r_id'] ?? null;
         if ($fi) {
             $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
-            if (!empty($ev)) {
-                $event_raw = is_array($ev[0] ?? null) ? $ev[0] : (is_array($ev) ? $ev : null);
+            // results[0] is the flat stream array; results itself may already be the array
+            if (!empty($ev['results'])) {
+                $event_raw = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
                 $has_live  = true;
             }
         }
         // 2. Fallback: try by match id (upcoming prematch)
         if (empty($event_raw)) {
             $ev2 = betsapi_get('/v1/bet365/event', ['id' => $match_id]);
-            if (!empty($ev2)) $event_raw = is_array($ev2[0] ?? null) ? $ev2[0] : $ev2;
+            if (!empty($ev2['results'])) {
+                $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
+            }
         }
         // 3. Try prematch odds endpoint
         if (empty($event_raw)) {
@@ -1170,8 +1173,9 @@ if ($action === 'match_detail') {
             }
         }
         // Use v3 sp markets as fallback if no live event tree
+        // Pass the full sp array; md_parse_markets handles {name, odds:[...]} objects
         if (empty($event_raw) && !empty($ev3['main']['sp'])) {
-            $event_raw = $ev3['main']['sp'];
+            $event_raw = array_values($ev3['main']['sp']);
         }
     }
 
@@ -1194,23 +1198,43 @@ if ($action === 'match_detail') {
 }
 
 /* ── Parse BetsAPI flat event array into structured markets ── */
+// BetsAPI /v1/bet365/event returns a flat stream where:
+//   MG = Market Group header (the market name row)
+//   MA = Market Alternative header (sub-group, also treated as market)
+//   PA = Participant/selection row (odds line)
 function md_parse_markets($event_arr) {
     if (!is_array($event_arr)) return [];
     $markets = []; $cur = null;
 
-    // Flatten one level if nested
-    $items = isset($event_arr[0]) && is_array($event_arr[0]) ? $event_arr[0] : $event_arr;
+    // Navigate to the flat items array.
+    // Shape A: already a flat array of item objects [ {type,NA,...}, ... ]
+    // Shape B: nested [ [{type,NA,...}, ...] ]  (results[0] from bet365/event)
+    // Shape C: { results: [ [{...}] ] }  (full response accidentally passed)
+    if (isset($event_arr['results'])) {
+        $event_arr = is_array($event_arr['results'][0] ?? null)
+            ? $event_arr['results'][0]
+            : ($event_arr['results'] ?? []);
+    }
+    $items = (isset($event_arr[0]) && is_array($event_arr[0])) ? $event_arr[0] : $event_arr;
 
     foreach ($items as $item) {
         if (!is_array($item)) continue;
         $type = $item['type'] ?? $item['TYPE'] ?? '';
         $na   = $item['NA']   ?? $item['name'] ?? $item['N']  ?? '';
 
-        if (in_array($type, ['MarketHeader','MH','Market'])) {
+        // MG = Market Group (the actual BetsAPI type for market headers)
+        // Also handle legacy MarketHeader/MH/Market codes for inplay stream
+        if (in_array($type, ['MG', 'MA', 'MarketHeader', 'MH', 'Market'])) {
             if ($cur && !empty($cur['selections'])) $markets[] = $cur;
-            $cur = ['id' => $item['ID'] ?? $item['id'] ?? uniqid(), 'name' => $na, 'selections' => []];
+            $cur = [
+                'id'         => $item['ID'] ?? $item['id'] ?? uniqid(),
+                'name'       => $na,
+                'selections' => [],
+            ];
+            continue;
         }
 
+        // PA = Participant (selection with odds)
         if ($type === 'PA' && $cur !== null) {
             $od  = $item['OD'] ?? $item['od'] ?? '';
             $dec = md_frac_to_dec($od);
@@ -1221,11 +1245,11 @@ function md_parse_markets($event_arr) {
                 'odds'     => $dec,
                 'handicap' => $item['HD'] ?? null,
             ];
+            continue;
         }
 
-        // sp market from main.sp structure (prematch)
-        if ($type === '' && isset($item['odds']) && is_array($item['odds'])) {
-            $mktName = $item['name'] ?? '';
+        // sp/prematch market object: {name, odds:[{name, odds},...]}
+        if (isset($item['odds']) && is_array($item['odds'])) {
             $sels = [];
             foreach ($item['odds'] as $o) {
                 $od  = $o['odds'] ?? $o['OD'] ?? '';
@@ -1233,17 +1257,24 @@ function md_parse_markets($event_arr) {
                 if (!$dec || $dec < 1.01) continue;
                 $sels[] = [
                     'id'       => $o['id']   ?? uniqid(),
-                    'name'     => $o['name'] ?? $o['N2'] ?? '',
+                    'name'     => $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '',
                     'odds'     => $dec,
-                    'handicap' => $o['handicap'] ?? null,
+                    'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
                 ];
             }
-            if ($sels) $markets[] = ['id' => uniqid(), 'name' => $mktName, 'selections' => $sels];
+            if ($sels) {
+                $markets[] = [
+                    'id'         => $item['id'] ?? uniqid(),
+                    'name'       => $item['name'] ?? $na,
+                    'selections' => $sels,
+                ];
+            }
+            continue;
         }
     }
     if ($cur && !empty($cur['selections'])) $markets[] = $cur;
 
-    // Also parse sp.* sub-markets from prematch structure
+    // Also parse sp.* sub-markets from prematch v3 structure
     if (isset($event_arr['main']['sp'])) {
         foreach ($event_arr['main']['sp'] as $sp) {
             if (!is_array($sp)) continue;
@@ -1258,7 +1289,16 @@ function md_parse_markets($event_arr) {
         }
     }
 
-    return array_slice($markets, 0, 60); // Allow up to 60 markets for full display
+    // Deduplicate by name (keep first occurrence)
+    $seen = []; $deduped = [];
+    foreach ($markets as $mkt) {
+        $k = strtolower(trim($mkt['name']));
+        if (!$k || isset($seen[$k])) continue;
+        $seen[$k] = true;
+        $deduped[] = $mkt;
+    }
+
+    return array_slice($deduped, 0, 80); // up to 80 real markets
 }
 
 /* ── Synthetic markets from live_odds stored in DB (full fcbet216 set) ── */
