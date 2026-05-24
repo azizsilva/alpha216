@@ -230,9 +230,10 @@ function formatLiveMinute(m) {
   var md = String(m.timer.md || m.timer.MD || '');
   if (md === '1') return 'Mi-temps';
   var tm = m.timer.tm;
-  if (tm === undefined || tm === null || tm === '') tm = m.timer.TM;
-  if (tm === undefined || tm === null || tm === '') return '';
-  return String(tm) + "'";
+  if (tm === undefined || tm === null) tm = m.timer.TM;
+  var tmn = parseInt(tm, 10);
+  if (!tmn || tmn < 1) return ''; // hide "0'" — match just started or no data
+  return tmn + "'";
 }
 
 /* ── Live counting timer (counts up from API snapshot) ─── */

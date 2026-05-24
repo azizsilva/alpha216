@@ -28,7 +28,10 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<?php $sb_css_v = @filemtime(__DIR__ . '/style.css') ?: time(); ?>
+<?php
+$sb_css_v = @filemtime(__DIR__ . '/style.css') ?: time();
+$sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
+?>
 <link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
@@ -524,4 +527,4 @@ for($i=0;$i<7;$i++){
   </button>
 </div>
 
-<script src="<?=$base?>sportsbook/app.js?v=<?=$sb_css_v?>"></script>
+<script src="<?=$base?>sportsbook/app.js?v=<?=$sb_js_v?>"></script>
