@@ -1409,10 +1409,13 @@ body {
 /* Sport tabs for Prochainement */
 .sb-upcoming-tabs {
   display: flex;
+  flex-direction: row;   /* explicitly horizontal pills only */
+  flex-wrap: nowrap;
+  width: 100%;
   gap: 4px;
   overflow-x: auto;
   padding: 0 0 10px;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 .sb-upcoming-tabs::-webkit-scrollbar { height: 0; }
 .sb-upcoming-tab {
@@ -3681,6 +3684,8 @@ body {
 
 /* ── Live section market dropdown (En direct maintenant) ── */
 .sb-live-mkt-wrap {
+  display: block !important;  /* must be full-width block, never inline */
+  width: 100%;
   margin: 6px 0 4px;
   position: relative;
 }

@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.15';
+  var newHref = base + 'sportsbook/style.css?v=20260524.16';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -2115,7 +2115,8 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   S.viewMode         = 'championship';
   S.mobLeagueTab     = 'best';
   if (!_skipPush) {
-    sbPushUrl('championship', {championshipIds: id||'', sportId: sid||1, name: name||'', flag: flag||''});
+    // flag is NOT stored in URL (it's derived from the name on restore)
+    sbPushUrl('championship', {championshipIds: id||'', sportId: sid||1, name: name||''});
   }
 
   // Hide homepage-only sections when entering championship view
@@ -3240,10 +3241,9 @@ function sbRestoreFromUrl() {
   if (page === 'championship') {
     var id   = sp.get('championshipIds') || null;
     var name = sp.get('name') ? decodeURIComponent(sp.get('name')) : '';
-    var flag = sp.get('flag') ? decodeURIComponent(sp.get('flag')) : '';
     var sid  = parseInt(sp.get('sportId') || '1') || 1;
     if (id || name) {
-      if (!flag && name) flag = getFlag(guessCountry(name));
+      var flag = getFlag(guessCountry(name));
       window.sbOpenLeague(id, name, flag, sid, true /* skipPush */);
       return true;
     }
@@ -3262,7 +3262,8 @@ function sbRestoreFromUrl() {
 window.addEventListener('popstate', function(e) {
   var st = e.state || {};
   if (st.page === 'championship') {
-    window.sbOpenLeague(st.championshipIds || null, st.name || '', st.flag || '', parseInt(st.sportId||1)||1, true);
+    var _f = st.flag || getFlag(guessCountry(st.name || ''));
+    window.sbOpenLeague(st.championshipIds || null, st.name || '', _f, parseInt(st.sportId||1)||1, true);
   } else if (st.page === 'liveEvent') {
     if (st.sportId) S.activeSportId = parseInt(st.sportId) || 1;
     window.sbOpenMatch(st.eventId || '', true);
