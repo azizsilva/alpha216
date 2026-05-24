@@ -779,6 +779,97 @@ body {
 }
 .sb-boost-card:hover { background: #3a3a3a; }
 
+/* Horizontal Slider Card (En direct/Upcoming at top) */
+.slc {
+  background: var(--sb-bg-card);
+  border: 1px solid var(--sb-border);
+  border-radius: 10px;
+  min-width: 280px;
+  max-width: 320px;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.slc-hdr {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--sb-border-light);
+  font-size: 11px;
+}
+.slc-bb {
+  background: var(--sb-green);
+  color: var(--sb-green-font);
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.slc-time, .slc-sep { color: var(--sb-text-2); }
+.slc-flag { width: 14px; height: 10px; border-radius: 1px; }
+.slc-lg { color: var(--sb-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.slc-mid {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  gap: 10px;
+}
+.slc-overlapping-jerseys {
+  display: flex;
+  align-items: center;
+  width: 32px;
+  position: relative;
+  height: 24px;
+}
+.slc-j {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #252525;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--sb-border);
+}
+.slc-j1 { left: 0; z-index: 2; }
+.slc-j2 { left: 12px; z-index: 1; }
+
+.slc-teams-horiz {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.slc-team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.slc-tname {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sb-text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.slc-score { color: var(--sb-green); font-weight: 700; font-size: 13px; }
+
+.slc-right {
+  display: flex;
+  align-items: center;
+}
+.slc-stats { color: var(--sb-text-2); font-size: 14px; }
+
+.slc-odds {
+  display: flex;
+  gap: 2px;
+  padding: 0 12px 10px;
+}
+
+
 .sb-boost-card-top {
   display: flex;
   align-items: center;
