@@ -4,7 +4,11 @@ if (!$mk_fragment) { require_once __DIR__.'/../app/index.php'; exit; }
 // Session-only check — no full db.php needed here (all DB ops are via AJAX to api.php)
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { echo '<script>window.location.href="/";</script>'; exit; }
-$base = '/public_html/';
+$base = '/';
+$script_name = $_SERVER['SCRIPT_NAME'];
+if (($pos = strpos($script_name, '/sportsbook/')) !== false) {
+    $base = substr($script_name, 0, $pos + 1);
+}
 
 // Dynamic dates
 $fr_days = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
@@ -24,7 +28,7 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="/public_html/sportsbook/style.css?v=<?=filemtime(__DIR__.'/style.css')?>">
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=filemtime(__DIR__.'/style.css')?>">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
 
@@ -356,9 +360,9 @@ for($i=0;$i<7;$i++){
 
 <!-- Mobile Bar — 3 items matching fcbet216 mobile footer -->
 <div class="sb-mob-footer">
-  <button class="sb-mob-btn" onclick="window.location.href='/public_html/'"><span class="sb-mob-icon">🍒</span><span class="sb-mob-lbl">Casino</span></button>
-  <button class="sb-mob-btn active" onclick="window.location.href='/public_html/sportsbook/'"><span class="sb-mob-icon">⚽</span><span class="sb-mob-lbl">Paris sportifs</span></button>
+  <button class="sb-mob-btn" onclick="window.location.href='<?=$base?>'"><span class="sb-mob-icon">🍒</span><span class="sb-mob-lbl">Casino</span></button>
+  <button class="sb-mob-btn active" onclick="window.location.href='<?=$base?>sportsbook/'"><span class="sb-mob-icon">⚽</span><span class="sb-mob-lbl">Paris sportifs</span></button>
   <button class="sb-mob-btn" onclick="window.sbToggleLeft()"><span class="sb-mob-icon">☰</span><span class="sb-mob-lbl">Menu</span></button>
 </div>
 
-<script src="/public_html/sportsbook/app.js?v=<?=time()?>"></script>
+<script src="<?=$base?>sportsbook/app.js?v=<?=time()?>"></script>
