@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.24';
+  var newHref = base + 'sportsbook/style.css?v=20260524.25';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1785,6 +1785,19 @@ function updateFloatingBetBadge() {
 
 window.sbSlipMode = function(mode) { SLIP_MODE = mode; renderBetSlip(); };
 window.sbClearSlip = function() { S.betSlip = []; renderBetSlip(); updateFloatingBetBadge(); };
+window.sbRemoveBet = function(id) { window.sbAddBet(id, '', '', 0); };
+window.sbRemoveBBLeg = function(betId, legIdx) {
+  var bet = S.betSlip.find(function(b){ return b.id === betId; });
+  if (!bet || !bet.legs) return;
+  bet.legs.splice(legIdx, 1);
+  if (!bet.legs.length) {
+    S.betSlip = S.betSlip.filter(function(b){ return b.id !== betId; });
+  } else {
+    bet.val = parseFloat(bet.legs.reduce(function(acc, l){ return acc * l.odds; }, 1).toFixed(2));
+    bet.sel = bet.legs.map(function(l){ return l.name; }).join(' + ');
+  }
+  renderBetSlip(); updateFloatingBetBadge();
+};
 
 window.sbUpdateBetStake = function(idx, val) {
   if (S.betSlip[idx]) S.betSlip[idx].stake = Math.max(0, parseFloat(val) || 0);
@@ -1802,13 +1815,14 @@ function renderBetSlip() {
   var cntEl = document.getElementById('sb-slip-count');
   if (!el) return;
 
+  var n = S.betSlip.length;
+
   if (cntEl) {
-    cntEl.innerText = S.betSlip.length || '';
-    cntEl.style.display = S.betSlip.length ? 'inline-block' : 'none';
+    cntEl.innerText = n || '';
+    cntEl.style.display = n ? 'inline-block' : 'none';
   }
 
   var out = '';
-  var n = S.betSlip.length;
 
   // ── Mode tabs ──────────────────────────────────────────────
   out += '<div class="slip-tabs">';
@@ -1827,62 +1841,83 @@ function renderBetSlip() {
     return;
   }
 
-  // ── Selections ─────────────────────────────────────────────
+  // ── Bet cards ──────────────────────────────────────────────
   var totalOdds = 1;
   S.betSlip.forEach(function(b, i) {
     totalOdds *= b.val;
 
     out += '<div class="slip-item">';
+
+    // Header row: [sport icon] [BB badge?] [match name] [odds box] [×]
     out += '<div class="slip-item-hdr">';
     out += '<span class="slip-sport-icon">' + ICON.football + '</span>';
+    if (b.isBB) out += '<span class="slip-bb-badge">BB</span>';
+    out += '<div class="slip-match-wrap">';
+    if (b.isLive) out += '<span class="slip-live-badge">EN DIRECT</span> ';
     out += '<span class="slip-match-nm">' + h(b.match) + '</span>';
-    // System mode: banker toggle
-    if (SLIP_MODE === 'system') {
-      out += '<span class="slip-banker-toggle" title="Banker">🅱</span>';
+    out += '</div>';
+    // Odds box (red border for changed, normal otherwise)
+    out += '<span class="slip-odds-box">';
+    if (b.isBB) {
+      out += '<span class="slip-odds-change-arrow">-</span>';
     }
-    out += '<button class="slip-remove-btn" onclick="window.sbAddBet(\'' + h(b.id) + '\',\'\',\'\',0)">×</button>';
+    out += b.val.toFixed(2);
+    out += '</span>';
+    out += '<button class="slip-remove-btn" onclick="window.sbRemoveBet(\'' + h(b.id) + '\')">×</button>';
     out += '</div>';
 
-    // Market name
-    out += '<div class="slip-market-nm">Vainqueur (prolongations incluses)</div>';
-
-    // Selection row: label + odds (highlighted box)
-    out += '<div class="slip-sel-row">';
-    if (b.isLive) out += '<span class="slip-live-badge">EN DIRECT</span>';
-    out += '<span class="slip-sel-lbl">' + h(b.sel) + '</span>';
-    out += '<span class="slip-sel-odd">' + b.val.toFixed(2) + '</span>';
-    out += '</div>';
-
-    // Stake + gain (Simple mode only — per-bet stake)
-    if (SLIP_MODE === 'simple') {
-      var gain = +(b.stake * b.val).toFixed(2);
-      out += '<div class="slip-stake-row">';
-      out += '<input type="number" class="slip-stake-inp" value="' + (b.stake || SLIP_STAKE) + '" min="0" step="1" onchange="window.sbUpdateBetStake(' + i + ',this.value)">';
-      out += '<span class="slip-gain-lbl">Gagner:</span>';
-      out += '<span class="slip-gain-val">' + gain.toFixed(2) + '</span>';
+    // BB legs (green dot + market + selection + ×)
+    if (b.isBB && b.legs && b.legs.length) {
+      b.legs.forEach(function(leg, li) {
+        out += '<div class="slip-leg-row">';
+        out += '<span class="slip-leg-dot"></span>';
+        out += '<div class="slip-leg-info">';
+        out += '<span class="slip-leg-mkt">' + h(leg.market || '') + '</span>';
+        out += '<span class="slip-leg-sel">' + h(leg.name) + '</span>';
+        out += '</div>';
+        out += '<button class="slip-leg-del" onclick="window.sbRemoveBBLeg(\'' + h(b.id) + '\',' + li + ')">×</button>';
+        out += '</div>';
+      });
+    } else if (!b.isBB) {
+      // Regular bet: market name + selection
+      out += '<div class="slip-market-nm">' + h(b.market || 'Vainqueur (prolongations incluses)') + '</div>';
+      out += '<div class="slip-sel-row">';
+      out += '<span class="slip-sel-lbl">' + h(b.sel) + '</span>';
       out += '</div>';
     }
-    out += '</div>';
+
+    // Stake input + Gagner (Simple mode)
+    if (SLIP_MODE === 'simple') {
+      var gain = +((b.stake || SLIP_STAKE) * b.val).toFixed(2);
+      out += '<div class="slip-stake-row">';
+      out += '<input type="number" class="slip-stake-inp" value="' + (b.stake || SLIP_STAKE) + '" min="1" step="1" oninput="window.sbUpdateBetStake(' + i + ',this.value)">';
+      out += '<span class="slip-gagner">Gagner: <strong>' + gain.toFixed(2) + '</strong></span>';
+      out += '</div>';
+    }
+
+    out += '</div>'; // slip-item
   });
 
-  // ── Promo hint ─────────────────────────────────────────────
-  if (SLIP_MODE === 'combi' && n >= 1) {
-    var bonusPct = n >= 4 ? 10 : n >= 3 ? 7 : 5;
-    out += '<div class="slip-promo">'
-      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" fill="var(--sb-green)"/></svg>'
-      + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>' + bonusPct + ' %</strong>'
-      + '</div>';
-  }
+  // ── Promo hint (always shown, matches fcbet) ───────────────
+  out += '<div class="slip-promo">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
+    + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>5 %</strong>'
+    + '</div>';
 
   // ── Tout effacer ───────────────────────────────────────────
-  out += '<button class="slip-clear-btn" onclick="window.sbClearSlip()">Tout effacer <i class="fa fa-trash"></i></button>';
+  out += '<button class="slip-clear-btn" onclick="window.sbClearSlip()">'
+    + 'Tout effacer '
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>'
+    + '</button>';
 
   // ── Odds changed warning ───────────────────────────────────
-  out += '<div class="slip-odds-warning"><i class="fa fa-exclamation-triangle"></i> Certaines cotes ont changées, veuillez accepter.</div>';
+  out += '<div class="slip-odds-warning">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+    + ' Certaines cotes ont changées, veuillez accepter.'
+    + '</div>';
 
   // ═══ MODE-SPECIFIC SUMMARY ═════════════════════════════════
   if (SLIP_MODE === 'simple') {
-    // ── Simple: sum of individual bets ───────────────────────
     var totalMise = 0, totalGain = 0;
     S.betSlip.forEach(function(b) {
       var st = b.stake || SLIP_STAKE;
@@ -1891,46 +1926,32 @@ function renderBetSlip() {
     });
     out += '<div class="slip-summary">';
     out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + totalMise.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Gain total</span><span class="green">' + totalGain.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Gain total</span><span class="slip-sum-green">' + totalGain.toFixed(2) + '</span></div>';
     out += '</div>';
 
   } else if (SLIP_MODE === 'combi') {
-    // ── Combiné: product of odds × stake + bonus ─────────────
-    var bonusPct2 = n >= 4 ? 10 : n >= 3 ? 7 : 5;
+    var bonusPct = n >= 4 ? 10 : n >= 3 ? 7 : 5;
     var baseGain = SLIP_COMBI_STAKE * totalOdds;
-    var bonus = baseGain * bonusPct2 / 100;
+    var bonus = baseGain * bonusPct / 100;
     var combiGain = baseGain + bonus;
-
     out += '<div class="slip-combo-row">';
     out += '<span class="slip-combo-lbl">Combo</span>';
-    out += '<span class="slip-combo-bonus">🎁 ' + bonusPct2 + '%</span>';
+    out += '<span class="slip-combo-bonus">🎁 ' + bonusPct + '%</span>';
     out += '<span class="slip-combo-mult">' + n + ' x</span>';
-    out += '<input type="number" class="slip-stake-inp" value="' + SLIP_COMBI_STAKE + '" min="0" step="1" onchange="window.sbUpdateCombiStake(this.value)">';
+    out += '<input type="number" class="slip-stake-inp" value="' + SLIP_COMBI_STAKE + '" min="1" step="1" oninput="window.sbUpdateCombiStake(this.value)">';
     out += '</div>';
-
     out += '<div class="slip-summary">';
     out += '<div class="slip-sum-row"><span>Cotes totales</span><span>' + totalOdds.toFixed(2) + '</span></div>';
     out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + SLIP_COMBI_STAKE.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Gains supplémentaires</span><span class="green">🎁 ' + bonus.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row slip-sum-total"><span>Gain total</span><span class="green">' + combiGain.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Gains supplémentaires</span><span class="slip-sum-green">🎁 ' + bonus.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row slip-sum-total"><span>Gain total</span><span class="slip-sum-green">' + combiGain.toFixed(2) + '</span></div>';
     out += '</div>';
 
   } else if (SLIP_MODE === 'system') {
-    // ── Système: singles + combo ─────────────────────────────
-    out += '<div class="slip-sys-row">';
-    out += '<span class="slip-sys-lbl">Seuls</span>';
-    out += '<span class="slip-sys-cnt">' + n + ' x</span>';
-    out += '<input type="number" class="slip-stake-inp" value="' + SLIP_SYS_SINGLES_STAKE + '" min="0" step="1" placeholder="Fixer la mise" onchange="window.sbUpdateSysStake(\'singles\',this.value)">';
-    out += '</div>';
-    out += '<div class="slip-sys-row">';
-    out += '<span class="slip-sys-lbl">Combo</span>';
-    out += '<span class="slip-sys-cnt">1 x</span>';
-    out += '<input type="number" class="slip-stake-inp" value="' + SLIP_SYS_COMBO_STAKE + '" min="0" step="1" placeholder="Fixer la mise" onchange="window.sbUpdateSysStake(\'combo\',this.value)">';
-    out += '</div>';
-
+    out += '<div class="slip-sys-row"><span class="slip-sys-lbl">Seuls</span><span class="slip-sys-cnt">' + n + ' x</span><input type="number" class="slip-stake-inp" value="' + SLIP_SYS_SINGLES_STAKE + '" min="0" step="1" oninput="window.sbUpdateSysStake(\'singles\',this.value)"></div>';
+    out += '<div class="slip-sys-row"><span class="slip-sys-lbl">Combo</span><span class="slip-sys-cnt">1 x</span><input type="number" class="slip-stake-inp" value="' + SLIP_SYS_COMBO_STAKE + '" min="0" step="1" oninput="window.sbUpdateSysStake(\'combo\',this.value)"></div>';
     var sysMise = (SLIP_SYS_SINGLES_STAKE * n) + SLIP_SYS_COMBO_STAKE;
     var sysNbParis = (SLIP_SYS_SINGLES_STAKE > 0 ? n : 0) + (SLIP_SYS_COMBO_STAKE > 0 ? 1 : 0);
-
     out += '<div class="slip-summary">';
     out += '<div class="slip-sum-row"><span>Nombre de paris</span><span>' + sysNbParis + '</span></div>';
     out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + sysMise.toFixed(2) + '</span></div>';
@@ -1939,7 +1960,9 @@ function renderBetSlip() {
 
   // ── Place bet button ───────────────────────────────────────
   out += '<div class="slip-place-wrap">';
-  out += '<span class="slip-bookmark" title="Sauvegarder">🔖</span>';
+  out += '<button class="slip-bookmark-btn" title="Sauvegarder">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>'
+    + '</button>';
   out += '<button class="slip-place-btn" onclick="window.sbPlaceBet()">Connectez-vous pour placer des paris</button>';
   out += '</div>';
 
@@ -3120,24 +3143,29 @@ window.sbBBAddToSlip = function() {
   var sels = window._bbSelections;
   if (!sels.length) return;
   var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
-  var names = sels.map(function(s){ return s.name; }).join(' + ');
   var bid = 'bb_' + Date.now();
-  if (typeof sbAddBet === 'function') {
-    sbAddBet(bid, 'Bet Builder', names, combined);
-  } else if (window.sbAddBet) {
-    window.sbAddBet(bid, 'Bet Builder', names, combined);
+  var matchName = (window._mdMatch ? (window._mdMatch.home ? window._mdMatch.home.name : '') + ' vs. ' + (window._mdMatch.away ? window._mdMatch.away.name : '') : 'Bet Builder');
+  var isLive = window._mdMatch ? isMatchLive(window._mdMatch) : false;
+  // Store as a BB bet with legs array — renderBetSlip will render legs separately
+  S.betSlip.push({
+    id: bid,
+    match: matchName,
+    sel: sels.map(function(s){ return s.name; }).join(' + '),
+    val: parseFloat(combined.toFixed(2)),
+    isLive: isLive,
+    isBB: true,
+    legs: sels.map(function(s){ return { market: s.market || '', name: s.name, odds: s.odds }; }),
+    stake: SLIP_STAKE
+  });
+  renderBetSlip();
+  updateFloatingBetBadge();
+  // Open bet slip on mobile
+  if (window.innerWidth <= 1100) {
+    var right = document.getElementById('sb-right');
+    if (right) right.classList.add('open');
   }
   window._bbSelections = [];
   sbBBRefresh();
-  // Flash confirmation
-  var bbPanel = document.getElementById('md-bb-panel');
-  if (bbPanel) {
-    var msg = document.createElement('div');
-    msg.className = 'md-bb-confirm';
-    msg.textContent = '✓ Ajouté au slip!';
-    bbPanel.prepend(msg);
-    setTimeout(function(){ msg.remove(); }, 2000);
-  }
 };
 
 // Removed duplicate sbSwitchTab
