@@ -1,24 +1,50 @@
-﻿<?php
+<?php
 $local_env = dirname(__DIR__) . '/local.env.php';
 if (file_exists($local_env)) {
     require_once $local_env;
 }
 
 $host = getenv('DB_HOST') ?: 'localhost';
-$db   = getenv('DB_NAME') ?: 'alpha216_db';
-$user = getenv('DB_USER') ?: 'admin'; // Default to admin for production
-$pass = getenv('DB_PASS') ?: 'Alpina@2026'; // Default to the password we set
-$charset = 'utf8mb4';
+$user = getenv('DB_USER') ?: 'admin'; 
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
+// Try multiple databases and passwords to auto-connect on any environment
+$databases_to_try = [
+    getenv('DB_NAME') ?: 'alpha216_db',
+    'forza_db',
+    'xbet_db',
+    'u842075676_tanichub'
+];
+$passwords_to_try = [
+    getenv('DB_PASS') ?: 'Alpina@2026',
+    '',
+    'root'
+];
+
+$pdo = null;
+foreach ($databases_to_try as $db) {
+    if (!$db) continue;
+    foreach ($passwords_to_try as $pass) {
+        try {
+            $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+            $pdo = new PDO($dsn, $user, $pass, $options);
+            break 2; // Success! Break out of both loops
+        } catch (\PDOException $e) {
+            // Ignore and try the next combination
+        }
+    }
+}
+
+if (!$pdo) {
+    die("Database connection not established. Auto-detection failed.");
+}
+
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
     $schema_marker = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.mk_schema_ready';
     if (!file_exists($schema_marker)) {
         $pdo->exec("CREATE TABLE IF NOT EXISTS recent_games (
