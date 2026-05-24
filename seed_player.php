@@ -30,8 +30,8 @@ if ($check->fetch()) {
     $upd->execute([$hash, $password, $balance, $username]);
     echo "Updated successfully.\n";
 } else {
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, password_text, role, balance, status) VALUES (?, ?, ?, ?, ?, 'active')");
-    $stmt->execute([$username, $hash, $password, $role, $balance]);
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, password_text, role, balance, status, mobile) VALUES (?, ?, ?, ?, ?, 'active', ?)");
+    $stmt->execute([$username, $hash, $password, $role, $balance, '0000000000']);
     echo "Player '$username' created successfully with balance $balance.\n";
 }
 
