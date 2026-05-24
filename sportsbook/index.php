@@ -89,8 +89,8 @@ for($i=0;$i<7;$i++){
   .sb-left,.sb-right{position:fixed!important;top:0!important;bottom:0!important;z-index:2000!important;}
   .sb-left{left:0!important;transform:translateX(-100%)!important;width:280px!important;}
   .sb-left.open{transform:translateX(0)!important;box-shadow:10px 0 40px rgba(0,0,0,0.9)!important;}
-  .sb-right{right:0!important;transform:translateX(100%)!important;width:320px!important;}
-  .sb-right.open{transform:translateX(0)!important;box-shadow:-10px 0 40px rgba(0,0,0,0.9)!important;}
+  .sb-right{bottom:0!important;left:0!important;right:0!important;top:auto!important;width:100%!important;max-height:82vh!important;border-radius:16px 16px 0 0!important;transform:translateY(100%)!important;border-left:none!important;border-top:1px solid rgba(255,255,255,0.10)!important;background:#181818!important;}
+  .sb-right.open{transform:translateY(0)!important;box-shadow:0 -10px 60px rgba(0,0,0,0.9)!important;}
 }
 /* ── Match cards — beat Bootstrap 3 from parent site ── */
 .sb-root .mc{background:#282828!important;border:1px solid rgba(255,255,255,0.10)!important;border-radius:10px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
@@ -494,9 +494,16 @@ for($i=0;$i<7;$i++){
     </div>
   </div>
 
-  <div class="sb-widget">
-    <div class="sb-widget-hdr">FICHE DE PARI <i class="fa fa-minus"></i></div>
-    <div id="sb-slip-body"></div>
+  <!-- Drag handle (mobile drawer) -->
+  <div class="sb-drawer-handle" onclick="window.sbToggleRight()"></div>
+
+  <div class="sb-slip-panel">
+    <div class="sb-slip-hdr">
+      <span class="sb-slip-hdr-title">FICHE DE PARI</span>
+      <span class="sb-slip-hdr-badge" id="sb-slip-count" style="display:none">0</span>
+      <button class="sb-slip-hdr-close" onclick="window.sbToggleRight()">&#8212;</button>
+    </div>
+    <div id="sb-slip-body" style="overflow-y:auto;flex:1;"></div>
   </div>
 
   <div class="sb-widget">
