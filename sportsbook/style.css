@@ -1700,13 +1700,13 @@ body {
   .sb-mobile-sidebar-content { display: flex; }
 
   /* ── Single-scroll mobile layout ── */
-  body { overflow-y: auto; overflow-x: hidden; }
-  .sb-root { height: auto; min-height: 100vh; overflow: visible; }
+  /* Make .sb-root the scroll container so body overflow:hidden doesn't block us */
+  .sb-root { height: 100vh; overflow-y: auto !important; overflow-x: hidden; }
   .sb-center { width: 100%; height: auto; overflow: visible; }
   .sb-center-header { overflow: visible; position: sticky; top: 48px; z-index: 100; background: var(--sb-bg-root); }
   .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; }
 
-  /* Mobile top bar sticky */
+  /* Mobile top bar sticky at top of sb-root scroll */
   .sb-mobile-topbar {
     position: sticky;
     top: 0;
