@@ -103,7 +103,7 @@ function launchGambllyGame($user_id, $game_id, $home_url, $pdo, $skip_log = fals
 function launchBtiGame($user_id, $game_id, $home_url, $pdo, $skip_log = false) {
     $TOKEN  = '3ef5c8c7684cd494e47347e4b6c53df7';
     $SECRET = 'c856e884370d3be58ae4a15f5fed6d54';
-    $SERVER_URL\ = 'https://igamingapis.live/api/v1/gameLaunch';
+    $SERVER_URL = 'https://igamingapis.live/api/v1/gameLaunch';
 
     $member_account = is_numeric($user_id) ? (string)(int)$user_id : trim((string)$user_id);
     $coins = 0;
