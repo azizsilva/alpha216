@@ -1,171 +1,364 @@
 <?php
 $mk_fragment = isset($_GET['mk_fragment']);
-if (!$mk_fragment) {
-    require_once __DIR__ . '/../app/index.php';
-    exit;
-}
-session_start();
-require_once '../includes/db.php';
-require_once '../api/game_logic.php';
-$base_url = '/';
+if (!$mk_fragment) { require_once __DIR__.'/../app/index.php'; exit; }
+// Session-only check — no full db.php needed here (all DB ops are via AJAX to api.php)
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['user_id'])) { echo '<script>window.location.href="/";</script>'; exit; }
+$base = '/public_html/';
 
-if (!isset($_SESSION['user_id'])) {
-    echo '<script>window.location.href = "/";</script>';
-    exit;
+// Dynamic dates
+$fr_days = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+$dates = [];
+for($i=0;$i<7;$i++){
+  $ts = strtotime("+$i days");
+  $dow = (int)date('w',$ts);
+  $dates[] = ['day'=>$i===0?"Aujourd'hui":$fr_days[$dow], 'num'=>date('j',$ts)];
 }
-
-$game_id = '8a704858d5deb4af1ddc722092ac7614';
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
-$home_url = $protocol . $_SERVER['HTTP_HOST'] . '/sports/?mk=1';
-$game_url = '';
-$error_msg = '';
-$cached = $_SESSION['mk_prefetched_game_urls'][$game_id] ?? null;
-if (is_array($cached) && !empty($cached['url']) && !empty($cached['ts']) && (time() - (int)$cached['ts']) <= 300) {
-    $ch = (string)($cached['home_url'] ?? '');
-    $isSports = $ch !== '' && (bool)preg_match('#/sports(?:/|\\?|$)#i', $ch);
-    $isSportsbook = $ch !== '' && (bool)preg_match('#/sportsbook(?:/|\\?|$)#i', $ch);
-    $tagOk = !isset($cached['tag']) || strtolower((string)$cached['tag']) === 'sports';
-    if (!$isSports || $isSportsbook || !$tagOk) {
-        $cached = null;
-    }
-}
-if (is_array($cached) && !empty($cached['url']) && !empty($cached['ts']) && (time() - (int)$cached['ts']) <= 300) {
-    $game_url = (string)$cached['url'];
-} else {
-    $launch_result = launchGambllyGame($_SESSION['user_id'], $game_id, $home_url, $pdo, true);
-    if ($launch_result['success']) {
-        $game_url = $launch_result['game_url'];
-    } else {
-        $error_msg = $launch_result['message'];
-    }
-}
-
-if ($game_url) {
-    if (!isset($_SESSION['mk_play_tokens']) || !is_array($_SESSION['mk_play_tokens'])) {
-        $_SESSION['mk_play_tokens'] = [];
-    }
-    $token = bin2hex(random_bytes(16));
-    $_SESSION['mk_play_tokens'][$token] = [
-        'game_id' => $game_id,
-        'game_url' => $game_url,
-        'name' => 'Sportsbook',
-        'tag' => 'sports',
-        'ts' => time(),
-        'home_url' => $home_url
-    ];
-    $_SESSION['mk_current_game_launch'] = [
-        'game_id' => $game_id,
-        'name' => 'Sportsbook',
-        'tag' => 'sports'
-    ];
-    $_SESSION['game_url'] = $game_url;
-    $_SESSION['game_back_url'] = $home_url;
-    $_GET['t'] = $token;
-    echo '<script>try{history.replaceState({}, "", "/play/?t=' . $token . '");}catch(e){} try{document.body.classList.remove("mk-api-game-fullscreen");}catch(e2){} try{var t=document.getElementById("mobilePageTitle"); if(t){t.setAttribute("data-translate","game_play"); t.innerText="GAME PLAY";}}catch(e3){} </script>';
-    require_once __DIR__ . '/../play/index.php';
-    exit;
-}
-
-require_once '../includes/header.php';
-
 ?>
+<!-- Fonts: preconnect + swap for zero render blocking -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</noscript>
+<link rel="stylesheet" href="/public_html/sportsbook/style.css?v=<?=filemtime(__DIR__.'/style.css')?>">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
 
-<div class="mobile-game-header visible-xs">
-  <div class="mgh-left">
-    <a href="<?php echo $base_url; ?>" class="mgh-back"><i class="fa fa-chevron-left"></i> BACK</a>
-  </div>
-  <div class="mgh-right">
-    <a href="#" class="btn btn-sm mgh-deposit" data-translate="deposit">Deposit</a>
-    <div class="mgh-balance">
-      <div class="bal-line">
-        <span class="bal-val-ci" data-live-balance="wallet"><?php echo number_format($_SESSION['coins'], 2); ?></span> 
-        <span class="bal-unit">TND</span>
-      </div>
-      <div class="bal-line">
-        <span class="bal-val-exp" data-live-balance="exposure">0.00</span> 
-        <span class="bal-unit">EXP</span>
-      </div>
-    </div>
-    <div class="mgh-icons">
-      <i class="fa fa-search mgh-icon-search"></i>
-      <i class="fa fa-bell-o mgh-icon-bell"></i>
-    </div>
-  </div>
- </div>
+<div class="sb-root">
 
-<div class="game-container" style="position: relative; width: 100%; background: #000;">
-  <div class="mk-iframe-secondary-nav hidden-xs">
-    <div class="mk-iframe-secondary-inner container">
-      <ul class="mk-iframe-secondary-list">
-        <li><a href="<?php echo $base_url; ?>sports/"><i class="fa fa-futbol-o"></i> <span data-translate="sports">SPORTS</span></a></li>
-        <li><a href="<?php echo $base_url; ?>casino-games/"><i class="fa fa-diamond"></i> <span data-translate="ace_casino">ACE CASINO</span></a></li>
-        <li><a href="<?php echo $base_url; ?>casino-games/live-casino/"><i class="fa fa-dot-circle-o"></i> <span data-translate="live_casino">LIVE CASINO</span></a></li>
-        <li><a href="<?php echo $base_url; ?>sportsbook/"><i class="fa fa-book"></i> <span data-translate="sports_book">SPORTS BOOK</span></a></li>
-        <li><a href="<?php echo $base_url; ?>casino-games/virtual-sports/"><i class="fa fa-desktop"></i> <span data-translate="virtual_sports">VIRTUAL SPORTS</span></a></li>
-        <li><a href="<?php echo $base_url; ?>casino-games/slot-games/"><i class="fa fa-th"></i> <span data-translate="slot_games">SLOT GAME</span></a></li>
-      </ul>
+<!-- ══ LEFT SIDEBAR ══ -->
+<aside class="sb-left" id="sb-left">
+  <div class="sb-sidebar-top">
+    <div class="sb-top-bar">
+      <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="sb-btn-live">EN DIRECT</button>
+      <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    
+    <div class="sb-section-toggle sb-favoris-toggle" onclick="window.sbToggleFavs()">
+      <div class="sb-toggle-left">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.667C8.254 0.667 8.485 0.811 8.598 1.038L10.503 4.898L14.763 5.52C15.014 5.557 15.223 5.733 15.301 5.974C15.379 6.216 15.314 6.481 15.132 6.658L12.05 9.66L12.777 13.901C12.82 14.151 12.717 14.404 12.512 14.553C12.307 14.702 12.034 14.722 11.81 14.603L8 12.6L4.19 14.603C3.966 14.722 3.693 14.702 3.488 14.553C3.283 14.404 3.18 14.151 3.223 13.901L3.95 9.66L0.868 6.658C0.686 6.481 0.621 6.216 0.699 5.974C0.777 5.733 0.986 5.557 1.237 5.52L5.497 4.898L7.402 1.038C7.514 0.811 7.746 0.667 8 0.667Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        <span>Favoris</span>
+      </div>
+      <i class="fa fa-chevron-up" id="sb-favs-chevron"></i>
     </div>
   </div>
-  <?php if ($game_url): ?>
-    <iframe id="gameFrame" src="<?php echo htmlspecialchars($game_url); ?>" style="width: 100%; height: 100%; border: none;"></iframe>
-  <?php else: ?>
-    <div id="gameError" style="display: flex; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 11; justify-content: center; align-items: center; flex-direction: column; color: #fff;">
-      <i class="fa fa-exclamation-triangle" style="font-size: 40px; color: #ff4444; margin-bottom: 15px;"></i>
-      <p id="errorText" style="margin-bottom: 20px;"><?php echo htmlspecialchars($error_msg); ?></p>
-      <a href="<?php echo $base_url; ?>" class="btn btn-warning" data-translate="go_back">Go Back</a>
+
+  <div class="sb-sidebar-scroll">
+    <!-- Collapsible favorites content -->
+    <div id="sb-favs-content">
+    <div class="sb-league-group-hdr">
+      <span class="hdr-title">LES MEILLEURES LIG...</span>
+      <div class="sb-mes-ligues">MES LIG... <span>0</span></div>
     </div>
-  <?php endif; ?>
+
+    <div class="sb-tl-list">
+      <?php
+      $top_leagues = [
+        ['id'=>'94',  'name'=>'Coupe du Monde 2026',          'flag'=>'un',     'sport'=>1],
+        ['id'=>'572', 'name'=>'Ligue des Champions',           'flag'=>'eu',     'sport'=>1],
+        ['id'=>'573', 'name'=>'Ligue Conférence',              'flag'=>'eu',     'sport'=>1],
+        ['id'=>'17',  'name'=>'Premier League',                'flag'=>'gb-eng', 'sport'=>1],
+        ['id'=>'119', 'name'=>'LaLiga',                        'flag'=>'es',     'sport'=>1],
+        ['id'=>'167', 'name'=>'Serie A',                       'flag'=>'it',     'sport'=>1],
+        ['id'=>'78',  'name'=>'Bundesliga',                    'flag'=>'de',     'sport'=>1],
+        ['id'=>'168', 'name'=>'Ligue 1',                       'flag'=>'fr',     'sport'=>1],
+        ['id'=>'320', 'name'=>'Eredivisie',                    'flag'=>'nl',     'sport'=>1],
+        ['id'=>'142', 'name'=>'Division 1A',                   'flag'=>'be',     'sport'=>1],
+        ['id'=>'599', 'name'=>'Copa Libertadores',             'flag'=>'un',     'sport'=>1],
+        ['id'=>'600', 'name'=>'Copa Sudamericana',             'flag'=>'un',     'sport'=>1],
+        ['id'=>'el',  'name'=>'Euroligue',                     'flag'=>'eu',     'sport'=>18],
+        ['id'=>'nba', 'name'=>'NBA',                           'flag'=>'us',     'sport'=>18],
+        ['id'=>'rg1', 'name'=>'Roland Garros, Féminin Simple', 'flag'=>'fr',     'sport'=>13],
+        ['id'=>'rg2', 'name'=>'Roland Garros, Hommes Simple',  'flag'=>'fr',     'sport'=>13],
+      ];
+      foreach($top_leagues as $l): ?>
+      <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
+        <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
+        <span class="sb-league-name"><?=$l['name']?></span>
+      </div>
+      <?php endforeach; ?>
+    </div>
+
+    </div><!-- /sb-favs-content -->
+
+    <div class="sb-search-wrap">
+      <div class="sb-search-box">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="text" id="sb-search-input" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du cha..." oninput="window.sbSearchMatches(this.value)">
+      </div>
+    </div>
+
+    <div class="sb-menu-label">Menu</div>
+    <div class="sb-time-filters">
+      <button class="sb-tf active" onclick="window.sbTimeFilter(this,'all')">Tout</button>
+      <button class="sb-tf" onclick="window.sbTimeFilter(this,'today')">Aujourd'hui</button>
+      <button class="sb-tf" onclick="window.sbTimeFilter(this,'3h')">3h</button>
+      <button class="sb-tf" onclick="window.sbTimeFilter(this,'6h')">6h</button>
+      <button class="sb-tf" onclick="window.sbTimeFilter(this,'24h')">24h</button>
+      <button class="sb-tf-arrow"><i class="fa fa-chevron-right"></i></button>
+    </div>
+
+    <div id="sb-sports-list">
+      <!-- Skeleton until app.js renders -->
+      <div class="sb-sk-sports-list" id="sb-sports-skeleton">
+        <?php for($s=0;$s<7;$s++): ?>
+        <div class="sb-sk-sport-row">
+          <div class="sb-sk-block" style="width:20px;height:20px;border-radius:50%"></div>
+          <div class="sb-sk-block" style="width:100px;height:11px;margin-left:10px"></div>
+          <div class="sb-sk-block" style="width:36px;height:18px;border-radius:9px;margin-left:auto"></div>
+        </div>
+        <?php endfor; ?>
+      </div>
+    </div>
+
+    <!-- Format de cotes — functional odds format picker -->
+    <div class="sb-cotes-section">
+      <div class="sb-cotes-label">Format de cotes</div>
+      <div class="sb-cotes-opts" id="sb-cotes-opts">
+        <div class="sb-cotes-opt" data-fmt="dec" onclick="window.sbSetOddsFormat('dec',this)">
+          <span>Décimal (2.00)</span><span class="sb-cotes-check">—</span>
+        </div>
+        <div class="sb-cotes-opt" data-fmt="amer" onclick="window.sbSetOddsFormat('amer',this)">
+          <span>Américain (+100)</span>
+        </div>
+        <div class="sb-cotes-opt active" data-fmt="frac" onclick="window.sbSetOddsFormat('frac',this)">
+          <span>Fractionnaire (1/1)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ CENTER PANEL ══ -->
+<section class="sb-center">
+  <!-- Mobile-only top bar (hidden on desktop) -->
+  <div class="sb-mobile-topbar">
+    <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="sb-btn-live">EN DIRECT</button>
+    <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+
+  <div class="sb-center-header">
+    <!-- Date selector — use div not button to avoid Bootstrap overrides -->
+    <div class="sb-date-row">
+      <?php foreach($dates as $i=>$d): ?>
+      <div class="sb-date-item<?=$i===0?' active':''?>" onclick="window.sbFilterByDate(this, <?=$i?>)" role="button" tabindex="0">
+        <span class="sb-date-lbl"><?=htmlspecialchars($d['day'])?></span>
+        <span class="sb-date-num"><?=$d['num']?></span>
+      </div>
+      <?php endforeach; ?>
+    </div>
+
+    <!-- Sport navigation — matches fcbet216 exactly -->
+    <div class="sb-sport-nav">
+      <!-- Streaming button with LIVE badge -->
+      <button class="sb-sport-item sb-nav-streaming" onclick="window.sbSwitchTab(this,'inplay',0)">
+        <div class="sb-sport-icon" style="position:relative">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="sb-nav-live-dot"></span>
+        </div>
+        <span class="sb-sport-lbl">Streami...</span>
+      </button>
+      <!-- En direct -->
+      <button class="sb-sport-item sb-nav-endirect" onclick="window.sbSwitchLive(this)">
+        <div class="sb-sport-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><polygon points="10,8 17,12 10,16" fill="currentColor"/></svg>
+        </div>
+        <span class="sb-sport-lbl">En direct</span>
+      </button>
+      <!-- Dynamic sport tabs -->
+      <div class="sb-sport-scroll" id="sb-sport-nav-list">
+        <div class="sb-skeleton-circ"></div>
+        <div class="sb-skeleton-circ"></div>
+        <div class="sb-skeleton-circ"></div>
+      </div>
+      <!-- Tous les marchés -->
+      <button class="sb-sport-item sb-nav-all" onclick="window.sbSwitchTab(this,'upcoming',1)">
+        <div class="sb-sport-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sb-sport-lbl">Tous les...</span>
+      </button>
+      <button class="sb-nav-arrow" id="sb-nav-arrow-btn" onclick="window.sbScrollNav()"><i class="fa fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Mobile-only: Sidebar content (search, leagues, sport tabs) shown inline -->
+  <div class="sb-mobile-sidebar-content">
+    <div class="sb-search-wrap">
+      <div class="sb-search-box">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
+      </div>
+    </div>
+
+    <!-- LES MEILLEURES LIGUES / MES LIGUES tabs -->
+    <div class="sb-mob-league-tabs">
+      <div class="sb-league-group-hdr">
+        <span class="hdr-title sb-mob-tab active" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</span>
+        <span class="sb-mob-tab" onclick="window.sbMobLeagueTab(this,'my')"><strong>MES LIGUES</strong> <span class="sb-badge-green">0</span></span>
+        <span class="sb-mob-collapse" onclick="this.closest('.sb-mob-league-tabs').classList.toggle('collapsed')">—</span>
+      </div>
+      <!-- Best leagues list -->
+      <div class="sb-mob-best-leagues" id="sb-mob-best-leagues">
+        <div class="sb-tl-list">
+          <?php foreach($top_leagues as $l): ?>
+          <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
+            <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
+            <span class="sb-league-name"><?=$l['name']?></span>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <!-- My leagues (empty state) -->
+      <div class="sb-mob-my-leagues" id="sb-mob-my-leagues" style="display:none">
+        <div class="sb-mob-empty-state">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="4" width="32" height="40" rx="4" stroke="var(--sb-text-3)" stroke-width="1.5"/><path d="M16 16h16M16 24h16M16 32h8" stroke="var(--sb-text-3)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <p>Aucune ligue ajoutée</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sb-center-scroll">
+    <!-- EN DIRECT live match cards (horizontal scroll, above Cotes boostées) -->
+    <div class="sb-en-direct-row" id="sb-en-direct-cards">
+      <!-- Skeleton until renderEnDirectCards() runs -->
+      <div class="sb-sk-boost-card"></div>
+      <div class="sb-sk-boost-card"></div>
+      <div class="sb-sk-boost-card"></div>
+    </div>
+
+    <!-- Cotes boostées (promotional) -->
+    <div class="sb-boost-header">
+      <i class="fa fa-bolt"></i> Cotes boostées
+    </div>
+
+    <div class="sb-boost-row" id="sb-boosted-odds">
+      <!-- Skeleton boosted cards -->
+      <div class="sb-sk-boost-card"></div>
+      <div class="sb-sk-boost-card"></div>
+    </div>
+
+    <!-- Match listings — richer skeleton until JS renders -->
+    <div id="sb-matches-body">
+      <div class="sb-skeleton-container" id="sb-initial-skeleton">
+        <?php for($s=0;$s<5;$s++): ?>
+        <div class="sb-sk-group">
+          <!-- League header row -->
+          <div class="sb-sk-row sb-sk-header">
+            <div class="sb-sk-block" style="width:18px;height:18px;border-radius:50%"></div>
+            <div class="sb-sk-block" style="width:130px;height:11px;margin-left:8px"></div>
+            <div class="sb-sk-block" style="width:40px;height:11px;margin-left:auto"></div>
+          </div>
+          <!-- Match row 1 -->
+          <div class="sb-sk-match">
+            <div class="sb-sk-match-left">
+              <div class="sb-sk-block" style="width:90px;height:10px;margin-bottom:6px"></div>
+              <div class="sb-sk-block" style="width:110px;height:10px"></div>
+            </div>
+            <div class="sb-sk-match-odds">
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+            </div>
+          </div>
+          <!-- Match row 2 -->
+          <div class="sb-sk-match">
+            <div class="sb-sk-match-left">
+              <div class="sb-sk-block" style="width:115px;height:10px;margin-bottom:6px"></div>
+              <div class="sb-sk-block" style="width:80px;height:10px"></div>
+            </div>
+            <div class="sb-sk-match-odds">
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+              <div class="sb-sk-btn"></div>
+            </div>
+          </div>
+        </div>
+        <?php endfor; ?>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RIGHT SIDEBAR ══ -->
+<aside class="sb-right" id="sb-right">
+
+  <!-- Match en direct viewer — shown when a match is opened -->
+  <div class="sb-match-viewer" id="sb-match-viewer" style="display:none">
+    <div class="sb-pitch-wrap">
+      <div class="sb-pitch" id="sb-pitch">
+        <div class="sb-pitch-line-center"></div>
+        <div class="sb-pitch-circle"></div>
+        <div class="sb-pitch-box left"></div>
+        <div class="sb-pitch-box right"></div>
+        <div class="sb-pitch-label" id="sb-pitch-label"></div>
+      </div>
+    </div>
+    <div class="sb-viewer-tabs">
+      <button class="sb-vt active" onclick="window.sbViewerTab(this,'live')">
+        <i class="fa fa-play"></i> EN DIRECT
+      </button>
+      <button class="sb-vt" onclick="window.sbViewerTab(this,'h2h')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M3 20c0-4.4 2.7-8 6-8M21 20c0-4.4-2.7-8-6-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> FACE-À-FACE
+      </button>
+      <button class="sb-vt" onclick="window.sbViewerTab(this,'incidents')">
+        <i class="fa fa-list"></i> INCIDENTS
+      </button>
+      <button class="sb-vt" onclick="window.sbViewerTab(this,'stats')">
+        <i class="fa fa-bar-chart"></i> STATS
+      </button>
+    </div>
+  </div>
+
+  <div class="sb-widget">
+    <div class="sb-widget-hdr">Code rapide <i class="fa fa-info-circle"></i></div>
+    <div class="sb-widget-body">
+      <input type="text" class="sb-dark-inp" placeholder="Entrez le code rapide">
+      <label class="sb-quick-toggle">
+        <input type="checkbox"> <span>Utilisez le mode rapide</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="sb-widget">
+    <div class="sb-widget-hdr">Rechercher des paris</div>
+    <div class="sb-widget-body">
+      <div class="sb-search-row">
+        <select class="sb-dark-sel"><option>Bet Code</option></select>
+        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d...">
+      </div>
+    </div>
+  </div>
+
+  <div class="sb-widget">
+    <div class="sb-widget-hdr">FICHE DE PARI <i class="fa fa-minus"></i></div>
+    <div id="sb-slip-body"></div>
+  </div>
+
+  <div class="sb-widget">
+    <div class="sb-widget-hdr">Paris populaires</div>
+    <div id="sb-popular-bets"></div>
+  </div>
+</aside>
+
 </div>
 
-<?php if (!$game_url): ?>
-<script>
-(function () {
-  try {
-    var gid = '8a704858d5deb4af1ddc722092ac7614';
-    if (window.MK_GAME_CACHE && window.MK_GAME_CACHE[gid] && window.MK_GAME_CACHE[gid].url) {
-      var hit = window.MK_GAME_CACHE[gid];
-      var hitTag = String(hit.tag || '').toLowerCase();
-      if (hit && hit.url && (Date.now() - (hit.ts || 0)) < 5 * 60 * 1000 && hitTag === 'sports') {
-        var iframe = document.getElementById('gameFrame');
-        if (iframe) iframe.src = hit.url;
-        var err = document.getElementById('gameError');
-        if (err) err.style.display = 'none';
-      }
-    }
-  } catch (e) {}
-})();
-</script>
-<?php endif; ?>
+<!-- Mobile Bar — 3 items matching fcbet216 mobile footer -->
+<div class="sb-mob-footer">
+  <button class="sb-mob-btn" onclick="window.location.href='/public_html/'"><span class="sb-mob-icon">🍒</span><span class="sb-mob-lbl">Casino</span></button>
+  <button class="sb-mob-btn active" onclick="window.location.href='/public_html/sportsbook/'"><span class="sb-mob-icon">⚽</span><span class="sb-mob-lbl">Paris sportifs</span></button>
+  <button class="sb-mob-btn" onclick="window.sbToggleLeft()"><span class="sb-mob-icon">☰</span><span class="sb-mob-lbl">Menu</span></button>
+</div>
 
-<style>
-  body { padding-top: 0 !important; overflow: hidden; }
-  .game-container { position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; }
-  @media (max-width: 767px) {
-    .game-container { position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; }
-    .top-header, .header-container, .custom-navbar, .secondary-nav-container, #mobile-footer-nav { display: none !important; }
-  }
-  .secondary-nav-container { display: none !important; }
-  .mk-iframe-secondary-nav { display: none !important; }
-  .game-container iframe { position: absolute; top: -102px; left: 0; right: 0; width: 100%; height: calc(100% + 102px); }
-  .mobile-game-header { background: #000; height: 60px; display: none !important; justify-content: space-between; align-items: center; padding: 0 12px; border-bottom: 1px solid #222; box-shadow: 0 2px 10px rgba(0,0,0,0.8); font-family: 'Roboto', sans-serif; width: 100%; flex-wrap: nowrap; }
-  @media (max-width: 767px) { .mobile-game-header { display: none !important; } }
-  @media (max-width: 767px) {
-    .game-container iframe { top: 0; height: 100%; }
-  }
-  .mgh-left { flex: 0 0 auto; }
-  .mgh-back { color: #fff; font-weight: 700; text-transform: uppercase; font-size: 13px; text-decoration: none; display: flex; align-items: center; letter-spacing: 0.5px; }
-  .mgh-back i { color: #c37601; font-weight: 900; margin-right: 4px; font-size: 16px; }
-  .mgh-right { display: flex; align-items: center; flex-wrap: nowrap; gap: 10px; }
-  .mgh-deposit { background: #c37601; color: #fff; border: none; font-weight: 600; padding: 6px 10px; font-size: 12px; border-radius: 4px; text-transform: capitalize; white-space: nowrap; }
-  .mgh-deposit:hover { background: #a05f00; color: #fff; }
-  .mgh-balance { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; font-size: 11px; font-weight: 700; min-width: auto; }
-  .bal-line { white-space: nowrap; display: flex; align-items: center; gap: 3px; }
-  .bal-val-ci { color: #FFD700; font-size: 12px; }
-  .bal-val-exp { color: #FF0000; font-size: 11px; }
-  .bal-unit { color: #fff; font-size: 10px; opacity: 0.9; }
-  .mgh-icons { display: flex; align-items: center; gap: 12px; margin-left: 2px; }
-  .mgh-icon-search { color: #fff; font-size: 18px; cursor: pointer; }
-  .mgh-icon-bell { color: #c37601; font-size: 18px; cursor: pointer; }
-</style>
-
-<?php require_once '../includes/footer.php'; ?>
+<script src="/public_html/sportsbook/app.js?v=<?=time()?>"></script>

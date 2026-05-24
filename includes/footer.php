@@ -15,7 +15,7 @@ if ($mk_fragment) {
         <span style="font-size: 24px;">🍒</span>
         <span>Casino</span>
     </a>
-    <a href="#" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports'); return false;" class="mbn-item">
+    <a href="#" onclick="mkSafeLaunch('6260', 'Sports'); return false;" class="mbn-item">
         <span style="font-size: 24px;">⚽</span>
         <span>Paris sportifs</span>
     </a>
@@ -54,30 +54,7 @@ if ($mk_fragment) {
             <a href="/promos">Promotions</a>
         </div>
 
-        <!-- Providers Section -->
-        <div class="fc-providers-section">
-            <h4 class="fc-section-title">FOURNISSEURS DE CASINOS</h4>
-            <div class="fc-providers-grid">
-                <!-- Row 1 (Cleaned) -->
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/pragmatic.png" alt="Pragmatic Play"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1658314_evolution_logo_online_250x100-white.png" alt="Evolution"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/amatic.png" alt="Amatic"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654605_PGSoft-250x100.png" alt="PG Soft"></div>
-                <div class="provider-box"><span class="provider-text-logo">3 OAKS</span></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654685_Spribe-250x100.png" alt="Spribe"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1659107_habanero-white-250x100.png" alt="Habanero"></div>
 
-                <!-- Row 2 -->
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1655807_Ruby-Play-250x100.png" alt="Ruby Play"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1658410_Ezugi.png" alt="Ezugi"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1726671_Hacksaw_logo.png" alt="Hacksaw Gaming"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1765463_Enjoy.png" alt="Enjoy"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1684250_Upgaming_250x100.png" alt="Upgaming"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1770316_Playson.png" alt="Playson"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1654681_flexsy_250x100_white.png" alt="Flexsy"></div>
-                <div class="provider-box"><img src="<?php echo $base_url; ?>images/1653303_kagaming.png" alt="KA Gaming"></div>
-            </div>
-        </div>
 
 
         <!-- Crypto Section -->
@@ -386,7 +363,7 @@ try {
 }
 ?>
 
-<script src="<?php echo $absolute_base_url; ?>includes/balance-sync.js?v=<?php echo (int)$mk_js_ver; ?>"></script>
+
 <script src="<?php echo $asset_path; ?>js/app-main.js?v=<?php echo (int)$mk_app_js_ver; ?>"></script>
 <script>
     (function () {
@@ -394,8 +371,8 @@ try {
             var loggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
             if (!loggedIn) return;
 
-            var SPORTS_ID = '8a704858d5deb4af1ddc722092ac7614';
-            var SPORTSBOOK_ID = '8a704858d5deb4af1ddc722092ac7614';
+            var SPORTS_ID = '6260';
+            var SPORTSBOOK_ID = '6260';
             var ROUTE_MAP = {
                 '/sports': { id: SPORTS_ID, title: 'Sports' },
                 '/sportsbook': { id: SPORTSBOOK_ID, title: 'Sports Book' }

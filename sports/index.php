@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $mk_fragment = isset($_GET['mk_fragment']);
 if (!$mk_fragment) {
     require_once __DIR__ . '/../app/index.php';
@@ -6,241 +6,392 @@ if (!$mk_fragment) {
 }
 session_start();
 require_once '../includes/db.php';
-require_once '../includes/header.php';
-require_once '../api/game_logic.php';
-
 if (!isset($_SESSION['user_id'])) {
-    echo '<script>window.location.href = "' . $base_url . '";</script>';
+    echo '<script>window.location.href = "/";</script>';
     exit;
 }
-
-$game_id = '8a704858d5deb4af1ddc722092ac7614';
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
-$home_url = $protocol . $_SERVER['HTTP_HOST'] . '/sports/?mk=1';
-
-$game_url = '';
-$error_msg = '';
-$cached = $_SESSION['mk_prefetched_game_urls'][$game_id] ?? null;
-if (is_array($cached) && !empty($cached['url']) && !empty($cached['ts']) && (time() - (int)$cached['ts']) <= 300) {
-    $ch = (string)($cached['home_url'] ?? '');
-    $isSports = $ch !== '' && (bool)preg_match('#/sports(?:/|\\?|$)#i', $ch);
-    $isSportsbook = $ch !== '' && (bool)preg_match('#/sportsbook(?:/|\\?|$)#i', $ch);
-    $tagOk = isset($cached['tag']) && strtolower((string)$cached['tag']) === 'sports';
-    if (!$isSports || $isSportsbook || !$tagOk) {
-        $cached = null;
-    }
-}
-if (is_array($cached) && !empty($cached['url']) && !empty($cached['ts']) && (time() - (int)$cached['ts']) <= 300) {
-    $game_url = (string)$cached['url'];
-}
+$base_url = '/public_html/';
 ?>
-
-<div class="mobile-game-header visible-xs">
-  <div class="mgh-left">
-    <a href="<?php echo $base_url; ?>" class="mgh-back"><i class="fa fa-chevron-left"></i> <span data-translate="back">BACK</span></a>
-  </div>
-  <div class="mgh-right">
-    <a href="#" class="btn btn-sm mgh-deposit" data-translate="deposit">Deposit</a>
-    <div class="mgh-balance">
-      <div class="bal-line">
-        <span class="bal-val-ci" data-live-balance="wallet"><?php echo number_format($_SESSION['coins'], 2); ?></span> 
-        <span class="bal-unit">TND</span>
-      </div>
-      <div class="bal-line">
-        <span class="bal-val-exp" data-live-balance="exposure">0.00</span> 
-        <span class="bal-unit">EXP</span>
-      </div>
-    </div>
-    <div class="mgh-icons">
-      <i class="fa fa-search mgh-icon-search"></i>
-      <i class="fa fa-bell-o mgh-icon-bell"></i>
-    </div>
-  </div>
- </div>
-
-<div class="game-container" style="position: relative; width: 100%; background: #000;">
-  <div id="mkSportsLoadingText" style="display:<?php echo $game_url ? 'none' : 'flex'; ?>; position:absolute; inset:0; align-items:center; justify-content:center; background:#000; z-index:10; color:#bbb; font-weight:800;">Loading...</div>
-  <iframe id="gameFrame" src="<?php echo $game_url ? htmlspecialchars($game_url) : 'about:blank'; ?>" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
-</div>
-
-<?php if ($game_url): ?>
-<script>
-(function () {
-  try {
-    var u = new URL("<?php echo htmlspecialchars($game_url); ?>");
-    if (!u || !u.origin) return;
-    var link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = u.origin;
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  } catch (e) {}
-})();
-</script>
-<?php endif; ?>
-
-<?php if (!$game_url): ?>
-<script>
-(function () {
-  try {
-    var iframe = document.getElementById('gameFrame');
-    var loading = document.getElementById('mkSportsLoadingText');
-    var apiUrl = (typeof SITE_API_URL !== 'undefined') ? SITE_API_URL + 'launch_game.php' : '/api/launch_game.php';
-    var origin = window.location.origin || (window.location.protocol + '//' + window.location.host);
-    var gid = '8a704858d5deb4af1ddc722092ac7614';
-    try {
-      if (window.MK_GAME_CACHE && window.MK_GAME_CACHE[gid] && window.MK_GAME_CACHE[gid].url) {
-        var hit = window.MK_GAME_CACHE[gid];
-        var hitTag = String(hit.tag || '').toLowerCase();
-        if (hit && hit.url && (Date.now() - (hit.ts || 0)) < 5 * 60 * 1000 && hitTag === 'sports' && !looksSportsbook(hit.url)) {
-          try {
-            var uHit = new URL(hit.url);
-            var linkHit = document.createElement('link');
-            linkHit.rel = 'preconnect';
-            linkHit.href = uHit.origin;
-            linkHit.crossOrigin = 'anonymous';
-            document.head.appendChild(linkHit);
-          } catch (eH0) {}
-          try { iframe.src = hit.url; } catch (eH1) {}
-          try { if (loading) loading.style.display = 'none'; } catch (eH2) {}
-          return;
-        }
-        if (hitTag && hitTag !== 'sports') {
-          try { delete window.MK_GAME_CACHE[gid]; } catch (eDel) {}
-        }
-      }
-    } catch (eHC) {}
-
-    function looksSportsbook(u) {
-      u = String(u || '').toLowerCase();
-      return u.indexOf('sportsbook') !== -1 || u.indexOf('saba') !== -1 || u.indexOf('sbo') !== -1;
-    }
-    function doLaunch(homeUrl) {
-      return fetch(apiUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ game_id: gid, home_url: homeUrl, prefetch: 1, skip_log: true }),
-        cache: 'no-store'
-      }).then(function (r) { return r.ok ? r.json() : null; });
-    }
-    doLaunch(origin + '/sports/?mk=1').then(function (j) {
-      if (j && j.success && j.game_url) {
-        if (String(j.tag || '').toLowerCase() !== 'sports') {
-          return doLaunch(origin + '/sports/?mk=1&force=1');
-        }
-        if (looksSportsbook(j.game_url)) {
-          return doLaunch(origin + '/sports/?mk=1&force=1').then(function (j2) { return (j2 && j2.success && j2.game_url) ? j2 : j; });
-        }
-        return j;
-      }
-      return j;
-    }).then(function (j) {
-      if (j && j.success && j.game_url) {
-        try {
-          window.MK_GAME_CACHE = window.MK_GAME_CACHE || {};
-          window.MK_GAME_CACHE[gid] = { url: j.game_url, ts: Date.now(), tag: String(j.tag || 'sports') };
-        } catch (eC0) {}
-        try {
-          var u = new URL(j.game_url);
-          var link = document.createElement('link');
-          link.rel = 'preconnect';
-          link.href = u.origin;
-          link.crossOrigin = 'anonymous';
-          document.head.appendChild(link);
-        } catch (e0) {}
-        try { iframe.src = j.game_url; } catch (e1) {}
-        try { if (loading) loading.style.display = 'none'; } catch (e2) {}
-      } else {
-        try { if (loading) loading.textContent = 'Failed to load.'; } catch (e3) {}
-      }
-    }).catch(function () {
-      try { if (loading) loading.textContent = 'Failed to load.'; } catch (e4) {}
-    });
-  } catch (e) {}
-})();
-</script>
-<?php endif; ?>
-
-<script>
-(function () {
-  function setVhVar() {
-    var h = window.innerHeight;
-    if (window.visualViewport && typeof window.visualViewport.height === 'number') h = window.visualViewport.height;
-    document.documentElement.style.setProperty('--mk-vh', (h * 0.01) + 'px');
-  }
-  function refresh() { requestAnimationFrame(setVhVar); setTimeout(setVhVar, 0); setTimeout(setVhVar, 150); }
-  window.addEventListener('resize', refresh);
-  window.addEventListener('orientationchange', refresh);
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', refresh);
-    window.visualViewport.addEventListener('scroll', refresh);
-  }
-  refresh();
-})();
-</script>
-
 <style>
-  :root { --mk-vh: 1vh; }
-  body { padding-top: 0 !important; overflow: hidden; }
-  .game-container {
-    position: fixed;
-    inset: 0;
-    width: 100vw !important;
-    height: calc(var(--mk-vh) * 100);
-    max-width: none;
-    margin: 0;
-    padding: 0;
-  }
-  .game-container iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .mobile-game-header { display: none !important; }
-  @media (max-width: 767px) {
-    .top-header, .header-container, .custom-navbar, .secondary-nav-container, #mobile-footer-nav { display: none !important; }
-    body, html { height: 100%; overflow: hidden !important; }
-    .game-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: calc(var(--mk-vh) * 100);
-    }
-    .game-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .top-header, .header-container, .custom-navbar, .secondary-nav-container, #mobile-footer-nav { display: none !important; }
-  }
-  @supports (height: 100dvh) {
-    @media (max-width: 767px) {
-      .game-container { height: 100dvh; }
-    }
-  }
-  .mobile-game-header { background: #000; height: 60px; display: none !important; justify-content: space-between; align-items: center; padding: 0 12px; border-bottom: 1px solid #222; box-shadow: 0 2px 10px rgba(0,0,0,0.8); font-family: 'Roboto', sans-serif; width: 100%; flex-wrap: nowrap; }
-  @media (max-width: 767px) { .mobile-game-header { display: none !important; } }
-  .mgh-left { flex: 0 0 auto; }
-  .mgh-back { color: #fff; font-weight: 700; text-transform: uppercase; font-size: 13px; text-decoration: none; display: flex; align-items: center; letter-spacing: 0.5px; }
-  .mgh-back i { color: #c37601; font-weight: 900; margin-right: 4px; font-size: 16px; }
-  .mgh-right { display: flex; align-items: center; flex-wrap: nowrap; gap: 10px; }
-  .mgh-deposit { background: #c37601; color: #fff; border: none; font-weight: 600; padding: 6px 10px; font-size: 12px; border-radius: 4px; text-transform: capitalize; white-space: nowrap; }
-  .mgh-deposit:hover { background: #a05f00; color: #fff; }
-  .mgh-balance { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; font-size: 11px; font-weight: 700; min-width: auto; }
-  .bal-line { white-space: nowrap; display: flex; align-items: center; gap: 3px; }
-  .bal-val-ci { color: #FFD700; font-size: 12px; }
-  .bal-val-exp { color: #FF0000; font-size: 11px; }
-  .bal-unit { color: #fff; font-size: 10px; opacity: 0.9; }
-  .mgh-icons { display: flex; align-items: center; gap: 12px; margin-left: 2px; }
-  .mgh-icon-search { color: #fff; font-size: 18px; cursor: pointer; }
-  .mgh-icon-bell { color: #c37601; font-size: 18px; cursor: pointer; }
+body { overflow: hidden !important; }
+/* Override body padding so our layout fills the screen below the navbar */
+.sp-wrapper {
+  display: flex;
+  height: calc(100vh - 50px); /* 50px = site navbar height */
+  margin-top: 0;
+  overflow: hidden;
+}
+
+/* ══ LEFT SIDEBAR ══ */
+.sp-left {
+  width: 245px; min-width: 245px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  display: flex; flex-direction: column;
+  overflow-y: auto; overflow-x: hidden;
+}
+.sp-left::-webkit-scrollbar { width: 4px; }
+.sp-left::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+.sp-mini-nav { display: flex; border-bottom: 1px solid #eee; flex-shrink: 0; }
+.sp-mini-btn {
+  flex: 1; padding: 10px 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-right: 1px solid #eee;
+  font-size: 14px; color: #555; text-decoration: none;
+}
+.sp-mini-btn:last-child { border-right: none; }
+.sp-mini-btn:hover { background: #f9f9f9; }
+.sp-live-pill {
+  background: #c0181e; color: white;
+  font-size: 9px; font-weight: 800;
+  padding: 3px 6px; border-radius: 3px;
+}
+
+.sp-red-head {
+  background: #c0181e; color: white;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  padding: 8px 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; user-select: none; flex-shrink: 0;
+}
+.sp-rh-right { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+.sp-rh-badge { background: rgba(0,0,0,.2); padding: 2px 6px; border-radius: 10px; }
+
+.sp-league-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px;
+  font-size: 12px; font-weight: 600; color: #333;
+  cursor: pointer; border-bottom: 1px solid #f5f5f5;
+  text-decoration: none; transition: background .15s;
+}
+.sp-league-item:hover { background: #fef5f5; color: #c0181e; }
+.sp-flag { font-size: 14px; line-height: 1; flex-shrink: 0; }
+.sp-live-badge {
+  margin-left: auto; background: #c0181e; color: white;
+  font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 2px; flex-shrink: 0;
+}
+
+.sp-search {
+  display: flex; align-items: center;
+  padding: 8px 10px; border-bottom: 1px solid #eee; flex-shrink: 0;
+}
+.sp-search-ico { color: #bbb; margin-right: 6px; }
+.sp-search input {
+  flex: 1; border: none; outline: none;
+  font-size: 12px; color: #333; background: transparent;
+}
+.sp-search input::placeholder { color: #bbb; }
+
+.sp-menu-label {
+  padding: 7px 10px 3px;
+  font-size: 10px; font-weight: 800; color: #aaa; text-transform: uppercase; flex-shrink: 0;
+}
+.sp-time-filter {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 4px 10px 8px; border-bottom: 1px solid #eee; flex-shrink: 0;
+}
+.sp-tbtn {
+  padding: 4px 9px; border: 1px solid #ddd; border-radius: 3px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  background: white; color: #555; transition: all .15s;
+}
+.sp-tbtn.active, .sp-tbtn:hover { background: #c0181e; color: white; border-color: #c0181e; }
+
+.sp-sport-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; font-size: 12px; font-weight: 600; color: #333;
+  cursor: pointer; border-bottom: 1px solid #f5f5f5; transition: background .15s;
+}
+.sp-sport-row:hover { background: #fef5f5; }
+.sp-sport-row .si { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+.sp-sport-row .sn { flex: 1; }
+.sp-sport-row .sr { display: flex; align-items: center; gap: 4px; }
+.sp-sl { background: #c0181e; color: white; font-size: 8px; font-weight: 800; padding: 2px 4px; border-radius: 2px; }
+.sp-sc { color: #888; font-size: 11px; }
+.sp-chev { color: #ccc; font-size: 11px; }
+
+/* ══ CENTER ══ */
+.sp-center { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+.sp-date-bar {
+  background: white; border-bottom: 1px solid #ddd;
+  display: flex; align-items: stretch; padding: 0 8px; flex-shrink: 0;
+}
+.sp-dbtn {
+  padding: 6px 13px; font-size: 11px; font-weight: 700; color: #888;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center;
+  border-bottom: 3px solid transparent; transition: all .15s; line-height: 1.3;
+}
+.sp-dbtn .dn { font-size: 15px; font-weight: 800; color: #333; }
+.sp-dbtn.active { color: #c0181e; border-bottom-color: #c0181e; }
+.sp-dbtn.active .dn { color: #c0181e; }
+.sp-dbtn:hover:not(.active) { color: #333; }
+
+.sp-sports-bar {
+  background: #1e1e1e;
+  display: flex; align-items: center;
+  overflow-x: auto; flex-shrink: 0;
+}
+.sp-sports-bar::-webkit-scrollbar { height: 3px; }
+.sp-sports-bar::-webkit-scrollbar-thumb { background: #444; }
+.sp-tab {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 15px; cursor: pointer;
+  color: #888; font-size: 11px; font-weight: 600; white-space: nowrap;
+  border-bottom: 3px solid transparent; transition: all .15s; flex-shrink: 0;
+}
+.sp-tab:hover { color: #fff; }
+.sp-tab.active { color: #fff; border-bottom-color: #c0181e; }
+.sp-tab .ti { font-size: 20px; margin-bottom: 2px; }
+
+.sp-iframe-area { flex: 1; position: relative; overflow: hidden; }
+.sp-iframe-area iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.sp-loading {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #f5f5f5; color: #999; font-size: 14px; font-weight: 600;
+  gap: 10px;
+}
+.sp-spinner {
+  width: 32px; height: 32px;
+  border: 4px solid #eee; border-top-color: #c0181e;
+  border-radius: 50%;
+  animation: sp-spin .8s linear infinite;
+}
+@keyframes sp-spin { to { transform: rotate(360deg); } }
+
+/* ══ RIGHT SIDEBAR ══ */
+.sp-right {
+  width: 280px; min-width: 280px;
+  background: white; border-left: 1px solid #ddd;
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+.sp-right::-webkit-scrollbar { width: 4px; }
+.sp-right::-webkit-scrollbar-thumb { background: #ddd; }
+
+.sp-rhead {
+  background: #c0181e; color: white;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  padding: 9px 12px; display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.sp-rhead .rhico {
+  width: 15px; height: 15px; border: 1px solid rgba(255,255,255,.5);
+  border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; cursor: help;
+}
+.sp-rbody { padding: 10px 12px; border-bottom: 1px solid #eee; }
+.sp-inp {
+  width: 100%; border: 1px solid #ddd; border-radius: 4px;
+  padding: 8px 10px; font-size: 12px; outline: none; color: #333; margin-bottom: 6px;
+}
+.sp-inp:focus { border-color: #c0181e; }
+.sp-cbrow { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+.sp-cbrow input { accent-color: #c0181e; }
+.sp-bcrow { display: flex; gap: 6px; }
+.sp-bcrow select {
+  border: 1px solid #ddd; border-radius: 4px;
+  padding: 8px; font-size: 12px; font-weight: 600;
+  outline: none; background: white; color: #333;
+}
+.sp-bcrow input { flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 8px; font-size: 12px; outline: none; }
+.sp-slip-empty { padding: 20px 12px; text-align: center; border-bottom: 1px solid #eee; }
+.sp-slip-ico { font-size: 40px; color: #ccc; margin-bottom: 8px; }
+.sp-slip-empty p { color: #999; font-size: 12px; margin-bottom: 10px; line-height: 1.5; }
+.sp-pop-item { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+.sp-pop-item:hover { background: #fef9f9; }
+.sp-pop-name { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 3px; }
+.sp-pop-meta { font-size: 11px; color: #888; display: flex; gap: 6px; align-items: center; }
+.sp-pop-odd { margin-left: auto; font-weight: 700; color: #c0181e; font-size: 12px; }
 </style>
 
-<?php require_once '../includes/footer.php'; ?>
+<!-- 3-Column Altenar Layout -->
+<div class="sp-wrapper">
+
+  <!-- ══ LEFT SIDEBAR ══ -->
+  <aside class="sp-left">
+    <div class="sp-mini-nav">
+      <a href="<?php echo $base_url; ?>" class="sp-mini-btn">🏠</a>
+      <div class="sp-mini-btn"><span class="sp-live-pill">EN DIRECT</span></div>
+      <div class="sp-mini-btn">📊</div>
+    </div>
+
+    <div class="sp-red-head">
+      <span>⭐ FAVORIS</span>
+      <span class="sp-rh-right">▾</span>
+    </div>
+
+    <div class="sp-red-head" style="background:#d01c22;">
+      <span>LES MEILLEURES LIG...</span>
+      <span class="sp-rh-right">
+        <span class="sp-rh-badge">MES LIGUES 0</span>
+        <span>—</span>
+      </span>
+    </div>
+
+    <a class="sp-league-item"><span class="sp-flag">🌐</span> Euro 2028</a>
+    <a class="sp-league-item"><span class="sp-flag">🌐</span> Ligue des Champions</a>
+    <a class="sp-league-item"><span class="sp-flag">🇦🇷</span> Copa Libertadores</a>
+    <a class="sp-league-item"><span class="sp-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> Premier League</a>
+    <a class="sp-league-item"><span class="sp-flag">🇪🇸</span> LaLiga</a>
+    <a class="sp-league-item"><span class="sp-flag">🇮🇹</span> Serie A</a>
+    <a class="sp-league-item"><span class="sp-flag">🇩🇪</span> Bundesliga <span class="sp-live-badge">EN DIRECT</span></a>
+    <a class="sp-league-item"><span class="sp-flag">🇫🇷</span> Ligue 1</a>
+    <a class="sp-league-item"><span class="sp-flag">🇫🇷</span> Coupe de France</a>
+    <a class="sp-league-item"><span class="sp-flag">🌐</span> Ligue Professionnelle</a>
+    <a class="sp-league-item"><span class="sp-flag">🌐</span> Euroligue</a>
+
+    <div class="sp-search">
+      <span class="sp-search-ico">🔍</span>
+      <input type="text" placeholder="Entrez l'équipe ou le nom du cha...">
+    </div>
+
+    <div class="sp-menu-label">MENU</div>
+    <div class="sp-time-filter">
+      <button class="sp-tbtn active">Tout</button>
+      <button class="sp-tbtn">Aujourd'hui</button>
+      <button class="sp-tbtn">3h</button>
+      <button class="sp-tbtn">6h</button>
+      <button class="sp-tbtn">24h</button>
+      <button class="sp-tbtn">Demain</button>
+    </div>
+
+    <div class="sp-sport-row"><span class="si">⚽</span><span class="sn">Football</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">999+</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🎾</span><span class="sn">Tennis</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">352</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🏀</span><span class="sn">Basketball</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">593</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🏐</span><span class="sn">Volleyball</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">29</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🏒</span><span class="sn">Hockey su...</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">59</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🏓</span><span class="sn">Tennis de...</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">337</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🎮</span><span class="sn">E-sports +</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">213</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">⚽</span><span class="sn">E-Football</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">97</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🏀</span><span class="sn">E-Basketb...</span><span class="sr"><span class="sp-sl">EN DIRECT</span><span class="sp-sc">29</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🚴</span><span class="sn">Cyclisme</span><span class="sr"><span class="sp-sc">14</span><span class="sp-chev">›</span></span></div>
+    <div class="sp-sport-row"><span class="si">🤖</span><span class="sn">Football AI</span><span class="sr"><span class="sp-sc">13</span><span class="sp-chev">›</span></span></div>
+  </aside>
+
+  <!-- ══ CENTER ══ -->
+  <section class="sp-center">
+    <div class="sp-date-bar">
+      <div class="sp-dbtn active">Aujourd'hui <span class="dn">21</span></div>
+      <div class="sp-dbtn">Ven <span class="dn">22</span></div>
+      <div class="sp-dbtn">Sam <span class="dn">23</span></div>
+      <div class="sp-dbtn">Dim <span class="dn">24</span></div>
+      <div class="sp-dbtn">Lun <span class="dn">25</span></div>
+      <div class="sp-dbtn">Mar <span class="dn">26</span></div>
+      <div class="sp-dbtn">Mer <span class="dn">27</span></div>
+    </div>
+
+    <div class="sp-sports-bar">
+      <div class="sp-tab active"><span class="ti">▶</span>En direct</div>
+      <div class="sp-tab"><span class="ti">⚽</span>Football</div>
+      <div class="sp-tab"><span class="ti">🎾</span>Tennis</div>
+      <div class="sp-tab"><span class="ti">🏀</span>Basket...</div>
+      <div class="sp-tab"><span class="ti">🏐</span>Volleyb...</div>
+      <div class="sp-tab"><span class="ti">🏒</span>Hocke...</div>
+      <div class="sp-tab"><span class="ti">🏆</span>Tous le...</div>
+    </div>
+
+    <div class="sp-iframe-area" style="width: 100%; height: 100vh; position: relative;">
+        <div id="sp-loading" style="text-align:center; padding: 50px; color: #fff;">
+            <div class="sp-spinner"></div> Chargement du sportsbook...
+        </div>
+        <script>
+        (function(){
+            // We use 6260 which is the BtiGaming ID
+            fetch('<?php echo $base_url; ?>api/launch_game.php', {
+                method:'POST', credentials:'same-origin',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({game_id:'6260', provider:'bti', home_url:'https://tanitbet716.com/', prefetch:1, skip_log:true})
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(j => {
+                var area = document.querySelector('.sp-iframe-area');
+                var load = document.getElementById('sp-loading');
+                if(j && j.success && j.game_url){
+                    if(load) load.remove();
+                    area.innerHTML = '<iframe src="' + j.game_url + '" allowfullscreen referrerpolicy="no-referrer" style="width:100%; height:100%; border:none;"></iframe>';
+                } else {
+                    if(load) load.innerHTML = '<div style="color:red;">❌ Erreur de chargement de l iframe.</div>';
+                }
+            })
+            .catch(e => {
+                var load = document.getElementById('sp-loading');
+                if(load) load.innerHTML = '<div style="color:red;">❌ Erreur réseau.</div>';
+            });
+        })();
+        </script>
+    </div>
+  </section>
+
+  <!-- ══ RIGHT SIDEBAR ══ -->
+  <aside class="sp-right">
+    <div class="sp-rhead">CODE RAPIDE <span class="rhico">?</span></div>
+    <div class="sp-rbody">
+      <input type="text" class="sp-inp" placeholder="Entrez le code rapide">
+      <div class="sp-cbrow">
+        <input type="checkbox" id="sp-rapid">
+        <label for="sp-rapid">Utilisez le mode rapide</label>
+      </div>
+    </div>
+
+    <div class="sp-rhead">RECHERCHER DES PARIS</div>
+    <div class="sp-rbody">
+      <div class="sp-bcrow">
+        <select><option>Bet Code</option></select>
+        <input type="text" placeholder="Entrez le numéro d...">
+      </div>
+    </div>
+
+    <div class="sp-rhead">FICHE DE PARI <span>—</span></div>
+    <div class="sp-slip-empty">
+      <div class="sp-slip-ico">📋</div>
+      <p>Pas de sélections sur la fiche de pari</p>
+      <input type="text" class="sp-inp" placeholder="Entrez le numéro de rés...">
+    </div>
+
+    <div class="sp-rhead">PARIS POPULAIRES</div>
+    <div class="sp-pop-item">
+      <div class="sp-pop-name">Atletico Mineiro vs. Cienciano</div>
+      <div class="sp-pop-meta">1x2 <span class="sp-pop-odd">1.20</span></div>
+    </div>
+    <div class="sp-pop-item">
+      <div class="sp-pop-name">Liverpool FC vs. Brentford</div>
+      <div class="sp-pop-meta">1x2 <span class="sp-pop-odd">1.83</span></div>
+    </div>
+    <div class="sp-pop-item">
+      <div class="sp-pop-name">Real Madrid vs. Athletic Club</div>
+      <div class="sp-pop-meta">1x2 <span class="sp-pop-odd">1.48</span></div>
+    </div>
+    <div class="sp-pop-item">
+      <div class="sp-pop-name">Vérone vs. AS Roma</div>
+      <div class="sp-pop-meta">1x2 <span class="sp-pop-odd">10.00</span></div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+document.querySelectorAll('.sp-tbtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.sp-tbtn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+  });
+});
+document.querySelectorAll('.sp-dbtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.sp-dbtn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+  });
+});
+document.querySelectorAll('.sp-tab').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.sp-tab').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+  });
+});
+</script>
+

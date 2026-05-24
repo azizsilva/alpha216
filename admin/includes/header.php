@@ -235,7 +235,7 @@ $materio_assets = $materio_base . 'assets/';
 $admin_username = $_SESSION['username'] ?? 'Admin';
 $admin_role = $_SESSION['role'] ?? 'admin';
 $admin_initials = strtoupper(substr(preg_replace('/[^a-z0-9]/i', '', $admin_username) ?: 'A', 0, 2));
-$admin_logo_url = '/assets/images/logo_bets.jpeg';
+$admin_logo_url = '/assets/images/xbet_logo.png';
 $page_title = $page_title ?? 'Admin';
 $admin_skeleton_profile = admin_skeleton_profile();
 

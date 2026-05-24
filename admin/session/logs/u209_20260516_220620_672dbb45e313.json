@@ -1,0 +1,17 @@
+{
+    "event": "login",
+    "time": "2026-05-16T22:06:20+00:00",
+    "user_id": 209,
+    "username": "Aziz",
+    "role": "admin",
+    "ip": "::1",
+    "forwarded_for": "",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "accept_language": "en-US,en;q=0.9",
+    "host": "localhost",
+    "request_uri": "/public_html/admin/",
+    "session_id_hash": "02cb00946062ce255c93b88c7deb106848b1cdedb1606b2089c4c5fbe69f0a7e"
+}

@@ -17,6 +17,16 @@ function odds_api_cache_dir() {
 }
 
 function odds_api_cache_get($key, $ttl_seconds) {
+    global $redis;
+    if (isset($redis)) {
+        $val = $redis->get('odds_' . $key);
+        if ($val) {
+            $data = json_decode($val, true);
+            return is_array($data) ? $data : null;
+        }
+        return null;
+    }
+    
     $dir = odds_api_cache_dir();
     if (!is_dir($dir)) @mkdir($dir, 0755, true);
     $path = $dir . '/odds_' . $key . '.json';
@@ -29,7 +39,14 @@ function odds_api_cache_get($key, $ttl_seconds) {
     return is_array($data) ? $data : null;
 }
 
-function odds_api_cache_set($key, $data) {
+function odds_api_cache_set($key, $data, $ttl_seconds = 20) {
+    global $redis;
+    if (isset($redis)) {
+        $redis->set('odds_' . $key, json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        $redis->expire('odds_' . $key, $ttl_seconds);
+        return;
+    }
+
     $dir = odds_api_cache_dir();
     if (!is_dir($dir)) @mkdir($dir, 0755, true);
     $path = $dir . '/odds_' . $key . '.json';
@@ -97,7 +114,7 @@ function odds_api_get($path, $params = [], $ttl_seconds = 20) {
 
     [$status, $json, $raw] = odds_api_http_get_json($url);
     if ($status >= 200 && $status < 300 && is_array($json)) {
-        odds_api_cache_set($cache_key, $json);
+        odds_api_cache_set($cache_key, $json, $ttl_seconds);
         return $json;
     }
 

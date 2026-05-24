@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>FCbet216 | Online sports betting with the best odds</title>
+  <meta name="description" content="Official destination for top-tier sports betting. Enjoy the best odds, fast payouts, and a seamless betting experience on a secure platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <header class="header">
+    <div class="header__inner">
+      <button class="header__burger" id="burgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="#" class="header__logo">
+        <img src="./fcbet216_demo_files/FCbet216%20dekstop.svg" alt="FCbet216" class="header__logo-img" />
+      </a>
+      <div class="header__search" id="searchWrap">
+        <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="header__search-input" id="searchInput" placeholder="Rechercher un match..." />
+      </div>
+      <nav class="header__nav">
+        <a href="#" class="active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          Sport
+        </a>
+        <a href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Live
+        </a>
+        <a href="#">Casino</a>
+        <a href="#">Promotions</a>
+        <a href="#">Résultats</a>
+      </nav>
+      <div class="header__actions">
+        <span class="header__balance">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          0.00 DT
+        </span>
+        <button class="btn btn--outline">Connexion</button>
+        <button class="btn btn--primary">Inscription</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="backdrop" class="backdrop hidden"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Paris sportifs
+      </div>
+      <ul class="sidebar__list" id="sidebarList">
+        <li class="sidebar__item active" data-sport="all">
+          <span class="sidebar__icon sidebar__icon--all">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </span>
+          <span class="sidebar__label">Tous les sports</span>
+          <span class="sidebar__badge">68</span>
+        </li>
+        <li class="sidebar__item" data-sport="football">
+          <span class="sidebar__icon sidebar__icon--football">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c3.314 0 6-2.686 6-6 0-3.314-6-10-6-10S6 12.686 6 16c0 3.314 2.686 6 6 6z"/><path d="M12 2v4"/></svg>
+          </span>
+          <span class="sidebar__label">Football</span>
+          <span class="sidebar__badge">38</span>
+        </li>
+        <li class="sidebar__item" data-sport="basketball">
+          <span class="sidebar__icon sidebar__icon--basketball">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/></svg>
+          </span>
+          <span class="sidebar__label">Basketball</span>
+          <span class="sidebar__badge">16</span>
+        </li>
+        <li class="sidebar__item" data-sport="tennis">
+          <span class="sidebar__icon sidebar__icon--tennis">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20z"/><path d="M2 12h20"/></svg>
+          </span>
+          <span class="sidebar__label">Tennis</span>
+          <span class="sidebar__badge">22</span>
+        </li>
+        <li class="sidebar__item" data-sport="handball">
+          <span class="sidebar__icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+          </span>
+          <span class="sidebar__label">Handball</span>
+          <span class="sidebar__badge">8</span>
+        </li>
+        <li class="sidebar__item" data-sport="rugby">
+          <span class="sidebar__icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v4c0 1.66-4 3-9 3s-9-1.34-9-3V5"/><path d="M3 9v4c0 1.66 4 3 9 3s9-1.34 9-3V9"/></svg>
+          </span>
+          <span class="sidebar__label">Rugby</span>
+          <span class="sidebar__badge">5</span>
+        </li>
+        <li class="sidebar__item" data-sport="esport">
+          <span class="sidebar__icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4M14 12h4M8 10v4M16 10v4"/></svg>
+          </span>
+          <span class="sidebar__label">E-Sport</span>
+          <span class="sidebar__badge">14</span>
+        </li>
+        <li class="sidebar__item" data-sport="golf">
+          <span class="sidebar__icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v14M12 16l-4 4M12 16l4 4M12 8l-4-4M12 8l4-4"/></svg>
+          </span>
+          <span class="sidebar__label">Golf</span>
+          <span class="sidebar__badge">3</span>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="section-header">
+        <h2 class="section-header__title" id="sectionTitle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c3.314 0 6-2.686 6-6 0-3.314-6-10-6-10S6 12.686 6 16c0 3.314 2.686 6 6 6z"/><path d="M12 2v4"/></svg>
+          Football
+          <span class="section-header__count" id="sectionCount">38 matchs</span>
+        </h2>
+        <div class="section-header__filters" id="filterBar">
+          <button class="filter-btn active" data-filter="all">Tous</button>
+          <button class="filter-btn" data-filter="live">En direct</button>
+          <button class="filter-btn" data-filter="today">Aujourd'hui</button>
+          <button class="filter-btn" data-filter="tomorrow">Demain</button>
+          <button class="filter-btn" data-filter="popular">Populaires</button>
+        </div>
+      </div>
+
+      <div id="matchesContainer" class="matches">
+        <div class="shimmer-list">
+          <div class="shimmer-card"></div>
+          <div class="shimmer-card"></div>
+          <div class="shimmer-card"></div>
+          <div class="shimmer-card"></div>
+          <div class="shimmer-card"></div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="betslip" id="betslip">
+      <div class="betslip__header">
+        <h3 class="betslip__title">Fiche de pari</h3>
+        <span class="betslip__count" id="betCount">0</span>
+        <button class="betslip__clear" id="clearAll" title="Tout effacer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </button>
+        <button class="betslip__close" id="betslipClose" aria-label="Fermer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="betslip__body" id="betslipBody">
+        <div class="betslip__empty" id="betslipEmpty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+          <p>Cliquez sur une cote<br/>pour parier</p>
+        </div>
+        <div class="betslip__items hidden" id="betslipItems"></div>
+        <div class="betslip__footer hidden" id="betslipFooter">
+          <div class="betslip__row">
+            <span>Cote totale</span>
+            <span class="betslip__value" id="totalOdds">—</span>
+          </div>
+          <div class="betslip__row">
+            <span>Mise</span>
+            <div class="betslip__stake">
+              <button class="betslip__stake-btn" data-dir="down">−</button>
+              <input type="number" id="stake" value="10" min="1" step="1" />
+              <button class="betslip__stake-btn" data-dir="up">+</button>
+              <span class="betslip__currency">DT</span>
+            </div>
+          </div>
+          <div class="betslip__divider"></div>
+          <div class="betslip__row betslip__row--gain">
+            <span>Gain potentiel</span>
+            <span class="betslip__value betslip__value--gain" id="totalGain">—</span>
+          </div>
+          <button class="btn btn--primary btn--full" id="placeBet">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Placer le pari
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__links">
+        <a href="#">Affiliation</a>
+        <a href="#">Termes et Conditions</a>
+        <a href="#">Notre compagnie</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Service Clients</a>
+      </div>
+      <div class="footer__logos">
+        <span class="footer__badge">18+</span>
+        <span class="footer__badge footer__badge--secure">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Sécurisé
+        </span>
+      </div>
+      <div class="footer__copy">&copy; 2026 FCbet216 - Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <button class="mobile-bet-btn" id="mobileBetBtn" aria-label="Fiche de pari">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+    <span class="mobile-bet-btn__count" id="mobileBetCount">0</span>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

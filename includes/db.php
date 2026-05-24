@@ -4,11 +4,31 @@ if (file_exists($local_env)) {
     require_once $local_env;
 }
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$db   = getenv('DB_NAME') ?: 'alpha216_db';
-$user = getenv('DB_USER') ?: 'admin'; // Default to admin for production
-$pass = getenv('DB_PASS') ?: 'Alpina@2026'; // Default to the password we set
+$host = getenv('DB_HOST') !== false ? getenv('DB_HOST') : 'localhost';
+$db   = getenv('DB_NAME') !== false ? getenv('DB_NAME') : 'alpha216_db';
+$user = getenv('DB_USER') !== false ? getenv('DB_USER') : 'admin'; // Default to admin for production
+$pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : 'Alpina@2026'; // Default to the password we set
 $charset = 'utf8mb4';
+
+// Initialize Redis via Predis — fail fast with 200ms timeout
+global $redis;
+$redis = null;
+try {
+    if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+        require_once dirname(__DIR__) . '/vendor/autoload.php';
+        $redis = new Predis\Client([
+            'scheme'             => 'tcp',
+            'host'               => '127.0.0.1',
+            'port'               => 6379,
+            'timeout'            => 0.2,   // 200ms connect timeout — fail fast
+            'read_write_timeout' => 0.5,   // 500ms r/w timeout
+        ]);
+        $redis->connect();
+    }
+} catch (Exception $e) {
+    // Redis unavailable — fallback to file/DB cache
+    $redis = null;
+}
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [

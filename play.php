@@ -18,7 +18,7 @@ $game_meta = (isset($_SESSION['mk_current_game_launch']) && is_array($_SESSION['
 $game_id = strtolower((string)($game_meta['game_id'] ?? ''));
 $game_name = (string)($game_meta['name'] ?? '');
 $game_tag = strtolower((string)($game_meta['tag'] ?? ''));
-$sports_api_id = '8a704858d5deb4af1ddc722092ac7614';
+$sports_api_id = '6260';
 $game_name_lc = strtolower($game_name);
 $is_inplay_game = (
     $game_id === $sports_api_id

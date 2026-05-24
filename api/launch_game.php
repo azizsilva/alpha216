@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
 require_once 'game_logic.php'; // Use centralized logic
 
 // Log errors to file, but never break JSON output with PHP warnings/notices
@@ -70,7 +70,18 @@ if (empty($game_id)) {
 }
 
 // Call Centralized Launch Function
-$result = launchGambllyGame($_SESSION['user_id'], $game_id, $home_url, $pdo, $skip_log);
+$provider = $data['provider'] ?? '';
+if (empty($provider) && $game_id === '6260') {
+    $provider = 'bti';
+} elseif (empty($provider)) {
+    $provider = 'gamblly';
+}
+
+if ($provider === 'bti') {
+    $result = launchBtiGame($_SESSION['user_id'], $game_id, $home_url, $pdo, $skip_log);
+} else {
+    $result = launchGambllyGame($_SESSION['user_id'], $game_id, $home_url, $pdo, $skip_log);
+}
 
 if ($result['success']) {
     $tag = 'other';

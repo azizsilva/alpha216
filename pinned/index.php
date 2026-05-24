@@ -13,7 +13,7 @@ try { document.body.classList.add('mk-pinned-mode'); } catch (e) {}
 
 <section class="mk-pinned-menu-page">
   <div class="mk-pinned-menu-list">
-    <a class="mk-pinned-menu-item" href="#" data-game-id="8a704858d5deb4af1ddc722092ac7614" onclick="launchGame('8a704858d5deb4af1ddc722092ac7614', 'In-Play'); return false;">
+    <a class="mk-pinned-menu-item" href="#" data-game-id="6260" onclick="launchGame('6260', 'In-Play'); return false;">
       <i class="fa fa-clock-o"></i>
       <span data-translate="in_play">IN-PLAY</span>
       <i class="fa fa-chevron-right mk-pinned-arrow"></i>
@@ -33,7 +33,7 @@ try { document.body.classList.add('mk-pinned-mode'); } catch (e) {}
       <span data-translate="sports">SPORTS</span>
       <i class="fa fa-chevron-right mk-pinned-arrow"></i>
     </a>
-    <a class="mk-pinned-menu-item" href="#" data-game-id="8a704858d5deb4af1ddc722092ac7614" onclick="launchGame('8a704858d5deb4af1ddc722092ac7614', 'Sports Book'); return false;">
+    <a class="mk-pinned-menu-item" href="#" data-game-id="6260" onclick="launchGame('6260', 'Sports Book'); return false;">
       <i class="fa fa-book"></i>
       <span data-translate="sports_book">SPORTS BOOK</span>
       <i class="fa fa-chevron-right mk-pinned-arrow"></i>

@@ -35,7 +35,7 @@ function launchGambllyGame($user_id, $game_id, $home_url, $pdo, $skip_log = fals
     } elseif ($ua !== '') {
         $is_mobile = (bool)preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\\.browser|up\\.link|webos|wos)/i", $ua);
     }
-    $platform = $is_mobile ? 2 : 1;
+    $platform = 2; // Forced Mobile for Mixed Altenar Hack
 
     // Prepare Request Payload
     $payload = [
@@ -98,4 +98,71 @@ function launchGambllyGame($user_id, $game_id, $home_url, $pdo, $skip_log = fals
         return ['success' => false, 'message' => $msg, 'debug' => $result];
     }
 }
+
+// BtiGaming / iGamingAPIs Launch Logic
+function launchBtiGame($user_id, $game_id, $home_url, $pdo, $skip_log = false) {
+    $TOKEN  = '3ef5c8c7684cd494e47347e4b6c53df7';
+    $SECRET = 'c856e884370d3be58ae4a15f5fed6d54';
+    $SERVER_URL\ = 'https://igamingapis.live/api/v1/gameLaunch';
+
+    $member_account = is_numeric($user_id) ? (string)(int)$user_id : trim((string)$user_id);
+    $coins = 0;
+    if ($pdo && is_numeric($user_id)) {
+        try {
+            $stmt = $pdo->prepare("SELECT balance FROM users WHERE id = ? LIMIT 1");
+            $stmt->execute([(int)$user_id]);
+            $b = $stmt->fetchColumn();
+            if ($b !== false) {
+                $coins = (float)$b;
+                if (isset($_SESSION)) $_SESSION['coins'] = $coins;
+            }
+        } catch (Exception $e) {}
+    }
+    if (isset($_SESSION['coins'])) $coins = (float)$_SESSION['coins'];
+
+    // DEMO Account Check
+    if (isset($_SESSION['email']) && $_SESSION['email'] === 'demo@gmail.com') {
+        $coins = 0;
+    }
+
+    $PAYLOAD = [
+        'user_id' => $member_account,
+        'balance' => (string)$coins,
+        'game_uid' => (string)$game_id,
+        'token' => $TOKEN,
+        'timestamp' => round(microtime(true) * 1000),
+        'return' => $home_url,
+        'callback' => 'https://' . $_SERVER['HTTP_HOST'] . '/api/callback.php',
+        'currency_code' => 'TND',
+        'language' => 'fr'
+    ];
+
+    $JSON = json_encode($PAYLOAD);
+    $ENC  = openssl_encrypt($JSON, 'AES-256-ECB', $SECRET, OPENSSL_RAW_DATA);
+    $ENCRYPTED = base64_encode($ENC);
+
+    $URL = $SERVER_URL . '?payload=' . urlencode($ENCRYPTED) . '&token=' . urlencode($TOKEN);
+
+    $ch = curl_init($URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    $response = curl_exec($ch);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    file_put_contents(__DIR__ . '/game_launch_debug.log', "[" . date('Y-m-d H:i:s') . "] BTI REQUEST to $SERVER_URL | RESPONSE: " . $response . " | CURL ERROR: " . $curl_error . "\n", FILE_APPEND);
+
+    if ($curl_error) return ['success' => false, 'message' => 'Connection Error'];
+
+    $result = json_decode($response, true);
+    if (isset($result['data']['url'])) {
+        // Return the URL (even if it's an error page) so it loads inside our UI
+        return ['success' => true, 'game_url' => $result['data']['url']];
+    } else {
+        return ['success' => false, 'message' => $result['msg'] ?? 'Failed to launch game', 'debug' => $result];
+    }
+}
 ?>
+

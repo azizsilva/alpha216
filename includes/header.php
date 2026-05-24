@@ -105,7 +105,7 @@ $root_dir_name = str_replace('\\', '/', dirname($this_dir));
 $doc_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
 
 $base_url = '/';
-if (strpos($root_dir_name, $doc_root) === 0) {
+if (stripos($root_dir_name, $doc_root) === 0) {
     $base_url = substr($root_dir_name, strlen($doc_root));
     $base_url = '/' . ltrim($base_url, '/') . '/';
     $base_url = str_replace('//', '/', $base_url);
@@ -302,6 +302,10 @@ if (!headers_sent()) {
             }
             return;
         }
+        if (id === '6260') {
+            window.location.href = '<?php echo $base_url; ?>sportsbook/';
+            return;
+        }
         launchGame(id, name);
     }
   </script>
@@ -330,6 +334,11 @@ if (!headers_sent()) {
         path = path.split('?')[0];
         path = path.replace(/\/index\.php$/i, '') || '/';
         if (path.length > 1 && path.endsWith('/')) path = path.slice(0,-1);
+        // Strip base prefix so map keys like /sportsbook work regardless of subdirectory
+        var baseTrimmed = (base.length > 1 && base.endsWith('/')) ? base.slice(0,-1) : (base === '/' ? '' : base);
+        if (baseTrimmed && path.indexOf(baseTrimmed) === 0) {
+          path = path.slice(baseTrimmed.length) || '/';
+        }
         var map = {
           '/': base + 'index.php?mk_fragment=1',
           '/home': base + '?mk_fragment=1',
@@ -482,7 +491,7 @@ if (!headers_sent()) {
         try { sessionStorage.setItem('mk_sw_prelaunch_ts', String(now)); } catch (e1) {}
 
         var apiUrl = (typeof SITE_API_URL !== 'undefined') ? SITE_API_URL + 'launch_game.php' : '/api/launch_game.php';
-        var ids = ['8a704858d5deb4af1ddc722092ac7614'];
+        var ids = ['3978'];
         function preconnect(origin) {
           try {
             if (!origin) return;
@@ -496,8 +505,8 @@ if (!headers_sent()) {
             document.head.appendChild(link);
           } catch (e) {}
         }
-        var SPORTS_ID = '8a704858d5deb4af1ddc722092ac7614';
-        var SBO_ID = '8a704858d5deb4af1ddc722092ac7614';
+        var SPORTS_ID = '3978';
+        var SBO_ID = '3978';
         function prelaunch(gid) {
           var origin = window.location.origin || (window.location.protocol + '//' + window.location.host);
           var desiredHome = origin + (gid === SPORTS_ID ? '/sports/?mk=1' : '/');
@@ -2906,8 +2915,8 @@ if ($__path !== '' && (preg_match('#/sports/?$#i', $__path) || preg_match('#/spo
       </a>
       
       <ul class="desktop-nav-menu hidden-xs hidden-sm">
-        <li><a href="#" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports'); return false;">PARIS SPORTIFS</a></li>
-        <li><a href="<?php echo $base_url; ?>live-football">PARIS EN DIRECT</a></li>
+<li><a href="<?php echo $base_url; ?>sportsbook/">PARIS SPORTIFS</a></li>
+        <li><a href="<?php echo $base_url; ?>frontend/dist/index.html">PARIS EN DIRECT</a></li>
         <li><a href="<?php echo $base_url; ?>casino">JEUX D'ADRESSE</a></li>
         <li><a href="<?php echo $base_url; ?>casino-games/live-casino">CASINO EN DIRECT</a></li>
         <li><a href="<?php echo $base_url; ?>casino-games/virtual-sports">VIRTUEL</a></li>
@@ -3320,8 +3329,8 @@ body {
     $('#mkSwInput').val('0'); $('#mkSwRange').attr('max','0').val('0'); $('#coinval').val('0');
     $('#mkSportsWalletModal').modal('show');
     try {
-      var sportsId = '8a704858d5deb4af1ddc722092ac7614';
-      var sbId = '8a704858d5deb4af1ddc722092ac7614';
+      var sportsId = '3978';
+      var sbId = '3978';
       var gid = (String(title || '').toLowerCase().indexOf('book') !== -1) ? sbId : sportsId;
       if (typeof MK_prefetchGame === 'function') MK_prefetchGame(gid);
       else {
@@ -3449,8 +3458,8 @@ body {
           var up = document.getElementById('userPopup'); if (up) up.classList.remove('active');
           var ov = document.getElementById('sidebarOverlay'); if (ov) ov.classList.remove('active');
         } catch (eC) {}
-        if (typeof launchGame === 'function') launchGame('8a704858d5deb4af1ddc722092ac7614', 'Sports Book');
-        else window.location.href = '/sports/';
+        
+        window.location.href = '<?php echo $base_url; ?>sportsbook/'; return;
         return;
       }
     }, true);

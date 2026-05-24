@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$admin_logo_url = '/assets/images/logo_bets.jpeg';
+$admin_logo_url = '/assets/images/xbet_logo.png';
 ?>
 <!doctype html>
 <html lang="en">
@@ -134,7 +134,7 @@ $admin_logo_url = '/assets/images/logo_bets.jpeg';
         width: min(100%, 440px);
         min-height: 520px;
         padding: 44px 44px 36px;
-        border: 1px solid rgba(213, 175, 82, .22);
+        border: 1px solid rgba(0, 210, 255, .25);
         border-radius: 12px;
         background: rgba(17, 24, 39, .96);
         box-shadow: 0 26px 80px rgba(0,0,0,.38);
@@ -146,7 +146,7 @@ $admin_logo_url = '/assets/images/logo_bets.jpeg';
         justify-content: center;
         gap: 14px;
         margin-bottom: 28px;
-        color: #f8e7b5;
+        color: #00d2ff;
         font-size: 22px;
         font-weight: 800;
         letter-spacing: .02em;
@@ -178,7 +178,7 @@ $admin_logo_url = '/assets/images/logo_bets.jpeg';
         z-index: 2;
         padding: 0 7px;
         background: #111827;
-        color: #bfff00;
+        color: #00d2ff;
         font-size: 14px;
         line-height: 20px;
       }
@@ -204,13 +204,13 @@ $admin_logo_url = '/assets/images/logo_bets.jpeg';
         color: #98a2b3;
       }
       .ta-field-floating .ta-input {
-        border-color: #bfff00;
-        box-shadow: 0 0 0 1px rgba(216, 166, 63, .08);
+        border-color: #00d2ff;
+        box-shadow: 0 0 0 1px rgba(0, 210, 255, .1);
       }
       .ta-input:focus,
       .ta-input-password:focus {
-        border-color: #bfff00;
-        box-shadow: 0 0 0 4px rgba(216, 166, 63, .13);
+        border-color: #00d2ff;
+        box-shadow: 0 0 0 4px rgba(0, 210, 255, .15);
       }
       .ta-password-toggle {
         position: absolute;
@@ -243,13 +243,13 @@ $admin_logo_url = '/assets/images/logo_bets.jpeg';
         margin-top: 2px;
         border: 0;
         border-radius: 8px;
-        background: linear-gradient(135deg, #bfff00, #8fff00);
-        color: #111827;
+        background: linear-gradient(135deg, #00d2ff, #0099ff);
+        color: #ffffff;
         font: inherit;
         font-size: 17px;
         font-weight: 800;
         cursor: pointer;
-        box-shadow: 0 14px 28px rgba(216, 166, 63, .18);
+        box-shadow: 0 14px 28px rgba(0, 210, 255, .2);
       }
       .ta-login-note {
         margin-top: 28px;

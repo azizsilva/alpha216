@@ -37,7 +37,7 @@ if ($game_url === '') {
     exit;
 }
 
-$sports_api_id = '8a704858d5deb4af1ddc722092ac7614';
+$sports_api_id = '6260';
 $game_name_lc = strtolower($game_name);
 $is_inplay_game = (
     strtolower($game_id) === $sports_api_id
@@ -51,7 +51,7 @@ $scheme = isset($parsed['scheme']) ? strtolower($parsed['scheme']) : '';
 $host = isset($parsed['host']) ? strtolower($parsed['host']) : '';
 $is_same_origin = ($host !== '' && $site_host !== '' && $host === $site_host);
 $is_http = ($scheme === 'http' || $scheme === 'https');
-$is_gamblly = ($host !== '' && (strpos($host, 'gamblly') !== false));
+$is_gamblly = ($host !== '' && (strpos($host, 'gamblly') !== false || strpos($host, 'igamingapis') !== false));
 
 if (!$is_http) {
     header('Location: ../index.php');

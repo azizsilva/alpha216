@@ -1,0 +1,41 @@
+[DB] C:\wamp64\www/forza/includes/db.php
+[LIVE] Syncing live matches + real odds...
+  [Football] 137 live matches
+  [Football] Odds updated for 8 matches
+  [Basketball] 18 live matches
+  [Tennis] 21 live matches
+  [Volleyball] 3 live matches
+  [Table Tennis] 1 live matches
+  [Ice Hockey] No live matches
+  [E-Sports] 5 live matches
+  [American Football] No live matches
+  [Handball] 3 live matches
+  [Badminton] No live matches
+  [MMA] No live matches
+  [E-Football] No live matches
+  [E-Basketball] No live matches
+  [Baseball] No live matches
+  [Rugby] No live matches
+  [Cricket] No live matches
+[UPCOMING] Syncing upcoming matches (10 pages/sport)...
+  [Football] 500 upcoming
+  [Basketball] 189 upcoming
+  [Tennis] 178 upcoming
+  [Volleyball] 31 upcoming
+  [Table Tennis] No upcoming
+  [Ice Hockey] 18 upcoming
+  [E-Sports] 66 upcoming
+  [American Football] 17 upcoming
+  [Handball] 90 upcoming
+  [Badminton] No upcoming
+  [MMA] No upcoming
+  [E-Football] 9 upcoming
+  [E-Basketball] 1 upcoming
+  [Baseball] No upcoming
+  [Rugby] No upcoming
+  [Cricket] No upcoming
+[CLEANUP] Marking old upcoming as ended...
+  Marked 31 matches as ended
+  Deleted 0 old ended matches
+
+[DONE] {"success":true,"mode":"full","saved":1287,"odds_fetched":8,"active":1794,"elapsed":120.51}

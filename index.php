@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // $mk_fragment = isset($_GET['mk_fragment']);
 // if ($mk_fragment) {
 //     require_once __DIR__ . '/app/index.php';
@@ -19,10 +19,10 @@ $marquee_items = require 'api/marquee.php';
 function mk_featured_banner_onclick($link) {
     $link = (string)$link;
     if ($link === '/sportsbook/') {
-        return "mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports Book'); return false;";
+        return "mkSafeLaunch('6260', 'Sports Book'); return false;";
     }
     if ($link === '/sports/') {
-        return "mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports'); return false;";
+        return "mkSafeLaunch('6260', 'Sports'); return false;";
     }
     return "location.href='" . addslashes($link) . "'";
 }
@@ -37,6 +37,10 @@ function mkSafeLaunch(gameId, gameName) {
         } else {
             alert(\'Veuillez vous connecter pour jouer.\');
         }
+        return false;
+    }
+    if (gameId === \'6260\') {
+        window.location.href = \'' . $base_url . 'sportsbook/\';
         return false;
     }
     if (typeof launchGame === \'function\') {
@@ -203,7 +207,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
     <!-- Category Grid -->
     <div class="premium-category-grid" style="margin-top: 10px; margin-bottom: 30px;">
         <div class="category-cards-wrapper">
-                <div class="premium-cat-card" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'Sports')">
+                <div class="premium-cat-card" onclick="mkSafeLaunch('6260', 'Sports')">
                     <div class="cat-card-inner desktop-cat-img-1" style="background-image: url('<?php echo $base_url; ?>images/slide_1_fr_1768927536.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">
@@ -211,7 +215,7 @@ function mk_resolve_recent_games(array $recent_game_ids, array $trending_games, 
                         </div>
                     </div>
                 </div>
-                <div class="premium-cat-card" onclick="mkSafeLaunch('8a704858d5deb4af1ddc722092ac7614', 'In-Play')">
+                <div class="premium-cat-card" onclick="mkSafeLaunch('6260', 'In-Play')">
                     <div class="cat-card-inner desktop-cat-img-2" style="background-image: url('<?php echo $base_url; ?>images/slide_2_fr_1768927541.png');">
                         <div class="cat-card-overlay"></div>
                         <div class="cat-card-content">

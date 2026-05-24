@@ -1,19 +1,19 @@
 :root {
-  --ta-primary: #bfff00;
-  --ta-primary-soft: rgba(191, 255, 0, 0.1);
-  --ta-primary-dark: #8fff00;
-  --ta-bg: #f8fafc;
-  --ta-surface: #ffffff;
-  --ta-muted-surface: #f2f4f7;
-  --ta-border: #e4e7ec;
-  --ta-border-strong: #d0d5dd;
-  --ta-heading: #101828;
-  --ta-text: #344054;
-  --ta-muted: #667085;
-  --ta-soft-muted: #98a2b3;
-  --ta-success: #039855;
-  --ta-danger: #d92d20;
-  --ta-warning: #f79009;
+  --ta-primary: #00d2ff;
+  --ta-primary-soft: rgba(0, 210, 255, 0.1);
+  --ta-primary-dark: #0099ff;
+  --ta-bg: #080c16;
+  --ta-surface: #0f172a;
+  --ta-muted-surface: #1e293b;
+  --ta-border: #1e293b;
+  --ta-border-strong: #334155;
+  --ta-heading: #f8fafc;
+  --ta-text: #cbd5e1;
+  --ta-muted: #94a3b8;
+  --ta-soft-muted: #64748b;
+  --ta-success: #10b981;
+  --ta-danger: #ef4444;
+  --ta-warning: #f59e0b;
   --ta-sidebar-w: 282px;
   --ta-topbar-h: 72px;
   --ta-radius: 16px;
@@ -183,7 +183,7 @@ textarea {
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #344054;
+  color: var(--ta-text);
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -212,16 +212,16 @@ textarea {
   flex: 0 0 auto;
   border-radius: 10px;
   background: rgba(255,255,255,0.04);
-  color: #667085;
+  color: var(--ta-muted);
   font-size: 22px;
   transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .ta-menu-link:hover .ta-menu-icon,
 .ta-menu-link.active .ta-menu-icon {
-  background: linear-gradient(135deg, rgba(70,95,255,0.28), rgba(70,95,255,0.08));
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(0, 210, 255, 0.05));
   color: var(--ta-primary);
-  box-shadow: inset 0 0 0 1px rgba(70,95,255,0.26), 0 10px 22px rgba(70,95,255,0.14);
+  box-shadow: inset 0 0 0 1px rgba(0, 210, 255, 0.26), 0 10px 22px rgba(0, 210, 255, 0.14);
   transform: translateY(-1px);
 }
 
@@ -236,7 +236,7 @@ textarea {
 .ta-menu-arrow,
 .ta-submenu-chevron {
   margin-left: auto;
-  color: #344054;
+  color: var(--ta-text);
   font-size: 20px;
 }
 
@@ -275,7 +275,7 @@ textarea {
   padding: 8px 10px 8px 18px;
   position: relative;
   border-radius: 8px;
-  color: #667085;
+  color: var(--ta-muted);
   font-size: 14px;
   font-weight: 600;
   transform: translateX(-8px);
@@ -303,7 +303,7 @@ textarea {
 
 .ta-submenu-link:hover,
 .ta-submenu-link.active {
-  background: rgba(70, 95, 255,0.10);
+  background: var(--ta-primary-soft);
   color: var(--ta-primary);
 }
 
@@ -383,8 +383,8 @@ textarea {
   flex: 0 0 auto;
   border: 1px solid var(--ta-border);
   border-radius: 14px;
-  background: #fff;
-  color: #667085;
+  background: var(--ta-surface);
+  color: var(--ta-muted);
   cursor: pointer;
   font-size: 24px;
   transition: border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
@@ -396,9 +396,9 @@ textarea {
 
 .ta-head-icon:hover,
 .ta-circle-btn:hover {
-  border-color: #cfd6e4;
+  border-color: var(--ta-border-strong);
   color: var(--ta-primary);
-  box-shadow: 0 8px 18px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
 }
 
 .ta-sidebar-close {
@@ -414,12 +414,12 @@ textarea {
   padding: 0 12px 0 18px;
   border: 1px solid var(--ta-border);
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  background: var(--ta-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ta-search i {
-  color: #667085;
+  color: var(--ta-muted);
   font-size: 24px;
 }
 
@@ -444,8 +444,8 @@ textarea {
   justify-content: center;
   border: 1px solid var(--ta-border);
   border-radius: 9px;
-  color: #667085;
-  background: #f9fafb;
+  color: var(--ta-muted);
+  background: var(--ta-muted-surface);
   font-size: 14px;
 }
 
@@ -536,14 +536,14 @@ textarea {
   padding: 0 14px;
   border: 1px solid var(--ta-border);
   border-radius: 12px;
-  background: #fff;
-  color: #344054;
+  background: var(--ta-surface);
+  color: var(--ta-text);
   font-weight: 700;
 }
 
 .ta-site-link:hover {
   color: var(--ta-primary);
-  border-color: #cfd6e4;
+  border-color: var(--ta-border-strong);
 }
 
 /* Dashboard-style cards */
@@ -564,7 +564,7 @@ textarea {
 .ta-panel-card {
   border: 1px solid var(--ta-border);
   border-radius: var(--ta-radius);
-  background: #fff;
+  background: var(--ta-surface);
 }
 
 .ta-metric-card {
@@ -583,13 +583,13 @@ textarea {
   justify-content: center;
   margin-bottom: 28px;
   border-radius: 14px;
-  background: #f2f4f7;
+  background: var(--ta-muted-surface);
   color: var(--ta-heading);
   font-size: 28px;
 }
 
 .ta-metric-label {
-  color: #475467;
+  color: var(--ta-muted);
   font-size: 16px;
   font-weight: 500;
 }
@@ -764,7 +764,7 @@ textarea {
 .ta-target-note {
   max-width: 460px;
   margin: 0 auto 28px;
-  color: #475467;
+  color: var(--ta-muted);
   font-size: 18px;
   line-height: 1.5;
   text-align: center;
@@ -775,7 +775,7 @@ textarea {
   grid-template-columns: repeat(3, 1fr);
   margin: auto -30px 0;
   padding: 28px 30px;
-  background: #f2f4f7;
+  background: var(--ta-muted-surface);
 }
 
 .ta-target-footer div {
