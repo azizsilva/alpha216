@@ -421,7 +421,12 @@ if ($action === 'inplay') {
 
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
     $stream_cache = $cache_dir . '/inplay_stream.json';
-    $cache_ttl    = 8; // seconds — live odds must refresh fast (fcbet ~5s)
+    $is_football  = ((int)$sport_id === 1);
+    $cache_ttl    = $is_football ? 3 : 5; // lower delay for live football
+    $ev_cache_ttl = $is_football ? 6 : 10;
+    $ev_stale_ttl = $is_football ? 4 : 8;
+    $odds_bg_ttl  = $is_football ? 10 : 18;
+    $ev_refresh_cap = $is_football ? 40 : 20;
 
     // ── Step 1: Get or refresh inplay_filter per sport ─────────────────────
     $use_sport_cache = file_exists($sport_cache) && (time()-filemtime($sport_cache)) < $cache_ttl;
@@ -574,9 +579,9 @@ if ($action === 'inplay') {
         }
     }
 
-    // Trigger bg_sync if odds cache stale (25s for live — fcbet refreshes continuously)
+    // Trigger bg_sync if odds cache stale
     $odds_cache_age = file_exists($odds_cache_file) ? (time()-filemtime($odds_cache_file)) : 9999;
-    if ($odds_cache_age > 25) {
+    if ($odds_cache_age > $odds_bg_ttl) {
         $lock_f = $cache_dir . '/bgsync_' . $sport_id . '.lock';
         $lock_age = file_exists($lock_f) ? (time()-filemtime($lock_f)) : 9999;
         if ($lock_age > 60) { // don't fire if already running
@@ -604,7 +609,7 @@ if ($action === 'inplay') {
         foreach ([$rid, $rid_num, $mid] as $eck) {
             if (!$eck) continue;
             $evf = $cache_dir . '/ev_' . $eck . '.json';
-            if (file_exists($evf) && (time() - filemtime($evf)) < 20) {
+            if (file_exists($evf) && (time() - filemtime($evf)) < $ev_cache_ttl) {
                 $ev_lo = json_decode(file_get_contents($evf), true);
                 if ($ev_lo && ($ev_lo['h'] ?? 0) > 1.01) break;
                 $ev_lo = null;
@@ -661,7 +666,7 @@ if ($action === 'inplay') {
     unset($m);
 
     // ── Step 5.5: Refresh per-event odds for ALL live matches (not only missing) ──
-    // Fires async fetch when ev_ cache is stale (>12s) so odds update at half-time etc.
+    // Fires async fetch when ev_ cache is stale.
     $host_ev   = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $script_ev = parse_url($_SERVER['REQUEST_URI'] ?? '/sportsbook/api.php', PHP_URL_PATH);
     $ev_refresh_n = 0;
@@ -673,12 +678,12 @@ if ($action === 'inplay') {
         foreach ([$rid_ev, $mid_ev] as $eck) {
             if (!$eck) continue;
             $ev_cache_f = $cache_dir . '/ev_' . $eck . '.json';
-            if (file_exists($ev_cache_f) && (time() - filemtime($ev_cache_f)) < 12) {
+            if (file_exists($ev_cache_f) && (time() - filemtime($ev_cache_f)) < $ev_stale_ttl) {
                 $ev_stale = false;
                 break;
             }
         }
-        if (!$ev_stale || $ev_refresh_n >= 20) continue;
+        if (!$ev_stale || $ev_refresh_n >= $ev_refresh_cap) continue;
         if ($rid_ev || $mid_ev) {
             fire_and_forget('http://' . $host_ev . $script_ev . '?action=fetch_event_odds&id=' . urlencode($rid_ev ?: $mid_ev));
             $ev_refresh_n++;
@@ -1574,16 +1579,16 @@ function md_frac_to_dec($frac) {
 
 // ══ LIVE REFRESH — directly fetches fresh scores/odds from BetsAPI for live match IDs ══
 // Called by championship view poller to ensure live matches are always up-to-date
-// POST ?action=live_refresh with JSON body: {"ids":["matchId1",...]} (max 8)
+// POST ?action=live_refresh with JSON body: {"ids":["matchId1",...]} (max 24)
 if ($action === 'live_refresh') {
     $ids = [];
     $body = file_get_contents('php://input');
     if ($body) {
         $parsed = json_decode($body, true);
-        $ids = array_slice(array_filter((array)($parsed['ids'] ?? [])), 0, 8);
+        $ids = array_slice(array_filter((array)($parsed['ids'] ?? [])), 0, 24);
     } else {
         $raw_ids = trim($_GET['ids'] ?? '');
-        if ($raw_ids) $ids = array_slice(array_filter(explode(',', $raw_ids)), 0, 8);
+        if ($raw_ids) $ids = array_slice(array_filter(explode(',', $raw_ids)), 0, 24);
     }
 
     $refreshed = [];

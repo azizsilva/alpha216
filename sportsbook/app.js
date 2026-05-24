@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.33';
+  var newHref = base + 'sportsbook/style.css?v=20260525.34';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -232,7 +232,7 @@ function formatLiveMinute(m) {
   var tm = m.timer.tm;
   if (tm === undefined || tm === null) tm = m.timer.TM;
   var tmn = parseInt(tm, 10);
-  if (!tmn || tmn < 1) return ''; // hide "0'" — match just started or no data
+  if (!tmn || tmn < 1) return '';
   return tmn + "'";
 }
 
@@ -259,7 +259,7 @@ function startMatchTimer(m) {
   }, 1000);
 }
 
-/* ── Match detail live poll (score + timer + odds every 5s) ── */
+/* ── Match detail live poll (score + timer + odds every 3s) ── */
 function startMatchDetailPoll(mid) {
   if (S._mdPollInterval) clearInterval(S._mdPollInterval);
   S._mdPollInterval = setInterval(function() {
@@ -275,7 +275,7 @@ function startMatchDetailPoll(mid) {
         patchMatchDetailLive(d.match, d.markets || []);
       })
       .catch(function() {});
-  }, 5000);
+  }, 3000);
 }
 
 function patchMatchDetailLive(m, markets) {
@@ -936,20 +936,22 @@ function startPolling() {
       isChamp = true;
 
       // For live matches in championship view, trigger direct BetsAPI refresh
+      var liveCap = (parseInt(S.activeSportId || 0, 10) === 1) ? 24 : 12;
       var liveIds = S.champMatches
         .filter(isMatchLive)
         .map(function(m) { return m.id; })
-        .slice(0, 8);
+        .slice(0, liveCap);
       if (liveIds.length) {
         liveRefreshP = applyLiveRefresh(liveIds, S.champMatches);
       }
     } else {
       // Main inplay view — refresh visible live matches every poll cycle
       if (S.activeAction === 'inplay' || S.activeDateOffset === 0) {
+        var mainCap = (parseInt(S.activeSportId || 0, 10) === 1) ? 24 : 12;
         var liveIdsMain = S.matches
           .filter(isMatchLive)
           .map(function(m) { return m.id; })
-          .slice(0, 8);
+          .slice(0, mainCap);
         if (liveIdsMain.length > 0) {
           liveRefreshP = applyLiveRefresh(liveIdsMain, S.matches);
         }
@@ -1073,9 +1075,9 @@ function startPolling() {
     });
   }
 
-  // 5s for live/inplay so odds appear on the very next cycle after async fetch fills cache.
-  // 15s for upcoming — less urgency, saves bandwidth.
-  var pollMs = (S.activeAction === 'inplay') ? 5000 : 15000;
+  // Faster live updates for minimal delay (football stricter).
+  var isFootball = (parseInt(S.activeSportId || 0, 10) === 1);
+  var pollMs = (S.activeAction === 'inplay') ? (isFootball ? 3000 : 5000) : 10000;
   S.pollingInterval = setInterval(doPoll, pollMs);
 }
 
@@ -1483,25 +1485,19 @@ function matchCard(m) {
 
   /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
   if (isLive) {
-    // LIVE Match Card Header
-    out += '<div class="mc-hdr-live">';
-    out += '<div class="mc-hl-left">';
+    // LIVE Match Card Header (fcbet-like single compact row)
+    out += '<div class="mc-hdr-live mc-hdr-live--inline">';
+    out += '<div class="mc-hl-left mc-hl-left--inline">';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
-    if (liveMin) out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
-    out += '</div>';
-    out += '<div class="mc-hl-right">';
-    out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
-    out += '</div>';
-    out += '</div>';
-
-    // League row: flag+name left, stats icon right (matching reference)
-    out += '<div class="mc-league-row mc-league-row--split">';
-    out += '<div class="mc-league-info">';
+    if (liveMin) {
+      out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
+      out += '<span class="mc-live-sep">&bull;</span>';
+    }
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
     out += '</div>';
-    out += '<div class="mc-league-actions">';
+    out += '<div class="mc-hl-right">';
     out += '<button type="button" class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     out += '</div>';
     out += '</div>';
