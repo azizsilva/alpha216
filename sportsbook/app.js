@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.8';
+  var newHref = base + 'sportsbook/style.css?v=20260524.9';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -28,6 +28,62 @@ var MARGIN = 0; // No additional margin — BetsAPI provides real Bet365 odds di
 // Dynamic base path calculation
 var scriptPath = window.location.pathname;
 var BASE = '/';
+
+// ── Shared jersey SVG builder ─────────────────────────────────────────────
+// Supports patterns: solid, stripes (vertical), hoops (horizontal),
+// halves (left/right), sash (diagonal stripe), quarters
+var _shirtId = 0;
+function shirtSVG(tName, cssClass, size) {
+  var kit = KITS[tName] || KITS[tName.replace(/ FC$| CF$| SC$/, '')] || null;
+  var main, sec, pat;
+  if (kit) {
+    main = kit.m; sec = kit.s; pat = kit.p || 'solid';
+  } else {
+    var c1 = ['#e02424','#2563eb','#16a34a','#ca8a04','#7c3aed','#db2777','#C8102E','#000000','#f97316','#0ea5e9'];
+    var c2 = ['#ffffff','#ffffff','#ffffff','#F5C400','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff'];
+    var seed = 0;
+    for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
+    main = c1[seed % c1.length]; sec = c2[seed % c2.length]; pat = 'solid';
+  }
+  var isWhiteMain = (main === '#ffffff' || main === '#fff' || main === '#FFFFFF');
+  var stroke = isWhiteMain ? '#bbbbbb' : main;
+  var sz = size || 24;
+  var uid = 'k' + (++_shirtId);
+  var defs = '';
+  var bodyFill = 'fill="' + main + '"';
+  if (pat === 'stripes') {
+    defs = '<defs><pattern id="' + uid + '" x="0" y="0" width="8" height="32" patternUnits="userSpaceOnUse"><rect width="4" height="32" fill="' + main + '"/><rect x="4" width="4" height="32" fill="' + sec + '"/></pattern></defs>';
+    bodyFill = 'fill="url(#' + uid + ')"';
+  } else if (pat === 'hoops') {
+    defs = '<defs><pattern id="' + uid + '" x="0" y="0" width="32" height="8" patternUnits="userSpaceOnUse"><rect width="32" height="4" fill="' + main + '"/><rect y="4" width="32" height="4" fill="' + sec + '"/></pattern></defs>';
+    bodyFill = 'fill="url(#' + uid + ')"';
+  } else if (pat === 'halves') {
+    defs = '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="1" y2="0"><stop offset="50%" stop-color="' + main + '"/><stop offset="50%" stop-color="' + sec + '"/></linearGradient></defs>';
+    bodyFill = 'fill="url(#' + uid + ')"';
+  } else if (pat === 'sash') {
+    defs = '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + main + '"/><stop offset="40%" stop-color="' + main + '"/><stop offset="40%" stop-color="' + sec + '"/><stop offset="60%" stop-color="' + sec + '"/><stop offset="60%" stop-color="' + main + '"/><stop offset="100%" stop-color="' + main + '"/></linearGradient></defs>';
+    bodyFill = 'fill="url(#' + uid + ')"';
+  } else if (pat === 'quarters') {
+    defs = '<defs><pattern id="' + uid + '" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="' + main + '"/><rect x="8" width="8" height="8" fill="' + sec + '"/><rect y="8" width="8" height="8" fill="' + sec + '"/><rect x="8" y="8" width="8" height="8" fill="' + main + '"/></pattern></defs>';
+    bodyFill = 'fill="url(#' + uid + ')"';
+  }
+  var collarFill = 'fill="' + sec + '" stroke="' + sec + '"';
+  return '<svg viewBox="0 0 32 32" class="' + cssClass + '" width="' + sz + '" height="' + sz + '" style="flex-shrink:0" stroke="' + stroke + '" stroke-width="1">'
+    + defs
+    + '<path ' + bodyFill + ' d="M11.6,2.2c0,0-1-1.3-4.5-0.1L2,5l2,6.5c0,0,1.3,0.3,3.5-1.5c0,0,1,19.3,1,19.9h15.2c0-0.6,0.9-19.9,0.9-19.9 c2.2,1.8,3.5,1.5,3.5,1.5L30,5L24.8,2.1c-3.4-1.2-4.5,0.1-4.5,0.1c-1.3,1.4-2.3,1.6-4.3,1.6C13.9,3.8,12.8,3.6,11.6,2.2z"/>'
+    + '<path d="M12.9,2.8c1,0.9,1.8,1.2,3.1,1.2c1.3,0,2.1-0.3,3.1-1.2l-1.4,1.8h-3.4L12.9,2.8z" ' + collarFill + '/>'
+    + '</svg>';
+}
+
+// ── Real team kit colors — loaded from kits.json ──────────────────────────
+var KITS = {};
+(function loadKits() {
+  var base2 = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
+  fetch(base2 + 'sportsbook/kits.json?v=1')
+    .then(function(r) { return r.json(); })
+    .then(function(d) { KITS = d.teams || {}; })
+    .catch(function() {}); // silent fail — falls back to seeded colours
+})();
 var pos = scriptPath.indexOf('/sportsbook');
 if (pos !== -1) {
     BASE = scriptPath.substring(0, pos + 1);
@@ -1118,18 +1174,7 @@ function matchCard(m) {
   // SVG Shirt helper (uses seeded colors based on team name)
   function getShirtSVG(tName) {
     if (!isLive) return '';
-    var c1 = ['#e02424','#2563eb','#16a34a','#ca8a04','#7c3aed','#db2777','#ffffff','#000000','#f97316','#0ea5e9'];
-    var c2 = ['#ffffff','#ffffff','#ffffff','#000000','#ffffff','#ffffff','#e02424','#ffffff','#ffffff','#ffffff'];
-    var seed = 0;
-    for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
-    var main = c1[seed % c1.length];
-    var sec = c2[seed % c2.length];
-    var isWhite = main === '#ffffff';
-    var stroke = isWhite ? '#404040' : main;
-    return '<svg viewBox="0 0 32 32" class="mc-jersey-svg" fill="' + main + '" stroke="' + stroke + '">'
-      + '<path d="M11.6,2.2c0,0-1-1.3-4.5-0.1L2,5l2,6.5c0,0,1.3,0.3,3.5-1.5c0,0,1,19.3,1,19.9h15.2c0-0.6,0.9-19.9,0.9-19.9 c2.2,1.8,3.5,1.5,3.5,1.5L30,5L24.8,2.1c-3.4-1.2-4.5,0.1-4.5,0.1c-1.3,1.4-2.3,1.6-4.3,1.6C13.9,3.8,12.8,3.6,11.6,2.2z"/>'
-      + '<path d="M12.9,2.8c1,0.9,1.8,1.2,3.1,1.2c1.3,0,2.1-0.3,3.1-1.2l-1.4,1.8h-3.4L12.9,2.8z" fill="' + sec + '" stroke="' + sec + '"/>'
-      + '</svg>';
+    return shirtSVG(tName, 'mc-jersey-svg', 24);
   }
 
   out += '<div class="mc-teams-wrap">';
@@ -1312,26 +1357,9 @@ function renderEnDirectCards(matches) {
   var out = '';
   var shown = matches.slice(0, 6); // max 6 live cards
 
-  // SVG Shirt helper (uses seeded colors based on team name)
+  // SVG Shirt helper — uses real kit colors from kits.json
   function getShirtSVG(tName) {
-    var c1 = [
-      '#e02424', '#2563eb', '#16a34a', '#ca8a04', '#7c3aed', '#db2777', 
-      '#ffffff', '#000000', '#f97316', '#0ea5e9'
-    ];
-    var c2 = [
-      '#ffffff', '#ffffff', '#ffffff', '#000000', '#ffffff', '#ffffff', 
-      '#e02424', '#ffffff', '#ffffff', '#ffffff'
-    ];
-    var seed = 0;
-    for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
-    var main = c1[seed % c1.length];
-    var sec = c2[seed % c2.length];
-    var isWhite = main === '#ffffff';
-    var stroke = isWhite ? '#404040' : main;
-    return '<svg viewBox="0 0 32 32" class="slc-team-logo" style="width:16px;height:16px;stroke-width:1px" fill="' + main + '" stroke="' + stroke + '">'
-      + '<path d="M11.6,2.2c0,0-1-1.3-4.5-0.1L2,5l2,6.5c0,0,1.3,0.3,3.5-1.5c0,0,1,19.3,1,19.9h15.2c0-0.6,0.9-19.9,0.9-19.9 c2.2,1.8,3.5,1.5,3.5,1.5L30,5L24.8,2.1c-3.4-1.2-4.5,0.1-4.5,0.1c-1.3,1.4-2.3,1.6-4.3,1.6C13.9,3.8,12.8,3.6,11.6,2.2z"/>'
-      + '<path d="M12.9,2.8c1,0.9,1.8,1.2,3.1,1.2c1.3,0,2.1-0.3,3.1-1.2l-1.4,1.8h-3.4L12.9,2.8z" fill="' + sec + '" stroke="' + sec + '"/>'
-      + '</svg>';
+    return shirtSVG(tName, 'slc-team-logo', 16);
   }
 
   shown.forEach(function(m) {

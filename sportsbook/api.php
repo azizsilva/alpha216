@@ -820,24 +820,53 @@ if ($action === 'league_matches') {
     // NOTE: No fallback to "all sport matches" — shows empty championship if no matches found,
     // which is correct behaviour (avoids LaLiga click showing Premier League data)
 
-    // ── ON-DEMAND prematch odds fetch (for matches missing live_odds) ──────
-    // Fetches odds for up to 5 upcoming matches without odds — max ~2.5s added latency
-    if (!empty($results) && $db_connected) {
-        $needs = [];
-        foreach ($results as $m) {
-            if (empty($m['live_odds']['h']) && ($m['time_status'] ?? '0') !== '1') {
-                $needs[] = $m;
-            }
-            if (count($needs) >= 5) break;
+    // ── FAST RETURN + ASYNC odds fill ──────────────────────────────────────
+    // 1. Collect matches still missing odds (upcoming only)
+    $needs_async = [];
+    foreach ($results as $m) {
+        if (empty($m['live_odds']['h']) && ($m['time_status'] ?? '0') !== '1') {
+            $needs_async[] = $m['id'] ?? null;
         }
-        foreach ($needs as $nm) {
-            $fi = $nm['id'] ?? null;
+    }
+    $needs_async = array_values(array_filter($needs_async));
+
+    // 2. Respond to client IMMEDIATELY — do NOT block for odds fetches
+    $json_out = json_encode(['success' => 1, 'results' => $results, 'league_filter' => $league_q,
+                             'odds_pending' => count($needs_async)]);
+    header('Content-Type: application/json');
+
+    // Close HTTP connection first, then fetch odds in background so client gets instant response
+    if (function_exists('fastcgi_finish_request')) {
+        echo $json_out;
+        fastcgi_finish_request();
+    } else {
+        // Apache fallback: set Content-Length so client knows when to close
+        header('Content-Length: ' . strlen($json_out));
+        header('Connection: close');
+        echo $json_out;
+        @ob_end_flush(); @flush();
+    }
+
+    // ── Background: fetch prematch odds for missing matches ───────────────
+    // Runs AFTER response is sent — client does not wait for this
+    if (!empty($needs_async) && $db_connected) {
+        @set_time_limit(120);
+        foreach ($needs_async as $fi) {
             if (!$fi) continue;
+            $pm = null;
+            // Try prematch endpoint first
             $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
-            if (!$or || empty($or['results'])) continue;
-            $pm = api_parse_prematch_odds($or);
-            if (!$pm) continue;
-            // Store in DB
+            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or);
+            // Fallback: event endpoint
+            if (!$pm) {
+                $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+                if ($or2 && !empty($or2['results'])) {
+                    $pm = api_parse_prematch_odds($or2);
+                    if (!$pm) $pm = parse_event_stream_odds($or2['results'] ?? []);
+                }
+            }
+            if (!$pm || ($pm['h'] ?? 0) < 1.01) continue;
+            // Store in DB so next poll returns with odds
             try {
                 $rj = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=?");
                 $rj->execute([$fi]);
@@ -848,15 +877,8 @@ if ($action === 'league_matches') {
                     $pdo->prepare("UPDATE sb_matches SET raw_json=? WHERE id=?")->execute([json_encode($mdata), $fi]);
                 }
             } catch (Exception $e) {}
-            // Inject into results for immediate response
-            foreach ($results as &$r) {
-                if ($r['id'] == $fi) { $r['live_odds'] = $pm; break; }
-            }
-            unset($r);
         }
     }
-
-    echo json_encode(['success' => 1, 'results' => $results, 'league_filter' => $league_q]);
     exit;
 }
 
