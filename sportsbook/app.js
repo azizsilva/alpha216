@@ -1197,7 +1197,10 @@ function matchCard(m) {
   var ouUnder = (o.un && parseFloat(o.un) >= 1.01) ? o.un : null;
 
   var mname = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
-  var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
+  // Detect 2-way sports (basketball, tennis, volleyball, etc.) — no draw column
+  var sportId = parseInt(m.sport_id || (S.activeSportId) || 0);
+  var isTwoWay = (sportId !== 0 && sportId !== 1); // sport_id 1 = football/soccer
+  var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" id="mc-' + mid + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
   /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
   if (isLive) {
@@ -1248,7 +1251,7 @@ function matchCard(m) {
     out += '</div>';
   }
 
-  out += '<div class="mc-body-col" onclick="event.stopPropagation()">';
+  out += '<div class="mc-body-col">';
 
   // SVG Shirt helper (uses seeded colors based on team name)
   function getShirtSVG(tName) {
@@ -1256,7 +1259,7 @@ function matchCard(m) {
     return shirtSVG(tName, 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), 24);
   }
 
-  out += '<div class="mc-teams-wrap">';
+  out += '<div class="mc-teams-wrap" onclick="window.sbOpenMatch(\'' + mid + '\')">';
   out += '<div class="mc-teams-stacked">';
   out += '<div class="mc-team-row">';
   out += getShirtSVG(hn);
@@ -1271,21 +1274,20 @@ function matchCard(m) {
   out += '</div>';
   out += '</div>';
 
-  // Odds buttons — full width bottom row
-  out += '<div class="mc-odds-bot">';
+  // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)
+  out += '<div class="mc-odds-bot" onclick="event.stopPropagation()">';
   var cat = (S.viewMode === 'championship') ? (S.activeMarketCat || 'populaire') : 'populaire';
   var hVal = parseFloat(o.h) || 0;
   var aVal = parseFloat(o.a) || 0;
   var xVal = parseFloat(o.x) || 0;
 
   if (cat === 'populaire') {
-    // Default: 1x2 only — matches fcbet216 "En direct maintenant" 3-button layout
     out += oddBtn(mid, mname, '1', o.h);
-    out += oddBtn(mid, mname, 'X', o.x);
+    if (!isTwoWay) out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
   } else if (cat === '1x2') {
     out += oddBtn(mid, mname, '1', o.h);
-    out += oddBtn(mid, mname, 'X', o.x);
+    if (!isTwoWay) out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
   } else if (cat === 'total') {
     out += ouBtn(mid, mname, 'Plus de ' + ouLine, ouOver, 'ou_over');
@@ -1341,14 +1343,13 @@ function matchCard(m) {
     out += oddBtn(mid, mname, 'Aucun', ng0);
     out += oddBtn(mid, mname, '2', ng2);
   } else {
-    // Fallback: populaire
     out += oddBtn(mid, mname, '1', o.h);
-    out += oddBtn(mid, mname, 'X', o.x);
+    if (!isTwoWay) out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
   }
   
-  // Right chevron button for additional markets
-  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Voir marchés">' + ICON.chevronDown + '</button>';
+  // Chevron toggles odds collapse/expand inline
+  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Masquer cotes">' + ICON.chevronDown + '</button>';
 
   out += '</div>'; // close mc-odds-bot
   out += '</div>'; // close body col
@@ -2389,6 +2390,15 @@ window.sbScrollNav = function() {
 /* ══════════════════════════════════════════════════════════
    MATCH DETAIL VIEW — Images 3 & 4
    ══════════════════════════════════════════════════════════ */
+/* Toggle match card odds row visibility (chevron) */
+window.sbToggleMc = function(mid) {
+  var el = document.getElementById('mc-' + mid);
+  if (!el) return;
+  el.classList.toggle('mc-collapsed');
+  var btn = el.querySelector('.mc-chevron-btn');
+  if (btn) btn.classList.toggle('mc-chevron-up', el.classList.contains('mc-collapsed'));
+};
+
 window.sbOpenMatch = function(mid) {
   S.activeMatchId = mid;
   S.viewMode = 'matchDetail';

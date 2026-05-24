@@ -11,7 +11,7 @@
   --sb-red:         #e02424;
   /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
   --sb-bg-root:     #0f0f0f;   /* page root — near black */
-  --sb-bg-card:     #1d1d1d;   /* match cards — visible against root */
+  --sb-bg-card:     #252525;   /* match cards — same as boosted card */
   --sb-bg-boost:    #252525;   /* boosted odds card bg */
   --sb-bg-alt:      #222222;   /* slightly elevated surfaces */
   --sb-bg-mkt:      #1c1c1c;   /* market grid cells (championship) */
@@ -1311,6 +1311,9 @@ body {
   flex-shrink: 0;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   outline: none;
+}
+.sb-root button.mc-chevron-btn svg {
+  transition: transform 0.2s ease;
 }
 .sb-root button.mc-chevron-btn:hover { 
   background: #303030;
@@ -3608,9 +3611,22 @@ body {
 }
 
 .sb-root .mc {
-  background: #1d1d1d !important;
+  background: #252525 !important;
   border: 1px solid rgba(255,255,255,0.11) !important;
   border-radius: 10px !important;
+}
+
+/* Collapse/expand odds row via chevron toggle */
+.sb-root .mc.mc-collapsed .mc-odds-bot {
+  display: none !important;
+}
+.sb-root button.mc-chevron-btn.mc-chevron-up svg {
+  transform: rotate(180deg);
+}
+
+/* Teams area pointer cursor — signals it opens match detail */
+.sb-root .mc-teams-wrap {
+  cursor: pointer;
 }
 
 .sb-root .mc-live-badge {
