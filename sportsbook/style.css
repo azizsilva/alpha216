@@ -99,6 +99,7 @@ body {
   padding: 10px 10px 8px;
   background: var(--sb-bg-root);
 }
+/* ── Mobile Top Action Buttons (base — overridden in mobile media queries) ── */
 .sb-btn-home, .sb-btn-live, .sb-btn-stats {
   border: none;
   border-radius: var(--sb-radius);
@@ -108,36 +109,65 @@ body {
   justify-content: center;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
-  transition: opacity 0.15s;
+  transition: background 0.18s, color 0.18s;
   outline: none;
 }
-.sb-btn-home  {
-  background: var(--sb-green);
-  color: var(--sb-green-font);
-  width: 42px;
+.sb-btn-home {
+  background: var(--sb-bg-alt);
+  color: var(--sb-text-2);
+  width: 48px;
   font-size: 16px;
 }
-.sb-btn-home:hover { background: var(--sb-green-dark); }
-.sb-btn-home svg  { width: 16px; height: 16px; stroke: currentColor; }
-
-.sb-btn-live  {
-  background: var(--sb-bg-alt); /* dark gray bg — EN DIRECT text in red like fcbet216 reference */
-  color: var(--sb-red);
+.sb-btn-home.active {
+  background: var(--sb-green);
+  color: var(--sb-green-font);
   flex: 1;
+  width: auto;
+}
+.sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
+
+/* EN DIRECT — dark container, red badge inside by default */
+.sb-btn-live {
+  background: var(--sb-bg-alt);
+  color: var(--sb-text-2);
+  width: 48px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+/* The red badge label inside EN DIRECT button */
+.sb-btn-live .sb-live-badge {
+  background: var(--sb-red);
+  color: #fff;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  border: 1px solid #3a3a3a;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
-.sb-btn-live:hover { background: #2e2e2e; }
+/* When EN DIRECT tab is ACTIVE — full green, badge disappears */
+.sb-btn-live.active {
+  background: var(--sb-green);
+  color: var(--sb-green-font);
+  flex: 1;
+  width: auto;
+}
+.sb-btn-live.active .sb-live-badge {
+  background: transparent;
+  color: var(--sb-green-font);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
 .sb-btn-stats {
   background: var(--sb-bg-alt);
   color: var(--sb-text-2);
-  width: 42px; /* match home button width */
-  min-width: 42px;
+  width: 48px;
+  min-width: 48px;
   font-size: 13px;
-  border: 1px solid #3a3a3a;
 }
 .sb-btn-stats:hover { background: var(--sb-border); color: #fff; }
 .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }
@@ -1603,40 +1633,52 @@ body {
   outline: none;
   flex-shrink: 0;
 }
-.sb-mobile-topbar .sb-btn-home {
-  background: var(--sb-green); /* GREEN by default */
-  color: var(--sb-green-font);
-  width: 54px;
-  min-width: 54px;
+/* ── Mobile top bar: FLEX layout, active tab expands (matches fcbet216 exactly) ── */
+.sb-mobile-topbar .sb-btn-home,
+.sb-mobile-topbar .sb-btn-live,
+.sb-mobile-topbar .sb-btn-stats {
+  height: 40px !important;
+  border-radius: 8px !important;
+  flex: none !important;
+  width: 48px !important;
+  min-width: 48px !important;
+  background: #252525 !important;
+  color: #979797 !important;
+  border: none !important;
 }
-.sb-mobile-topbar .sb-btn-home.inactive {
-  background: var(--sb-bg-alt); /* dark when EN DIRECT tab is active */
-  color: var(--sb-text-2);
+/* Active button expands to fill remaining space — like fcbet216 */
+.sb-mobile-topbar .sb-btn-home.active,
+.sb-mobile-topbar .sb-btn-live.active {
+  flex: 1 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  background: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+}
+/* EN DIRECT badge inside button when NOT active */
+.sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge {
+  background: #e02424 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  white-space: nowrap !important;
+}
+/* EN DIRECT badge when ACTIVE — plain text on green */
+.sb-mobile-topbar .sb-btn-live.active .sb-live-badge {
+  background: transparent !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  padding: 0 !important;
 }
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
-.sb-mobile-topbar .sb-btn-live {
-  background: var(--sb-red); /* RED background, white text — matches fcbet216 default */
-  color: #fff;
-  flex: 1;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border: none;
-}
-/* When EN DIRECT tab is active/selected — turns GREEN like the home button */
-.sb-mobile-topbar .sb-btn-live.active {
-  background: var(--sb-green);
-  color: var(--sb-green-font);
-}
-.sb-mobile-topbar .sb-btn-live:hover:not(.active) { background: #c71f1f; }
-.sb-mobile-topbar .sb-btn-stats {
-  background: var(--sb-bg-alt);
-  border: none;
-  color: var(--sb-text-2);
-  width: 54px;  /* same as home — balanced equal squares */
-  min-width: 54px;
-}
+.sb-mobile-topbar .sb-btn-stats { width: 48px !important; min-width: 48px !important; }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }
 
 .sb-mob-footer {
@@ -1724,23 +1766,28 @@ body {
 
 @media (max-width: 1100px) {
   .sb-mob-footer { display: flex !important; }
-  /* Use CSS Grid for the top bar — 100% guaranteed to work on all mobile browsers */
+  /* Mobile top bar — FLEX layout, active tab expands (matches fcbet216 reference) */
   .sb-mobile-topbar {
-    display: grid !important;
-    grid-template-columns: 54px 1fr 54px !important;
-    grid-template-rows: 40px !important;
-    gap: 0 8px !important;
-    align-items: stretch !important;
+    display: flex !important;
+    gap: 8px !important;
     padding: 8px 10px !important;
+    align-items: stretch !important;
   }
-  /* Reset individual button flex/width set elsewhere */
+  /* All buttons default: fixed 48px dark */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats {
+    flex: none !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 40px !important;
+  }
+  /* Active button expands (flex:1) and turns green */
+  .sb-mobile-topbar .sb-btn-home.active,
+  .sb-mobile-topbar .sb-btn-live.active {
+    flex: 1 !important;
     width: auto !important;
     min-width: 0 !important;
-    height: 40px !important;
-    flex: none !important;
   }
   .sb-mobile-sidebar-content { display: flex !important; }
 
