@@ -34,7 +34,10 @@ var BASE = '/';
 // halves (left/right), sash (diagonal stripe), quarters
 var _shirtId = 0;
 function shirtSVG(tName, cssClass, size) {
-  var kit = KITS[tName] || KITS[tName.replace(/ FC$| CF$| SC$/, '')] || null;
+  var kit = KITS[tName]
+    || KITS[tName.replace(/ FC$| CF$| SC$| AC$| BC$| IF$| FK$| BK$| SK$/, '').trim()]
+    || KITS[tName.replace(/^FC |^AC |^AS |^RC |^SC |^SS |^CS |^CF |^SL |^FK |^NK |^SK |^BK /, '').trim()]
+    || null;
   var main, sec, pat;
   if (kit) {
     main = kit.m; sec = kit.s; pat = kit.p || 'solid';
@@ -75,14 +78,94 @@ function shirtSVG(tName, cssClass, size) {
     + '</svg>';
 }
 
-// ── Real team kit colors — loaded from kits.json ──────────────────────────
-var KITS = {};
-(function loadKits() {
+// ── Real team kit colors — INLINED for zero-latency (no fetch needed) ─────
+// Format: {m: mainColor, s: secondaryColor, p: pattern}
+// Patterns: solid | stripes | hoops | halves | sash | quarters
+var KITS = {
+  "Arsenal":{"m":"#EF0107","s":"#FFFFFF","p":"solid"},"Chelsea":{"m":"#034694","s":"#FFFFFF","p":"solid"},
+  "Man City":{"m":"#6CABDD","s":"#FFFFFF","p":"solid"},"Manchester City":{"m":"#6CABDD","s":"#FFFFFF","p":"solid"},
+  "Man Utd":{"m":"#DA291C","s":"#FFFFFF","p":"solid"},"Manchester Utd":{"m":"#DA291C","s":"#FFFFFF","p":"solid"},"Manchester United":{"m":"#DA291C","s":"#FFFFFF","p":"solid"},
+  "Liverpool":{"m":"#C8102E","s":"#FFFFFF","p":"solid"},"Tottenham":{"m":"#FFFFFF","s":"#132257","p":"solid"},"Tottenham Hotspur":{"m":"#FFFFFF","s":"#132257","p":"solid"},"Spurs":{"m":"#FFFFFF","s":"#132257","p":"solid"},
+  "West Ham":{"m":"#7A263A","s":"#1BB1E7","p":"solid"},"West Ham United":{"m":"#7A263A","s":"#1BB1E7","p":"solid"},
+  "Everton":{"m":"#003399","s":"#FFFFFF","p":"solid"},"Leicester":{"m":"#003090","s":"#FDBE11","p":"solid"},"Leicester City":{"m":"#003090","s":"#FDBE11","p":"solid"},
+  "Newcastle":{"m":"#241F20","s":"#FFFFFF","p":"stripes"},"Newcastle United":{"m":"#241F20","s":"#FFFFFF","p":"stripes"},"Newcastle Utd":{"m":"#241F20","s":"#FFFFFF","p":"stripes"},
+  "Brighton":{"m":"#0057B8","s":"#FFFFFF","p":"stripes"},"Brighton & Hove Albion":{"m":"#0057B8","s":"#FFFFFF","p":"stripes"},
+  "Aston Villa":{"m":"#95BFE5","s":"#670E36","p":"stripes"},"Wolves":{"m":"#FDB913","s":"#231F20","p":"solid"},"Wolverhampton":{"m":"#FDB913","s":"#231F20","p":"solid"},
+  "Crystal Palace":{"m":"#1B458F","s":"#C4122E","p":"halves"},"Brentford":{"m":"#E30613","s":"#FFFFFF","p":"stripes"},
+  "Fulham":{"m":"#FFFFFF","s":"#000000","p":"solid"},"Burnley":{"m":"#6C1D45","s":"#99D6EA","p":"solid"},
+  "Nottingham Forest":{"m":"#DD0000","s":"#FFFFFF","p":"solid"},"Nott'm Forest":{"m":"#DD0000","s":"#FFFFFF","p":"solid"},"Nottm Forest":{"m":"#DD0000","s":"#FFFFFF","p":"solid"},
+  "Southampton":{"m":"#D71920","s":"#FFFFFF","p":"stripes"},"Leeds United":{"m":"#FFFFFF","s":"#1D428A","p":"solid"},"Leeds":{"m":"#FFFFFF","s":"#1D428A","p":"solid"},
+  "Bournemouth":{"m":"#DA291C","s":"#000000","p":"stripes"},"AFC Bournemouth":{"m":"#DA291C","s":"#000000","p":"stripes"},
+  "Ipswich":{"m":"#0033A0","s":"#FFFFFF","p":"solid"},"Ipswich Town":{"m":"#0033A0","s":"#FFFFFF","p":"solid"},
+  "Sunderland":{"m":"#EB172B","s":"#FFFFFF","p":"stripes"},"Sheffield United":{"m":"#EE2737","s":"#FFFFFF","p":"stripes"},"Sheff Utd":{"m":"#EE2737","s":"#FFFFFF","p":"stripes"},
+  "Norwich City":{"m":"#00A650","s":"#FFF200","p":"halves"},"Norwich":{"m":"#00A650","s":"#FFF200","p":"halves"},
+  "Middlesbrough":{"m":"#DD0000","s":"#FFFFFF","p":"solid"},"Boro":{"m":"#DD0000","s":"#FFFFFF","p":"solid"},
+  "Barcelona":{"m":"#004D98","s":"#A50044","p":"stripes"},"Real Madrid":{"m":"#FFFFFF","s":"#00529F","p":"solid"},
+  "Atletico Madrid":{"m":"#CB3524","s":"#FFFFFF","p":"stripes"},"Atlético Madrid":{"m":"#CB3524","s":"#FFFFFF","p":"stripes"},"Atl. Madrid":{"m":"#CB3524","s":"#FFFFFF","p":"stripes"},
+  "Valencia":{"m":"#FFFFFF","s":"#FF7F00","p":"solid"},"Villarreal":{"m":"#FFD900","s":"#005689","p":"solid"},"Villarreal CF":{"m":"#FFD900","s":"#005689","p":"solid"},
+  "Sevilla":{"m":"#FFFFFF","s":"#D91A21","p":"solid"},"Sevilla FC":{"m":"#FFFFFF","s":"#D91A21","p":"solid"},
+  "Real Betis":{"m":"#00954C","s":"#FFFFFF","p":"stripes"},"Betis":{"m":"#00954C","s":"#FFFFFF","p":"stripes"},
+  "Athletic Bilbao":{"m":"#EE2523","s":"#FFFFFF","p":"stripes"},"Athletic Club":{"m":"#EE2523","s":"#FFFFFF","p":"stripes"},"Athletic":{"m":"#EE2523","s":"#FFFFFF","p":"stripes"},
+  "Real Sociedad":{"m":"#003DA5","s":"#FFFFFF","p":"stripes"},"Osasuna":{"m":"#C8102E","s":"#003DA5","p":"solid"},
+  "Celta Vigo":{"m":"#8CBFE8","s":"#FFFFFF","p":"stripes"},"Celta de Vigo":{"m":"#8CBFE8","s":"#FFFFFF","p":"stripes"},
+  "Girona":{"m":"#CD1E2C","s":"#FFFFFF","p":"stripes"},"Girona FC":{"m":"#CD1E2C","s":"#FFFFFF","p":"stripes"},
+  "Getafe":{"m":"#005FA8","s":"#FFFFFF","p":"solid"},"Rayo Vallecano":{"m":"#FFFFFF","s":"#D01111","p":"sash"},
+  "Mallorca":{"m":"#E4001B","s":"#000000","p":"stripes"},"Cadiz":{"m":"#FFE000","s":"#003DA5","p":"solid"},"Cádiz":{"m":"#FFE000","s":"#003DA5","p":"solid"},
+  "Alaves":{"m":"#0047AB","s":"#FFFFFF","p":"solid"},"Leganes":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},"Leganés":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},
+  "Juventus":{"m":"#000000","s":"#FFFFFF","p":"stripes"},"Juve":{"m":"#000000","s":"#FFFFFF","p":"stripes"},
+  "Inter":{"m":"#010E80","s":"#000000","p":"stripes"},"Inter Milan":{"m":"#010E80","s":"#000000","p":"stripes"},"Internazionale":{"m":"#010E80","s":"#000000","p":"stripes"},
+  "AC Milan":{"m":"#FB090B","s":"#000000","p":"stripes"},"Milan":{"m":"#FB090B","s":"#000000","p":"stripes"},
+  "Napoli":{"m":"#12A0C3","s":"#FFFFFF","p":"solid"},"SSC Napoli":{"m":"#12A0C3","s":"#FFFFFF","p":"solid"},
+  "Roma":{"m":"#A6192E","s":"#F5C400","p":"solid"},"AS Roma":{"m":"#A6192E","s":"#F5C400","p":"solid"},
+  "Lazio":{"m":"#87CEEB","s":"#FFFFFF","p":"solid"},"SS Lazio":{"m":"#87CEEB","s":"#FFFFFF","p":"solid"},
+  "Fiorentina":{"m":"#6C1F7B","s":"#FFFFFF","p":"solid"},"ACF Fiorentina":{"m":"#6C1F7B","s":"#FFFFFF","p":"solid"},
+  "Atalanta":{"m":"#1C4E9D","s":"#000000","p":"stripes"},"Bologna":{"m":"#C8102E","s":"#003DA5","p":"halves"},"FC Bologna":{"m":"#C8102E","s":"#003DA5","p":"halves"},
+  "Torino":{"m":"#7A1621","s":"#FFFFFF","p":"solid"},"Genoa":{"m":"#C8102E","s":"#003DA5","p":"stripes"},
+  "Udinese":{"m":"#000000","s":"#FFFFFF","p":"stripes"},"Cagliari":{"m":"#003DA5","s":"#CC0000","p":"solid"},
+  "Lecce":{"m":"#F5C400","s":"#CC0000","p":"solid"},"Empoli":{"m":"#1B9CD0","s":"#FFFFFF","p":"solid"},
+  "Monza":{"m":"#FF0000","s":"#FFFFFF","p":"solid"},"AC Monza":{"m":"#FF0000","s":"#FFFFFF","p":"solid"},
+  "Bayern Munich":{"m":"#DC052D","s":"#FFFFFF","p":"solid"},"FC Bayern":{"m":"#DC052D","s":"#FFFFFF","p":"solid"},"Bayern":{"m":"#DC052D","s":"#FFFFFF","p":"solid"},
+  "Dortmund":{"m":"#FDE100","s":"#000000","p":"solid"},"Borussia Dortmund":{"m":"#FDE100","s":"#000000","p":"solid"},"BVB":{"m":"#FDE100","s":"#000000","p":"solid"},"B. Dortmund":{"m":"#FDE100","s":"#000000","p":"solid"},
+  "Bayer Leverkusen":{"m":"#E32221","s":"#000000","p":"solid"},"Leverkusen":{"m":"#E32221","s":"#000000","p":"solid"},"B. Leverkusen":{"m":"#E32221","s":"#000000","p":"solid"},
+  "RB Leipzig":{"m":"#FFFFFF","s":"#CC0000","p":"solid"},"Schalke":{"m":"#004D9E","s":"#FFFFFF","p":"solid"},
+  "Werder Bremen":{"m":"#1D6034","s":"#FFFFFF","p":"solid"},"Eintracht Frankfurt":{"m":"#E1000F","s":"#000000","p":"solid"},"Frankfurt":{"m":"#E1000F","s":"#000000","p":"solid"},"Ein Frankfurt":{"m":"#E1000F","s":"#000000","p":"solid"},
+  "Stuttgart":{"m":"#E32221","s":"#FFFFFF","p":"solid"},"VfB Stuttgart":{"m":"#E32221","s":"#FFFFFF","p":"solid"},
+  "Wolfsburg":{"m":"#65B32E","s":"#FFFFFF","p":"solid"},"Freiburg":{"m":"#C8102E","s":"#FFFFFF","p":"stripes"},
+  "Hoffenheim":{"m":"#1863A1","s":"#FFFFFF","p":"solid"},"Mainz":{"m":"#C8102E","s":"#FFFFFF","p":"solid"},"Mainz 05":{"m":"#C8102E","s":"#FFFFFF","p":"solid"},
+  "Union Berlin":{"m":"#CF2218","s":"#FFFFFF","p":"solid"},"Augsburg":{"m":"#007A33","s":"#FFFFFF","p":"stripes"},
+  "Heidenheim":{"m":"#C8102E","s":"#FFFFFF","p":"solid"},"Bochum":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},"VfL Bochum":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},
+  "PSG":{"m":"#003F8A","s":"#DA291C","p":"solid"},"Paris Saint-Germain":{"m":"#003F8A","s":"#DA291C","p":"solid"},"Paris SG":{"m":"#003F8A","s":"#DA291C","p":"solid"},
+  "Marseille":{"m":"#009FE3","s":"#FFFFFF","p":"solid"},"Olympique Marseille":{"m":"#009FE3","s":"#FFFFFF","p":"solid"},
+  "Lyon":{"m":"#FFFFFF","s":"#0D1E4C","p":"solid"},"Monaco":{"m":"#D01027","s":"#FFFFFF","p":"halves"},"AS Monaco":{"m":"#D01027","s":"#FFFFFF","p":"halves"},
+  "Rennes":{"m":"#C8102E","s":"#000000","p":"solid"},"Nice":{"m":"#C8102E","s":"#000000","p":"stripes"},
+  "Lens":{"m":"#CF2118","s":"#F5C400","p":"solid"},"RC Lens":{"m":"#CF2118","s":"#F5C400","p":"solid"},
+  "Lille":{"m":"#CF0B28","s":"#003D8F","p":"halves"},"Toulouse":{"m":"#6B2C85","s":"#FFFFFF","p":"solid"},
+  "Brest":{"m":"#DA291C","s":"#FFFFFF","p":"solid"},"Nantes":{"m":"#F5C400","s":"#009550","p":"stripes"},
+  "Reims":{"m":"#DA291C","s":"#FFFFFF","p":"solid"},"Saint-Etienne":{"m":"#007A33","s":"#FFFFFF","p":"solid"},
+  "Ajax":{"m":"#CC0000","s":"#FFFFFF","p":"stripes"},"PSV":{"m":"#DA291C","s":"#FFFFFF","p":"stripes"},"PSV Eindhoven":{"m":"#DA291C","s":"#FFFFFF","p":"stripes"},
+  "Feyenoord":{"m":"#CC0000","s":"#FFFFFF","p":"halves"},"AZ":{"m":"#CC0000","s":"#FFFFFF","p":"solid"},
+  "Porto":{"m":"#003DA5","s":"#FFFFFF","p":"stripes"},"FC Porto":{"m":"#003DA5","s":"#FFFFFF","p":"stripes"},
+  "Benfica":{"m":"#CC0000","s":"#FFFFFF","p":"solid"},"SL Benfica":{"m":"#CC0000","s":"#FFFFFF","p":"solid"},
+  "Sporting CP":{"m":"#009550","s":"#FFFFFF","p":"solid"},"Sporting":{"m":"#009550","s":"#FFFFFF","p":"solid"},
+  "Celtic":{"m":"#009550","s":"#FFFFFF","p":"hoops"},"Rangers":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},
+  "Anderlecht":{"m":"#6B2C85","s":"#FFFFFF","p":"solid"},"Club Brugge":{"m":"#003DA5","s":"#000000","p":"stripes"},
+  "Shakhtar Donetsk":{"m":"#E87722","s":"#000000","p":"stripes"},"Shakhtar":{"m":"#E87722","s":"#000000","p":"stripes"},
+  "Galatasaray":{"m":"#CC0000","s":"#F5C400","p":"stripes"},"Fenerbahce":{"m":"#F5C400","s":"#003DA5","p":"stripes"},"Fenerbahçe":{"m":"#F5C400","s":"#003DA5","p":"stripes"},
+  "Besiktas":{"m":"#000000","s":"#FFFFFF","p":"stripes"},"Beşiktaş":{"m":"#000000","s":"#FFFFFF","p":"stripes"},
+  "Olympiakos":{"m":"#CC0000","s":"#FFFFFF","p":"stripes"},"Panathinaikos":{"m":"#009550","s":"#FFFFFF","p":"solid"},
+  "Salzburg":{"m":"#CC0000","s":"#FFFFFF","p":"solid"},"RB Salzburg":{"m":"#CC0000","s":"#FFFFFF","p":"solid"},
+  "Young Boys":{"m":"#F5C400","s":"#000000","p":"solid"},"FC Zurich":{"m":"#003DA5","s":"#FFFFFF","p":"solid"},
+  "Flamengo":{"m":"#CC0000","s":"#000000","p":"stripes"},"Palmeiras":{"m":"#006E51","s":"#FFFFFF","p":"solid"},
+  "Corinthians":{"m":"#000000","s":"#FFFFFF","p":"stripes"},"Boca Juniors":{"m":"#003DA5","s":"#F5C400","p":"stripes"},
+  "River Plate":{"m":"#FFFFFF","s":"#CC0000","p":"sash"},"Fluminense":{"m":"#CC0000","s":"#FFFFFF","p":"stripes"}
+};
+// Async-extend with full kits.json (extra teams not in the inline set)
+(function() {
   var base2 = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  fetch(base2 + 'sportsbook/kits.json?v=1')
+  fetch(base2 + 'sportsbook/kits.json?v=2')
     .then(function(r) { return r.json(); })
-    .then(function(d) { KITS = d.teams || {}; })
-    .catch(function() {}); // silent fail — falls back to seeded colours
+    .then(function(d) { Object.assign(KITS, d.teams || {}); })
+    .catch(function() {});
 })();
 var pos = scriptPath.indexOf('/sportsbook');
 if (pos !== -1) {
@@ -180,8 +263,9 @@ function renderStatsBar(m, sportId) {
       + mdStat(goalsH, '⚽', goalsA)
       + mdStat(sv('yellow_cards',0,'-'), '<span class="md-si-yc">▮</span>', sv('yellow_cards',1,'-'))
       + mdStat(sv('red_cards',0,'-'),    '<span class="md-si-rc">▮</span>', sv('red_cards',1,'-'))
-      + mdStat(sv('on_target',0,sv('attacks',0,'-')), '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" opacity=".4"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>', sv('on_target',1,sv('attacks',1,'-')))
-      + mdStat(sv('corners',0,'-'), '⚑', sv('corners',1,'-'))
+      + mdStat(sv('attacks',0,sv('dangerous_attacks',0,'-')), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>', sv('attacks',1,sv('dangerous_attacks',1,'-')))
+      + mdStat(sv('corners',0,'-'), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18v-2H5V3H3zm4 14l4-5 3 3 3-4 4 5H7z"/></svg>', sv('corners',1,'-'))
+      + mdStat(sv('on_target',0,'-'), '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', sv('on_target',1,'-'))
       + '</div>';
   }
   // Basketball
@@ -358,12 +442,12 @@ function h(s) {
 /** Live match — BetsAPI uses string or number time_status */
 function isMatchLive(m) {
   if (!m) return false;
-  // Primary: API says live
+  // Primary: API says live — always trust this
   if (String(m.time_status) === '1' || m.status === 'inplay') return true;
-  // Secondary: start time has passed — show EN DIRECT immediately without waiting for API
-  // This means La Liga 20:00 shows EN DIRECT badge the moment the clock reaches 20:00
+  // Secondary: start time has passed by more than 5 minutes — match has definitely started
+  // We use a 5-minute grace window so a match at 20:00 doesn't show EN DIRECT at 19:59
   var startTs = parseInt(m.time || 0);
-  if (startTs > 1000000000 && (Date.now() / 1000) >= startTs) return true;
+  if (startTs > 1000000000 && (Date.now() / 1000) >= (startTs + 300)) return true;
   return false;
 }
 function margin(v) { return Math.max(1.01, +(parseFloat(v) * (1 - MARGIN)).toFixed(2)); }
@@ -1173,8 +1257,8 @@ function matchCard(m) {
 
   // SVG Shirt helper (uses seeded colors based on team name)
   function getShirtSVG(tName) {
-    if (!isLive) return '';
-    return shirtSVG(tName, 'mc-jersey-svg', 24);
+    // Show jerseys for all matches — live ones are full opacity, upcoming are slightly faded
+    return shirtSVG(tName, 'mc-jersey-svg' + (isLive ? '' : ' mc-jersey-up'), 24);
   }
 
   out += '<div class="mc-teams-wrap">';
@@ -2355,37 +2439,40 @@ function renderMatchDetail(m, markets) {
   var el = document.getElementById('sb-matches-body');
   if (!el || !m) return;
 
-  var isLive  = isMatchLive(m);
-  var hn      = h(m.home ? m.home.name : '');
-  var an      = h(m.away ? m.away.name : '');
-  var scores  = m.ss ? m.ss.split('-') : ['',''];
-  var scoreH  = scores[0] !== undefined ? scores[0] : '0';
-  var scoreA  = scores[1] !== undefined ? scores[1] : '0';
-  var FALLBACK = BASE + 'assets/images/logo.png';
-  var hl      = m.home ? m.home.image_id : null;
-  var al      = m.away ? m.away.image_id : null;
-  var hlogo   = hl ? 'https://assets.b365api.com/images/team/m/' + hl + '.png' : FALLBACK;
-  var alogo   = al ? 'https://assets.b365api.com/images/team/m/' + al + '.png' : FALLBACK;
-
+  var isLive   = isMatchLive(m);
+  var hn       = m.home ? m.home.name : '';
+  var an       = m.away ? m.away.name : '';
+  var hShort   = hn.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'').substring(0,3).toUpperCase();
+  var aShort   = an.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'').substring(0,3).toUpperCase();
+  var scores   = m.ss ? m.ss.split('-') : ['',''];
+  var scoreH   = scores[0] !== undefined ? scores[0].trim() : '';
+  var scoreA   = scores[1] !== undefined ? scores[1].trim() : '';
+  var sportId  = parseInt(m.sport_id || 1);
+  var lg       = m.league ? m.league.name : '';
+  var country  = guessCountry(lg);
+  var flagUrl  = getFlag(country);
   var period   = isLive ? getMatchPeriod(m) : '';
   var baseMins = isLive && m.timer ? (parseInt(m.timer.tm || 0) || 0) : 0;
   var baseSecs = isLive && m.timer ? (parseInt(m.timer.ts || 0) || 0) : 0;
-  var isHT     = isLive && m.timer && (m.timer.md === '1' || m.timer.MD === '1');
+  var isHT     = isLive && m.timer && (String(m.timer.md||m.timer.MD||'') === '1');
   var timerInit = isHT ? 'Mi-temps' : (String(baseMins).padStart(2,'0') + ':' + String(baseSecs).padStart(2,'0'));
-  var sportId  = parseInt(m.sport_id || 1);
-
-  var lg = m.league ? m.league.name : '';
-  var country = guessCountry(lg);
-  var flagUrl = getFlag(country);
 
   var ts2 = parseInt(m.time || 0);
   var dObj = ts2 > 0 ? new Date(ts2 * 1000) : new Date();
   var dateStr = String(dObj.getDate()).padStart(2,'0') + '/' + String(dObj.getMonth()+1).padStart(2,'0') + '/' + dObj.getFullYear()
               + ' ' + String(dObj.getHours()).padStart(2,'0') + ':' + String(dObj.getMinutes()).padStart(2,'0');
 
+  // HT score from scores object
+  var htScoreH = '', htScoreA = '';
+  if (m.scores && m.scores['1']) {
+    var hts = m.scores['1'];
+    htScoreH = hts.home !== undefined ? hts.home : '';
+    htScoreA = hts.away !== undefined ? hts.away : '';
+  }
+
   var out = '<div class="md-view">';
 
-  // ── Nav bar — matches reference exactly
+  // ── Nav bar
   out += '<div class="md-nav-bar">';
   out += '<button class="md-back-btn" onclick="window.sbBackToMain()">' + ICON.arrowLeft + '<span>Retour</span></button>';
   out += '<span class="md-date-info">' + h(dateStr) + '</span>';
@@ -2394,73 +2481,109 @@ function renderMatchDetail(m, markets) {
   // ── Match header
   out += '<div class="md-match-hdr">';
 
-  // League line + live badge (right-aligned like reference)
+  // League row
   out += '<div class="md-league-line">';
   out += '<img src="' + flagUrl + '" class="md-flag" onerror="this.style.display=\'none\'">';
   out += '<span class="md-league-nm">' + h(lg) + '</span>';
-  if (isLive) out += '<span class="md-live-pill" style="margin-left:auto"><span class="md-live-dot"></span>EN DIRECT</span>';
+  if (isLive) out += '<span class="md-live-pill"><span class="md-live-dot"></span>EN DIRECT</span>';
   out += '</div>';
 
-  // Period + counting timer (center above score) — matches reference format "1ère mi-temps | 41:22"
+  // Period + timer row (center)
   if (isLive && period) {
     out += '<div class="md-period-row">';
     out += '<span class="md-period-txt">' + h(period) + '</span>';
     if (!isHT) {
-      out += '<span class="md-period-sep"> | </span>';
-      out += '<span class="md-timer" id="md-timer-display">' + h(timerInit) + '</span>';
+      out += ' <span class="md-period-sep">|</span> <span class="md-timer" id="md-timer-display">' + h(timerInit) + '</span>';
     }
     out += '</div>';
   }
 
-  // Teams + Score row
+  // Teams + jersey icons + score  — matches reference: [BRI jersey] abbr ... score ... abbr [jersey MAN]
   out += '<div class="md-teams-row">';
+
+  // Home
   out += '<div class="md-team-col">';
-  out += '<img src="' + hlogo + '" class="md-jersey" onerror="this.src=\'' + FALLBACK + '\'">';
-  out += '<span class="md-team-nm">' + hn + '</span>';
+  out += shirtSVG(hn, 'md-team-jersey', 44);
+  out += '<span class="md-team-abbr">' + h(hShort) + '</span>';
+  out += '<span class="md-team-nm">' + h(hn) + '</span>';
   out += '</div>';
+
+  // Score center
   out += '<div class="md-score-col">';
-  if (isLive) {
+  if (isLive && scoreH !== '' && scoreA !== '') {
+    out += '<div class="md-score-live">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
+    if (htScoreH !== '' && htScoreA !== '') {
+      out += '<div class="md-ht-score">' + h(htScoreH) + ' : ' + h(htScoreA) + '</div>';
+    }
+  } else if (scoreH !== '' && scoreA !== '') {
     out += '<div class="md-score-live">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
   } else {
     out += '<div class="md-score-vs">vs</div>';
   }
   out += '</div>';
-  out += '<div class="md-team-col">';
-  out += '<img src="' + alogo + '" class="md-jersey" onerror="this.src=\'' + FALLBACK + '\'">';
-  out += '<span class="md-team-nm">' + an + '</span>';
-  out += '</div>';
+
+  // Away
+  out += '<div class="md-team-col md-team-away">';
+  out += shirtSVG(an, 'md-team-jersey', 44);
+  out += '<span class="md-team-abbr">' + h(aShort) + '</span>';
+  out += '<span class="md-team-nm">' + h(an) + '</span>';
   out += '</div>';
 
-  // Stats bar (live only)
-  if (isLive) {
-    out += renderStatsBar(m, sportId);
-  }
+  out += '</div>'; // md-teams-row
+
+  // Stats bar (live + upcoming both get it if data available)
+  var statsHtml = renderStatsBar(m, sportId);
+  if (statsHtml) out += statsHtml;
+
   out += '</div>'; // md-match-hdr
 
-  // ── Market tabs
-  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals','Combi...'];
-  out += '<div class="md-tabs-row">';
+  // ── Quick-filter tabs row (Flash / 1 min / Marchés rapides)
+  out += '<div class="md-quick-tabs">';
   out += '<button class="md-tab-icon-btn" title="Rechercher">' + ICON.search + '</button>';
+  out += '<button class="md-qt active" data-filter="flash" onclick="window.sbMdQuickFilter(this,\'flash\')">'
+    + '<svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor"><path d="M6.5 0L0 8h4.5L4 14l7-8H6L6.5 0z"/></svg> Flash</button>';
+  out += '<button class="md-qt" data-filter="1min" onclick="window.sbMdQuickFilter(this,\'1min\')">'
+    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 1 minute</button>';
+  out += '<button class="md-qt" data-filter="all" onclick="window.sbMdQuickFilter(this,\'all\')">Marchés rapides</button>';
+  out += '</div>';
+
+  // ── Main market category tabs (Principaux is default active)
+  var TABS = ['Tout','Principaux','Bet Builder','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals'];
+  out += '<div class="md-tabs-row">';
   TABS.forEach(function(t, i) {
-    out += '<button class="md-tab' + (i === 1 ? ' active' : '') + '" onclick="window.sbMdTab(this)">' + h(t) + '</button>';
+    out += '<button type="button" class="md-tab' + (i === 1 ? ' active' : '') + '" onclick="window.sbMdTab(this,\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
   });
   out += '</div>';
 
-  // ── Markets
-  out += '<div class="md-markets">';
+  // ── Bet Builder panel (hidden by default, shown when BB tab active)
+  out += '<div class="md-bb-panel" id="md-bb-panel" style="display:none">';
+  out += '<div class="md-bb-info">Sélectionnez des cotes pour construire votre pari combiné</div>';
+  out += '<div class="md-bb-legs" id="md-bb-legs"></div>';
+  out += '<div class="md-bb-foot" id="md-bb-foot" style="display:none">';
+  out += '<div class="md-bb-combined"><span>Cote combinée</span><span class="md-bb-combined-val" id="md-bb-combined-val">1.00</span></div>';
+  out += '<button type="button" class="md-bb-add-btn" onclick="window.sbBBAddToSlip()">Ajouter au slip</button>';
+  out += '</div></div>';
+
+  // ── Markets list
   if (!markets.length) markets = buildFallbackMarkets(m);
-  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 4); });
+  // Store markets for filtering
+  window._mdMarkets = markets;
+  window._mdMatch   = m;
+
+  out += '<div class="md-markets" id="md-markets-body">';
+  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
   out += '</div></div>';
 
   el.innerHTML = out;
 
-  // ── Post-render: start live timer + show pitch viewer
+  // ── Post-render
   if (isLive && !isHT) startMatchTimer(m);
   else clearInterval(window._mdTimerInterval);
   showMatchViewer(m);
+  window._bbSelections = [];
 }
 
-function renderMarketGroup(mkt, m, expanded) {
+function renderMarketGroup(mkt, m, expanded, bbMode) {
   var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + '">';
   out += '<div class="md-mkt-hdr" onclick="this.parentNode.classList.toggle(\'collapsed\')">';
   out += '<span class="md-mkt-star">' + ICON.star + '</span>';
@@ -2526,13 +2649,21 @@ function renderMarketGroup(mkt, m, expanded) {
   return out;
 }
 
-function renderMktBtn(sel, m) {
+function renderMktBtn(sel, m, bbMode) {
   var rawOdd = parseFloat(sel.odds) || 1.50;
   var val    = applyMargin(rawOdd);
-  var lbl    = h(sel.name) + (sel.handicap != null ? ' <span class="md-hc">' + sel.handicap + '</span>' : '');
+  var lbl    = h(sel.name) + (sel.handicap != null ? ' <span class="md-hc">' + h(String(sel.handicap)) + '</span>' : '');
   var bid    = h(m.id) + '_md_' + h(String(sel.id || sel.name));
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
-  return '<button class="md-odd-btn' + (isSel ? ' sel' : '') + '" onclick="window.sbAddBet(\''
+  var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
+  if (bbMode) {
+    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + '" onclick="window.sbBBToggle(\''
+      + bid + '\',\'' + h(sel.name) + '\',' + val + ')">'
+      + '<span class="md-o-name">' + lbl + '</span>'
+      + '<span class="md-o-val">' + val.toFixed(2) + '</span>'
+      + '</button>';
+  }
+  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + '" onclick="window.sbAddBet(\''
     + bid + '\',\'' + h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''))
     + '\',\'' + h(sel.name) + '\',' + val + ')">'
     + '<span class="md-o-name">' + lbl + '</span>'
@@ -2628,9 +2759,141 @@ function buildFallbackMarkets(m) {
   return mkts;
 }
 
-window.sbMdTab = function(btn) {
+// ── Flash keywords: markets shown in "Flash" quick view
+var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts','pair','pari combiné'];
+var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
+
+window.sbMdTab = function(btn, tabName) {
   document.querySelectorAll('.md-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
+  var bbPanel  = document.getElementById('md-bb-panel');
+  var mktBody  = document.getElementById('md-markets-body');
+  if (tabName === 'Bet Builder') {
+    if (bbPanel)  bbPanel.style.display  = '';
+    if (mktBody)  mktBody.style.display  = 'none';
+    // Re-render markets in BB mode
+    if (mktBody && window._mdMarkets && window._mdMatch) {
+      mktBody.style.display = '';
+      var out = '';
+      window._mdMarkets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, true); });
+      mktBody.innerHTML = out;
+    }
+  } else {
+    if (bbPanel) bbPanel.style.display = 'none';
+    if (mktBody) {
+      mktBody.style.display = '';
+      if (!window._mdMarkets || !window._mdMatch) return;
+      var filter = null;
+      if (tabName === 'Principaux') filter = function(mkt) {
+        var nm = (mkt.name || '').toLowerCase();
+        return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+      };
+      if (tabName === 'Tout') filter = null;
+      // For other tabs (Corners, 1 minute, etc.) match by keyword
+      if (!filter && tabName && tabName !== 'Tout') {
+        var kw = tabName.toLowerCase();
+        filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
+      }
+      var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
+      if (!shown.length) shown = window._mdMarkets; // fallback: show all
+      var out = '';
+      shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, false); });
+      mktBody.innerHTML = out;
+    }
+  }
+};
+
+window.sbMdQuickFilter = function(btn, filter) {
+  document.querySelectorAll('.md-qt').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var mktBody = document.getElementById('md-markets-body');
+  if (!mktBody || !window._mdMarkets || !window._mdMatch) return;
+  var shown = window._mdMarkets;
+  if (filter === 'flash') {
+    shown = window._mdMarkets.filter(function(mkt){
+      var nm = (mkt.name || '').toLowerCase();
+      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    });
+    if (!shown.length) shown = window._mdMarkets.slice(0, 5);
+  } else if (filter === '1min') {
+    shown = window._mdMarkets.filter(function(mkt){
+      var nm = (mkt.name || '').toLowerCase();
+      return MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    });
+    if (!shown.length) shown = window._mdMarkets.slice(0, 8);
+  }
+  var out = '';
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, false); });
+  mktBody.innerHTML = out;
+};
+
+// ── Bet Builder ──────────────────────────────────────────────
+window._bbSelections = [];
+
+window.sbBBToggle = function(id, name, odds) {
+  var idx = window._bbSelections.findIndex(function(s){ return s.id === id; });
+  if (idx >= 0) {
+    window._bbSelections.splice(idx, 1);
+  } else {
+    window._bbSelections.push({ id: id, name: name, odds: odds });
+  }
+  sbBBRefresh();
+  // Highlight/unhighlight button
+  document.querySelectorAll('.md-bb-btn').forEach(function(btn){
+    var onclick = btn.getAttribute('onclick') || '';
+    if (onclick.indexOf("'" + id + "'") !== -1) {
+      btn.classList.toggle('sel', idx < 0);
+    }
+  });
+};
+
+function sbBBRefresh() {
+  var legs = document.getElementById('md-bb-legs');
+  var foot = document.getElementById('md-bb-foot');
+  var combVal = document.getElementById('md-bb-combined-val');
+  if (!legs) return;
+  var sels = window._bbSelections;
+  if (!sels.length) {
+    legs.innerHTML = '';
+    if (foot) foot.style.display = 'none';
+    return;
+  }
+  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var out = '';
+  sels.forEach(function(s){
+    out += '<div class="md-bb-leg">'
+      + '<span class="md-bb-leg-name">' + h(s.name) + '</span>'
+      + '<span class="md-bb-leg-odds">' + s.odds.toFixed(2) + '</span>'
+      + '<button type="button" class="md-bb-leg-del" onclick="window.sbBBToggle(\'' + s.id + '\',\'' + s.name.replace(/'/g,"\\'") + '\',' + s.odds + ')">&times;</button>'
+      + '</div>';
+  });
+  legs.innerHTML = out;
+  if (combVal) combVal.textContent = combined.toFixed(2);
+  if (foot) foot.style.display = '';
+}
+
+window.sbBBAddToSlip = function() {
+  var sels = window._bbSelections;
+  if (!sels.length) return;
+  var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
+  var names = sels.map(function(s){ return s.name; }).join(' + ');
+  var bid = 'bb_' + Date.now();
+  if (typeof sbAddBet === 'function') {
+    sbAddBet(bid, 'Bet Builder', names, combined);
+  } else if (window.sbAddBet) {
+    window.sbAddBet(bid, 'Bet Builder', names, combined);
+  }
+  window._bbSelections = [];
+  sbBBRefresh();
+  // Flash confirmation
+  var bbPanel = document.getElementById('md-bb-panel');
+  if (bbPanel) {
+    var msg = document.createElement('div');
+    msg.className = 'md-bb-confirm';
+    msg.textContent = '✓ Ajouté au slip!';
+    bbPanel.prepend(msg);
+    setTimeout(function(){ msg.remove(); }, 2000);
+  }
 };
 
 // Removed duplicate sbSwitchTab

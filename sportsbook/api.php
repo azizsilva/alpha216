@@ -434,7 +434,7 @@ if ($action === 'inplay') {
     // ── Step 2: Get or refresh global inplay stream (for live OU odds) ─────
     $use_stream_cache = file_exists($stream_cache) && (time()-filemtime($stream_cache)) < $cache_ttl;
     if (!$use_stream_cache) {
-        $sresp = betsapi_get('/v1/bet365/inplay', [], 30);
+        $sresp = betsapi_get('/v1/bet365/inplay', []);
         if (!empty($sresp['results'][0]) && is_array($sresp['results'][0])) {
             @file_put_contents($stream_cache, json_encode($sresp['results'][0]));
         }
@@ -1105,6 +1105,29 @@ if ($action === 'match_detail') {
         if (empty($event_raw)) {
             $ev3 = betsapi_get('/v1/bet365/prematch_odds', ['event_id' => $match_id]);
             if (!empty($ev3['results'])) $event_raw = $ev3['results'];
+        }
+    }
+
+    // ── Step 3: v3/event/view — fresh stats, timer, scores + prematch sp odds ──
+    $v3_data = betsapi_get('/v3/event/view', ['event_id' => $match_id, 'source' => 'bet365', 'odds' => '1']);
+    if (!empty($v3_data['results'][0])) {
+        $ev3 = $v3_data['results'][0];
+        if ($match_data === null) $match_data = $ev3;
+        // Merge live state into stored data so client gets fresh values
+        foreach (['stats','timer','ss','scores','time_status','r_id'] as $fk) {
+            if (!empty($ev3[$fk])) $match_data[$fk] = $ev3[$fk];
+        }
+        // Half-time score
+        if (!empty($ev3['scores'])) $match_data['scores'] = $ev3['scores'];
+        // Supply team image_ids if missing
+        foreach (['home','away'] as $side) {
+            if (!empty($ev3[$side]['image_id']) && empty($match_data[$side]['image_id'])) {
+                $match_data[$side]['image_id'] = $ev3[$side]['image_id'];
+            }
+        }
+        // Use v3 sp markets as fallback if no live event tree
+        if (empty($event_raw) && !empty($ev3['main']['sp'])) {
+            $event_raw = $ev3['main']['sp'];
         }
     }
 

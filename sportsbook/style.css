@@ -1181,11 +1181,14 @@ body {
   gap: 10px; 
 }
 .mc-jersey-svg {
-  width: 18px; 
-  height: 18px;
+  width: 20px; 
+  height: 20px;
   flex-shrink: 0;
   stroke: #404040;
   stroke-width: 1px;
+}
+.mc-jersey-up {
+  opacity: 0.65;
 }
 .mc-t-name {
   font-size: 13px;
@@ -2479,6 +2482,151 @@ body {
 .md-score-vs  { font-size: 20px; font-weight: 700; color: var(--sb-text-2); }
 .md-timer     { font-size: 12px; color: var(--sb-green); font-weight: 600; }
 .md-sub-score { font-size: 10px; color: var(--sb-text-3); }
+.md-ht-score  { font-size: 11px; color: var(--sb-text-3); letter-spacing: 2px; }
+
+/* Jersey SVG in match header */
+.md-team-jersey {
+  width: 48px !important;
+  height: 48px !important;
+  flex-shrink: 0;
+}
+.md-team-abbr {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--sb-text-1);
+  letter-spacing: 1px;
+}
+.md-team-nm {
+  font-size: 11px;
+  color: var(--sb-text-2);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 110px;
+  word-break: break-word;
+}
+.md-team-away { align-items: center; }
+
+/* Period row */
+.md-period-row {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--sb-text-2);
+}
+.md-period-txt { font-weight: 600; color: var(--sb-text-1); }
+.md-period-sep { color: var(--sb-text-3); }
+
+/* Quick filter tab row (Flash / 1min / Marchés rapides) */
+.md-quick-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #111;
+  border-bottom: 1px solid var(--sb-border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+.md-quick-tabs::-webkit-scrollbar { height: 0; }
+.md-qt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  color: var(--sb-text-2);
+  font-size: 11px;
+  font-family: 'Poppins', sans-serif;
+  padding: 5px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  outline: none;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.md-qt svg { width: 11px; height: 11px; flex-shrink: 0; }
+.md-qt:hover { background: rgba(255,255,255,0.09); color: var(--sb-text-1); }
+.md-qt.active { background: var(--sb-green) !important; color: #000 !important; border-color: var(--sb-green) !important; font-weight: 600; }
+
+/* Bet Builder panel */
+.md-bb-panel {
+  padding: 10px 10px 6px;
+  background: #111;
+  border-bottom: 1px solid var(--sb-border);
+}
+.md-bb-info {
+  font-size: 11px;
+  color: var(--sb-text-3);
+  text-align: center;
+  padding: 4px 0 8px;
+}
+.md-bb-legs { display: flex; flex-direction: column; gap: 4px; }
+.md-bb-leg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sb-bg-card);
+  border: 1px solid var(--sb-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.md-bb-leg-name { flex: 1; font-size: 12px; color: var(--sb-text-1); }
+.md-bb-leg-odds { font-size: 13px; font-weight: 700; color: var(--sb-green); flex-shrink: 0; }
+.md-bb-leg-del {
+  background: transparent;
+  border: none;
+  color: var(--sb-text-3);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  outline: none;
+  line-height: 1;
+}
+.md-bb-leg-del:hover { color: var(--sb-red); }
+.md-bb-foot {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.md-bb-combined {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--sb-text-2);
+}
+.md-bb-combined-val { font-size: 16px; font-weight: 800; color: var(--sb-green); }
+.md-bb-add-btn {
+  background: var(--sb-green);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  transition: opacity 0.12s;
+}
+.md-bb-add-btn:hover { opacity: 0.85; }
+.md-bb-btn.sel { background: rgba(112,246,105,0.15) !important; border-color: var(--sb-green) !important; }
+.md-bb-confirm {
+  background: var(--sb-green);
+  color: #000;
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  animation: fadeInUp 0.2s ease;
+}
 
 /* Market tabs */
 .md-tabs-row {
