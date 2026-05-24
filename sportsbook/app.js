@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.19';
+  var newHref = base + 'sportsbook/style.css?v=20260524.20';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1082,7 +1082,7 @@ function renderLiveMarketDropdown() {
   out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + ICON.chevronDown + '</span>';
   out += '</button>';
   // Dropdown — only show non-active options (active already shown in trigger above)
-  out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop" style="display:none">';
+  out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop">';
   LIVE_MKT_OPTIONS.forEach(function(o) {
     var isCur = (o.key === (S.activeLiveCat || 'populaire'));
     if (isCur) return; // skip — it's shown in the trigger button
@@ -1096,34 +1096,36 @@ function renderLiveMarketDropdown() {
 }
 
 window.sbToggleLiveMktDrop = function() {
-  var drop = document.getElementById('sb-live-mkt-drop');
+  var wrap  = document.getElementById('sb-live-mkt-wrap');
   var arrow = document.getElementById('sb-lmb-arrow');
-  var btn   = document.getElementById('sb-live-mkt-btn');
-  if (!drop) return;
-  var open = drop.style.display !== 'none';
-  drop.style.display = open ? 'none' : 'block';
+  if (!wrap) return;
+  var isOpen = wrap.classList.contains('sb-lmdt-open');
+  wrap.classList.toggle('sb-lmdt-open', !isOpen);
+  // Arrow: minus when open, chevron down when closed
   if (arrow) {
-    if (!open) {
-      // opening: show minus dash, remove chevron
+    if (!isOpen) {
       arrow.innerHTML = '&minus;';
-      arrow.classList.add('rotated');
     } else {
-      // closing: restore chevron SVG
       arrow.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-      arrow.classList.remove('rotated');
     }
   }
-  if (btn) btn.classList.toggle('open', !open);
+  var btn = document.getElementById('sb-live-mkt-btn');
+  if (btn) btn.classList.toggle('open', !isOpen);
 };
 
 window.sbSetLiveCat = function(key, label) {
   S.activeLiveCat = key;
   var lbl = document.getElementById('sb-live-mkt-lbl');
   if (lbl) lbl.textContent = label;
-  var drop = document.getElementById('sb-live-mkt-drop');
-  if (drop) drop.style.display = 'none';
+  // Close dropdown via class
+  var wrap = document.getElementById('sb-live-mkt-wrap');
+  if (wrap) wrap.classList.remove('sb-lmdt-open');
   var arrow = document.getElementById('sb-lmb-arrow');
-  if (arrow) arrow.classList.remove('rotated');
+  if (arrow) {
+    arrow.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  }
+  var btn = document.getElementById('sb-live-mkt-btn');
+  if (btn) btn.classList.remove('open');
   // Re-render only the live match groups (fast — no API call)
   var liveList = (S.matches || []).filter(isMatchLive);
   liveList = sortLiveMatches(liveList);

@@ -3720,6 +3720,7 @@ body {
 }
 .sb-lmb-arrow svg { display: block; }
 .sb-live-mkt-drop {
+  display: none;             /* hidden by default */
   background: #1e1e1e;
   border: 1px solid rgba(255,255,255,0.12);
   border-top: none;
@@ -3727,6 +3728,10 @@ body {
   overflow: hidden;
   position: relative;
   z-index: 10;
+}
+/* Open state driven by class — beats Bootstrap's display rules */
+.sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop {
+  display: block !important;
 }
 .sb-lmk-item {
   width: 100%;
@@ -3756,7 +3761,9 @@ body {
 }
 
 /* Collapse/expand odds row via chevron toggle */
-.sb-root .mc.mc-collapsed .mc-odds-bot {
+/* Collapse: hide only the odd BUTTONS, keep the chevron btn visible */
+.sb-root .mc.mc-collapsed .mc-odd-btn,
+.sb-root .mc.mc-collapsed .mc-no-market {
   display: none !important;
 }
 .sb-root button.mc-chevron-btn.mc-chevron-up svg {

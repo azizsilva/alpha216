@@ -115,7 +115,11 @@ for($i=0;$i<7;$i++){
 .sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:400!important}
 .sb-root .mc-odd-val{color:rgb(113,246,105)!important;font-size:14px!important;font-weight:700!important}
 /* Chevron button — matches reference style */
-.sb-root button.mc-chevron-btn{width:38px!important;height:40px!important;background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;box-shadow:none!important;flex-shrink:0!important}
+.sb-root button.mc-chevron-btn{width:38px!important;height:40px!important;background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;box-shadow:none!important;flex-shrink:0!important;cursor:pointer!important;}
+/* Collapse hides only odds btns — chevron stays visible to allow re-expand */
+.sb-root .mc.mc-collapsed .mc-odd-btn,.sb-root .mc.mc-collapsed .mc-no-market{display:none!important;}
+.sb-root button.mc-chevron-btn.mc-chevron-up svg{transform:rotate(180deg)!important;}
+.sb-root button.mc-chevron-btn svg{transition:transform 0.2s ease!important;}
 .sb-root .sb-league-section-hdr{background:#1e1e1e!important;border-width:0!important;border-radius:6px!important;margin:12px 0 6px!important;padding:10px 12px!important;display:flex!important;align-items:center!important}
 .sb-root .sb-league-block{margin-bottom:8px!important}
 /* Championship market tabs — must scroll horizontally, never wrap */
