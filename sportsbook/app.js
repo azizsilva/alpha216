@@ -7,7 +7,13 @@
 'use strict';
 
 var MARGIN = 0; // No additional margin — BetsAPI provides real Bet365 odds directly
-var BASE = '/public_html/';
+// Dynamic base path calculation
+var scriptPath = window.location.pathname;
+var BASE = '/';
+var pos = scriptPath.indexOf('/sportsbook');
+if (pos !== -1) {
+    BASE = scriptPath.substring(0, pos + 1);
+}
 var ODDS_FMT = 'dec'; // 'dec' | 'frac' | 'amer'
 
 /* ── Odds format conversion ──────────────────────────────── */
@@ -920,7 +926,7 @@ function matchCard(m) {
   }
 
   // Team logos
-  var FALLBACK = '/public_html/assets/images/logo.png';
+  var FALLBACK = BASE + 'assets/images/logo.png';
   var hl = m.home ? m.home.image_id : null;
   var al = m.away ? m.away.image_id : null;
   var hlogo = hl ? 'https://assets.b365api.com/images/team/m/' + hl + '.png' : FALLBACK;
@@ -1151,7 +1157,7 @@ function renderEnDirectCards(matches) {
     var flagUrl = getFlag(country);
     var isLive  = m.time_status === '1';
 
-    var FALLBACK = '/public_html/assets/images/logo.png';
+    var FALLBACK = BASE + 'assets/images/logo.png';
     var hl  = m.home ? m.home.image_id : null;
     var al  = m.away ? m.away.image_id : null;
     var hlogo = hl ? 'https://assets.b365api.com/images/team/m/' + hl + '.png' : FALLBACK;
@@ -2075,7 +2081,7 @@ function renderMatchDetail(m, markets) {
   var scores  = m.ss ? m.ss.split('-') : ['',''];
   var scoreH  = scores[0] !== undefined ? scores[0] : '0';
   var scoreA  = scores[1] !== undefined ? scores[1] : '0';
-  var FALLBACK = '/public_html/assets/images/logo.png';
+  var FALLBACK = BASE + 'assets/images/logo.png';
   var hl      = m.home ? m.home.image_id : null;
   var al      = m.away ? m.away.image_id : null;
   var hlogo   = hl ? 'https://assets.b365api.com/images/team/m/' + hl + '.png' : FALLBACK;
