@@ -412,13 +412,12 @@ for($i=0;$i<7;$i++){
 <!-- Mobile Bar — 5 items matching fcbet216 -->
 <div class="sb-mob-footer">
   <button class="sb-mob-btn" onclick="window.location.href='/'">
-    <!-- Cherry/Casino icon matching fcbet216 reference -->
+    <!-- Cherry icon matching fcbet216 Casino button -->
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Cherries: two circles with a stem -->
-      <circle cx="8" cy="16" r="4" stroke="currentColor" stroke-width="1.5"/>
-      <circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M8 12C8 12 9 7 13 5C13 5 16 8 16 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M13 5C13 5 11 3 12 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <circle cx="7.5" cy="17.5" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="16.5" cy="17.5" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M7.5 14C7.5 14 8 10 11 8C11 8 13 10 16.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 8C11 8 11 5 13 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
     <span class="sb-mob-lbl">Casino</span>
   </button>
