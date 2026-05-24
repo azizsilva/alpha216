@@ -385,6 +385,11 @@ if ($action === 'inplay') {
     $cache_dir  = __DIR__ . '/cache';
     if (!is_dir($cache_dir)) @mkdir($cache_dir, 0755, true);
 
+    // Auto-purge stale sb_counts files older than 8 min so EN DIRECT badges refresh
+    foreach (glob($cache_dir . '/sb_counts_*.json') ?: [] as $sf) {
+        if ((time() - filemtime($sf)) >= 480) @unlink($sf);
+    }
+
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
     $stream_cache = $cache_dir . '/inplay_stream.json';
     $cache_ttl    = 20; // seconds (refresh every ~3rd app.js poll)

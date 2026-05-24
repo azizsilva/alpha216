@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.6';
+  var newHref = base + 'sportsbook/style.css?v=20260524.7';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -302,7 +302,13 @@ function h(s) {
 /** Live match — BetsAPI uses string or number time_status */
 function isMatchLive(m) {
   if (!m) return false;
-  return String(m.time_status) === '1' || m.status === 'inplay';
+  // Primary: API says live
+  if (String(m.time_status) === '1' || m.status === 'inplay') return true;
+  // Secondary: start time has passed — show EN DIRECT immediately without waiting for API
+  // This means La Liga 20:00 shows EN DIRECT badge the moment the clock reaches 20:00
+  var startTs = parseInt(m.time || 0);
+  if (startTs > 1000000000 && (Date.now() / 1000) >= startTs) return true;
+  return false;
 }
 function margin(v) { return Math.max(1.01, +(parseFloat(v) * (1 - MARGIN)).toFixed(2)); }
 function rand(a, b) { return (a + Math.random() * (b - a)).toFixed(2); }
@@ -678,7 +684,16 @@ function startPolling() {
       }
     } else {
       // Main view: poll inplay or upcoming based on date
-      var apiAction = S.activeDateOffset > 0 ? 'upcoming' : 'inplay';
+      // If on upcoming view but some matches have already started, switch to inplay automatically
+      var hasStarted = S.activeDateOffset > 0 && S.matches.some(function(m) {
+        return isMatchLive(m) && String(m.time_status) !== '1';
+      });
+      var apiAction = (S.activeDateOffset > 0 && !hasStarted) ? 'upcoming' : 'inplay';
+      if (hasStarted) {
+        // Matches went live — flip to inplay view
+        S.activeDateOffset = 0;
+        S.activeAction = 'inplay';
+      }
       url = BASE + 'sportsbook/api.php?action=' + apiAction + '&sport_id=' + S.activeSportId;
       targetList = S.matches;
       isChamp = false;
