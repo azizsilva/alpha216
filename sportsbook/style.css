@@ -816,11 +816,12 @@ body {
 /* Horizontal Slider Card (En direct/Upcoming at top) */
 /* ── EN DIRECT Carousel Card (slc) ── matches fcbet216 reference ── */
 .slc {
-  background: rgb(49, 49, 49);
-  border: 1px solid rgba(255,255,255,0.10);
+  position: relative;          /* needed for sport badge absolute positioning */
+  background: #282828;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
-  min-width: 220px;
-  max-width: 260px;
+  min-width: 230px;
+  max-width: 265px;
   flex-shrink: 0;
   cursor: pointer;
   display: flex;
@@ -829,6 +830,25 @@ body {
   transition: background 0.15s;
 }
 .slc:hover { background: #3a3a3a; }
+
+/* Sport badge — round circle on top-left of card, exact fcbet style */
+.slc-sport-badge {
+  position: absolute;
+  top: 8px;
+  left: -10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(50,50,50,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.55);
+  flex-shrink: 0;
+  z-index: 1;
+}
+.slc-sport-badge svg { width: 13px !important; height: 13px !important; }
 
 /* Header */
 .slc-hdr {
@@ -2128,9 +2148,9 @@ body {
 /* ── EN DIRECT live cards container ───── */
 .sb-en-direct-row {
   display: flex;
-  gap: 10px;
+  gap: 14px;              /* wider gap so sport badge on -10px left has breathing room */
   overflow-x: auto;
-  padding: 0 0 4px;
+  padding: 0 4px 4px 14px; /* left padding so badge doesn't get clipped */
   margin-bottom: 4px;
   -webkit-overflow-scrolling: touch;
 }
@@ -2142,14 +2162,37 @@ body {
    (duplicate rules are intentional overrides for specificity)
    ════════════════════════════════════════════════════════════ */
 .slc {
-  background: rgb(49,49,49) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  position: relative !important;
+  background: #282828 !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
   border-radius: 10px !important;
-  min-width: 220px !important;
-  max-width: 260px !important;
+  min-width: 230px !important;
+  max-width: 265px !important;
   flex-shrink: 0 !important;
 }
-.slc:hover { background: #3a3a3a !important; }
+.slc:hover { background: #333 !important; }
+
+/* Sport badge in mobile block */
+.slc-sport-badge {
+  position: absolute !important;
+  top: 8px !important;
+  left: -10px !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  background: rgba(50,50,50,0.95) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(255,255,255,0.55) !important;
+  z-index: 1 !important;
+}
+.slc-sport-badge svg { width: 13px !important; height: 13px !important; }
+
+/* Odds in carousel cards */
+.slc-odd-lbl { font-size: 11px !important; font-weight: 500 !important; color: rgba(255,255,255,0.55) !important; }
+.slc-odd-val { font-size: 13px !important; font-weight: 700 !important; color: rgb(113,246,105) !important; }
 
 /* Header row */
 .slc-hdr {
@@ -2241,10 +2284,10 @@ body {
 }
 .slc-odd-btn {
   flex: 1 !important;
-  background: rgba(0,0,0,0.25) !important;
-  border: 1px solid rgba(255,255,255,0.15) !important;
-  border-radius: 6px !important;
-  height: 36px !important;
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 4px !important;
+  height: 40px !important;
   padding: 0 8px !important;
   display: flex !important;
   flex-direction: row !important;
@@ -3359,7 +3402,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: var(--sb-bg-root);
+  background: rgb(49, 49, 49);
   border-bottom: 1px solid var(--sb-border);
   cursor: pointer;
   user-select: none;
@@ -3676,10 +3719,9 @@ body {
 }
 
 .sb-root .mc {
-  background: rgb(49, 49, 49) !important;   /* exact DevTools value */
-  border-width: 0px !important;
-  border-color: rgba(255, 255, 255, 0) !important;
-  border-radius: 6px !important;
+  background: #282828 !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 10px !important;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   margin-bottom: 6px !important;

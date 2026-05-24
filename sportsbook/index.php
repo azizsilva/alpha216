@@ -93,7 +93,7 @@ for($i=0;$i<7;$i++){
   .sb-right.open{transform:translateX(0)!important;box-shadow:-10px 0 40px rgba(0,0,0,0.9)!important;}
 }
 /* ── Match cards — beat Bootstrap 3 from parent site ── */
-.sb-root .mc{background:rgb(49,49,49)!important;border-width:0!important;border-color:transparent!important;border-radius:6px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
+.sb-root .mc{background:#282828!important;border:1px solid rgba(255,255,255,0.10)!important;border-radius:10px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
 .sb-root .mc-hdr-live{display:flex!important;justify-content:space-between!important;padding:10px 12px 4px!important}
 .sb-root .mc-badge-bb{background:#71f669!important;color:rgba(0,0,0,.87)!important;font-size:10px!important;font-weight:700!important;padding:2px 5px!important;border-radius:3px!important}
 .sb-root .mc-live-badge{background:#e02424!important;color:#fff!important;font-size:9px!important;font-weight:800!important;padding:2px 7px!important;border-radius:4px!important;border:none!important}

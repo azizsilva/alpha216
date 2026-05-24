@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.20';
+  var newHref = base + 'sportsbook/style.css?v=20260524.21';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1624,18 +1624,29 @@ function renderEnDirectCards(matches) {
     // Swap 20→14 for small icon
     var spIconSm = spIcon.replace(/width="20" height="20"/g, 'width="14" height="14"');
 
+    // League flag (derived from league name)
+    var lgCountry  = guessCountry(rawLg);
+    var lgFlagUrl  = getFlag(lgCountry);
+
     out += '<div class="slc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-    // ── Header: [BB] [EN DIRECT] [timer?] [sport icon] [league name] ──
+    // ── Sport badge — round circle on top-left outside card (matches fcbet reference) ──
+    out += '<div class="slc-sport-badge">' + spIconSm + '</div>';
+
+    // ── Header: [BB] [EN DIRECT] [timer] [•] [flag] [league] — exact fcbet layout ──
     out += '<div class="slc-hdr">';
     out += '<span class="slc-bb">BB</span>';
     if (isLive) {
       out += '<span class="slc-live-badge">EN DIRECT</span>';
-      if (timerMin) out += '<span class="slc-time">' + h(timerMin) + '</span>';
+      if (timerMin) {
+        out += '<span class="slc-time">' + h(timerMin) + '</span>';
+        out += '<span class="slc-sep">&bull;</span>';
+      }
     } else {
       out += '<span class="slc-time">' + timeStr + '</span>';
+      out += '<span class="slc-sep">&bull;</span>';
     }
-    out += '<span class="slc-sport-ico">' + spIconSm + '</span>';
+    out += '<img src="' + lgFlagUrl + '" class="slc-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="slc-lg">' + lgName + '</span>';
     out += '</div>';
 
@@ -1647,9 +1658,7 @@ function renderEnDirectCards(matches) {
     out += '<div class="slc-team-row">';
     out += getShirtSVG(hn);
     out += '<span class="slc-tname">' + hn + '</span>';
-    if (isLive) {
-      out += '<span class="slc-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
-    }
+    out += '<span class="slc-score">' + h(isLive && scores[0] !== '' ? scores[0] : (isLive ? '0' : '')) + '</span>';
     out += '<span class="slc-stats-ico">' + ICON.stats + '</span>';
     out += '</div>';
 
@@ -1657,9 +1666,7 @@ function renderEnDirectCards(matches) {
     out += '<div class="slc-team-row">';
     out += getShirtSVG(an);
     out += '<span class="slc-tname">' + an + '</span>';
-    if (isLive) {
-      out += '<span class="slc-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
-    }
+    out += '<span class="slc-score">' + h(isLive && scores[1] !== '' ? scores[1] : (isLive ? '0' : '')) + '</span>';
     out += '</div>';
 
     out += '</div>';  // slc-teams
