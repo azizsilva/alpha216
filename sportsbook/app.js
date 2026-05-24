@@ -6,6 +6,18 @@
 (function(){
 'use strict';
 
+// ── CSS self-injection: ensures sportsbook/style.css is always loaded
+// Fixes "CSS disappears on SPA navigation" issue
+(function injectCSS() {
+  if (!document.querySelector('link[href*="sportsbook/style.css"]')) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
+    link.href = base + 'sportsbook/style.css?v=' + Date.now();
+    document.head.appendChild(link);
+  }
+})();
+
 var MARGIN = 0; // No additional margin — BetsAPI provides real Bet365 odds directly
 // Dynamic base path calculation
 var scriptPath = window.location.pathname;
@@ -951,29 +963,28 @@ function matchCard(m) {
   var mname = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
   var out = '<div class="mc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-  /* ── Info row — exact reference order: BB | EN DIRECT/time | min | ☆ | flag league ── */
+  /* ── Row 1: BB | EN DIRECT | time/min | spacer | ☆ star (matches fcbet216 exactly) ── */
   out += '<div class="mc-info-row">';
   out += '<span class="mc-badge-bb">BB</span>';
-
   if (isLive) {
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     if (liveMin) out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
   } else {
-    // Reference format: "24/05 · 16:00" (date first, then dot, then time)
-    out += '<span class="mc-date">' + h(dateStr) + ' · ' + h(timeStr) + '</span>';
+    out += '<span class="mc-date">' + h(timeStr) + ' ' + h(dateStr) + '</span>';
   }
-
-  // Separator dot
-  out += '<span class="mc-info-sep">·</span>';
+  out += '<span class="mc-row-spacer"></span>';
   out += '<button class="mc-star" onclick="event.stopPropagation()" aria-label="Favori">' + ICON.star + '</button>';
+  out += '</div>';
+
+  /* ── Row 2: flag | league · country | stats/EN DIRECT badge ── */
+  out += '<div class="mc-league-row">';
   out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
   out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
-
-  // Right side: EN DIRECT outlined (upcoming) or stats
-  out += '<span class="mc-info-right">';
-  if (!isLive) out += '<span class="mc-live-badge outlined">EN DIRECT</span>';
-  out += '<button class="mc-stats-icon" onclick="event.stopPropagation()" aria-label="Statistiques">' + ICON.stats + '</button>';
-  out += '</span>';
+  if (!isLive) {
+    out += '<span class="mc-live-badge outlined" style="margin-left:auto;flex-shrink:0">EN DIRECT</span>';
+  } else {
+    out += '<button class="mc-stats-icon" onclick="event.stopPropagation()" style="margin-left:auto" aria-label="Statistiques">' + ICON.stats + '</button>';
+  }
   out += '</div>';
 
   /* ── Body row: teams/scores | odds | chevron ── */

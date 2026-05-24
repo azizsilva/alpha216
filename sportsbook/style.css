@@ -878,26 +878,23 @@ body {
 .mc:hover { background: #212121; }
 
 /* Top info row — compact, matches fcbet216 reference */
+/* ── Row 1: BB | EN DIRECT | time | spacer | ☆ ── */
 .mc-info-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px 4px;
+  gap: 5px;
+  padding: 7px 12px 3px;
   font-size: 11px;
   flex-wrap: nowrap;
-  overflow: hidden;
 }
-.mc-info-sep {
-  color: var(--sb-text-3);
-  font-size: 10px;
-  flex-shrink: 0;
-}
-.mc-info-right {
-  margin-left: auto;
+.mc-row-spacer { flex: 1; }
+/* ── Row 2: flag | league · country | right badge/icon ── */
+.mc-league-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 5px;
+  padding: 0 12px 6px;
+  overflow: hidden;
 }
 
 .mc-badge-bb {
@@ -951,11 +948,13 @@ body {
 }
 .mc-league-name {
   font-size: 11px;
-  color: var(--sb-text-2);  /* #979797 gray for league info */
+  color: var(--sb-text-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 400;
+  flex: 1;
+  min-width: 0;
 }
 
 /* Match time / period badge — red bg pill matching fcbet216 "Mi-temps" style */
@@ -1699,24 +1698,20 @@ body {
   .sb-mobile-topbar { display: flex; }
   .sb-mobile-sidebar-content { display: flex; }
 
-  /* ── Single-scroll mobile layout ── */
-  /* Match exact specificity of body.mk-game-no-chrome #mkApp to override it */
-  body.mk-game-no-chrome #mkApp,
-  body #mkApp, #mkApp, .mk-app-shell {
+  /* ── Single-scroll: ONLY override overflow-y, keep position:fixed for SPA ── */
+  /* body.mk-game-no-chrome #mkApp has position:fixed; height:100vh; overflow:hidden */
+  /* We change ONLY overflow — the fixed container becomes a scroll viewport */
+  body.mk-game-no-chrome #mkApp {
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important; /* iOS momentum scroll */
   }
-  .sb-root { height: auto; min-height: 100vh; overflow: visible; }
+  /* sb-root fills #mkApp and grows beyond 100vh, triggering scroll */
+  .sb-root { height: auto !important; min-height: 100% !important; overflow: visible !important; }
   .sb-center { width: 100%; height: auto; overflow: visible; }
-  .sb-center-header { overflow: visible; position: sticky; top: 48px; z-index: 100; background: var(--sb-bg-root); }
   .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; }
 
-  /* Mobile top bar sticky */
+  /* Mobile top bar sticky within #mkApp scroll container */
   .sb-mobile-topbar {
     position: sticky;
     top: 0;
@@ -1750,8 +1745,8 @@ body {
 @media (max-width: 768px) {
   .sb-date-num { font-size: 18px; }
   .sb-date-item { padding: 6px 10px; min-width: 55px; }
-  .mc-teams { min-width: 80px; max-width: 100px; }
-  .mc-t-name { max-width: 90px; font-size: 11px; }
+  .mc-teams { min-width: 100px; max-width: 150px; }
+  .mc-t-name { max-width: 140px; font-size: 11px; }
   .mc-body-row { gap: 2px; }
   /* Odds cells smaller on mobile */
   .mc-o-lbl-cell { padding: 0 6px; font-size: 11px; height: 32px; }
