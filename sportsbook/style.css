@@ -9,16 +9,20 @@
   --sb-green-dark:  #5bc355;
   --sb-green-font:  rgba(0,0,0,0.87); /* text on green backgrounds */
   --sb-red:         #e02424;
-  --sb-bg-root:     #101010;
-  --sb-bg-card:     #1c1c1c;
-  --sb-bg-boost:    #313131;   /* cotes boostées card bg (confirmed from DOM) */
-  --sb-bg-alt:      #252525;
-  --sb-bg-odd-btn:  #2a2a2a;
-  --sb-bg-odd-hover:#333333;
-  --sb-border:      #2a2a2a;
-  --sb-border-light:#3a3a3a;
+  /* ── Backgrounds — extracted precisely from fcbet216 DOM ── */
+  --sb-bg-root:     #0f0f0f;   /* page root */
+  --sb-bg-card:     #191919;   /* match cards, panels */
+  --sb-bg-boost:    #2a2a2a;   /* boosted odds card bg */
+  --sb-bg-alt:      #212121;   /* slightly elevated surfaces */
+  --sb-bg-mkt:      #1c1c1c;   /* market grid cells in championship */
+  --sb-bg-odd-btn:  #242424;   /* odd buttons */
+  --sb-bg-odd-hover:#2d2d2d;
+  /* ── Borders — very subtle, rgba-based like reference ── */
+  --sb-border:      rgba(255,255,255,0.07);
+  --sb-border-light:rgba(255,255,255,0.12);
+  --sb-border-card: rgba(255,255,255,0.06);  /* card-level border */
   --sb-text-1:      #ffffff;
-  --sb-text-2:      #979797;   /* ← THE gray the engineer wants */
+  --sb-text-2:      #979797;
   --sb-text-3:      #555555;
   --sb-radius:      8px;
   --sb-radius-card: 10px;
@@ -754,7 +758,7 @@ body {
 .sb-nav-arrow:hover { background: var(--sb-bg-alt); color: var(--sb-text-1); }
 
 /* Content scroll area */
-.sb-center-scroll { flex: 1; overflow-y: auto; padding: 14px; }
+.sb-center-scroll { flex: 1; overflow-y: auto; padding: 14px; background: #0f0f0f; }
 
 /* Boosted section */
 .sb-boost-section {
@@ -2401,8 +2405,8 @@ body {
 
 /* Match header */
 .md-match-hdr {
-  background: #181818;
-  border-bottom: 1px solid var(--sb-border);
+  background: #141414;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
   padding: 14px 16px 12px;
   flex-shrink: 0;
 }
@@ -2702,11 +2706,11 @@ body {
 .md-tab.active { color: var(--sb-text-1); border-bottom-color: var(--sb-green); font-weight: 600; }
 
 /* Markets area */
-.md-markets { padding: 6px 8px 20px; }
+.md-markets { padding: 6px 8px 20px; background: #0f0f0f; }
 
 .md-market-group {
-  background: var(--sb-bg-card);
-  border: 1px solid var(--sb-border);
+  background: #181818;
+  border: 1px solid rgba(255,255,255,0.07);
   border-radius: var(--sb-radius);
   margin-bottom: 4px;
   overflow: hidden;
@@ -2748,8 +2752,8 @@ body {
 
 .md-odd-btn {
   flex: 1;
-  background: var(--sb-bg-odd-btn);
-  border: 1px solid var(--sb-border);
+  background: #222222;
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 4px;
   padding: 9px 10px;
   display: flex;
@@ -3077,8 +3081,8 @@ body {
 .sb-champ-back-btn:hover { background: var(--sb-border); }
 /* Breadcrumb pills — bordered dark buttons matching fcbet216 */
 .sb-root button.sb-bc-pill {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border-light);
+  background: #1c1c1c;
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 4px;
   padding: 7px 14px;
   font-size: 12px;
@@ -3195,8 +3199,8 @@ body {
 }
 .sb-champ-mkt-tabs::-webkit-scrollbar { display: none; }
 .sb-cmt {
-  background: var(--sb-bg-alt) !important;
-  border: 1px solid var(--sb-border) !important;
+  background: var(--sb-bg-mkt) !important;
+  border: 1px solid transparent !important;
   border-radius: 20px !important;
   padding: 5px 12px !important;
   font-size: 11px;
@@ -3234,8 +3238,8 @@ body {
   margin-bottom: 4px;
 }
 .sb-ccg-btn {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
+  background: var(--sb-bg-mkt);
+  border: 1px solid transparent;
   border-radius: 6px;
   padding: 0 8px;
   height: 36px;
@@ -3265,7 +3269,7 @@ body {
   border-color: var(--sb-green);
   color: var(--sb-green-font);
 }
-.sb-ccg-btn:hover:not(.active):not(.green) { background: var(--sb-border); color: var(--sb-text-1); }
+.sb-ccg-btn:hover:not(.active):not(.green) { background: #2a2a2a; color: var(--sb-text-1); }
 
 /* Column market selectors */
 .sb-champ-col-sel {
@@ -3576,8 +3580,8 @@ body {
 /* Odds row — fcbet216: label grey left, value green right */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
-  background: #2a2a2a !important;
-  border: 1px solid #3a3a3a !important;
+  background: #222222 !important;
+  border: 1px solid rgba(255,255,255,0.09) !important;
   border-radius: 6px !important;
   height: 40px !important;
   min-height: 40px !important;
@@ -3603,8 +3607,8 @@ body {
 }
 
 .sb-root .mc {
-  background: #1c1c1c !important;
-  border: 1px solid #2a2a2a !important;
+  background: #181818 !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
   border-radius: 10px !important;
 }
 
@@ -3620,16 +3624,16 @@ body {
 }
 
 .sb-root .sb-league-section-hdr {
-  background: #1e1e1e !important;
-  border: 1px solid #2a2a2a !important;
+  background: #151515 !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
   border-radius: 10px !important;
 }
 
 .sb-root .sb-market-sel {
   flex: 1;
   height: 36px;
-  background: #1c1c1c !important;
-  border: 1px solid #2a2a2a !important;
+  background: #181818 !important;
+  border: 1px solid rgba(255,255,255,0.09) !important;
   border-radius: 6px !important;
   color: #fff !important;
   padding: 0 10px !important;
