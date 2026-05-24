@@ -979,12 +979,16 @@ function matchCard(m) {
   /* ── Body row: teams/scores | odds | chevron ── */
   out += '<div class="mc-body-row" onclick="event.stopPropagation()">';
 
-  // Teams column (no logos in list view — matches reference)
+  // Teams column — with jersey/badge images matching fcbet216
   out += '<div class="mc-teams">';
-  out += '<div class="mc-team"><span class="mc-t-name">' + hn + '</span>';
+  out += '<div class="mc-team">';
+  out += '<img src="' + hlogo + '" class="mc-jersey" onerror="this.style.opacity=\'0\'">';
+  out += '<span class="mc-t-name">' + hn + '</span>';
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[0]) + '</span>';
   out += '</div>';
-  out += '<div class="mc-team"><span class="mc-t-name">' + an + '</span>';
+  out += '<div class="mc-team">';
+  out += '<img src="' + alogo + '" class="mc-jersey" onerror="this.style.opacity=\'0\'">';
+  out += '<span class="mc-t-name">' + an + '</span>';
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[1]) + '</span>';
   out += '</div>';
   out += '</div>';
@@ -1172,10 +1176,15 @@ function renderEnDirectCards(matches) {
 
     out += '<div class="slc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-    // Header row: BB · time · dot · flag · league
+    // Header row: for live → BB · EN DIRECT · minute; for upcoming → BB · time date
     out += '<div class="slc-hdr">';
     out += '<span class="slc-bb">BB</span>';
-    out += '<span class="slc-time">' + timeStr + ' ' + dateStr + '</span>';
+    if (isLive) {
+      out += '<span class="slc-live-badge">EN DIRECT</span>';
+      if (timerMin) out += '<span class="slc-time">' + h(timerMin) + '</span>';
+    } else {
+      out += '<span class="slc-time">' + timeStr + ' ' + dateStr + '</span>';
+    }
     out += '<span class="slc-sep">·</span>';
     out += '<img src="' + flagUrl + '" class="slc-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="slc-lg">' + lgName + '</span>';
@@ -1192,10 +1201,6 @@ function renderEnDirectCards(matches) {
     out += '</div>';
     out += '</div>';
     out += '<div class="slc-right">';
-    if (isLive) {
-      out += '<span class="slc-endirect"><span class="slc-dot-pulse"></span>EN DIRECT</span>';
-      if (timerMin) out += '<span class="slc-timer">' + h(timerMin) + '</span>';
-    }
     out += '<span class="slc-stats">' + ICON.stats + '</span>';
     out += '</div>';
     out += '</div>';
@@ -1887,8 +1892,10 @@ window.sbMobLeagueTab = function(el, tab) {
 };
 
 window.sbToggleFavs = function() {
-  var content = document.getElementById('sb-favs-content');
-  var ico     = document.getElementById('sb-favs-chevron');
+  var content = document.getElementById('sb-favoris-content') || document.getElementById('sb-favs-content');
+  var ico     = document.getElementById('sb-favoris-chevron') || document.getElementById('sb-favs-chevron');
+  var row     = document.getElementById('sb-favoris-row');
+  if (row) row.classList.toggle('open');
   if (!content) return;
   var isOpen = (content.style.display !== 'none');
   if (isOpen) {

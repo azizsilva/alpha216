@@ -158,6 +158,18 @@ for($i=0;$i<7;$i++){
       <?php endforeach; ?>
     </div>
 
+    <!-- Favoris row — between date bar and sport tabs (matches fcbet216) -->
+    <div class="sb-favoris-row" onclick="window.sbToggleFavs()" id="sb-favoris-row">
+      <div class="sb-fav-left">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.667C8.254 0.667 8.485 0.811 8.598 1.038L10.503 4.898L14.763 5.52C15.014 5.557 15.223 5.733 15.301 5.974C15.379 6.216 15.314 6.481 15.132 6.658L12.05 9.66L12.777 13.901C12.82 14.151 12.717 14.404 12.512 14.553C12.307 14.702 12.034 14.722 11.81 14.603L8 12.6L4.19 14.603C3.966 14.722 3.693 14.702 3.488 14.553C3.283 14.404 3.18 14.151 3.223 13.901L3.95 9.66L0.868 6.658C0.686 6.481 0.621 6.216 0.699 5.974C0.777 5.733 0.986 5.557 1.237 5.52L5.497 4.898L7.402 1.038C7.514 0.811 7.746 0.667 8 0.667Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        <span>Favoris</span>
+      </div>
+      <i class="fa fa-chevron-down" id="sb-favoris-chevron"></i>
+    </div>
+    <div class="sb-favoris-content" id="sb-favoris-content" style="display:none">
+      <div class="sb-no-favs"><span>Aucun favori ajouté</span></div>
+    </div>
+
     <!-- Sport navigation — matches fcbet216 exactly -->
     <div class="sb-sport-nav">
       <!-- Streaming button with LIVE badge -->
@@ -346,6 +358,28 @@ for($i=0;$i<7;$i++){
 
 </div>
 
-
+<!-- Mobile Bar — 5 items matching fcbet216 -->
+<div class="sb-mob-footer">
+  <button class="sb-mob-btn" onclick="window.location.href='/'">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.5"/></svg>
+    <span class="sb-mob-lbl">Casino</span>
+  </button>
+  <button class="sb-mob-btn active">
+    <svg width="22" height="22" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.3514 5.82922C24.4299 1.15119 18.5499-0.498047 12.9999 0.802002C7.44989 2.1021 3.06249 6.48951 1.76239 12.0395C0.46229 17.5895 2.11244 23.4695 5.82244 27.1795C9.53244 30.8895 15.4124 32.5396 20.9624 31.2396C26.5124 29.9396 30.8998 25.5522 32.1998 19.9522C33.4998 14.3522 31.8499 8.50718 28.3514 5.82922Z" fill="currentColor" opacity="0.15"/><circle cx="16" cy="16.5" r="5" fill="currentColor"/></svg>
+    <span class="sb-mob-lbl">Paris sportifs</span>
+  </button>
+  <button class="sb-mob-btn" onclick="window.location.href='/'">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" stroke="currentColor" stroke-width="1.5"/><path d="M16 3l-4 4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="sb-mob-lbl">Promos</span>
+  </button>
+  <button class="sb-mob-btn" onclick="document.querySelector('.sb-sidebar-search') && document.querySelector('.sb-sidebar-search').focus()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="sb-mob-lbl">Recherche</span>
+  </button>
+  <button class="sb-mob-btn" onclick="window.sbToggleLeft()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="sb-mob-lbl">Menu</span>
+  </button>
+</div>
 
 <script src="<?=$base?>sportsbook/app.js?v=<?=time()?>"></script>

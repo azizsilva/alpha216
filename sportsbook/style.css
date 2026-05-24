@@ -1700,13 +1700,16 @@ body {
   .sb-mobile-sidebar-content { display: flex; }
 
   /* ── Single-scroll mobile layout ── */
-  /* Override the parent app shell (mk-app-shell / #mkApp) which locks height+overflow */
-  #mkApp, .mk-app-shell {
+  /* Match exact specificity of body.mk-game-no-chrome #mkApp to override it */
+  body.mk-game-no-chrome #mkApp,
+  body #mkApp, #mkApp, .mk-app-shell {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     height: auto !important;
     min-height: 100vh !important;
     position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
   }
   .sb-root { height: auto; min-height: 100vh; overflow: visible; }
   .sb-center { width: 100%; height: auto; overflow: visible; }
@@ -2799,3 +2802,151 @@ body {
 .sb-lh-gift:hover { color: var(--sb-text-1); }
 .sb-lh-gift svg { width: 14px; height: 14px; }
 .sb-lh-icons { margin-left: 6px; }
+
+/* ════════════════════════════════════════════════════════════
+   FAVORIS ROW — between date bar and sport tabs (fcbet216 match)
+   ════════════════════════════════════════════════════════════ */
+.sb-favoris-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--sb-bg-root);
+  border-bottom: 1px solid var(--sb-border);
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+.sb-fav-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sb-text-2);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}
+.sb-fav-left svg { color: var(--sb-text-2); flex-shrink: 0; }
+.sb-favoris-row .fa { color: var(--sb-text-2); font-size: 11px; transition: transform 0.2s; }
+.sb-favoris-row.open .fa { transform: rotate(180deg); }
+.sb-favoris-content {
+  padding: 10px 14px;
+  background: var(--sb-bg-root);
+  border-bottom: 1px solid var(--sb-border);
+}
+.sb-no-favs {
+  font-size: 12px;
+  color: var(--sb-text-2);
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 4px 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MATCH CARD JERSEY — team badge images (fcbet216 style)
+   ════════════════════════════════════════════════════════════ */
+.mc-jersey {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #1a1a1a;
+  padding: 2px;
+  flex-shrink: 0;
+  border: 1px solid var(--sb-border);
+}
+/* Update mc-team to accommodate jersey */
+.mc-team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* Remove old hidden logo rule */
+.mc-t-logo { display: none; }
+
+/* ════════════════════════════════════════════════════════════
+   FEATURED CARD — EN DIRECT badge in header
+   ════════════════════════════════════════════════════════════ */
+.slc-live-badge {
+  background: var(--sb-red);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LEAGUE LIST — flat style matching fcbet216 exactly
+   ════════════════════════════════════════════════════════════ */
+.sb-mob-league-tabs {
+  margin: 0;
+  background: var(--sb-bg-root);
+  border: none;
+  border-top: 1px solid var(--sb-border);
+  border-radius: 0;
+  overflow: visible;
+}
+.sb-mob-league-tabs .sb-league-group-hdr {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--sb-border);
+  background: var(--sb-bg-root);
+}
+/* Each league row — flat with divider, matching fcbet216 */
+.sb-mob-best-leagues .sb-tl-item,
+.sb-tl-item {
+  background: var(--sb-bg-card);
+  border-bottom: 1px solid var(--sb-border);
+  padding: 12px 14px;
+}
+.sb-mob-best-leagues .sb-tl-item:last-child { border-bottom: none; }
+
+/* Remove old max-height scroll constraint — page now scrolls as one unit */
+.sb-mob-best-leagues .sb-tl-list {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE FOOTER — 5 items matching fcbet216
+   ════════════════════════════════════════════════════════════ */
+.sb-mob-footer {
+  display: none;
+  background: var(--sb-bg-root);
+  padding: 6px 4px;
+  justify-content: space-around;
+  border-top: 1px solid var(--sb-border);
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1001;
+  gap: 0;
+}
+.sb-mob-btn {
+  background: transparent;
+  color: var(--sb-text-2);
+  border: none;
+  padding: 6px 4px;
+  font-size: 9px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  max-width: 72px;
+  transition: color 0.15s;
+}
+.sb-mob-btn svg { width: 22px; height: 22px; }
+.sb-mob-btn.active { color: var(--sb-green); }
+.sb-mob-btn:hover { color: var(--sb-text-1); }
+.sb-mob-lbl { font-size: 9px; line-height: 1.2; }
+
+@media (max-width: 1100px) {
+  .sb-mob-footer { display: flex; }
+}
