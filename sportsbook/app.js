@@ -2555,24 +2555,35 @@ function renderMatchDetail(m, markets) {
   });
   out += '</div>';
 
-  // ── Bet Builder panel (hidden by default, shown when BB tab active)
-  out += '<div class="md-bb-panel" id="md-bb-panel" style="display:none">';
-  out += '<div class="md-bb-info">Sélectionnez des cotes pour construire votre pari combiné</div>';
-  out += '<div class="md-bb-legs" id="md-bb-legs"></div>';
-  out += '<div class="md-bb-foot" id="md-bb-foot" style="display:none">';
-  out += '<div class="md-bb-combined"><span>Cote combinée</span><span class="md-bb-combined-val" id="md-bb-combined-val">1.00</span></div>';
-  out += '<button type="button" class="md-bb-add-btn" onclick="window.sbBBAddToSlip()">Ajouter au slip</button>';
-  out += '</div></div>';
-
-  // ── Markets list
+  // ── Markets list (always visible; markets switch to BB-mode when tab is active)
   if (!markets.length) markets = buildFallbackMarkets(m);
-  // Store markets for filtering
   window._mdMarkets = markets;
   window._mdMatch   = m;
 
   out += '<div class="md-markets" id="md-markets-body">';
   markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
+  out += '</div>';
+
+  // ── Bet Builder sticky footer (fixed at bottom while scrolling markets)
+  // Hidden until at least 1 selection is made — matches fcbet UX exactly
+  out += '<div class="md-bb-sticky" id="md-bb-sticky" style="display:none">';
+  out += '<div class="md-bb-header">';
+  out += '<div class="md-bb-title">'
+    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>'
+    + ' <span>Bet Builder</span>';
+  out += '</div>';
+  out += '<span class="md-bb-count" id="md-bb-count">0 sél.</span>';
+  out += '</div>';
+  out += '<div class="md-bb-legs" id="md-bb-legs"></div>';
+  out += '<div class="md-bb-foot">';
+  out += '<div class="md-bb-combined">'
+    + '<span class="md-bb-combined-lbl">Cote combinée</span>'
+    + '<span class="md-bb-combined-val" id="md-bb-combined-val">1.00</span>'
+    + '</div>';
+  out += '<button type="button" class="md-bb-add-btn" onclick="window.sbBBAddToSlip()">Ajouter au slip</button>';
   out += '</div></div>';
+
+  out += '</div>'; // md-view
 
   el.innerHTML = out;
 
@@ -2763,43 +2774,44 @@ function buildFallbackMarkets(m) {
 var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts','pair','pari combiné'];
 var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
 
+window._bbModeActive = false;
+
 window.sbMdTab = function(btn, tabName) {
   document.querySelectorAll('.md-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  var bbPanel  = document.getElementById('md-bb-panel');
-  var mktBody  = document.getElementById('md-markets-body');
-  if (tabName === 'Bet Builder') {
-    if (bbPanel)  bbPanel.style.display  = '';
-    if (mktBody)  mktBody.style.display  = 'none';
-    // Re-render markets in BB mode
-    if (mktBody && window._mdMarkets && window._mdMatch) {
-      mktBody.style.display = '';
-      var out = '';
-      window._mdMarkets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, true); });
-      mktBody.innerHTML = out;
+  var mktBody = document.getElementById('md-markets-body');
+  if (!mktBody || !window._mdMarkets || !window._mdMatch) return;
+
+  var isBB = (tabName === 'Bet Builder');
+  window._bbModeActive = isBB;
+
+  // Re-render markets (in BB mode or normal mode)
+  var filter = null;
+  if (!isBB) {
+    if (tabName === 'Principaux') filter = function(mkt) {
+      var nm = (mkt.name || '').toLowerCase();
+      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    };
+    if (tabName !== 'Tout' && !filter) {
+      var kw = tabName.toLowerCase();
+      filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
     }
+  }
+  var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
+  if (!shown.length) shown = window._mdMarkets;
+  var out = '';
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
+  mktBody.innerHTML = out;
+
+  // Show/hide BB hint at top when BB mode
+  var bbSticky = document.getElementById('md-bb-sticky');
+  if (isBB) {
+    // Show sticky footer only if there are already selections
+    if (bbSticky && window._bbSelections && window._bbSelections.length > 0) bbSticky.style.display = '';
+    // Add extra bottom padding so sticky doesn't cover last market
+    mktBody.style.paddingBottom = '120px';
   } else {
-    if (bbPanel) bbPanel.style.display = 'none';
-    if (mktBody) {
-      mktBody.style.display = '';
-      if (!window._mdMarkets || !window._mdMatch) return;
-      var filter = null;
-      if (tabName === 'Principaux') filter = function(mkt) {
-        var nm = (mkt.name || '').toLowerCase();
-        return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
-      };
-      if (tabName === 'Tout') filter = null;
-      // For other tabs (Corners, 1 minute, etc.) match by keyword
-      if (!filter && tabName && tabName !== 'Tout') {
-        var kw = tabName.toLowerCase();
-        filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
-      }
-      var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
-      if (!shown.length) shown = window._mdMarkets; // fallback: show all
-      var out = '';
-      shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, false); });
-      mktBody.innerHTML = out;
-    }
+    mktBody.style.paddingBottom = '';
   }
 };
 
@@ -2848,16 +2860,20 @@ window.sbBBToggle = function(id, name, odds) {
 };
 
 function sbBBRefresh() {
-  var legs = document.getElementById('md-bb-legs');
-  var foot = document.getElementById('md-bb-foot');
+  var legs    = document.getElementById('md-bb-legs');
+  var sticky  = document.getElementById('md-bb-sticky');
   var combVal = document.getElementById('md-bb-combined-val');
+  var countEl = document.getElementById('md-bb-count');
   if (!legs) return;
-  var sels = window._bbSelections;
+
+  var sels = window._bbSelections || [];
+
   if (!sels.length) {
     legs.innerHTML = '';
-    if (foot) foot.style.display = 'none';
+    if (sticky) sticky.style.display = 'none';
     return;
   }
+
   var combined = sels.reduce(function(acc, s){ return acc * s.odds; }, 1.0);
   var out = '';
   sels.forEach(function(s){
@@ -2869,7 +2885,13 @@ function sbBBRefresh() {
   });
   legs.innerHTML = out;
   if (combVal) combVal.textContent = combined.toFixed(2);
-  if (foot) foot.style.display = '';
+  if (countEl) countEl.textContent = sels.length + ' sél.';
+
+  // Show sticky footer whenever there are selections (in BB mode or even if user switched tab)
+  if (sticky) sticky.style.display = '';
+  // Keep bottom padding so markets aren't hidden behind the sticky panel
+  var mktBody = document.getElementById('md-markets-body');
+  if (mktBody) mktBody.style.paddingBottom = '130px';
 }
 
 window.sbBBAddToSlip = function() {
