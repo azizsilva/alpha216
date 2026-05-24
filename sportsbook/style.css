@@ -1604,28 +1604,37 @@ body {
   flex-shrink: 0;
 }
 .sb-mobile-topbar .sb-btn-home {
-  background: var(--sb-green);
+  background: var(--sb-green); /* GREEN by default */
   color: var(--sb-green-font);
   width: 54px;
   min-width: 54px;
 }
+.sb-mobile-topbar .sb-btn-home.inactive {
+  background: var(--sb-bg-alt); /* dark when EN DIRECT tab is active */
+  color: var(--sb-text-2);
+}
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 .sb-mobile-topbar .sb-btn-live {
-  background: var(--sb-bg-alt); /* dark gray bg — EN DIRECT text in red, matches fcbet216 reference */
-  color: var(--sb-red);
+  background: var(--sb-red); /* RED background, white text — matches fcbet216 default */
+  color: #fff;
   flex: 1;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  border: 1px solid #3a3a3a;
+  border: none;
 }
-.sb-mobile-topbar .sb-btn-live:hover { background: #2e2e2e; }
+/* When EN DIRECT tab is active/selected — turns GREEN like the home button */
+.sb-mobile-topbar .sb-btn-live.active {
+  background: var(--sb-green);
+  color: var(--sb-green-font);
+}
+.sb-mobile-topbar .sb-btn-live:hover:not(.active) { background: #c71f1f; }
 .sb-mobile-topbar .sb-btn-stats {
   background: var(--sb-bg-alt);
-  border: 1px solid #3a3a3a;
+  border: none;
   color: var(--sb-text-2);
-  width: 54px;  /* same as home — equal squares matching reference */
+  width: 54px;  /* same as home — balanced equal squares */
   min-width: 54px;
 }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }

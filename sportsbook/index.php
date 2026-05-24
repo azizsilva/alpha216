@@ -28,7 +28,7 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_21" id="sb-css-link">
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_22" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -59,12 +59,14 @@ for($i=0;$i<7;$i++){
     border:none!important;border-radius:6px!important;cursor:pointer!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
-  /* Home — green square */
+  /* Home — GREEN by default, dark when EN DIRECT is active */
   .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;}
-  /* EN DIRECT — DARK GRAY bg + RED text (matching fcbet216 reference image exactly) */
-  .sb-mobile-topbar .sb-btn-live{background:#252525!important;color:#e02424!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;border:1px solid #3a3a3a!important;}
-  /* Stats — dark gray, same width as home (54px via grid) */
-  .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;border:1px solid #3a3a3a!important;}
+  .sb-mobile-topbar .sb-btn-home.inactive{background:#252525!important;color:#979797!important;}
+  /* EN DIRECT — RED bg + WHITE text by default; GREEN bg when active (user clicked it) */
+  .sb-mobile-topbar .sb-btn-live{background:#e02424!important;color:#fff!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;}
+  .sb-mobile-topbar .sb-btn-live.active{background:#70f669!important;color:rgba(0,0,0,0.87)!important;}
+  /* Stats — dark gray, same 54px width as home */
+  .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;}
   /* SCROLL FIX */
   body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
   .sb-root{height:auto!important;min-height:100%!important;overflow:visible!important;}
@@ -193,8 +195,8 @@ for($i=0;$i<7;$i++){
 <section class="sb-center">
   <!-- Mobile-only top bar (hidden on desktop) -->
   <div class="sb-mobile-topbar">
-    <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="sb-btn-live">EN DIRECT</button>
+    <button class="sb-btn-home" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)">EN DIRECT</button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 

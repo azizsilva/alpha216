@@ -2043,6 +2043,33 @@ window.sbSwitchLive = function(btn) {
   loadAndFilter('inplay', 1, null);
 };
 
+/* Mobile top bar tab switcher — handles home ⇄ EN DIRECT toggle
+   Home clicked:       home = green (default state)  |  EN DIRECT = red (default state)
+   EN DIRECT clicked:  home = dark gray (inactive)   |  EN DIRECT = green (active/selected)
+   This mirrors FCBet216 exactly: images 2 (default) and 3 (EN DIRECT active) */
+window.sbSwitchTab = function(btn, action, sportId) {
+  var topbar = document.querySelector('.sb-mobile-topbar');
+  if (!topbar) return;
+  var homeBtn = topbar.querySelector('.sb-btn-home');
+  var liveBtn = topbar.querySelector('.sb-btn-live');
+
+  if (action === 'live') {
+    // EN DIRECT clicked → turn EN DIRECT green, home gray
+    if (liveBtn)  { liveBtn.classList.add('active'); }
+    if (homeBtn)  { homeBtn.classList.add('inactive'); }
+  } else {
+    // Home clicked → home back to green, EN DIRECT back to red (default)
+    if (liveBtn)  { liveBtn.classList.remove('active'); }
+    if (homeBtn)  { homeBtn.classList.remove('inactive'); }
+  }
+
+  S.activeSportId = sportId || 1;
+  S.activeAction  = action === 'live' ? 'inplay' : 'inplay';
+  S.activeLeagueId = null;
+  S.activeDateOffset = 0;
+  loadAndFilter('inplay', S.activeSportId, null);
+};
+
 // Scroll the sport nav
 window.sbScrollNav = function() {
   var scroll = document.getElementById('sb-sport-nav-list');
