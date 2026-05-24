@@ -100,16 +100,24 @@ for($i=0;$i<7;$i++){
 .sb-root .mc-live-min{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
 .sb-root .mc-league-row{padding:0 12px 8px!important;display:flex!important;align-items:center!important}
 .sb-root .mc-league-name{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
-.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;gap:8px!important;padding:0 12px!important;cursor:pointer!important}
-.sb-root .mc-teams-stacked{flex:1!important;display:flex!important;flex-direction:column!important;gap:8px!important}
-.sb-root .mc-team-row{display:flex!important;align-items:center!important;gap:8px!important}
-.sb-root .mc-t-name{color:#fff!important;font-size:13px!important;font-weight:600!important;flex:1!important}
-.sb-root .mc-live-on .mc-t-score{color:#fff!important;font-size:15px!important;font-weight:800!important}
-.sb-root .mc-odds-bot{display:flex!important;gap:6px!important;padding:8px 12px 12px!important}
-.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:#3d3d3d!important;border:1px solid rgba(255,255,255,0.18)!important;border-radius:6px!important;height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important}
+/* H2H teams layout */
+.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;padding:2px 12px 10px!important;width:100%!important;cursor:pointer!important}
+.sb-root .mc-h2h{display:flex!important;align-items:center!important;gap:6px!important;width:100%!important}
+.sb-root .mc-h2h-home,.sb-root .mc-h2h-away{flex:1!important;display:flex!important;align-items:center!important;gap:6px!important;min-width:0!important}
+.sb-root .mc-h2h-away{flex-direction:row-reverse!important}
+.sb-root .mc-h2h-score{display:flex!important;align-items:center!important;gap:3px!important;flex-shrink:0!important;min-width:48px!important;justify-content:center!important}
+.sb-root .mc-sv{font-size:17px!important;font-weight:800!important;color:#fff!important;line-height:1!important}
+.sb-root .mc-sc-sep{font-size:12px!important;color:rgba(255,255,255,0.4)!important}
+.sb-root .mc-vs-lbl{font-size:11px!important;font-weight:700!important;color:rgba(255,255,255,0.4)!important}
+.sb-root .mc-t-name{color:#fff!important;font-size:12px!important;font-weight:600!important;flex:1!important;min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.sb-root .mc-h2h-home .mc-t-name{text-align:left!important}
+.sb-root .mc-h2h-away .mc-t-name{text-align:right!important}
+.sb-root .mc-jersey-svg{width:26px!important;height:26px!important;flex-shrink:0!important;display:inline-block!important;overflow:visible!important}
+.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important}
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.22)!important;border-radius:6px!important;height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important}
 .sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:500!important}
 .sb-root .mc-odd-val{color:#71f669!important;font-size:14px!important;font-weight:700!important}
-.sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:#3d3d3d!important;border:1px solid rgba(255,255,255,0.18)!important;border-radius:6px!important}
+.sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.22)!important;border-radius:6px!important}
 .sb-root .sb-league-section-hdr{background:#1e1e1e!important;border-width:0!important;border-radius:6px!important;margin:12px 0 6px!important;padding:10px 12px!important;display:flex!important;align-items:center!important}
 .sb-root .sb-league-block{margin-bottom:8px!important}
 /* Championship market tabs — must scroll horizontally, never wrap */
@@ -119,6 +127,11 @@ for($i=0;$i<7;$i++){
   .sb-root .sb-champ-cat-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;}
   .sb-root .sb-ccg-btn{height:36px!important;min-height:36px!important;padding:0 8px!important;font-size:11px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;line-height:1.2!important;}
 }
+/* Sport nav — single fully-scrollable row */
+.sb-sport-nav{overflow:hidden!important;height:58px!important;background:#181818!important;border-bottom:1px solid #2a2a2a!important;flex-shrink:0!important;}
+.sb-sport-nav-inner{display:flex!important;align-items:center!important;height:100%!important;gap:2px!important;padding:0 6px!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;}
+.sb-sport-nav-inner::-webkit-scrollbar{display:none!important;}
+#sb-sport-nav-list{display:contents!important;}
 /* Sport nav tiles — Bootstrap 3 overrides button bg; force transparent */
 .sb-root .sb-sport-item{background:transparent!important;border:none!important;box-shadow:none!important;display:flex!important;flex-direction:column!important;align-items:center!important;}
 .sb-root .sb-sport-item.active{background:#70f669!important;color:rgba(0,0,0,.87)!important;}
@@ -286,8 +299,9 @@ for($i=0;$i<7;$i++){
       <div class="sb-no-favs"><span>Aucun favori ajouté</span></div>
     </div>
 
-    <!-- Sport navigation — matches fcbet216 exactly -->
+    <!-- Sport navigation — single scrollable row, matches fcbet216 -->
     <div class="sb-sport-nav">
+      <div class="sb-sport-nav-inner">
       <!-- Streaming button with LIVE badge — exact fcbet SVG -->
       <button class="sb-sport-item sb-nav-streaming" onclick="window.sbSwitchTab(this,'inplay',0)">
         <div class="sb-sport-icon" style="position:relative">
@@ -303,8 +317,8 @@ for($i=0;$i<7;$i++){
         </div>
         <span class="sb-sport-lbl">En direct</span>
       </button>
-      <!-- Dynamic sport tabs -->
-      <div class="sb-sport-scroll" id="sb-sport-nav-list">
+      <!-- Dynamic sport tabs — rendered by renderSportNav() -->
+      <div id="sb-sport-nav-list">
         <div class="sb-skeleton-circ"></div>
         <div class="sb-skeleton-circ"></div>
         <div class="sb-skeleton-circ"></div>
@@ -316,7 +330,7 @@ for($i=0;$i<7;$i++){
         </div>
         <span class="sb-sport-lbl">Tous les...</span>
       </button>
-      <button class="sb-nav-arrow" id="sb-nav-arrow-btn" onclick="window.sbScrollNav()"><i class="fa fa-chevron-right"></i></button>
+      </div><!-- /sb-sport-nav-inner -->
     </div>
   </div>
 

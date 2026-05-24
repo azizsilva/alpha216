@@ -631,27 +631,34 @@ body {
 }
 
 /* ════ Sport Nav — matches fcbet216 reference ════ */
+/* ── Sport nav: single fully-scrollable row (all items scroll together) ── */
 .sb-sport-nav {
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  gap: 2px;
   background: #181818;
   border-bottom: 1px solid var(--sb-border);
-  height: 54px;
+  height: 58px;
   flex-shrink: 0;
+  overflow: hidden;
 }
-
-.sb-sport-scroll {
+.sb-sport-nav-inner {
   display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  flex: 1;
-  padding: 0;
-  height: 100%;
   align-items: center;
+  height: 100%;
+  gap: 2px;
+  padding: 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sb-sport-nav-inner::-webkit-scrollbar { display: none; }
+
+/* Legacy sb-sport-scroll becomes inline flex (items flow into the scroll container) */
+.sb-sport-scroll {
+  display: contents;
 }
 .sb-sport-scroll::-webkit-scrollbar { height: 0; }
+/* Hide arrow button — native scroll replaces it */
+.sb-nav-arrow { display: none !important; }
 
 /* Sport skeleton items */
 .sb-skeleton-circ {
@@ -1174,48 +1181,73 @@ body {
   gap: 12px;
 }
 
-/* Teams Stack */
-.mc-teams-stacked {
+/* ── H2H Teams layout: [jersey home | name] [score / VS] [name | jersey away] ── */
+.mc-h2h {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
 }
-.mc-team-row { 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
+.mc-h2h-home,
+.mc-h2h-away {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.mc-h2h-away {
+  flex-direction: row-reverse;
+}
+.mc-h2h-home .mc-t-name { text-align: left; }
+.mc-h2h-away .mc-t-name { text-align: right; }
+.mc-h2h-score {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  min-width: 46px;
+  justify-content: center;
+}
+.mc-sv {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--sb-text-1);
+  line-height: 1;
+}
+.mc-sc-sep {
+  font-size: 13px;
+  color: var(--sb-text-2);
+  font-weight: 400;
+}
+.mc-vs-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sb-text-2);
+  letter-spacing: 0.5px;
 }
 .mc-jersey-svg {
-  width: 20px; 
-  height: 20px;
+  width: 26px;
+  height: 26px;
   flex-shrink: 0;
-  stroke: #404040;
-  stroke-width: 1px;
 }
 .mc-jersey-up {
-  opacity: 0.65;
+  opacity: 0.60;
 }
 .mc-t-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--sb-text-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
+  min-width: 0;
 }
-.mc-t-score {
-  color: var(--sb-green);
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-/* Live list: white scores like fcbet216 reference */
-.mc-live-on .mc-t-score {
-  color: var(--sb-text-1);
-  font-weight: 800;
-  font-size: 15px;
-}
+/* Keep legacy classes so no JS errors */
+.mc-teams-stacked { display: flex; flex-direction: column; gap: 8px; }
+.mc-team-row { display: flex; align-items: center; gap: 10px; }
+.mc-t-score { color: var(--sb-text-1); font-weight: 800; font-size: 15px; flex-shrink: 0; }
 
 /* Odds container — full width row at the bottom */
 .mc-odds-bot {
@@ -1251,7 +1283,7 @@ body {
 
 .mc-odd-btn {
   background: var(--sb-bg-odd-btn);
-  border: 1px solid var(--sb-border-light);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 6px;
   height: 40px;
   display: flex;
@@ -1265,7 +1297,7 @@ body {
   flex: 1;
   min-width: 0;
 }
-.mc-odd-btn:hover:not(.no-odds) { background: #303030; border-color: var(--sb-border); }
+.mc-odd-btn:hover:not(.no-odds) { background: #404040; border-color: rgba(255,255,255,0.35); }
 .mc-odd-btn.sel {
   background: var(--sb-green);
   border-color: var(--sb-green);
@@ -3581,11 +3613,11 @@ body {
   gap: 0;
 }
 
-/* Odds row — fcbet216: label grey left, value green right */
+/* Odds row — fcbet216: label grey left, value green right, visible border */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
   background: rgb(49, 49, 49) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
   border-radius: 6px !important;
   height: 40px !important;
   min-height: 40px !important;
@@ -3723,58 +3755,80 @@ body {
 /* ══ FCBET216 MATCH CARD v5 — Complete Bootstrap 3 Isolation ══════════════
    These rules are the final authority. They win every specificity battle.    */
 
-/* Jersey SVG — Bootstrap 3 can set img{border:0} which affects inline SVG display */
+/* Jersey SVG in h2h card */
 .sb-root .mc-jersey-svg {
   display: inline-block !important;
-  width: 20px !important;
-  height: 20px !important;
+  width: 26px !important;
+  height: 26px !important;
   flex-shrink: 0 !important;
   vertical-align: middle !important;
   overflow: visible !important;
 }
 
-/* Team row: jersey + name fills space + score hugs right */
-.sb-root .mc-team-row {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  min-height: 26px !important;
-}
+/* Team name in h2h */
 .sb-root .mc-t-name {
-  flex: 1 !important;
   min-width: 0 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   color: #fff !important;
-}
-.sb-root .mc-t-score {
-  flex-shrink: 0 !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  color: #fff !important;
-  min-width: 16px !important;
-  text-align: right !important;
+  flex: 1 !important;
 }
 
-/* Teams stacked column */
-.sb-root .mc-teams-stacked {
+/* H2H layout */
+.sb-root .mc-h2h {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+}
+.sb-root .mc-h2h-home,
+.sb-root .mc-h2h-away {
   flex: 1 !important;
   display: flex !important;
-  flex-direction: column !important;
+  align-items: center !important;
   gap: 6px !important;
   min-width: 0 !important;
 }
+.sb-root .mc-h2h-away {
+  flex-direction: row-reverse !important;
+}
+.sb-root .mc-h2h-home .mc-t-name { text-align: left !important; }
+.sb-root .mc-h2h-away .mc-t-name { text-align: right !important; }
+.sb-root .mc-h2h-score {
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  flex-shrink: 0 !important;
+  min-width: 48px !important;
+  justify-content: center !important;
+}
+.sb-root .mc-sv {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  line-height: 1 !important;
+}
+.sb-root .mc-sc-sep {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.45) !important;
+}
+.sb-root .mc-vs-lbl {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.45) !important;
+  letter-spacing: 0.5px !important;
+}
 
-/* Teams wrap — horizontal container (stacked teams + optional side element) */
+/* Teams wrap */
 .sb-root .mc-teams-wrap {
   display: flex !important;
   align-items: center !important;
   padding: 2px 12px 10px !important;
-  gap: 8px !important;
   width: 100% !important;
+  cursor: pointer !important;
 }
 
 /* League row split: info left, actions right */
