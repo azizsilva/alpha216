@@ -257,12 +257,22 @@ if ($action === 'counts') {
         $live_cnt = 0;
         $upcoming_cnt = 0;
 
-        // Step 1: Local live cache (populated every ~15s by cron) — fast, no API call
+        // Step 1: Local live cache — accept up to 5 minutes old (was 120s, too tight)
         $lc = $cache_dir . '/live_' . $sid . '.json';
-        $lc_age = file_exists($lc) ? (time() - filemtime($lc)) : 9999;
-        if ($lc_age < 120 && file_exists($lc)) {
+        if (file_exists($lc)) {
             $lj = json_decode(@file_get_contents($lc), true);
-            $live_cnt = is_array($lj) ? count($lj) : 0;
+            $local_live = is_array($lj) ? count($lj) : 0;
+            if ($local_live > $live_cnt) $live_cnt = $local_live;
+        }
+
+        // Step 1b: DB inplay count (fast, reliable — always synced by daemon)
+        if ($db_connected) {
+            try {
+                $st_il = $pdo->prepare("SELECT COUNT(*) FROM sb_matches WHERE sport_id=? AND status='inplay'");
+                $st_il->execute([$sid]);
+                $db_live = (int)$st_il->fetchColumn();
+                if ($db_live > $live_cnt) $live_cnt = $db_live;
+            } catch (Exception $e) {}
         }
 
         // Step 2: For top sports, get BetsAPI pager.total (real worldwide count like fcbet 999+)

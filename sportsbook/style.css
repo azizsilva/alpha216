@@ -2921,34 +2921,44 @@ body {
   align-items: center;
   gap: 0;
   margin-bottom: 10px;
+  border-bottom: 1px solid var(--sb-border);
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.sb-champ-top-tabs::-webkit-scrollbar { display: none; }
 .sb-ctt {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid transparent;
   padding: 8px 14px;
   font-size: 14px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: var(--sb-text-2);
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  outline: none !important;
+  box-shadow: none !important;
   border-bottom: 2px solid transparent;
   transition: color 0.12s, border-color 0.12s;
   white-space: nowrap;
 }
 .sb-ctt:first-child { padding-left: 0; }
-.sb-ctt.active { color: var(--sb-green); border-bottom-color: var(--sb-green); }
-.sb-ctt:hover:not(.active) { color: var(--sb-text-1); }
+.sb-ctt.active { color: var(--sb-green) !important; border-bottom-color: var(--sb-green) !important; }
+.sb-ctt:hover:not(.active) { color: var(--sb-text-1) !important; }
+.sb-ctt-more { color: var(--sb-text-2); padding: 8px 6px; font-size: 16px; cursor: pointer; }
 
 /* Sub-nav: Par Ligue | Par Heure */
 .sb-champ-subnav {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   margin-bottom: 10px;
 }
 .sb-subnav-btn {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
-  border-radius: 4px;
+  background: transparent;
+  border: 1px solid var(--sb-border-light);
+  border-radius: 6px;
   padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -3006,10 +3016,10 @@ body {
 }
 .sb-champ-mkt-tabs::-webkit-scrollbar { display: none; }
 .sb-cmt {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
-  border-radius: 4px;
-  padding: 6px 12px;
+  background: var(--sb-bg-alt) !important;
+  border: 1px solid var(--sb-border) !important;
+  border-radius: 20px !important;
+  padding: 5px 12px !important;
   font-size: 11px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
@@ -3020,11 +3030,11 @@ body {
   flex-shrink: 0;
 }
 .sb-cmt.active {
-  background: var(--sb-green);
-  border-color: var(--sb-green);
-  color: var(--sb-green-font);
+  background: var(--sb-green) !important;
+  border-color: var(--sb-green) !important;
+  color: var(--sb-green-font) !important;
 }
-.sb-cmt:hover:not(.active) { background: var(--sb-border); color: var(--sb-text-1); }
+.sb-cmt:hover:not(.active) { background: var(--sb-border) !important; color: var(--sb-text-1) !important; }
 .sb-cmt-arrow {
   background: var(--sb-bg-alt);
   border: 1px solid var(--sb-border);

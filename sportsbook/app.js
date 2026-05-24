@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.9';
+  var newHref = base + 'sportsbook/style.css?v=20260524.10';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1944,15 +1944,16 @@ function renderChampionship(id, name, flag, matches) {
 
   // ── Top tabs: Cotes de match | Victoire finale | Cotes boostées ─────────────
   out += '<div class="sb-champ-top-tabs">';
-  out += '<span class="sb-ctt active">Cotes de match</span>';
-  out += '<span class="sb-ctt">Victoire finale</span>';
-  out += '<span class="sb-ctt">Cotes boostées</span>';
+  out += '<button type="button" class="sb-ctt active">Cotes de match</button>';
+  out += '<button type="button" class="sb-ctt">Victoire finale</button>';
+  out += '<button type="button" class="sb-ctt">Cotes boostées</button>';
+  out += '<span class="sb-ctt-more">&rsaquo;</span>';
   out += '</div>';
 
   // ── Sub-nav: Par Ligue | Par Heure ────────────────────────────────────
   out += '<div class="sb-champ-subnav">';
-  out += '<button class="sb-subnav-btn active">Par Ligue</button>';
-  out += '<button class="sb-subnav-btn">Par Heure</button>';
+  out += '<button type="button" class="sb-subnav-btn active">Par Ligue</button>';
+  out += '<button type="button" class="sb-subnav-btn">Par Heure</button>';
   out += '</div>';
 
   // ── Date filter: Tout + upcoming dates ────────────────────────────────
@@ -1967,7 +1968,7 @@ function renderChampionship(id, name, flag, matches) {
   out += '</div>';
 
   // ── Market type tabs (horizontal scroll) ──────────────────────────────
-  var mktTypeTabs = ['Tout','Principaux','Spéciale joueurs','1ère mi-temps','2ème mi-temps','Teams H2H','Correct Score','Corners','Cartes','Multi Chance','Multigoals','Combo','Combo 1x2','Combo DC','Specials'];
+  var mktTypeTabs = ['Tout','Principaux','Spéciale joueurs','1 minute','Mi-temps 1','Mi-temps 2','Teams H2H','Correct Score','Corners','Cartes','Multi Chance','Multigoals','Combo'];
   out += '<div class="sb-champ-mkt-tabs">';
   mktTypeTabs.forEach(function(t, i) {
     out += '<button class="sb-cmt' + (i === 1 ? ' active' : '') + '" onclick="this.parentNode.querySelectorAll(\'.sb-cmt\').forEach(function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">' + t + '</button>';
