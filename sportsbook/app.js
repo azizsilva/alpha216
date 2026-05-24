@@ -967,41 +967,56 @@ function matchCard(m) {
   var mname = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
   var out = '<div class="mc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-  /* ── Row 1: BB | EN DIRECT | time/min | spacer | ☆ star ── */
-  out += '<div class="mc-hdr-live">';
-  out += '<div class="mc-hl-left">';
-  out += '<span class="mc-badge-bb">BB</span>';
+  /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
   if (isLive) {
+    // LIVE Match Card Header
+    out += '<div class="mc-hdr-live">';
+    out += '<div class="mc-hl-left">';
+    out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     if (liveMin) out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
-  } else {
-    out += '<span class="mc-date">' + h(timeStr) + ' ' + h(dateStr) + '</span>';
-  }
-  out += '</div>';
-  out += '<div class="mc-hl-right">';
-  out += '<button class="mc-star" onclick="event.stopPropagation()" aria-label="Favori">' + ICON.star + '</button>';
-  out += '</div>';
-  out += '</div>';
+    out += '</div>';
+    out += '<div class="mc-hl-right">';
+    out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
+    out += '</div>';
+    out += '</div>';
 
-  /* ── Row 2: flag | league · country ── */
-  out += '<div class="mc-league-row">';
-  out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-  out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
-  out += '</div>';
+    out += '<div class="mc-league-row">';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
+    out += '</div>';
+  } else {
+    // UPCOMING Match Card Header
+    out += '<div class="mc-hdr-live">';
+    out += '<div class="mc-hl-left">';
+    out += '<span class="mc-badge-bb">BB</span>';
+    out += '<span class="mc-date" style="color:var(--sb-text-1);font-weight:600">' + h(dateStr) + ' - ' + h(timeStr) + '</span>';
+    out += '</div>';
+    out += '<div class="mc-hl-right">';
+    out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
+    out += '</div>';
+    out += '</div>';
+
+    out += '<div class="mc-league-row" style="justify-content:space-between">';
+    out += '<div style="display:flex;align-items:center;gap:6px;overflow:hidden">';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
+    out += '</div>';
+    out += '<div style="display:flex;align-items:center;gap:6px">';
+    out += '<span class="mc-live-badge" style="background:transparent;border:1px solid #444;color:var(--sb-text-2)">EN DIRECT</span>';
+    out += '<button class="mc-stats-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    out += '</div>';
+    out += '</div>';
+  }
 
   /* ── Body row: teams/scores | odds | chevron ── */
   out += '<div class="mc-body-col" onclick="event.stopPropagation()">';
 
   // SVG Shirt helper (uses seeded colors based on team name)
   function getShirtSVG(tName) {
-    var c1 = [
-      '#e02424', '#2563eb', '#16a34a', '#ca8a04', '#7c3aed', '#db2777', 
-      '#ffffff', '#000000', '#f97316', '#0ea5e9'
-    ];
-    var c2 = [
-      '#ffffff', '#ffffff', '#ffffff', '#000000', '#ffffff', '#ffffff', 
-      '#e02424', '#ffffff', '#ffffff', '#ffffff'
-    ];
+    if (!isLive) return ''; // No shirts for upcoming matches
+    var c1 = ['#e02424','#2563eb','#16a34a','#ca8a04','#7c3aed','#db2777','#ffffff','#000000','#f97316','#0ea5e9'];
+    var c2 = ['#ffffff','#ffffff','#ffffff','#000000','#ffffff','#ffffff','#e02424','#ffffff','#ffffff','#ffffff'];
     var seed = 0;
     for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
     var main = c1[seed % c1.length];
@@ -2079,6 +2094,7 @@ window.sbFilterByDate = function(btn, dayOffset) {
 window.sbSwitchLive = function(btn) {
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
+  S.activeTab = 'live';
   S.activeSportId = 1; S.activeAction = 'inplay'; S.activeLeagueId = null; S.activeDateOffset = 0;
   loadAndFilter('inplay', 1, null);
 };
@@ -2097,6 +2113,7 @@ window.sbSwitchTab = function(btn, action, sportId) {
     }
   }
 
+  S.activeTab = action;
   S.activeSportId = sportId || 1;
   // If 'home' or 'live', we actually want 'inplay' internally, UNLESS 'upcoming' is clicked
   S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
@@ -2482,6 +2499,7 @@ function loadAndFilter(action, sid, lid) {
 
       // Filter out invalid and ended matches
       res = res.filter(function(m) {
+        if (S.activeTab === 'live' && m.time_status !== '1') return false; // En direct tab must only show Live
         return m && m.id
           && m.home && m.home.name && m.home.name !== ''
           && m.away && m.away.name && m.away.name !== ''
