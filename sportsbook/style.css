@@ -1416,10 +1416,11 @@ body {
 }
 .sb-upcoming-tabs::-webkit-scrollbar { height: 0; }
 .sb-upcoming-tab {
-  background: var(--sb-bg-alt) !important;
-  border: 1px solid var(--sb-border) !important;
+  background: #252525 !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
   border-radius: 20px !important;
-  padding: 5px 12px !important;
+  padding: 0 13px !important;
+  height: 34px !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
@@ -3688,25 +3689,36 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #2a2a2a;
+  background: #1e1e1e;
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 6px;
-  padding: 10px 14px;
+  padding: 12px 14px;
   color: var(--sb-text-1);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
 }
-.sb-live-mkt-btn:hover { background: #333; }
-.sb-lmb-arrow { color: var(--sb-text-2); transition: transform 0.2s; }
-.sb-lmb-arrow.rotated svg { transform: rotate(180deg); }
+.sb-live-mkt-btn:hover,
+.sb-live-mkt-btn.open { background: #252525; border-radius: 6px 6px 0 0; }
+.sb-lmb-arrow {
+  color: var(--sb-text-1);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}
+.sb-lmb-arrow svg { display: block; }
 .sb-live-mkt-drop {
-  background: #2a2a2a;
+  background: #1e1e1e;
   border: 1px solid rgba(255,255,255,0.12);
   border-top: none;
   border-radius: 0 0 6px 6px;
   overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 .sb-lmk-item {
   width: 100%;
@@ -3717,13 +3729,13 @@ body {
   background: transparent;
   border: none;
   border-top: 1px solid rgba(255,255,255,0.07);
-  color: var(--sb-text-1);
+  color: rgba(255,255,255,0.85);
   font-size: 13px;
   text-align: left;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.sb-lmk-item:hover { background: rgba(255,255,255,0.05); }
-.sb-lmk-item.active { font-weight: 600; }
+.sb-lmk-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
 .sb-lmk-minus { font-size: 18px; color: var(--sb-text-2); line-height: 1; }
 
 /* "Market not available" message in match card */

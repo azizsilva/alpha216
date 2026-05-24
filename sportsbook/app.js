@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260524.13';
+  var newHref = base + 'sportsbook/style.css?v=20260524.14';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1076,16 +1076,18 @@ function renderLiveMarketDropdown() {
   var active = LIVE_MKT_OPTIONS.find(function(o){ return o.key === (S.activeLiveCat||'populaire'); });
   var label  = active ? active.label : '1x2';
   var out = '<div class="sb-live-mkt-wrap" id="sb-live-mkt-wrap">';
+  // Trigger — shows active label + minus; chevronDown shown via CSS when closed
   out += '<button type="button" class="sb-live-mkt-btn" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
   out += '<span id="sb-live-mkt-lbl">' + h(label) + '</span>';
   out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + ICON.chevronDown + '</span>';
   out += '</button>';
+  // Dropdown — only show non-active options (active already shown in trigger above)
   out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop" style="display:none">';
   LIVE_MKT_OPTIONS.forEach(function(o) {
     var isCur = (o.key === (S.activeLiveCat || 'populaire'));
-    out += '<button type="button" class="sb-lmk-item' + (isCur ? ' active' : '') + '" onclick="window.sbSetLiveCat(\'' + o.key + '\',\'' + h(o.label) + '\')">';
+    if (isCur) return; // skip — it's shown in the trigger button
+    out += '<button type="button" class="sb-lmk-item" onclick="window.sbSetLiveCat(\'' + o.key + '\',\'' + h(o.label) + '\')">';
     out += h(o.label);
-    out += isCur ? '<span class="sb-lmk-minus">&minus;</span>' : '';
     out += '</button>';
   });
   out += '</div>';
@@ -1096,10 +1098,22 @@ function renderLiveMarketDropdown() {
 window.sbToggleLiveMktDrop = function() {
   var drop = document.getElementById('sb-live-mkt-drop');
   var arrow = document.getElementById('sb-lmb-arrow');
+  var btn   = document.getElementById('sb-live-mkt-btn');
   if (!drop) return;
   var open = drop.style.display !== 'none';
   drop.style.display = open ? 'none' : 'block';
-  if (arrow) arrow.classList.toggle('rotated', !open);
+  if (arrow) {
+    if (!open) {
+      // opening: show minus dash, remove chevron
+      arrow.innerHTML = '&minus;';
+      arrow.classList.add('rotated');
+    } else {
+      // closing: restore chevron SVG
+      arrow.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      arrow.classList.remove('rotated');
+    }
+  }
+  if (btn) btn.classList.toggle('open', !open);
 };
 
 window.sbSetLiveCat = function(key, label) {
