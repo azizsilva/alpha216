@@ -809,93 +809,119 @@ body {
 .sb-boost-card:hover { background: #404040; }
 
 /* Horizontal Slider Card (En direct/Upcoming at top) */
+/* ── EN DIRECT Carousel Card (slc) ── matches fcbet216 reference ── */
 .slc {
-  background: var(--sb-bg-card);
-  border: 1px solid var(--sb-border);
+  background: rgb(49, 49, 49);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 10px;
-  min-width: 280px;
-  max-width: 320px;
+  min-width: 220px;
+  max-width: 260px;
   flex-shrink: 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: background 0.15s;
 }
+.slc:hover { background: #3a3a3a; }
+
+/* Header */
 .slc-hdr {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--sb-border-light);
+  gap: 5px;
+  padding: 8px 10px 6px;
   font-size: 11px;
+  overflow: hidden;
 }
 .slc-bb {
   background: var(--sb-green);
   color: var(--sb-green-font);
-  font-weight: 700;
-  padding: 1px 4px;
-  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
 }
-.slc-time, .slc-sep { color: var(--sb-text-2); }
-.slc-flag { width: 14px; height: 10px; border-radius: 1px; }
-.slc-lg { color: var(--sb-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slc-live-badge {
+  background: #e02424;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.slc-time { color: var(--sb-text-2); font-size: 10px; flex-shrink: 0; font-weight: 600; }
+.slc-sport-ico {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--sb-text-2);
+  opacity: 0.7;
+}
+.slc-sport-ico svg { width: 14px; height: 14px; }
+.slc-flag { width: 14px; height: 10px; object-fit: cover; border-radius: 1px; flex-shrink: 0; }
+.slc-lg { color: var(--sb-text-2); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
 
+/* Middle: teams stacked, jersey inline per row */
 .slc-mid {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
-  gap: 10px;
+  padding: 8px 10px 4px;
 }
-.slc-overlapping-jerseys {
-  display: flex;
-  align-items: center;
-  width: 32px;
-  position: relative;
-  height: 24px;
-}
-.slc-j {
-  position: absolute;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: #252525;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--sb-border);
-}
-.slc-j1 { left: 0; z-index: 2; }
-.slc-j2 { left: 12px; z-index: 1; }
-
-.slc-teams-horiz {
-  flex: 1;
+.slc-teams {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  gap: 5px;
 }
 .slc-team-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
+}
+.slc-team-logo,
+.slc-team-row .mc-jersey-svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0;
 }
 .slc-tname {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--sb-text-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
-.slc-score { color: var(--sb-green); font-weight: 700; font-size: 13px; }
-
-.slc-right {
+.slc-score {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--sb-text-1);
+  flex-shrink: 0;
+  min-width: 14px;
+  text-align: right;
+}
+.slc-stats-ico {
+  flex-shrink: 0;
+  color: var(--sb-text-2);
   display: flex;
   align-items: center;
+  opacity: 0.7;
 }
-.slc-stats { color: var(--sb-text-2); font-size: 14px; }
+.slc-stats-ico svg { width: 13px; height: 13px; stroke: currentColor; }
+/* Keep legacy classes to avoid JS errors */
+.slc-overlapping-jerseys, .slc-j, .slc-j1, .slc-j2, .slc-teams-horiz, .slc-right { display: none; }
+.slc-stats { display: none; }
 
+/* Odds row */
 .slc-odds {
   display: flex;
-  gap: 2px;
-  padding: 0 12px 10px;
+  gap: 4px;
+  padding: 8px 10px 10px;
 }
 
 
@@ -2098,135 +2124,120 @@ body {
 .sb-en-direct-row:empty { display: none; }
 
 /* ════════════════════════════════════════════════════════════
-   LIVE CARDS CAROUSEL  — image-2 style
+   LIVE CARDS CAROUSEL  — fcbet216 reference style
+   (duplicate rules are intentional overrides for specificity)
    ════════════════════════════════════════════════════════════ */
 .slc {
-  background: var(--sb-bg-card);
-  border: 1px solid var(--sb-border);
-  border-radius: var(--sb-radius-card);
-  min-width: 272px;
-  max-width: 300px;
-  padding: 0;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: hidden;
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 10px !important;
+  min-width: 220px !important;
+  max-width: 260px !important;
+  flex-shrink: 0 !important;
 }
-.slc:hover { background: #333; border-color: var(--sb-border-light); }
+.slc:hover { background: #3a3a3a !important; }
 
 /* Header row */
 .slc-hdr {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 8px 10px 6px !important;
+  font-size: 11px !important;
+  overflow: hidden !important;
 }
 .slc-bb {
-  background: var(--sb-green);
-  color: var(--sb-green-font);
-  font-size: 9px;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 2px;
-  flex-shrink: 0;
+  background: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  padding: 2px 5px !important;
+  border-radius: 3px !important;
+  flex-shrink: 0 !important;
 }
-.slc-time { color: var(--sb-text-1); font-weight: 600; font-size: 11px; flex-shrink: 0; }
-.slc-sep  { color: var(--sb-text-3); flex-shrink: 0; }
-.slc-flag { width: 14px; height: 10px; object-fit: cover; border-radius: 1px; flex-shrink: 0; }
-.slc-lg   { color: var(--sb-text-2); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slc-live-badge {
+  background: #e02424 !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  padding: 2px 5px !important;
+  border-radius: 3px !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+.slc-time { color: rgba(255,255,255,0.55) !important; font-size: 10px !important; flex-shrink: 0 !important; }
+.slc-sep  { color: rgba(255,255,255,0.3) !important; flex-shrink: 0 !important; }
+.slc-flag { width: 14px !important; height: 10px !important; object-fit: cover !important; border-radius: 1px !important; flex-shrink: 0 !important; }
+.slc-sport-ico { flex-shrink: 0 !important; display: flex !important; align-items: center !important; color: rgba(255,255,255,0.55) !important; }
+.slc-sport-ico svg { width: 14px !important; height: 14px !important; }
+.slc-lg { color: rgba(255,255,255,0.55) !important; font-size: 11px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; flex: 1 !important; min-width: 0 !important; }
 
-/* Middle */
+/* Middle — teams with inline jerseys */
 .slc-mid {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
+  display: block !important;
+  padding: 8px 10px 4px !important;
 }
-.slc-teams { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.slc-teams {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
 .slc-team-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
 }
-.slc-jersey {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  border-radius: 50%;
-  background: #1e1e1e;
-  padding: 2px;
-  flex-shrink: 0;
+.slc-team-row .mc-jersey-svg,
+.slc-team-logo {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
 }
 .slc-tname {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--sb-text-1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  flex: 1 !important;
+  min-width: 0 !important;
 }
 .slc-score {
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--sb-text-1);
-  margin-left: auto;
-  flex-shrink: 0;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  flex-shrink: 0 !important;
+  min-width: 14px !important;
+  text-align: right !important;
 }
+.slc-stats-ico { flex-shrink: 0 !important; color: rgba(255,255,255,0.45) !important; display: flex !important; align-items: center !important; }
+.slc-stats-ico svg { width: 13px !important; height: 13px !important; }
 
-/* Right side */
-.slc-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  flex-shrink: 0;
-}
-.slc-endirect {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: transparent;
-  border: 1px solid var(--sb-red);
-  color: var(--sb-red);
-  font-size: 8px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 3px;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-.slc-dot-pulse {
-  width: 5px; height: 5px;
-  background: var(--sb-red);
-  border-radius: 50%;
-  animation: pulse-live 1s infinite;
-}
-.slc-timer { font-size: 10px; color: var(--sb-text-2); }
-.slc-stats { color: var(--sb-text-3); display: flex; align-items: center; }
-.slc-stats svg { width: 14px; height: 14px; }
+/* Legacy — hide replaced elements */
+.slc-overlapping-jerseys, .slc-j, .slc-j1, .slc-j2 { display: none !important; }
+.slc-teams-horiz { display: none !important; }
+.slc-right       { display: none !important; }
+.slc-stats       { display: none !important; }
+.slc-endirect    { display: none !important; }
 
 /* Odds row */
 .slc-odds {
-  display: flex;
-  gap: 6px;
-  padding: 0 12px 12px;
+  display: flex !important;
+  gap: 4px !important;
+  padding: 6px 10px 10px !important;
 }
 .slc-odd-btn {
-  flex: 1;
-  background: var(--sb-bg-odd-btn);
-  border: 1px solid var(--sb-border-light);
-  border-radius: 6px;
-  height: 40px;
-  padding: 0 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex: 1 !important;
+  background: rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  border-radius: 6px !important;
+  height: 36px !important;
+  padding: 0 8px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   gap: 6px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
