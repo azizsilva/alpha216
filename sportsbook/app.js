@@ -342,12 +342,12 @@ function extractRealOdds(m) {
   if (oddsObj && typeof oddsObj === 'object') {
     var parsed = null;
     // Try keyed sub-objects first: live > updated > init > start
-    var keys = ['live','updated','init','start'];
+    var keys = ['live','updated','init','start','end'];
     for (var i = 0; i < keys.length; i++) {
       parsed = _parseOddsFlat(oddsObj[keys[i]]);
       if (parsed) break;
     }
-    // Try flat format: {"1":"2.01","X":"3.55","2":"4.23"}
+    // Try flat format: {"1":"2.01","X":"3.55","2":"4.23"} and "end" key
     if (!parsed) parsed = _parseOddsFlat(oddsObj);
     if (parsed) {
       return {
@@ -384,7 +384,9 @@ function _parseOddsFlat(o) {
   var h = parseFloat(o['1'] || o.home || o.h || 0);
   var x = parseFloat(o['X'] || o.x || o.draw || 0);
   var a = parseFloat(o['2'] || o.away || o.a || 0);
-  return (h > 1.01 && x > 1.01 && a > 1.01) ? { h: h, x: x, a: a } : null;
+  // Only require h (home odds) — x can be null for 2-way sports (basketball, tennis)
+  if (!(h > 1.01)) return null;
+  return { h: h, x: (x > 1.01 ? x : null), a: (a > 1.01 ? a : null) };
 }
 
 /* Return raw BetsAPI odds without arbitrary reduction */

@@ -272,9 +272,21 @@ function _extract_inplay_match_odds($m) {
 }
 function _parse_flat_odds_api($o) {
     if (!$o || !is_array($o)) return null;
-    $h = (float)($o['1'] ?? $o['home'] ?? $o['h'] ?? 0);
-    $x = (float)($o['X'] ?? $o['x'] ?? $o['draw'] ?? 0);
-    $a = (float)($o['2'] ?? $o['away'] ?? $o['a'] ?? 0);
+    // Support both plain decimal ("3.00") and fractional string ("11/10") values
+    $pv = function($v) {
+        $v = trim((string)$v);
+        if (!$v || $v === '0' || $v === '-') return 0.0;
+        if (strpos($v, '/') !== false) {
+            [$fn, $fd] = explode('/', $v, 2);
+            $fd = floatval($fd);
+            return $fd > 0 ? round(1 + floatval($fn) / $fd, 2) : 0.0;
+        }
+        return floatval($v);
+    };
+    $h = $pv($o['1'] ?? $o['home'] ?? $o['h'] ?? 0);
+    $x = $pv($o['X'] ?? $o['x'] ?? $o['draw'] ?? 0);
+    $a = $pv($o['2'] ?? $o['away'] ?? $o['a'] ?? 0);
+    // Only require h (home odds) — x can be null for 2-way sports (basketball, tennis)
     if ($h < 1.01) return null;
     return ['h'=>round($h,2),'x'=>($x>0.01?round($x,2):null),'a'=>($a>0.01?round($a,2):null)];
 }
@@ -288,6 +300,40 @@ function _stream_od_to_dec($raw) {
         return $fd>0 ? round(1+floatval($fn)/$fd,2) : null;
     }
     $v=floatval($raw); return $v>0 ? round($v+1,2) : null;
+}
+
+// ── Helper: parse a Bet365 event-stream array → live_odds struct ──────────
+// Works for both /v1/bet365/event?FI=X and /v1/bet365/inplay results[0]
+function parse_event_stream_odds($results_arr) {
+    // results[0] is the actual flat stream; flatten one level if needed
+    $stream = (is_array($results_arr[0] ?? null)) ? $results_arr[0] : (is_array($results_arr) ? $results_arr : []);
+    $h_o = $x_o = $a_o = $ov_o = $un_o = null;
+    $curr_ou_line = 2.5;
+    foreach ($stream as $item) {
+        if (!is_array($item)) continue;
+        $type = $item['type'] ?? $item['TYPE'] ?? '';
+        // Extract OU line from market name
+        if ($type === 'MA') {
+            $mkt = $item['NA'] ?? $item['N2'] ?? '';
+            if (preg_match('/over.under\s*(\d+\.?\d*)/i', $mkt, $mat)
+             || preg_match('/total[^0-9]*(\d+\.?\d*)/i', $mkt, $mat)) {
+                $curr_ou_line = (float)$mat[1];
+            }
+        }
+        if ($type === 'PA') {
+            $n2  = (string)($item['N2'] ?? $item['NA'] ?? '');
+            $or  = (string)($item['OR'] ?? '');
+            $od  = _stream_od_to_dec($item['OD'] ?? '');
+            if (!$od || $od < 1.01) continue;
+            if (($n2 === '1' || $or === '0') && !$h_o)  $h_o = $od;
+            if (($n2 === 'X' || $or === '1') && !$x_o)  $x_o = $od;
+            if (($n2 === '2' || $or === '2') && !$a_o)  $a_o = $od;
+            if (stripos($n2, 'over')  !== false && !$ov_o) $ov_o = $od;
+            if (stripos($n2, 'under') !== false && !$un_o) $un_o = $od;
+        }
+    }
+    if (!$h_o) return null;
+    return ['h'=>$h_o,'x'=>$x_o,'a'=>$a_o,'ou_line'=>$curr_ou_line,'ou_over'=>$ov_o,'ou_under'=>$un_o,'ts'=>time()];
 }
 
 // ═══ INPLAY — Auto-sync from BetsAPI (no daemon needed) ═══════════════════
@@ -475,6 +521,39 @@ if ($action === 'inplay') {
         }
     }
     unset($m);
+
+    // ── Step 5.5: Per-event odds cache for live matches still missing odds ────
+    // Uses sportsbook/cache/ev_{id}.json (60s TTL).
+    // If no cache → fires fire-and-forget to fetch_event_odds so NEXT poll gets it.
+    $host_ev  = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $script_ev = parse_url($_SERVER['REQUEST_URI'] ?? '/sportsbook/api.php', PHP_URL_PATH);
+    $fired_ev = 0;
+    foreach ($results as &$mr5) {
+        if (isset($mr5['live_odds'])) continue;                       // already has odds
+        if (($mr5['time_status'] ?? '0') !== '1') continue;          // only live matches
+        $mid_ev = (string)($mr5['id'] ?? '');
+        $rid_ev = (string)($mr5['r_id'] ?? $mid_ev);
+        // Try per-event cache
+        $ev_cache_f = $cache_dir . '/ev_' . $rid_ev . '.json';
+        if (file_exists($ev_cache_f) && (time() - filemtime($ev_cache_f)) < 60) {
+            $evo = json_decode(file_get_contents($ev_cache_f), true);
+            if ($evo && isset($evo['h']) && $evo['h'] > 1.01) { $mr5['live_odds'] = $evo; continue; }
+        }
+        // Also try mid-based cache
+        if ($rid_ev !== $mid_ev) {
+            $ev_cache_m = $cache_dir . '/ev_' . $mid_ev . '.json';
+            if (file_exists($ev_cache_m) && (time() - filemtime($ev_cache_m)) < 60) {
+                $evo2 = json_decode(file_get_contents($ev_cache_m), true);
+                if ($evo2 && isset($evo2['h']) && $evo2['h'] > 1.01) { $mr5['live_odds'] = $evo2; continue; }
+            }
+        }
+        // Fire async fetch (limits concurrent fetches to avoid overloading)
+        if ($fired_ev < 4 && $rid_ev) {
+            fire_and_forget('http://' . $host_ev . $script_ev . '?action=fetch_event_odds&id=' . urlencode($rid_ev));
+            $fired_ev++;
+        }
+    }
+    unset($mr5);
 
     // ── Step 6: DB fallback when BetsAPI unreachable ────────────────────────
     if (empty($results) && $db_connected) {
@@ -1292,17 +1371,30 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
         // Skip if odds already cached and have OU (cache hit)
         $existing = $cached_bg[$mid] ?? null;
         if ($existing && isset($existing['ou_over']) && $existing['ou_over']) continue;
-        // Use r_id (Bet365 FI) for the prematch endpoint
-        $fi = $bm['r_id'] ?? $mid;
-        $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
-        if (!$or) { // try event endpoint
-            $or = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
-            if ($or && !empty($or['results'])) {
-                // wrap in expected structure
-                $or = ['results' => $or['results']];
+        // Use r_id (Bet365 FI) for the event endpoint
+        $fi   = $bm['r_id'] ?? $mid;
+        $pm   = null;
+        $is_live_bm = (($bm['time_status'] ?? '') === '1');
+        // For LIVE matches: use event FI (stream format) first — prematch doesn't return live odds
+        if ($is_live_bm) {
+            $or_ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+            if (!empty($or_ev['results'])) {
+                $pm = parse_event_stream_odds($or_ev['results']);
+                if (!$pm) $pm = api_parse_prematch_odds($or_ev); // fallback to sp structure
             }
         }
-        $pm = ($or && !empty($or['results'])) ? api_parse_prematch_odds($or) : null;
+        // For upcoming (or if live fetch failed): use prematch endpoint
+        if (!$pm) {
+            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            if (!$or || empty($or['results'])) {
+                $or = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+            }
+            $pm = ($or && !empty($or['results'])) ? api_parse_prematch_odds($or) : null;
+            // last resort: try stream parse on the event response
+            if (!$pm && $or && !empty($or['results'])) {
+                $pm = parse_event_stream_odds($or['results']);
+            }
+        }
         if ($pm && $pm['h'] > 1.01) {
             $new_odds[(string)$mid] = $pm;
             // Also update DB
@@ -1335,6 +1427,52 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
     @unlink($lock_f);
     echo json_encode(['success' => 1, 'fetched' => count($new_odds)]);
     exit;
+}
+
+// ═══ FETCH_EVENT_ODDS — async per-event odds cache (called by fire_and_forget) ══
+// Fetches live odds from BetsAPI event FI endpoint and stores in ev_{id}.json
+if ($action === 'fetch_event_odds') {
+    $feo_id = preg_replace('/[^a-zA-Z0-9_\-]/', '', trim($_GET['id'] ?? ''));
+    if (!$feo_id) { echo json_encode(['success'=>0]); exit; }
+    $feo_cache_dir = __DIR__ . '/cache';
+    if (!is_dir($feo_cache_dir)) @mkdir($feo_cache_dir, 0755, true);
+    $feo_file = $feo_cache_dir . '/ev_' . $feo_id . '.json';
+    // Skip if cached recently
+    if (file_exists($feo_file) && (time() - filemtime($feo_file)) < 30) {
+        echo json_encode(['success'=>1,'cached'=>true]); exit;
+    }
+    ignore_user_abort(true);
+    // 1. Try event FI (stream format) — works for live matches
+    $feo_pm = null;
+    $feo_ev = betsapi_get('/v1/bet365/event', ['FI' => $feo_id]);
+    if (!empty($feo_ev['results'])) {
+        $feo_pm = parse_event_stream_odds($feo_ev['results']);
+        // Also try prematch structure parser as fallback
+        if (!$feo_pm) $feo_pm = api_parse_prematch_odds($feo_ev);
+    }
+    // 2. Fallback: prematch endpoint
+    if (!$feo_pm) {
+        $feo_pre = betsapi_get('/v1/bet365/prematch', ['FI' => $feo_id]);
+        if (!empty($feo_pre['results'])) $feo_pm = api_parse_prematch_odds($feo_pre);
+    }
+    if ($feo_pm && $feo_pm['h'] > 1.01) {
+        @file_put_contents($feo_file, json_encode($feo_pm));
+        // Update DB if available
+        if ($db_connected) {
+            try {
+                $feo_sq = $pdo->prepare("SELECT id, raw_json FROM sb_matches WHERE id=? OR r_id=? LIMIT 1");
+                $feo_sq->execute([$feo_id, $feo_id]);
+                $feo_row = $feo_sq->fetch(PDO::FETCH_ASSOC);
+                if ($feo_row) {
+                    $feo_md = json_decode($feo_row['raw_json'], true) ?: [];
+                    $feo_md['live_odds'] = $feo_pm;
+                    $pdo->prepare("UPDATE sb_matches SET raw_json=?, updated_at=CURRENT_TIMESTAMP WHERE id=?")
+                        ->execute([json_encode($feo_md), $feo_row['id']]);
+                }
+            } catch (Exception $e) {}
+        }
+    }
+    echo json_encode(['success'=>1,'h'=>$feo_pm['h']??null]); exit;
 }
 
 echo json_encode(['success' => 0, 'error' => 'Invalid action: ' . htmlspecialchars($action)]);
