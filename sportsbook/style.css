@@ -11,12 +11,12 @@
   --sb-red:         #e02424;
   /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
   --sb-bg-root:     #0f0f0f;   /* page root — near black */
-  --sb-bg-card:     #252525;   /* match cards — same as boosted card */
-  --sb-bg-boost:    #252525;   /* boosted odds card bg */
-  --sb-bg-alt:      #222222;   /* slightly elevated surfaces */
-  --sb-bg-mkt:      #1c1c1c;   /* market grid cells (championship) */
-  --sb-bg-odd-btn:  #242424;   /* odd buttons in cards */
-  --sb-bg-odd-hover:#2e2e2e;
+  --sb-bg-card:     #313131;   /* match cards — rgb(49,49,49) from fcbet DevTools */
+  --sb-bg-boost:    #313131;   /* boosted odds card bg */
+  --sb-bg-alt:      #3a3a3a;   /* slightly elevated surfaces */
+  --sb-bg-mkt:      #272727;   /* market grid cells (championship) */
+  --sb-bg-odd-btn:  #3d3d3d;   /* odd buttons in cards */
+  --sb-bg-odd-hover:#484848;
   /* ── Borders — visible but not harsh, based on DevTools rgb(120,118,118) */
   --sb-border:      rgba(255,255,255,0.10);
   --sb-border-light:rgba(255,255,255,0.15);
@@ -789,9 +789,9 @@ body {
 .sb-boost-row::-webkit-scrollbar { height: 3px; }
 
 .sb-boost-card {
-  background: #252525;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 10px;
+  background: rgb(49, 49, 49);
+  border-width: 0px;
+  border-radius: 6px;
   min-width: 270px;
   max-width: 300px;
   padding: 14px;
@@ -799,7 +799,7 @@ body {
   cursor: pointer;
   transition: background 0.15s;
 }
-.sb-boost-card:hover { background: #3a3a3a; }
+.sb-boost-card:hover { background: #404040; }
 
 /* Horizontal Slider Card (En direct/Upcoming at top) */
 .slc {
@@ -3584,8 +3584,8 @@ body {
 /* Odds row — fcbet216: label grey left, value green right */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
-  background: #242424 !important;
-  border: 1px solid rgba(255,255,255,0.13) !important;
+  background: #3d3d3d !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
   border-radius: 6px !important;
   height: 40px !important;
   min-height: 40px !important;
@@ -3611,9 +3611,13 @@ body {
 }
 
 .sb-root .mc {
-  background: #252525 !important;
-  border: 1px solid rgba(255,255,255,0.11) !important;
-  border-radius: 10px !important;
+  background: rgb(49, 49, 49) !important;   /* exact DevTools value */
+  border-width: 0px !important;
+  border-color: rgba(255, 255, 255, 0) !important;
+  border-radius: 6px !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 6px !important;
 }
 
 /* Collapse/expand odds row via chevron toggle */
@@ -3641,9 +3645,10 @@ body {
 }
 
 .sb-root .sb-league-section-hdr {
-  background: #1a1a1a !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-  border-radius: 10px !important;
+  background: #1e1e1e !important;
+  border-width: 0px !important;
+  border-radius: 6px !important;
+  margin-bottom: 2px !important;
 }
 
 .sb-root .sb-market-sel {
