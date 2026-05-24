@@ -8,6 +8,7 @@ $hash     = md5($password);
 $role     = 'player';
 $balance  = 10000.00; // Starting balance for play
 
+try {
 // Ensure the users table exists first so it doesn't throw a Fatal Error on empty databases
 $pdo->exec("CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,4 +33,10 @@ if ($check->fetch()) {
     $stmt = $pdo->prepare("INSERT INTO users (username, password, password_text, role, balance, status) VALUES (?, ?, ?, ?, ?, 'active')");
     $stmt->execute([$username, $hash, $password, $role, $balance]);
     echo "Player '$username' created successfully with balance $balance.\n";
+}
+
+} catch (Throwable $e) {
+    echo "<h1>CRITICAL ERROR DETECTED</h1>";
+    echo "<pre>" . print_r($e->getMessage(), true) . "</pre>";
+    echo "<pre>" . print_r($e->getTraceAsString(), true) . "</pre>";
 }
