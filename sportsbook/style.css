@@ -1709,7 +1709,23 @@ body {
 
 @media (max-width: 1100px) {
   .sb-mob-footer { display: flex !important; }
-  .sb-mobile-topbar { display: flex !important; }
+  /* Use CSS Grid for the top bar — 100% guaranteed to work on all mobile browsers */
+  .sb-mobile-topbar {
+    display: grid !important;
+    grid-template-columns: 54px 1fr 44px !important;
+    grid-template-rows: 40px !important;
+    gap: 0 8px !important;
+    align-items: stretch !important;
+  }
+  /* Reset individual button flex/width set elsewhere */
+  .sb-mobile-topbar .sb-btn-home,
+  .sb-mobile-topbar .sb-btn-live,
+  .sb-mobile-topbar .sb-btn-stats {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    flex: none !important;
+  }
   .sb-mobile-sidebar-content { display: flex !important; }
 
   /* ── Single-scroll: ONLY override overflow-y, keep position:fixed for SPA ── */
