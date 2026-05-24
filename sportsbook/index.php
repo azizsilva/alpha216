@@ -101,7 +101,7 @@ for($i=0;$i<7;$i++){
   <div class="sb-sidebar-top">
     <div class="sb-top-bar">
       <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="sb-btn-live">EN DIRECT</button>
+      <button class="sb-btn-live"><span class="sb-live-badge">EN DIRECT</span></button>
       <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     
@@ -198,13 +198,13 @@ for($i=0;$i<7;$i++){
     <div class="sb-cotes-section">
       <div class="sb-cotes-label">Format de cotes</div>
       <div class="sb-cotes-opts" id="sb-cotes-opts">
-        <div class="sb-cotes-opt" data-fmt="dec" onclick="window.sbSetOddsFormat('dec',this)">
-          <span>Décimal (2.00)</span><span class="sb-cotes-check">—</span>
+        <div class="sb-cotes-opt active" data-fmt="dec" onclick="window.sbSetOddsFormat('dec',this)">
+          <span>Décimal (2.00)</span><span class="sb-cotes-check">✓</span>
         </div>
         <div class="sb-cotes-opt" data-fmt="amer" onclick="window.sbSetOddsFormat('amer',this)">
           <span>Américain (+100)</span>
         </div>
-        <div class="sb-cotes-opt active" data-fmt="frac" onclick="window.sbSetOddsFormat('frac',this)">
+        <div class="sb-cotes-opt" data-fmt="frac" onclick="window.sbSetOddsFormat('frac',this)">
           <span>Fractionnaire (1/1)</span>
         </div>
       </div>
@@ -217,7 +217,7 @@ for($i=0;$i<7;$i++){
   <!-- Mobile-only top bar (hidden on desktop) -->
   <div class="sb-mobile-topbar">
     <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'home',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)">EN DIRECT</button>
+    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 
@@ -285,6 +285,18 @@ for($i=0;$i<7;$i++){
       <div class="sb-sk-boost-card"></div>
       <div class="sb-sk-boost-card"></div>
       <div class="sb-sk-boost-card"></div>
+    </div>
+
+    <!-- Cotes boostées — matches fcbet216 prelive layout -->
+    <div class="sb-boost-section" id="sb-boost-section">
+      <div class="sb-boost-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+        <span>Cotes boostées</span>
+      </div>
+      <div class="sb-boost-row" id="sb-boosted-odds">
+        <div class="sb-sk-boost-card"></div>
+        <div class="sb-sk-boost-card"></div>
+      </div>
     </div>
 
     <!-- ══ MOBILE INLINE LEAGUE SECTION ══

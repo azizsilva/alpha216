@@ -20,7 +20,8 @@
   --sb-text-1:      #ffffff;
   --sb-text-2:      #979797;   /* ← THE gray the engineer wants */
   --sb-text-3:      #555555;
-  --sb-radius:      6px;
+  --sb-radius:      8px;
+  --sb-radius-card: 10px;
   --sb-sidebar-w:   260px;
   --sb-right-w:     290px;
   --sb-accent-blue: #1e6ef5;
@@ -602,9 +603,10 @@ body {
   border-color: #3a3a3a;
 }
 .sb-date-item.active {
-  background: #252525;
+  background: #1e1e1e;
   color: var(--sb-text-1);
-  border-color: #404040;
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
 }
 .sb-date-lbl {
   font-size: 12px;
@@ -745,6 +747,10 @@ body {
 .sb-center-scroll { flex: 1; overflow-y: auto; padding: 14px; }
 
 /* Boosted section */
+.sb-boost-section {
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
 .sb-boost-header {
   display: flex;
   align-items: center;
@@ -951,12 +957,12 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 10px 12px;
   background: #1e1e1e;
   border: 1px solid var(--sb-border);
-  border-radius: var(--sb-radius);
-  margin-top: 14px;
-  margin-bottom: 4px;
+  border-radius: var(--sb-radius-card);
+  margin-top: 12px;
+  margin-bottom: 6px;
 }
 .sb-lh-star {
   color: var(--sb-text-2);
@@ -989,10 +995,10 @@ body {
 .mc {
   background: var(--sb-bg-card);
   border: 1px solid var(--sb-border);
-  border-radius: var(--sb-radius);
+  border-radius: var(--sb-radius-card);
   display: flex;
   flex-direction: column;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   transition: background 0.12s;
   cursor: pointer;
   overflow: hidden;
@@ -1028,6 +1034,16 @@ body {
   gap: 6px;
   padding: 0 12px 6px;
   overflow: hidden;
+}
+.mc-league-row--split {
+  justify-content: space-between;
+  gap: 8px;
+}
+.mc-league-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .mc-badge-bb {
@@ -1114,8 +1130,12 @@ body {
 /* Outlined EN DIRECT for upcoming matches that haven't started yet */
 .mc-live-badge.outlined {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.35);
-  color: #fff;
+  border: 1px solid rgba(255,255,255,0.45);
+  color: var(--sb-text-1);
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
 }
 .mc-stats-icon {
   color: var(--sb-text-2);
@@ -1208,8 +1228,8 @@ body {
 .mc-odd-btn {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
-  border-radius: 4px;
-  height: 38px;
+  border-radius: 6px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1255,9 +1275,9 @@ body {
 .sb-root button.mc-chevron-btn {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
-  border-radius: 4px;
-  width: 38px;
-  height: 38px;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1915,8 +1935,8 @@ body {
     min-width: 0 !important;
   }
   .sb-mobile-sidebar-content { display: flex !important; }
-  /* Show inline league section on mobile */
-  .sb-mob-inline-leagues { display: flex !important; }
+  /* Leagues live in the menu drawer — not in center scroll (fcbet216 prelive) */
+  .sb-mob-inline-leagues { display: none !important; }
   /* Match cards full width on mobile */
   .mc { width: 100%; margin-bottom: 6px; }
   .mc-odds-bot { gap: 4px; }
@@ -2003,18 +2023,19 @@ body {
    LIVE CARDS CAROUSEL  — image-2 style
    ════════════════════════════════════════════════════════════ */
 .slc {
-  background: #2a2a2a;
+  background: var(--sb-bg-card);
   border: 1px solid var(--sb-border);
-  border-radius: 10px;
-  min-width: 260px;
-  max-width: 280px;
-  padding: 12px 12px 10px;
+  border-radius: var(--sb-radius-card);
+  min-width: 272px;
+  max-width: 300px;
+  padding: 0;
   flex-shrink: 0;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
+  overflow: hidden;
 }
 .slc:hover { background: #333; border-color: var(--sb-border-light); }
 
@@ -2114,30 +2135,37 @@ body {
 /* Odds row */
 .slc-odds {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  padding: 0 12px 12px;
 }
 .slc-odd-btn {
   flex: 1;
   background: var(--sb-bg-odd-btn);
-  border: 1px solid var(--sb-border);
-  border-radius: 4px;
-  padding: 6px 4px;
+  border: 1px solid var(--sb-border-light);
+  border-radius: 6px;
+  height: 40px;
+  padding: 0 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
+  gap: 6px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   transition: background 0.12s, border-color 0.12s;
   outline: none;
+  min-width: 0;
 }
-.slc-odd-btn:hover { background: var(--sb-bg-odd-hover); border-color: var(--sb-border-light); }
+.slc-odd-btn:hover:not(.no-odds) { background: var(--sb-bg-odd-hover); border-color: var(--sb-border); }
 .slc-odd-btn.sel {
-  background: rgba(112,246,105,0.12);
+  background: var(--sb-green);
   border-color: var(--sb-green);
 }
-.slc-odd-lbl { font-size: 9px; color: var(--sb-text-2); }
-.slc-odd-val { font-size: 12px; font-weight: 700; color: var(--sb-green); }
+.slc-odd-btn.sel .slc-odd-val { color: var(--sb-green-font); }
+.slc-odd-btn.sel .slc-odd-lbl { color: rgba(0,0,0,0.6); }
+.slc-odd-btn.no-odds { cursor: default; opacity: 0.65; }
+.slc-odd-lbl { font-size: 11px; font-weight: 500; color: var(--sb-text-2); }
+.slc-odd-val { font-size: 13px; font-weight: 700; color: var(--sb-green); }
 
 /* ════════════════════════════════════════════════════════════
    MATCH DETAIL ENHANCEMENTS

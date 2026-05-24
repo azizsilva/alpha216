@@ -863,14 +863,16 @@ function renderMatches(results) {
   }
 
   // Always update the en-direct horizontal cards row (clears skeletons)
+  var boostSec = document.getElementById('sb-boost-section');
   if (!S.activeLeagueId) {
+    var liveOnly = results.filter(function(m) { return m.time_status === '1'; });
+    var featured = liveOnly.length ? liveOnly : results;
+    renderEnDirectCards(featured.slice(0, 6));
     if (S.activeAction === 'inplay') {
-      // For inplay: show the first 6 live matches as en-direct cards
-      renderEnDirectCards(results.slice(0, 6));
+      if (boostSec) boostSec.style.display = 'none';
     } else {
-      // For upcoming: show upcoming matches as en-direct cards + cotes boostées
-      renderEnDirectCards(results.slice(0, 6));
-      renderBoosted(results.slice(6, 10));
+      if (boostSec) boostSec.style.display = '';
+      renderBoosted(results.slice(0, 4));
     }
   }
 
@@ -917,8 +919,8 @@ function renderMatches(results) {
     out += '<div class="sb-league-section-hdr">';
     out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
     out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
-    out += '<span class="sb-league-n">' + h(lg) + countryLabel + '</span>';
-    out += '<span class="sb-lh-bb">BB</span>';
+    out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg) || lg) + countryLabel + '</span>';
+    out += '<span class="sb-lh-gift" title="Offres spéciales" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
     out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
     out += '</div>';
     groups[lg].forEach(function(m) { out += matchCard(m); });
@@ -939,6 +941,7 @@ function matchCard(m) {
   var dateD = ts > 0 ? new Date(ts * 1000) : new Date();
   var dateStr = String(dateD.getDate()).padStart(2,'0') + '/' + String(dateD.getMonth()+1).padStart(2,'0');
   var timeStr = String(dateD.getHours()).padStart(2,'0') + ':' + String(dateD.getMinutes()).padStart(2,'0');
+  var dateTimeLabel = dateStr + ' \u2022 ' + timeStr;
 
   // Live timer — "Mi-temps" for half-time, otherwise "45'"
   var liveMin = '';
@@ -999,21 +1002,21 @@ function matchCard(m) {
     out += '<div class="mc-hdr-live">';
     out += '<div class="mc-hl-left">';
     out += '<span class="mc-badge-bb">BB</span>';
-    out += '<span class="mc-date" style="color:var(--sb-text-1);font-weight:600">' + h(dateStr) + ' - ' + h(timeStr) + '</span>';
+    out += '<span class="mc-date">' + h(dateTimeLabel) + '</span>';
     out += '</div>';
     out += '<div class="mc-hl-right">';
     out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
     out += '</div>';
     out += '</div>';
 
-    out += '<div class="mc-league-row" style="justify-content:space-between">';
-    out += '<div style="display:flex;align-items:center;gap:6px;overflow:hidden">';
+    out += '<div class="mc-league-row mc-league-row--split">';
+    out += '<div class="mc-league-info">';
     out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
+    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' - ' + countryLabel : '') + '</span>';
     out += '</div>';
-    out += '<div style="display:flex;align-items:center;gap:6px">';
-    out += '<span class="mc-live-badge" style="background:transparent;border:1px solid #444;color:var(--sb-text-2)">EN DIRECT</span>';
-    out += '<button class="mc-stats-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    out += '<div class="mc-league-actions">';
+    out += '<span class="mc-live-badge outlined">EN DIRECT</span>';
+    out += '<button class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     out += '</div>';
     out += '</div>';
   }
@@ -1156,6 +1159,21 @@ function oddBtn(mid, match, sel, val) {
     + '</button>';
 }
 
+function slcOddBtn(mid, match, sel, val) {
+  var v = parseFloat(val);
+  var hasOdds = !isNaN(v) && v >= 1.01;
+  var bid = mid + '_slc_' + sel;
+  var isSel = S.betSlip.some(function(b) { return b.id === bid; });
+  var valCls = 'slc-odd-btn' + (isSel ? ' sel' : '') + (hasOdds ? '' : ' no-odds');
+  var onclick = hasOdds
+    ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(sel) + '\',' + v + ')"'
+    : '';
+  return '<button class="' + valCls + '"' + onclick + '>'
+    + '<span class="slc-odd-lbl">' + sel + '</span>'
+    + '<span class="slc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
+    + '</button>';
+}
+
 function ouBtn(mid, match, label, val, key) {
   var v = parseFloat(val);
   var hasOdds = val !== null && !isNaN(v) && v >= 1.01;
@@ -1282,18 +1300,12 @@ function renderEnDirectCards(matches) {
     out += '</div>';
     out += '</div>';
 
-    // Odds row: 1 / X / 2
+    // Odds row: 1 / X / 2 (same layout as main match cards)
+    var slcMatch = (m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : '');
     out += '<div class="slc-odds">';
-    ['1','X','2'].forEach(function(lbl, i) {
-      var val = [o.h, o.x, o.a][i];
-      if (!val) return;
-      var bid = mid + '_slc_' + lbl;
-      var isSel = S.betSlip.some(function(b){ return b.id === bid; });
-      out += '<button class="slc-odd-btn' + (isSel ? ' sel' : '') + '" onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + hn + ' v ' + an + '\',\'' + lbl + '\',' + parseFloat(val) + ')">'
-        + '<span class="slc-odd-lbl">' + lbl + '</span>'
-        + '<span class="slc-odd-val">' + parseFloat(val).toFixed(2) + '</span>'
-        + '</button>';
-    });
+    out += slcOddBtn(mid, slcMatch, '1', o.h);
+    out += slcOddBtn(mid, slcMatch, 'X', o.x);
+    out += slcOddBtn(mid, slcMatch, '2', o.a);
     out += '</div>';
 
     out += '</div>'; // slc
@@ -1340,7 +1352,7 @@ function renderBoosted(matches) {
     out += '<div class="sb-odds-row">';
     out += '<span class="sb-old-val">' + oldOdd + '</span>';
     out += '<svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5H17M13 1L17 5L13 9" stroke="var(--sb-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    out += '<span class="sb-new-val">' + newOdd + '</span>';
+    out += '<span class="sb-new-val">' + h(formatOdd(parseFloat(newOdd))) + '</span>';
     out += '</div></div>';
   });
   el.innerHTML = out || '<div style="padding:10px;color:var(--sb-text-2);font-size:12px">Aucune cote boostée disponible</div>';
@@ -1740,11 +1752,9 @@ window.sbOpenLeague = function(id, name, flag, sid) {
 
   // Hide homepage-only sections when entering championship view
   var enDirect = document.getElementById('sb-en-direct-cards');
-  var boostedHdr = document.querySelector('.sb-boost-header');
-  var boostedRow = document.getElementById('sb-boosted-odds');
+  var boostedSec = document.getElementById('sb-boost-section');
   if (enDirect)   enDirect.style.display   = 'none';
-  if (boostedHdr) boostedHdr.style.display  = 'none';
-  if (boostedRow) boostedRow.style.display  = 'none';
+  if (boostedSec) boostedSec.style.display  = 'none';
 
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildSkeleton(4);
@@ -1943,11 +1953,9 @@ window.sbBackToMain = function() {
 
   // Restore homepage sections
   var enDirect = document.getElementById('sb-en-direct-cards');
-  var boostedHdr = document.querySelector('.sb-boost-header');
-  var boostedRow = document.getElementById('sb-boosted-odds');
+  var boostedSec = document.getElementById('sb-boost-section');
   if (enDirect)   enDirect.style.display   = '';
-  if (boostedHdr) boostedHdr.style.display  = '';
-  if (boostedRow) boostedRow.style.display  = '';
+  if (boostedSec) boostedSec.style.display  = '';
 
   loadAndFilter(S.activeAction, S.activeSportId, null);
 };
