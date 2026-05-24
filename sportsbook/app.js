@@ -6,14 +6,18 @@
 (function(){
 'use strict';
 
-// ── CSS self-injection: ensures sportsbook/style.css is always loaded
-// Fixes "CSS disappears on SPA navigation" issue
+// ── CSS self-injection: force-refreshes sportsbook/style.css on every load
+// Fixes "CSS cached/disappears" issue on SPA navigation
 (function injectCSS() {
-  if (!document.querySelector('link[href*="sportsbook/style.css"]')) {
+  var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
+  var newHref = base + 'sportsbook/style.css?v=' + Date.now();
+  var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
+  if (existingLink) {
+    existingLink.href = newHref; // Force fresh fetch
+  } else {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-    link.href = base + 'sportsbook/style.css?v=' + Date.now();
+    link.href = newHref;
     document.head.appendChild(link);
   }
 })();

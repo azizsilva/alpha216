@@ -28,9 +28,57 @@ for($i=0;$i<7;$i++){
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </noscript>
-<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=filemtime(__DIR__.'/style.css')?>">
+<link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=20260524_18" id="sb-css-link">
 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+
+<!-- CRITICAL MOBILE CSS — inline to bypass all server/browser caching -->
+<style id="sb-critical-mobile">
+@media (max-width:1100px){
+  /* TOP BAR: CSS Grid — home|EN DIRECT|stats */
+  .sb-mobile-topbar{
+    display:grid!important;
+    grid-template-columns:54px 1fr 44px!important;
+    grid-template-rows:40px!important;
+    gap:0 8px!important;
+    align-items:stretch!important;
+    padding:8px 10px!important;
+    position:sticky!important;
+    top:0!important;
+    z-index:200!important;
+    background:#101010!important;
+    border-bottom:1px solid #2a2a2a!important;
+  }
+  .sb-mobile-topbar .sb-btn-home,
+  .sb-mobile-topbar .sb-btn-live,
+  .sb-mobile-topbar .sb-btn-stats{
+    width:auto!important;min-width:0!important;
+    height:40px!important;flex:none!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    border:none!important;border-radius:6px!important;cursor:pointer!important;
+    font-family:'Poppins',sans-serif!important;outline:none!important;
+  }
+  .sb-mobile-topbar .sb-btn-home{background:#70f669!important;color:rgba(0,0,0,0.87)!important;}
+  .sb-mobile-topbar .sb-btn-live{background:#e02424!important;color:#fff!important;font-size:11px!important;font-weight:800!important;letter-spacing:1px!important;text-transform:uppercase!important;}
+  .sb-mobile-topbar .sb-btn-stats{background:#252525!important;color:#979797!important;}
+  /* SCROLL FIX */
+  body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
+  .sb-root{height:auto!important;min-height:100%!important;overflow:visible!important;}
+  .sb-center{width:100%;height:auto;overflow:visible;}
+  .sb-center-scroll{flex:initial!important;overflow:visible!important;height:auto!important;padding:10px 10px 80px!important;}
+  /* FOOTER */
+  .sb-mob-footer{display:flex!important;}
+  /* SIDEBAR CONTENT */
+  .sb-mobile-sidebar-content{display:flex!important;}
+  /* OFF-CANVAS SIDEBARS */
+  .sb-left,.sb-right{position:fixed!important;top:0!important;bottom:0!important;z-index:2000!important;}
+  .sb-left{left:0!important;transform:translateX(-100%)!important;width:280px!important;}
+  .sb-left.open{transform:translateX(0)!important;box-shadow:10px 0 40px rgba(0,0,0,0.9)!important;}
+  .sb-right{right:0!important;transform:translateX(100%)!important;width:320px!important;}
+  .sb-right.open{transform:translateX(0)!important;box-shadow:-10px 0 40px rgba(0,0,0,0.9)!important;}
+}
+</style>
 
 <div class="sb-root">
 
