@@ -1036,30 +1036,31 @@ body {
 }
 .mc-stats-icon svg { width: 14px; height: 14px; stroke: currentColor; }
 
-/* Teams + Odds row */
-.mc-body-row {
-  display: flex;
-  align-items: center;
-  padding: 2px 12px 10px;
-  gap: 10px;
-}
-
-/* Teams column */
-.mc-teams {
+/* Teams + Odds Stacked Layout */
+.mc-body-col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-width: 130px;
-  max-width: 160px;
-  flex: 0 0 auto;
-  gap: 4px;
+  padding: 0 12px 10px;
+  gap: 12px;
 }
-.mc-team { display: flex; align-items: center; gap: 6px; }
-.mc-t-logo {
-  width: 15px; height: 15px;
-  object-fit: contain;
+
+/* Teams Stack */
+.mc-teams-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mc-team-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+.mc-jersey-svg {
+  width: 18px; 
+  height: 18px;
   flex-shrink: 0;
-  filter: brightness(0.9);
+  stroke: #404040;
+  stroke-width: 1px;
 }
 .mc-t-name {
   font-size: 13px;
@@ -1068,36 +1069,30 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 140px;
+  flex: 1;
 }
 .mc-t-score {
   color: var(--sb-green);
   font-weight: 700;
-  font-size: 13px;
-  margin-left: auto;
-  min-width: 14px;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
-/* Odds container — separate bordered cells matching fcbet216/Altenar OddBox style
-   Layout: [1][2.66][X][3.33][2][2.66][Plus de 2.5][1.88][Moins de 2.5][1.94][v]
-*/
-.mc-odds-all {
-  flex: 1;
+/* Odds container — full width row at the bottom */
+.mc-odds-bot {
   display: flex;
   align-items: center;
-  gap: 2px;
-  overflow-x: auto;
-  min-width: 0;
+  gap: 6px;
+  width: 100%;
 }
-.mc-odds-all::-webkit-scrollbar { height: 0; }
 
 /* ── Label cell: "1", "X", "2", "Plus de 2.5", "Moins de 2.5" ── */
 .mc-o-lbl-cell {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
   border-radius: 4px;
-  height: 36px;
-  display: inline-flex;
+  height: 38px;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 10px;
@@ -1115,44 +1110,42 @@ body {
   padding: 0 8px;
 }
 
-/* ── Value cell: "2.66", "3.33" — clickable, green text ── */
-.sb-root button.mc-o-val-cell {
+.mc-odd-btn {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
   border-radius: 4px;
-  min-width: 48px;
-  height: 36px;
-  display: inline-flex;
+  height: 38px;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 10px;
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--sb-green);
-  white-space: nowrap;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.12s, border-color 0.12s;
   outline: none;
+  flex: 1;
+  min-width: 0;
 }
-.sb-root button.mc-o-val-cell:hover {
-  background: var(--sb-bg-odd-hover);
-  border-color: #444;
-}
-
-/* Selected state — green background */
-.sb-root button.mc-o-val-cell.sel {
+.mc-odd-btn:hover:not(.no-odds) { background: #303030; border-color: var(--sb-border); }
+.mc-odd-btn.sel {
   background: var(--sb-green);
   border-color: var(--sb-green);
-  color: var(--sb-green-font);
 }
+.mc-odd-btn.sel .mc-odd-val { color: var(--sb-green-font); }
+.mc-odd-btn.sel .mc-odd-lbl { color: rgba(0,0,0,0.6); }
 
-/* No odds — shows lock icon, dimmed */
-.sb-root button.mc-o-val-cell.no-odds {
-  opacity: 0.6;
+.mc-odd-btn.no-odds {
   cursor: default;
-  pointer-events: none;
+  opacity: 0.6;
+}
+.mc-odd-lbl {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sb-text-2);
+}
+.mc-odd-val {
+  font-size: 13px;
+  font-weight: 700;
   color: var(--sb-green);
 }
 

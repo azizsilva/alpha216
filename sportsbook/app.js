@@ -992,24 +992,46 @@ function matchCard(m) {
   out += '</div>';
 
   /* ── Body row: teams/scores | odds | chevron ── */
-  out += '<div class="mc-body-row" onclick="event.stopPropagation()">';
+  out += '<div class="mc-body-col" onclick="event.stopPropagation()">';
 
-  // Teams column — with jersey/badge images matching fcbet216
-  out += '<div class="mc-teams">';
-  out += '<div class="mc-team">';
-  out += '<img src="' + hlogo + '" class="mc-jersey" onerror="this.style.opacity=\'0\'">';
+  // SVG Shirt helper (uses seeded colors based on team name)
+  function getShirtSVG(tName) {
+    var c1 = [
+      '#e02424', '#2563eb', '#16a34a', '#ca8a04', '#7c3aed', '#db2777', 
+      '#ffffff', '#000000', '#f97316', '#0ea5e9'
+    ];
+    var c2 = [
+      '#ffffff', '#ffffff', '#ffffff', '#000000', '#ffffff', '#ffffff', 
+      '#e02424', '#ffffff', '#ffffff', '#ffffff'
+    ];
+    var seed = 0;
+    for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
+    var main = c1[seed % c1.length];
+    var sec = c2[seed % c2.length];
+    var isWhite = main === '#ffffff';
+    var stroke = isWhite ? '#404040' : main;
+    return '<svg viewBox="0 0 32 32" class="mc-jersey-svg" fill="' + main + '" stroke="' + stroke + '">'
+      + '<path d="M11.6,2.2c0,0-1-1.3-4.5-0.1L2,5l2,6.5c0,0,1.3,0.3,3.5-1.5c0,0,1,19.3,1,19.9h15.2c0-0.6,0.9-19.9,0.9-19.9 c2.2,1.8,3.5,1.5,3.5,1.5L30,5L24.8,2.1c-3.4-1.2-4.5,0.1-4.5,0.1c-1.3,1.4-2.3,1.6-4.3,1.6C13.9,3.8,12.8,3.6,11.6,2.2z"/>'
+      + '<path d="M12.9,2.8c1,0.9,1.8,1.2,3.1,1.2c1.3,0,2.1-0.3,3.1-1.2l-1.4,1.8h-3.4L12.9,2.8z" fill="' + sec + '" stroke="' + sec + '"/>'
+      + '</svg>';
+  }
+
+  // Teams column — vertically stacked
+  out += '<div class="mc-teams-stacked">';
+  out += '<div class="mc-team-row">';
+  out += getShirtSVG(hn);
   out += '<span class="mc-t-name">' + hn + '</span>';
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[0]) + '</span>';
   out += '</div>';
-  out += '<div class="mc-team">';
-  out += '<img src="' + alogo + '" class="mc-jersey" onerror="this.style.opacity=\'0\'">';
+  out += '<div class="mc-team-row">';
+  out += getShirtSVG(an);
   out += '<span class="mc-t-name">' + an + '</span>';
   if (hasScore) out += '<span class="mc-t-score">' + h(scores[1]) + '</span>';
   out += '</div>';
   out += '</div>';
 
-  // Odds buttons — market-specific rendering based on activeMarketCat
-  out += '<div class="mc-odds-all">';
+  // Odds buttons — full width bottom row
+  out += '<div class="mc-odds-bot">';
   var cat = (S.viewMode === 'championship') ? (S.activeMarketCat || 'populaire') : 'populaire';
   var hVal = parseFloat(o.h) || 0;
   var aVal = parseFloat(o.a) || 0;
@@ -1085,10 +1107,10 @@ function matchCard(m) {
     out += oddBtn(mid, mname, 'X', o.x);
     out += oddBtn(mid, mname, '2', o.a);
   }
-  out += '</div>';
-
   out += '<button class="mc-more-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Voir marchés">' + ICON.chevronDown + '</button>';
-  out += '</div>'; // body row
+  out += '</div>'; // close mc-odds-bot
+
+  out += '</div>'; // close body col
   out += '</div>'; // mc
   return out;
 }
@@ -1096,37 +1118,34 @@ function matchCard(m) {
 /* Lock icon SVG — shown when odds are suspended/unavailable */
 var LOCK_ICON = '<svg class="mc-lock-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>';
 
-/* Odds cell pair: [label-cell] [value-cell] — two separate bordered cells
-   Matching fcbet216 Altenar OddBox: label and value are in separate bordered boxes */
+/* Combined odds button: label left, odd right (matches fcbet216) */
 function oddBtn(mid, match, sel, val) {
   var v = parseFloat(val);
   var hasOdds = !isNaN(v) && v >= 1.01;
   var bid = mid + '_' + sel;
   var isSel = S.betSlip.some(function(b) { return b.id === bid; });
-  var valCls = 'mc-o-val-cell' + (isSel ? ' sel' : '') + (hasOdds ? '' : ' no-odds');
+  var valCls = 'mc-odd-btn' + (isSel ? ' sel' : '') + (hasOdds ? '' : ' no-odds');
   var onclick = hasOdds
     ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(sel) + '\',' + v + ')"'
     : '';
-  return '<span class="mc-o-lbl-cell">' + sel + '</span>'
-    + '<button class="' + valCls + '"' + onclick + '>'
-    + (hasOdds ? h(formatOdd(v)) : LOCK_ICON)
+  return '<button class="' + valCls + '"' + onclick + '>'
+    + '<span class="mc-odd-lbl">' + sel + '</span>'
+    + '<span class="mc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
     + '</button>';
 }
 
-/* Over/Under cell pair: [label-cell] [value-cell]
-   Shows lock icon when val is null or < 1.01 */
 function ouBtn(mid, match, label, val, key) {
   var v = parseFloat(val);
   var hasOdds = val !== null && !isNaN(v) && v >= 1.01;
   var bid = mid + '_' + key;
   var isSel = S.betSlip.some(function(b) { return b.id === bid; });
-  var valCls = 'mc-o-val-cell' + (isSel ? ' sel' : '') + (hasOdds ? '' : ' no-odds');
+  var valCls = 'mc-odd-btn' + (isSel ? ' sel' : '') + (hasOdds ? '' : ' no-odds');
   var onclick = hasOdds
     ? ' onclick="event.stopPropagation();window.sbAddBet(\'' + h(bid) + '\',\'' + h(match) + '\',\'' + h(label) + '\',' + v + ')"'
     : '';
-  return '<span class="mc-o-lbl-cell ou">' + h(label) + '</span>'
-    + '<button class="' + valCls + '"' + onclick + '>'
-    + (hasOdds ? h(formatOdd(v)) : LOCK_ICON)
+  return '<button class="' + valCls + '"' + onclick + '>'
+    + '<span class="mc-odd-lbl">' + h(label) + '</span>'
+    + '<span class="mc-odd-val">' + (hasOdds ? h(formatOdd(v)) : LOCK_ICON) + '</span>'
     + '</button>';
 }
 
