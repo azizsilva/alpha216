@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525d';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525e';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -88,14 +88,17 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     background:rgb(49,49,49)!important;
     border-bottom:1px solid rgba(255,255,255,0.04)!important;
   }
-  /* All 3 topbar buttons — equal flex share, EN DIRECT centered (no icon) */
+  /* All 3 topbar buttons — equal flex share, EN DIRECT centered (no icon).
+     Background matches the bar's gray family (rgb(58,58,58) sits just one
+     step lighter than the bar's rgb(49,49,49) so the button is visible as
+     a chip without ever falling into the near-black look of rgba black). */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats{
     flex:1!important;min-width:0!important;
     height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    border:none!important;border-radius:8px!important;cursor:pointer!important;
-    background:rgba(0,0,0,0.45)!important;color:#979797!important;
+    border:1px solid rgba(255,255,255,0.04)!important;border-radius:8px!important;cursor:pointer!important;
+    background:rgb(58,58,58)!important;color:#cfcfcf!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
     padding:0!important;
   }

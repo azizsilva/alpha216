@@ -2102,9 +2102,9 @@ body {
   flex-shrink: 0;
 }
 /* ── Mobile top bar: EQUAL flex share — all 3 buttons same width.
-   Bar surface is gray rgb(49,49,49); inactive buttons sit on a darker
-   recess (rgba(0,0,0,0.45)) so they remain readable. EN DIRECT centered
-   inside its button with no extra icon. ── */
+   Bar surface = rgb(49,49,49); chips sit one step lighter (rgb(58,58,58))
+   so they read as the SAME gray family as the bar — no near-black recess.
+   EN DIRECT badge sits centered inside its chip with no extra icon. ── */
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
 .sb-mobile-topbar .sb-btn-stats {
@@ -2113,9 +2113,9 @@ body {
   flex: 1 1 0 !important;
   width: auto !important;
   min-width: 0 !important;
-  background: rgba(0,0,0,0.45) !important;
-  color: #979797 !important;
-  border: none !important;
+  background: rgb(58,58,58) !important;
+  color: #cfcfcf !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
   padding: 0 !important;
   gap: 0 !important;
   justify-content: center !important;
@@ -2248,7 +2248,7 @@ body {
     align-items: stretch !important;
   /*  background: rgb(49, 49, 49) !important; */
   }
-  /* All 3 buttons: EQUAL flex share, dark recess on the gray bar */
+  /* All 3 buttons: EQUAL flex share, gray chip in the same family as bar */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats {
@@ -2256,7 +2256,8 @@ body {
     width: auto !important;
     min-width: 0 !important;
     height: 40px !important;
-    background: rgba(0,0,0,0.45) !important;
+    background: rgb(58,58,58) !important;
+    border: 1px solid rgba(255,255,255,0.04) !important;
     border-radius: 8px !important;
     padding: 0 !important;
     justify-content: center !important;
