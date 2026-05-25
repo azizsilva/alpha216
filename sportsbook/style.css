@@ -236,17 +236,26 @@ body {
   flex: 1;
   width: auto;
 }
-.sb-btn-live.active .sb-live-badge {
-  background: none !important;
+/* Active state: badge becomes inline text — NO red pill, NO padding, NO bg.
+   Max specificity so it always wins regardless of cascade order. */
+button.sb-btn-live.active .sb-live-badge,
+.sb-root button.sb-btn-live.active .sb-live-badge,
+.sb-top-bar button.sb-btn-live.active .sb-live-badge,
+.sb-mobile-topbar button.sb-btn-live.active .sb-live-badge {
+  background: transparent !important;
   background-color: transparent !important;
-  color: rgba(0, 0, 0, 0.87) !important;
-  font-size: 12px !important;
+  background-image: none !important;
+  color: #000 !important;
+  font-size: 13px !important;
   font-weight: 800 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
   padding: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
 }
 
 .sb-btn-stats {
@@ -2328,15 +2337,19 @@ body {
   white-space: nowrap !important;
 }
 /* EN DIRECT badge when ACTIVE — black uppercase on full green (fcbet216) */
-.sb-mobile-topbar .sb-btn-live.active .sb-live-badge {
-  background: none !important;
+.sb-mobile-topbar .sb-btn-live.active .sb-live-badge,
+.sb-mobile-topbar button.sb-btn-live.active .sb-live-badge,
+.sb-mobile-topbar .sb-btn-live.active > .sb-live-badge {
+  background: transparent !important;
   background-color: transparent !important;
-  color: rgba(0, 0, 0, 0.87) !important;
-  font-size: 12px !important;
+  background-image: none !important;
+  color: #000 !important;
+  font-size: 13px !important;
   font-weight: 800 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
   padding: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }

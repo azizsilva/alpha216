@@ -327,23 +327,118 @@ function _normalize_timer($src) {
     return ['tm' => (string)$tm, 'ts' => (string)$ts, 'md' => (string)$md];
 }
 
+// Validate one side of a stat pair: must look like a small non-negative
+// integer (BetsAPI sometimes leaks timestamps like "20260524011600" into
+// red_cards / yellow_cards arrays — those must be rejected).
+function _is_valid_stat_value($s) {
+    if ($s === null) return false;
+    $s = trim((string)$s);
+    if ($s === '') return true; // empty cell is OK, treated as 0
+    if (!preg_match('/^-?\d+$/', $s)) return false;
+    $n = (int)$s;
+    return $n >= 0 && $n <= 999;
+}
+
 // Parse "home,away" or array/object into [home, away] strings.
+// Returns null if values look like timestamps / non-counts.
 function _pair_stat_val($v) {
     if ($v === null || $v === '') return null;
     if (is_string($v) && strpos($v, ',') !== false) {
         $p = array_map('trim', explode(',', $v, 2));
-        return [(string)($p[0] ?? '0'), (string)($p[1] ?? '0')];
+        $h = (string)($p[0] ?? '0'); $a = (string)($p[1] ?? '0');
+        if (!_is_valid_stat_value($h) || !_is_valid_stat_value($a)) return null;
+        return [$h, $a];
     }
     if (is_array($v)) {
         if (array_key_exists(0, $v) || array_key_exists(1, $v) || isset($v['home']) || isset($v['away'])) {
-            return [
-                (string)($v[0] ?? $v['home'] ?? '0'),
-                (string)($v[1] ?? $v['away'] ?? '0'),
-            ];
+            $h = (string)($v[0] ?? $v['home'] ?? '0');
+            $a = (string)($v[1] ?? $v['away'] ?? '0');
+            if (!_is_valid_stat_value($h) || !_is_valid_stat_value($a)) return null;
+            return [$h, $a];
         }
     }
-    if (is_numeric($v)) return [(string)$v, '0'];
+    if (is_numeric($v)) {
+        if (!_is_valid_stat_value((string)$v)) return null;
+        return [(string)$v, '0'];
+    }
     return null;
+}
+
+// Parse bet365 event stream ST timeline records and count corners /
+// yellow cards / red cards per team. BetsAPI v3 often returns these as
+// event timestamps rather than counts, so this LA-text parser is the
+// most reliable source for football live counters.
+function _parse_stream_timeline_stats($stream, $home_name = '', $away_name = '') {
+    if (!is_array($stream)) return null;
+
+    $home_lc = strtolower(trim((string)$home_name));
+    $away_lc = strtolower(trim((string)$away_name));
+
+    // Helper: match a team name from a LA snippet to home or away.
+    $team_side = function($team) use ($home_lc, $away_lc) {
+        $t = strtolower(trim((string)$team));
+        if ($t === '') return null;
+        if ($home_lc && (strpos($home_lc, $t) !== false || strpos($t, $home_lc) !== false)) return 0;
+        if ($away_lc && (strpos($away_lc, $t) !== false || strpos($t, $away_lc) !== false)) return 1;
+        // Word-level overlap (covers truncations like "Xelaju" vs "Xelaju MC")
+        $tw = preg_split('/\s+/', $t);
+        foreach ([$home_lc => 0, $away_lc => 1] as $cand => $idx) {
+            if (!$cand) continue;
+            foreach ($tw as $w) {
+                if (strlen($w) >= 4 && strpos($cand, $w) !== false) return $idx;
+            }
+        }
+        return null;
+    };
+
+    $corners      = [0, 0];
+    $yellow_cards = [0, 0];
+    $red_cards    = [0, 0];
+
+    foreach ($stream as $row) {
+        if (!is_array($row)) continue;
+        if (($row['type'] ?? '') !== 'ST') continue;
+        $la = (string)($row['LA'] ?? '');
+        if ($la === '') continue;
+
+        // Corner: "88' - 11th Corner - Xelaju"  (skip "Race to N Corners")
+        if (preg_match('/-\s*\d+(?:st|nd|rd|th)?\s+Corner\s*-\s*(.+?)\s*$/i', $la, $m)
+            && stripos($la, 'Race to') === false) {
+            $idx = $team_side($m[1]);
+            if ($idx !== null) $corners[$idx]++;
+            continue;
+        }
+
+        // Yellow card: "45' ~ 5th Yellow Card ~  ~(Xelaju)"
+        if (preg_match('/\d+(?:st|nd|rd|th)?\s+Yellow Card[^()]*\(([^)]+)\)/i', $la, $m)) {
+            $idx = $team_side($m[1]);
+            if ($idx !== null) $yellow_cards[$idx]++;
+            continue;
+        }
+
+        // Red card: "62' ~ 1st Red Card ~  ~(CSD Municipal)"
+        if (preg_match('/\d+(?:st|nd|rd|th)?\s+Red Card[^()]*\(([^)]+)\)/i', $la, $m)) {
+            $idx = $team_side($m[1]);
+            if ($idx !== null) $red_cards[$idx]++;
+            continue;
+        }
+    }
+
+    $out = [];
+    if ($corners[0] || $corners[1])           $out['corners']      = [(string)$corners[0],      (string)$corners[1]];
+    if ($yellow_cards[0] || $yellow_cards[1]) $out['yellow_cards'] = [(string)$yellow_cards[0], (string)$yellow_cards[1]];
+    if ($red_cards[0] || $red_cards[1])       $out['red_cards']    = [(string)$red_cards[0],    (string)$red_cards[1]];
+    return $out ?: null;
+}
+
+// Merge two stats arrays — preferring whichever side has data per key.
+function _merge_stats($a, $b) {
+    if (!$a) return $b ?: null;
+    if (!$b) return $a;
+    foreach ($b as $k => $v) {
+        if (!isset($a[$k]) || $a[$k] === null || $a[$k] === '') $a[$k] = $v;
+    }
+    return $a;
 }
 
 // Bet365 inplay EV row — S1..S8 map to soccer counters (fcbet216 stat bar order).
@@ -437,13 +532,21 @@ function _normalize_stats($raw) {
     return $out ?: null;
 }
 
-// Unified stats fetch — v3, v1, then bet365 event stream (S1..S8).
+// Unified stats fetch — v3 / v1 first (already-aggregated counts), then
+// bet365 stream timeline (ST records' LA text) for the most reliable
+// per-team corner/card counts, then bet365 EV S1..S8 (rare on most feeds).
 function _fetch_event_stats($event_id, $fi = null) {
     $stats = null;
+    $home_name = ''; $away_name = '';
 
     $v3 = betsapi_get('/v3/event/view', ['event_id' => $event_id, 'source' => 'bet365']);
-    if (!empty($v3['results'][0]['stats'])) {
-        $stats = _normalize_stats($v3['results'][0]['stats']);
+    if (!empty($v3['results'][0])) {
+        $r0 = $v3['results'][0];
+        $home_name = $r0['home']['name'] ?? '';
+        $away_name = $r0['away']['name'] ?? '';
+        if (!empty($r0['stats'])) {
+            $stats = _normalize_stats($r0['stats']);
+        }
     }
 
     if (!$stats) {
@@ -451,14 +554,33 @@ function _fetch_event_stats($event_id, $fi = null) {
         if (!empty($v1['results'][0]['stats'])) {
             $stats = _normalize_stats($v1['results'][0]['stats']);
         }
+        if (!$home_name && !empty($v1['results'][0]['home']['name'])) $home_name = $v1['results'][0]['home']['name'];
+        if (!$away_name && !empty($v1['results'][0]['away']['name'])) $away_name = $v1['results'][0]['away']['name'];
     }
 
-    if (!$stats && $fi) {
+    if ($fi) {
         $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
         if (!empty($ev['results'])) {
-            $stats = _parse_bet365_event_stats($ev['results']);
-            if (!$stats && !empty($ev['results'][0]['stats'])) {
-                $stats = _normalize_stats($ev['results'][0]['stats']);
+            $stream = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
+
+            if (!$home_name || !$away_name) {
+                foreach ($stream as $row) {
+                    if (!is_array($row) || ($row['type'] ?? '') !== 'EV') continue;
+                    $na = (string)($row['NA'] ?? '');
+                    if (preg_match('/^(.+?)\s+v\s+(.+)$/', $na, $mm)) {
+                        if (!$home_name) $home_name = trim($mm[1]);
+                        if (!$away_name) $away_name = trim($mm[2]);
+                    }
+                    break;
+                }
+            }
+
+            // Timeline-based counts are the most reliable when present.
+            $tl = _parse_stream_timeline_stats($stream, $home_name, $away_name);
+            if ($tl) $stats = _merge_stats($tl, $stats);
+
+            if (!$stats) {
+                $stats = _parse_bet365_event_stats($ev['results']);
             }
         }
     }
@@ -1446,6 +1568,26 @@ if ($action === 'match_live') {
         } catch (Exception $e) {}
     }
 
+    // Fallback: lookup match in per-sport live cache files when DB is unavailable.
+    if (!$match_data) {
+        foreach ([1, 13, 18, 17, 12, 78] as $cache_sid) {
+            $lf = __DIR__ . '/cache/live_' . $cache_sid . '.json';
+            if (!file_exists($lf)) continue;
+            $lj = json_decode(@file_get_contents($lf), true) ?: [];
+            foreach ($lj as $mm) {
+                if (!is_array($mm)) continue;
+                $mmid = (string)($mm['id'] ?? '');
+                $mrid = (string)($mm['r_id'] ?? '');
+                if ($mmid === $match_id || $mrid === $match_id || preg_replace('/[^0-9].*$/', '', $mrid) === $match_id) {
+                    $match_data = $mm;
+                    $match_id = $mmid ?: $match_id;
+                    $fi = $mrid ?: $fi;
+                    break 2;
+                }
+            }
+        }
+    }
+
     // Fresh score + timer + stats from v3 / v1 / bet365 stream
     $v3 = betsapi_get('/v3/event/view', ['event_id' => $match_id, 'source' => 'bet365']);
     if (!empty($v3['results'][0])) {
@@ -1468,22 +1610,33 @@ if ($action === 'match_live') {
     $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
     if (!empty($ev['results'])) {
         $pm = parse_event_stream_odds($ev['results']);
-        if (!$fresh_stats) {
-            $stream_stats = _parse_bet365_event_stats($ev['results']);
-            if ($stream_stats) $match_data['stats'] = $stream_stats;
-        }
-        // Timer + score from stream EV when v3 omitted them
         $stream = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
+
+        // Timer + score from stream EV
+        $home_n = $match_data['home']['name'] ?? '';
+        $away_n = $match_data['away']['name'] ?? '';
         foreach ($stream as $sitem) {
             if (!is_array($sitem) || ($sitem['type'] ?? '') !== 'EV') continue;
             if (!empty($sitem['SS'])) $match_data['ss'] = $sitem['SS'];
             $stimer = _normalize_timer($sitem);
             if ($stimer) $match_data['timer'] = $stimer;
-            if (!$fresh_stats) {
-                $evst = _parse_stream_ev_stats($sitem);
-                if ($evst) $match_data['stats'] = $evst;
+            if (!$home_n || !$away_n) {
+                $na = (string)($sitem['NA'] ?? '');
+                if (preg_match('/^(.+?)\s+v\s+(.+)$/', $na, $mm)) {
+                    if (!$home_n) $home_n = trim($mm[1]);
+                    if (!$away_n) $away_n = trim($mm[2]);
+                }
             }
             break;
+        }
+
+        // Stream-based stats — timeline LA parser is most reliable for football
+        $tl_stats = _parse_stream_timeline_stats($stream, $home_n, $away_n);
+        $stream_stats = $tl_stats ?: _parse_bet365_event_stats($ev['results']);
+        if ($stream_stats) {
+            $match_data['stats'] = $fresh_stats
+                ? _merge_stats($stream_stats, $fresh_stats)
+                : $stream_stats;
         }
         if ($pm && ($pm['h'] ?? 0) > 1.01) {
             $pm['ts'] = time();

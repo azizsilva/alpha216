@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525aj';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ak';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -156,12 +156,14 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     white-space:nowrap!important;
   }
   /* EN DIRECT badge when active — black uppercase on green (no red pill) */
-  .sb-mobile-topbar .sb-btn-live.active .sb-live-badge{
-    background:none!important;background-color:transparent!important;
-    color:rgba(0,0,0,0.87)!important;
-    font-size:12px!important;font-weight:800!important;letter-spacing:1px!important;
-    text-transform:uppercase!important;padding:0!important;border-radius:0!important;
-    box-shadow:none!important;
+  .sb-mobile-topbar .sb-btn-live.active .sb-live-badge,
+  .sb-mobile-topbar button.sb-btn-live.active .sb-live-badge,
+  .sb-mobile-topbar .sb-btn-live.active > .sb-live-badge{
+    background:transparent!important;background-color:transparent!important;background-image:none!important;
+    color:#000!important;
+    font-size:13px!important;font-weight:800!important;letter-spacing:1px!important;
+    text-transform:uppercase!important;padding:0!important;border:0!important;border-radius:0!important;
+    box-shadow:none!important;display:inline-block!important;white-space:nowrap!important;
   }
   /* SCROLL FIX */
   body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
