@@ -2923,26 +2923,144 @@ window.sbRemoveBBLeg = function(betId, legIdx) {
   renderBetSlip(); updateFloatingBetBadge();
 };
 
+/* ── Slip financial helpers — update totals WITHOUT re-rendering the
+   whole slip (re-render destroys focused inputs and breaks typing). ── */
+function slipParseStake(val) {
+  var v = parseFloat(String(val == null ? '' : val).replace(',', '.'));
+  return isNaN(v) ? 0 : Math.max(0, v);
+}
+function slipCombiMeta() {
+  var combiLegs = S.betSlip.filter(function(b) { return !b.excluded; });
+  var seen = {};
+  var valid = combiLegs.filter(function(b) {
+    var mid = String(b.matchId || b.id);
+    if (seen[mid]) return false;
+    seen[mid] = true;
+    return true;
+  });
+  var odds = valid.reduce(function(acc, l) { return acc * (parseFloat(l.val) || 1); }, 1);
+  var cnt = valid.length;
+  var bonusPct = cnt >= 4 ? 10 : cnt >= 3 ? 7 : cnt >= 2 ? 5 : 0;
+  var stake = parseFloat(SLIP_COMBI_STAKE) || 0;
+  var baseGain = stake * odds;
+  var bonus = baseGain * bonusPct / 100;
+  return { odds: odds, cnt: cnt, bonusPct: bonusPct, stake: stake, gain: baseGain + bonus, bonus: bonus };
+}
+function slipSystemMeta() {
+  var sysLegs = S.betSlip.filter(function(b) { return !b.excluded; });
+  var groups = {};
+  sysLegs.forEach(function(b) {
+    var key = String(b.matchId || b.id);
+    (groups[key] = groups[key] || []).push(b);
+  });
+  var groupCounts = Object.keys(groups).map(function(k) { return groups[k].length; });
+  function countCombos(k) {
+    var poly = [1];
+    groupCounts.forEach(function(g) {
+      var next = poly.slice();
+      for (var i = 0; i < poly.length; i++) next[i + 1] = (next[i + 1] || 0) + poly[i] * g;
+      poly = next;
+    });
+    return poly[k] || 0;
+  }
+  var levels = [
+    { k: 1, id: 'k1' }, { k: 2, id: 'k2' }, { k: 3, id: 'k3' },
+    { k: 4, id: 'k4' }, { k: 5, id: 'k5' }, { k: 6, id: 'k6' },
+    { k: 7, id: 'k7' }, { k: 8, id: 'k8' }
+  ];
+  S._sysStakes = S._sysStakes || {};
+  var totalBets = 0, totalMise = 0;
+  levels.forEach(function(lvl) {
+    if (lvl.k > sysLegs.length) return;
+    var combos = countCombos(lvl.k);
+    if (!combos) return;
+    var stake = parseFloat(S._sysStakes[lvl.id] || 0) || 0;
+    if (stake > 0) totalBets += combos;
+    totalMise += stake * combos;
+  });
+  return { totalBets: totalBets, totalMise: totalMise };
+}
+function _syncStakeInput(mode, idx, str) {
+  var sel = mode === 'combi' ? '#slip-combi-stake'
+    : '.slip-item[data-slip-idx="' + idx + '"] .slip-stake-inp';
+  var inp = document.querySelector(sel);
+  if (inp && document.activeElement !== inp) inp.value = str;
+}
+function patchSlipFinancials() {
+  if (SLIP_MODE === 'simple') {
+    var totalMise = 0, totalGain = 0;
+    S.betSlip.forEach(function(b, i) {
+      var st = slipParseStake(b.stake != null ? b.stake : SLIP_STAKE);
+      var gain = (st * (parseFloat(b.val) || 1)).toFixed(2);
+      totalMise += st;
+      totalGain += st * (parseFloat(b.val) || 1);
+      var card = document.querySelector('.slip-item[data-slip-idx="' + i + '"]');
+      if (!card) return;
+      var gag = card.querySelector('.slip-gagner strong');
+      if (gag) gag.textContent = gain;
+      _syncStakeInput('simple', i, String(st || ''));
+    });
+    var miseEl = document.getElementById('slip-sum-mise');
+    var gainEl = document.getElementById('slip-sum-gain');
+    if (miseEl) miseEl.textContent = totalMise.toFixed(2);
+    if (gainEl) gainEl.textContent = totalGain.toFixed(2);
+  } else if (SLIP_MODE === 'combi') {
+    var cm = slipCombiMeta();
+    _syncStakeInput('combi', 0, String(cm.stake || ''));
+    var oEl = document.getElementById('slip-combi-odds');
+    var mEl = document.getElementById('slip-combi-mise');
+    var bEl = document.getElementById('slip-combi-bonus');
+    var gEl = document.getElementById('slip-combi-gain');
+    if (oEl) oEl.textContent = cm.odds.toFixed(2);
+    if (mEl) mEl.textContent = cm.stake.toFixed(2);
+    if (bEl) {
+      bEl.style.display = cm.bonusPct > 0 ? '' : 'none';
+      if (cm.bonusPct > 0) bEl.textContent = '+' + cm.bonus.toFixed(2);
+    }
+    if (gEl) gEl.textContent = cm.gain.toFixed(2);
+  } else if (SLIP_MODE === 'system') {
+    var sm = slipSystemMeta();
+    var cEl = document.getElementById('slip-sys-count');
+    var mEl2 = document.getElementById('slip-sys-mise');
+    if (cEl) cEl.textContent = String(sm.totalBets);
+    if (mEl2) mEl2.textContent = sm.totalMise.toFixed(2);
+  }
+}
+function slipMarkActiveStake(idx) {
+  document.querySelectorAll('.slip-stake-inp').forEach(function(inp) {
+    var card = inp.closest('.slip-item');
+    var ci = card ? parseInt(card.getAttribute('data-slip-idx'), 10) : -1;
+    inp.classList.toggle('active', ci === idx);
+  });
+}
+
 window.sbUpdateBetStake = function(idx, val) {
-  if (S.betSlip[idx]) S.betSlip[idx].stake = Math.max(0, parseFloat(val) || 0);
-  renderBetSlip();
+  if (!S.betSlip[idx]) return;
+  S.betSlip[idx].stake = slipParseStake(val);
+  patchSlipFinancials();
 };
-window.sbUpdateCombiStake = function(val) { SLIP_COMBI_STAKE = Math.max(0, parseFloat(val) || 0); renderBetSlip(); };
-// Quick-stake chips on the Combiné tab — bump the stake by N (fcbet216).
+window.sbUpdateCombiStake = function(val) {
+  SLIP_COMBI_STAKE = slipParseStake(val);
+  patchSlipFinancials();
+};
 window.sbCombiQuickStake = function(delta) {
-  SLIP_COMBI_STAKE = Math.max(0, (parseFloat(SLIP_COMBI_STAKE) || 0) + (parseFloat(delta) || 0));
-  renderBetSlip();
+  SLIP_COMBI_STAKE = slipParseStake((parseFloat(SLIP_COMBI_STAKE) || 0) + (parseFloat(delta) || 0));
+  _syncStakeInput('combi', 0, String(SLIP_COMBI_STAKE || ''));
+  patchSlipFinancials();
 };
-// Quick-stake chips on the Simple tab — bump bet[idx].stake by N.
 window.sbSimpleQuickStake = function(delta, idx) {
   if (!S.betSlip[idx]) return;
-  S.betSlip[idx].stake = Math.max(0, (parseFloat(S.betSlip[idx].stake) || 0) + (parseFloat(delta) || 0));
+  S.betSlip[idx].stake = slipParseStake((parseFloat(S.betSlip[idx].stake) || 0) + (parseFloat(delta) || 0));
   S._activeStakeIdx = idx;
-  renderBetSlip();
+  _syncStakeInput('simple', idx, String(S.betSlip[idx].stake || ''));
+  slipMarkActiveStake(idx);
+  patchSlipFinancials();
 };
 window.sbActivateStake = function(idx) {
   S._activeStakeIdx = idx;
-  // Don't re-render — would lose focus / cursor. Just update internal state.
+  slipMarkActiveStake(idx);
+  var editor = document.getElementById('slip-stake-editor');
+  if (editor) editor.classList.add('slip-stake-editor--open');
 };
 
 /* ── Stake numpad — 1..9, 0, "." , ⌫, OK ──
@@ -2980,40 +3098,41 @@ function _writeStake(mode, idx, str) {
 }
 window.sbNumpadKey = function(key, mode, idx) {
   var cur = _readStake(mode, idx);
-  // Avoid leading zero "00" and multiple dots
   if (key === '.' && cur.indexOf('.') !== -1) return;
   if (cur === '0' && key !== '.') cur = '';
   cur = cur + key;
-  // Truncate to 2 decimal places
   if (cur.indexOf('.') !== -1) {
     var parts = cur.split('.');
     cur = parts[0] + '.' + (parts[1] || '').slice(0, 2);
   }
   _writeStake(mode, idx, cur);
-  renderBetSlip();
+  _syncStakeInput(mode, idx, cur);
+  patchSlipFinancials();
 };
 window.sbNumpadDel = function(mode, idx) {
   var cur = _readStake(mode, idx);
   cur = cur.slice(0, -1);
   _writeStake(mode, idx, cur);
-  renderBetSlip();
+  _syncStakeInput(mode, idx, cur);
+  patchSlipFinancials();
 };
 window.sbNumpadOk = function(mode, idx) {
-  // OK currently just closes any kind of "edit mode" — placeholder for
-  // future "confirm and place bet" flow.
-  if (mode === 'simple') S._activeStakeIdx = idx;
-  renderBetSlip();
+  if (mode === 'simple') {
+    S._activeStakeIdx = idx;
+    slipMarkActiveStake(idx);
+  }
+  var editor = document.getElementById('slip-stake-editor');
+  if (editor) editor.classList.remove('slip-stake-editor--open');
 };
 window.sbUpdateSysStake = function(type, val) {
-  if (type === 'singles') SLIP_SYS_SINGLES_STAKE = Math.max(0, parseFloat(val) || 0);
-  else SLIP_SYS_COMBO_STAKE = Math.max(0, parseFloat(val) || 0);
-  renderBetSlip();
+  if (type === 'singles') SLIP_SYS_SINGLES_STAKE = slipParseStake(val);
+  else SLIP_SYS_COMBO_STAKE = slipParseStake(val);
+  patchSlipFinancials();
 };
-// Per-level stake for Système mode (Seuls / Doublé / Triplé / ...).
 window.sbUpdateSysLevelStake = function(levelId, val) {
   S._sysStakes = S._sysStakes || {};
-  S._sysStakes[levelId] = Math.max(0, parseFloat(val) || 0);
-  renderBetSlip();
+  S._sysStakes[levelId] = slipParseStake(val);
+  patchSlipFinancials();
 };
 // Accept all pending odds changes — clears the "cotes ont changées" banner.
 window.sbAcceptOddsChanges = function() {
@@ -3078,18 +3197,20 @@ function renderBetSlip() {
     out += '<div class="slip-item'
       + (isExcl ? ' excluded' : '')
       + (SLIP_MODE === 'combi' ? ' combi' : '')
-      + '">';
+      + '" data-slip-idx="' + i + '">';
 
     // ── Header row: ⚽ | match name | [−][B][×]
     out += '<div class="slip-item-hdr">';
     out += '<span class="slip-sport-icon">' + ICON.football + '</span>';
     out += '<span class="slip-match-nm">' + h(b.match) + '</span>';
     out += '<div class="slip-item-btns">';
-    out += '<button class="slip-excl-btn' + (isExcl ? ' excluded' : '') + '" title="Exclure/Inclure" onclick="window.sbToggleExclude(' + i + ')">&#8722;</button>';
-    out += '<button class="slip-banker-btn' + (isBanker ? ' active' : '') + '" title="Banker" onclick="window.sbToggleBanker(' + i + ')">B</button>';
-    out += '<button class="slip-remove-btn" onclick="window.sbRemoveBet(\'' + h(b.id) + '\')">&#215;</button>';
+    out += '<button type="button" class="slip-excl-btn' + (isExcl ? ' excluded' : '') + '" title="Exclure/Inclure" onclick="window.sbToggleExclude(' + i + ')">&#8722;</button>';
+    out += '<button type="button" class="slip-banker-btn' + (isBanker ? ' active' : '') + '" title="Banker" onclick="window.sbToggleBanker(' + i + ')">B</button>';
+    out += '<button type="button" class="slip-remove-btn" onclick="window.sbRemoveBet(\'' + h(b.id) + '\')">&#215;</button>';
     out += '</div>';
     out += '</div>';
+
+    out += '<div class="slip-item-body">';
 
     // ── Market name
     if (b.isBB) {
@@ -3141,29 +3262,31 @@ function renderBetSlip() {
       var gain = +((b.stake || SLIP_STAKE) * b.val).toFixed(2);
       var activeCls = (i === (S._activeStakeIdx || 0)) ? ' active' : '';
       out += '<div class="slip-stake-row">';
-      out += '<input type="number" class="slip-stake-inp' + activeCls + '" value="' + (b.stake || SLIP_STAKE) + '" min="1" step="1" oninput="window.sbUpdateBetStake(' + i + ',this.value)" onfocus="window.sbActivateStake(' + i + ')">';
+      out += '<input type="text" inputmode="decimal" class="slip-stake-inp' + activeCls + '" value="' + (b.stake || SLIP_STAKE) + '" autocomplete="off" oninput="window.sbUpdateBetStake(' + i + ',this.value)" onfocus="window.sbActivateStake(' + i + ')">';
       out += '<span class="slip-gagner">Gagner: <strong>' + gain.toFixed(2) + '</strong></span>';
       out += '</div>';
     }
 
+    out += '</div>'; // slip-item-body
     out += '</div>'; // slip-item
   });
 
-  // ── Simple-mode stake editor: quick stake chips + virtual numpad ──
-  // (Matches fcbet216 reference image 2 — appears immediately below
-  //  the bet card, BEFORE the promo banner.) For Combiné/Système modes
-  //  the editor lives further down inside the mode-specific block.
+  // ── Simple-mode stake editor (quick chips + numpad) ──
   if (SLIP_MODE === 'simple') {
+    var editorOpen = !!document.getElementById('slip-stake-editor') &&
+      document.getElementById('slip-stake-editor').classList.contains('slip-stake-editor--open');
+    out += '<div class="slip-stake-editor' + (editorOpen ? ' slip-stake-editor--open' : '') + '" id="slip-stake-editor">';
     var simpleActiveIdxA = (typeof S._activeStakeIdx === 'number')
       ? Math.min(S._activeStakeIdx, S.betSlip.length - 1)
       : 0;
     if (simpleActiveIdxA < 0) simpleActiveIdxA = 0;
     out += '<div class="slip-quick-stakes">';
     [5, 10, 20, 50].forEach(function(v) {
-      out += '<button class="slip-quick-stake" onclick="window.sbSimpleQuickStake(' + v + ',' + simpleActiveIdxA + ')">+' + v + '</button>';
+      out += '<button type="button" class="slip-quick-stake" onclick="window.sbSimpleQuickStake(' + v + ',' + simpleActiveIdxA + ')">+' + v + '</button>';
     });
     out += '</div>';
     out += renderStakeNumpad('simple', simpleActiveIdxA);
+    out += '</div>';
   }
 
   // ── Promo hint (always shown, matches fcbet) ───────────────
@@ -3196,8 +3319,8 @@ function renderBetSlip() {
       totalGain += st * b.val;
     });
     out += '<div class="slip-summary">';
-    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + totalMise.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Gain total</span><span class="slip-sum-green">' + totalGain.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Mise totale</span><span id="slip-sum-mise">' + totalMise.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Gain total</span><span class="slip-sum-green" id="slip-sum-gain">' + totalGain.toFixed(2) + '</span></div>';
     out += '</div>';
 
   } else if (SLIP_MODE === 'combi') {
@@ -3239,29 +3362,29 @@ function renderBetSlip() {
         + ' ' + bonusPct + '%</span>';
     }
     out += '<span class="slip-combo-mult">' + combiCount + ' x</span>';
-    out += '<input type="number" class="slip-stake-inp slip-combi-stake" id="slip-combi-stake" value="' + stake + '" min="0" step="1" oninput="window.sbUpdateCombiStake(this.value)">';
+    out += '<input type="text" inputmode="decimal" class="slip-stake-inp slip-combi-stake" id="slip-combi-stake" value="' + stake + '" autocomplete="off" oninput="window.sbUpdateCombiStake(this.value)" onfocus="document.getElementById(\'slip-stake-editor\')&&document.getElementById(\'slip-stake-editor\').classList.add(\'slip-stake-editor--open\')">';
     out += '</div>';
 
-    // Quick stake chips — +5 / +10 / +20 / +50 (matches fcbet216 image 8)
+    out += '<div class="slip-stake-editor slip-stake-editor--open" id="slip-stake-editor">';
     out += '<div class="slip-quick-stakes">';
     [5, 10, 20, 50].forEach(function(v) {
-      out += '<button class="slip-quick-stake" onclick="window.sbCombiQuickStake(' + v + ')">+' + v + '</button>';
+      out += '<button type="button" class="slip-quick-stake" onclick="window.sbCombiQuickStake(' + v + ')">+' + v + '</button>';
     });
     out += '</div>';
-    // Virtual numpad — operates on the Combo stake (fcbet216 image 8)
     out += renderStakeNumpad('combi');
+    out += '</div>'; // slip-stake-editor
 
     // Summary (cotes / mise / bonus / gain total)
     var baseGain = stake * combiOdds;
     var bonus = baseGain * bonusPct / 100;
     var combiGain = baseGain + bonus;
     out += '<div class="slip-summary">';
-    out += '<div class="slip-sum-row"><span>Cotes totales</span><span>' + combiOdds.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + stake.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Cotes totales</span><span id="slip-combi-odds">' + combiOdds.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Mise totale</span><span id="slip-combi-mise">' + stake.toFixed(2) + '</span></div>';
     if (bonusPct > 0) {
-      out += '<div class="slip-sum-row"><span>Gains supplémentaires</span><span class="slip-sum-green">+' + bonus.toFixed(2) + '</span></div>';
+      out += '<div class="slip-sum-row" id="slip-combi-bonus-row"><span>Gains supplémentaires</span><span class="slip-sum-green" id="slip-combi-bonus">+' + bonus.toFixed(2) + '</span></div>';
     }
-    out += '<div class="slip-sum-row slip-sum-total"><span>Gain total</span><span class="slip-sum-green">' + combiGain.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row slip-sum-total"><span>Gain total</span><span class="slip-sum-green" id="slip-combi-gain">' + combiGain.toFixed(2) + '</span></div>';
     out += '</div>';
 
   } else if (SLIP_MODE === 'system') {
@@ -3316,14 +3439,14 @@ function renderBetSlip() {
       out += '<div class="slip-sys-row">';
       out += '<span class="slip-sys-lbl">' + lvl.lbl + '</span>';
       out += '<span class="slip-sys-cnt">' + combos + ' x</span>';
-      out += '<input type="number" class="slip-stake-inp" value="' + (stake || '') + '" min="0" step="1" placeholder="Fixer la mise" oninput="window.sbUpdateSysLevelStake(\'' + lvl.id + '\',this.value)">';
+      out += '<input type="text" inputmode="decimal" class="slip-stake-inp" value="' + (stake || '') + '" autocomplete="off" placeholder="Fixer la mise" oninput="window.sbUpdateSysLevelStake(\'' + lvl.id + '\',this.value)">';
       out += '</div>';
     });
 
     // Summary
     out += '<div class="slip-summary">';
-    out += '<div class="slip-sum-row"><span>Nombre de paris</span><span>' + totalBetsCount + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + totalSysMise.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Nombre de paris</span><span id="slip-sys-count">' + totalBetsCount + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Mise totale</span><span id="slip-sys-mise">' + totalSysMise.toFixed(2) + '</span></div>';
     out += '</div>';
   }
 

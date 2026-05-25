@@ -4076,41 +4076,272 @@ button.md-odd-btn,
 /* ════════════════════════════════════════════════════════════
    BET SLIP — Altenar reference design (Simple/Combiné/Système)
    ════════════════════════════════════════════════════════════ */
-/* ── Fiche de Pari — full fcbet216 match ── */
+/* ── Fiche de Pari — fcbet216 exact match ── */
+body .sb-root .slip-tabs,
+.sb-root .slip-tabs,
 .slip-tabs {
-  display: flex;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: #1a1a1a;
+  display: flex !important;
+  gap: 4px !important;
+  padding: 10px 12px 0 !important;
+  background: #121212 !important;
+  border-bottom: none !important;
 }
+body .sb-root .slip-tab,
+.sb-root .slip-tab,
 .slip-tab {
-  flex: 1;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: rgba(255,255,255,0.50);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 10px 4px;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  outline: none;
-  transition: color 0.12s, border-color 0.12s;
-  white-space: nowrap;
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 6px 6px 0 0 !important;
+  color: rgba(255,255,255,0.50) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 11px 6px !important;
+  cursor: pointer !important;
+  font-family: 'Roboto', sans-serif !important;
+  outline: none !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  box-shadow: none !important;
 }
-.slip-tab:hover { color: rgba(255,255,255,0.80); }
-.slip-tab.active { color: #fff; border-bottom-color: var(--sb-green); font-weight: 600; }
+body .sb-root .slip-tab.active,
+.sb-root .slip-tab.active,
+.slip-tab.active {
+  background: rgb(49,49,49) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  border-bottom: none !important;
+}
 
-/* ── Bet items — exact fcbet216 card design ── */
+body .sb-root .slip-item,
+.sb-root .slip-item,
 .slip-item {
-  padding: 10px 12px 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  background: #1e1e1e;
+  margin: 10px 12px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: rgb(49,49,49) !important;
+  overflow: hidden !important;
 }
+body .sb-root .slip-item.combi,
+.sb-root .slip-item.combi,
+.slip-item.combi {
+  background: rgba(120,75,65,0.35) !important;
+}
+body .sb-root .slip-item-body,
+.sb-root .slip-item-body,
+.slip-item-body {
+  padding: 12px 14px 14px !important;
+}
+body .sb-root .slip-item-hdr,
+.sb-root .slip-item-hdr,
 .slip-item-hdr {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  margin-bottom: 4px;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  padding: 12px 14px 0 !important;
+  margin: 0 !important;
+}
+body .sb-root .slip-match-nm,
+.sb-root .slip-match-nm,
+.slip-match-nm {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  line-height: 1.35 !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+body .sb-root .slip-market-nm,
+.sb-root .slip-market-nm,
+.slip-market-nm {
+  font-size: 11px !important;
+  color: rgba(255,255,255,0.45) !important;
+  margin: 6px 0 4px !important;
+  padding: 0 !important;
+}
+body .sb-root .slip-sel-row,
+.sb-root .slip-sel-row,
+.slip-sel-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  margin: 0 0 10px !important;
+}
+body .sb-root .slip-sel-lbl,
+.sb-root .slip-sel-lbl,
+.slip-sel-lbl {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  flex: 1 !important;
+}
+body .sb-root .slip-odds-pill,
+.sb-root .slip-odds-pill,
+.slip-odds-pill {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  min-width: auto !important;
+}
+
+body .sb-root .slip-stake-row,
+.sb-root .slip-stake-row,
+.slip-stake-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+}
+body .sb-root .slip-stake-inp,
+.sb-root .slip-stake-inp,
+.slip-stake-inp {
+  width: 96px !important;
+  min-width: 96px !important;
+  height: 40px !important;
+  background: rgb(38,38,38) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 0 12px !important;
+  outline: none !important;
+  text-align: left !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+body .sb-root .slip-stake-inp:focus,
+body .sb-root .slip-stake-inp.active,
+.sb-root .slip-stake-inp:focus,
+.sb-root .slip-stake-inp.active,
+.slip-stake-inp:focus,
+.slip-stake-inp.active {
+  border-color: rgb(113,246,105) !important;
+  box-shadow: 0 0 0 1px rgba(113,246,105,0.25) !important;
+}
+body .sb-root .slip-gagner,
+.sb-root .slip-gagner,
+.slip-gagner {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.55) !important;
+  margin-left: auto !important;
+  white-space: nowrap !important;
+}
+body .sb-root .slip-gagner strong,
+.sb-root .slip-gagner strong,
+.slip-gagner strong {
+  color: rgb(113,246,105) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+/* Stake editor — numpad hidden until input focused (mobile); never on desktop */
+.slip-stake-editor { display: none !important; }
+.slip-stake-editor.slip-stake-editor--open { display: block !important; }
+@media (min-width: 1101px) {
+  .slip-stake-editor { display: none !important; }
+}
+
+body .sb-root .slip-promo,
+.sb-root .slip-promo,
+.slip-promo {
+  margin: 10px 12px !important;
+  padding: 12px 14px !important;
+  background: rgba(112,246,105,0.04) !important;
+  border: 1px solid rgba(112,246,105,0.30) !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  color: rgba(255,255,255,0.65) !important;
+  line-height: 1.5 !important;
+}
+body .sb-root .slip-clear-btn,
+.sb-root .slip-clear-btn,
+.slip-clear-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: calc(100% - 24px) !important;
+  margin: 8px 12px !important;
+  padding: 12px !important;
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 8px !important;
+  color: rgb(113,246,105) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+body .sb-root .slip-summary,
+.sb-root .slip-summary,
+.slip-summary {
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+  padding: 12px 14px !important;
+  margin: 4px 0 0 !important;
+}
+body .sb-root .slip-sum-row,
+.sb-root .slip-sum-row,
+.slip-sum-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 13px !important;
+  color: rgba(255,255,255,0.55) !important;
+  margin-bottom: 8px !important;
+  padding: 0 !important;
+}
+body .sb-root .slip-sum-green,
+.sb-root .slip-sum-green,
+.slip-sum-green {
+  font-weight: 700 !important;
+  color: rgb(113,246,105) !important;
+  font-size: 14px !important;
+}
+
+body .sb-root .slip-combo-row,
+.sb-root .slip-combo-row,
+.slip-combo-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 14px !important;
+  margin: 0 12px !important;
+  background: rgb(49,49,49) !important;
+  border-radius: 8px !important;
+}
+body .sb-root .slip-sys-row,
+.sb-root .slip-sys-row,
+.slip-sys-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  margin: 0 12px 6px !important;
+  background: rgb(49,49,49) !important;
+  border-radius: 8px !important;
+  border-top: none !important;
+}
+body .sb-root .slip-sys-row .slip-stake-inp,
+.sb-root .slip-sys-row .slip-stake-inp {
+  margin-left: auto !important;
+  width: 110px !important;
+  min-width: 110px !important;
+}
+
+#sb-slip-body {
+  overflow-y: auto !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: 8px !important;
 }
 .slip-sport-icon {
   color: rgba(255,255,255,0.45);
@@ -4323,62 +4554,6 @@ button.md-odd-btn,
 .slip-leg-sel { font-size: 12px; font-weight: 600; color: #fff; }
 .slip-leg-del { background: none; border: none; color: rgba(255,255,255,0.35); cursor: pointer; font-size: 13px; padding: 0 2px; outline: none; }
 .slip-leg-del:hover { color: rgb(251,51,51); }
-/* Stake row */
-.slip-stake-row {
-  display: flex; align-items: center; gap: 10px; margin-top: 8px; padding-left: 23px;
-}
-.slip-stake-inp {
-  width: 64px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 6px;
-  color: #fff; font-family: 'Roboto',sans-serif; font-size: 13px; font-weight: 600;
-  padding: 5px 8px; outline: none; text-align: center;
-  transition: border-color 0.15s;
-}
-.slip-stake-inp:focus,
-.slip-stake-inp.active {
-  border-color: rgb(113,246,105);
-}
-.slip-gagner { font-size: 12px; color: rgba(255,255,255,0.6); margin-left: auto; white-space: nowrap; }
-.slip-gagner strong { color: var(--sb-green); font-size: 13px; }
-
-/* Promo hint — always shown, green border */
-.slip-promo {
-  margin: 8px 12px;
-  padding: 10px 12px;
-  background: rgba(112,246,105,0.05);
-  border: 1px solid rgba(112,246,105,0.25);
-  border-radius: 6px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.60);
-  line-height: 1.5;
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-}
-.slip-promo svg { flex-shrink: 0; margin-top: 1px; color: var(--sb-green); }
-.slip-promo strong { color: var(--sb-green); }
-
-/* Clear button — green text, trash icon */
-.slip-clear-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: var(--sb-green);
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px;
-  cursor: pointer;
-  outline: none;
-  transition: opacity 0.12s;
-}
-.slip-clear-btn:hover { opacity: 0.75; }
 
 /* Odds changed warning — orange background (exact fcbet) */
 .slip-odds-warning {
@@ -4395,42 +4570,13 @@ button.md-odd-btn,
 }
 .slip-odds-warning svg { flex-shrink: 0; margin-top: 1px; }
 
-/* Summary rows */
-.slip-summary {
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding: 10px 12px;
-}
-.slip-sum-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 5px;
-}
-.slip-sum-row:last-child { margin-bottom: 0; }
-.slip-sum-green { font-weight: 700; color: var(--sb-green); font-size: 13px; }
-
-/* Combo row (Combiné mode) */
-.slip-combo-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 14px;
-  border-top: 1px solid var(--sb-border);
-}
 .slip-combo-lbl { font-size: 13px; font-weight: 700; color: var(--sb-text-1); }
 .slip-combo-bonus { font-size: 11px; color: var(--sb-green); background: rgba(112,246,105,0.1); padding: 2px 6px; border-radius: 4px; }
 .slip-combo-mult { font-size: 12px; color: var(--sb-text-2); }
-.slip-combo-row .slip-stake-inp { margin-left: auto; width: 60px; }
+.slip-combo-row .slip-stake-inp { margin-left: auto !important; width: 96px !important; min-width: 96px !important; }
 
-/* System row (Système mode) */
-.slip-sys-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-}
 .slip-sys-lbl { font-size: 14px; font-weight: 700; color: #fff; min-width: 55px; }
 .slip-sys-cnt { font-size: 13px; color: rgba(255,255,255,0.5); }
-.slip-sys-row .slip-stake-inp { margin-left: auto; width: 120px; }
 /* Excluded bet card — dimmed */
 .slip-item.excluded { opacity: 0.45; }
 .slip-item.excluded .slip-sel-odds { text-decoration: line-through; }

@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525cg';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ch';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -508,6 +508,30 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-fb-circle svg{color:rgba(255,255,255,0.88);width:22px;height:22px;}
 .sb-fb-count,body .sb-root .sb-fb-count{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;background:rgb(113,246,105);color:#000;border-radius:999px;font-size:11px;font-weight:800;line-height:22px;text-align:center;border:2px solid #1e1e1e;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
 .sb-fb-label,body .sb-root .sb-fb-label{font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.7);white-space:nowrap;}
+/* ── Fiche de Pari — critical inline (fcbet216 reference) ── */
+body .sb-root .slip-tabs,.sb-root .slip-tabs{display:flex!important;gap:4px!important;padding:10px 12px 0!important;background:#121212!important;}
+body .sb-root .slip-tab,.sb-root .slip-tab{flex:1!important;background:transparent!important;border:none!important;border-radius:6px 6px 0 0!important;color:rgba(255,255,255,0.5)!important;font-size:13px!important;padding:11px 6px!important;cursor:pointer!important;}
+body .sb-root .slip-tab.active,.sb-root .slip-tab.active{background:rgb(49,49,49)!important;color:#fff!important;font-weight:600!important;}
+body .sb-root .slip-item,.sb-root .slip-item{margin:10px 12px!important;padding:0!important;border-radius:8px!important;background:rgb(49,49,49)!important;border:none!important;overflow:hidden!important;}
+body .sb-root .slip-item.combi,.sb-root .slip-item.combi{background:rgba(120,75,65,0.35)!important;}
+body .sb-root .slip-item-body,.sb-root .slip-item-body{padding:12px 14px 14px!important;}
+body .sb-root .slip-item-hdr,.sb-root .slip-item-hdr{display:flex!important;align-items:flex-start!important;gap:8px!important;padding:12px 14px 0!important;}
+body .sb-root .slip-match-nm,.sb-root .slip-match-nm{font-size:13px!important;font-weight:700!important;color:#fff!important;flex:1!important;}
+body .sb-root .slip-market-nm,.sb-root .slip-market-nm{font-size:11px!important;color:rgba(255,255,255,0.45)!important;margin:6px 0 4px!important;padding:0!important;}
+body .sb-root .slip-sel-row,.sb-root .slip-sel-row{display:flex!important;align-items:center!important;margin:0 0 10px!important;padding:0!important;}
+body .sb-root .slip-sel-lbl,.sb-root .slip-sel-lbl{font-size:15px!important;font-weight:700!important;color:#fff!important;flex:1!important;}
+body .sb-root .slip-stake-row,.sb-root .slip-stake-row{display:flex!important;align-items:center!important;gap:12px!important;margin:4px 0 0!important;padding:0!important;}
+body .sb-root .slip-stake-inp,.sb-root .slip-stake-inp{width:96px!important;min-width:96px!important;height:40px!important;background:rgb(38,38,38)!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:6px!important;color:#fff!important;font-size:14px!important;font-weight:600!important;padding:0 12px!important;text-align:left!important;box-shadow:none!important;-webkit-appearance:none!important;}
+body .sb-root .slip-stake-inp:focus,body .sb-root .slip-stake-inp.active,.sb-root .slip-stake-inp:focus,.sb-root .slip-stake-inp.active{border-color:rgb(113,246,105)!important;}
+body .sb-root .slip-gagner,.sb-root .slip-gagner{font-size:12px!important;color:rgba(255,255,255,0.55)!important;margin-left:auto!important;}
+body .sb-root .slip-gagner strong,.sb-root .slip-gagner strong{color:rgb(113,246,105)!important;font-weight:700!important;}
+body .sb-root .slip-promo,.sb-root .slip-promo{margin:10px 12px!important;padding:12px 14px!important;border:1px solid rgba(112,246,105,0.3)!important;border-radius:8px!important;}
+body .sb-root .slip-clear-btn,.sb-root .slip-clear-btn{width:calc(100% - 24px)!important;margin:8px 12px!important;padding:12px!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:8px!important;color:rgb(113,246,105)!important;}
+body .sb-root .slip-summary,.sb-root .slip-summary{border-top:1px solid rgba(255,255,255,0.08)!important;padding:12px 14px!important;}
+body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:#000!important;border:0!important;border-radius:8px!important;font-weight:800!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.slip-stake-editor{display:none!important;}
+.slip-stake-editor.slip-stake-editor--open{display:block!important;}
+@media(min-width:1101px){.slip-stake-editor{display:none!important;}}
 /* ── Virtual stake numpad — critical inline CSS, fcbet216 image 2 ── */
 .slip-quick-stakes,body .sb-root .slip-quick-stakes{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;padding:0 12px 12px!important;}
 .slip-quick-stake,body .sb-root .slip-quick-stake{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:700!important;padding:12px 0!important;cursor:pointer!important;outline:none!important;}
