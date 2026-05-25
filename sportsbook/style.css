@@ -3562,24 +3562,33 @@ button.sb-btn-live.active .sb-live-badge,
   font-weight: 700 !important;
 }
 
+/* Match-detail compact card — fcbet216 reference.
+   Surface uses a slightly cooler/lighter dark gray (rgb(40,42,48)) to
+   match fcbet's elevated card look, with a subtle inner top-strip via
+   a 1px bottom border under the league header that visually separates
+   it from the body without a heavy two-tone fill. */
 .md-card--compact {
-  background: rgb(28,28,28) !important;
+  background: rgb(40,42,48) !important;
   border: 1px solid rgba(255,255,255,0.05) !important;
   border-radius: 10px !important;
-  padding: 12px 14px !important;
+  padding: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
+  gap: 0 !important;
   margin-bottom: 12px !important;
   font-family: 'Roboto', sans-serif !important;
+  overflow: hidden;
 }
 .md-card-top {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
+  padding: 10px 14px 8px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(255,255,255,0.02) !important;
 }
 .md-card-flag { width: 18px !important; height: 13px !important; object-fit: cover !important; border-radius: 2px !important; flex-shrink: 0; }
-.md-card-league { flex: 1 1 auto !important; color: rgba(255,255,255,0.55) !important; font-size: 12px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500 !important; }
+.md-card-league { flex: 1 1 auto !important; color: rgba(255,255,255,0.72) !important; font-size: 13px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600 !important; }
 .md-card-date   { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; flex-shrink: 0; }
 
 /* Period + timer row — fcbet216 image 3 reference.
@@ -3592,7 +3601,7 @@ button.sb-btn-live.active .sb-live-badge,
   align-items: center !important;
   justify-content: center !important;
   gap: 10px !important;
-  padding: 2px 0 !important;
+  padding: 10px 14px 4px !important;
 }
 .md-card-info {
   color: rgba(255,255,255,0.85) !important;
@@ -3621,11 +3630,11 @@ button.sb-btn-live.active .sb-live-badge,
   display: grid !important;
   grid-template-columns: 1fr auto auto auto 1fr !important;
   align-items: center !important;
-  gap: 10px !important;
-  padding: 2px 0 !important;
+  gap: 12px !important;
+  padding: 6px 14px 8px !important;
 }
 .md-card-team-abbr {
-  font-size: 15px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
   color: #ffffff !important;
   letter-spacing: 0.4px !important;
@@ -3633,14 +3642,14 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .md-card-team-home { text-align: right !important; }
 .md-card-team-away { text-align: left !important; }
-.md-card-jersey { width: 28px !important; height: 28px !important; flex-shrink: 0; }
-.md-card-score-col { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 56px; }
+.md-card-jersey { width: 30px !important; height: 30px !important; flex-shrink: 0; }
+.md-card-score-col { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 64px; }
 .md-card-score {
-  font-size: 18px !important;
+  font-size: 22px !important;
   font-weight: 700 !important;
   color: var(--sb-green) !important;
   line-height: 1 !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.5px !important;
   font-variant-numeric: tabular-nums !important;
 }
 .md-card-score--vs { color: rgba(255,255,255,0.55) !important; font-size: 14px !important; font-weight: 600 !important; }
@@ -3648,8 +3657,8 @@ button.sb-btn-live.active .sb-live-badge,
 
 .md-card--compact .md-stats-bar {
   border-top: 1px solid rgba(255,255,255,0.06) !important;
-  padding: 8px 0 2px !important;
-  margin-top: 4px !important;
+  padding: 10px 12px !important;
+  margin-top: 0 !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
