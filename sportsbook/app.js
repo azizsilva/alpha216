@@ -194,6 +194,61 @@ function formatOdd(decVal) {
   return v.toFixed(2); // decimal default
 }
 
+/* ── Kickoff-derived fallback timer ─────────────────────────────
+ * Some third-party feeds don't always return m.timer for live
+ * matches — especially smaller leagues / women's matches /
+ * niche competitions. Without timer the user saw "ⓘ 00:00" with
+ * no period name, even though the match was clearly live.
+ *
+ * Solution: derive {tm, ts, md} purely from the kickoff timestamp
+ * (m.time, unix seconds) and the current wall clock. We assume a
+ * standard football timeline (45+15+45) and inject a synthetic
+ * Mi-temps window between 45-60 minutes. Returns null only when
+ * the match clearly hasn't kicked off yet.  */
+function computeFallbackTimer(m) {
+  if (!m) return null;
+  var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
+  if (kickoff <= 0) return null;
+  var nowSec = Math.floor(Date.now() / 1000);
+  var elapsed = nowSec - kickoff;
+  if (elapsed < 0) return null;       // not started yet
+  var sid = parseInt(m.sport_id || 1, 10);
+  // Football timeline: 0-45 first half, 45-60 (15 min) halftime,
+  // 60-105 second half, >105 stoppage / ET. We map the wall time
+  // back onto match minutes so the timer reads naturally.
+  if (sid === 1 || sid === 36) {
+    var totalMin = Math.floor(elapsed / 60);
+    var sec = elapsed % 60;
+    if (totalMin <= 45) {
+      return { tm: totalMin, ts: sec, md: '0' };
+    }
+    if (totalMin > 45 && totalMin < 60) {
+      return { tm: 45, ts: 0, md: '1' };  // Mi-temps
+    }
+    // Second half: subtract the 15 min break so the clock reads 46-90
+    var secondHalfMin = 46 + (totalMin - 60);
+    if (secondHalfMin <= 90) {
+      return { tm: secondHalfMin, ts: sec, md: '0' };
+    }
+    return { tm: 90, ts: 0, md: '0' }; // stoppage — frozen at 90
+  }
+  // Generic non-football: just count up
+  return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
+}
+
+/* ── Merge real m.timer with kickoff fallback. Returns the timer
+ * object the rest of the code should use — real data wins, but
+ * we never leave the user staring at 00:00 for a live match. */
+function effectiveTimer(m) {
+  if (m && m.timer) {
+    var hasReal = (m.timer.tm !== undefined && m.timer.tm !== null && m.timer.tm !== '')
+               || (m.timer.TM !== undefined && m.timer.TM !== null && m.timer.TM !== '')
+               || (String(m.timer.md || m.timer.MD || '') === '1');
+    if (hasReal) return m.timer;
+  }
+  return computeFallbackTimer(m);
+}
+
 /* ── Build the inner HTML for the match-detail period+timer block.
  * Used both by initial render (renderMatchDetail) and by the live
  * 3s poll (patchMatchDetailLive). Lets the period text appear as
@@ -217,9 +272,14 @@ function buildMdPeriodBlock(period, isHT, timerStr) {
 
 /* ── Period detection (1ère mi-temps, 2ème quart, etc.) ─── */
 function getMatchPeriod(m) {
-  if (!m.timer) return '';
-  var md  = m.timer.md || m.timer.MD || '';
-  var tm  = parseInt(m.timer.tm || m.timer.TM || 0) || 0;
+  if (!m) return '';
+  // Prefer real m.timer, but fall back to kickoff-derived timer
+  // so non-major leagues without timer feeds still show the
+  // correct period name.
+  var tmr = effectiveTimer(m);
+  if (!tmr) return '';
+  var md  = String(tmr.md || tmr.MD || '');
+  var tm  = parseInt(tmr.tm || tmr.TM || 0) || 0;
   var sid = parseInt(m.sport_id || 1);
   if (md === '1') return 'Mi-temps';
   if (md === '2') return 'Pause';
@@ -278,12 +338,16 @@ function formatLiveMinute(m) {
 /* ── Live counting timer (counts up from API snapshot) ─── */
 function startMatchTimer(m) {
   clearInterval(window._mdTimerInterval);
-  if (!m || !m.timer) return;
-  var isHalfTime = (m.timer.md === '1' || m.timer.MD === '1');
+  if (!m) return;
+  // Use effectiveTimer so we keep ticking even when the third
+  // party hasn't sent a real m.timer for this match.
+  var tmr = effectiveTimer(m);
+  if (!tmr) return;
+  var isHalfTime = (String(tmr.md || tmr.MD || '') === '1');
   if (isHalfTime) return;
 
-  var baseMin = parseInt(m.timer.tm || m.timer.TM || 0) || 0;
-  var baseSec = parseInt(m.timer.ts || m.timer.TS || 0) || 0;
+  var baseMin = parseInt(tmr.tm || tmr.TM || 0) || 0;
+  var baseSec = parseInt(tmr.ts || tmr.TS || 0) || 0;
   var totalBase = baseMin * 60 + baseSec;
   var t0 = Date.now();
 
@@ -337,15 +401,16 @@ function patchMatchDetailLive(m, markets) {
   }
 
   // Timer + period — surgically re-fill #md-period-block so the
-  // text appears as soon as the API gives us a timer object. We
-  // can't just update #md-timer-display because the period name
-  // ("1ère mi-temps") and the `|` separator only render when we
-  // know the period — both arrive from the same API payload.
-  if (m.timer) {
-    var isHTnow = (String(m.timer.md || m.timer.MD || '') === '1');
+  // text appears as soon as we have *any* timer data, real or
+  // kickoff-derived. We can't just update #md-timer-display
+  // because the period name and the `|` separator only render
+  // when we know the period.
+  var effPatch = effectiveTimer(m);
+  if (effPatch) {
+    var isHTnow = (String(effPatch.md || effPatch.MD || '') === '1');
     var pname  = getMatchPeriod(m);
-    var tmStr  = String(m.timer.tm || m.timer.TM || '0').padStart(2, '0');
-    var tsStr  = String(m.timer.ts || m.timer.TS || '0').padStart(2, '0');
+    var tmStr  = String(effPatch.tm || effPatch.TM || '0').padStart(2, '0');
+    var tsStr  = String(effPatch.ts || effPatch.TS || '0').padStart(2, '0');
     var clock  = tmStr + ':' + tsStr;
     var pblock = document.getElementById('md-period-block');
     if (pblock) {
@@ -3460,9 +3525,10 @@ function renderMatchDetail(m, markets) {
   var country  = guessCountry(lg);
   var flagUrl  = getFlag(country);
   var period   = isLive ? getMatchPeriod(m) : '';
-  var baseMins = isLive && m.timer ? (parseInt(m.timer.tm || 0) || 0) : 0;
-  var baseSecs = isLive && m.timer ? (parseInt(m.timer.ts || 0) || 0) : 0;
-  var isHT     = isLive && m.timer && (String(m.timer.md||m.timer.MD||'') === '1');
+  var effTmr   = isLive ? effectiveTimer(m) : null;
+  var baseMins = effTmr ? (parseInt(effTmr.tm || 0) || 0) : 0;
+  var baseSecs = effTmr ? (parseInt(effTmr.ts || 0) || 0) : 0;
+  var isHT     = effTmr && (String(effTmr.md||effTmr.MD||'') === '1');
   var timerInit = isHT ? 'Mi-temps' : (String(baseMins).padStart(2,'0') + ':' + String(baseSecs).padStart(2,'0'));
 
   var ts2 = parseInt(m.time || 0);
