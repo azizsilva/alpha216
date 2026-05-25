@@ -972,17 +972,15 @@ function startPolling() {
           liveRefreshP = applyLiveRefresh(liveIdsMain, S.matches);
         }
       }
-      // Main view: poll inplay or upcoming based on date
-      // If on upcoming view but some matches have already started, switch to inplay automatically
-      var hasStarted = S.activeDateOffset > 0 && S.matches.some(function(m) {
-        return isMatchLive(m) && String(m.time_status) !== '1';
-      });
-      var apiAction = (S.activeDateOffset > 0 && !hasStarted) ? 'upcoming' : 'inplay';
-      if (hasStarted) {
-        // Matches went live — flip to inplay view
-        S.activeDateOffset = 0;
-        S.activeAction = 'inplay';
-      }
+      // Main view: poll inplay or upcoming based on USER-PICKED date.
+      // IMPORTANT: never silently flip activeDateOffset back to 0 — the
+      // user explicitly chose that date and the previous heuristic
+      // ("a match's start time has passed") was firing on day-N matches
+      // that had been loaded into S.matches, causing the date row to
+      // snap back to TODAY mid-poll. We respect the user's selection;
+      // if a match goes live on a future date, the user can re-pick
+      // "today" or "EN DIRECT" themselves.
+      var apiAction = (S.activeDateOffset > 0) ? 'upcoming' : 'inplay';
       url = BASE + 'sportsbook/api.php?action=' + apiAction + '&sport_id=' + S.activeSportId;
       targetList = S.matches;
       isChamp = false;
@@ -2791,6 +2789,11 @@ window.sbFilterByDate = function(btn, dayOffset) {
   document.querySelectorAll('.sb-date-item').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   S.activeDateOffset = dayOffset;
+  // Keep state coherent so the next poll cycle does NOT misinterpret the
+  // view as live and snap activeDateOffset back to 0. Also flip the tab
+  // so .sb-btn-live no longer claims the active state.
+  S.activeAction = (dayOffset === 0) ? 'inplay' : 'upcoming';
+  if (dayOffset > 0) S.activeTab = 'home';
 
   // If currently in a league view, stay in that league but re-filter by date
   if (S.activeLeagueName) {
@@ -2798,6 +2801,9 @@ window.sbFilterByDate = function(btn, dayOffset) {
   } else {
     loadAndFilter(dayOffset === 0 ? 'inplay' : 'upcoming', S.activeSportId, null);
   }
+  // Restart polling so the interval (5s live / 15s upcoming) and the
+  // action used by doPoll match the new date selection.
+  startPolling();
 };
 
 // Switch to live view (En direct button)

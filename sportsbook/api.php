@@ -812,7 +812,68 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         }
     }
 
-    echo json_encode(['success' => 1, 'results' => $results]);
+    // ── FAST RETURN + ASYNC prematch odds fill ──────────────────────────
+    // Collect upcoming matches still missing odds; respond to client
+    // FIRST so the UI paints immediately, then fetch prematch odds in
+    // the background and persist them to DB so the next poll cycle
+    // shows real values instead of 🔒 locks.
+    $needs_async_up = [];
+    foreach ($results as $m_chk) {
+        if (empty($m_chk['live_odds']['h']) || (float)($m_chk['live_odds']['h'] ?? 0) < 1.01) {
+            if (!empty($m_chk['id'])) $needs_async_up[] = $m_chk['id'];
+        }
+    }
+    // Cap to avoid hammering BetsAPI per request — daemon picks up the rest
+    $needs_async_up = array_slice(array_values(array_unique($needs_async_up)), 0, 12);
+
+    $json_out_up = json_encode(['success' => 1, 'results' => $results,
+                                 'odds_pending' => count($needs_async_up)]);
+    header('Content-Type: application/json');
+    if (function_exists('fastcgi_finish_request')) {
+        echo $json_out_up;
+        fastcgi_finish_request();
+    } else {
+        header('Content-Length: ' . strlen($json_out_up));
+        header('Connection: close');
+        echo $json_out_up;
+        @ob_end_flush(); @flush();
+    }
+
+    if (!empty($needs_async_up) && $db_connected) {
+        @set_time_limit(120);
+        foreach ($needs_async_up as $fi) {
+            if (!$fi) continue;
+            // Per-match dedup: skip if we tried within the last 5 minutes,
+            // even if we got no odds back. Prevents 5 polls × 12 matches
+            // = 60 BetsAPI calls/min on a single sport.
+            $pm_lock = $up_cache_dir . '/pm_' . $fi . '.lock';
+            if (file_exists($pm_lock) && (time() - filemtime($pm_lock)) < 300) continue;
+            @touch($pm_lock);
+            $pm = null;
+            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or);
+            if (!$pm) {
+                $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+                if ($or2 && !empty($or2['results'])) {
+                    $pm = api_parse_prematch_odds($or2);
+                    if (!$pm && function_exists('parse_event_stream_odds')) {
+                        $pm = parse_event_stream_odds($or2['results'] ?? []);
+                    }
+                }
+            }
+            if (!$pm || ($pm['h'] ?? 0) < 1.01) continue;
+            try {
+                $rj = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=?");
+                $rj->execute([$fi]);
+                $raw = $rj->fetchColumn();
+                if ($raw) {
+                    $mdata = json_decode($raw, true);
+                    $mdata['live_odds'] = $pm;
+                    $pdo->prepare("UPDATE sb_matches SET raw_json=? WHERE id=?")->execute([json_encode($mdata), $fi]);
+                }
+            } catch (Exception $e) {}
+        }
+    }
     exit;
 }
 
