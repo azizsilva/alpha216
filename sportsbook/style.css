@@ -5395,32 +5395,33 @@ body .sb-root .sb-champ-mkt-opt.active {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  gap: 8px !important;         /* SEPARATION between the two t-shirts */
+  gap: 4px !important;         /* fcbet216 — shirts almost touching */
   flex-shrink: 0 !important;
-  padding: 0 4px 0 0 !important;
+  padding: 0 6px 0 0 !important;
 }
-/* Live card jersey — dark CIRCLE wrapper around each shirt SVG.
-   fcbet216 reference (Notts County vs Salford City FC): the two team
-   jerseys sit inside small dark gray circles, side-by-side. */
+/* Live card jersey — fcbet216 EXACT (Notts County vs Salford City FC):
+   small dark gray circle, 1px white border, smaller shirt inside,
+   tight gap between the two jerseys so they sit close together. */
 .sb-root .mc-jersey-cell,
 .sb-root .mc-jersey-cell--circle {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 32px !important;
-  height: 32px !important;
+  width: 26px !important;
+  height: 26px !important;
   border-radius: 50% !important;
   background: rgb(48,48,48) !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.95) !important;  /* fcbet white edge */
   flex-shrink: 0 !important;
   overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 .sb-root .mc-jersey-cell .mc-jersey-svg,
 .sb-root .mc-jersey-cell--circle .mc-jersey-svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
   display: block !important;
-  stroke: rgba(255,255,255,0.9) !important;
+  stroke: rgba(255,255,255,0.95) !important;
   stroke-width: 0.6 !important;
 }
 .sb-root .mc-teams-wrap--side .mc-teams-stacked {
@@ -5565,25 +5566,25 @@ body .sb-root .sb-champ-mkt-opt.active {
   height: 16px !important;
 }
 .sb-root .mc-signal-ico svg { display: block !important; width: 14px !important; height: 14px !important; }
-/* Legacy circle shirt cell — render same dark CIRCLE as the new
-   .mc-jersey-cell so any older markup also shows the correct shape. */
+/* Legacy circle shirt cell — same compact fcbet216 spec */
 .sb-root .mc-shirt-cell--circle,
 .sb-root .mc-shirt-cell {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 32px !important;
-  height: 32px !important;
+  width: 26px !important;
+  height: 26px !important;
   border-radius: 50% !important;
   background: rgb(48,48,48) !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.95) !important;
   flex-shrink: 0 !important;
   overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 .sb-root .mc-shirt-cell--circle .mc-jersey-svg,
 .sb-root .mc-shirt-cell .mc-jersey-svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
   display: block !important;
 }
 
