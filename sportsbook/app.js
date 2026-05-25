@@ -12,7 +12,7 @@
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
   // Static version = no FOUC (browser caches the file between refreshes)
   // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260525.34';
+  var newHref = base + 'sportsbook/style.css?v=20260525.35';
   var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
   if (existingLink) {
     existingLink.href = newHref; // Force fresh fetch
@@ -1439,6 +1439,29 @@ function renderMatches(results) {
 
   el.innerHTML = out;
   highlightHomeLeagueFilter();
+  startLiveMinuteTicker();
+}
+
+/* ── Live minute ticker — bumps the displayed minute every 60s between API polls so
+   "41'" naturally advances to "42'", "43'" etc. even if the next poll is delayed. ── */
+function startLiveMinuteTicker() {
+  if (window._mcLiveMinTicker) return; // already running
+  window._mcLiveMinTicker = setInterval(function() {
+    var nodes = document.querySelectorAll('.mc-live-min[data-mc-min-start]');
+    if (!nodes.length) return;
+    var now = Date.now();
+    nodes.forEach(function(el) {
+      var md = el.getAttribute('data-mc-min-md') || '';
+      if (md === '1') return; // half-time freeze
+      var base = parseInt(el.getAttribute('data-mc-min-start') || '0', 10) || 0;
+      var renderedAt = parseInt(el.getAttribute('data-mc-min-render') || '0', 10) || now;
+      var elapsedMin = Math.floor((now - renderedAt) / 60000);
+      var current = base + elapsedMin;
+      if (current > 0 && current < 130) {
+        el.textContent = current + "'";
+      }
+    });
+  }, 15000); // tick every 15s — cheap and smooth
 }
 
 function matchCard(m) {
@@ -1490,75 +1513,51 @@ function matchCard(m) {
   var spIconSm = spIcon.replace(/width="20" height="20"/g, 'width="13" height="13"');
   var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" id="mc-' + mid + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-  /* ── Row 1 & 2: Differentiate Live vs Upcoming ── */
+  /* ── Row 1: BB + EN DIRECT (or date/time) + timer ........ ☆ ── */
+  out += '<div class="mc-hdr-live">';
+  out += '<div class="mc-hl-left">';
   if (isLive) {
-    // LIVE Match Card Header (fcbet-style single compact line)
-    out += '<div class="mc-hdr-live mc-hdr-live--inline">';
-    out += '<div class="mc-hl-left mc-hl-left--inline">';
-    out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
-    if (liveMin) out += '<span class="mc-live-min">' + h(liveMin) + '</span>';
-    if (liveMin) out += '<span class="mc-live-sep">&bull;</span>';
-    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' · ' + countryLabel : '') + '</span>';
-    out += '</div>';
-    out += '<div class="mc-hl-right">';
-    out += '<button type="button" class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
-    out += '</div>';
-    out += '</div>';
+    if (liveMin) {
+      out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + (parseInt((m.timer && (m.timer.tm || m.timer.TM)) || 0, 10)) + '" data-mc-min-md="' + h(String((m.timer && (m.timer.md || m.timer.MD)) || '')) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
+    }
   } else {
-    // UPCOMING Match Card Header
-    out += '<div class="mc-hdr-live">';
-    out += '<div class="mc-hl-left">';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-date">' + h(dateTimeLabel) + '</span>';
-    out += '</div>';
-    out += '<div class="mc-hl-right">';
-    out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
-    out += '</div>';
-    out += '</div>';
-
-    out += '<div class="mc-league-row mc-league-row--split">';
-    out += '<div class="mc-league-info">';
-    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' - ' + countryLabel : '') + '</span>';
-    out += '</div>';
-    out += '<div class="mc-league-actions">';
-    // Only show EN DIRECT if this upcoming match has actually just gone live
-    // (time_status flipped but card re-render hasn't happened yet — handled by polling)
-    out += '<button class="mc-stats-icon" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="none"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
-    out += '</div>';
-    out += '</div>';
   }
+  out += '</div>';
+  out += '<div class="mc-hl-right">';
+  out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
+  out += '</div>';
+  out += '</div>';
+
+  /* ── Row 2: flag + league name ── */
+  out += '<div class="mc-league-row mc-league-row--split">';
+  out += '<div class="mc-league-info">';
+  out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
+  out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' \u00b7 ' + countryLabel : '') + '</span>';
+  out += '</div>';
+  out += '</div>';
 
   out += '<div class="mc-body-col">';
 
-  // ── Stacked layout: [⬤ jersey][name flex-1][score] per row (matches fcbet216 reference) ──
-  function getShirtSVG(tName) {
-    var opacity = isLive ? '' : ' mc-jersey-up';
-    return '<div class="mc-jersey-wrap' + opacity + '">' + shirtSVG(tName, 'mc-jersey-svg', 20) + '</div>';
-  }
+  /* ── Per-team rows: [shirt][name].........[score] (matches fcbet216) ── */
+  out += '<div class="mc-teams-wrap mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
 
-  out += '<div class="mc-teams-wrap" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-  out += '<div class="mc-teams-stacked">';
-
-  // Home row: [⬤ jersey] [name flex-1] [score]
   out += '<div class="mc-team-row">';
-  out += getShirtSVG(m.home ? m.home.name : '');
+  out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
   out += '<span class="mc-t-name">' + hn + '</span>';
   if (isLive) out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
   out += '</div>';
 
-  // Away row: [⬤ jersey] [name flex-1] [score]
   out += '<div class="mc-team-row">';
-  out += getShirtSVG(m.away ? m.away.name : '');
+  out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
   out += '<span class="mc-t-name">' + an + '</span>';
   if (isLive) out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
   out += '</div>';
 
-  out += '</div>';// close mc-teams-stacked
-  out += '</div>';// close mc-teams-wrap
+  out += '</div>'; // close mc-teams-wrap
 
   // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)
   out += '<div class="mc-odds-bot" onclick="event.stopPropagation()">';
@@ -1810,7 +1809,6 @@ function renderEnDirectCards(matches) {
     out += '<div class="slc-team-row">';
     out += '<span class="slc-tname">' + hn + '</span>';
     out += '<span class="slc-score">' + h(isLive && scores[0] !== '' ? scores[0] : (isLive ? '0' : '')) + '</span>';
-    out += '<span class="slc-stats-ico">' + ICON.stats + '</span>';
     out += '</div>';
 
     out += '<div class="slc-team-row">';

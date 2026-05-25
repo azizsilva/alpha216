@@ -212,8 +212,20 @@ if (!headers_sent()) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alpha 216 | Premium Sportsbook & Casino</title>
   <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($site_favicon_url); ?>">
+<?php
+/* ── Detect sportsbook full-screen pages so we can skip Bootstrap CSS ──
+   The sportsbook UI is a self-contained design (matches fcbet216) and the
+   parent navbar/footer are hidden via `mk-game-no-chrome`. Loading Bootstrap
+   3 here only causes UI conflicts (button bg, *, .row, container resets etc.),
+   so we drop it entirely on those pages. Custom-style.css is still loaded
+   below but its impact is neutralised by `.sb-root` resets in style.css. */
+$__sb_path = (string)(parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH) ?? '');
+$__sb_skip_bootstrap = ($__sb_path !== '' && (preg_match('#/sportsbook(?:/|$)#i', $__sb_path) || preg_match('#/sports(?:/|$)#i', $__sb_path)));
+?>
+<?php if (!$__sb_skip_bootstrap): ?>
   <!-- Bootstrap 3.3.7 CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<?php endif; ?>
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Owl Carousel 2 CSS -->
@@ -309,8 +321,10 @@ if (!headers_sent()) {
         launchGame(id, name);
     }
   </script>
+<?php if (!$__sb_skip_bootstrap): ?>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<?php endif; ?>
   <script>  
     (function () {
       try {
