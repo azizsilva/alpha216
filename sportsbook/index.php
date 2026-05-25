@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525cl';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525cm';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -798,6 +798,18 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
       <div class="sb-boost-row" id="sb-boosted-odds">
         <div class="sb-sk-boost-card"></div>
         <div class="sb-sk-boost-card"></div>
+      </div>
+    </div>
+
+    <!-- ══ MOBILE RECHERCHE DE PARIS (Bet Code) ══
+         Visible on mobile only, matches fcbet216 image 2 -->
+    <div class="sb-mob-bet-search-panel" style="margin: 0 10px 10px;">
+      <div class="sb-widget-hdr" style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; text-transform: uppercase;">Rechercher des paris</div>
+      <div class="sb-widget-body" style="background: var(--sb-bg-card); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+        <div class="sb-search-row" style="display: flex; gap: 8px;">
+          <select class="sb-dark-sel" style="background: var(--sb-bg-alt); border: 1px solid var(--sb-border); color: #fff; padding: 8px 10px; border-radius: 4px; font-size: 13px; outline: none;"><option>Bet Code</option></select>
+          <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d..." style="flex: 1; background: var(--sb-bg-alt); border: 1px solid var(--sb-border); color: #fff; padding: 8px 10px; border-radius: 4px; font-size: 13px; outline: none; min-width: 0;">
+        </div>
       </div>
     </div>
 

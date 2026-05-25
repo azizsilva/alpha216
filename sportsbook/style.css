@@ -6923,3 +6923,6 @@ body .sb-root .sb-lmk-item:hover,
 . s b - c h a m p - v i e w  
    p a d d i n g :   0   1 0 p x ;    
  
+/* Mobile Recherche de paris */
+@media (min-width: 1025px) { .sb-mob-bet-search-panel { display: none !important; } }
+
