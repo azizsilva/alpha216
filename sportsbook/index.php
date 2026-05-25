@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525be';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bf';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -434,6 +434,20 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root[data-view="periodpage"] .sb-league-acc-body{background:transparent!important;border-top:0!important;padding:4px 0 6px!important;}
 /* Compact sport pills row inside the period view */
 .sb-root .sb-period-sport-tabs{margin:6px 0 10px!important;}
+/* INLINE MATCH MARKETS — chevron on a card expands tabs + accordions
+   (Principaux / Bet Builder / Teams H2H / 1 minute) inside the card. */
+.sb-root .mc-inline-md{margin:6px 0 0!important;padding:0!important;background:transparent!important;border-top:1px solid rgba(255,255,255,0.05)!important;}
+.sb-root .mc-inline-md:empty{display:none!important;}
+.sb-root .mc-inline-md .mc-md-loading,.sb-root .mc-inline-md .mc-md-empty{padding:12px!important;color:rgba(255,255,255,0.55)!important;font-size:13px!important;text-align:center!important;}
+.sb-root .mc-inline-md .mc-md-inner{padding:6px 4px 4px!important;}
+.sb-root .mc-inline-md .mc-md-tabs{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:6px!important;overflow-x:auto!important;scrollbar-width:none!important;padding:4px 0 8px!important;}
+.sb-root .mc-inline-md .mc-md-tabs::-webkit-scrollbar{display:none!important;}
+.sb-root .mc-inline-md .mc-md-tab{flex:0 0 auto!important;background:rgb(49,49,49)!important;color:rgba(255,255,255,0.85)!important;border:0!important;border-radius:4px!important;padding:8px 14px!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-weight:600!important;cursor:pointer!important;outline:none!important;white-space:nowrap!important;}
+.sb-root .mc-inline-md .mc-md-tab.active{background:rgb(113,246,105)!important;color:#000!important;font-weight:700!important;}
+.sb-root .mc-inline-md .mc-md-info{flex:0 0 auto!important;width:22px!important;height:22px!important;border-radius:50%!important;background:transparent!important;border:1.5px solid #f04a4a!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;margin-left:2px!important;}
+.sb-root .mc-inline-md .mc-md-markets{padding:0!important;}
+.sb-root .mc-inline-md .md-market-group{margin-top:8px!important;}
+.sb-root .mc-inline-md .md-market-group:first-child{margin-top:0!important;}
 /* Match-detail view: hide ALL home siblings + the mobile topbar / date /
  * favoris / sport nav / live carousel / boost section so the match-detail
  * header is the only thing on screen (fcbet216 parity). */

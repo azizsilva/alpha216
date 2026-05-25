@@ -2193,10 +2193,13 @@ function matchCard(m) {
     out += oddBtn(mid, mname, '2', o.a);
   }
   
-  // Chevron toggles odds collapse/expand inline
-  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Masquer cotes">' + ICON.chevronDown + '</button>';
+  // Chevron expands the full markets list INLINE (fcbet216 UX) — does
+  // NOT navigate to the match-detail page. Card body still navigates.
+  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Voir tous les marchés">' + ICON.chevronDown + '</button>';
 
   out += '</div>'; // close mc-odds-bot
+  // Inline markets container — populated on chevron click via sbToggleMc.
+  out += '<div class="mc-inline-md" id="mc-md-' + h(String(mid)) + '" style="display:none"></div>';
   out += '</div>'; // close body col
   out += '</div>'; // mc
   return out;
@@ -3773,13 +3776,154 @@ window.sbScrollNav = function() {
 /* ══════════════════════════════════════════════════════════
    MATCH DETAIL VIEW — Images 3 & 4
    ══════════════════════════════════════════════════════════ */
-/* Toggle match card odds row visibility (chevron) */
+/* Toggle inline markets view on a match card (fcbet216 UX).
+   Click chevron → expands ALL markets (tabs + accordions) right inside
+   the card, no navigation. Click again → collapses. Markets are fetched
+   on first expand and cached on window._mcMktCache so subsequent
+   open/close is instant. The full card body still routes to the match
+   detail page on click; only the chevron triggers inline expansion. */
+window._mcMktCache = window._mcMktCache || {};
 window.sbToggleMc = function(mid) {
-  var el = document.getElementById('mc-' + mid);
-  if (!el) return;
-  el.classList.toggle('mc-collapsed');
-  var btn = el.querySelector('.mc-chevron-btn');
-  if (btn) btn.classList.toggle('mc-chevron-up', el.classList.contains('mc-collapsed'));
+  var card = document.getElementById('mc-' + mid);
+  var box  = document.getElementById('mc-md-' + mid);
+  if (!card || !box) return;
+  var isOpen = box.style.display !== 'none' && box.style.display !== '';
+  // Some browsers leave display as '' (default) after init — treat as closed.
+  if (box.getAttribute('data-open') === '1') isOpen = true;
+  else if (box.getAttribute('data-open') === '0') isOpen = false;
+
+  var chev = card.querySelector('.mc-chevron-btn');
+  if (isOpen) {
+    box.style.display = 'none';
+    box.setAttribute('data-open', '0');
+    card.classList.remove('mc-inline-open');
+    if (chev) chev.classList.remove('mc-chevron-up');
+    return;
+  }
+
+  // Opening — render from cache instantly if we have it; else fetch.
+  box.style.display = '';
+  box.setAttribute('data-open', '1');
+  card.classList.add('mc-inline-open');
+  if (chev) chev.classList.add('mc-chevron-up');
+
+  var cached = window._mcMktCache[mid];
+  if (cached && cached.match && cached.markets) {
+    box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, cached.tab || 'Principaux');
+    return;
+  }
+
+  // Fallback: try to find the match in our in-memory list so we can
+  // render fallback markets immediately while the real fetch resolves.
+  var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
+  box.innerHTML = '<div class="mc-md-loading">Chargement des marchés…</div>';
+
+  fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var stillOpen = (box.getAttribute('data-open') === '1');
+      if (!stillOpen) return;
+      var m    = (d && d.match) ? d.match : localMatch;
+      var mkts = (d && d.markets && d.markets.length) ? d.markets : null;
+      if (!m) { box.innerHTML = '<div class="mc-md-empty">Marchés indisponibles.</div>'; return; }
+      if (!mkts || !mkts.length) {
+        try { mkts = buildFallbackMarkets(m); } catch (e) { mkts = []; }
+      }
+      window._mcMktCache[mid] = { match: m, markets: mkts, tab: 'Principaux' };
+      box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, 'Principaux');
+    })
+    .catch(function() {
+      var stillOpen = (box.getAttribute('data-open') === '1');
+      if (!stillOpen) return;
+      if (localMatch) {
+        var fb = [];
+        try { fb = buildFallbackMarkets(localMatch); } catch (e) {}
+        window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
+        box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
+      } else {
+        box.innerHTML = '<div class="mc-md-empty">Marchés indisponibles.</div>';
+      }
+    });
+};
+
+/* Render the inline markets view (tabs + accordions) inside a card.
+   Uses the same renderMarketGroup() the full match-detail page uses
+   so the look-and-feel is identical (images 7 / 2-6 in the spec). */
+function renderInlineMatchMarkets(mid, m, markets, activeTab) {
+  activeTab = activeTab || 'Principaux';
+  var TABS = ['Principaux','Bet Builder','Teams H2H','1 minute'];
+
+  var out = '<div class="mc-md-inner" data-mid="' + h(String(mid)) + '">';
+
+  // Tabs row (mirrors the full match-detail tabs, compact)
+  out += '<div class="mc-md-tabs">';
+  TABS.forEach(function(t) {
+    var isAct = (t === activeTab);
+    out += '<button type="button" class="mc-md-tab' + (isAct?' active':'') + '"'
+        +  ' data-tab="' + h(t) + '"'
+        +  ' onclick="window.sbInlineMcTab(this,\'' + String(mid) + '\',\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
+  });
+  out += '<button type="button" class="mc-md-info" aria-label="Légende">'
+      + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f04a4a" stroke-width="2.2"><circle cx="12" cy="12" r="10"/></svg>'
+      + '</button>';
+  out += '</div>';
+
+  // Filter markets by active tab (same logic as match-detail page)
+  var isBB = (activeTab === 'Bet Builder');
+  var filter = null;
+  if (!isBB && activeTab !== 'Tout') {
+    var kw = activeTab.toLowerCase();
+    if (activeTab === 'Principaux') {
+      filter = function(mk){
+        var nm = (mk.name||'').toLowerCase();
+        if (nm.indexOf('2ème mi-temps') !== -1) return false;
+        return (typeof MD_FLASH_MARKETS !== 'undefined')
+          ? MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; })
+          : true;
+      };
+    } else if (activeTab === '1 minute') {
+      filter = function(mk){
+        var nm = (mk.name||'').toLowerCase();
+        return (typeof MD_1MIN_MARKETS !== 'undefined')
+          ? MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; })
+          : false;
+      };
+    } else if (activeTab === 'Teams H2H') {
+      filter = function(mk){
+        var nm = (mk.name||'').toLowerCase();
+        return nm.indexOf('h2h') !== -1 || nm.indexOf('head to head') !== -1
+            || nm.indexOf('face') !== -1 || nm === '1x2' || nm.indexOf('1 x 2') !== -1;
+      };
+    } else {
+      filter = function(mk){ return (mk.name||'').toLowerCase().indexOf(kw) !== -1; };
+    }
+  }
+  var shown = filter ? markets.filter(filter) : markets;
+  if (!shown.length) shown = markets;
+
+  out += '<div class="mc-md-markets">';
+  if (!shown.length) {
+    out += '<div class="mc-md-empty">Aucun marché disponible.</div>';
+  } else {
+    shown.forEach(function(mk, i) {
+      out += renderMarketGroup(mk, m, i < 4, isBB);
+    });
+  }
+  out += '</div>';
+
+  out += '</div>';
+  return out;
+}
+
+/* Tab click inside an inline expanded card — re-renders the markets list
+   for the new tab without collapsing the card or fetching again. */
+window.sbInlineMcTab = function(btn, mid, tabName) {
+  var box = document.getElementById('mc-md-' + mid);
+  if (!box) return;
+  var cache = (window._mcMktCache || {})[mid];
+  if (!cache || !cache.match || !cache.markets) return;
+  cache.tab = tabName;
+  box.innerHTML = renderInlineMatchMarkets(mid, cache.match, cache.markets, tabName);
 };
 
 window.sbOpenMatch = function(mid, _skipPush) {

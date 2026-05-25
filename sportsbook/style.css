@@ -5411,6 +5411,75 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   transform: rotate(180deg);
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   INLINE MATCH MARKETS — chevron on a match card expands the full
+   markets list (tabs + accordions) right inside the card, no nav.
+   Mirrors fcbet216 prelive card expansion (images 7-9 in spec).
+   ════════════════════════════════════════════════════════════════════════ */
+.sb-root .mc-inline-md {
+  margin: 6px 0 0;
+  padding: 0;
+  background: transparent;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.sb-root .mc-inline-md:empty { display: none !important; }
+.sb-root .mc-inline-md .mc-md-loading,
+.sb-root .mc-inline-md .mc-md-empty {
+  padding: 12px;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  text-align: center;
+}
+.sb-root .mc-inline-md .mc-md-inner { padding: 6px 4px 4px; }
+/* Inline tabs row (Principaux / Bet Builder / Teams H2H / 1 minute / ⓘ) */
+.sb-root .mc-inline-md .mc-md-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0 8px;
+}
+.sb-root .mc-inline-md .mc-md-tabs::-webkit-scrollbar { display: none; }
+.sb-root .mc-inline-md .mc-md-tab {
+  flex: 0 0 auto;
+  background: rgb(49,49,49);
+  color: rgba(255,255,255,0.85);
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+}
+.sb-root .mc-inline-md .mc-md-tab.active {
+  background: rgb(113,246,105);
+  color: #000;
+  font-weight: 700;
+}
+.sb-root .mc-inline-md .mc-md-info {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid #f04a4a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 2px;
+}
+/* The market accordions reuse .md-market-group from the detail page — but
+   inside a card they need a tiny padding tweak so they sit flush. */
+.sb-root .mc-inline-md .mc-md-markets { padding: 0; }
+.sb-root .mc-inline-md .md-market-group { margin-top: 8px; }
+.sb-root .mc-inline-md .md-market-group:first-child { margin-top: 0; }
+
 /* Teams area pointer cursor — signals it opens match detail */
 .sb-root .mc-teams-wrap {
   cursor: pointer;
