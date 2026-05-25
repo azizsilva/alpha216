@@ -3396,72 +3396,73 @@ function renderMatchDetail(m, markets) {
     htScoreA = hts.away !== undefined ? hts.away : '';
   }
 
-  var out = '<div class="md-view">';
+  // Country / sport strings for the breadcrumb (fcbet216 layout).
+  var sportObj  = SPORTS.find(function(s) { return s.id === sportId; }) || SPORTS[0];
+  var sportName = sportObj ? sportObj.name : 'Football';
+  var leagueDisplay = stripCountryPrefix(lg) || lg;
+  var countryDisplay = country || '';
 
-  // ── Nav bar
-  out += '<div class="md-nav-bar">';
-  out += '<button class="md-back-btn" onclick="window.sbBackToMain()">' + ICON.arrowLeft + '<span>Retour</span></button>';
-  out += '<span class="md-date-info">' + h(dateStr) + '</span>';
+  var out = '<div class="md-view md-view--compact">';
+
+  // ── Breadcrumb pill row: [<] Football | Country | League | TeamShort
+  // Mirrors fcbet216 (user image 5). Single back arrow only — no
+  // "Retour" text — to match the reference compact header.
+  out += '<div class="sb-champ-breadcrumb md-bc-row">';
+  out += '<button class="sb-bc-pill sb-champ-back-btn" onclick="window.sbBackToMain()" aria-label="Retour">' + ICON.arrowLeft + '</button>';
+  out += '<button class="sb-bc-pill" onclick="window.sbBackToMain()">' + h(sportName) + '</button>';
+  if (countryDisplay && countryDisplay !== 'International') {
+    out += '<button class="sb-bc-pill">' + h(countryDisplay) + '</button>';
+  }
+  if (leagueDisplay) {
+    out += '<button class="sb-bc-pill">' + h(leagueDisplay) + '</button>';
+  }
+  out += '<button class="sb-bc-pill sb-bc-active">' + h(hShort) + '</button>';
   out += '</div>';
 
-  // ── Match header
-  out += '<div class="md-match-hdr">';
+  // ── Compact match-detail card (image 2 / image 5)
+  out += '<div class="md-card md-card--compact">';
 
-  // League row
-  out += '<div class="md-league-line">';
-  out += '<img src="' + flagUrl + '" class="md-flag" onerror="this.style.display=\'none\'">';
-  out += '<span class="md-league-nm">' + h(lg) + '</span>';
-  if (isLive) out += '<span class="md-live-pill"><span class="md-live-dot"></span>EN DIRECT</span>';
+  // Row 1: flag + league + date
+  out += '<div class="md-card-top">';
+  out += '<img src="' + flagUrl + '" class="md-card-flag" onerror="this.style.display=\'none\'">';
+  out += '<span class="md-card-league">' + h(lg) + '</span>';
+  out += '<span class="md-card-date">' + h(dateStr) + '</span>';
   out += '</div>';
 
-  // Period + timer row (center)
-  if (isLive && period) {
-    out += '<div class="md-period-row">';
-    out += '<span class="md-period-txt">' + h(period) + '</span>';
-    if (!isHT) {
-      out += ' <span class="md-period-sep">|</span> <span class="md-timer" id="md-timer-display">' + h(timerInit) + '</span>';
-    }
+  // Row 2 (live only): info dot + period + green timer
+  if (isLive) {
+    out += '<div class="md-card-period">';
+    out += '<span class="md-card-info"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="16" cy="12" r="1.2" fill="currentColor"/></svg></span>';
+    if (period) out += '<span class="md-card-period-txt">' + h(period) + '</span>';
+    if (period && !isHT) out += '<span class="md-card-period-sep">|</span>';
+    if (!isHT) out += '<span class="md-card-timer" id="md-timer-display">' + h(timerInit) + '</span>';
+    else out += '<span class="md-card-timer md-card-timer--ht">Mi-temps</span>';
     out += '</div>';
   }
 
-  // Teams + jersey icons + score  — matches reference: [BRI jersey] abbr ... score ... abbr [jersey MAN]
-  out += '<div class="md-teams-row">';
-
-  // Home
-  out += '<div class="md-team-col">';
-  out += shirtSVG(hn, 'md-team-jersey', 44);
-  out += '<span class="md-team-abbr">' + h(hShort) + '</span>';
-  out += '<span class="md-team-nm">' + h(hn) + '</span>';
-  out += '</div>';
-
-  // Score center
-  out += '<div class="md-score-col">';
-  if (isLive && scoreH !== '' && scoreA !== '') {
-    out += '<div class="md-score-live" id="md-score-display">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
-    if (htScoreH !== '' && htScoreA !== '') {
-      out += '<div class="md-ht-score">' + h(htScoreH) + ' : ' + h(htScoreA) + '</div>';
+  // Row 3: team1 [jersey] score [jersey] team2 — compact single line
+  out += '<div class="md-card-teams">';
+  out += '<span class="md-card-team-abbr md-card-team-home">' + h(hShort) + '</span>';
+  out += shirtSVG(hn, 'md-card-jersey', 28);
+  out += '<div class="md-card-score-col">';
+  if (scoreH !== '' && scoreA !== '') {
+    out += '<div class="md-card-score" id="md-score-display">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
+    if (isLive && htScoreH !== '' && htScoreA !== '') {
+      out += '<div class="md-card-ht">' + h(htScoreH) + ' : ' + h(htScoreA) + '</div>';
     }
-  } else if (scoreH !== '' && scoreA !== '') {
-    out += '<div class="md-score-live">' + h(scoreH) + ' : ' + h(scoreA) + '</div>';
   } else {
-    out += '<div class="md-score-vs">vs</div>';
+    out += '<div class="md-card-score md-card-score--vs">vs</div>';
   }
   out += '</div>';
-
-  // Away
-  out += '<div class="md-team-col md-team-away">';
-  out += shirtSVG(an, 'md-team-jersey', 44);
-  out += '<span class="md-team-abbr">' + h(aShort) + '</span>';
-  out += '<span class="md-team-nm">' + h(an) + '</span>';
+  out += shirtSVG(an, 'md-card-jersey', 28);
+  out += '<span class="md-card-team-abbr md-card-team-away">' + h(aShort) + '</span>';
   out += '</div>';
 
-  out += '</div>'; // md-teams-row
-
-  // Stats bar (live + upcoming both get it if data available)
+  // Row 4: stats bar (corners, cards, attacks, shots)
   var statsHtml = renderStatsBar(m, sportId);
   if (statsHtml) out += statsHtml;
 
-  out += '</div>'; // md-match-hdr
+  out += '</div>'; // md-card
 
   // ── Main market category tabs — fcbet216 style.
   // Single horizontal row: [search] Tout Principaux Bet Builder Teams H2H

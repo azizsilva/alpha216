@@ -3439,6 +3439,124 @@ body {
 .md-tab-info-icon--lock svg { width: 14px; height: 14px; }
 .md-tab-info-icon--star { width: 16px; height: 16px; color: rgba(255,255,255,0.65); font-size: 14px; }
 
+/* ════════════════════════════════════════════════════════════════
+ * COMPACT match-detail header (fcbet216 parity, user image 2/4/5)
+ * Layout: breadcrumb row + a single dark card with:
+ *   1) flag + league + date
+ *   2) (live only) ⓘ + period + green timer
+ *   3) ABBR [shirt] score [shirt] ABBR
+ *   4) stats bar (corners, cards, attacks, shots)
+ * ════════════════════════════════════════════════════════════════ */
+.md-view--compact { padding: 12px 10px 0 !important; background: #0f0f0f; }
+.md-view--compact .md-bc-row {
+  display: flex !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 0 12px !important;
+  margin: 0 !important;
+}
+.md-view--compact .md-bc-row::-webkit-scrollbar { display: none !important; height: 0 !important; }
+.md-view--compact .md-bc-row .sb-bc-pill {
+  flex-shrink: 0;
+  background: rgb(40,40,40) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  color: #ffffff !important;
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+.md-view--compact .md-bc-row .sb-bc-pill.sb-champ-back-btn {
+  width: 36px !important; height: 36px !important; padding: 0 !important;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.md-view--compact .md-bc-row .sb-bc-pill.sb-bc-active {
+  background: var(--sb-green) !important;
+  border-color: var(--sb-green) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+.md-card--compact {
+  background: rgb(28,28,28) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+.md-card-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.md-card-flag { width: 18px !important; height: 13px !important; object-fit: cover !important; border-radius: 2px !important; flex-shrink: 0; }
+.md-card-league { flex: 1 1 auto !important; color: rgba(255,255,255,0.55) !important; font-size: 12px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500 !important; }
+.md-card-date   { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; flex-shrink: 0; }
+
+.md-card-period {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 2px 0 !important;
+}
+.md-card-info { color: rgba(255,255,255,0.55); display: inline-flex; align-items: center; flex-shrink: 0; }
+.md-card-info svg { width: 18px; height: 18px; }
+.md-card-period-txt { color: #ffffff !important; font-size: 13px !important; font-weight: 500 !important; }
+.md-card-period-sep { color: rgba(255,255,255,0.30); font-size: 13px; }
+.md-card-timer { color: var(--sb-green) !important; font-size: 15px !important; font-weight: 700 !important; font-variant-numeric: tabular-nums !important; }
+.md-card-timer--ht { color: var(--sb-green) !important; }
+
+.md-card-teams {
+  display: grid !important;
+  grid-template-columns: 1fr auto auto auto 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 2px 0 !important;
+}
+.md-card-team-abbr {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.4px !important;
+  white-space: nowrap;
+}
+.md-card-team-home { text-align: right !important; }
+.md-card-team-away { text-align: left !important; }
+.md-card-jersey { width: 28px !important; height: 28px !important; flex-shrink: 0; }
+.md-card-score-col { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 56px; }
+.md-card-score {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--sb-green) !important;
+  line-height: 1 !important;
+  letter-spacing: 0.3px !important;
+  font-variant-numeric: tabular-nums !important;
+}
+.md-card-score--vs { color: rgba(255,255,255,0.55) !important; font-size: 14px !important; font-weight: 600 !important; }
+.md-card-ht { font-size: 11px !important; color: rgba(255,255,255,0.55) !important; margin-top: 2px !important; font-variant-numeric: tabular-nums !important; }
+
+.md-card--compact .md-stats-bar {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 10px 0 2px !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 4px 12px !important;
+}
+
 /* Markets area */
 .md-markets,
 .sb-root .md-markets { padding: 10px 10px 80px !important; background: #0f0f0f !important; }
