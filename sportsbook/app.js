@@ -3051,21 +3051,23 @@ function renderChampionship(id, name, flag, matches) {
        +   '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen ? '&minus;' : '&#9662;') + '</span>'
        + '</button>';
   out += '<div class="sb-champ-mkt-acc-body"' + (accOpen ? '' : ' style="display:none"') + '>';
+  // EXACT fcbet216 .SelectMenuOptionContainer / .hMbNfr spec (user-provided):
+  //   width:100%; display:grid; grid-template-columns:1fr 20px;
+  //   padding:12px 10px; border-radius:4px; background:rgb(74,74,74);
+  //   color:#fff; font Roboto 14px / 500 / 16px line-height
   // Inline styles so neither Bootstrap nor a cached style.css can win.
-  // IMPORTANT: NO border-top on the buttons themselves — the separator
-  // between options comes from the CSS rule .sb-champ-mkt-opt+.sb-champ-mkt-opt.
-  // Adding border-top here would put one on EVERY option (including the
-  // first), which doubles up with the body's own border-top and makes each
-  // row look like its own boxed card.
   var optStyle =
-      'display:block;width:100%;text-align:left;'
-    + 'padding:12px 16px;margin:0;'
-    + 'background:transparent;border:0;border-radius:0;'
-    + 'color:#fff;font-family:Roboto,sans-serif;'
-    + 'font-size:14px;font-weight:500;line-height:16px;'
-    + 'letter-spacing:0;text-transform:none;'
-    + 'cursor:pointer;outline:none;box-shadow:none;'
-    + '-webkit-appearance:none;-moz-appearance:none;appearance:none;';
+      'display:grid !important;grid-template-columns:1fr 20px !important;'
+    + 'place-items:center !important;width:100% !important;'
+    + 'padding:12px 10px !important;margin:0 !important;'
+    + 'background:rgb(74,74,74) !important;border:0 !important;border-radius:4px !important;'
+    + 'color:rgb(255,255,255) !important;font-family:Roboto,sans-serif !important;'
+    + 'font-size:14px !important;font-weight:500 !important;line-height:16px !important;'
+    + 'letter-spacing:0 !important;text-transform:none !important;'
+    + 'cursor:pointer !important;outline:none !important;'
+    + 'box-shadow:rgba(13,13,13,0) 0 0 0 0, rgba(13,13,13,0) 0 0 0 0 inset !important;'
+    + 'text-shadow:rgba(13,13,13,0) 0 0 0 !important;'
+    + '-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;';
   marketOpts.forEach(function(o) {
     if (o.key === activeOpt.key) return;
     out += '<button type="button" class="sb-champ-mkt-opt" '
@@ -5192,7 +5194,8 @@ function renderPeriodPage(dayOffset, matches) {
   out += '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen?'&minus;':'&#9662;') + '</span>';
   out += '</button>';
   out += '<div class="sb-champ-mkt-acc-body"' + (accOpen?'':' style="display:none"') + '>';
-  var optStyle = 'display:block;width:100%;text-align:left;padding:12px 16px;margin:0;background:transparent;border:0;border-radius:0;color:#fff;font-family:Roboto,sans-serif;font-size:14px;font-weight:500;line-height:16px;cursor:pointer;outline:none;box-shadow:none;-webkit-appearance:none;-moz-appearance:none;appearance:none;';
+  // EXACT fcbet216 .hMbNfr spec — bg rgb(74,74,74), grid 1fr 20px, padding 12px 10px.
+  var optStyle = 'display:grid !important;grid-template-columns:1fr 20px !important;place-items:center !important;width:100% !important;padding:12px 10px !important;margin:0 !important;background:rgb(74,74,74) !important;border:0 !important;border-radius:4px !important;color:rgb(255,255,255) !important;font-family:Roboto,sans-serif !important;font-size:14px !important;font-weight:500 !important;line-height:16px !important;cursor:pointer !important;outline:none !important;box-shadow:rgba(13,13,13,0) 0 0 0 0, rgba(13,13,13,0) 0 0 0 0 inset !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;';
   marketOpts.forEach(function(o) {
     if (o.key === activeOpt.key) return;
     out += '<button type="button" class="sb-champ-mkt-opt" style="' + optStyle + '" onclick="window.sbSetPeriodMarketCat(\'' + o.key + '\')">' + h(o.label) + '</button>';

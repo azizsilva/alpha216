@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bg';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bh';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -434,6 +434,21 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root[data-view="periodpage"] .sb-league-acc-body{background:transparent!important;border-top:0!important;padding:4px 0 6px!important;}
 /* Compact sport pills row inside the period view */
 .sb-root .sb-period-sport-tabs{margin:6px 0 10px!important;}
+/* fcbet216 .TopSportBarButton / .fA-dBjY EXACT — sport-nav tiles */
+.sb-root .sb-sport-item{background:rgb(74,74,74)!important;border:0!important;box-shadow:0 2px 4px rgba(0,0,0,0.25),0 1px 2px rgba(0,0,0,0.18)!important;border-radius:4px!important;padding:8px!important;display:grid!important;grid-template-rows:auto auto!important;justify-items:center!important;justify-content:space-around!important;gap:4px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:15px!important;color:rgb(255,255,255)!important;width:100%!important;height:56px!important;margin:0!important;-webkit-tap-highlight-color:transparent!important;}
+.sb-root .sb-sport-item:hover{background:rgb(82,82,82)!important;box-shadow:0 3px 6px rgba(0,0,0,0.3),0 1px 3px rgba(0,0,0,0.22)!important;}
+.sb-root .sb-sport-item.active{background:var(--sb-green)!important;color:var(--sb-green-font)!important;border:0!important;font-weight:700!important;}
+/* fcbet216 .HeaderMarketsSelectorContainer + .hMbNfr EXACT — 1x2 dropdown */
+.sb-root .sb-champ-mkt-acc{background:rgb(49,49,49)!important;border:0!important;border-radius:4px!important;padding:4px!important;margin:12px 0!important;overflow:visible!important;}
+.sb-root .sb-champ-mkt-acc-hdr{display:grid!important;grid-template-columns:1fr 20px!important;place-items:center!important;width:100%!important;background:rgb(74,74,74)!important;border:0!important;border-radius:4px!important;padding:12px 10px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:16px!important;color:rgb(255,255,255)!important;cursor:pointer!important;outline:none!important;box-shadow:rgba(13,13,13,0) 0 0 0 0,rgba(13,13,13,0) 0 0 0 0 inset!important;text-shadow:rgba(13,13,13,0) 0 0 0!important;margin:0!important;}
+.sb-root .sb-champ-mkt-acc-lbl{text-align:center!important;color:rgb(255,255,255)!important;}
+.sb-root .sb-champ-mkt-acc-tgl{font-size:14px!important;font-weight:500!important;color:rgba(255,255,255,0.85)!important;width:20px!important;text-align:center!important;line-height:1!important;margin:0!important;}
+.sb-root .sb-champ-mkt-acc-body{padding:4px 0 0!important;border-top:0!important;display:flex!important;flex-direction:column!important;gap:4px!important;background:transparent!important;}
+.sb-root .sb-champ-mkt-acc.collapsed .sb-champ-mkt-acc-body{display:none!important;}
+body .sb-root .sb-champ-mkt-opt,body .sb-root button.sb-champ-mkt-opt{display:grid!important;grid-template-columns:1fr 20px!important;place-items:center!important;width:100%!important;padding:12px 10px!important;border:0!important;border-radius:4px!important;background:rgb(74,74,74)!important;background-color:rgb(74,74,74)!important;background-image:none!important;color:rgb(255,255,255)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:16px!important;cursor:pointer!important;outline:none!important;box-shadow:rgba(13,13,13,0) 0 0 0 0,rgba(13,13,13,0) 0 0 0 0 inset!important;text-shadow:rgba(13,13,13,0) 0 0 0!important;margin:0!important;-webkit-appearance:none!important;-moz-appearance:none!important;appearance:none!important;text-transform:none!important;letter-spacing:0!important;}
+body .sb-root .sb-champ-mkt-opt+.sb-champ-mkt-opt{border-top:0!important;}
+body .sb-root .sb-champ-mkt-opt:hover,body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{background:rgb(82,82,82)!important;background-color:rgb(82,82,82)!important;outline:none!important;}
+body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:rgba(0,0,0,0.87)!important;}
 /* INLINE MATCH MARKETS — chevron on a card expands tabs + accordions
    (Principaux / Bet Builder / Teams H2H / 1 minute) inside the card. */
 .sb-root .mc-inline-md{margin:6px 0 0!important;padding:0!important;background:transparent!important;border-top:1px solid rgba(255,255,255,0.05)!important;}
