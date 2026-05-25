@@ -18,6 +18,45 @@ for($i=0;$i<7;$i++){
   $dow = (int)date('w',$ts);
   $dates[] = ['day'=>$i===0?"Aujourd'hui":$fr_days[$dow], 'num'=>date('j',$ts)];
 }
+
+// Top leagues — single source for desktop sidebar + mobile panel (fcbet216 reference)
+$top_leagues = [
+  ['id'=>'94',  'name'=>'Coupe du Monde 2026',          'flag'=>'un',     'sport'=>1],
+  ['id'=>'572', 'name'=>'Ligue des Champions',           'flag'=>'eu',     'sport'=>1],
+  ['id'=>'573', 'name'=>'Ligue Conférence',              'flag'=>'eu',     'sport'=>1],
+  ['id'=>'17',  'name'=>'Premier League',                'flag'=>'gb-eng', 'sport'=>1],
+  ['id'=>'119', 'name'=>'LaLiga',                        'flag'=>'es',     'sport'=>1],
+  ['id'=>'167', 'name'=>'Serie A',                       'flag'=>'it',     'sport'=>1],
+  ['id'=>'78',  'name'=>'Bundesliga',                    'flag'=>'de',     'sport'=>1],
+  ['id'=>'168', 'name'=>'Ligue 1',                       'flag'=>'fr',     'sport'=>1],
+  ['id'=>'320', 'name'=>'Eredivisie',                    'flag'=>'nl',     'sport'=>1],
+  ['id'=>'142', 'name'=>'Division 1A',                   'flag'=>'be',     'sport'=>1],
+  ['id'=>'599', 'name'=>'Copa Libertadores',             'flag'=>'un',     'sport'=>1],
+  ['id'=>'600', 'name'=>'Copa Sudamericana',             'flag'=>'un',     'sport'=>1],
+  ['id'=>'el',  'name'=>'Euroligue',                     'flag'=>'eu',     'sport'=>18],
+  ['id'=>'nba', 'name'=>'NBA',                           'flag'=>'us',     'sport'=>18],
+  ['id'=>'rg1', 'name'=>'Roland Garros, Féminin Simple', 'flag'=>'fr',     'sport'=>13],
+  ['id'=>'rg2', 'name'=>'Roland Garros, Hommes Simple',  'flag'=>'fr',     'sport'=>13],
+];
+
+function sb_render_tl_item(array $l): void {
+  $is_globe = in_array($l['flag'], ['un', 'eu'], true);
+  $id   = htmlspecialchars((string)$l['id'], ENT_QUOTES, 'UTF-8');
+  $name = htmlspecialchars($l['name'], ENT_QUOTES, 'UTF-8');
+  $flag = htmlspecialchars($l['flag'], ENT_QUOTES, 'UTF-8');
+  $sport = (int)$l['sport'];
+  $flagUrl = 'https://flagcdn.com/w20/' . $flag . '.png';
+  echo '<div class="sb-tl-item" data-league-id="' . $id . '" data-league-label="' . $name . '" onclick="window.sbOpenLeague(\'' . $id . '\',\'' . $name . '\',\'' . $flagUrl . '\',' . $sport . ')">';
+  if ($is_globe) {
+    echo '<span class="sb-globe-icon" aria-hidden="true">';
+    echo '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    echo '</span>';
+  } else {
+    echo '<img src="' . $flagUrl . '" class="sb-flag-icon" alt="" width="22" height="16" loading="lazy">';
+  }
+  echo '<span class="sb-league-name">' . $name . '</span>';
+  echo '</div>';
+}
 ?>
 <!-- ── INSTANT PAINT — runs before any external CSS loads ──────────────
      Kills the "black flash on reload" by painting the dark sportsbook
@@ -58,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525af';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ai';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -185,11 +224,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}
 .sb-root .mc-signal-ico svg{display:block;width:14px;height:14px;}
 /* Sidebar leagues panel — separate from search card, fcbet216 image 1 */
-.sb-mob-search-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;margin:0 2px 10px;}
+.sb-sidebar-search-card{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:8px 8px 10px;}
+.sb-sidebar-search-card .sb-search-wrap{padding:10px 12px;}
+.sb-sidebar-search-card .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
+.sb-top-leagues-card{margin:0 8px 10px;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;}
+.sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
+.sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
+.sb-mob-search-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:0 2px 10px;}
 .sb-mob-search-panel .sb-search-wrap{padding:10px 12px;}
-.sb-mob-search-panel .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
-.sb-mob-leagues-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;margin:0 2px 12px;}
-.sb-mob-leagues-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:10px!important;overflow:hidden;margin:0 2px 12px!important;}
+.sb-mob-search-panel .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
+.sb-mob-leagues-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;margin:0 2px 12px!important;}
 .sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
 .sb-mob-leagues-panel .sb-mob-tab[data-tab="my"]{color:rgba(255,255,255,.85)!important;}
@@ -197,14 +241,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-mob-leagues-panel .sb-lh-minus{margin-left:auto!important;color:#fff!important;opacity:.85!important;font-size:18px!important;line-height:1!important;}
 .sb-root .sb-upcoming-tabs::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
 .sb-root .sb-upcoming-tabs{scrollbar-width:none!important;-ms-overflow-style:none!important;}
-.sb-root .sb-live-mkt-btn{color:#fff!important;text-shadow:none!important;box-shadow:none!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:12px!important;}
-.sb-root .sb-live-mkt-btn span,.sb-root .sb-live-mkt-btn #sb-live-mkt-lbl{color:#fff!important;}
+.sb-root .sb-live-mkt-btn{color:#fff!important;text-shadow:none!important;box-shadow:none!important;background:transparent!important;border:none!important;border-radius:0!important;}
+.sb-root .sb-live-mkt-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:12px!important;overflow:hidden;}
+.sb-root[data-view="livepage"] .sb-mob-search-panel{display:flex!important;}
+.sb-root[data-view="livepage"] .sb-mob-search-panel .sb-search-box{border:1px solid #70f669!important;}
 .sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-tl-item:last-child{border-bottom:none;}
 .sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sb-globe-icon{width:22px;height:22px;border-radius:5px;background:#4dd0c8;color:#1f2937;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-globe-icon{width:22px;height:22px;border-radius:5px;background:#4dd0c8;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sb-mob-leagues-panel .sb-flag-icon{width:22px;height:16px;object-fit:cover;border-radius:3px;flex-shrink:0;}
-.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:#e02424;color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:0.4px;text-transform:uppercase;}
+.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:#e02424;color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:10px;letter-spacing:0.4px;text-transform:uppercase;}
 .sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
@@ -406,8 +452,18 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
   </div>
 
   <div class="sb-sidebar-scroll">
+    <!-- Search card — above leagues (fcbet216 sidebar order) -->
+    <div class="sb-sidebar-search-card">
+      <div class="sb-search-wrap">
+        <div class="sb-search-box">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" id="sb-search-input" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat..." oninput="window.sbSearchMatches(this.value)">
+        </div>
+      </div>
+    </div>
+
     <!-- League tabs: LES MEILLEURES LIGUES / MES LIGUES -->
-    <div id="sb-favs-content">
+    <div id="sb-favs-content" class="sb-top-leagues-card">
     <div class="sb-league-group-hdr">
       <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURS LIGUES</button>
       <button class="sb-mob-tab" data-tab="my" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
@@ -417,39 +473,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     <!-- LES MEILLEURS LIGUES content — always shows the fixed top-league list -->
     <div id="sb-mob-best-leagues">
     <div class="sb-tl-list">
-      <?php
-      $top_leagues = [
-        ['id'=>'94',  'name'=>'Coupe du Monde 2026',          'flag'=>'un',     'sport'=>1],
-        ['id'=>'572', 'name'=>'Ligue des Champions',           'flag'=>'eu',     'sport'=>1],
-        ['id'=>'573', 'name'=>'Ligue Conférence',              'flag'=>'eu',     'sport'=>1],
-        ['id'=>'17',  'name'=>'Premier League',                'flag'=>'gb-eng', 'sport'=>1],
-        ['id'=>'119', 'name'=>'LaLiga',                        'flag'=>'es',     'sport'=>1],
-        ['id'=>'167', 'name'=>'Serie A',                       'flag'=>'it',     'sport'=>1],
-        ['id'=>'78',  'name'=>'Bundesliga',                    'flag'=>'de',     'sport'=>1],
-        ['id'=>'168', 'name'=>'Ligue 1',                       'flag'=>'fr',     'sport'=>1],
-        ['id'=>'320', 'name'=>'Eredivisie',                    'flag'=>'nl',     'sport'=>1],
-        ['id'=>'142', 'name'=>'Division 1A',                   'flag'=>'be',     'sport'=>1],
-        ['id'=>'599', 'name'=>'Copa Libertadores',             'flag'=>'un',     'sport'=>1],
-        ['id'=>'600', 'name'=>'Copa Sudamericana',             'flag'=>'un',     'sport'=>1],
-        ['id'=>'el',  'name'=>'Euroligue',                     'flag'=>'eu',     'sport'=>18],
-        ['id'=>'nba', 'name'=>'NBA',                           'flag'=>'us',     'sport'=>18],
-        ['id'=>'rg1', 'name'=>'Roland Garros, Féminin Simple', 'flag'=>'fr',     'sport'=>13],
-        ['id'=>'rg2', 'name'=>'Roland Garros, Hommes Simple',  'flag'=>'fr',     'sport'=>13],
-      ];
-      foreach($top_leagues as $l):
-        $is_intl_d = in_array($l['flag'], ['un','eu'], true);
-      ?>
-      <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
-        <?php if ($is_intl_d): ?>
-          <span class="sb-globe-icon" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          </span>
-        <?php else: ?>
-          <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
-        <?php endif; ?>
-        <span class="sb-league-name"><?=$l['name']?></span>
-      </div>
-      <?php endforeach; ?>
+      <?php foreach ($top_leagues as $l) { sb_render_tl_item($l); } ?>
     </div>
     </div><!-- /sb-mob-best-leagues -->
 
@@ -462,13 +486,6 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     </div><!-- /sb-mob-my-leagues -->
 
     </div><!-- /sb-favs-content -->
-
-    <div class="sb-search-wrap">
-      <div class="sb-search-box">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input type="text" id="sb-search-input" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du cha..." oninput="window.sbSearchMatches(this.value)">
-      </div>
-    </div>
 
     <div class="sb-menu-label">Menu</div>
     <div class="sb-time-filters">
@@ -616,7 +633,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
       <div class="sb-search-wrap">
         <div class="sb-search-box">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
+          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat..." oninput="window.sbSearchMatches(this.value)">
         </div>
       </div>
     </div><!-- /sb-mob-search-panel -->
@@ -635,23 +652,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
       <!-- LES MEILLEURS LIGUES content -->
       <div id="sb-inline-best-leagues">
         <div class="sb-tl-list">
-          <?php foreach($top_leagues as $l):
-            // International / continental competitions use a teal globe icon
-            // (matches fcbet216 reference image 1). National leagues keep
-            // their country flag.
-            $is_intl = in_array($l['flag'], ['un','eu'], true);
-          ?>
-          <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
-            <?php if ($is_intl): ?>
-              <span class="sb-globe-icon" aria-hidden="true">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-              </span>
-            <?php else: ?>
-              <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon" alt="<?=$l['name']?>">
-            <?php endif; ?>
-            <span class="sb-league-name"><?=$l['name']?></span>
-          </div>
-          <?php endforeach; ?>
+          <?php foreach ($top_leagues as $l) { sb_render_tl_item($l); } ?>
         </div>
       </div>
 

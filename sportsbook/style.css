@@ -298,35 +298,42 @@ body {
 }
 .sb-mes-ligues span { color: #fff; }
 
-/* Sidebar league items (top leagues) */
-.sb-tl-list { padding: 2px 6px 6px; }
+/* Sidebar league items (top leagues) — rows live inside .sb-top-leagues-card */
+.sb-tl-list { padding: 0; }
 .sb-tl-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: 12px;
+  padding: 12px 14px;
   cursor: pointer;
-  border-radius: var(--sb-radius);
+  border-radius: 0;
   transition: background 0.12s;
   color: var(--sb-text-1);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--sb-border);
+  min-height: 44px;
 }
-.sb-tl-item:hover { background: var(--sb-bg-alt); }
+.sb-tl-item:last-child { border-bottom: none; }
+.sb-tl-item:hover { background: rgba(255,255,255,0.03); }
 .sb-tl-item .sb-league-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sb-flag-icon { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
-/* Live EN DIRECT badge for sidebar leagues */
+.sb-flag-icon { width: 22px; height: 16px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
+/* Live EN DIRECT badge for sidebar/top-league rows — fcbet216 red pill */
 .sb-tl-live-badge {
   background: #e02424;
   color: #fff;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
-  padding: 2px 5px;
-  border-radius: 3px;
-  letter-spacing: 0.3px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: auto;
+  line-height: 1.2;
 }
 
 /* Favoris collapsible */
@@ -335,7 +342,46 @@ body {
   overflow: hidden;
 }
 
-/* Sidebar search */
+/* Desktop sidebar — search card + leagues card (fcbet216: two separate boxes) */
+.sb-sidebar-search-card {
+  margin: 8px 8px 10px;
+  background: rgb(49, 49, 49);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.sb-sidebar-search-card .sb-search-wrap {
+  padding: 10px 12px;
+}
+.sb-sidebar-search-card .sb-search-box {
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  height: 36px;
+  padding: 0 10px;
+}
+.sb-top-leagues-card {
+  margin: 0 8px 10px;
+  background: rgb(49, 49, 49) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+.sb-top-leagues-card .sb-league-group-hdr {
+  padding: 10px 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  gap: 10px;
+}
+.sb-top-leagues-card .sb-tl-item {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 12px 14px !important;
+}
+.sb-top-leagues-card .sb-tl-item:last-child {
+  border-bottom: none !important;
+}
+
+/* Sidebar search (legacy wrap — kept for any leftover markup) */
 .sb-search-wrap { padding: 8px 8px 4px; }
 .sb-search-box {
   background: var(--sb-bg-alt);
@@ -3550,6 +3596,7 @@ body {
 .md-card-period-sep { color: rgba(255,255,255,0.35) !important; font-size: 14px !important; font-weight: 400 !important; line-height: 1 !important; }
 .md-card-timer { color: rgb(113,246,105) !important; font-size: 15px !important; font-weight: 700 !important; font-variant-numeric: tabular-nums !important; line-height: 1 !important; letter-spacing: 0.2px !important; }
 .md-card-timer--ht { color: rgb(113,246,105) !important; font-size: 14px !important; font-weight: 600 !important; }
+.md-card-timer--ended { color: rgba(255,255,255,0.55) !important; font-size: 14px !important; font-weight: 600 !important; }
 
 .md-card-teams {
   display: grid !important;
@@ -4417,7 +4464,7 @@ button.md-odd-btn,
 /* Search card — ABOVE leagues card, clearly detached */
 .sb-mob-search-panel {
   background: rgb(49,49,49) !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
   border-radius: 10px !important;
   overflow: hidden;
   margin: 0 2px 10px !important;       /* clean gap to the leagues card */
@@ -4437,7 +4484,7 @@ button.md-odd-btn,
 /* Leagues card — reuses --sb-surface-1 so the gray is consistent everywhere */
 .sb-mob-leagues-panel {
   background: var(--sb-surface-1) !important;
-  border: 1px solid var(--sb-border-subtle) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
   border-radius: 10px !important;
   overflow: hidden;
   margin: 0 2px 12px !important;
@@ -4531,7 +4578,7 @@ button.md-odd-btn,
   height: 22px;
   border-radius: 5px;
   background: #4dd0c8;             /* teal/cyan from fcbet216 */
-  color: #1f2937;                  /* dark glyph */
+  color: #ffffff;                  /* white wireframe globe */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -4554,9 +4601,10 @@ button.md-odd-btn,
   font-size: 9px !important;
   font-weight: 800 !important;
   padding: 3px 8px !important;
-  border-radius: 4px !important;
+  border-radius: 10px !important;
   letter-spacing: 0.4px !important;
   text-transform: uppercase !important;
+  line-height: 1.2 !important;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -4780,27 +4828,30 @@ button.md-odd-btn,
   width: 100% !important;
 }
 
-/* ── Live section market dropdown (En direct maintenant) — fcbet216 spec ──
-   Trigger and the open panel are TWO independently rounded cards with a
-   small gap between them (image 5/7). Items inside the panel are FLAT
-   (no rounded inner corners). All surfaces use the fcbet216 gray
-   rgb(49,49,49). 12px radius matches the user spec for tabs. */
+/* ── Live section market dropdown (En direct maintenant) — fcbet216 accordion ──
+   ONE connected card: header + list share border/radius; minus when open. */
 .sb-live-mkt-wrap {
-  display: block !important;  /* must be full-width block, never inline */
+  display: block !important;
   width: 100%;
   margin: 8px 0 4px;
   position: relative;
+}
+.sb-live-mkt-panel {
+  background: rgb(49, 49, 49) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
 }
 .sb-live-mkt-btn {
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  background: var(--sb-surface-1) !important;
-  border: 1px solid var(--sb-border-subtle) !important;
-  border-radius: 12px !important;
-  padding: 12px 18px !important;
-  color: #ffffff !important;                 /* beats Bootstrap's .btn yellow/dark inherits */
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 14px 18px !important;
+  color: #ffffff !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   text-shadow: none !important;
@@ -4811,10 +4862,12 @@ button.md-odd-btn,
   outline: none !important;
   line-height: 1.2 !important;
 }
+.sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-btn {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
 .sb-live-mkt-btn #sb-live-mkt-lbl,
 .sb-live-mkt-btn span { color: #ffffff !important; }
-.sb-live-mkt-btn:hover { background: var(--sb-surface-2) !important; }
-.sb-live-mkt-btn.open  { background: var(--sb-surface-1) !important; border-radius: 12px !important; }
+.sb-live-mkt-btn:hover { background: rgba(255, 255, 255, 0.04) !important; }
 .sb-lmb-arrow {
   color: rgba(255,255,255,0.75);
   font-size: 20px;
@@ -4825,16 +4878,15 @@ button.md-odd-btn,
 }
 .sb-lmb-arrow svg { display: block; }
 .sb-live-mkt-drop {
-  display: none;             /* hidden by default */
-  background: var(--sb-surface-1);
-  border: 1px solid var(--sb-border-subtle);
-  border-radius: 12px;
+  display: none;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   position: relative;
   z-index: 10;
-  margin-top: 6px;           /* small gap to the trigger above (image 7) */
+  margin-top: 0;
 }
-/* Open state driven by class — beats Bootstrap's display rules */
 .sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop {
   display: block !important;
 }
@@ -4842,7 +4894,7 @@ button.md-odd-btn,
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 14px 18px;
   background: transparent;
   border: none;
@@ -5605,9 +5657,20 @@ button.md-odd-btn,
 .sb-root[data-view="livepage"] #sb-boost-section,
 .sb-root[data-view="livepage"] #sb-boost-dots,
 .sb-root[data-view="livepage"] .sb-mob-leagues-panel,
-.sb-root[data-view="livepage"] .sb-mob-inline-leagues,
 .sb-root[data-view="livepage"] .sb-points-forts-block {
   display: none !important;
+}
+/* Keep search visible on EN DIRECT — fcbet216 live page */
+.sb-root[data-view="livepage"] .sb-mob-search-panel {
+  display: flex !important;
+  flex-direction: column;
+  margin: 0 2px 10px !important;
+}
+.sb-root[data-view="livepage"] .sb-mob-search-panel .sb-search-box {
+  border: 1px solid #70f669 !important;
+}
+.sb-root[data-view="livepage"] .sb-mob-search-panel .sb-sidebar-search {
+  color: #fff !important;
 }
 .sb-root[data-view="livepage"] #sb-matches-body {
   padding-top: 8px !important;

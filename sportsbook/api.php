@@ -327,32 +327,143 @@ function _normalize_timer($src) {
     return ['tm' => (string)$tm, 'ts' => (string)$ts, 'md' => (string)$md];
 }
 
+// Parse "home,away" or array/object into [home, away] strings.
+function _pair_stat_val($v) {
+    if ($v === null || $v === '') return null;
+    if (is_string($v) && strpos($v, ',') !== false) {
+        $p = array_map('trim', explode(',', $v, 2));
+        return [(string)($p[0] ?? '0'), (string)($p[1] ?? '0')];
+    }
+    if (is_array($v)) {
+        if (array_key_exists(0, $v) || array_key_exists(1, $v) || isset($v['home']) || isset($v['away'])) {
+            return [
+                (string)($v[0] ?? $v['home'] ?? '0'),
+                (string)($v[1] ?? $v['away'] ?? '0'),
+            ];
+        }
+    }
+    if (is_numeric($v)) return [(string)$v, '0'];
+    return null;
+}
+
+// Bet365 inplay EV row — S1..S8 map to soccer counters (fcbet216 stat bar order).
+function _parse_stream_ev_stats($ev) {
+    if (!$ev || !is_array($ev)) return null;
+    $map = [
+        'S1' => 'on_target',
+        'S2' => 'off_target',
+        'S3' => 'attacks',
+        'S4' => 'dangerous_attacks',
+        'S6' => 'corners',
+        'S7' => 'yellow_cards',
+        'S8' => 'red_cards',
+    ];
+    $out = [];
+    foreach ($map as $sk => $canonical) {
+        if (!isset($ev[$sk]) || $ev[$sk] === '') continue;
+        $pair = _pair_stat_val($ev[$sk]);
+        if ($pair) $out[$canonical] = $pair;
+    }
+    return $out ?: null;
+}
+
+function _parse_bet365_event_stats($results) {
+    if (!$results || !is_array($results)) return null;
+    $stream = is_array($results[0] ?? null) ? $results[0] : $results;
+    foreach ($stream as $item) {
+        if (!is_array($item)) continue;
+        if (($item['type'] ?? $item['TYPE'] ?? '') === 'EV') {
+            $st = _parse_stream_ev_stats($item);
+            if ($st) return $st;
+        }
+    }
+    return null;
+}
+
 // Normalize BetsAPI stats into { yellow_cards:[home,away], ... } arrays.
 function _normalize_stats($raw) {
     if (!$raw || !is_array($raw)) return null;
+
     $aliases = [
-        'yellow_cards'      => ['yellow_cards','yellowcards','yellowcard','yellow card'],
-        'red_cards'         => ['red_cards','redcards','redcard','red card'],
+        'yellow_cards'      => ['yellow_cards','yellowcards','yellowcard','yellow card','yellow card(s)'],
+        'red_cards'         => ['red_cards','redcards','redcard','red card','red card(s)'],
         'corners'           => ['corners','corner','corner_kicks','corner kicks'],
-        'on_target'         => ['on_target','on target','shots_on_target','shots on target','shots on goal'],
+        'on_target'         => ['on_target','on target','shots_on_target','shots on target','shots on goal','goal attempts','goals on target'],
+        'off_target'        => ['off_target','off target','shots_off_target','shots off target'],
         'dangerous_attacks' => ['dangerous_attacks','dangerous attacks'],
         'attacks'           => ['attacks','attack'],
     ];
+
+    // List-of-objects format: [{name:"Corners", home:"2", away:"1"}, ...]
+    if (isset($raw[0]) && is_array($raw[0]) && (isset($raw[0]['name']) || isset($raw[0]['NA']))) {
+        $out = [];
+        foreach ($raw as $row) {
+            if (!is_array($row)) continue;
+            $label = strtolower(trim((string)($row['name'] ?? $row['NA'] ?? '')));
+            $pair  = _pair_stat_val($row['value'] ?? $row['VA'] ?? [
+                $row['home'] ?? $row['T1'] ?? null,
+                $row['away'] ?? $row['T2'] ?? null,
+            ]);
+            if (!$pair) continue;
+            foreach ($aliases as $canonical => $keys) {
+                foreach ($keys as $k) {
+                    if (strpos($label, str_replace('_', ' ', $k)) !== false || $label === $k) {
+                        $out[$canonical] = $pair;
+                        break 2;
+                    }
+                }
+            }
+        }
+        if ($out) return $out;
+    }
+
     $out = [];
+    $lower = [];
+    foreach ($raw as $k => $v) {
+        if (is_string($k)) $lower[strtolower($k)] = $v;
+    }
     foreach ($aliases as $canonical => $keys) {
         foreach ($keys as $k) {
-            if (!isset($raw[$k])) continue;
-            $v = $raw[$k];
-            if (is_array($v)) {
-                $out[$canonical] = [
-                    (string)($v[0] ?? $v['home'] ?? '0'),
-                    (string)($v[1] ?? $v['away'] ?? '0'),
-                ];
+            $lk = strtolower($k);
+            if (!isset($lower[$lk]) && !isset($raw[$k])) continue;
+            $v = $lower[$lk] ?? $raw[$k];
+            $pair = _pair_stat_val($v);
+            if ($pair) {
+                $out[$canonical] = $pair;
+                break;
             }
-            break;
         }
     }
-    return $out ?: $raw;
+    return $out ?: null;
+}
+
+// Unified stats fetch — v3, v1, then bet365 event stream (S1..S8).
+function _fetch_event_stats($event_id, $fi = null) {
+    $stats = null;
+
+    $v3 = betsapi_get('/v3/event/view', ['event_id' => $event_id, 'source' => 'bet365']);
+    if (!empty($v3['results'][0]['stats'])) {
+        $stats = _normalize_stats($v3['results'][0]['stats']);
+    }
+
+    if (!$stats) {
+        $v1 = betsapi_get('/v1/event/view', ['event_id' => $event_id]);
+        if (!empty($v1['results'][0]['stats'])) {
+            $stats = _normalize_stats($v1['results'][0]['stats']);
+        }
+    }
+
+    if (!$stats && $fi) {
+        $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
+        if (!empty($ev['results'])) {
+            $stats = _parse_bet365_event_stats($ev['results']);
+            if (!$stats && !empty($ev['results'][0]['stats'])) {
+                $stats = _normalize_stats($ev['results'][0]['stats']);
+            }
+        }
+    }
+
+    return $stats;
 }
 
 // ═══ Helper: extract inline 1x2 odds from inplay_filter match object ══════
@@ -497,6 +608,9 @@ if ($action === 'inplay') {
     $stream_odds = [];       // keyed by FI (Bet365 event id)
     $stream_timers = [];     // keyed by FI
     $stream_timers_rid = []; // keyed by r_id base (194099376C1A)
+    $stream_stats = [];      // keyed by FI
+    $stream_stats_rid = [];  // keyed by r_id base
+    $stream_ss = [];         // keyed by FI — fresh score from EV.SS
     $rid_to_fi   = [];       // r_id (inplay_filter) → FI (stream EV)
     $curr_fi = null; $curr_h = $curr_x = $curr_a = null;
     $curr_ou_line = 2.5; $curr_ou_over = $curr_ou_under = null;
@@ -514,8 +628,15 @@ if ($action === 'inplay') {
             // FI may be empty; OI is the reliable Bet365 event id in this stream
             $curr_fi = $item['OI'] ?? $item['FI'] ?? null;
             $ev_timer = _normalize_timer($item);
+            $ev_stats = _parse_stream_ev_stats($item);
             if ($ev_timer && $curr_fi) {
                 $stream_timers[$curr_fi] = $ev_timer;
+            }
+            if ($ev_stats && $curr_fi) {
+                $stream_stats[$curr_fi] = $ev_stats;
+            }
+            if ($curr_fi && !empty($item['SS'])) {
+                $stream_ss[$curr_fi] = $item['SS'];
             }
             if (!empty($item['ID'])) {
                 // ID format: "194088383C1A_1_3" → base "194088383C1A" matches r_id in inplay_filter
@@ -523,6 +644,7 @@ if ($action === 'inplay') {
                 if ($id_base) {
                     $rid_to_fi[$id_base] = $curr_fi;
                     if ($ev_timer) $stream_timers_rid[$id_base] = $ev_timer;
+                    if ($ev_stats) $stream_stats_rid[$id_base] = $ev_stats;
                 }
                 // Also map numeric prefix (e.g. "194088383") in case r_id strips suffix
                 $num_only = preg_replace('/[^0-9].*$/', '', $id_base);
@@ -688,6 +810,25 @@ if ($action === 'inplay') {
             }
             if ($timer) {
                 $m['timer'] = $timer;
+            }
+            // Live stats — stream S1..S8, then cached/API stats
+            $m_stats = null;
+            foreach ([$rid, $rid_num, $mid] as $stk) {
+                if (!$stk || !isset($stream_stats_rid[$stk])) continue;
+                $m_stats = $stream_stats_rid[$stk];
+                break;
+            }
+            if (!$m_stats && $fi && isset($stream_stats[$fi])) {
+                $m_stats = $stream_stats[$fi];
+            }
+            if (!$m_stats && !empty($m['stats'])) {
+                $m_stats = _normalize_stats($m['stats']);
+            }
+            if ($m_stats) {
+                $m['stats'] = $m_stats;
+            }
+            if ($fi && !empty($stream_ss[$fi])) {
+                $m['ss'] = $stream_ss[$fi];
             }
         }
     }
@@ -1305,20 +1446,45 @@ if ($action === 'match_live') {
         } catch (Exception $e) {}
     }
 
-    // Fresh score + timer from v3
+    // Fresh score + timer + stats from v3 / v1 / bet365 stream
     $v3 = betsapi_get('/v3/event/view', ['event_id' => $match_id, 'source' => 'bet365']);
     if (!empty($v3['results'][0])) {
         $ev3 = $v3['results'][0];
         if ($match_data === null) $match_data = $ev3;
-        foreach (['ss','timer','time_status','stats','scores'] as $fk) {
-            if (isset($ev3[$fk])) $match_data[$fk] = $ev3[$fk];
+        foreach (['ss','timer','time_status','scores'] as $fk) {
+            if (isset($ev3[$fk]) && $ev3[$fk] !== '' && $ev3[$fk] !== null) {
+                $match_data[$fk] = $ev3[$fk];
+            }
         }
+    }
+    $fresh_stats = _fetch_event_stats($match_id, $fi);
+    if ($fresh_stats) {
+        $match_data['stats'] = $fresh_stats;
+    } elseif (!empty($match_data['stats'])) {
+        $match_data['stats'] = _normalize_stats($match_data['stats']) ?: $match_data['stats'];
     }
 
     // Fresh live odds from event stream
-    $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+    $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
     if (!empty($ev['results'])) {
         $pm = parse_event_stream_odds($ev['results']);
+        if (!$fresh_stats) {
+            $stream_stats = _parse_bet365_event_stats($ev['results']);
+            if ($stream_stats) $match_data['stats'] = $stream_stats;
+        }
+        // Timer + score from stream EV when v3 omitted them
+        $stream = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
+        foreach ($stream as $sitem) {
+            if (!is_array($sitem) || ($sitem['type'] ?? '') !== 'EV') continue;
+            if (!empty($sitem['SS'])) $match_data['ss'] = $sitem['SS'];
+            $stimer = _normalize_timer($sitem);
+            if ($stimer) $match_data['timer'] = $stimer;
+            if (!$fresh_stats) {
+                $evst = _parse_stream_ev_stats($sitem);
+                if ($evst) $match_data['stats'] = $evst;
+            }
+            break;
+        }
         if ($pm && ($pm['h'] ?? 0) > 1.01) {
             $pm['ts'] = time();
             $match_data['live_odds'] = $pm;
@@ -1364,7 +1530,7 @@ if ($action === 'match_detail') {
         // 1. Try live event via Bet365 FI (r_id)
         $fi = $match_data['r_id'] ?? null;
         if ($fi) {
-            $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+            $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
             // results[0] is the flat stream array; results itself may already be the array
             if (!empty($ev['results'])) {
                 $event_raw = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
@@ -1394,6 +1560,10 @@ if ($action === 'match_detail') {
         foreach (['stats','timer','ss','scores','time_status','r_id'] as $fk) {
             if (!empty($ev3[$fk])) $match_data[$fk] = $ev3[$fk];
         }
+        if (!empty($ev3['stats'])) {
+            $norm = _normalize_stats($ev3['stats']);
+            if ($norm) $match_data['stats'] = $norm;
+        }
         // Half-time score
         if (!empty($ev3['scores'])) $match_data['scores'] = $ev3['scores'];
         // Supply team image_ids if missing
@@ -1416,6 +1586,25 @@ if ($action === 'match_detail') {
     // Fallback: build synthetic markets from stored live_odds
     if (empty($markets) && $match_data) {
         $markets = md_synthetic_markets($match_data);
+    }
+
+    // Ensure stats are normalized and populated (v3 → v1 → bet365 S1..S8)
+    if ($match_data) {
+        $fi_md = $match_data['r_id'] ?? null;
+        $have  = !empty($match_data['stats']) && is_array($match_data['stats']);
+        if ($have) {
+            $norm = _normalize_stats($match_data['stats']);
+            if ($norm) $match_data['stats'] = $norm;
+            else $have = count($match_data['stats']) > 0;
+        }
+        if (!$have) {
+            $fetched = _fetch_event_stats($match_id, $fi_md);
+            if ($fetched) $match_data['stats'] = $fetched;
+            elseif ($event_raw) {
+                $stream_st = _parse_bet365_event_stats(is_array($event_raw[0] ?? null) ? [$event_raw] : $event_raw);
+                if ($stream_st) $match_data['stats'] = $stream_st;
+            }
+        }
     }
 
     echo json_encode([
@@ -2016,6 +2205,25 @@ if ($action === 'fetch_event_odds') {
         }
     }
     echo json_encode(['success'=>1,'h'=>$feo_pm['h']??null]); exit;
+}
+
+// ═══ TOP LEAGUES LIVE — league names with in-play matches (multi-sport) ═══
+if ($action === 'top_leagues_live') {
+    $cache_dir_tl = __DIR__ . '/cache';
+    $live_names = [];
+    foreach ([1, 13, 18] as $sid) {
+        $lf = $cache_dir_tl . '/live_' . $sid . '.json';
+        if (!file_exists($lf)) continue;
+        $arr = json_decode(@file_get_contents($lf), true);
+        if (!is_array($arr)) continue;
+        foreach ($arr as $m) {
+            if ((string)($m['time_status'] ?? '') !== '1') continue;
+            $ln = trim($m['league']['name'] ?? '');
+            if ($ln !== '') $live_names[] = $ln;
+        }
+    }
+    echo json_encode(['success' => 1, 'live_leagues' => array_values(array_unique($live_names))]);
+    exit;
 }
 
 echo json_encode(['success' => 0, 'error' => 'Invalid action: ' . htmlspecialchars($action)]);

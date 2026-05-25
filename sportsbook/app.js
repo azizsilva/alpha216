@@ -207,6 +207,7 @@ function formatOdd(decVal) {
  * the match clearly hasn't kicked off yet.  */
 function computeFallbackTimer(m) {
   if (!m) return null;
+  if (isMatchEnded(m)) return null;
   var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
   if (kickoff <= 0) return null;
   var nowSec = Math.floor(Date.now() / 1000);
@@ -240,6 +241,7 @@ function computeFallbackTimer(m) {
  * object the rest of the code should use — real data wins, but
  * we never leave the user staring at 00:00 for a live match. */
 function effectiveTimer(m) {
+  if (isMatchEnded(m)) return null;
   if (m && m.timer) {
     var hasReal = (m.timer.tm !== undefined && m.timer.tm !== null && m.timer.tm !== '')
                || (m.timer.TM !== undefined && m.timer.TM !== null && m.timer.TM !== '')
@@ -338,7 +340,7 @@ function formatLiveMinute(m) {
 /* ── Live counting timer (counts up from API snapshot) ─── */
 function startMatchTimer(m) {
   clearInterval(window._mdTimerInterval);
-  if (!m) return;
+  if (!m || isMatchEnded(m)) return;
   // Use effectiveTimer so we keep ticking even when the third
   // party hasn't sent a real m.timer for this match.
   var tmr = effectiveTimer(m);
@@ -354,6 +356,11 @@ function startMatchTimer(m) {
   window._mdTimerInterval = setInterval(function() {
     var el = document.getElementById('md-timer-display');
     if (!el) { clearInterval(window._mdTimerInterval); return; }
+    if (window._mdMatch && isMatchEnded(window._mdMatch)) {
+      clearInterval(window._mdTimerInterval);
+      el.textContent = 'Terminé';
+      return;
+    }
     var elapsed = Math.floor((Date.now() - t0) / 1000);
     var curr = totalBase + elapsed;
     var mm = Math.floor(curr / 60);
@@ -393,6 +400,15 @@ function startMatchDetailPoll(mid) {
 function patchMatchDetailLive(m, markets) {
   window._mdMatch = m;
 
+  // Ended match — freeze clock, keep score/stats fresh
+  if (isMatchEnded(m)) {
+    clearInterval(window._mdTimerInterval);
+    var pEnd = document.getElementById('md-period-block');
+    if (pEnd) {
+      pEnd.innerHTML = '<span class="md-card-timer md-card-timer--ended">Terminé</span>';
+    }
+  }
+
   // Score
   var scoreEl = document.getElementById('md-score-display') || document.querySelector('.md-score-live');
   if (scoreEl && m.ss) {
@@ -400,12 +416,8 @@ function patchMatchDetailLive(m, markets) {
     scoreEl.textContent = (sp[0] || '0').trim() + ' : ' + (sp[1] || '0').trim();
   }
 
-  // Timer + period — surgically re-fill #md-period-block so the
-  // text appears as soon as we have *any* timer data, real or
-  // kickoff-derived. We can't just update #md-timer-display
-  // because the period name and the `|` separator only render
-  // when we know the period.
-  var effPatch = effectiveTimer(m);
+  // Timer + period — skip ticking when match ended
+  var effPatch = isMatchEnded(m) ? null : effectiveTimer(m);
   if (effPatch) {
     var isHTnow = (String(effPatch.md || effPatch.MD || '') === '1');
     var pname  = getMatchPeriod(m);
@@ -432,10 +444,7 @@ function patchMatchDetailLive(m, markets) {
   sbSyncMatchCache(m);
 
   // Refresh stats bar (corners, yellow/red cards, attacks, shots on target)
-  // in-place so counts tick up live without re-rendering the whole page.
-  // Always refresh when live — even if m.stats is empty we re-render
-  // so zeros show correctly instead of stale values.
-  if (isMatchLive(m)) {
+  if (isMatchLive(m) || isMatchEnded(m)) {
     var sportId = parseInt(m.sport_id || 1);
     var newBar  = renderStatsBar(m, sportId);
     var oldBar  = document.querySelector('.md-card--compact .md-stats-bar') || document.querySelector('.md-stats-bar');
@@ -514,17 +523,24 @@ function renderStatsBar(m, sportId) {
   function sv(key, idx, def) {
     if (!st) return def;
     var aliases = {
-      yellow_cards: ['yellow_cards','yellowcard','yellow card','yellowcards'],
+      yellow_cards: ['yellow_cards','yellowcard','yellow card','yellowcards','yellowcards'],
       red_cards:    ['red_cards','redcard','red card','redcards'],
       corners:      ['corners','corner','corner_kicks','corner kicks'],
-      on_target:    ['on_target','on target','shots_on_target','shots on target','goal','goals'],
+      on_target:    ['on_target','on target','shots_on_target','shots on target','goal','goals','goal attempts'],
       dangerous_attacks: ['dangerous_attacks','dangerous attacks','attacks','attack'],
       attacks:      ['attacks','attack','dangerous_attacks']
     };
     var keys = aliases[key] || [key];
     for (var ki = 0; ki < keys.length; ki++) {
       var k = keys[ki];
-      if (st[k] && st[k][idx] !== undefined && st[k][idx] !== null && st[k][idx] !== '') return st[k][idx];
+      if (st[k] === undefined || st[k] === null || st[k] === '') continue;
+      var v = st[k];
+      if (typeof v === 'string' && v.indexOf(',') !== -1) {
+        var parts = v.split(',');
+        if (parts[idx] !== undefined && parts[idx] !== '') return parts[idx].trim();
+      }
+      if (Array.isArray(v) && v[idx] !== undefined && v[idx] !== null && v[idx] !== '') return v[idx];
+      if (v && v[idx] !== undefined && v[idx] !== null && v[idx] !== '') return v[idx];
     }
     return def;
   }
@@ -661,7 +677,9 @@ var S = {
   activeMarketCat: 'populaire', // active market category in championship view
   mobLeagueTab: 'best',         // 'best' | 'my' — mobile inline league tabs
   homeLeagueFilter: null,       // filter "En direct maintenant" after league pick
-  activeLiveCat: 'populaire'    // active market category for live section dropdown
+  activeLiveCat: 'populaire',   // active market category for live section dropdown
+  liveSearchQ: ''               // debounced EN DIRECT search filter
+  ,allLiveLeagueNames: []       // multi-sport live leagues for top-league badges
 };
 
 /* ── Navigation helpers — keep every view switch instant and race-free.
@@ -804,8 +822,14 @@ function h(s) {
 }
 
 /** Live match — BetsAPI uses string or number time_status */
-function isMatchLive(m) {
+function isMatchEnded(m) {
   if (!m) return false;
+  if (String(m.time_status) === '3') return true;
+  if (m.status === 'ended' || m.status === 'finished') return true;
+  return false;
+}
+function isMatchLive(m) {
+  if (!m || isMatchEnded(m)) return false;
   // Primary: API says live — always trust this
   if (String(m.time_status) === '1' || m.status === 'inplay') return true;
   // Secondary: start time has passed by more than 5 minutes — match has definitely started
@@ -971,6 +995,8 @@ function isLeagueMatch(n, apiLeagueName) {
     'euroligue':          ['euroleague', 'eurocup'],
     'nba':                ['nba'],
     'roland garros':      ['roland garros', 'french open'],
+    'féminin':            ['french open women', 'roland garros women', 'wta french open', 'roland garros, féminin'],
+    'hommes':             ['french open men', 'roland garros men', 'atp french open', 'roland garros, hommes'],
     'euroleague':         ['euroleague'],
     'europa league':      ['uefa europa league'],
   };
@@ -1151,6 +1177,7 @@ function loadCounts() {
         });
         renderSidebar();
         renderSportNav();
+        refreshLiveTopLeagues();
       }
     })
     .catch(function() {
@@ -1159,6 +1186,7 @@ function loadCounts() {
       });
       renderSidebar();
       renderSportNav();
+      refreshLiveTopLeagues();
     })
     .finally(function() { if (tid) clearTimeout(tid); });
 }
@@ -1381,7 +1409,10 @@ function startPolling() {
   // Faster live updates for minimal delay (football stricter).
   var isFootball = (parseInt(S.activeSportId || 0, 10) === 1);
   var pollMs = (S.activeAction === 'inplay') ? (isFootball ? 3000 : 5000) : 10000;
-  S.pollingInterval = setInterval(doPoll, pollMs);
+  S.pollingInterval = setInterval(function() {
+    doPoll();
+    refreshLiveTopLeagues();
+  }, pollMs);
 }
 
 /* ── Sidebar Rendering ───────────────────────────────────── */
@@ -1550,20 +1581,22 @@ function renderLiveMarketDropdown() {
   var active = LIVE_MKT_OPTIONS.find(function(o){ return o.key === (S.activeLiveCat||'populaire'); });
   var label  = active ? active.label : '1x2';
   var out = '<div class="sb-live-mkt-wrap" id="sb-live-mkt-wrap">';
-  // Trigger — shows active label + minus; chevronDown shown via CSS when closed
+  out += '<div class="sb-live-mkt-panel">';
+  // Header — toggles open/closed; minus when open (fcbet216 accordion)
   out += '<button type="button" class="sb-live-mkt-btn" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
   out += '<span id="sb-live-mkt-lbl">' + h(label) + '</span>';
   out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + ICON.chevronDown + '</span>';
   out += '</button>';
-  // Dropdown — only show non-active options (active already shown in trigger above)
+  // Options — same card, no gap (connected accordion body)
   out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop">';
   LIVE_MKT_OPTIONS.forEach(function(o) {
     var isCur = (o.key === (S.activeLiveCat || 'populaire'));
-    if (isCur) return; // skip — it's shown in the trigger button
+    if (isCur) return;
     out += '<button type="button" class="sb-lmk-item" onclick="window.sbSetLiveCat(\'' + o.key + '\',\'' + h(o.label) + '\')">';
     out += h(o.label);
     out += '</button>';
   });
+  out += '</div>';
   out += '</div>';
   out += '</div>';
   return out;
@@ -1589,6 +1622,11 @@ window.sbToggleLiveMktDrop = function() {
 
 window.sbSetLiveCat = function(key, label) {
   S.activeLiveCat = key;
+  // Rebuild dropdown list (selected option moves to header)
+  var wrap = document.getElementById('sb-live-mkt-wrap');
+  if (wrap) {
+    wrap.outerHTML = renderLiveMarketDropdown();
+  }
   var lbl = document.getElementById('sb-live-mkt-lbl');
   if (lbl) lbl.textContent = label;
   // Close dropdown via class
@@ -1710,6 +1748,17 @@ function renderMatches(results) {
   if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
 
   results = results || [];
+
+  // EN DIRECT search filter — survives poll re-renders
+  if (S.liveSearchQ && S.activeTab === 'live') {
+    var sq = S.liveSearchQ;
+    results = results.filter(function(m) {
+      var home   = ((m.home   && m.home.name)   || '').toLowerCase();
+      var away   = ((m.away   && m.away.name)   || '').toLowerCase();
+      var league = ((m.league && m.league.name) || '').toLowerCase();
+      return home.indexOf(sq) !== -1 || away.indexOf(sq) !== -1 || league.indexOf(sq) !== -1;
+    });
+  }
 
   // Home league filter (after returning from a league or picking from list)
   if (S.homeLeagueFilter && S.viewMode === 'main' && !S.activeLeagueId) {
@@ -3075,6 +3124,7 @@ window.sbSearchMatches = function(rawQ) {
   clearTimeout(_sbSearchTimer);
   _sbSearchTimer = setTimeout(function() {
     var q = (rawQ || '').trim().toLowerCase();
+    S.liveSearchQ = q;
 
     // Filter top-league sidebar items
     document.querySelectorAll('.sb-tl-item').forEach(function(el) {
@@ -3082,8 +3132,26 @@ window.sbSearchMatches = function(rawQ) {
       if (name) el.style.display = (!q || name.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
     });
 
+    // EN DIRECT live page — fast client-side filter only
+    if (S.activeTab === 'live' && S.viewMode === 'main') {
+      if (!q) {
+        S.liveSearchQ = '';
+        renderMatches(S.matches);
+        return;
+      }
+      var liveFiltered = S.matches.filter(isMatchLive).filter(function(m) {
+        var home   = ((m.home   && m.home.name)   || '').toLowerCase();
+        var away   = ((m.away   && m.away.name)   || '').toLowerCase();
+        var league = ((m.league && m.league.name) || '').toLowerCase();
+        return home.indexOf(q) !== -1 || away.indexOf(q) !== -1 || league.indexOf(q) !== -1;
+      });
+      renderMatches(liveFiltered);
+      return;
+    }
+
     // Clear → restore full match list
     if (!q) {
+      S.liveSearchQ = '';
       renderMatches(S.matches);
       return;
     }
@@ -3116,7 +3184,7 @@ window.sbSearchMatches = function(rawQ) {
           }).catch(function() {});
       }
     }
-  }, 300);
+  }, 180);
 };
 
 /* ── Sidebar time filters (Tout / Aujourd'hui / 3h / 6h / 24h) ── */
@@ -3484,6 +3552,7 @@ window.sbSwitchTab = function(btn, action, sportId) {
   }
 
   S.activeTab = (action === 'live') ? 'live' : 'home';
+  if (action !== 'live') S.liveSearchQ = '';
   S.activeSportId = sportId || 1;
   S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
   S.activeLeagueId = null;
@@ -3671,6 +3740,7 @@ function renderMatchDetail(m, markets) {
   if (!el || !m) return;
 
   var isLive   = isMatchLive(m);
+  var isEnded  = isMatchEnded(m);
   var hn       = m.home ? m.home.name : '';
   var an       = m.away ? m.away.name : '';
   var hShort   = hn.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'').substring(0,3).toUpperCase();
@@ -3740,11 +3810,18 @@ function renderMatchDetail(m, markets) {
   // patchMatchDetailLive can refresh ALL of it in one go when the
   // 3s poll lands fresh timer/period data (period text, | separator,
   // timer or Mi-temps label).
-  if (isLive) {
+  if (isLive && !isEnded) {
     out += '<div class="md-card-period" id="md-period-row">';
     out += '<span class="md-card-info"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="16" cy="12" r="1.2" fill="currentColor"/></svg></span>';
     out += '<span class="md-card-period-block" id="md-period-block">';
     out +=   buildMdPeriodBlock(period, isHT, timerInit);
+    out += '</span>';
+    out += '</div>';
+  } else if (isEnded) {
+    out += '<div class="md-card-period" id="md-period-row">';
+    out += '<span class="md-card-info"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="16" cy="12" r="1.2" fill="currentColor"/></svg></span>';
+    out += '<span class="md-card-period-block" id="md-period-block">';
+    out += '<span class="md-card-timer md-card-timer--ended">Terminé</span>';
     out += '</span>';
     out += '</div>';
   }
@@ -3768,7 +3845,7 @@ function renderMatchDetail(m, markets) {
   out += '</div>';
 
   // Row 4: stats bar (corners, cards, attacks, shots)
-  var statsHtml = renderStatsBar(m, sportId);
+  var statsHtml = (isLive || isEnded) ? renderStatsBar(m, sportId) : '';
   if (statsHtml) out += statsHtml;
 
   out += '</div>'; // md-card
@@ -4627,11 +4704,23 @@ function loadAndFilter(action, sid, lid) {
     });
 }
 
+/* ── Multi-sport live league names for top-league EN DIRECT badges ── */
+function refreshLiveTopLeagues() {
+  fetch(BASE + 'sportsbook/api.php?action=top_leagues_live')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d && d.live_leagues) {
+        S.allLiveLeagueNames = d.live_leagues;
+        markLiveSidebarLeagues(S.matches);
+      }
+    })
+    .catch(function() {});
+}
+
 /* ── Mark sidebar top-league items with EN DIRECT badge when live matches exist ── */
 function markLiveSidebarLeagues(matches) {
-  // Build set of live league names from current results
-  var liveApiLeagues = [];
-  matches.forEach(function(m) {
+  var liveApiLeagues = (S.allLiveLeagueNames || []).slice();
+  (matches || []).forEach(function(m) {
     if (isMatchLive(m) && m.league && m.league.name) {
       liveApiLeagues.push(m.league.name);
     }
@@ -4640,9 +4729,8 @@ function markLiveSidebarLeagues(matches) {
   document.querySelectorAll('.sb-tl-item').forEach(function(el) {
     var nameEl = el.querySelector('.sb-league-name');
     if (!nameEl) return;
-    var displayName = nameEl.textContent.trim(); // e.g. "Serie A", "Premier League"
+    var displayName = (el.getAttribute('data-league-label') || nameEl.textContent || '').trim();
 
-    // Check using the same isLeagueMatch used for filtering
     var isLive = liveApiLeagues.some(function(apiLn) {
       return isLeagueMatch(displayName, apiLn);
     });
@@ -4806,6 +4894,7 @@ document.addEventListener('DOMContentLoaded', function() { setTimeout(sbHideBoot
 
 /* ── Init ─────────────────────────────────────────────────── */
 loadCounts();
+refreshLiveTopLeagues();
 startPolling();
 renderSidebar();
 renderBetSlip();
