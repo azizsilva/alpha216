@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525cb';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525cc';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -891,6 +891,17 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
         <div class="sb-search-row">
           <select class="sb-dark-sel"><option>Bet Code</option></select>
           <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Team / championship search — added above Paris populaires per
+         the reference image (matches the fcbet216 sidebar order). -->
+    <div class="sb-widget sb-widget--team-search">
+      <div class="sb-widget-body" style="padding-top:6px">
+        <div class="sb-search-box sb-search-box--right">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
         </div>
       </div>
     </div>

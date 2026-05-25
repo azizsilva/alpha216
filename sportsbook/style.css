@@ -4805,11 +4805,11 @@ button.md-odd-btn,
   margin: 0 !important;
 }
 .sb-root .sb-champ-mkt-acc-body {
-  padding: 4px 0 0 !important;
+  padding: 6px 0 0 !important;
   border-top: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 6px !important;   /* visible breathing room between options (matches fcbet216 reference image) */
   background: transparent !important;
 }
 .sb-root .sb-champ-mkt-acc.collapsed .sb-champ-mkt-acc-body { display: none !important; }
@@ -5573,13 +5573,15 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   background: transparent;
   border: none;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 10;
-  margin-top: 0;
+  margin-top: 6px;
+  flex-direction: column;
+  gap: 6px;            /* visible spacing between dropdown rows (fcbet216 ref image) */
 }
 .sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop {
-  display: block !important;
+  display: flex !important;
 }
 .sb-lmk-item {
   width: 100%;
@@ -5587,9 +5589,9 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   align-items: center;
   justify-content: flex-start;
   padding: 14px 18px;
-  background: transparent;
+  background: rgb(74,74,74);
   border: none;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
   color: rgba(255,255,255,0.92);
   font-size: 14px;
   font-weight: 500;
@@ -5597,8 +5599,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.sb-lmk-item:first-child { border-top: none; }
-.sb-lmk-item:hover { background: rgba(255,255,255,0.04); color: #fff; }
+.sb-lmk-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .sb-lmk-minus { font-size: 18px; color: var(--sb-text-2); line-height: 1; }
 
 /* "Market not available" message in match card */

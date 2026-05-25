@@ -513,6 +513,8 @@ function startMatchDetailPoll(mid) {
   // known timer/stats can't leak into this one.
   window._mdLastTimer = null;
   window._mdLastStats = null;
+  // Forget any previously expanded markets when switching match.
+  S._mdMktState = {};
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
@@ -2025,15 +2027,21 @@ var LEAGUE_PENALTY_TERMS = [
 ];
 function getLeaguePriority(league) {
   if (!league || !league.name) return 900;
-  var n = league.name;
+  var n   = league.name;
+  var low = n.toLowerCase();
+
+  // ── Penalty check FIRST. If a league name contains a penalty term
+  //    (women, U17/U19/U21/U23, reserve, youth, friendly, esoccer,
+  //    regional, amateur), it never gets top priority — even when its
+  //    name happens to contain "Premier League" or "Bundesliga". This
+  //    is what was previously letting "Iceland Premier League Women"
+  //    or "Germany Bundesliga U19" jump to the top of the list.
+  for (var pi = 0; pi < LEAGUE_PENALTY_TERMS.length; pi++) {
+    if (low.indexOf(LEAGUE_PENALTY_TERMS[pi]) >= 0) return 850;
+  }
+
   for (var k in LEAGUE_PRIORITY_MAP) {
     if (n.indexOf(k) >= 0 || k.indexOf(n) >= 0) return LEAGUE_PRIORITY_MAP[k];
-  }
-  // Unknown league — default to 500 (worse than every named European
-  // league above), then push down further if it matches a penalty term.
-  var low = n.toLowerCase();
-  for (var i = 0; i < LEAGUE_PENALTY_TERMS.length; i++) {
-    if (low.indexOf(LEAGUE_PENALTY_TERMS[i]) >= 0) return 800;
   }
   return 500;
 }
@@ -4757,6 +4765,10 @@ window.sbToggleMdMarket = function(hdr) {
   var closedIc = hdr.querySelector('.md-mkt-ctrl--closed');
   if (openIc)   openIc.style.display   = nowCollapsed ? 'none' : '';
   if (closedIc) closedIc.style.display = nowCollapsed ? '' : 'none';
+  // Persist per-group expanded state so the 1.5s match-detail poll
+  // does not re-collapse a market the user just opened.
+  if (!S._mdMktState) S._mdMktState = {};
+  if (grp.id) S._mdMktState[grp.id] = !nowCollapsed;
 };
 
 function renderMatchDetail(m, markets) {
@@ -4964,6 +4976,13 @@ function renderMatchDetail(m, markets) {
 function renderMarketGroup(mkt, m, expanded, bbMode) {
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
+  // Honor any user-driven expand/collapse override stored in S._mdMktState.
+  // Without this, the 1.5s match-detail poll re-renders the markets and
+  // any group the user just opened immediately collapses back to its
+  // initial "expanded by index" state.
+  if (S && S._mdMktState && S._mdMktState.hasOwnProperty(grpId)) {
+    expanded = !!S._mdMktState[grpId];
+  }
   var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + (bbMode ? ' bb-mode' : '') + '" id="' + h(grpId) + '">';
   out += '<div class="md-mkt-hdr" onclick="window.sbToggleMdMarket(this)">';
   out += '<span class="md-mkt-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
