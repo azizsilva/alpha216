@@ -6,22 +6,18 @@
 (function(){
 'use strict';
 
-// ── CSS self-injection: force-refreshes sportsbook/style.css on every load
-// Fixes "CSS cached/disappears" issue on SPA navigation
+// ── CSS safety-net: ensure sportsbook/style.css is in the DOM (does NOT
+// re-fetch when the file is already linked via PHP filemtime cache-bust).
+// The previous version forced a re-download on every page load by setting
+// `existingLink.href = newHref` — that defeated browser caching and slowed
+// every navigation. Now we only inject if the link is missing.
 (function injectCSS() {
+  if (document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]')) return;
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  // Static version = no FOUC (browser caches the file between refreshes)
-  // Bump this string manually only when style.css actually changes.
-  var newHref = base + 'sportsbook/style.css?v=20260525.35';
-  var existingLink = document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]');
-  if (existingLink) {
-    existingLink.href = newHref; // Force fresh fetch
-  } else {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = newHref;
-    document.head.appendChild(link);
-  }
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = base + 'sportsbook/style.css';
+  document.head.appendChild(link);
 })();
 
 var MARGIN = 0; // BetsAPI provides real Bet365 odds directly; margin is in Bet365's overround

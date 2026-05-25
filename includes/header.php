@@ -321,10 +321,11 @@ $__sb_skip_bootstrap = ($__sb_path !== '' && (preg_match('#/sportsbook(?:/|$)#i'
         launchGame(id, name);
     }
   </script>
-<?php if (!$__sb_skip_bootstrap): ?>
+  <!-- Bootstrap JS + Owl Carousel are kept loaded everywhere: only their
+       CSS conflicted with the sportsbook UI, the JS is needed by other
+       page initialisers (e.g. $('.owl-carousel').owlCarousel(...)). -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<?php endif; ?>
   <script>  
     (function () {
       try {
