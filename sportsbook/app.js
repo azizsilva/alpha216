@@ -1923,23 +1923,19 @@ var LIVE_MKT_OPTIONS = [
 function renderLiveMarketDropdown() {
   var active = LIVE_MKT_OPTIONS.find(function(o){ return o.key === (S.activeLiveCat||'populaire'); });
   var label  = active ? active.label : '1x2';
-  // Persist open/closed across re-renders (poll cycles, sport switches,
-  // etc.) so the user opening the menu does NOT see it slam shut every
-  // few seconds when sbHomeInit / sbPollSportPage repaints the home tab.
-  var isOpen = !!S._liveMktOpen;
-  var openCls = isOpen ? ' sb-lmdt-open' : '';
-  var arrow   = isOpen ? '&minus;' : ICON.chevronDown;
-  var out = '<div class="sb-live-mkt-wrap' + openCls + '" id="sb-live-mkt-wrap">';
-  // Header — its own rounded card (fcbet216 reference)
+  // Honor persisted open state so the 1.5-3s poll re-render never
+  // collapses a dropdown the user has just opened (this is the
+  // "ferme automatiquement" bug the client kept hitting).
+  var isOpen = !!S.liveMktDropOpen;
+  var arrowHtml = isOpen
+    ? '&minus;'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var out = '<div class="sb-live-mkt-wrap' + (isOpen ? ' sb-lmdt-open' : '') + '" id="sb-live-mkt-wrap">';
   out += '<div class="sb-live-mkt-panel">';
   out += '<button type="button" class="sb-live-mkt-btn' + (isOpen ? ' open' : '') + '" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
   out += '<span id="sb-live-mkt-lbl">' + h(label) + '</span>';
-  out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + arrow + '</span>';
+  out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + arrowHtml + '</span>';
   out += '</button>';
-  out += '</div>';
-  // Options list — SIBLING of the header panel (NOT inside it) so each
-  // option renders as its own spaced card instead of a single dense
-  // strip inside one rounded panel.
   out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop">';
   LIVE_MKT_OPTIONS.forEach(function(o) {
     var isCur = (o.key === (S.activeLiveCat || 'populaire'));
@@ -1950,6 +1946,7 @@ function renderLiveMarketDropdown() {
   });
   out += '</div>';
   out += '</div>';
+  out += '</div>';
   return out;
 }
 
@@ -1958,33 +1955,30 @@ window.sbToggleLiveMktDrop = function() {
   var arrow = document.getElementById('sb-lmb-arrow');
   if (!wrap) return;
   var isOpen = wrap.classList.contains('sb-lmdt-open');
-  wrap.classList.toggle('sb-lmdt-open', !isOpen);
-  // Persist so the next poll re-render preserves the state.
-  S._liveMktOpen = !isOpen;
+  var nextOpen = !isOpen;
+  wrap.classList.toggle('sb-lmdt-open', nextOpen);
+  S.liveMktDropOpen = nextOpen;        // persist so poll re-render keeps state
   if (arrow) {
-    if (!isOpen) {
-      arrow.innerHTML = '&minus;';
-    } else {
-      arrow.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-    }
+    arrow.innerHTML = nextOpen
+      ? '&minus;'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   }
   var btn = document.getElementById('sb-live-mkt-btn');
-  if (btn) btn.classList.toggle('open', !isOpen);
+  if (btn) btn.classList.toggle('open', nextOpen);
 };
 
 window.sbSetLiveCat = function(key, label) {
   S.activeLiveCat = key;
-  // User picked an option ⇒ collapse the dropdown (fcbet UX).
-  S._liveMktOpen  = false;
-  // Rebuild dropdown list (selected option moves to header)
+  // Close dropdown after picking — fcbet UX. Update persisted state
+  // BEFORE re-rendering so the rebuilt dropdown is in the closed state.
+  S.liveMktDropOpen = false;
   var wrap = document.getElementById('sb-live-mkt-wrap');
   if (wrap) {
     wrap.outerHTML = renderLiveMarketDropdown();
   }
   var lbl = document.getElementById('sb-live-mkt-lbl');
   if (lbl) lbl.textContent = label;
-  // Close dropdown via class
-  var wrap = document.getElementById('sb-live-mkt-wrap');
+  wrap = document.getElementById('sb-live-mkt-wrap');
   if (wrap) wrap.classList.remove('sb-lmdt-open');
   var arrow = document.getElementById('sb-lmb-arrow');
   if (arrow) {

@@ -292,7 +292,12 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-root .sb-upcoming-tabs::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
 .sb-root .sb-upcoming-tabs{scrollbar-width:none!important;-ms-overflow-style:none!important;}
 .sb-root .sb-live-mkt-btn{color:#fff!important;text-shadow:none!important;box-shadow:none!important;background:transparent!important;border:none!important;border-radius:0!important;}
-.sb-root .sb-live-mkt-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:12px!important;overflow:hidden;}
+.sb-root .sb-live-mkt-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:12px!important;overflow:visible!important;}
+/* Live-page market dropdown — spaced rounded rows (fcbet216 reference image). */
+body .sb-root .sb-live-mkt-drop,.sb-root .sb-live-mkt-drop,.sb-live-mkt-drop{display:none!important;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;position:relative!important;z-index:10!important;margin-top:6px!important;padding:4px!important;flex-direction:column!important;gap:6px!important;}
+body .sb-root .sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop,.sb-root .sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop,.sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop{display:flex!important;}
+body .sb-root .sb-lmk-item,.sb-root .sb-lmk-item,.sb-lmk-item{width:100%!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:14px 18px!important;background:rgb(74,74,74)!important;background-color:rgb(74,74,74)!important;background-image:none!important;border:0!important;border-radius:6px!important;color:rgba(255,255,255,0.92)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;text-align:left!important;cursor:pointer!important;outline:none!important;box-shadow:none!important;margin:0!important;line-height:1.2!important;-webkit-tap-highlight-color:transparent!important;}
+body .sb-root .sb-lmk-item:hover,.sb-root .sb-lmk-item:hover,.sb-lmk-item:hover{background:rgba(255,255,255,0.08)!important;color:#fff!important;}
 .sb-root[data-view="livepage"] .sb-mob-search-panel{display:flex!important;}
 .sb-root[data-view="livepage"] .sb-mob-search-panel .sb-search-box{border:1px solid #70f669!important;}
 .sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
