@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525u';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525v';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -334,15 +334,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .md-tab-info-btn svg{width:14px!important;height:14px!important;color:#f04a4a!important;}
 
 /* Match-detail market cards + odd buttons — critical inline CSS so
- * the layout is correct even before style.css loads. Fixes the
- * "flat unstyled buttons" issue where rgb(58,58,58) buttons were
- * blending into rgb(40,40,40) cards. */
-.md-markets{padding:10px 10px 80px;background:#0f0f0f;}
-.md-market-group{background:rgb(28,28,28)!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:10px!important;margin-bottom:10px!important;overflow:hidden;}
-.md-mkt-body{padding:10px 12px 14px!important;display:flex!important;flex-direction:column!important;gap:8px!important;}
-.md-mkt-row{display:flex!important;gap:8px!important;align-items:stretch!important;}
-.md-odd-btn{flex:1 1 0!important;min-width:0!important;background:rgb(56,56,56)!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:8px!important;padding:12px 14px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;outline:none!important;min-height:46px!important;gap:8px!important;box-shadow:none!important;text-shadow:none!important;margin:0!important;}
-.md-odd-btn:hover{background:rgb(70,70,70)!important;border-color:rgba(255,255,255,.10)!important;}
+ * the layout is correct even before style.css loads. Selectors are
+ * doubled up (`.sb-root button.md-odd-btn` + `.md-odd-btn`) to bump
+ * specificity past the `.sb-root button { background: transparent }`
+ * reset that was making the buttons look flat in production. */
+.md-markets,.sb-root .md-markets{padding:10px 10px 80px!important;background:#0f0f0f!important;}
+.sb-root .md-market-group,.md-market-group{background:rgb(28,28,28)!important;background-color:rgb(28,28,28)!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:10px!important;margin-bottom:10px!important;overflow:hidden;}
+.sb-root .md-mkt-body,.md-mkt-body{padding:10px 12px 14px!important;display:flex!important;flex-direction:column!important;gap:8px!important;}
+.sb-root .md-mkt-row,.md-mkt-row{display:flex!important;gap:8px!important;align-items:stretch!important;}
+.sb-root button.md-odd-btn,.sb-root .md-odd-btn,button.md-odd-btn,.md-odd-btn{flex:1 1 0!important;min-width:0!important;background:rgb(56,56,56)!important;background-color:rgb(56,56,56)!important;background-image:none!important;border:1px solid rgba(255,255,255,.06)!important;border-radius:8px!important;padding:12px 14px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;outline:none!important;min-height:46px!important;gap:8px!important;box-shadow:none!important;text-shadow:none!important;margin:0!important;color:#fff!important;}
+.sb-root button.md-odd-btn:hover,.sb-root .md-odd-btn:hover,.md-odd-btn:hover{background:rgb(70,70,70)!important;background-color:rgb(70,70,70)!important;border-color:rgba(255,255,255,.10)!important;}
 .md-o-name{font-size:13px!important;color:rgba(255,255,255,.92)!important;flex:1 1 auto!important;text-align:left!important;font-weight:500!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .md-o-val{font-size:14px!important;font-weight:700!important;color:rgb(113,246,105)!important;display:inline-flex;align-items:center;gap:4px;}
 .md-o-arrow{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-size:9px;}

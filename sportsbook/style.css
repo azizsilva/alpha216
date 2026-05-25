@@ -99,7 +99,7 @@ body {
 
 /* Scoped button reset — prevents Bootstrap .btn and parent rules
    from giving sportsbook buttons borders, shadows or oversized padding. */
-.sb-root button,
+.sb-root button:not(.md-odd-btn):not(.md-tab):not(.md-tab-search-btn):not(.md-tab-search-close):not(.md-tab-info-btn),
 .sb-root input[type="button"],
 .sb-root input[type="submit"] {
   background: transparent;
@@ -3440,10 +3440,14 @@ body {
 .md-tab-info-icon--star { width: 16px; height: 16px; color: rgba(255,255,255,0.65); font-size: 14px; }
 
 /* Markets area */
-.md-markets { padding: 10px 10px 80px; background: #0f0f0f; }
+.md-markets,
+.sb-root .md-markets { padding: 10px 10px 80px !important; background: #0f0f0f !important; }
 
+.sb-root .md-market-group,
 .md-market-group {
   background: rgb(28,28,28) !important;
+  background-color: rgb(28,28,28) !important;
+  background-image: none !important;
   border: 1px solid rgba(255,255,255,0.05) !important;
   border-radius: 10px !important;
   margin-bottom: 10px !important;
@@ -3488,13 +3492,20 @@ body {
 
 /* Odds button — fcbet216 reference. Clear lighter-gray pill that
    pops against the darker card background. Each row holds 2 (or 3)
-   buttons side by side with equal width. Heavy !important to defeat
-   Bootstrap's `.btn` reset that was making buttons look unstyled. */
+   buttons side by side with equal width. We bump selector specificity
+   with `.sb-root button.md-odd-btn` (0,2,1) to beat the global
+   `.sb-root button { background: transparent }` reset (0,1,1) that
+   was making the buttons look completely flat in production. */
+.sb-root button.md-odd-btn,
+.sb-root .md-odd-btn,
+button.md-odd-btn,
 .md-odd-btn {
   flex: 1 1 0 !important;
   min-width: 0 !important;
   background: rgb(56,56,56) !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
+  background-color: rgb(56,56,56) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
   border-radius: 8px !important;
   padding: 12px 14px !important;
   display: flex !important;
@@ -3513,9 +3524,13 @@ body {
   box-shadow: none !important;
   text-shadow: none !important;
   margin: 0 !important;
+  color: #fff !important;
 }
-.md-odd-btn:hover  { background: rgb(70,70,70) !important; border-color: rgba(255,255,255,0.10) !important; }
-.md-odd-btn:active { background: rgb(78,78,78) !important; }
+.sb-root button.md-odd-btn:hover,
+.sb-root .md-odd-btn:hover,
+.md-odd-btn:hover  { background: rgb(70,70,70) !important; background-color: rgb(70,70,70) !important; border-color: rgba(255,255,255,0.10) !important; }
+.sb-root button.md-odd-btn:active,
+.md-odd-btn:active { background: rgb(78,78,78) !important; background-color: rgb(78,78,78) !important; }
 .md-odd-btn.sel {
   background: var(--sb-green) !important;
   border-color: var(--sb-green) !important;
