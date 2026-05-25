@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525ax';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ay';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -282,7 +282,9 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-tl-item:last-child{border-bottom:none;}
 .sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sb-globe-icon{width:22px;height:22px;border-radius:5px;background:#4dd0c8;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-globe-icon,body .sb-root .sb-globe-icon,body .sb-mob-leagues-panel .sb-globe-icon,body .sb-top-leagues-card .sb-globe-icon{width:22px!important;height:22px!important;border-radius:5px!important;background:#4dd0e1!important;color:#fff!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;}
+body .sb-root .sb-globe-icon svg{display:block!important;}
+body .sb-root .sb-globe-icon svg circle,body .sb-root .sb-globe-icon svg path{stroke:#fff!important;}
 .sb-mob-leagues-panel .sb-flag-icon{width:22px;height:16px;object-fit:cover;border-radius:3px;flex-shrink:0;}
 .sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:rgb(251,51,51);color:rgb(255,255,255);font-family:'Roboto',sans-serif;font-size:12px;font-weight:500;line-height:12px;padding:2px 4px;border:0;border-radius:4px;letter-spacing:0;text-transform:uppercase;}
 .sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}

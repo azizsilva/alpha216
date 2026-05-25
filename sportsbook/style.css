@@ -4977,18 +4977,24 @@ body .sb-root .sb-champ-mkt-opt.active {
 
 /* ── Globe icon for international competitions (teal rounded square,
      fcbet216 reference image 1: Coupe du Monde, UEFA, Copa, etc.) ── */
-.sb-globe-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #4dd0c8;             /* teal/cyan from fcbet216 */
-  color: #ffffff;                  /* white wireframe globe */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.sb-globe-icon,
+body .sb-root .sb-globe-icon,
+body .sb-mob-leagues-panel .sb-globe-icon,
+body .sb-top-leagues-card .sb-globe-icon {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 5px !important;
+  background: #4dd0e1 !important;  /* fcbet216 exact: bright cyan-teal */
+  color: #ffffff !important;       /* white wireframe globe */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
 }
-.sb-globe-icon svg { display: block; }
+.sb-globe-icon svg,
+body .sb-root .sb-globe-icon svg { display: block !important; }
+body .sb-root .sb-globe-icon svg circle,
+body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
 /* Flag icon — slightly bigger so it visually balances the globe square */
 .sb-mob-leagues-panel .sb-flag-icon {
   width: 22px !important;
