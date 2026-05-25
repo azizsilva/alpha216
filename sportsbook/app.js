@@ -1923,14 +1923,23 @@ var LIVE_MKT_OPTIONS = [
 function renderLiveMarketDropdown() {
   var active = LIVE_MKT_OPTIONS.find(function(o){ return o.key === (S.activeLiveCat||'populaire'); });
   var label  = active ? active.label : '1x2';
-  var out = '<div class="sb-live-mkt-wrap" id="sb-live-mkt-wrap">';
+  // Persist open/closed across re-renders (poll cycles, sport switches,
+  // etc.) so the user opening the menu does NOT see it slam shut every
+  // few seconds when sbHomeInit / sbPollSportPage repaints the home tab.
+  var isOpen = !!S._liveMktOpen;
+  var openCls = isOpen ? ' sb-lmdt-open' : '';
+  var arrow   = isOpen ? '&minus;' : ICON.chevronDown;
+  var out = '<div class="sb-live-mkt-wrap' + openCls + '" id="sb-live-mkt-wrap">';
+  // Header — its own rounded card (fcbet216 reference)
   out += '<div class="sb-live-mkt-panel">';
-  // Header — toggles open/closed; minus when open (fcbet216 accordion)
-  out += '<button type="button" class="sb-live-mkt-btn" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
+  out += '<button type="button" class="sb-live-mkt-btn' + (isOpen ? ' open' : '') + '" id="sb-live-mkt-btn" onclick="window.sbToggleLiveMktDrop()">';
   out += '<span id="sb-live-mkt-lbl">' + h(label) + '</span>';
-  out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + ICON.chevronDown + '</span>';
+  out += '<span class="sb-lmb-arrow" id="sb-lmb-arrow">' + arrow + '</span>';
   out += '</button>';
-  // Options — same card, no gap (connected accordion body)
+  out += '</div>';
+  // Options list — SIBLING of the header panel (NOT inside it) so each
+  // option renders as its own spaced card instead of a single dense
+  // strip inside one rounded panel.
   out += '<div class="sb-live-mkt-drop" id="sb-live-mkt-drop">';
   LIVE_MKT_OPTIONS.forEach(function(o) {
     var isCur = (o.key === (S.activeLiveCat || 'populaire'));
@@ -1939,7 +1948,6 @@ function renderLiveMarketDropdown() {
     out += h(o.label);
     out += '</button>';
   });
-  out += '</div>';
   out += '</div>';
   out += '</div>';
   return out;
@@ -1951,7 +1959,8 @@ window.sbToggleLiveMktDrop = function() {
   if (!wrap) return;
   var isOpen = wrap.classList.contains('sb-lmdt-open');
   wrap.classList.toggle('sb-lmdt-open', !isOpen);
-  // Arrow: minus when open, chevron down when closed
+  // Persist so the next poll re-render preserves the state.
+  S._liveMktOpen = !isOpen;
   if (arrow) {
     if (!isOpen) {
       arrow.innerHTML = '&minus;';
@@ -1965,6 +1974,8 @@ window.sbToggleLiveMktDrop = function() {
 
 window.sbSetLiveCat = function(key, label) {
   S.activeLiveCat = key;
+  // User picked an option ⇒ collapse the dropdown (fcbet UX).
+  S._liveMktOpen  = false;
   // Rebuild dropdown list (selected option moves to header)
   var wrap = document.getElementById('sb-live-mkt-wrap');
   if (wrap) {

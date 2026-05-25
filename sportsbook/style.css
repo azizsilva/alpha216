@@ -5253,8 +5253,15 @@ body .sb-root .sb-champ-mkt-opt.active {
   background: rgba(255,255,255,0.06) !important;
   box-shadow: inset 3px 0 0 var(--sb-green);
 }
-.sb-live-now-block { margin-top: 4px; }
-.sb-upcoming-block { margin-top: 8px; }
+.sb-live-now-block { margin-top: 4px; margin-bottom: 18px; }
+.sb-upcoming-block { margin-top: 18px; margin-bottom: 18px; }
+/* Visible breathing room between every top-level home section
+   (En direct maintenant, Prochainement, Cotes boostées, etc.) — the
+   client wanted clear gaps matching fcbet216 instead of sections
+   stacked tight against each other. */
+.sb-root .sb-section-title { margin-top: 18px; }
+.sb-root .sb-live-now-block + .sb-section-title,
+.sb-root .sb-upcoming-block + .sb-section-title { margin-top: 22px; }
 
 /* ── Globe icon for international competitions (teal rounded square,
      fcbet216 reference image 1: Coupe du Monde, UEFA, Copa, etc.) ── */
