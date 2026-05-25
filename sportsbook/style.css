@@ -4384,6 +4384,113 @@ button.md-odd-btn,
 }
 .sb-champ-col-sel .sb-market-sel { flex: 1; }
 
+/* ── Championship market accordion — replaces static <select>.
+   Header is a clickable bar showing the active market (e.g. "Vainqueur")
+   with a +/− indicator that collapses/expands the league list.
+   Matches fcbet216 reference (images 6 + 8). ─────────────────────── */
+.sb-champ-mkt-acc {
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.sb-champ-mkt-acc-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  position: relative;
+  outline: none;
+}
+.sb-champ-mkt-acc-lbl {
+  flex: 1;
+  text-align: center;
+}
+.sb-champ-mkt-acc-tgl {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: #cfcfcf;
+  width: 16px;
+  text-align: center;
+  line-height: 1;
+}
+.sb-champ-mkt-acc-body {
+  padding: 0 10px 10px;
+}
+.sb-champ-mkt-acc.collapsed .sb-champ-mkt-acc-body { display: none; }
+
+/* ── League accordion (per-league section inside the market acc) ───── */
+.sb-league-acc {
+  background: rgb(58,58,58);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.sb-league-acc:first-child { margin-top: 4px; }
+.sb-league-acc-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  text-align: left;
+  outline: none;
+}
+.sb-league-acc-hdr .sb-lh-star {
+  color: var(--sb-text-2);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.sb-league-acc-hdr .sb-lh-star svg { width: 14px; height: 14px; stroke: currentColor; }
+.sb-league-acc-hdr .sb-lh-star:hover { color: #ffd700; }
+.sb-league-acc-hdr .sb-league-f { width: 18px; height: 13px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
+.sb-league-acc-hdr .sb-league-n {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sb-league-acc-tgl {
+  font-size: 16px;
+  font-weight: 700;
+  color: #cfcfcf;
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+  line-height: 1;
+  margin-left: 6px;
+}
+.sb-league-acc-body {
+  padding: 6px 10px 10px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.sb-league-acc.collapsed .sb-league-acc-body { display: none; }
+.sb-league-acc.collapsed .sb-league-acc-hdr { border-bottom: 0; }
+
 /* Gift icon in league header */
 .sb-lh-gift {
   color: var(--sb-text-2);

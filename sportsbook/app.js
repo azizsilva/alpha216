@@ -518,6 +518,18 @@ function renderStatsBar(m, sportId) {
   var st = m.stats || {};
   var s = m.ss ? m.ss.split('-') : [];
 
+  // Validate one stat cell — must look like a small non-negative integer.
+  // BetsAPI occasionally leaks event timestamps (e.g. "20260525143000") into
+  // red_cards / yellow_cards arrays; this filter strips them client-side as
+  // a defense-in-depth in case the server response slips one through.
+  function _validCell(x) {
+    if (x === null || x === undefined) return false;
+    var s = String(x).trim();
+    if (s === '') return false;
+    if (!/^-?\d+$/.test(s)) return false;
+    var n = parseInt(s, 10);
+    return n >= 0 && n <= 999;
+  }
   // Helper: get stat value — tries several API key variants because
   // BetsAPI / Bet365 feeds use inconsistent naming across leagues.
   function sv(key, idx, def) {
@@ -534,13 +546,18 @@ function renderStatsBar(m, sportId) {
     for (var ki = 0; ki < keys.length; ki++) {
       var k = keys[ki];
       if (st[k] === undefined || st[k] === null || st[k] === '') continue;
-      var v = st[k];
+      var v = st[k], pick;
       if (typeof v === 'string' && v.indexOf(',') !== -1) {
         var parts = v.split(',');
-        if (parts[idx] !== undefined && parts[idx] !== '') return parts[idx].trim();
+        pick = parts[idx] !== undefined ? String(parts[idx]).trim() : null;
+      } else if (Array.isArray(v) && v[idx] !== undefined && v[idx] !== null) {
+        pick = v[idx];
+      } else if (v && typeof v === 'object' && v[idx] !== undefined && v[idx] !== null) {
+        pick = v[idx];
       }
-      if (Array.isArray(v) && v[idx] !== undefined && v[idx] !== null && v[idx] !== '') return v[idx];
-      if (v && v[idx] !== undefined && v[idx] !== null && v[idx] !== '') return v[idx];
+      if (pick !== undefined && pick !== null && pick !== '' && _validCell(pick)) {
+        return pick;
+      }
     }
     return def;
   }
@@ -680,6 +697,9 @@ var S = {
   activeLiveCat: 'populaire',   // active market category for live section dropdown
   liveSearchQ: ''               // debounced EN DIRECT search filter
   ,allLiveLeagueNames: []       // multi-sport live leagues for top-league badges
+  ,champGroupMode: 'league'     // 'league' | 'hour' — Par Ligue / Par Heure
+  ,champMktAccOpen: true        // collapsed state of the main market accordion
+  ,champLeagueCollapsed: {}     // per-league collapsed map in championship view
 };
 
 /* ── Navigation helpers — keep every view switch instant and race-free.
@@ -2907,9 +2927,10 @@ function renderChampionship(id, name, flag, matches) {
   out += '</div>';
 
   // ── Sub-nav: Par Ligue | Par Heure ────────────────────────────────────
+  var groupMode = S.champGroupMode || 'league';
   out += '<div class="sb-champ-subnav">';
-  out += '<button type="button" class="sb-subnav-btn active">Par Ligue</button>';
-  out += '<button type="button" class="sb-subnav-btn">Par Heure</button>';
+  out += '<button type="button" class="sb-subnav-btn' + (groupMode === 'league' ? ' active' : '') + '" onclick="window.sbChampGroupMode(\'league\')">Par Ligue</button>';
+  out += '<button type="button" class="sb-subnav-btn' + (groupMode === 'hour' ? ' active' : '') + '" onclick="window.sbChampGroupMode(\'hour\')">Par Heure</button>';
   out += '</div>';
 
   // ── Date filter: Tout + upcoming dates ────────────────────────────────
@@ -2962,36 +2983,74 @@ function renderChampionship(id, name, flag, matches) {
   });
   out += '</div>';
 
-  // ── Column selector — shows active market category name ──────────────
+  // ── Market accordion — replaces the static <select>. Single full-width
+  //    header showing the active market (e.g. "Vainqueur" / "1x2") with a
+  //    +/− toggle that collapses/expands the matches list. Matches the
+  //    fcbet216 reference (image 6 + 8). ────────────────────────────────
   var catLabel = (catRow1.concat(catRow2)).find(function(c) { return c.key === activeCat; });
-  out += '<div class="sb-champ-col-sel">';
-  out += '<select class="sb-market-sel"><option>' + (catLabel ? catLabel.label : '1x2') + '</option></select>';
-  out += '</div>';
+  var mktLabel = (catLabel ? catLabel.label : '1x2');
+  // Populaire bucket shows the canonical "Vainqueur / 1x2" header.
+  if (activeCat === 'populaire' || activeCat === '1x2') mktLabel = 'Vainqueur';
+  var accOpen = (S.champMktAccOpen !== false); // default open
+  out += '<div class="sb-champ-mkt-acc' + (accOpen ? ' open' : ' collapsed') + '" id="sb-champ-mkt-acc">';
+  out += '<button type="button" class="sb-champ-mkt-acc-hdr" onclick="window.sbToggleChampMktAcc()">'
+       +   '<span class="sb-champ-mkt-acc-lbl">' + h(mktLabel) + '</span>'
+       +   '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen ? '&minus;' : '&#9662;') + '</span>'
+       + '</button>';
+  out += '<div class="sb-champ-mkt-acc-body"' + (accOpen ? '' : ' style="display:none"') + '>';
 
-  // ── Match list grouped by league ──────────────────────────────────────
+  // ── Match list grouped by league or by hour — each group is its OWN
+  //    accordion. "Par Ligue" groups by m.league.name, "Par Heure"
+  //    groups by start hour (e.g. "14h00").
   if (!matches.length) {
     out += '<div class="sb-loader" style="margin-top:16px">Aucun match disponible pour cette ligue.</div>';
   } else {
     var groups = {}, order = [];
+    var byHour = (S.champGroupMode === 'hour');
     matches.forEach(function(m) {
-      var k = (m.league && m.league.name) ? m.league.name : name;
+      var k;
+      if (byHour) {
+        var ts = parseInt(m.time || m.start_time || 0) || 0;
+        if (ts) {
+          var d = new Date(ts * 1000);
+          var hh = String(d.getHours()).padStart(2,'0');
+          var mm = String(d.getMinutes()).padStart(2,'0');
+          var dnames = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+          k = dnames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + ' · ' + hh + 'h' + mm;
+        } else {
+          k = 'En direct';
+        }
+      } else {
+        k = (m.league && m.league.name) ? m.league.name : name;
+      }
       if (!groups[k]) { groups[k] = []; order.push(k); }
       groups[k].push(m);
     });
-    order.forEach(function(lg) {
+    S.champLeagueCollapsed = S.champLeagueCollapsed || {};
+    order.forEach(function(lg, idx) {
       var lc = guessCountry(lg);
       var lf = getFlag(lc);
       var lcl = (lc && lc !== 'International') ? (' · ' + h(lc)) : '';
-      out += '<div class="sb-league-section-hdr" style="margin-top:8px">';
-      out += '<span class="sb-lh-star">' + ICON.star + '</span>';
+      var lgKey = encodeURIComponent(lg);
+      var isCollapsed = !!S.champLeagueCollapsed[lg];
+      var hasLive = groups[lg].some(function(m){ return m.time_status === '1'; });
+      out += '<div class="sb-league-acc' + (isCollapsed ? ' collapsed' : ' open') + '" data-lg="' + h(lg) + '">';
+      out += '<button type="button" class="sb-league-acc-hdr" onclick="window.sbToggleChampLeague(\'' + lgKey + '\')">';
+      out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
       out += '<img src="' + lf + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
       out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg)||lg) + lcl + '</span>';
-      out += '<span class="sb-lh-gift" title="Offres spéciales"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
-      out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
-      out += '</div>';
+      if (hasLive) out += '<span class="sb-en-direct-badge" style="font-size:7px;padding:1px 4px;margin-left:6px">EN DIRECT</span>';
+      out += '<span class="sb-league-acc-tgl" aria-hidden="true">' + (isCollapsed ? '&#9662;' : '&minus;') + '</span>';
+      out += '</button>';
+      out += '<div class="sb-league-acc-body"' + (isCollapsed ? ' style="display:none"' : '') + '>';
       groups[lg].forEach(function(m) { out += matchCard(m); });
+      out += '</div>';
+      out += '</div>';
     });
   }
+
+  out += '</div>'; // sb-champ-mkt-acc-body
+  out += '</div>'; // sb-champ-mkt-acc
 
   out += '</div>'; // sb-champ-view
   el.innerHTML = out;
@@ -3003,6 +3062,45 @@ window.sbSwitchMarketCat = function(cat) {
   if (cat === 'all_markets') return; // TODO: open full markets view
   S.activeMarketCat = cat;
   renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+};
+
+/* ── Toggle the overall market accordion (e.g. "Vainqueur") open/close ── */
+window.sbToggleChampMktAcc = function() {
+  var acc = document.getElementById('sb-champ-mkt-acc');
+  if (!acc) return;
+  var open = acc.classList.contains('open');
+  acc.classList.toggle('open', !open);
+  acc.classList.toggle('collapsed', open);
+  var body = acc.querySelector('.sb-champ-mkt-acc-body');
+  var tgl  = acc.querySelector('.sb-champ-mkt-acc-tgl');
+  if (body) body.style.display = open ? 'none' : '';
+  if (tgl)  tgl.innerHTML = open ? '&#9662;' : '&minus;';
+  S.champMktAccOpen = !open;
+};
+
+/* ── Switch championship grouping: "league" or "hour" ────────────────── */
+window.sbChampGroupMode = function(mode) {
+  S.champGroupMode = (mode === 'hour') ? 'hour' : 'league';
+  S.champLeagueCollapsed = {}; // reset accordion state on regroup
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+};
+
+/* ── Toggle a single league section open/close (chevron / minus) ─────── */
+window.sbToggleChampLeague = function(lgKey) {
+  var lg = decodeURIComponent(lgKey);
+  S.champLeagueCollapsed = S.champLeagueCollapsed || {};
+  var nextCollapsed = !S.champLeagueCollapsed[lg];
+  S.champLeagueCollapsed[lg] = nextCollapsed;
+  // Update DOM directly (no full re-render — keeps scroll position).
+  var sel = '.sb-league-acc[data-lg="' + lg.replace(/"/g,'\\"') + '"]';
+  var node = document.querySelector(sel);
+  if (!node) return;
+  node.classList.toggle('collapsed', nextCollapsed);
+  node.classList.toggle('open', !nextCollapsed);
+  var body = node.querySelector('.sb-league-acc-body');
+  var tgl  = node.querySelector('.sb-league-acc-tgl');
+  if (body) body.style.display = nextCollapsed ? 'none' : '';
+  if (tgl)  tgl.innerHTML = nextCollapsed ? '&#9662;' : '&minus;';
 };
 
 window.sbChampDateFilter = function(btn, offset) {

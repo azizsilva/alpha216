@@ -1603,7 +1603,11 @@ if ($action === 'match_live') {
     if ($fresh_stats) {
         $match_data['stats'] = $fresh_stats;
     } elseif (!empty($match_data['stats'])) {
-        $match_data['stats'] = _normalize_stats($match_data['stats']) ?: $match_data['stats'];
+        // ONLY accept normalized (validated) stats — never fall back to raw,
+        // because BetsAPI leaks timestamps into red_cards/yellow_cards arrays.
+        $norm = _normalize_stats($match_data['stats']);
+        if ($norm) $match_data['stats'] = $norm;
+        else unset($match_data['stats']);
     }
 
     // Fresh live odds from event stream
@@ -1741,21 +1745,29 @@ if ($action === 'match_detail') {
         $markets = md_synthetic_markets($match_data);
     }
 
-    // Ensure stats are normalized and populated (v3 → v1 → bet365 S1..S8)
+    // Ensure stats are normalized and populated (v3 → v1 → bet365 timeline).
+    // We NEVER keep raw stats — only validated counts pass through.
     if ($match_data) {
         $fi_md = $match_data['r_id'] ?? null;
-        $have  = !empty($match_data['stats']) && is_array($match_data['stats']);
-        if ($have) {
+        $have  = false;
+        if (!empty($match_data['stats']) && is_array($match_data['stats'])) {
             $norm = _normalize_stats($match_data['stats']);
-            if ($norm) $match_data['stats'] = $norm;
-            else $have = count($match_data['stats']) > 0;
+            if ($norm) { $match_data['stats'] = $norm; $have = true; }
+            else { unset($match_data['stats']); }
         }
         if (!$have) {
             $fetched = _fetch_event_stats($match_id, $fi_md);
             if ($fetched) $match_data['stats'] = $fetched;
             elseif ($event_raw) {
-                $stream_st = _parse_bet365_event_stats(is_array($event_raw[0] ?? null) ? [$event_raw] : $event_raw);
-                if ($stream_st) $match_data['stats'] = $stream_st;
+                $stream_arr = is_array($event_raw[0] ?? null) ? $event_raw : [$event_raw];
+                $home_n = $match_data['home']['name'] ?? '';
+                $away_n = $match_data['away']['name'] ?? '';
+                $tl = _parse_stream_timeline_stats($stream_arr, $home_n, $away_n);
+                if ($tl) $match_data['stats'] = $tl;
+                else {
+                    $stream_st = _parse_bet365_event_stats(is_array($event_raw[0] ?? null) ? [$event_raw] : $event_raw);
+                    if ($stream_st) $match_data['stats'] = $stream_st;
+                }
             }
         }
     }
