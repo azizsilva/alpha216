@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525t';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525u';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -332,6 +332,26 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .md-search-input{flex:1 1 auto!important;min-width:0!important;background:#2a2a2a!important;border:1px solid rgba(255,255,255,.08)!important;color:#fff!important;border-radius:8px!important;padding:8px 12px!important;font-size:13px!important;font-family:'Roboto',sans-serif!important;outline:none!important;height:34px!important;box-shadow:none!important;}
 .md-tab-info-btn{background:transparent!important;border:1.5px solid #f04a4a!important;color:#f04a4a!important;cursor:pointer;padding:0!important;width:28px!important;height:28px!important;min-width:28px!important;border-radius:50%!important;outline:none!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;margin:0!important;box-shadow:none!important;}
 .md-tab-info-btn svg{width:14px!important;height:14px!important;color:#f04a4a!important;}
+
+/* Match-detail market cards + odd buttons — critical inline CSS so
+ * the layout is correct even before style.css loads. Fixes the
+ * "flat unstyled buttons" issue where rgb(58,58,58) buttons were
+ * blending into rgb(40,40,40) cards. */
+.md-markets{padding:10px 10px 80px;background:#0f0f0f;}
+.md-market-group{background:rgb(28,28,28)!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:10px!important;margin-bottom:10px!important;overflow:hidden;}
+.md-mkt-body{padding:10px 12px 14px!important;display:flex!important;flex-direction:column!important;gap:8px!important;}
+.md-mkt-row{display:flex!important;gap:8px!important;align-items:stretch!important;}
+.md-odd-btn{flex:1 1 0!important;min-width:0!important;background:rgb(56,56,56)!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:8px!important;padding:12px 14px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;outline:none!important;min-height:46px!important;gap:8px!important;box-shadow:none!important;text-shadow:none!important;margin:0!important;}
+.md-odd-btn:hover{background:rgb(70,70,70)!important;border-color:rgba(255,255,255,.10)!important;}
+.md-o-name{font-size:13px!important;color:rgba(255,255,255,.92)!important;flex:1 1 auto!important;text-align:left!important;font-weight:500!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.md-o-val{font-size:14px!important;font-weight:700!important;color:rgb(113,246,105)!important;display:inline-flex;align-items:center;gap:4px;}
+.md-o-arrow{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-size:9px;}
+.md-o-arrow--up{color:#2bcd62;}
+.md-o-arrow--down{color:#f04a4a;}
+@keyframes mdOddFlashUp{0%{background:rgba(43,205,98,.22);}100%{background:rgb(56,56,56);}}
+@keyframes mdOddFlashDown{0%{background:rgba(240,74,74,.22);}100%{background:rgb(56,56,56);}}
+.md-odd-btn.md-odd-flash--up{animation:mdOddFlashUp 2.4s ease-out 1;}
+.md-odd-btn.md-odd-flash--down{animation:mdOddFlashDown 2.4s ease-out 1;}
 </style>
 
 <!-- Loading splash — visible from the very first paint until app.js

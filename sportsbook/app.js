@@ -351,14 +351,38 @@ function patchMatchDetailLive(m, markets) {
   //      fallback markets from the updated match so the user sees
   //      the new odds (1x2 etc.) without reloading.
   var needsRender = false;
+  var prevMarkets = window._mdMarkets || [];
+  var nextMarkets = null;
   if (markets && markets.length) {
-    window._mdMarkets = markets;
-    needsRender = true;
+    nextMarkets = markets;
   } else if (m && m.live_odds) {
-    try {
-      window._mdMarkets = buildFallbackMarkets(m);
-      needsRender = true;
-    } catch (e) {}
+    try { nextMarkets = buildFallbackMarkets(m); } catch (e) {}
+  }
+  if (nextMarkets) {
+    // Diff: annotate each selection with _change ('up'|'down'|null)
+    // and a flash class so renderMktBtn can show the ▲ / ▼ arrow.
+    var prevIdx = {};
+    prevMarkets.forEach(function(pm){
+      (pm.selections || []).forEach(function(ps){
+        var key = (pm.id || pm.name || '') + '|' + (ps.id || ps.name || '');
+        var pv = parseFloat(ps.odds);
+        if (!isNaN(pv) && pv > 1.01) prevIdx[key] = pv;
+      });
+    });
+    nextMarkets.forEach(function(nm){
+      (nm.selections || []).forEach(function(ns){
+        var key = (nm.id || nm.name || '') + '|' + (ns.id || ns.name || '');
+        var nv = parseFloat(ns.odds);
+        var pv = prevIdx[key];
+        if (pv && !isNaN(nv) && nv > 1.01 && Math.abs(nv - pv) >= 0.01) {
+          ns._change = (nv > pv) ? 'up' : 'down';
+        } else {
+          ns._change = null;
+        }
+      });
+    });
+    window._mdMarkets = nextMarkets;
+    needsRender = true;
   }
   if (needsRender) {
     // If the user is searching, preserve the search filter so live
@@ -3453,8 +3477,12 @@ function renderMatchDetail(m, markets) {
        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>'
        + '</button>';
 
-  // Inline search panel (hidden by default)
-  out += '<div class="md-search-panel" id="md-search-panel" style="display:none">';
+  // Inline search panel. Hidden by default via CSS rule
+  //   .md-search-panel { display:none !important }
+  // and revealed via the wrapper class .md-tabs-wrap--search.
+  // Do NOT use inline style="display:none" — that fought the
+  // class toggle on some browsers.
+  out += '<div class="md-search-panel" id="md-search-panel">';
   out += '<button type="button" class="md-tab-search-close" onclick="window.sbMdSearchToggle(false)" title="Fermer">'
        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
        + '</button>';
@@ -3613,24 +3641,34 @@ function renderMktBtn(sel, m, bbMode) {
   var nameHasHc = hcStr && String(safeName).indexOf(hcStr) !== -1;
   var lbl = h(String(safeName)) + (sel.handicap != null && !nameHasHc ? ' <span class="md-hc">' + h(hcStr) + '</span>' : '');
   var bid    = h(String(m.id || '')) + '_md_' + h(String(sel.id || safeName));
+  // Direction arrow — set by buildOddsDiff() when live odds move.
+  var arrowHtml = '';
+  var flashCls  = '';
+  if (sel._change === 'up') {
+    arrowHtml = '<span class="md-o-arrow md-o-arrow--up" aria-hidden="true">▲</span>';
+    flashCls  = ' md-odd-flash--up';
+  } else if (sel._change === 'down') {
+    arrowHtml = '<span class="md-o-arrow md-o-arrow--down" aria-hidden="true">▼</span>';
+    flashCls  = ' md-odd-flash--down';
+  }
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
   var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
   // Market name for BB leg display — stored in the button's data-mkt attr if available
   var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
-    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + '"'
+    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
       + (hasOdd ? ' onclick="window.sbBBToggle(\'' + bid + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
       + '>'
       + '<span class="md-o-name">' + lbl + '</span>'
-      + (hasOdd ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
+      + (hasOdd ? '<span class="md-o-val">' + arrowHtml + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
       + '</button>';
   }
   var matchStr = h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''));
-  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + '"'
+  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
     + (hasOdd ? ' onclick="window.sbAddBet(\'' + bid + '\',\'' + matchStr + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
     + '>'
     + '<span class="md-o-name">' + lbl + '</span>'
-    + (hasOdd ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
+    + (hasOdd ? '<span class="md-o-val">' + arrowHtml + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
     + '</button>';
 }
 
