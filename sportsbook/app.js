@@ -237,6 +237,36 @@ function computeFallbackTimer(m) {
   return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
 }
 
+/* ── Timer regression guard. Sometimes BetsAPI / v3 momentarily
+ * returns timer.tm = 0 while the match is well past minute 0 — we
+ * never want to "reset" the live clock back to zero because that
+ * causes the dreaded "42' → 0' → 42'" flicker on cards. Returns
+ * TRUE iff the new timer is a legit forward update.                */
+function _acceptTimerUpdate(oldT, newT) {
+  if (!newT) return false;
+  if (!oldT) return true;
+  var oldMd = String(oldT.md || oldT.MD || '');
+  var newMd = String(newT.md || newT.MD || '');
+  // Period change always wins (e.g. 1st-half → halftime → 2nd-half).
+  if (oldMd !== newMd) return true;
+  var oldTm = parseInt(oldT.tm || oldT.TM || 0, 10) || 0;
+  var newTm = parseInt(newT.tm || newT.TM || 0, 10) || 0;
+  // Obvious regression: clock fell back by >2 minutes inside same period.
+  if (newTm + 2 < oldTm) return false;
+  // Reset-to-zero glitch inside an active period.
+  if (newTm === 0 && oldTm > 3) return false;
+  return true;
+}
+/* Helper: in-place merge of m.timer with newTimer, respecting the
+ * regression guard. Returns true if any field was updated.        */
+function _mergeTimer(m, newTimer) {
+  if (!m || !newTimer) return false;
+  if (!_acceptTimerUpdate(m.timer, newTimer)) return false;
+  if (JSON.stringify(m.timer) === JSON.stringify(newTimer)) return false;
+  m.timer = newTimer;
+  return true;
+}
+
 /* ── Merge real m.timer with kickoff fallback. Returns the timer
  * object the rest of the code should use — real data wins, but
  * we never leave the user staring at 00:00 for a live match. */
@@ -384,6 +414,10 @@ function _mdPollOnce(mid) {
 }
 function startMatchDetailPoll(mid) {
   if (S._mdPollInterval) clearInterval(S._mdPollInterval);
+  // Reset the per-match timer high-water-mark so a different match's
+  // last-known timer can't leak into this one (avoid the "stuck at 42'"
+  // glitch when navigating between live matches).
+  window._mdLastTimer = null;
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
@@ -416,7 +450,18 @@ function patchMatchDetailLive(m, markets) {
     scoreEl.textContent = (sp[0] || '0').trim() + ' : ' + (sp[1] || '0').trim();
   }
 
-  // Timer + period — skip ticking when match ended
+  // Timer + period — skip ticking when match ended.
+  // We apply the regression guard against the previously displayed
+  // timer (window._mdLastTimer) so a momentary "tm:0" from upstream
+  // never resets the on-screen clock to zero.
+  if (!isMatchEnded(m)) {
+    if (m.timer && _acceptTimerUpdate(window._mdLastTimer, m.timer)) {
+      window._mdLastTimer = m.timer;
+    } else if (window._mdLastTimer) {
+      // Keep ticking off the last-known-good timer.
+      m.timer = window._mdLastTimer;
+    }
+  }
   var effPatch = isMatchEnded(m) ? null : effectiveTimer(m);
   if (effPatch) {
     var isHTnow = (String(effPatch.md || effPatch.MD || '') === '1');
@@ -1227,8 +1272,7 @@ function applyLiveRefresh(ids, targetList) {
           m.ss = upd.ss;
           updated = true;
         }
-        if (upd.timer && JSON.stringify(m.timer) !== JSON.stringify(upd.timer)) {
-          m.timer = upd.timer;
+        if (upd.timer && _mergeTimer(m, upd.timer)) {
           updated = true;
         }
         if (upd.live_odds && upd.live_odds.h) {
@@ -1456,9 +1500,8 @@ function startPolling() {
             }
           }
 
-          // ── Timer update ─────────────────────────────────────────
-          if (nm.timer && JSON.stringify(m.timer) !== JSON.stringify(nm.timer)) {
-            m.timer = nm.timer;
+          // ── Timer update (regression-guarded) ─────────────────────
+          if (nm.timer && _mergeTimer(m, nm.timer)) {
             updated = true;
           }
 

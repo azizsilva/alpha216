@@ -3788,7 +3788,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   align-items: center !important;
   justify-content: center !important;
   gap: 10px !important;
-  padding: 10px 14px 4px !important;
+  padding: 14px 14px 6px !important;
 }
 .md-card-info {
   color: rgba(255,255,255,0.85) !important;
@@ -3818,24 +3818,24 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   grid-template-columns: 1fr auto auto auto 1fr !important;
   align-items: center !important;
   gap: 12px !important;
-  padding: 6px 14px 8px !important;
+  padding: 10px 14px 14px !important;
 }
 .md-card-team-abbr {
-  font-size: 16px !important;
-  font-weight: 700 !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
   color: #ffffff !important;
   letter-spacing: 0.4px !important;
   white-space: nowrap;
 }
 .md-card-team-home { text-align: right !important; }
 .md-card-team-away { text-align: left !important; }
-.md-card-jersey { width: 30px !important; height: 30px !important; flex-shrink: 0; }
-.md-card-score-col { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 64px; }
+.md-card-jersey { width: 34px !important; height: 34px !important; flex-shrink: 0; }
+.md-card-score-col { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 72px; }
 .md-card-score {
-  font-size: 22px !important;
-  font-weight: 700 !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
   color: var(--sb-green) !important;
-  line-height: 1 !important;
+  line-height: 1.05 !important;
   letter-spacing: 0.5px !important;
   font-variant-numeric: tabular-nums !important;
 }
@@ -6465,6 +6465,23 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   display: none !important;
 }
 .sb-root[data-view="matchdetail"] #sb-matches-body { margin-top: 0 !important; padding-top: 0 !important; }
+/* Match-detail view should ALWAYS scroll vertically — never get stuck
+   when the markets list grows past the viewport (fcbet216 parity). */
+.sb-root[data-view="matchdetail"] .sb-center-scroll {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 90px !important;
+}
+@media (max-width: 1100px) {
+  .sb-root[data-view="matchdetail"] .sb-center-scroll {
+    overflow: visible !important;
+    height: auto !important;
+    padding-bottom: 110px !important;
+  }
+}
 
 .sb-root .sb-sport-page {
   display: flex;
