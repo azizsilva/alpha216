@@ -4736,6 +4736,57 @@ body .sb-root .sb-champ-mkt-opt.active {
 .sb-league-acc.collapsed .sb-league-acc-body { display: none; }
 .sb-league-acc.collapsed .sb-league-acc-hdr { border-bottom: 0; }
 
+/* ════════════════════════════════════════════════════════════════════════
+   PERIOD PAGE — override the championship league-accordion look to match
+   fcbet216 /sportsbook/prelive?page=period&date=... exactly:
+   - background rgb(49,49,49)
+   - no border / no radius (flat rows, hairline separators)
+   - more compact header height (~36px)
+   ════════════════════════════════════════════════════════════════════════ */
+.sb-root[data-view="periodpage"] .sb-league-acc {
+  background: rgb(49,49,49) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  margin-top: 6px !important;
+}
+.sb-root[data-view="periodpage"] .sb-league-acc:first-child { margin-top: 4px !important; }
+.sb-root[data-view="periodpage"] .sb-league-acc-hdr {
+  padding: 8px 12px !important;
+  min-height: 36px !important;
+}
+.sb-root[data-view="periodpage"] .sb-league-acc-body {
+  background: transparent !important;
+  border-top: 0 !important;
+  padding: 4px 0 6px !important;
+}
+/* Period market shortcut grid (Populaire / 1x2 / Total / ...) */
+.sb-period-shortcuts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 0;
+}
+.sb-period-shortcut {
+  background: rgb(49,49,49);
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 14px 12px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+}
+.sb-period-shortcut.active {
+  background: rgb(113,246,105);
+  color: #000;
+  font-weight: 700;
+}
+.sb-period-sport-tabs { margin: 6px 0 10px; }
+
 /* Gift icon in league header */
 .sb-lh-gift {
   color: var(--sb-text-2);

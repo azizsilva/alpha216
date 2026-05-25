@@ -4959,6 +4959,28 @@ function renderPeriodPage(dayOffset, matches) {
   });
   out += '</div>';
 
+  // Market category shortcut grid — fcbet216 image-2 reference:
+  //   Populaire | 1x2
+  //   Total     | Double chance
+  //   Les deux équipes qui marquent | Voir tous les marchés
+  // Two cells per row, green = active. Tapping a cell sets the
+  // market category (same data as the dropdown below).
+  var activeShortcut = S.periodShortcut || 'popular';
+  var shortcuts = [
+    {k:'popular',       label:'Populaire'},
+    {k:'1x2',           label:'1x2'},
+    {k:'total',         label:'Total'},
+    {k:'double_chance', label:'Double chance'},
+    {k:'btts',          label:'Les deux équipes qui marquent'},
+    {k:'all_markets',   label:'Voir tous les marchés'}
+  ];
+  out += '<div class="sb-period-shortcuts">';
+  shortcuts.forEach(function(s) {
+    var isAct = (s.k === activeShortcut) || (s.k === 'all_markets' && activeShortcut === 'all_markets');
+    out += '<button type="button" class="sb-period-shortcut' + (isAct?' active':'') + '" onclick="window.sbPeriodSetShortcut(\'' + s.k + '\')">' + h(s.label) + '</button>';
+  });
+  out += '</div>';
+
   // Market category dropdown (1x2 default)
   out += '<div class="sb-champ-mkt-acc' + (accOpen?' open':' collapsed') + '" id="sb-period-mkt-acc">';
   out += '<button type="button" class="sb-champ-mkt-acc-hdr" onclick="window.sbTogglePeriodMktAcc()">';
@@ -4996,13 +5018,16 @@ function renderPeriodPage(dayOffset, matches) {
       groups[k].push(m);
     });
     S.periodLeagueExpanded = S.periodLeagueExpanded || {};
-    order.forEach(function(lg) {
+    // Default: open the first 3 leagues, collapse the rest (fcbet216 UX).
+    var defaultOpenN = 3;
+    order.forEach(function(lg, lgIdx) {
       var lc = guessCountry(lg);
       var lf = getFlag(lc);
       var lcl = (lc && lc !== 'International') ? (' · ' + h(lc)) : '';
-      // DEFAULT: collapsed. Only honor explicit "expanded" state set by user clicks.
-      var isExpanded  = !!S.periodLeagueExpanded[lg];
-      var isCollapsed = !isExpanded;
+      // Honor user clicks first; otherwise auto-open the first N.
+      var hasUserState = Object.prototype.hasOwnProperty.call(S.periodLeagueExpanded, lg);
+      var isExpanded   = hasUserState ? !!S.periodLeagueExpanded[lg] : (lgIdx < defaultOpenN);
+      var isCollapsed  = !isExpanded;
       var lgKey = encodeURIComponent(lg);
       out += '<div class="sb-league-acc' + (isCollapsed?' collapsed':' open') + '" data-lg-period="' + h(lg) + '">';
       out += '<button type="button" class="sb-league-acc-hdr" onclick="window.sbTogglePeriodLeague(\'' + lgKey + '\')">';
@@ -5069,6 +5094,16 @@ window.sbPeriodSwitchSport = function(sportId) {
   S.activeSportId = sportId || 1;
   S.periodLeagueExpanded = {};   // reset accordion state on sport change
   window.sbOpenPeriodPage(S.activeDateOffset, true /* don't push duplicate URL */);
+};
+
+/* Shortcut grid (Populaire / 1x2 / Total / ... ) sets the market category
+   then re-renders. fcbet216 .HeaderMarketsButtonsContainer behaviour. */
+window.sbPeriodSetShortcut = function(key) {
+  S.periodShortcut = key;
+  if (key && key !== 'popular' && key !== 'all_markets') {
+    S.activeMarketCat = key;
+  }
+  renderPeriodPage(S.activeDateOffset, S.periodMatches || []);
 };
 
 function loadAndFilter(action, sid, lid) {

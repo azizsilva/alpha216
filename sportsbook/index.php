@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bd';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525be';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -406,10 +406,12 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root[data-view="livepage"] .sb-points-forts-block{display:none!important;}
 .sb-root[data-view="livepage"] #sb-matches-body{padding-top:8px!important;}
 /* PERIOD PAGE (fcbet216 /sportsbook/prelive?page=period&date=...) —
-   clicking a future date pill switches into this view. Keep the date
-   row + sport nav visible at the top, hide everything home-specific. */
+   clicking a future date pill switches into this view. Keep ONLY the
+   date row at top. Hide the BIG sport-nav tile row (we render compact
+   sport pills inside the period view instead) + every home-only block. */
 .sb-root[data-view="periodpage"] .sb-favoris-row,
 .sb-root[data-view="periodpage"] .sb-favoris-content,
+.sb-root[data-view="periodpage"] .sb-sport-nav,
 .sb-root[data-view="periodpage"] .sb-en-direct-row,
 .sb-root[data-view="periodpage"] #sb-en-direct-cards,
 .sb-root[data-view="periodpage"] .sb-boost-section,
@@ -420,6 +422,18 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root[data-view="periodpage"] .sb-mob-inline-leagues,
 .sb-root[data-view="periodpage"] .sb-points-forts-block{display:none!important;}
 .sb-root[data-view="periodpage"] #sb-matches-body{padding-top:8px!important;}
+/* Period page — market shortcut grid (Populaire / 1x2 / Total / Double chance
+   / Les deux équipes qui marquent / Voir tous les marchés) — 2 cells per row */
+.sb-root .sb-period-shortcuts{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin:8px 0!important;}
+.sb-root .sb-period-shortcut{background:rgb(49,49,49)!important;color:#fff!important;border:0!important;border-radius:4px!important;padding:14px 12px!important;font-family:'Roboto',sans-serif!important;font-size:13px!important;font-weight:600!important;line-height:1.2!important;cursor:pointer!important;text-align:center!important;outline:none!important;}
+.sb-root .sb-period-shortcut.active{background:rgb(113,246,105)!important;color:#000!important;font-weight:700!important;}
+/* Period page — league accordions: bg rgb(49,49,49), no radius, compact h */
+.sb-root[data-view="periodpage"] .sb-league-acc{background:rgb(49,49,49)!important;border:0!important;border-radius:0!important;margin-top:6px!important;}
+.sb-root[data-view="periodpage"] .sb-league-acc:first-child{margin-top:4px!important;}
+.sb-root[data-view="periodpage"] .sb-league-acc-hdr{padding:8px 12px!important;min-height:36px!important;}
+.sb-root[data-view="periodpage"] .sb-league-acc-body{background:transparent!important;border-top:0!important;padding:4px 0 6px!important;}
+/* Compact sport pills row inside the period view */
+.sb-root .sb-period-sport-tabs{margin:6px 0 10px!important;}
 /* Match-detail view: hide ALL home siblings + the mobile topbar / date /
  * favoris / sport nav / live carousel / boost section so the match-detail
  * header is the only thing on screen (fcbet216 parity). */
