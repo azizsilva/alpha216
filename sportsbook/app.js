@@ -946,6 +946,10 @@ function startPolling() {
   function doPoll() {
     // Match detail page uses dedicated faster poll (startMatchDetailPoll)
     if (S.viewMode === 'matchDetail') return;
+    // Sport page (intermediate category cards) doesn't need match polling;
+    // its data was computed once on open. Polling here would just overwrite
+    // the category cards with a match list.
+    if (S.viewMode === 'sportPage') return;
 
     var url, targetList, isChamp, liveRefreshP = Promise.resolve(false);
 
@@ -2902,14 +2906,23 @@ window.sbOpenSportPage = function(sportId) {
   S.viewMode        = 'sportPage';
   S.sportPageName   = sportName;
 
-  // Highlight the clicked tile in the nav
+  // Switch the page into "sport page" mode — CSS hides the home-only
+  // sections (date row, favoris, sport nav, EN DIRECT carousel, Cotes
+  // boostées, mobile leagues panel) so the user gets a dedicated
+  // sport-detail view (matches fcbet216 ?page=sport&sportId=X layout).
+  var root = document.querySelector('.sb-root');
+  if (root) root.setAttribute('data-view', 'sportpage');
+
+  // Highlight the clicked tile in the nav (even though the nav is
+  // hidden in sport-page mode, we still mark it so the state is
+  // correct when the user returns home).
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
   var navBtn = document.querySelector('.sb-sport-item[data-sid="' + sportId + '"]');
   if (navBtn) navBtn.classList.add('active');
 
   renderSportPage(sportId, sportName);
   if (typeof sbPushUrl === 'function') {
-    try { sbPushUrl('sport-' + sportId); } catch (e) {}
+    try { sbPushUrl('sport', { sportId: sportId }); } catch (e) {}
   }
   window.scrollTo({ top: 0, behavior: 'instant' in window.scrollTo ? 'instant' : 'auto' });
 };
@@ -3000,6 +3013,13 @@ function catIconTrophy() {
 window.sbOpenCategory = function(kind) {
   S.viewMode       = 'sportCategory';
   S.sportCategory  = kind;
+  // Stay in the sport-page mode (still hide home sections) but flip
+  // the content to the matches list. We use a sibling data-view value
+  // so CSS can keep the home siblings hidden but allow the back
+  // button + matches body.
+  var root = document.querySelector('.sb-root');
+  if (root) root.setAttribute('data-view', 'sportpage');
+
   // Map kind -> date offset / live filter
   if (kind === 'tomorrow') { S.activeDateOffset = 1; S.activeAction = 'upcoming'; }
   else if (kind === 'soon'){ S.activeDateOffset = 0; S.activeAction = 'upcoming'; }
@@ -3015,6 +3035,10 @@ window.sbBackToHome = function() {
   S.activeDateOffset = 0;
   S.activeLeagueId   = null;
   S.activeLeagueName = null;
+  // Exit sport-page mode so home siblings (live cards, boost section,
+  // mobile leagues panel, sport nav, date row, favoris) reappear.
+  var root = document.querySelector('.sb-root');
+  if (root) root.removeAttribute('data-view');
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
   loadAndFilter('inplay', 1, null);
   if (typeof sbPushUrl === 'function') { try { sbPushUrl('main'); } catch (e) {} }
@@ -3028,6 +3052,10 @@ window.sbSwitchLive = function(btn) {
   S.activeTab = 'live';
   S.activeSportId = 1; S.activeAction = 'inplay'; S.activeLeagueId = null; S.activeDateOffset = 0;
   S.viewMode = 'main';
+  S.userPickedSport = false;
+  // Exit sport-page mode if we were in it (live view = home view).
+  var rootLive = document.querySelector('.sb-root');
+  if (rootLive) rootLive.removeAttribute('data-view');
   var topbar = document.querySelector('.sb-mobile-topbar');
   if (topbar) {
     topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
@@ -3061,6 +3089,10 @@ window.sbSwitchTab = function(btn, action, sportId) {
   S.activeLeagueName = null; S.activeLeagueFlag = null;
   S.activeMatchId    = null; S.viewMode         = 'main';
   S.champMatches     = [];
+  S.userPickedSport  = false;
+  // Always leave sport-page mode when switching home/live/upcoming tabs.
+  var rootHL = document.querySelector('.sb-root');
+  if (rootHL) rootHL.removeAttribute('data-view');
   clearInterval(window._mdTimerInterval);
   var _v = document.getElementById('sb-match-viewer');
   if (_v) _v.style.display = 'none';
@@ -3859,6 +3891,13 @@ function sbRestoreFromUrl() {
       window.sbOpenMatch(eventId, true /* skipPush */);
       return true;
     }
+  } else if (page === 'sport') {
+    // /sportsbook?page=sport&sportId=N — restore the sport-detail view
+    var sportId3 = parseInt(sp.get('sportId') || '0') || 0;
+    if (sportId3) {
+      window.sbOpenSportPage(sportId3);
+      return true;
+    }
   }
   return false;
 }
@@ -3871,10 +3910,16 @@ window.addEventListener('popstate', function(e) {
   } else if (st.page === 'liveEvent') {
     if (st.sportId) S.activeSportId = parseInt(st.sportId) || 1;
     window.sbOpenMatch(st.eventId || '', true);
+  } else if (st.page === 'sport') {
+    var sid = parseInt(st.sportId || 0) || 0;
+    if (sid) window.sbOpenSportPage(sid);
   } else {
     // main — restore without pushing another entry
     S.activeLeagueId = null; S.activeLeagueName = null; S.activeLeagueFlag = null;
     S.activeMatchId  = null; S.viewMode = 'main'; S.champMatches = [];
+    S.userPickedSport = false;
+    var rootPop = document.querySelector('.sb-root');
+    if (rootPop) rootPop.removeAttribute('data-view');
     clearInterval(window._mdTimerInterval);
     var viewer = document.getElementById('sb-match-viewer');
     if (viewer) viewer.style.display = 'none';

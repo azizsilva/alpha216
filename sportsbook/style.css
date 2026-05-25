@@ -5169,7 +5169,25 @@ body {
 /* ════════════════════════════════════════════════════════════════════════
    SPORT PAGE — opened when a user taps a sport tile in the nav strip.
    Mirrors fcbet216 /sportsbook/prelive?page=sport&sportId=X.
+
+   When .sb-root has data-view="sportpage", the home-only sections are
+   hidden so the user sees ONLY the sport-detail content (mobile top
+   bar + search bar + back-pill + category cards). Polling is also
+   skipped server-side so the matches list doesn't overwrite the view.
    ════════════════════════════════════════════════════════════════════════ */
+.sb-root[data-view="sportpage"] .sb-date-row,
+.sb-root[data-view="sportpage"] .sb-favoris-row,
+.sb-root[data-view="sportpage"] .sb-favoris-content,
+.sb-root[data-view="sportpage"] .sb-sport-nav,
+.sb-root[data-view="sportpage"] .sb-en-direct-row,
+.sb-root[data-view="sportpage"] #sb-en-direct-cards,
+.sb-root[data-view="sportpage"] .sb-boost-section,
+.sb-root[data-view="sportpage"] #sb-boost-section,
+.sb-root[data-view="sportpage"] #sb-boost-dots,
+.sb-root[data-view="sportpage"] .sb-mob-leagues-panel {
+  display: none !important;
+}
+
 .sb-root .sb-sport-page {
   display: flex;
   flex-direction: column;

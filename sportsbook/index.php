@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525k';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525l';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -264,6 +264,17 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .sb-upcoming-tab.active .sb-tab-icon svg{filter:brightness(0)!important;opacity:1!important;}
 /* Championship top tabs — horizontal scroll */
 .sb-root .sb-champ-top-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:0!important;scrollbar-width:none!important;}
+/* Sport-page mode — hide home sections so the sport view is clean */
+.sb-root[data-view="sportpage"] .sb-date-row,
+.sb-root[data-view="sportpage"] .sb-favoris-row,
+.sb-root[data-view="sportpage"] .sb-favoris-content,
+.sb-root[data-view="sportpage"] .sb-sport-nav,
+.sb-root[data-view="sportpage"] .sb-en-direct-row,
+.sb-root[data-view="sportpage"] #sb-en-direct-cards,
+.sb-root[data-view="sportpage"] .sb-boost-section,
+.sb-root[data-view="sportpage"] #sb-boost-section,
+.sb-root[data-view="sportpage"] #sb-boost-dots,
+.sb-root[data-view="sportpage"] .sb-mob-leagues-panel{display:none!important;}
 /* Cotes boostées — tight card + timeline dots (fcbet216 ref) */
 .sb-root .sb-boost-header{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;margin:0 0 8px;letter-spacing:.2px;line-height:1;}
 .sb-root .sb-boost-header svg{width:14px;height:14px;color:#fff;fill:#fff;}
