@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bi';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bj';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -435,7 +435,7 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 /* Compact sport pills row inside the period view */
 .sb-root .sb-period-sport-tabs{margin:6px 0 10px!important;}
 /* fcbet216 .TopSportBarButton / .fA-dBjY EXACT — sport-nav tiles */
-.sb-root .sb-sport-item{background:rgb(74,74,74)!important;border:0!important;box-shadow:0 2px 4px rgba(0,0,0,0.25),0 1px 2px rgba(0,0,0,0.18)!important;border-radius:4px!important;padding:8px!important;display:grid!important;grid-template-rows:auto auto!important;justify-items:center!important;justify-content:space-around!important;gap:4px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:15px!important;color:rgb(255,255,255)!important;width:100%!important;height:56px!important;margin:0!important;-webkit-tap-highlight-color:transparent!important;}
+.sb-root .sb-sport-item{background:rgb(74,74,74)!important;border:0!important;box-shadow:0 2px 4px rgba(0,0,0,0.25),0 1px 2px rgba(0,0,0,0.18)!important;border-radius:4px!important;padding:8px!important;display:grid!important;grid-template-rows:auto auto!important;justify-items:center!important;justify-content:space-around!important;gap:4px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:15px!important;color:rgb(255,255,255)!important;width:auto!important;min-width:72px!important;height:56px!important;margin:0!important;-webkit-tap-highlight-color:transparent!important;}
 .sb-root .sb-sport-item:hover{background:rgb(82,82,82)!important;box-shadow:0 3px 6px rgba(0,0,0,0.3),0 1px 3px rgba(0,0,0,0.22)!important;}
 .sb-root .sb-sport-item.active{background:var(--sb-green)!important;color:var(--sb-green-font)!important;border:0!important;font-weight:700!important;}
 /* fcbet216 .HeaderMarketsSelectorContainer + .hMbNfr EXACT — 1x2 dropdown */

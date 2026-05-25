@@ -982,7 +982,7 @@ button.sb-btn-live.active .sb-live-badge,
   transition: background 0.12s, color 0.12s, box-shadow 0.12s;
   outline: none;
   min-width: 72px;
-  width: 100%;
+  width: auto;
   height: 56px;
   margin: 0;
   user-select: none;
@@ -5028,6 +5028,7 @@ body .sb-root .sb-champ-mkt-opt.active {
   padding: 0 !important;
   background: transparent !important;
   background: rgb(49, 49, 49) !important;
+  border-color: currentcolor;
 }
 .sb-mob-leagues-panel .sb-tl-item {
   background: transparent !important;
