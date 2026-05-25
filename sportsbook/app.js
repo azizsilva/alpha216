@@ -3676,8 +3676,9 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
       var refined = res.filter(function(m) {
         return m.league && isLeagueMatch(name, m.league.name);
       });
-      // Only use refined if we had results to filter; avoids discarding all on mismatch
-      if (res.length > 0) res = refined;
+      // Fallback: if precision filter removes all matches, but the server sent matches
+      // specifically for this league query, show the server's matches instead of nothing.
+      if (refined.length > 0) res = refined;
 
       // Date filter if a future date is selected
       if (S.activeDateOffset > 0) {
