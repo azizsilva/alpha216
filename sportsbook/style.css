@@ -3864,8 +3864,11 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   line-height: 1.2 !important;
   font-family: 'Roboto', sans-serif !important;
 }
-.md-mkt-ctrl { color: rgba(255,255,255,0.45) !important; flex-shrink: 0; display: flex; align-items: center; font-size: 16px; }
+.md-mkt-ctrl { color: rgba(255,255,255,0.45) !important; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; min-width: 18px; }
 .md-mkt-ctrl svg { width: 14px !important; height: 14px !important; }
+/* Chevron-down points down when collapsed, minus when open — exact fcbet216 UX */
+.md-mkt-ctrl--closed { color: rgba(255,255,255,0.55) !important; }
+.md-mkt-ctrl--open { color: rgba(255,255,255,0.55) !important; }
 .md-mkt-body { padding: 2px 10px 12px !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
 .md-market-group.collapsed .md-mkt-body { display: none !important; }
 

@@ -3912,6 +3912,20 @@ function buildMatchDetailSkeleton() {
   return out;
 }
 
+/* Toggle a single market accordion (open/close) — mirrors fcbet216 UX.
+   Click the header to flip .collapsed and swap the minus/chevron icon. */
+window.sbToggleMdMarket = function(hdr) {
+  if (!hdr) return;
+  var grp = hdr.parentNode;
+  if (!grp || !grp.classList) return;
+  var nowCollapsed = !grp.classList.contains('collapsed');
+  grp.classList.toggle('collapsed', nowCollapsed);
+  var openIc   = hdr.querySelector('.md-mkt-ctrl--open');
+  var closedIc = hdr.querySelector('.md-mkt-ctrl--closed');
+  if (openIc)   openIc.style.display   = nowCollapsed ? 'none' : '';
+  if (closedIc) closedIc.style.display = nowCollapsed ? '' : 'none';
+};
+
 function renderMatchDetail(m, markets) {
   var el = document.getElementById('sb-matches-body');
   if (!el || !m) return;
@@ -4115,19 +4129,25 @@ function renderMatchDetail(m, markets) {
 }
 
 function renderMarketGroup(mkt, m, expanded, bbMode) {
-  var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + (bbMode ? ' bb-mode' : '') + '">';
-  out += '<div class="md-mkt-hdr" onclick="this.parentNode.classList.toggle(\'collapsed\')">';
-  out += '<span class="md-mkt-star">' + ICON.star + '</span>';
+  // Stable id so the toggle handler can target this exact group.
+  var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
+  var out = '<div class="md-market-group' + (expanded ? '' : ' collapsed') + (bbMode ? ' bb-mode' : '') + '" id="' + h(grpId) + '">';
+  out += '<div class="md-mkt-hdr" onclick="window.sbToggleMdMarket(this)">';
+  out += '<span class="md-mkt-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
   out += '<span class="md-mkt-name">' + h(mkt.name) + '</span>';
   // Grid icons only for Total / Handicap in normal mode
   if (!bbMode && /^(total|handicap)$/i.test(mkt.name)) {
-    out += '<span class="md-mkt-grid-icons">'
+    out += '<span class="md-mkt-grid-icons" onclick="event.stopPropagation()">'
       + '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg>'
       + '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="4" x2="15" y2="4"/><line x1="1" y1="8" x2="15" y2="8"/><line x1="1" y1="12" x2="15" y2="12"/></svg>'
       + '</span>';
   }
   out += '<span class="md-mkt-bb' + (bbMode ? ' md-mkt-bb-active' : '') + '">BB</span>';
-  out += '<span class="md-mkt-ctrl">' + ICON.minus + '</span>';
+  // Swap icon: minus when open, chevron-down when collapsed — fcbet216 UX
+  out += '<span class="md-mkt-ctrl md-mkt-ctrl--open" aria-hidden="true"'
+       + (expanded ? '' : ' style="display:none"') + '>' + ICON.minus + '</span>';
+  out += '<span class="md-mkt-ctrl md-mkt-ctrl--closed" aria-hidden="true"'
+       + (expanded ? ' style="display:none"' : '') + '>' + ICON.chevronDown + '</span>';
   out += '</div>';
   out += '<div class="md-mkt-body">';
 
