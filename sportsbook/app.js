@@ -194,6 +194,27 @@ function formatOdd(decVal) {
   return v.toFixed(2); // decimal default
 }
 
+/* ── Build the inner HTML for the match-detail period+timer block.
+ * Used both by initial render (renderMatchDetail) and by the live
+ * 3s poll (patchMatchDetailLive). Lets the period text appear as
+ * soon as we have a timer (even if the first match_detail payload
+ * was timer-less). Format mirrors fcbet216 image 3:
+ *   "1ère mi-temps | 43:42"   when running
+ *   "Mi-temps"                 when halftime  */
+function buildMdPeriodBlock(period, isHT, timerStr) {
+  var out = '';
+  if (isHT) {
+    out += '<span class="md-card-timer md-card-timer--ht">Mi-temps</span>';
+    return out;
+  }
+  if (period) {
+    out += '<span class="md-card-period-txt">' + h(period) + '</span>';
+    out += '<span class="md-card-period-sep">|</span>';
+  }
+  out += '<span class="md-card-timer" id="md-timer-display">' + h(timerStr || '00:00') + '</span>';
+  return out;
+}
+
 /* ── Period detection (1ère mi-temps, 2ème quart, etc.) ─── */
 function getMatchPeriod(m) {
   if (!m.timer) return '';
@@ -277,22 +298,31 @@ function startMatchTimer(m) {
   }, 1000);
 }
 
-/* ── Match detail live poll (score + timer + odds every 3s) ── */
+/* ── Match detail live poll (score + timer + odds every 3s) ──
+ * Fires one immediate fetch so the period name + minute appear
+ * straight after click, then continues polling every 3s. */
+function _mdPollOnce(mid) {
+  if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) return;
+  fetch(BASE + 'sportsbook/api.php?action=match_live&match_id=' + encodeURIComponent(mid))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d || !d.success || !d.match) return;
+      patchMatchDetailLive(d.match, d.markets || []);
+    })
+    .catch(function() {});
+}
 function startMatchDetailPoll(mid) {
   if (S._mdPollInterval) clearInterval(S._mdPollInterval);
+  // Fire one cycle right away so the timer/period populate without
+  // a 3s blank-screen wait.
+  _mdPollOnce(mid);
   S._mdPollInterval = setInterval(function() {
     if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) {
       clearInterval(S._mdPollInterval);
       S._mdPollInterval = null;
       return;
     }
-    fetch(BASE + 'sportsbook/api.php?action=match_live&match_id=' + encodeURIComponent(mid))
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (!d || !d.success || !d.match) return;
-        patchMatchDetailLive(d.match, d.markets || []);
-      })
-      .catch(function() {});
+    _mdPollOnce(mid);
   }, 3000);
 }
 
@@ -306,17 +336,29 @@ function patchMatchDetailLive(m, markets) {
     scoreEl.textContent = (sp[0] || '0').trim() + ' : ' + (sp[1] || '0').trim();
   }
 
-  // Timer / half-time
-  var timerEl = document.getElementById('md-timer-display');
-  if (timerEl && m.timer) {
-    var isHT = (m.timer.md === '1' || m.timer.MD === '1');
-    if (isHT) {
-      timerEl.textContent = 'Mi-temps';
+  // Timer + period — surgically re-fill #md-period-block so the
+  // text appears as soon as the API gives us a timer object. We
+  // can't just update #md-timer-display because the period name
+  // ("1ère mi-temps") and the `|` separator only render when we
+  // know the period — both arrive from the same API payload.
+  if (m.timer) {
+    var isHTnow = (String(m.timer.md || m.timer.MD || '') === '1');
+    var pname  = getMatchPeriod(m);
+    var tmStr  = String(m.timer.tm || m.timer.TM || '0').padStart(2, '0');
+    var tsStr  = String(m.timer.ts || m.timer.TS || '0').padStart(2, '0');
+    var clock  = tmStr + ':' + tsStr;
+    var pblock = document.getElementById('md-period-block');
+    if (pblock) {
+      pblock.innerHTML = buildMdPeriodBlock(pname, isHTnow, clock);
+    } else {
+      // Fallback: just update the timer text if the period block
+      // wasn't rendered yet (e.g. user opened a not-yet-live match).
+      var timerEl = document.getElementById('md-timer-display');
+      if (timerEl) timerEl.textContent = isHTnow ? 'Mi-temps' : clock;
+    }
+    if (isHTnow) {
       clearInterval(window._mdTimerInterval);
     } else {
-      var tm = m.timer.tm || m.timer.TM || '0';
-      var ts = m.timer.ts || m.timer.TS || '0';
-      timerEl.textContent = String(tm).padStart(2, '0') + ':' + String(ts).padStart(2, '0');
       startMatchTimer(m);
     }
   }
@@ -3429,14 +3471,17 @@ function renderMatchDetail(m, markets) {
   out += '<span class="md-card-date">' + h(dateStr) + '</span>';
   out += '</div>';
 
-  // Row 2 (live only): info dot + period + green timer
+  // Row 2 (live only): info dot + period + green timer.
+  // We wrap the inner content in #md-period-block so
+  // patchMatchDetailLive can refresh ALL of it in one go when the
+  // 3s poll lands fresh timer/period data (period text, | separator,
+  // timer or Mi-temps label).
   if (isLive) {
-    out += '<div class="md-card-period">';
+    out += '<div class="md-card-period" id="md-period-row">';
     out += '<span class="md-card-info"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="16" cy="12" r="1.2" fill="currentColor"/></svg></span>';
-    if (period) out += '<span class="md-card-period-txt">' + h(period) + '</span>';
-    if (period && !isHT) out += '<span class="md-card-period-sep">|</span>';
-    if (!isHT) out += '<span class="md-card-timer" id="md-timer-display">' + h(timerInit) + '</span>';
-    else out += '<span class="md-card-timer md-card-timer--ht">Mi-temps</span>';
+    out += '<span class="md-card-period-block" id="md-period-block">';
+    out +=   buildMdPeriodBlock(period, isHT, timerInit);
+    out += '</span>';
     out += '</div>';
   }
 
