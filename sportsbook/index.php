@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525ay';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525az';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -250,6 +250,10 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .slc-mid{padding:4px 14px 8px!important;}
 /* SLC EN DIRECT — fcbet216 .cqljKD EXACT */
 .sb-root .slc-live-badge{background:rgb(251,51,51)!important;color:rgb(255,255,255)!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-weight:500!important;line-height:12px!important;padding:2px 4px!important;border:0!important;border-radius:4px!important;letter-spacing:0!important;text-transform:uppercase!important;flex-shrink:0!important;white-space:nowrap!important;}
+/* SLC odds chip — fcbet216 .glRfhP EXACT user-provided spec */
+body .sb-root .slc-odd-btn,body .sb-root button.slc-odd-btn{flex:1!important;background:rgb(74,74,74)!important;background-color:rgb(74,74,74)!important;background-image:none!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:44px!important;padding:0 12px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;box-shadow:rgba(13,13,13,0) 0px 0px 0px 0px,rgba(13,13,13,0) 0px 0px 0px 0px inset!important;outline:none!important;min-width:0!important;color:rgb(113,246,105)!important;text-align:start!important;}
+body .sb-root .slc-odd-lbl{color:rgba(255,255,255,0.55)!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-weight:500!important;}
+body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:700!important;}
 .sb-root .mc-upcoming-actions{display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;}
 .sb-root .mc-ed-pill{background:transparent;border:1px solid rgba(255,255,255,0.35);border-radius:4px;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:3px 6px;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;display:inline-flex;align-items:center;}
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}

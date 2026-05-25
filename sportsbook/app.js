@@ -2979,11 +2979,15 @@ function renderChampionship(id, name, flag, matches) {
        + '</button>';
   out += '<div class="sb-champ-mkt-acc-body"' + (accOpen ? '' : ' style="display:none"') + '>';
   // Inline styles so neither Bootstrap nor a cached style.css can win.
+  // IMPORTANT: NO border-top on the buttons themselves — the separator
+  // between options comes from the CSS rule .sb-champ-mkt-opt+.sb-champ-mkt-opt.
+  // Adding border-top here would put one on EVERY option (including the
+  // first), which doubles up with the body's own border-top and makes each
+  // row look like its own boxed card.
   var optStyle =
       'display:block;width:100%;text-align:left;'
-    + 'padding:14px 16px;margin:0;'
+    + 'padding:12px 16px;margin:0;'
     + 'background:transparent;border:0;border-radius:0;'
-    + 'border-top:1px solid rgba(255,255,255,0.06);'
     + 'color:#fff;font-family:Roboto,sans-serif;'
     + 'font-size:14px;font-weight:500;line-height:16px;'
     + 'letter-spacing:0;text-transform:none;'
