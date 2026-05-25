@@ -2690,6 +2690,11 @@ window.sbUpdateBetStake = function(idx, val) {
   renderBetSlip();
 };
 window.sbUpdateCombiStake = function(val) { SLIP_COMBI_STAKE = Math.max(0, parseFloat(val) || 0); renderBetSlip(); };
+// Quick-stake chips on the Combiné tab — bump the stake by N (fcbet216).
+window.sbCombiQuickStake = function(delta) {
+  SLIP_COMBI_STAKE = Math.max(0, (parseFloat(SLIP_COMBI_STAKE) || 0) + (parseFloat(delta) || 0));
+  renderBetSlip();
+};
 window.sbUpdateSysStake = function(type, val) {
   if (type === 'singles') SLIP_SYS_SINGLES_STAKE = Math.max(0, parseFloat(val) || 0);
   else SLIP_SYS_COMBO_STAKE = Math.max(0, parseFloat(val) || 0);
@@ -2720,6 +2725,12 @@ function renderBetSlip() {
     cntEl.style.display = n ? 'inline-block' : 'none';
   }
 
+  // Hide / show the secondary widgets (CODE RAPIDE / RECHERCHER DES PARIS
+  // / PARIS POPULAIRES) — they act as the empty-state UI and must hide
+  // the moment any bet is added (matches fcbet216 reference image).
+  var secondary = document.querySelector('.sb-right-secondary');
+  if (secondary) secondary.style.display = n ? 'none' : '';
+
   var out = '';
 
   // ── Mode tabs ──────────────────────────────────────────────
@@ -2731,10 +2742,18 @@ function renderBetSlip() {
   out += '</div>';
 
   // ── Empty state ────────────────────────────────────────────
+  // Just the centered document icon — the CODE RAPIDE / RECHERCHER /
+  // PARIS POPULAIRES widgets below act as the rest of the empty state,
+  // exactly like fcbet216 reference (image 2).
   if (!n) {
-    out += '<div class="sb-slip-empty">'
-      + '<svg viewBox="0 0 40 40" fill="none"><rect x="8" y="4" width="24" height="32" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M14 14h12M14 20h12M14 26h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
-      + '<p>Pas de sélections sur la fiche de pari</p></div>';
+    out += '<div class="sb-slip-empty-icon">'
+      + '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">'
+      +   '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>'
+      +   '<polyline points="14 2 14 8 20 8"/>'
+      +   '<line x1="8" y1="13" x2="16" y2="13"/>'
+      +   '<line x1="8" y1="17" x2="13" y2="17"/>'
+      + '</svg>'
+      + '</div>';
     el.innerHTML = out;
     return;
   }
@@ -2855,20 +2874,64 @@ function renderBetSlip() {
     out += '</div>';
 
   } else if (SLIP_MODE === 'combi') {
-    var bonusPct = n >= 4 ? 10 : n >= 3 ? 7 : 5;
-    var baseGain = SLIP_COMBI_STAKE * totalOdds;
-    var bonus = baseGain * bonusPct / 100;
-    var combiGain = baseGain + bonus;
+    // Combo is built ONLY from non-excluded legs whose match isn't
+    // already represented by another leg (you can't combo two 1x2
+    // selections of the same match). When that happens we still show
+    // the duplicate in the list but it's silently dropped from the
+    // combined odds — matches fcbet216 behaviour.
+    var combiLegs = S.betSlip.filter(function(b) { return !b.excluded; });
+    var seenMatches = {};
+    var validCombiLegs = combiLegs.filter(function(b) {
+      var mid = String(b.matchId || b.id);
+      if (seenMatches[mid]) return false;
+      seenMatches[mid] = true;
+      return true;
+    });
+    var combiOdds = validCombiLegs.reduce(function(acc, l){ return acc * (parseFloat(l.val) || 1); }, 1);
+    var combiCount = validCombiLegs.length;
+
+    // Progressive bonus, fcbet216-style
+    var bonusPct = combiCount >= 4 ? 10 : combiCount >= 3 ? 7 : combiCount >= 2 ? 5 : 0;
+
+    // Promo banner shown when fewer than 4 legs (encourage more)
+    if (combiCount >= 1 && combiCount < 4) {
+      var nextBonus = combiCount < 2 ? 5 : combiCount < 3 ? 7 : 10;
+      out += '<div class="slip-promo">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
+        + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>' + nextBonus + '\u00A0%</strong>'
+        + '</div>';
+    }
+
+    // Combo row + active quick-stake chips
+    var stake = SLIP_COMBI_STAKE || 0;
     out += '<div class="slip-combo-row">';
     out += '<span class="slip-combo-lbl">Combo</span>';
-    out += '<span class="slip-combo-bonus">🎁 ' + bonusPct + '%</span>';
-    out += '<span class="slip-combo-mult">' + n + ' x</span>';
-    out += '<input type="number" class="slip-stake-inp" value="' + SLIP_COMBI_STAKE + '" min="1" step="1" oninput="window.sbUpdateCombiStake(this.value)">';
+    if (bonusPct > 0) {
+      out += '<span class="slip-combo-bonus">'
+        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>'
+        + ' ' + bonusPct + '%</span>';
+    }
+    out += '<span class="slip-combo-mult">' + combiCount + ' x</span>';
+    out += '<input type="number" class="slip-stake-inp slip-combi-stake" id="slip-combi-stake" value="' + stake + '" min="0" step="1" oninput="window.sbUpdateCombiStake(this.value)">';
     out += '</div>';
+
+    // Quick stake chips — +5 / +10 / +20 / +50 (matches fcbet216 image 8)
+    out += '<div class="slip-quick-stakes">';
+    [5, 10, 20, 50].forEach(function(v) {
+      out += '<button class="slip-quick-stake" onclick="window.sbCombiQuickStake(' + v + ')">+' + v + '</button>';
+    });
+    out += '</div>';
+
+    // Summary (cotes / mise / bonus / gain total)
+    var baseGain = stake * combiOdds;
+    var bonus = baseGain * bonusPct / 100;
+    var combiGain = baseGain + bonus;
     out += '<div class="slip-summary">';
-    out += '<div class="slip-sum-row"><span>Cotes totales</span><span>' + totalOdds.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + SLIP_COMBI_STAKE.toFixed(2) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Gains supplémentaires</span><span class="slip-sum-green">🎁 ' + bonus.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Cotes totales</span><span>' + combiOdds.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + stake.toFixed(2) + '</span></div>';
+    if (bonusPct > 0) {
+      out += '<div class="slip-sum-row"><span>Gains supplémentaires</span><span class="slip-sum-green">+' + bonus.toFixed(2) + '</span></div>';
+    }
     out += '<div class="slip-sum-row slip-sum-total"><span>Gain total</span><span class="slip-sum-green">' + combiGain.toFixed(2) + '</span></div>';
     out += '</div>';
 
@@ -3617,7 +3680,18 @@ window.sbTimeFilter = function(btn, range) {
 };
 
 window.sbToggleLeft = function() { document.getElementById('sb-left').classList.toggle('open'); };
-window.sbToggleRight = function() { document.getElementById('sb-right').classList.toggle('open'); };
+window.sbToggleRight = function() {
+  var right = document.getElementById('sb-right');
+  if (!right) return;
+  right.classList.toggle('open');
+  // Hide the floating FAB while the drawer is open (it would otherwise
+  // sit on top of the slip content on mobile). Restored when closing.
+  var fab = document.getElementById('sb-floating-bet-badge');
+  if (fab) {
+    if (right.classList.contains('open')) fab.style.visibility = 'hidden';
+    else if (S.betSlip && S.betSlip.length) fab.style.visibility = '';
+  }
+};
 
 window.sbFilterByDate = function(btn, dayOffset) {
   document.querySelectorAll('.sb-date-item').forEach(function(b) { b.classList.remove('active'); });

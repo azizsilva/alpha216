@@ -4120,21 +4120,28 @@ button.md-odd-btn,
   flex-shrink: 0;
   margin-top: 1px;
 }
+/* Include/exclude toggle — like a checkbox. Green minus when included,
+   empty outline when excluded (fcbet216 reference image 3 vs 4). */
 .slip-excl-btn {
   width: 22px; height: 22px;
   background: rgba(112,246,105,0.12);
-  border: 1px solid rgba(112,246,105,0.4);
+  border: 1px solid rgba(112,246,105,0.6);
   border-radius: 4px;
-  color: var(--sb-green);
+  color: rgb(113,246,105);
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer; outline: none;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.12s;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
-.slip-excl-btn:hover { background: rgba(112,246,105,0.25); }
-.slip-excl-btn.excluded { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); }
+.slip-excl-btn:hover { background: rgba(112,246,105,0.22); }
+.slip-excl-btn.excluded {
+  background: transparent;
+  border-color: rgba(112,246,105,0.55);
+  color: transparent;             /* hide the "−" sign when excluded */
+}
+.slip-excl-btn.excluded:hover { background: rgba(112,246,105,0.06); }
 .slip-banker-btn {
   width: 22px; height: 22px;
   background: rgba(255,255,255,0.07);
@@ -4209,6 +4216,38 @@ button.md-odd-btn,
   background: rgba(140,90,80,0.28) !important;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
+/* Empty-state document icon shown in the slip body when there are no
+   bets. The CODE RAPIDE / RECHERCHER / PARIS POPULAIRES widgets below
+   the slip body act as the rest of the empty state (fcbet216 image 2). */
+.sb-slip-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px 24px;
+  color: rgba(255,255,255,0.55);
+}
+/* Combiné quick stake chips — fcbet216 reference image 8 */
+.slip-quick-stakes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+.slip-quick-stake {
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  color: rgb(113,246,105);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 0;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.12s;
+}
+.slip-quick-stake:hover { background: rgb(60,60,60); }
+.slip-quick-stake:active { background: rgb(40,40,40); }
 /* BB legs under bet card */
 .slip-leg-row {
   display: flex; align-items: flex-start; gap: 8px; padding: 3px 0 3px 23px;
