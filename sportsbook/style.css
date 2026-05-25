@@ -5321,8 +5321,74 @@ body {
 .sb-root .sb-cat-error {
   padding: 18px;
   color: #cfcfcf;
-  background: rgb(49,49,49);
+  background: var(--sb-surface-1);
   border-radius: 10px;
   text-align: center;
+}
+
+/* ── Sport page matches list (BELOW the 4 category cards) ──
+   Lives in #sb-sport-matches. Reuses the standard match cards so the
+   row format (BB + EN DIRECT + timer + flag + league + teams + odds)
+   stays identical to the home view. */
+.sb-root .sb-sport-page-matches {
+  display: block;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+.sb-root .sb-sport-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+  padding: 6px 4px;
+  margin: 12px 0 6px;
+}
+.sb-root .sb-sport-page-matches .mc {
+  margin-bottom: 10px;
+}
+
+/* ── LIVE card without jerseys (fcbet216 image 4/5/7 spec) ──
+   When the live card uses .mc-teams-wrap--text, the team rows take
+   the full width of the card (no left jersey column). Names left,
+   scores far right, exactly like fcbet216. */
+.sb-root .mc-teams-wrap--text {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 4px 14px 6px !important;
+  gap: 2px !important;
+}
+.sb-root .mc-teams-wrap--text .mc-teams-stacked--full {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 100% !important;
+}
+.sb-root .mc-teams-wrap--text .mc-team-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+.sb-root .mc-teams-wrap--text .mc-t-name {
+  flex: 1 1 auto !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.sb-root .mc-teams-wrap--text .mc-t-score {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  padding-left: 10px !important;
+  font-variant-numeric: tabular-nums !important;
 }
 

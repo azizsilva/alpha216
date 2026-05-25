@@ -946,10 +946,12 @@ function startPolling() {
   function doPoll() {
     // Match detail page uses dedicated faster poll (startMatchDetailPoll)
     if (S.viewMode === 'matchDetail') return;
-    // Sport page (intermediate category cards) doesn't need match polling;
-    // its data was computed once on open. Polling here would just overwrite
-    // the category cards with a match list.
-    if (S.viewMode === 'sportPage') return;
+    // Sport page has its own light refresh path (sbPollSportPage) that
+    // only re-renders the matches list, not the four category cards.
+    if (S.viewMode === 'sportPage') {
+      if (typeof sbPollSportPage === 'function') sbPollSportPage();
+      return;
+    }
 
     var url, targetList, isChamp, liveRefreshP = Promise.resolve(false);
 
@@ -1643,12 +1645,11 @@ function matchCard(m) {
              with scores at the far right (fcbet216 live card spec)
      OTHER → per-team rows: [shirt][name] */
   if (isLive) {
-    out += '<div class="mc-teams-wrap mc-teams-wrap--side" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-    out += '<div class="mc-jerseys-side">';
-    out += '<span class="mc-jersey-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 26) + '</span>';
-    out += '<span class="mc-jersey-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 26) + '</span>';
-    out += '</div>';
-    out += '<div class="mc-teams-stacked">';
+    // LIVE — fcbet216 reference image 7 (Hantharwady U20 vs Thitsar):
+    //   Clean text-only rows. NO jerseys (matches fcbet216 exactly).
+    //   Each row = team name on the left + score pinned far right.
+    out += '<div class="mc-teams-wrap mc-teams-wrap--rows mc-teams-wrap--text" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    out += '<div class="mc-teams-stacked mc-teams-stacked--full">';
     out += '<div class="mc-team-row mc-team-row--live">';
     out += '<span class="mc-t-name">' + hn + '</span>';
     out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
@@ -2931,33 +2932,59 @@ function renderSportPage(sportId, sportName) {
   var el = document.getElementById('sb-matches-body');
   if (!el) return;
 
-  // Pre-fetch totals for the four category cards. We use action=upcoming
-  // (which returns ALL non-ended matches for the sport) and bucket client-
-  // side so we don't burn extra API calls.
-  var url = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId;
-  el.innerHTML = '<div class="sb-sport-page sb-sport-page--loading">' +
+  var hdr =
     '<div class="sb-sport-page-header">' +
       '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
         '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
       '</button>' +
       '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
-    '</div>' +
-    '<div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div>' +
     '</div>';
 
-  fetch(url).then(function(r){ return r.json(); }).then(function(d) {
-    var matches = (d && d.results) ? d.results : [];
-    var now  = Math.floor(Date.now() / 1000);
-    var endToday = now + (24*3600);
-    var endTomorrow = now + (48*3600);
+  // Show skeleton immediately so the page never flashes empty
+  el.innerHTML =
+    '<div class="sb-sport-page sb-sport-page--loading">' +
+      hdr +
+      '<div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div>' +
+    '</div>' +
+    '<div class="sb-sport-page-matches" id="sb-sport-matches">' +
+      '<div class="sb-loader">Chargement des matchs…</div>' +
+    '</div>';
 
+  // Fetch live + upcoming in parallel. Live = ALL inplay matches for the
+  // sport, Upcoming = the next 48h of non-ended matches. Both are used to
+  // compute the four category-card counts AND to populate the matches list
+  // that lives BELOW the cards on the sport page (matches fcbet216 layout).
+  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sportId;
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId;
+
+  Promise.all([
+    fetch(liveUrl).then(function(r){ return r.json(); }).catch(function(){ return {results: []}; }),
+    fetch(upUrl).then(function(r){ return r.json(); }).catch(function(){ return {results: []}; })
+  ]).then(function(both) {
+    var live     = (both[0] && both[0].results) ? both[0].results : [];
+    var upcoming = (both[1] && both[1].results) ? both[1].results : [];
+
+    // Stash so polling can refresh the matches without re-fetching counts
+    S.sportPageLive     = live;
+    S.sportPageUpcoming = upcoming;
+
+    var now         = Math.floor(Date.now() / 1000);
+    var endToday    = now + (24 * 3600);
+    var endTomorrow = now + (48 * 3600);
     var jour = 0, demain = 0, prochain = 0, leagues = {};
-    matches.forEach(function(m) {
+    upcoming.forEach(function(m) {
       if (!m || !m.id || m.time_status === '3') return;
       var ts = parseInt(m.time || m.start_time || 0) || 0;
-      if (ts > 0 && ts <= endToday)          jour++;
+      if (ts > 0 && ts <= endToday)               jour++;
       else if (ts > endToday && ts <= endTomorrow) demain++;
-      else                                    prochain++;
+      else                                         prochain++;
+      var ln = (m.league && m.league.name) ? m.league.name : '';
+      if (ln) leagues[ln] = 1;
+    });
+    // Live matches always count toward "matches du jour" too
+    live.forEach(function(m) {
+      if (!m || !m.id) return;
+      jour++;
       var ln = (m.league && m.league.name) ? m.league.name : '';
       if (ln) leagues[ln] = 1;
     });
@@ -2965,29 +2992,73 @@ function renderSportPage(sportId, sportName) {
 
     el.innerHTML =
       '<div class="sb-sport-page">' +
-        '<div class="sb-sport-page-header">' +
-          '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
-            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '</button>' +
-          '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
-        '</div>' +
+        hdr +
         sbCatCard('today',    'Les matches du jour',    jour,        catIconCalendar()) +
         sbCatCard('tomorrow', 'Les matches de demain',  demain,      catIconArrowIn()) +
         sbCatCard('soon',     'Les prochains matchs',   prochain,    catIconClock()) +
         sbCatCard('leagues',  'Les meilleurs ligues',   leaguesCount,catIconTrophy()) +
-      '</div>';
+      '</div>' +
+      '<div class="sb-sport-page-matches" id="sb-sport-matches"></div>';
+
+    renderSportPageMatches(live, upcoming);
   }).catch(function(){
     el.innerHTML =
       '<div class="sb-sport-page">' +
-        '<div class="sb-sport-page-header">' +
-          '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
-            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '</button>' +
-          '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
-        '</div>' +
+        hdr +
         '<div class="sb-cat-error">Impossible de charger les matches.</div>' +
       '</div>';
   });
+}
+
+// Light poll for the sport page — refreshes the live matches every poll
+// cycle so timers tick and scores update, but leaves the four category
+// cards untouched (their counts are pre-computed once on open).
+function sbPollSportPage() {
+  var sid = S.activeSportId;
+  if (!sid) return;
+  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sid;
+  fetch(liveUrl).then(function(r){ return r.json(); }).then(function(d) {
+    var live = (d && d.results) ? d.results : [];
+    S.sportPageLive = live;
+    renderSportPageMatches(live, S.sportPageUpcoming || []);
+  }).catch(function(){});
+}
+
+// Render live + upcoming matches BELOW the four category cards. Each match
+// uses the standard matchCard() helper so the row layout (BB + EN DIRECT +
+// timer + flag + league + teams + odds) is identical to the home view.
+function renderSportPageMatches(live, upcoming) {
+  var holder = document.getElementById('sb-sport-matches');
+  if (!holder) return;
+
+  var sortedLive = (typeof sortLiveMatches === 'function') ? sortLiveMatches(live) : (live || []);
+  var sortedUp   = (typeof sortUpcomingMatches === 'function') ? sortUpcomingMatches(upcoming) : (upcoming || []);
+
+  var out = '';
+
+  if (sortedLive.length) {
+    out += '<div class="sb-section-title sb-sport-section-title"><span>En direct maintenant</span></div>';
+    sortedLive.slice(0, 30).forEach(function(m) {
+      try { out += matchCard(m); } catch (e) {}
+    });
+  }
+
+  if (sortedUp.length) {
+    out += '<div class="sb-section-title sb-sport-section-title"><span>Prochainement</span></div>';
+    sortedUp.slice(0, 50).forEach(function(m) {
+      try { out += matchCard(m); } catch (e) {}
+    });
+  }
+
+  if (!out) {
+    out = '<div class="sb-loader">Aucun match disponible pour ce sport.</div>';
+  }
+
+  holder.innerHTML = out;
+  // Kick the live-minute ticker so timers on live cards update immediately
+  if (typeof startLiveMinuteTicker === 'function') {
+    try { startLiveMinuteTicker(); } catch (e) {}
+  }
 }
 
 function sbCatCard(kind, label, count, iconSvg) {
