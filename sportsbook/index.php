@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525az';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ba';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -158,14 +158,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     letter-spacing:0!important;text-transform:uppercase!important;
     white-space:nowrap!important;
   }
-  /* EN DIRECT badge when active — black uppercase on green (no red pill) */
+  /* EN DIRECT badge when active — KEEP red pill on green tab (fcbet216 image 3) */
   .sb-mobile-topbar .sb-btn-live.active .sb-live-badge,
   .sb-mobile-topbar button.sb-btn-live.active .sb-live-badge,
   .sb-mobile-topbar .sb-btn-live.active > .sb-live-badge{
-    background:transparent!important;background-color:transparent!important;background-image:none!important;
-    color:#000!important;
-    font-size:13px!important;font-weight:800!important;letter-spacing:1px!important;
-    text-transform:uppercase!important;padding:0!important;border:0!important;border-radius:0!important;
+    background:rgb(251,51,51)!important;background-color:rgb(251,51,51)!important;background-image:none!important;
+    color:rgb(255,255,255)!important;
+    font-family:'Roboto',sans-serif!important;
+    font-size:12px!important;font-weight:500!important;line-height:12px!important;
+    letter-spacing:0!important;text-transform:uppercase!important;
+    padding:2px 4px!important;border:0!important;border-radius:4px!important;
     box-shadow:none!important;display:inline-block!important;white-space:nowrap!important;
   }
   /* SCROLL FIX */
@@ -262,7 +264,9 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-sidebar-search-card{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:8px 8px 10px;}
 .sb-sidebar-search-card .sb-search-wrap{padding:10px 12px;}
 .sb-sidebar-search-card .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
-.sb-top-leagues-card{margin:0 8px 10px;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;}
+/* Panel surface — fcbet216 reference: very dark, just slightly above the
+   page bg so individual rows read FLAT instead of like lifted boxes. */
+.sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;}
 .sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
 .sb-mob-search-panel{background:transparent;border:0;border-radius:0;overflow:visible;margin:0 2px 10px;}
@@ -271,7 +275,7 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-mob-search-panel .sb-search-box svg,.sb-mob-search-panel .sb-search-box .sb-search-icon{width:18px;height:18px;color:rgba(255,255,255,0.55);flex-shrink:0;}
 .sb-mob-search-panel .sb-sidebar-search{flex:1 1 auto;width:100%;min-width:0;background:transparent;border:0;outline:none;color:#fff;font-family:'Roboto',sans-serif;font-size:13px;padding:0;}
 .sb-mob-search-panel .sb-sidebar-search::placeholder{color:rgba(255,255,255,0.45);font-size:13px;opacity:1;}
-.sb-mob-leagues-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;margin:0 2px 12px!important;}
+.sb-mob-leagues-panel,body .sb-root .sb-mob-leagues-panel{background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;margin:0 2px 12px!important;}
 .sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
 .sb-mob-leagues-panel .sb-mob-tab[data-tab="my"]{color:rgba(255,255,255,.85)!important;}
