@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525au';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525av';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -205,12 +205,23 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-league-name{color:rgba(255,255,255,0.55);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* Global font — Roboto matches alpina216.com */
 .sb-root,.sb-root *{font-family:'Roboto',sans-serif;}
-/* Upcoming/prelive: per-team rows */
-.sb-root .mc-teams-wrap--rows{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;padding:4px 12px 10px;width:100%;cursor:pointer;}
-.sb-root .mc-teams-wrap--rows .mc-team-row{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
-.sb-root .mc-shirt-cell{width:26px;height:26px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:rgb(48,48,48);border:1px solid rgba(255,255,255,0.95);border-radius:50%;overflow:hidden;box-sizing:border-box;}
-.sb-root .mc-shirt-cell .mc-jersey-svg{width:16px;height:16px;display:block;flex-shrink:0;}
-.sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
+/* Per-team rows — used for BOTH live and prelive (fcbet216 image 2 spec).
+   Each row = [shirt-inline] [team name flex-1] [score]. */
+.sb-root .mc-teams-wrap--rows{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:2px;padding:2px 12px 8px;width:100%;cursor:pointer;}
+.sb-root .mc-teams-wrap--rows .mc-team-row{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:0;width:100%;min-height:22px;}
+/* Inline shirt cell — plain shirt SVG with hairline white stroke, NO circle
+   wrapper (fcbet216 "En direct maintenant" reference). The shirt sits
+   inline at the start of each team row. */
+.sb-root .mc-shirt-cell{width:20px;height:20px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible;box-sizing:border-box;margin-right:8px;}
+.sb-root .mc-shirt-cell .mc-jersey-svg{width:18px;height:18px;display:block;flex-shrink:0;stroke:rgba(255,255,255,0.95);stroke-width:0.6;}
+
+/* ── Separate league row — flag · League · Country (fcbet216 image 2) ── */
+.sb-root .mc-league-row{display:flex;align-items:center;gap:6px;padding:2px 12px 4px;font-family:'Roboto',sans-serif;font-size:11px;color:rgba(255,255,255,0.55);line-height:14px;}
+.sb-root .mc-league-row .mc-league-flag{width:14px;height:10px;object-fit:cover;border-radius:1px;flex-shrink:0;}
+.sb-root .mc-league-row .mc-league-name,.sb-root .mc-league-row .mc-league-country{font-size:11px;font-weight:500;color:rgba(255,255,255,0.55);}
+.sb-root .mc-league-row .mc-live-sep{color:rgba(255,255,255,0.35);font-size:9px;}
+.sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-family:'Roboto',sans-serif;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;line-height:18px;}
+.sb-root .mc-teams-wrap--rows .mc-t-score{flex-shrink:0;font-family:'Roboto',sans-serif;font-size:13px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;line-height:18px;}
 /* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
 .sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:10px;padding:4px 12px 6px;width:100%;cursor:pointer;}
 .sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
@@ -225,8 +236,9 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-teams-wrap--upcoming .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .sb-root .mc-teams-wrap--upcoming .mc-team-row--upcoming{display:flex;align-items:center;width:100%;min-height:18px;}
 .sb-root .mc-teams-wrap--upcoming .mc-team-row--upcoming .mc-t-name{flex:1 1 0;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.25;}
-.sb-root .mc-shirt-cell--circle,.sb-root .mc-shirt-cell{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgb(48,48,48);border:1px solid rgba(255,255,255,0.95);flex-shrink:0;overflow:hidden;box-sizing:border-box;}
-.sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:16px;height:16px;display:block;}
+/* Defensive: any legacy markup using these classes also renders plain shirt */
+.sb-root .mc-shirt-cell--circle,.sb-root .mc-shirt-cell{display:inline-flex!important;align-items:center;justify-content:center;width:20px;height:20px;border-radius:0!important;background:transparent!important;border:0!important;flex-shrink:0;overflow:visible;box-sizing:border-box;margin-right:8px;}
+.sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:18px;height:18px;display:block;stroke:rgba(255,255,255,0.95);stroke-width:0.6;}
 .sb-root .mc-upcoming-actions{display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;}
 .sb-root .mc-ed-pill{background:transparent;border:1px solid rgba(255,255,255,0.35);border-radius:4px;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:3px 6px;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;display:inline-flex;align-items:center;}
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}

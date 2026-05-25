@@ -1943,7 +1943,7 @@ function matchCard(m) {
   var spIconSm = spIcon.replace(/width="20" height="20"/g, 'width="13" height="13"');
   var out = '<div class="mc' + (isLive ? ' mc-live-on' : '') + '" id="mc-' + mid + '" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-  /* ── Row 1: BB + EN DIRECT (or date/time) + timer ........ ☆ ── */
+  /* ── Row 1: BB + EN DIRECT + timer ........ ☆ (NO flag/league here) ── */
   out += '<div class="mc-hdr-live">';
   out += '<div class="mc-hl-left">';
   if (isLive) {
@@ -1965,15 +1965,8 @@ function matchCard(m) {
     out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
-    // ALWAYS render the timer span for live matches; formatLiveMinute()
-    // guarantees a non-empty string ("En cours" as last resort) so every
-    // live card gets a visible minute label.
     if (!liveMin) liveMin = 'En cours';
     out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
-    // Inline league bullet • flag • name (fcbet216 LIVE card header)
-    out += '<span class="mc-live-sep">&bull;</span>';
-    out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
-    out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
   } else {
     // UPCOMING — inline header that matches fcbet216:
     //   [sport-icon] [BB] 19:30 25/05 • [flag] Bundesliga
@@ -1992,30 +1985,33 @@ function matchCard(m) {
 
   out += '<div class="mc-body-col">';
 
-  /* ── Teams layout ──────────────────────────────────────────────────────
-     LIVE  → two shirts side-by-side on the LEFT + stacked names on RIGHT
-             with scores at the far right (fcbet216 live card spec)
-     OTHER → per-team rows: [shirt][name] */
+  /* ── Row 2: SEPARATE league row — flag · league · country
+        (fcbet216 "En direct maintenant" spec — image 2 Notts ref) ── */
   if (isLive) {
-    // LIVE — fcbet216 reference (Notts County vs Salford City FC):
-    //   [shirt-circle][shirt-circle]   Team A           2
-    //                                  Team B           0
-    // Two jerseys inside dark CIRCLES on the left, stacked names on the
-    // right with scores pinned far right.
-    out += '<div class="mc-teams-wrap mc-teams-wrap--live mc-teams-wrap--side" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-    out += '<div class="mc-jerseys-side">';
-    out += '<span class="mc-jersey-cell mc-jersey-cell--circle">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 18) + '</span>';
-    out += '<span class="mc-jersey-cell mc-jersey-cell--circle">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 18) + '</span>';
+    out += '<div class="mc-league-row">';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
+    if (countryLabel) {
+      out += '<span class="mc-live-sep">&bull;</span>';
+      out += '<span class="mc-league-country">' + countryLabel + '</span>';
+    }
     out += '</div>';
-    out += '<div class="mc-teams-stacked mc-teams-stacked--full">';
+  }
+
+  /* ── Teams layout — fcbet216 image 2 spec:
+        per-team rows = [shirt-inline] [team name ........... score]
+        No big jersey circles, no side-by-side stack. ──────────────────── */
+  if (isLive) {
+    out += '<div class="mc-teams-wrap mc-teams-wrap--live mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
     out += '<div class="mc-team-row mc-team-row--live">';
+    out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 16) + '</span>';
     out += '<span class="mc-t-name">' + hn + '</span>';
     out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
     out += '</div>';
     out += '<div class="mc-team-row mc-team-row--live">';
+    out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 16) + '</span>';
     out += '<span class="mc-t-name">' + an + '</span>';
     out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
-    out += '</div>';
     out += '</div>';
     out += '</div>';
   } else {
@@ -2981,9 +2977,22 @@ function renderChampionship(id, name, flag, matches) {
        +   '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen ? '&minus;' : '&#9662;') + '</span>'
        + '</button>';
   out += '<div class="sb-champ-mkt-acc-body"' + (accOpen ? '' : ' style="display:none"') + '>';
+  // Inline styles so neither Bootstrap nor a cached style.css can win.
+  var optStyle =
+      'display:block;width:100%;text-align:left;'
+    + 'padding:14px 16px;margin:0;'
+    + 'background:transparent;border:0;border-radius:0;'
+    + 'border-top:1px solid rgba(255,255,255,0.06);'
+    + 'color:#fff;font-family:Roboto,sans-serif;'
+    + 'font-size:14px;font-weight:500;line-height:16px;'
+    + 'letter-spacing:0;text-transform:none;'
+    + 'cursor:pointer;outline:none;box-shadow:none;'
+    + '-webkit-appearance:none;-moz-appearance:none;appearance:none;';
   marketOpts.forEach(function(o) {
-    if (o.key === activeOpt.key) return; // hide the currently selected one
-    out += '<button type="button" class="sb-champ-mkt-opt" onclick="window.sbSwitchMarketCat(\'' + o.key + '\')">'
+    if (o.key === activeOpt.key) return;
+    out += '<button type="button" class="sb-champ-mkt-opt" '
+         + 'style="' + optStyle + '" '
+         + 'onclick="window.sbSwitchMarketCat(\'' + o.key + '\')">'
          +    h(o.label)
          + '</button>';
   });
