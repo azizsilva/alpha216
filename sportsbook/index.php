@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bf';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bg';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -448,6 +448,11 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root .mc-inline-md .mc-md-markets{padding:0!important;}
 .sb-root .mc-inline-md .md-market-group{margin-top:8px!important;}
 .sb-root .mc-inline-md .md-market-group:first-child{margin-top:0!important;}
+.sb-root .mc-inline-md .mc-sk{display:inline-block!important;background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.10),rgba(255,255,255,0.06))!important;background-size:200% 100%!important;border-radius:4px!important;animation:mcSkShimmer 1.2s ease-in-out infinite!important;}
+.sb-root .mc-inline-md .mc-sk-tab{height:32px!important;border-radius:4px!important;}
+.sb-root .mc-inline-md .mc-sk-row{display:block!important;width:100%!important;height:56px!important;margin-top:8px!important;}
+.sb-root .mc-inline-md .mc-sk-row:first-child{margin-top:0!important;}
+@keyframes mcSkShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 /* Match-detail view: hide ALL home siblings + the mobile topbar / date /
  * favoris / sport nav / live carousel / boost section so the match-detail
  * header is the only thing on screen (fcbet216 parity). */

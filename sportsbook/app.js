@@ -1930,6 +1930,12 @@ function renderMatches(results) {
   el.innerHTML = out;
   highlightHomeLeagueFilter();
   startLiveMinuteTicker();
+  // Re-apply inline expansion to any card the user had open before
+  // this re-render (polling, sport switch, etc.). Skip the very first
+  // call when no card is yet expanded — Object.keys check is cheap.
+  if (typeof window.sbRestoreExpandedCards === 'function') {
+    window.sbRestoreExpandedCards();
+  }
 }
 
 /* ── Live minute ticker — bumps the displayed minute between API polls so
@@ -2116,7 +2122,7 @@ function matchCard(m) {
   }
   if (!catHasOdds && cat !== 'populaire') {
     out += '<div class="mc-no-market">Le marché que vous avez sélectionné n\'est pas disponible</div>';
-    out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Masquer cotes">' + ICON.chevronDown + '</button>';
+    out += '<button class="mc-chevron-btn" onclick="window.sbToggleMc(\'' + mid + '\',event)" aria-label="Voir tous les marchés">' + ICON.chevronDown + '</button>';
     out += '</div>';
     out += '</div>';
     out += '</div>';
@@ -2195,11 +2201,13 @@ function matchCard(m) {
   
   // Chevron expands the full markets list INLINE (fcbet216 UX) — does
   // NOT navigate to the match-detail page. Card body still navigates.
-  out += '<button class="mc-chevron-btn" onclick="event.stopPropagation();window.sbToggleMc(\'' + mid + '\')" aria-label="Voir tous les marchés">' + ICON.chevronDown + '</button>';
+  out += '<button class="mc-chevron-btn" onclick="window.sbToggleMc(\'' + mid + '\',event)" aria-label="Voir tous les marchés">' + ICON.chevronDown + '</button>';
 
   out += '</div>'; // close mc-odds-bot
   // Inline markets container — populated on chevron click via sbToggleMc.
-  out += '<div class="mc-inline-md" id="mc-md-' + h(String(mid)) + '" style="display:none"></div>';
+  // onclick stopPropagation is critical: every click inside this box
+  // must NOT bubble up to the card .mc onclick (which routes to detail).
+  out += '<div class="mc-inline-md" id="mc-md-' + h(String(mid)) + '" style="display:none" onclick="event.stopPropagation()"></div>';
   out += '</div>'; // close body col
   out += '</div>'; // mc
   return out;
@@ -3123,6 +3131,9 @@ function renderChampionship(id, name, flag, matches) {
 
   out += '</div>'; // sb-champ-view
   el.innerHTML = out;
+  if (typeof window.sbRestoreExpandedCards === 'function') {
+    window.sbRestoreExpandedCards();
+  }
 }
 
 /* Championship date filter helper */
@@ -3780,17 +3791,37 @@ window.sbScrollNav = function() {
    Click chevron → expands ALL markets (tabs + accordions) right inside
    the card, no navigation. Click again → collapses. Markets are fetched
    on first expand and cached on window._mcMktCache so subsequent
-   open/close is instant. The full card body still routes to the match
-   detail page on click; only the chevron triggers inline expansion. */
-window._mcMktCache = window._mcMktCache || {};
-window.sbToggleMc = function(mid) {
+   open/close is instant. Expanded state is preserved across polling
+   re-renders via window._mcExpandedSet + sbRestoreExpandedCards(). */
+window._mcMktCache    = window._mcMktCache || {};
+window._mcExpandedSet = window._mcExpandedSet || {};
+
+function _mcSkeletonHTML() {
+  // Skeleton matches the real inline UI: a tabs row + 4 accordion bars.
+  var out = '<div class="mc-md-inner mc-md-skeleton">';
+  out += '<div class="mc-md-tabs">';
+  out += '<span class="mc-sk mc-sk-tab" style="width:90px"></span>';
+  out += '<span class="mc-sk mc-sk-tab" style="width:90px"></span>';
+  out += '<span class="mc-sk mc-sk-tab" style="width:90px"></span>';
+  out += '<span class="mc-sk mc-sk-tab" style="width:70px"></span>';
+  out += '</div>';
+  out += '<div class="mc-md-markets">';
+  for (var i = 0; i < 4; i++) {
+    out += '<div class="mc-sk mc-sk-row"></div>';
+  }
+  out += '</div>';
+  out += '</div>';
+  return out;
+}
+
+window.sbToggleMc = function(mid, ev) {
+  // Always cancel propagation — clicking the chevron must NEVER trigger
+  // the parent .mc onclick that routes to the match-detail page.
+  if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
   var card = document.getElementById('mc-' + mid);
   var box  = document.getElementById('mc-md-' + mid);
   if (!card || !box) return;
-  var isOpen = box.style.display !== 'none' && box.style.display !== '';
-  // Some browsers leave display as '' (default) after init — treat as closed.
-  if (box.getAttribute('data-open') === '1') isOpen = true;
-  else if (box.getAttribute('data-open') === '0') isOpen = false;
+  var isOpen = (box.getAttribute('data-open') === '1');
 
   var chev = card.querySelector('.mc-chevron-btn');
   if (isOpen) {
@@ -3798,6 +3829,7 @@ window.sbToggleMc = function(mid) {
     box.setAttribute('data-open', '0');
     card.classList.remove('mc-inline-open');
     if (chev) chev.classList.remove('mc-chevron-up');
+    delete window._mcExpandedSet[String(mid)];
     return;
   }
 
@@ -3806,6 +3838,7 @@ window.sbToggleMc = function(mid) {
   box.setAttribute('data-open', '1');
   card.classList.add('mc-inline-open');
   if (chev) chev.classList.add('mc-chevron-up');
+  window._mcExpandedSet[String(mid)] = true;
 
   var cached = window._mcMktCache[mid];
   if (cached && cached.match && cached.markets) {
@@ -3813,16 +3846,15 @@ window.sbToggleMc = function(mid) {
     return;
   }
 
-  // Fallback: try to find the match in our in-memory list so we can
-  // render fallback markets immediately while the real fetch resolves.
+  // Show skeleton while the real fetch resolves.
   var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
-  box.innerHTML = '<div class="mc-md-loading">Chargement des marchés…</div>';
+  box.innerHTML = _mcSkeletonHTML();
 
   fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      var stillOpen = (box.getAttribute('data-open') === '1');
-      if (!stillOpen) return;
+      // If user collapsed in the meantime, don't paint stale markup.
+      if (box.getAttribute('data-open') !== '1') return;
       var m    = (d && d.match) ? d.match : localMatch;
       var mkts = (d && d.markets && d.markets.length) ? d.markets : null;
       if (!m) { box.innerHTML = '<div class="mc-md-empty">Marchés indisponibles.</div>'; return; }
@@ -3833,8 +3865,7 @@ window.sbToggleMc = function(mid) {
       box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, 'Principaux');
     })
     .catch(function() {
-      var stillOpen = (box.getAttribute('data-open') === '1');
-      if (!stillOpen) return;
+      if (box.getAttribute('data-open') !== '1') return;
       if (localMatch) {
         var fb = [];
         try { fb = buildFallbackMarkets(localMatch); } catch (e) {}
@@ -3846,6 +3877,33 @@ window.sbToggleMc = function(mid) {
     });
 };
 
+/* Re-apply inline expansion to every card the user had previously opened.
+   Called after every match-list re-render (renderMatches, renderMatchGroups,
+   period page, championship view) so polling refreshes don't silently
+   collapse the user's open cards. */
+window.sbRestoreExpandedCards = function() {
+  var set = window._mcExpandedSet || {};
+  Object.keys(set).forEach(function(mid) {
+    if (!set[mid]) return;
+    var card = document.getElementById('mc-' + mid);
+    var box  = document.getElementById('mc-md-' + mid);
+    if (!card || !box) {
+      // Card no longer in the DOM — drop from set so it doesn't accumulate.
+      delete window._mcExpandedSet[mid];
+      return;
+    }
+    var cached = (window._mcMktCache || {})[mid];
+    box.style.display = '';
+    box.setAttribute('data-open', '1');
+    card.classList.add('mc-inline-open');
+    var chev = card.querySelector('.mc-chevron-btn');
+    if (chev) chev.classList.add('mc-chevron-up');
+    if (cached && cached.match && cached.markets) {
+      box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, cached.tab || 'Principaux');
+    }
+  });
+};
+
 /* Render the inline markets view (tabs + accordions) inside a card.
    Uses the same renderMarketGroup() the full match-detail page uses
    so the look-and-feel is identical (images 7 / 2-6 in the spec). */
@@ -3855,15 +3913,17 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
 
   var out = '<div class="mc-md-inner" data-mid="' + h(String(mid)) + '">';
 
-  // Tabs row (mirrors the full match-detail tabs, compact)
-  out += '<div class="mc-md-tabs">';
+  // Tabs row (mirrors the full match-detail tabs, compact). Each tab
+  // explicitly stopPropagation()s so the card-level onclick (which
+  // routes to the dedicated detail page) never fires.
+  out += '<div class="mc-md-tabs" onclick="event.stopPropagation()">';
   TABS.forEach(function(t) {
     var isAct = (t === activeTab);
     out += '<button type="button" class="mc-md-tab' + (isAct?' active':'') + '"'
         +  ' data-tab="' + h(t) + '"'
-        +  ' onclick="window.sbInlineMcTab(this,\'' + String(mid) + '\',\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
+        +  ' onclick="event.stopPropagation();window.sbInlineMcTab(this,\'' + String(mid) + '\',\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
   });
-  out += '<button type="button" class="mc-md-info" aria-label="Légende">'
+  out += '<button type="button" class="mc-md-info" aria-label="Légende" onclick="event.stopPropagation()">'
       + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f04a4a" stroke-width="2.2"><circle cx="12" cy="12" r="10"/></svg>'
       + '</button>';
   out += '</div>';
@@ -5190,6 +5250,9 @@ function renderPeriodPage(dayOffset, matches) {
   out += '</div>'; // sb-period-matches
   out += '</div>'; // sb-period-view
   el.innerHTML = out;
+  if (typeof window.sbRestoreExpandedCards === 'function') {
+    window.sbRestoreExpandedCards();
+  }
 }
 
 window.sbTogglePeriodLeague = function(lgKey) {

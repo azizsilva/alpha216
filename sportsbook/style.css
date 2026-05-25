@@ -5479,6 +5479,26 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
 .sb-root .mc-inline-md .mc-md-markets { padding: 0; }
 .sb-root .mc-inline-md .md-market-group { margin-top: 8px; }
 .sb-root .mc-inline-md .md-market-group:first-child { margin-top: 0; }
+/* Loading skeleton — matches the real UI so there is zero layout shift */
+.sb-root .mc-inline-md .mc-sk {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: mcSkShimmer 1.2s ease-in-out infinite;
+}
+.sb-root .mc-inline-md .mc-sk-tab { height: 32px; border-radius: 4px; }
+.sb-root .mc-inline-md .mc-sk-row {
+  display: block;
+  width: 100%;
+  height: 56px;
+  margin-top: 8px;
+}
+.sb-root .mc-inline-md .mc-sk-row:first-child { margin-top: 0; }
+@keyframes mcSkShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
 /* Teams area pointer cursor — signals it opens match detail */
 .sb-root .mc-teams-wrap {
