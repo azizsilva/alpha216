@@ -1190,7 +1190,11 @@ function renderSportNav() {
   var el = document.getElementById('sb-sport-nav-list');
   if (!el) return;
   var out = '';
-  SPORTS.forEach(function(sp) {
+  // fcbet216 nav only shows sports that have a proper icon — the generic
+  // "person silhouette" placeholder (ICON.default) is filtered out so the
+  // strip never renders the unknown-sport tiles (Baseball, Auto-moto,
+  // Cricket, etc.) the user flagged in image 3.
+  SPORTS.filter(function(sp){ return sp.icon && sp.icon !== ICON.default; }).forEach(function(sp) {
     var active = (S.activeSportId === sp.id && !S.activeLeagueId && S.activeDateOffset === 0);
     out += '<button class="sb-sport-item' + (active ? ' active' : '') + '" data-sid="' + sp.id + '" onclick="window.sbSwitchTab(this,\'inplay\',' + sp.id + ')">';
     out += '<div class="sb-sport-icon">' + sp.icon + '</div>';

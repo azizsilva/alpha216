@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525g';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525h';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -230,10 +230,13 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-sport-nav-inner::-webkit-scrollbar-thumb,.sb-sport-nav-inner::-webkit-scrollbar-track{display:none!important;}
 #sb-sport-nav-list{display:contents;}
 /* Scroll chevrons */
-.sb-nav-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(40,40,40,0.92);border:1px solid rgba(255,255,255,0.10);color:rgba(255,255,255,0.85);align-items:center;justify-content:center;cursor:pointer;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.45);}
+/* Sport nav — EXACT fcbet216 spec (user-provided DevTools CSS) */
+.sb-sport-nav-inner{background:rgb(49,49,49)!important;border:none!important;border-radius:6px!important;padding:8px 44px!important;gap:8px!important;}
+.sb-sport-item{background:rgb(58,58,58)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:4px!important;padding:8px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;min-width:72px!important;height:56px!important;}
+.sb-nav-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);width:32px!important;height:32px!important;border-radius:100px!important;background:rgba(255,255,255,0.54)!important;border:none!important;color:rgba(0,0,0,0.87)!important;align-items:center;justify-content:center;cursor:pointer;z-index:3;padding:0!important;margin:0!important;box-shadow:none!important;}
 .sb-nav-arrow.is-hidden{opacity:0;pointer-events:none;}
-.sb-nav-arrow.left{left:4px;} .sb-nav-arrow.right{right:4px;}
-.sb-nav-arrow svg{width:12px;height:12px;display:block;}
+.sb-nav-arrow.left{left:8px;} .sb-nav-arrow.right{right:8px;}
+.sb-nav-arrow svg{width:16px!important;height:16px!important;display:block;}
 /* Sport nav tiles — each is its own gray card with border */
 .sb-root .sb-sport-item{background:#2c2c2c;border:1px solid rgba(255,255,255,0.10);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:70px;height:56px;color:#979797;font-family:'Poppins',sans-serif;cursor:pointer;flex-shrink:0;}
 .sb-root .sb-sport-item.active{background:#70f669;color:rgba(0,0,0,.87);border-color:#70f669;font-weight:700;}
@@ -415,13 +418,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 
     <!-- Sport navigation — single scrollable row, matches fcbet216 -->
     <div class="sb-sport-nav" id="sb-sport-nav">
+      <!-- EXACT fcbet216 ScrollButton SVG markup (user-supplied):
+           d="M6 4L10 8L6 12" stroke-width 1.5 — rendered as a circular
+           light-on-dark button via the .sb-nav-arrow CSS spec. -->
       <button class="sb-nav-arrow left is-hidden" id="sb-nav-arrow-left" aria-label="Scroll left" type="button"
         onclick="window.sbScrollSportNav(-1)">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(180deg)"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <button class="sb-nav-arrow right" id="sb-nav-arrow-right" aria-label="Scroll right" type="button"
         onclick="window.sbScrollSportNav(1)">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="sb-sport-nav-inner" id="sb-sport-nav-inner">
       <!-- Streaming button with LIVE badge — exact fcbet SVG -->

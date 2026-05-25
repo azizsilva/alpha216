@@ -695,31 +695,35 @@ body {
    tile-cards with gray bg + border, plus left/right chevron arrows on
    the edges. The whole strip sits in its own outer card with margin
    below so it doesn't touch the Favoris row above or the cards below. ════ */
+/* ════ Sport nav — EXACT fcbet216 spec from user-provided DevTools CSS ════
+   .ScrollerWrapper: background rgb(49,49,49), padding 8px, border-radius 6px
+   .ScrollButton:    width/height 32px, border-radius 100px (circle),
+                     background rgba(255,255,255,0.54), color rgba(0,0,0,0.87)
+   .TopSportBarButton: padding 8px, border-radius 4px, font Roboto 14px ════ */
 .sb-sport-nav {
   background: transparent;
   border: none;
   height: auto;
-  min-height: 70px;
+  min-height: 72px;
   flex-shrink: 0;
   overflow: visible;
   position: relative;
   padding: 0;
-  margin: 12px 5px 8px 12px;  /* gap above + user spec: left 12px / right 5px */
+  margin: 12px 8px 8px;
 }
 .sb-sport-nav-inner {
   display: flex;
   align-items: center;
-  height: 70px;
-  gap: 6px;
-  padding: 7px 36px;
+  gap: 8px;
+  padding: 8px 44px;                    /* 8px wrapper padding + arrow room */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none;       /* IE/old Edge */
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: rgb(49,49,49);            /* EXACT fcbet216 .ScrollerWrapper */
+  border: none;
+  border-radius: 6px;                   /* EXACT fcbet216 .ScrollerWrapper */
   scroll-behavior: smooth;
   width: 100%;
 }
@@ -728,36 +732,37 @@ body {
 .sb-sport-nav-inner::-webkit-scrollbar-track { display: none !important; }
 
 /* Legacy sb-sport-scroll becomes inline flex (items flow into the scroll container) */
-.sb-sport-scroll {
-  display: contents;
-}
+.sb-sport-scroll { display: contents; }
 .sb-sport-scroll::-webkit-scrollbar { height: 0; }
 
-/* Scroll chevrons — small gray circles on left/right edges of the strip
-   (matches fcbet216 reference). JS toggles `.is-hidden` based on scroll. */
+/* Scroll chevrons — EXACT fcbet216 .ScrollButton spec the user supplied:
+   width/height 32px, border-radius 100px (circular), light translucent
+   white background, dark glyph. */
 .sb-nav-arrow {
   display: flex !important;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(40,40,40,0.92);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: rgba(255,255,255,0.85);
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 100px !important;
+  background: rgba(255,255,255,0.54) !important;
+  border: none !important;
+  color: rgba(0,0,0,0.87) !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 3;
+  padding: 0 !important;
+  margin: 0 !important;
   transition: background .12s, opacity .12s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+  box-shadow: none !important;
 }
-.sb-nav-arrow:hover { background: rgba(60,60,60,0.98); }
+.sb-nav-arrow:hover  { background: rgba(255,255,255,0.70) !important; }
 .sb-nav-arrow.is-hidden { opacity: 0; pointer-events: none; }
-.sb-nav-arrow.left  { left: 4px;  }
-.sb-nav-arrow.right { right: 4px; }
-.sb-nav-arrow svg { width: 12px; height: 12px; display: block; }
+.sb-nav-arrow.left  { left: 8px;  }
+.sb-nav-arrow.right { right: 8px; }
+.sb-nav-arrow svg { width: 16px !important; height: 16px !important; display: block; }
 
 /* Sport skeleton items */
 .sb-skeleton-circ {
@@ -771,31 +776,34 @@ body {
 }
 @keyframes sb-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
 
-/* Unified nav item style — each tile is its own gray card with border,
-   exactly like the fcbet216 Streami / En direct / Football tiles. */
+/* Sport tile — EXACT fcbet216 .TopSportBarButton spec:
+   padding 8px, border-radius 4px, Roboto 14px, no visible border. */
 .sb-sport-item {
-  background: #2c2c2c !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgb(58,58,58) !important;             /* slightly elevated above the rgb(49,49,49) wrapper */
+  border: 1px solid rgba(255,255,255,0.04) !important;
   box-shadow: none !important;
   text-shadow: none !important;
-  border-radius: 8px;
-  padding: 6px 12px;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 4px;
+  border-radius: 4px;
+  padding: 8px;                                      /* EXACT fcbet216 */
+  display: grid !important;
+  grid-template-rows: auto auto;
+  justify-items: center !important;
+  align-content: space-around !important;
+  row-gap: 4px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
+  font-family: 'Roboto', sans-serif;                 /* EXACT fcbet216 */
+  font-size: 14px;                                   /* EXACT fcbet216 */
+  color: rgba(255,255,255,0.85);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  transition: background 0.12s, color 0.12s;
   outline: none;
-  min-width: 70px;
+  min-width: 72px;
   height: 56px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.sb-sport-item:hover { background: #353535 !important; color: var(--sb-text-1); border-color: rgba(255,255,255,0.18) !important; }
+.sb-sport-item:hover { background: rgb(66,66,66) !important; color: #fff; }
 .sb-sport-item.active {
   background: var(--sb-green) !important;
   color: var(--sb-green-font) !important;
