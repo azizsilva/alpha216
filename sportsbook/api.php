@@ -690,10 +690,18 @@ if ($action === 'inplay') {
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
     $stream_cache = $cache_dir . '/inplay_stream.json';
     $is_football  = ((int)$sport_id === 1);
-    $cache_ttl    = $is_football ? 3 : 5; // lower delay for live football
-    $ev_cache_ttl = $is_football ? 6 : 10;
-    $ev_stale_ttl = $is_football ? 4 : 8;
-    $odds_bg_ttl  = $is_football ? 10 : 18;
+    // ── Cache TTLs ─────────────────────────────────────────────
+    // If the tick_live.php daemon is running it refreshes the
+    // stream every ~2s and each sport every ~4s, so we can trust
+    // the file for the same window. When the daemon is OFFLINE
+    // (tick_live.lock missing) we fall back to a self-refresh
+    // path so the site still works.
+    $tick_lock     = $cache_dir . '/tick_live.lock';
+    $daemon_alive  = file_exists($tick_lock) && (time() - filemtime($tick_lock)) < 10;
+    $cache_ttl     = $daemon_alive ? ($is_football ? 5 : 8) : ($is_football ? 3 : 5);
+    $ev_cache_ttl  = $is_football ? 6 : 10;
+    $ev_stale_ttl  = $is_football ? 4 : 8;
+    $odds_bg_ttl   = $is_football ? 10 : 18;
     $ev_refresh_cap = $is_football ? 40 : 20;
 
     // ── Step 1: Get or refresh inplay_filter per sport ─────────────────────
