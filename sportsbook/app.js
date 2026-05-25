@@ -1981,15 +1981,67 @@ function renderBoosted(matches) {
     });
     out += '<div class="sb-odds-row">';
     out += '<span class="sb-old-val">' + oldOdd + '</span>';
-    // Double-chevron arrow (≫) sized to match the odds text — fcbet216
-    // reference image 1. Uses currentColor so it inherits the green.
+    // EXACT fcbet216 BoostIcon SVG (user-supplied DevTools markup):
+    //   path d="M4 5L7.11111 8L4 11M8.88889 5L12 8L8.88889 11"
+    //   stroke-width 1.5, stroke-linecap/linejoin round. currentColor
+    //   inherits the green sb-boost-arrow text color.
     out += '<span class="sb-boost-arrow" aria-hidden="true">';
-    out += '<svg viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L10 9L4 14M11 4L17 9L11 14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    out += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5L7.11111 8L4 11M8.88889 5L12 8L8.88889 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     out += '</span>';
     out += '<span class="sb-new-val">' + h(formatOdd(parseFloat(newOdd))) + '</span>';
     out += '</div></div>';
   });
   el.innerHTML = out || '<div style="padding:10px;color:var(--sb-text-2);font-size:12px">Aucune cote boostée disponible</div>';
+
+  // Build pagination dots and wire scroll-snap to highlight the active card
+  // with the blue left border (matches fcbet216 reference image 2).
+  sbBuildBoostDots(matches.length);
+  sbUpdateBoostActive();
+}
+
+/* ── Boost row: pagination dots + active-card tracker ─────────────────
+   Matches fcbet216 image 2: ●●○○○ dots under the carousel; the snapped
+   card gets a 1px blue left border (.is-active). */
+function sbBuildBoostDots(count) {
+  var holder = document.getElementById('sb-boost-dots');
+  if (!holder) {
+    var row = document.getElementById('sb-boosted-odds');
+    if (!row || !row.parentNode) return;
+    holder = document.createElement('div');
+    holder.id = 'sb-boost-dots';
+    holder.className = 'sb-boost-dots';
+    row.parentNode.insertBefore(holder, row.nextSibling);
+    // Attach scroll listener once
+    row.addEventListener('scroll', function() {
+      if (sbBuildBoostDots._raf) return;
+      sbBuildBoostDots._raf = requestAnimationFrame(function() {
+        sbBuildBoostDots._raf = null;
+        sbUpdateBoostActive();
+      });
+    }, { passive: true });
+  }
+  var dots = '';
+  for (var i = 0; i < count; i++) dots += '<span class="sb-boost-dot-pip" data-i="' + i + '"></span>';
+  holder.innerHTML = dots;
+}
+function sbUpdateBoostActive() {
+  var row = document.getElementById('sb-boosted-odds');
+  if (!row) return;
+  var cards = row.querySelectorAll('.sb-boost-card');
+  if (!cards.length) return;
+  var rowRect = row.getBoundingClientRect();
+  var rowCenter = rowRect.left + rowRect.width / 2;
+  var activeIdx = 0;
+  var bestDist = Infinity;
+  cards.forEach(function(c, i) {
+    var r = c.getBoundingClientRect();
+    var center = r.left + r.width / 2;
+    var d = Math.abs(center - rowCenter);
+    if (d < bestDist) { bestDist = d; activeIdx = i; }
+  });
+  cards.forEach(function(c, i) { c.classList.toggle('is-active', i === activeIdx); });
+  var dots = document.querySelectorAll('#sb-boost-dots .sb-boost-dot-pip');
+  dots.forEach(function(d, i) { d.classList.toggle('is-active', i === activeIdx); });
 }
 
 /* ── Bet Slip — fcbet216-style with Simple/Combiné/Système ────────────── */

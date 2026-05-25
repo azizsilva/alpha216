@@ -34,6 +34,18 @@
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Global scrollbar — EXACT fcbet216 spec (user-inspected --wsdk-Scrollbar* tokens):
+   thumb rgba(151,151,151,1) = #979797, thin width. Applies on Firefox via
+   the standard scrollbar-* properties; WebKit/Blink browsers use the
+   ::-webkit-scrollbar pseudo-elements below. */
+.sb-root, .sb-root * {
+  scrollbar-width: thin;
+  scrollbar-color: #979797 transparent;
+}
+.sb-root ::-webkit-scrollbar         { width: 6px; height: 6px; }
+.sb-root ::-webkit-scrollbar-thumb   { background: #979797; border-radius: 6px; }
+.sb-root ::-webkit-scrollbar-track   { background: transparent; }
+
 body {
   background: var(--sb-bg-root);
   color: var(--sb-text-1);
@@ -914,6 +926,7 @@ body {
 .sb-boost-card {
   background: rgb(58,58,58);                       /* same gray family as fcbet216 */
   border: 1px solid rgba(255,255,255,0.04);
+  border-left: 1px solid rgba(255,255,255,0.04);   /* will become blue on .is-active */
   border-radius: 10px;
   flex: 0 0 calc(100% - 22px);                     /* full width, peek next card */
   min-width: calc(100% - 22px);
@@ -922,9 +935,39 @@ body {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
 }
 .sb-boost-card:hover { background: rgb(66,66,66); }
+/* Active card — 1px blue LEFT border highlights the currently-snapped
+   card, matches the fcbet216 reference. Driven by scroll position
+   in JS (see sbUpdateBoostActive). */
+.sb-boost-card.is-active {
+  border-left: 1px solid rgb(33,151,243);
+}
+
+/* Pagination dots under the boost row (fcbet216 image 2 reference).
+   Active dot = brand green pill; idle dots = muted gray circles. */
+.sb-boost-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 0 14px;
+  margin: 0;
+}
+.sb-boost-dot-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: width 0.15s, background 0.15s;
+}
+.sb-boost-dot-pip.is-active {
+  width: 18px;
+  border-radius: 4px;
+  background: var(--sb-green);
+}
 
 /* ── EN DIRECT live card (slc) — one full-width slide ──
    fcbet216 reference: gray rgb(49,49,49) surface, NO radius (user spec). */
@@ -1097,17 +1140,19 @@ body {
   line-height: 1.4;
   flex-shrink: 0;
 }
+/* COTES BOOSTÉES badge — EXACT fcbet216 blue rgb(33,151,243) */
 .sb-badge-blue {
   display: inline-flex;
   align-items: center;
-  background: var(--sb-accent-blue);
+  background: rgb(33,151,243);
   color: #fff;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 3px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 .sb-boost-card .sb-meta-text  { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 500; line-height: 1.45; }
 .sb-boost-card .sb-teams-text { font-size: 14px; font-weight: 700; color: #fff; margin: 4px 0 8px; }
@@ -1121,44 +1166,41 @@ body {
 }
 .sb-boost-card .sb-boost-line { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 4px; display: flex; align-items: center; }
 
-/* Boost odds pill — old (strikethrough) → arrow → new value.
-   Arrow now sized to MATCH the odds text (the user explicitly asked for
-   the arrow to be the same size as the text). */
+/* Boost odds pill — fcbet216 reference image 4 (23.10 >> 21.10).
+   Tighter than before: smaller padding, smaller text, 16px BoostIcon. */
 .sb-odds-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   background: rgb(40,40,40);
-  padding: 12px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   justify-content: center;
   margin-top: 12px;
 }
 .sb-old-val {
-  color: var(--sb-text-2);
+  color: rgba(255,255,255,0.45);
   text-decoration: line-through;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 1;
 }
 .sb-new-val {
   color: var(--sb-green);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   line-height: 1;
 }
-/* Double-chevron arrow (>>) — matches fcbet216 reference image 1 */
+/* Double-chevron BoostIcon — EXACT fcbet216 SVG (16x16, currentColor green) */
 .sb-boost-arrow {
   color: var(--sb-green);
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1;
   display: inline-flex;
   align-items: center;
+  line-height: 1;
 }
-.sb-boost-arrow svg { width: 22px; height: 18px; display: block; }
+.sb-boost-arrow svg { width: 16px; height: 16px; display: block; }
 .sb-odds-row i,
-.sb-odds-row svg { color: var(--sb-green); fill: var(--sb-green); }
+.sb-odds-row svg { color: var(--sb-green); }
 
 /* ════════════════════════════════════════════════════════════
    MATCH CARDS — Premium reference site layout
