@@ -269,14 +269,36 @@ function _mergeTimer(m, newTimer) {
 
 /* ── Merge real m.timer with kickoff fallback. Returns the timer
  * object the rest of the code should use — real data wins, but
- * we never leave the user staring at 00:00 for a live match. */
+ * we never leave the user staring at 00:00 for a live match.
+ *
+ * KEY FIX (b20260525bs): BetsAPI sometimes returns `tm = 0` for a
+ * live match (its "I don't know" sentinel). We previously accepted
+ * that as "real" data, which is why the match-detail clock kept
+ * ticking from 00:00 even though the match was in HT or 60'+ already.
+ * Now we treat tm=0 as missing UNLESS we can confirm via kickoff that
+ * the match really is in its first minute. */
 function effectiveTimer(m) {
   if (isMatchEnded(m)) return null;
   if (m && m.timer) {
-    var hasReal = (m.timer.tm !== undefined && m.timer.tm !== null && m.timer.tm !== '')
-               || (m.timer.TM !== undefined && m.timer.TM !== null && m.timer.TM !== '')
-               || (String(m.timer.md || m.timer.MD || '') === '1');
-    if (hasReal) return m.timer;
+    var tmV = m.timer.tm;
+    if (tmV === undefined || tmV === null) tmV = m.timer.TM;
+    var tmn = parseInt(tmV, 10);
+    var md = String(m.timer.md || m.timer.MD || '');
+    // Period markers are always trustworthy (HT, ET, etc.)
+    if (md === '1' || md === '3') return m.timer;
+    var fb = computeFallbackTimer(m);
+    var fbMin = fb ? (parseInt(fb.tm, 10) || 0) : 0;
+    // Real positive minute → use it
+    if (!isNaN(tmn) && tmn > 0 && tmn < 130) {
+      // If the kickoff fallback is well ahead of the API timer
+      // (more than 4 minutes), BetsAPI is feeding us stale data —
+      // trust the fallback so the clock reflects reality.
+      if (fb && fbMin > tmn + 4) return fb;
+      return m.timer;
+    }
+    // tm = 0 or missing → only believe it if kickoff confirms minute 0
+    if (fb && fbMin > 1) return fb;
+    return m.timer;   // genuinely just kicked off
   }
   return computeFallbackTimer(m);
 }
@@ -342,28 +364,40 @@ function getMatchPeriod(m) {
 function formatLiveMinute(m) {
   if (!m) return '';
 
+  var sid = parseInt(m.sport_id || 1, 10);
+  var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
+  var nowSec  = Math.floor(Date.now() / 1000);
+  var elapsedMin = (kickoff > 0) ? Math.floor((nowSec - kickoff) / 60) : -1;
+
+  // Helper: kickoff-based fallback for football. We use this whenever
+  // the API hasn't given us a non-zero tm yet (or when the match has
+  // clearly progressed past the period BetsAPI is reporting).
+  function kickoffMinute() {
+    if (sid !== 1 || elapsedMin < 0) return null;
+    if (elapsedMin <= 45)  return Math.max(1, elapsedMin) + "'";
+    if (elapsedMin <= 60)  return 'Mi-temps';
+    if (elapsedMin <= 105) return Math.max(46, elapsedMin - 15) + "'";
+    return "90+'";
+  }
+
   if (m.timer) {
     var md = String(m.timer.md || m.timer.MD || '');
     if (md === '1' || md === '3') return 'Mi-temps';
     var tm = m.timer.tm;
     if (tm === undefined || tm === null) tm = m.timer.TM;
     var tmn = parseInt(tm, 10);
-    if (!isNaN(tmn) && tmn >= 0 && tmn < 130) return tmn + "'";
+    // ── Real, non-zero, in-range timer minute → use as-is.
+    if (!isNaN(tmn) && tmn > 0 && tmn < 130) return tmn + "'";
+    // ── tm === 0 is BetsAPI's "I don't know" sentinel. Don't display
+    //    "0'" on a live match — fall through to the kickoff fallback so
+    //    the user sees the real elapsed minute (e.g. 42' or Mi-temps).
+    var ko = kickoffMinute();
+    if (ko) return ko;
   }
 
-  // Fallback: compute minute from kickoff timestamp (football only)
-  var sid = parseInt(m.sport_id || 1, 10);
-  if (sid === 1) {
-    var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
-    if (kickoff > 0) {
-      var nowSec  = Math.floor(Date.now() / 1000);
-      var elapsed = Math.floor((nowSec - kickoff) / 60);
-      if (elapsed >= 0 && elapsed <= 45) return Math.max(1, elapsed) + "'";
-      if (elapsed > 45 && elapsed <= 60) return 'Mi-temps';
-      if (elapsed > 60 && elapsed <= 105) return Math.max(46, elapsed - 15) + "'";
-      if (elapsed > 105) return "90+'";   // never return empty here — match is in stoppage / ET
-    }
-  }
+  // No timer object at all — pure kickoff fallback (football only)
+  var koOnly = kickoffMinute();
+  if (koOnly) return koOnly;
   return 'En cours';
 }
 
@@ -2161,14 +2195,21 @@ function matchCard(m) {
     var _tmRaw = (m.timer && (m.timer.tm || m.timer.TM)) || 0;
     var _tmBase = parseInt(_tmRaw, 10) || 0;
     var _mdRaw = String((m.timer && (m.timer.md || m.timer.MD)) || '');
-    if (_tmBase === 0 && (parseInt(m.sport_id || 1, 10) === 1)) {
+    // ── Kickoff fallback (football only): used when BetsAPI returned
+    //    tm=0 (its "unknown" sentinel) OR when the elapsed kickoff
+    //    minute is clearly AHEAD of the API timer (stale data — e.g.
+    //    API says 12' but kickoff was 40 min ago → trust kickoff).
+    if (parseInt(m.sport_id || 1, 10) === 1) {
       var _kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
       if (_kickoff > 0) {
         var _elapsed = Math.floor((Date.now() / 1000 - _kickoff) / 60);
-        if (_elapsed > 105) { _tmBase = 90; }                            // stoppage/ET — freeze around 90+
-        else if (_elapsed > 60) _tmBase = _elapsed - 15;
-        else if (_elapsed > 45) { _tmBase = 45; _mdRaw = '1'; }
-        else if (_elapsed >= 0) _tmBase = Math.max(1, _elapsed);
+        var _shouldFallback = (_tmBase === 0) || (_elapsed > _tmBase + 5 && _elapsed <= 105);
+        if (_shouldFallback) {
+          if (_elapsed > 105) { _tmBase = 90; }
+          else if (_elapsed > 60) _tmBase = _elapsed - 15;
+          else if (_elapsed > 45) { _tmBase = 45; _mdRaw = '1'; }
+          else if (_elapsed >= 0) _tmBase = Math.max(1, _elapsed);
+        }
       }
     }
     // fcbet216 Type A (En direct maintenant list) — NO sport icon in header.

@@ -2103,17 +2103,33 @@ if ($action === 'live_refresh') {
         // v3/event/view — fresh score + timer + stats (half-time, 2nd half)
         $v3 = betsapi_get('/v3/event/view', ['event_id' => $db_mid, 'source' => 'bet365']);
         $ss = null; $timer = null; $ts_stat = '1'; $stats = null;
+        $home_nm = ''; $away_nm = '';
         if (!empty($v3['results'][0])) {
             $ev3 = $v3['results'][0];
             $ss = $ev3['ss'] ?? null;
             $timer = _normalize_timer($ev3['timer'] ?? null);
             $ts_stat = (string)($ev3['time_status'] ?? '1');
             if (!empty($ev3['stats'])) $stats = _normalize_stats($ev3['stats']);
+            $home_nm = (string)($ev3['home']['name'] ?? '');
+            $away_nm = (string)($ev3['away']['name'] ?? '');
         }
 
         // BetsAPI /v1/bet365/event — fresh live odds stream
         $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
         if (!$ev || empty($ev['results'])) continue;
+
+        // ── Augment stats from the bet365 event stream. v3 often
+        //    misses cards / corners; the bet365 EV row carries them as
+        //    S6 / S7 / S8 (corners / yellow / red) and the ST rows
+        //    carry full event timelines. Both sources merged together
+        //    give the same counters fcbet216 shows on its live cards.
+        $ev_stream_stats = _parse_bet365_event_stats($ev['results']);
+        $timeline_stats  = _parse_stream_timeline_stats(
+            is_array($ev['results'][0] ?? null) ? $ev['results'][0] : $ev['results'],
+            $home_nm, $away_nm
+        );
+        $stats = _merge_stats($stats, $ev_stream_stats);
+        $stats = _merge_stats($stats, $timeline_stats);
 
         $stream = is_array($ev['results'][0] ?? null) ? $ev['results'][0] : [$ev['results'][0] ?? null];
         $h_o = $x_o = $a_o = $ov_o = $un_o = null;
