@@ -699,18 +699,25 @@ function renderStatsBar(m, sportId) {
     }
     // Stat icons — proper SVGs (no unicode ▮ which renders ugly in
     // many fonts). Order + glyphs match fcbet216 image 3 exactly:
-    //   ⚡ attacks  | 🟨 yellow card | 🟥 red card | ⚑ corner | ⚽ shots
+    //   ⚡ attacks  | 🟨 yellow card | 🟥 red card | ⚑ corner | ⚽ goals
     var icAtk  = '<svg class="md-si-ic md-si-ic--atk"  width="10" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>';
     var icYC   = '<svg class="md-si-ic md-si-ic--yc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#FACC15"/></svg>';
     var icRC   = '<svg class="md-si-ic md-si-ic--rc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#EF4444"/></svg>';
     var icCor  = '<svg class="md-si-ic md-si-ic--cor" width="11" height="12" viewBox="0 0 16 16" fill="none"><line x1="3" y1="1" x2="3" y2="15" stroke="#ffffff" stroke-width="1.5"/><path d="M3 2 L13 4.5 L3 7 Z" fill="#22C55E"/></svg>';
     var icBall = '<svg class="md-si-ic md-si-ic--ball" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><polygon points="12,7 16,10 14.5,15 9.5,15 8,10" fill="currentColor" stroke="none"/></svg>';
+    // Goals counter — derived directly from the live score (m.ss).
+    // The football icon naturally reads as a goal counter; showing
+    // "0 ⚽ 0" while the score above is 1:1 looked broken, so we now
+    // mirror m.ss into the stat bar. on_target moves to a (future) row.
+    var goalParts = m.ss ? String(m.ss).replace(/\s+/g,'').split(/[-:]/) : [];
+    var goalH = goalParts[0] !== undefined && goalParts[0] !== '' ? goalParts[0] : (isLiveNow ? '0' : '-');
+    var goalA = goalParts[1] !== undefined && goalParts[1] !== '' ? goalParts[1] : (isLiveNow ? '0' : '-');
     return '<div class="md-stats-bar">'
       + mdStat(svBest('dangerous_attacks','attacks',0), icAtk,  svBest('dangerous_attacks','attacks',1))
       + mdStat(svL('yellow_cards',0),                   icYC,   svL('yellow_cards',1))
       + mdStat(svL('red_cards',0),                      icRC,   svL('red_cards',1))
       + mdStat(svL('corners',0),                        icCor,  svL('corners',1))
-      + mdStat(svL('on_target',0),                      icBall, svL('on_target',1))
+      + mdStat(goalH,                                   icBall, goalA)
       + '</div>';
   }
   // Basketball
