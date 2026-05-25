@@ -1266,6 +1266,8 @@ function startPolling() {
       if (typeof sbPollSportPage === 'function') sbPollSportPage();
       return;
     }
+    // Period page is for future dates — no live polling needed.
+    if (S.viewMode === 'periodPage') return;
 
     var url, targetList, isChamp, liveRefreshP = Promise.resolve(false);
 
@@ -3388,23 +3390,36 @@ window.sbToggleRight = function() { document.getElementById('sb-right').classLis
 
 window.sbFilterByDate = function(btn, dayOffset) {
   document.querySelectorAll('.sb-date-item').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   S.activeDateOffset = dayOffset;
-  // Keep state coherent so the next poll cycle does NOT misinterpret the
-  // view as live and snap activeDateOffset back to 0. Also flip the tab
-  // so .sb-btn-live no longer claims the active state.
   S.activeAction = (dayOffset === 0) ? 'inplay' : 'upcoming';
   if (dayOffset > 0) S.activeTab = 'home';
 
-  // If currently in a league view, stay in that league but re-filter by date
+  // If currently in a league view, stay in that league but re-filter by date.
   if (S.activeLeagueName) {
     window.sbOpenLeague(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.activeSportId);
-  } else {
-    loadAndFilter(dayOffset === 0 ? 'inplay' : 'upcoming', S.activeSportId, null);
+    return;
   }
-  // Restart polling so the interval (5s live / 15s upcoming) and the
-  // action used by doPoll match the new date selection.
-  startPolling();
+
+  // Aujourd'hui (offset 0) — restore the full home page.
+  if (dayOffset === 0) {
+    S.viewMode = 'main';
+    var root = document.querySelector('.sb-root');
+    if (root) root.setAttribute('data-view', '');
+    try {
+      var u = new URL(window.location.href);
+      u.searchParams.delete('page');
+      u.searchParams.delete('date');
+      history.pushState({ sbView:'main' }, '', u.toString());
+    } catch (e) {}
+    sbSetHomepanelVisible(true);
+    loadAndFilter('inplay', S.activeSportId, null);
+    startPolling();
+    return;
+  }
+
+  // Future date — open the fcbet-style period page (hides home chrome).
+  window.sbOpenPeriodPage(dayOffset);
 };
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -4800,9 +4815,245 @@ window.sbSetUpcomingTab = function(sportId, btn) {
   loadAndFilter(S.activeDateOffset === 0 ? 'inplay' : 'upcoming', sportId, null);
 };
 
+/* ════════════════════════════════════════════════════════════════════════
+   PERIOD PAGE — fcbet216 reference (URL: /sportsbook/prelive?page=period&date=...)
+   Tapping a future date pill opens this view: all leagues with that date's
+   fixtures, every accordion CLOSED by default, user can expand any.
+   Hides Favoris / sport tiles / SLC carousel / Cotes boostees / search /
+   leagues panel — see CSS [data-view="periodpage"].
+   ════════════════════════════════════════════════════════════════════════ */
+window.sbOpenPeriodPage = function(dayOffset, _skipPush) {
+  sbAbortListFetches();
+  sbAbortMdFetches();
+  var navGen = sbNextNav();
+
+  S.viewMode         = 'periodPage';
+  S.activeDateOffset = dayOffset;
+  S.activeAction     = 'upcoming';
+  S.activeTab        = 'home';
+  S.activeLeagueId   = null;
+  S.userPickedSport  = false;
+  if (!S.periodLeagueExpanded) S.periodLeagueExpanded = {};
+
+  // Update URL with fcbet-like format ?page=period&date=ISO
+  try {
+    var dt = new Date();
+    dt.setDate(dt.getDate() + dayOffset);
+    dt.setHours(23, 0, 0, 0);
+    var dateStr = dt.toISOString();
+    if (!_skipPush) {
+      var u = new URL(window.location.href);
+      u.searchParams.set('page', 'period');
+      u.searchParams.set('date', dateStr);
+      history.pushState({ sbView:'period', date:dateStr, dayOffset:dayOffset }, '', u.toString());
+    }
+  } catch (e) {}
+
+  var root = document.querySelector('.sb-root');
+  if (root) root.setAttribute('data-view', 'periodpage');
+
+  var el = document.getElementById('sb-matches-body');
+  if (el) el.innerHTML = buildSkeleton(5);
+
+  // Stop home polling while on period page (future-date fixtures won't go live)
+  if (window._sbPollTid) { clearInterval(window._sbPollTid); window._sbPollTid = null; }
+
+  var apiUrl = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + (S.activeSportId || 1);
+  fetch(apiUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode !== 'periodPage') return;
+      var res = (d && d.results) ? d.results : [];
+      var now = new Date();
+      var target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + dayOffset);
+      var targetStr = target.toDateString();
+      res = res.filter(function(m) {
+        if (!m || !m.id || !m.home || !m.home.name || !m.away || !m.away.name) return false;
+        if (m.time_status === '3') return false;
+        var ts = parseInt(m.time || m.start_time || 0) || 0;
+        if (!ts) return false;
+        return new Date(ts * 1000).toDateString() === targetStr;
+      });
+      S.periodMatches = res;
+      renderPeriodPage(dayOffset, res);
+    })
+    .catch(function() {
+      if (S.viewMode !== 'periodPage') return;
+      S.periodMatches = [];
+      renderPeriodPage(dayOffset, []);
+    });
+};
+
+function renderPeriodPage(dayOffset, matches) {
+  var el = document.getElementById('sb-matches-body');
+  if (!el) return;
+  if (S.viewMode !== 'periodPage') return;
+
+  matches = sortUpcomingMatches(matches || []);
+
+  var groupMode = S.periodGroupMode || 'league';
+  var activeCat = S.activeMarketCat || '1x2';
+  var marketOpts = [
+    {key:'1x2',           label:'1x2'},
+    {key:'total',         label:'Total'},
+    {key:'double_chance', label:'Double chance'},
+    {key:'btts',          label:'Les deux équipes qui marquent'},
+    {key:'handicap',      label:'Handicap'},
+    {key:'ht_1x2',        label:'1ère mi-temps - 1x2'},
+    {key:'ht_total',      label:'1ère mi-temps - total'}
+  ];
+  var activeOpt = marketOpts.find(function(o){ return o.key === activeCat; }) || marketOpts[0];
+  var accOpen = !!S.periodMktAccOpen;
+
+  var out = '<div class="sb-period-view sb-champ-view">';
+
+  // Sport pills (Football / Basketball / Tennis / ...) — switches the
+  // active sport and reloads the period for the current dayOffset.
+  out += '<div class="sb-upcoming-tabs sb-period-sport-tabs">';
+  SPORTS.filter(function(sp){ return sp.live !== false; }).slice(0, 8).forEach(function(sp) {
+    var isActive = (sp.id === S.activeSportId);
+    out += '<button type="button" class="sb-upcoming-tab' + (isActive?' active':'') + '" onclick="window.sbPeriodSwitchSport(' + sp.id + ')">';
+    out += '<div class="sb-tab-icon">' + sp.icon + '</div>';
+    out += '<span class="sb-tab-name">' + h(sp.name) + '</span>';
+    out += '</button>';
+  });
+  out += '</div>';
+
+  // Cotes de match / Cotes boostees top tabs
+  out += '<div class="sb-champ-top-tabs">';
+  out += '<button type="button" class="sb-ctt active">Cotes de match</button>';
+  out += '<button type="button" class="sb-ctt">Cotes boostées</button>';
+  out += '</div>';
+
+  // Par Ligue / Par Heure sub-nav
+  out += '<div class="sb-champ-subnav">';
+  out += '<button type="button" class="sb-subnav-btn' + (groupMode==='league'?' active':'') + '" onclick="window.sbPeriodGroupMode(\'league\')">Par Ligue</button>';
+  out += '<button type="button" class="sb-subnav-btn' + (groupMode==='hour'?' active':'') + '" onclick="window.sbPeriodGroupMode(\'hour\')">Par Heure</button>';
+  out += '</div>';
+
+  // Market type tabs (horizontal scroll)
+  out += '<div class="sb-champ-mkt-tabs">';
+  ['Tout','Principaux','Spéciale joueurs','1 minute','Mi-temps 1','Mi-temps 2','Teams H2H','Correct Score','Corners','Cartes','Combo'].forEach(function(t, i) {
+    out += '<button class="sb-cmt' + (i === 1 ? ' active' : '') + '" onclick="this.parentNode.querySelectorAll(\'.sb-cmt\').forEach(function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">' + t + '</button>';
+  });
+  out += '</div>';
+
+  // Market category dropdown (1x2 default)
+  out += '<div class="sb-champ-mkt-acc' + (accOpen?' open':' collapsed') + '" id="sb-period-mkt-acc">';
+  out += '<button type="button" class="sb-champ-mkt-acc-hdr" onclick="window.sbTogglePeriodMktAcc()">';
+  out += '<span class="sb-champ-mkt-acc-lbl">' + h(activeOpt.label) + '</span>';
+  out += '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen?'&minus;':'&#9662;') + '</span>';
+  out += '</button>';
+  out += '<div class="sb-champ-mkt-acc-body"' + (accOpen?'':' style="display:none"') + '>';
+  var optStyle = 'display:block;width:100%;text-align:left;padding:12px 16px;margin:0;background:transparent;border:0;border-radius:0;color:#fff;font-family:Roboto,sans-serif;font-size:14px;font-weight:500;line-height:16px;cursor:pointer;outline:none;box-shadow:none;-webkit-appearance:none;-moz-appearance:none;appearance:none;';
+  marketOpts.forEach(function(o) {
+    if (o.key === activeOpt.key) return;
+    out += '<button type="button" class="sb-champ-mkt-opt" style="' + optStyle + '" onclick="window.sbSetPeriodMarketCat(\'' + o.key + '\')">' + h(o.label) + '</button>';
+  });
+  out += '</div></div>';
+
+  // League / hour accordions — ALL CLOSED BY DEFAULT
+  out += '<div class="sb-period-matches sb-champ-matches">';
+  if (!matches.length) {
+    out += '<div class="sb-loader" style="margin-top:16px">Aucun match disponible pour cette date.</div>';
+  } else {
+    var groups = {}, order = [];
+    var byHour = (groupMode === 'hour');
+    matches.forEach(function(m) {
+      var k;
+      if (byHour) {
+        var ts = parseInt(m.time||m.start_time||0)||0;
+        if (ts) {
+          var dx = new Date(ts*1000);
+          var dn = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+          k = dn[dx.getDay()] + ' ' + String(dx.getDate()).padStart(2,'0') + '/' + String(dx.getMonth()+1).padStart(2,'0') + ' · ' + String(dx.getHours()).padStart(2,'0') + 'h' + String(dx.getMinutes()).padStart(2,'0');
+        } else { k = 'À venir'; }
+      } else {
+        k = (m.league && m.league.name) ? m.league.name : 'Autre championnat';
+      }
+      if (!groups[k]) { groups[k]=[]; order.push(k); }
+      groups[k].push(m);
+    });
+    S.periodLeagueExpanded = S.periodLeagueExpanded || {};
+    order.forEach(function(lg) {
+      var lc = guessCountry(lg);
+      var lf = getFlag(lc);
+      var lcl = (lc && lc !== 'International') ? (' · ' + h(lc)) : '';
+      // DEFAULT: collapsed. Only honor explicit "expanded" state set by user clicks.
+      var isExpanded  = !!S.periodLeagueExpanded[lg];
+      var isCollapsed = !isExpanded;
+      var lgKey = encodeURIComponent(lg);
+      out += '<div class="sb-league-acc' + (isCollapsed?' collapsed':' open') + '" data-lg-period="' + h(lg) + '">';
+      out += '<button type="button" class="sb-league-acc-hdr" onclick="window.sbTogglePeriodLeague(\'' + lgKey + '\')">';
+      out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
+      out += '<img src="' + lf + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
+      out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg)||lg) + lcl + '</span>';
+      out += '<span class="sb-lh-bb">BB</span>';
+      out += '<span class="sb-league-acc-tgl" aria-hidden="true">' + (isCollapsed?'&#9662;':'&minus;') + '</span>';
+      out += '</button>';
+      out += '<div class="sb-league-acc-body"' + (isCollapsed?' style="display:none"':'') + '>';
+      groups[lg].forEach(function(m) { out += matchCard(m); });
+      out += '</div>';
+      out += '</div>';
+    });
+  }
+  out += '</div>'; // sb-period-matches
+  out += '</div>'; // sb-period-view
+  el.innerHTML = out;
+}
+
+window.sbTogglePeriodLeague = function(lgKey) {
+  var lg = decodeURIComponent(lgKey);
+  S.periodLeagueExpanded = S.periodLeagueExpanded || {};
+  var nextExpanded = !S.periodLeagueExpanded[lg];
+  S.periodLeagueExpanded[lg] = nextExpanded;
+  var sel = '.sb-league-acc[data-lg-period="' + lg.replace(/"/g,'\\"') + '"]';
+  var node = document.querySelector(sel);
+  if (!node) return;
+  node.classList.toggle('collapsed', !nextExpanded);
+  node.classList.toggle('open', nextExpanded);
+  var body = node.querySelector('.sb-league-acc-body');
+  var tgl  = node.querySelector('.sb-league-acc-tgl');
+  if (body) body.style.display = nextExpanded ? '' : 'none';
+  if (tgl)  tgl.innerHTML = nextExpanded ? '&minus;' : '&#9662;';
+};
+
+window.sbPeriodGroupMode = function(mode) {
+  S.periodGroupMode = (mode === 'hour') ? 'hour' : 'league';
+  S.periodLeagueExpanded = {}; // reset accordion state on regroup
+  renderPeriodPage(S.activeDateOffset, S.periodMatches || []);
+};
+
+window.sbTogglePeriodMktAcc = function() {
+  var acc = document.getElementById('sb-period-mkt-acc');
+  if (!acc) return;
+  var open = acc.classList.contains('open');
+  acc.classList.toggle('open', !open);
+  acc.classList.toggle('collapsed', open);
+  var body = acc.querySelector('.sb-champ-mkt-acc-body');
+  var tgl  = acc.querySelector('.sb-champ-mkt-acc-tgl');
+  if (body) body.style.display = open ? 'none' : '';
+  if (tgl)  tgl.innerHTML = open ? '&#9662;' : '&minus;';
+  S.periodMktAccOpen = !open;
+};
+
+window.sbSetPeriodMarketCat = function(cat) {
+  S.activeMarketCat = cat;
+  S.periodMktAccOpen = false;
+  renderPeriodPage(S.activeDateOffset, S.periodMatches || []);
+};
+
+/* Switch sport on the period page — reloads fixtures for the same date. */
+window.sbPeriodSwitchSport = function(sportId) {
+  S.activeSportId = sportId || 1;
+  S.periodLeagueExpanded = {};   // reset accordion state on sport change
+  window.sbOpenPeriodPage(S.activeDateOffset, true /* don't push duplicate URL */);
+};
+
 function loadAndFilter(action, sid, lid) {
   // Never clobber a dedicated sub-view with a list skeleton.
-  if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
+  if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage' || S.viewMode === 'periodPage') return;
 
   sbAbortListFetches();
   var navGen = sbNextNav();
@@ -4985,6 +5236,25 @@ function sbRestoreFromUrl() {
       window.sbOpenSportPage(sportId3);
       return true;
     }
+  } else if (page === 'period') {
+    // /sportsbook?page=period&date=ISO — restore the prelive period page
+    var iso = sp.get('date');
+    if (iso) {
+      try {
+        var d   = new Date(iso);
+        var now = new Date();
+        var ms  = d.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        var dOff = Math.max(0, Math.round(ms / 86400000));
+        // Activate the matching date pill if present
+        var items = document.querySelectorAll('.sb-date-item');
+        if (items[dOff]) {
+          items.forEach(function(b){ b.classList.remove('active'); });
+          items[dOff].classList.add('active');
+        }
+        window.sbOpenPeriodPage(dOff, true /* skipPush */);
+        return true;
+      } catch (e) {}
+    }
   }
   return false;
 }
@@ -5000,6 +5270,10 @@ window.addEventListener('popstate', function(e) {
   } else if (st.page === 'sport') {
     var sid = parseInt(st.sportId || 0) || 0;
     if (sid) window.sbOpenSportPage(sid);
+  } else if (st.sbView === 'period') {
+    // Restore period page from back/forward navigation
+    var dOff = parseInt(st.dayOffset || 0, 10) || 0;
+    window.sbOpenPeriodPage(dOff, true /* skipPush */);
   } else {
     // main — restore without pushing another entry
     S.activeLeagueId = null; S.activeLeagueName = null; S.activeLeagueFlag = null;

@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bb';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bc';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -405,6 +405,21 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 .sb-root[data-view="livepage"] .sb-mob-inline-leagues,
 .sb-root[data-view="livepage"] .sb-points-forts-block{display:none!important;}
 .sb-root[data-view="livepage"] #sb-matches-body{padding-top:8px!important;}
+/* PERIOD PAGE (fcbet216 /sportsbook/prelive?page=period&date=...) —
+   clicking a future date pill switches into this view. Keep the date
+   row + sport nav visible at the top, hide everything home-specific. */
+.sb-root[data-view="periodpage"] .sb-favoris-row,
+.sb-root[data-view="periodpage"] .sb-favoris-content,
+.sb-root[data-view="periodpage"] .sb-en-direct-row,
+.sb-root[data-view="periodpage"] #sb-en-direct-cards,
+.sb-root[data-view="periodpage"] .sb-boost-section,
+.sb-root[data-view="periodpage"] #sb-boost-section,
+.sb-root[data-view="periodpage"] #sb-boost-dots,
+.sb-root[data-view="periodpage"] .sb-mob-search-panel,
+.sb-root[data-view="periodpage"] .sb-mob-leagues-panel,
+.sb-root[data-view="periodpage"] .sb-mob-inline-leagues,
+.sb-root[data-view="periodpage"] .sb-points-forts-block{display:none!important;}
+.sb-root[data-view="periodpage"] #sb-matches-body{padding-top:8px!important;}
 /* Match-detail view: hide ALL home siblings + the mobile topbar / date /
  * favoris / sport nav / live carousel / boost section so the match-detail
  * header is the only thing on screen (fcbet216 parity). */
