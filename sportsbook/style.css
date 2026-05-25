@@ -5380,6 +5380,34 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   margin-bottom: 2px !important;
 }
 
+/* ── League header BB pill (fcbet216 image 2 ref): solid green pill
+   sitting before the toggle icon on every league accordion row. ── */
+.sb-root .sb-lh-bb {
+  background: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  padding: 3px 6px !important;
+  border-radius: 3px !important;
+  border: 0 !important;
+  flex-shrink: 0 !important;
+  letter-spacing: 0.3px !important;
+}
+/* When the header is in toggle mode, the whole row should look clickable. */
+.sb-root .sb-league-section-hdr--toggle {
+  cursor: pointer !important;
+}
+.sb-root .sb-league-section-hdr--toggle:hover {
+  background: #232323 !important;
+}
+/* Collapsed body — hidden via inline style:display:none on render; this
+   rule is a defensive fallback in case the inline style is stripped. */
+.sb-root .sb-league-block.collapsed > .sb-league-matches {
+  display: none !important;
+}
+
 .sb-root .sb-market-sel {
   flex: 1;
   height: 36px;

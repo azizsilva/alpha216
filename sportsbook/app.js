@@ -1558,32 +1558,49 @@ function renderSportNav() {
 function renderMatchGroups(matches, out, opts) {
   opts = opts || {};
   var showLeagueHeader = (opts.showLeagueHeader !== false);
+  var collapsible     = !!opts.collapsible;
+  var defaultOpenN    = (typeof opts.defaultOpenCount === 'number') ? opts.defaultOpenCount : 999;
   var groups = {}, order = [];
   matches.forEach(function(m) {
     var k = (m.league && m.league.name) ? m.league.name : 'Autre championnat';
     if (!groups[k]) { groups[k] = []; order.push(k); }
     groups[k].push(m);
   });
-  order.forEach(function(lg) {
+  order.forEach(function(lg, lgIdx) {
     if (showLeagueHeader) {
       var country = guessCountry(lg);
       var flag = getFlag(country);
       var countryLabel = (country && country !== 'International') ? (' · ' + h(country)) : '';
-      out += '<div class="sb-league-block">';
-      out += '<div class="sb-league-section-hdr">';
+      var isCollapsed = collapsible && (lgIdx >= defaultOpenN);
+      var headerOnclick = collapsible ? ' onclick="window.sbToggleLeagueAcc(this)"' : '';
+      out += '<div class="sb-league-block' + (isCollapsed ? ' collapsed' : '') + '">';
+      out += '<div class="sb-league-section-hdr' + (collapsible ? ' sb-league-section-hdr--toggle' : '') + '"' + headerOnclick + '>';
       out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
       out += '<img src="' + flag + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
       out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg) || lg) + countryLabel + '</span>';
-      out += '<span class="sb-lh-gift" title="Offres spéciales" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span>';
-      out += '<div class="sb-lh-icons">' + ICON.minus + '</div>';
+      out += '<span class="sb-lh-bb">BB</span>';
+      out += '<div class="sb-lh-icons">' + (isCollapsed ? ICON.chevronDown : ICON.minus) + '</div>';
       out += '</div>';
-      out += '<div class="sb-league-matches">';
+      out += '<div class="sb-league-matches"' + (isCollapsed ? ' style="display:none"' : '') + '>';
     }
     groups[lg].forEach(function(m) { out += matchCard(m); });
     if (showLeagueHeader) out += '</div></div>';
   });
   return out;
 }
+
+/* Click handler for collapsible league accordions on the EN DIRECT tab. */
+window.sbToggleLeagueAcc = function(headerEl) {
+  if (!headerEl) return;
+  var block = headerEl.parentElement; // .sb-league-block
+  if (!block) return;
+  var body = block.querySelector('.sb-league-matches');
+  var icon = headerEl.querySelector('.sb-lh-icons');
+  var nowCollapsed = !block.classList.contains('collapsed');
+  block.classList.toggle('collapsed', nowCollapsed);
+  if (body) body.style.display = nowCollapsed ? 'none' : '';
+  if (icon) icon.innerHTML = nowCollapsed ? ICON.chevronDown : ICON.minus;
+};
 
 // showMarkets=false for live section (pills only), true for upcoming (pills + market selectors)
 /* ── Live section market-type dropdown (matches fcbet "En direct maintenant") ── */
@@ -1669,6 +1686,30 @@ window.sbSetLiveCat = function(key, label) {
   }
 };
 
+/* European countries (incl. UEFA continental comps) — used to surface
+   European football leagues FIRST inside each sport on the home page
+   and the EN DIRECT page. Country names match the values returned by
+   guessCountry() (French labels). */
+var EUROPEAN_COUNTRIES = {
+  'France':1,'Allemagne':1,'Italie':1,'Espagne':1,'Angleterre':1,
+  'Royaume-Uni':1,'Pays-Bas':1,'Portugal':1,'Belgique':1,'Suisse':1,
+  'Autriche':1,'Pologne':1,'Suède':1,'Norvège':1,'Danemark':1,
+  'Finlande':1,'Russie':1,'Turquie':1,'Grèce':1,'Roumanie':1,
+  'Hongrie':1,'Tchéquie':1,'République Tchèque':1,'Slovaquie':1,
+  'Slovénie':1,'Croatie':1,'Serbie':1,'Ukraine':1,'Bulgarie':1,
+  'Bosnie-Herzégovine':1,'Albanie':1,'Macédoine':1,'Monténégro':1,
+  'Estonie':1,'Lettonie':1,'Lituanie':1,'Écosse':1,'Pays de Galles':1,
+  'Irlande':1,'Irlande du Nord':1,'Islande':1,'Géorgie':1,'Arménie':1,
+  'Azerbaïdjan':1,'Kazakhstan':1,'Israël':1,'Chypre':1,'Malte':1,
+  'Luxembourg':1,'Andorre':1,'Saint-Marin':1,'Liechtenstein':1,
+  'Europe':1   // UEFA continental tournaments
+};
+function isEuropeanLeague(league) {
+  if (!league || !league.name) return false;
+  var c = guessCountry(league.name);
+  return !!EUROPEAN_COUNTRIES[c];
+}
+
 /* Sort live matches: Football first (sport_id=1), then by league priority.
    LEAGUE_PRIORITY_MAP keys are matched with a substring on both sides so
    "England Premier League", "Premier League England" and "EPL" all hit. */
@@ -1710,13 +1751,17 @@ function sortLiveMatches(list) {
       if (sb2 === 1) return 1;
       return sa - sb2;
     }
+    // Europe FIRST within each sport (client request: Europe before others)
+    var ea = isEuropeanLeague(a.league) ? 0 : 1;
+    var eb = isEuropeanLeague(b.league) ? 0 : 1;
+    if (ea !== eb) return ea - eb;
     return getLeaguePriority(a.league) - getLeaguePriority(b.league);
   });
 }
-/* Sort UPCOMING matches: Football first, popular leagues first, earliest
-   kickoff first. Ensures Premier League / La Liga / Serie A / Bundesliga
-   / Ligue 1 / Champions League etc. surface at the top of "Prochainement"
-   instead of being buried under lower-profile leagues. */
+/* Sort UPCOMING matches: Football first, EUROPE first, popular leagues
+   first, earliest kickoff first. Ensures Premier League / La Liga /
+   Serie A / Bundesliga / Ligue 1 / Champions League etc. surface at the
+   top of "Prochainement" before any non-European league. */
 function sortUpcomingMatches(list) {
   return list.slice().sort(function(a, b) {
     var sa = parseInt(a.sport_id || 1);
@@ -1726,6 +1771,9 @@ function sortUpcomingMatches(list) {
       if (sb2 === 1) return 1;
       return sa - sb2;
     }
+    var ea = isEuropeanLeague(a.league) ? 0 : 1;
+    var eb = isEuropeanLeague(b.league) ? 0 : 1;
+    if (ea !== eb) return ea - eb;
     var pa = getLeaguePriority(a.league);
     var pb = getLeaguePriority(b.league);
     if (pa !== pb) return pa - pb;
@@ -1793,10 +1841,13 @@ function renderMatches(results) {
   var liveOnlyTab = (S.activeTab === 'live');
 
   // Carousel + boosted — home page only (NOT on EN DIRECT tab).
+  // Europe-priority sort so the featured "before Cotes boostees" card
+  // and the live carousel surface PL / La Liga / Serie A / etc. first.
   if (!S.activeLeagueId && S.viewMode === 'main' && !liveOnlyTab) {
-    var carouselSrc = liveList.length ? liveList : results;
+    var carouselRaw = liveList.length ? liveList : results;
+    var carouselSrc = sortLiveMatches(carouselRaw);
     renderEnDirectCards(carouselSrc.slice(0, 6));
-    renderBoosted(results.slice(0, 4));
+    renderBoosted(sortUpcomingMatches(results).slice(0, 4));
     sbSetHomepanelVisible(true);
   } else if (liveOnlyTab) {
     // EN DIRECT tab: hide carousel / boost / sport nav — show matches only.
@@ -1806,6 +1857,11 @@ function renderMatches(results) {
   var out = '';
 
   // ── EN DIRECT MAINTENANT (live cards with jerseys, scores, green odds) ──
+  // On the EN DIRECT tab we render PER-LEAGUE collapsible accordions
+  // (fcbet216 image ref): each league header has star + flag + name +
+  // BB pill + minus/chevron, click toggles the body. On the home page
+  // the same rows render WITHOUT league headers (flat list under
+  // "En direct maintenant").
   if (isTodayInplay && (liveList.length || liveOnlyTab)) {
     var showLive = liveOnlyTab ? liveList : liveList;
     var sortedLive = sortLiveMatches(showLive);
@@ -1817,7 +1873,11 @@ function renderMatches(results) {
       out += '<div class="sb-loader">Aucun match en direct pour le moment.</div>';
     } else {
       out += '<div id="sb-live-groups-body">';
-      out = renderMatchGroups(sortedLive, out, { showLeagueHeader: false });
+      out = renderMatchGroups(sortedLive, out, {
+        showLeagueHeader: liveOnlyTab,
+        collapsible:      liveOnlyTab,
+        defaultOpenCount: 2  // first 2 leagues open by default, rest collapsed
+      });
       out += '</div>';
     }
     out += '</div>';
