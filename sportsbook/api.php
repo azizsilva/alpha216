@@ -2376,15 +2376,27 @@ if ($action === 'fetch_event_odds') {
 if ($action === 'top_leagues_live') {
     $cache_dir_tl = __DIR__ . '/cache';
     $live_names = [];
-    foreach ([1, 13, 18] as $sid) {
-        $lf = $cache_dir_tl . '/live_' . $sid . '.json';
-        if (!file_exists($lf)) continue;
+    // Scan ALL live_*.json files so every sport's live leagues are detected
+    // (previously only 1/13/18 were scanned — Tennis live outside those IDs was missed).
+    foreach (glob($cache_dir_tl . '/live_*.json') ?: [] as $lf) {
         $arr = json_decode(@file_get_contents($lf), true);
         if (!is_array($arr)) continue;
         foreach ($arr as $m) {
             if ((string)($m['time_status'] ?? '') !== '1') continue;
             $ln = trim($m['league']['name'] ?? '');
             if ($ln !== '') $live_names[] = $ln;
+        }
+    }
+    // Also scan the global inplay stream for any leagues not yet in a sport cache
+    $stream = $cache_dir_tl . '/inplay_stream.json';
+    if (file_exists($stream)) {
+        $sarr = json_decode(@file_get_contents($stream), true);
+        if (is_array($sarr)) {
+            foreach ($sarr as $m) {
+                if ((string)($m['time_status'] ?? '') !== '1') continue;
+                $ln = trim($m['league']['name'] ?? '');
+                if ($ln !== '') $live_names[] = $ln;
+            }
         }
     }
     echo json_encode(['success' => 1, 'live_leagues' => array_values(array_unique($live_names))]);

@@ -5435,11 +5435,21 @@ function refreshLiveTopLeagues() {
     .then(function(d) {
       if (d && d.live_leagues) {
         S.allLiveLeagueNames = d.live_leagues;
+        // Merge in whatever the current match list has — covers the active sport
         markLiveSidebarLeagues(S.matches);
       }
     })
     .catch(function() {});
 }
+
+/* Refresh EN DIRECT badges on sidebar leagues every 15s independently
+   of which sport the user is browsing, so Tennis/Basketball/etc. rows
+   get their badge even when the home view shows football. */
+(function _startLiveLeaguePoll() {
+  // First run happens at boot (refreshLiveTopLeagues() called below).
+  // Subsequent runs every 15s — cheap PHP endpoint reads local cache files.
+  setInterval(refreshLiveTopLeagues, 15000);
+})();
 
 /* ── Mark sidebar top-league items with EN DIRECT badge when live matches exist ── */
 function markLiveSidebarLeagues(matches) {
