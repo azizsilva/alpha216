@@ -689,25 +689,35 @@ body {
   line-height: 1;
 }
 
-/* ════ Sport Nav — matches fcbet216 reference ════ */
-/* ── Sport nav: single fully-scrollable row (all items scroll together) ── */
+/* ════ Sport Nav — fcbet216 prelive style: scrollable row of individual
+   tile-cards with gray bg + border, plus left/right chevron arrows on
+   the edges. The whole strip sits in its own outer card with margin
+   below so it doesn't touch the Favoris row above or the cards below. ════ */
 .sb-sport-nav {
-  background: #181818;
-  border-bottom: 1px solid var(--sb-border);
-  height: 58px;
+  background: transparent;
+  border: none;
+  height: auto;
+  min-height: 70px;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  padding: 0;
+  margin: 12px 10px 8px;  /* gap above (after Favoris) + below (before cards) */
 }
 .sb-sport-nav-inner {
   display: flex;
-  align-items: center;
-  height: 100%;
-  gap: 2px;
-  padding: 0 6px;
+  align-items: stretch;
+  height: 64px;
+  gap: 6px;
+  padding: 6px 32px;       /* horizontal padding leaves room for arrows */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  scroll-behavior: smooth;
 }
 .sb-sport-nav-inner::-webkit-scrollbar { display: none; }
 
@@ -716,14 +726,38 @@ body {
   display: contents;
 }
 .sb-sport-scroll::-webkit-scrollbar { height: 0; }
-/* Hide arrow button — native scroll replaces it */
-.sb-nav-arrow { display: none !important; }
+
+/* Scroll chevrons — small gray circles on left/right edges of the strip
+   (matches fcbet216 reference). JS toggles `.is-hidden` based on scroll. */
+.sb-nav-arrow {
+  display: flex !important;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(40,40,40,0.92);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.85);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background .12s, opacity .12s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+}
+.sb-nav-arrow:hover { background: rgba(60,60,60,0.98); }
+.sb-nav-arrow.is-hidden { opacity: 0; pointer-events: none; }
+.sb-nav-arrow.left  { left: 4px;  }
+.sb-nav-arrow.right { right: 4px; }
+.sb-nav-arrow svg { width: 12px; height: 12px; display: block; }
 
 /* Sport skeleton items */
 .sb-skeleton-circ {
   width: 80px;
-  height: 38px;
-  border-radius: 6px;
+  height: 52px;
+  border-radius: 8px;
   background: #252525;
   animation: sb-pulse 1.4s ease-in-out infinite;
   flex-shrink: 0;
@@ -731,33 +765,35 @@ body {
 }
 @keyframes sb-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
 
-/* Unified nav item style — ALL nav items use this */
+/* Unified nav item style — each tile is its own gray card with border,
+   exactly like the fcbet216 Streami / En direct / Football tiles. */
 .sb-sport-item {
-  background: transparent !important;
-  border: none !important;
+  background: #252525 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
   box-shadow: none !important;
   text-shadow: none !important;
-  border-radius: 6px;
-  padding: 6px 10px;
+  border-radius: 8px;
+  padding: 6px 12px;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 3px;
+  gap: 4px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   color: var(--sb-text-2);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
   outline: none;
-  min-width: 58px;
-  height: 46px;
+  min-width: 64px;
+  height: 52px;
 }
-.sb-sport-item:hover { background: rgba(255,255,255,0.06); color: var(--sb-text-1); }
+.sb-sport-item:hover { background: #2e2e2e !important; color: var(--sb-text-1); border-color: rgba(255,255,255,0.14) !important; }
 .sb-sport-item.active {
   background: var(--sb-green) !important;
   color: var(--sb-green-font) !important;
+  border-color: var(--sb-green) !important;
   font-weight: 700;
 }
 .sb-sport-item .sb-sport-icon {
@@ -3769,15 +3805,20 @@ body {
 .sb-lh-icons { margin-left: 6px; }
 
 /* ════════════════════════════════════════════════════════════
-   FAVORIS ROW — between date bar and sport tabs (fcbet216 match)
+   FAVORIS ROW — between date bar and sport tabs (fcbet216 match).
+   Now styled as its own dark card with rounded corners + subtle
+   border + horizontal margin, with a small bottom margin so it
+   never touches the sport-nav strip below it.
    ════════════════════════════════════════════════════════════ */
 .sb-favoris-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgb(49, 49, 49);
-  border-bottom: 1px solid var(--sb-border);
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  margin: 10px 10px 0;
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
@@ -3786,18 +3827,24 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--sb-text-2);
+  color: var(--sb-text-1);
   font-size: 13px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
 }
-.sb-fav-left svg { color: var(--sb-text-2); flex-shrink: 0; }
-.sb-favoris-row .fa { color: var(--sb-text-2); font-size: 11px; transition: transform 0.2s; }
+.sb-fav-left svg { color: var(--sb-text-1); flex-shrink: 0; }
+.sb-favoris-row .fa {
+  color: var(--sb-text-2);
+  font-size: 11px;
+  transition: transform 0.2s;
+}
 .sb-favoris-row.open .fa { transform: rotate(180deg); }
 .sb-favoris-content {
+  margin: 4px 10px 0;
   padding: 10px 14px;
-  background: var(--sb-bg-root);
-  border-bottom: 1px solid var(--sb-border);
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
 }
 .sb-no-favs {
   font-size: 12px;

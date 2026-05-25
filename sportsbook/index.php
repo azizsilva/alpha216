@@ -136,17 +136,24 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
   .sb-root .sb-champ-cat-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;}
   .sb-root .sb-ccg-btn{height:36px!important;min-height:36px!important;padding:0 8px!important;font-size:11px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;line-height:1.2!important;}
 }
-/* Sport nav — single fully-scrollable row */
-.sb-sport-nav{overflow:hidden!important;height:58px!important;background:#181818!important;border-bottom:1px solid #2a2a2a!important;flex-shrink:0!important;}
-.sb-sport-nav-inner{display:flex!important;align-items:center!important;height:100%!important;gap:2px!important;padding:0 6px!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;}
-.sb-sport-nav-inner::-webkit-scrollbar{display:none!important;}
-#sb-sport-nav-list{display:contents!important;}
-/* Sport nav tiles — Bootstrap 3 overrides button bg; force transparent */
-.sb-root .sb-sport-item{background:transparent!important;border:none!important;box-shadow:none!important;display:flex!important;flex-direction:column!important;align-items:center!important;}
-.sb-root .sb-sport-item.active{background:#70f669!important;color:rgba(0,0,0,.87)!important;}
-.sb-root .sb-sport-item .sb-sport-icon,.sb-root .sb-sport-item .sb-sport-icon svg{display:flex!important;width:20px!important;height:20px!important;overflow:visible!important;}
-.sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1)!important;opacity:.55!important;}
-.sb-root .sb-sport-item.active .sb-sport-icon svg{filter:brightness(0)!important;opacity:1!important;}
+/* Sport nav — fcbet216 design: rounded contained strip with tile cards
+   and left/right scroll chevrons. Inline critical CSS matches style.css
+   so there's no flicker on first paint. */
+.sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 10px 8px;}
+.sb-sport-nav-inner{display:flex;align-items:stretch;height:64px;gap:6px;padding:6px 32px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;}
+.sb-sport-nav-inner::-webkit-scrollbar{display:none;}
+#sb-sport-nav-list{display:contents;}
+/* Scroll chevrons */
+.sb-nav-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(40,40,40,0.92);border:1px solid rgba(255,255,255,0.10);color:rgba(255,255,255,0.85);align-items:center;justify-content:center;cursor:pointer;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.45);}
+.sb-nav-arrow.is-hidden{opacity:0;pointer-events:none;}
+.sb-nav-arrow.left{left:4px;} .sb-nav-arrow.right{right:4px;}
+.sb-nav-arrow svg{width:12px;height:12px;display:block;}
+/* Sport nav tiles — each is its own gray card with border */
+.sb-root .sb-sport-item{background:#252525;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:64px;height:52px;color:#979797;font-family:'Poppins',sans-serif;cursor:pointer;flex-shrink:0;}
+.sb-root .sb-sport-item.active{background:#70f669;color:rgba(0,0,0,.87);border-color:#70f669;font-weight:700;}
+.sb-root .sb-sport-item .sb-sport-icon,.sb-root .sb-sport-item .sb-sport-icon svg{display:flex;width:20px;height:20px;overflow:visible;}
+.sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1);opacity:.55;}
+.sb-root .sb-sport-item.active .sb-sport-icon svg{filter:brightness(0);opacity:1;}
 /* Sport filter pills — Bootstrap 3 collapses SVG icons */
 .sb-root .sb-upcoming-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:4px!important;padding-bottom:8px!important;}
 .sb-root .sb-upcoming-tab{display:inline-flex!important;align-items:center!important;gap:6px!important;height:34px!important;white-space:nowrap!important;flex-shrink:0!important;background:#252525!important;border:1px solid rgba(255,255,255,0.10)!important;border-radius:20px!important;padding:0 13px!important;font-size:12px!important;color:#fff!important;box-shadow:none!important;}
@@ -309,8 +316,16 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
     </div>
 
     <!-- Sport navigation — single scrollable row, matches fcbet216 -->
-    <div class="sb-sport-nav">
-      <div class="sb-sport-nav-inner">
+    <div class="sb-sport-nav" id="sb-sport-nav">
+      <button class="sb-nav-arrow left is-hidden" id="sb-nav-arrow-left" aria-label="Scroll left" type="button"
+        onclick="window.sbScrollSportNav(-1)">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="sb-nav-arrow right" id="sb-nav-arrow-right" aria-label="Scroll right" type="button"
+        onclick="window.sbScrollSportNav(1)">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sb-sport-nav-inner" id="sb-sport-nav-inner">
       <!-- Streaming button with LIVE badge — exact fcbet SVG -->
       <button class="sb-sport-item sb-nav-streaming" onclick="window.sbSwitchTab(this,'inplay',0)">
         <div class="sb-sport-icon" style="position:relative">

@@ -1183,6 +1183,11 @@ function renderSportNav() {
   document.querySelectorAll('.sb-nav-streaming,.sb-nav-endirect,.sb-nav-all').forEach(function(b) {
     b.classList.remove('active');
   });
+  // Refresh chevron arrow visibility now that the tiles are in place
+  if (typeof _sbUpdateNavArrows === 'function') {
+    setTimeout(_sbUpdateNavArrows, 0);
+    setTimeout(_sbUpdateNavArrows, 200);
+  }
 }
 
 /* ── Match Rendering ─────────────────────────────────────── */
@@ -3552,6 +3557,32 @@ window.addEventListener('popstate', function(e) {
     loadAndFilter(S.activeAction || 'inplay', S.activeSportId || 1, null);
   }
 });
+
+/* ── Sport nav scroll arrows — show/hide based on scroll position ── */
+window.sbScrollSportNav = function(dir) {
+  var inner = document.getElementById('sb-sport-nav-inner');
+  if (!inner) return;
+  inner.scrollBy({ left: dir * Math.max(120, inner.clientWidth * 0.6), behavior: 'smooth' });
+};
+function _sbUpdateNavArrows() {
+  var inner = document.getElementById('sb-sport-nav-inner');
+  var l = document.getElementById('sb-nav-arrow-left');
+  var r = document.getElementById('sb-nav-arrow-right');
+  if (!inner || !l || !r) return;
+  var atStart = inner.scrollLeft <= 2;
+  var atEnd   = (inner.scrollLeft + inner.clientWidth) >= (inner.scrollWidth - 2);
+  l.classList.toggle('is-hidden', atStart);
+  r.classList.toggle('is-hidden', atEnd);
+}
+(function _sbInitNavArrows() {
+  var inner = document.getElementById('sb-sport-nav-inner');
+  if (!inner) return;
+  inner.addEventListener('scroll', _sbUpdateNavArrows, { passive: true });
+  window.addEventListener('resize', _sbUpdateNavArrows);
+  setTimeout(_sbUpdateNavArrows, 80);
+  setTimeout(_sbUpdateNavArrows, 400);
+  setTimeout(_sbUpdateNavArrows, 1500); // after sport tiles render
+})();
 
 /* ── Init ─────────────────────────────────────────────────── */
 loadCounts();
