@@ -46,8 +46,10 @@ function shirtSVG(tName, cssClass, size) {
     for (var i = 0; i < tName.length; i++) seed += tName.charCodeAt(i);
     main = c1[seed % c1.length]; sec = c2[seed % c2.length]; pat = 'solid';
   }
-  var isWhiteMain = (main === '#ffffff' || main === '#fff' || main === '#FFFFFF');
-  var stroke = isWhiteMain ? '#bbbbbb' : main;
+  // STROKE = pure white for every shirt. Inline SVG attribute (not CSS) so
+  // it always wins regardless of cache or browser specificity quirks.
+  // This is the "border 1 white" the user has been asking for.
+  var stroke = '#ffffff';
   var sz = size || 24;
   var uid = 'k' + (++_shirtId);
   var defs = '';
@@ -68,8 +70,8 @@ function shirtSVG(tName, cssClass, size) {
     defs = '<defs><pattern id="' + uid + '" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="' + main + '"/><rect x="8" width="8" height="8" fill="' + sec + '"/><rect y="8" width="8" height="8" fill="' + sec + '"/><rect x="8" y="8" width="8" height="8" fill="' + main + '"/></pattern></defs>';
     bodyFill = 'fill="url(#' + uid + ')"';
   }
-  var collarFill = 'fill="' + sec + '" stroke="' + sec + '"';
-  return '<svg viewBox="0 0 32 32" class="' + cssClass + '" width="' + sz + '" height="' + sz + '" style="flex-shrink:0" stroke="' + stroke + '" stroke-width="1">'
+  var collarFill = 'fill="' + sec + '" stroke="' + stroke + '"';
+  return '<svg viewBox="0 0 32 32" class="' + cssClass + '" width="' + sz + '" height="' + sz + '" style="flex-shrink:0" stroke="' + stroke + '" stroke-width="1" stroke-linejoin="round">'
     + defs
     + '<path ' + bodyFill + ' d="M11.6,2.2c0,0-1-1.3-4.5-0.1L2,5l2,6.5c0,0,1.3,0.3,3.5-1.5c0,0,1,19.3,1,19.9h15.2c0-0.6,0.9-19.9,0.9-19.9 c2.2,1.8,3.5,1.5,3.5,1.5L30,5L24.8,2.1c-3.4-1.2-4.5,0.1-4.5,0.1c-1.3,1.4-2.3,1.6-4.3,1.6C13.9,3.8,12.8,3.6,11.6,2.2z"/>'
     + '<path d="M12.9,2.8c1,0.9,1.8,1.2,3.1,1.2c1.3,0,2.1-0.3,3.1-1.2l-1.4,1.8h-3.4L12.9,2.8z" ' + collarFill + '/>'
@@ -1643,24 +1645,26 @@ function matchCard(m) {
     out += '</div>';
     out += '</div>';
   } else {
-    // UPCOMING — fcbet216 layout: [circle-shirt][name] rows on the LEFT,
-    // [EN DIRECT btn] + [stats icon] on the FAR right (image 1 reference)
+    // UPCOMING — fcbet216 reference image 3 (Paderborn vs VfL Wolfsburg):
+    //   [shirt][shirt]   Team A      [EN DIRECT]  [signal]
+    //                    Team B
+    // Two PLAIN shirts side-by-side on the LEFT (no circle wrapper, the
+    // shirt SVG itself carries the 1px white stroke). Team names stacked
+    // in the middle. EN DIRECT pill + signal icon pinned far right.
     out += '<div class="mc-teams-wrap mc-teams-wrap--upcoming" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-    out += '<div class="mc-teams-rows">';
-    out += '<div class="mc-team-row">';
-    out += '<span class="mc-shirt-cell mc-shirt-cell--circle">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
-    out += '<span class="mc-t-name">' + hn + '</span>';
+    out += '<div class="mc-jerseys-side">';
+    out += '<span class="mc-jersey-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 26) + '</span>';
+    out += '<span class="mc-jersey-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 26) + '</span>';
     out += '</div>';
-    out += '<div class="mc-team-row">';
-    out += '<span class="mc-shirt-cell mc-shirt-cell--circle">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
-    out += '<span class="mc-t-name">' + an + '</span>';
-    out += '</div>';
+    out += '<div class="mc-teams-stacked">';
+    out += '<div class="mc-team-row mc-team-row--upcoming"><span class="mc-t-name">' + hn + '</span></div>';
+    out += '<div class="mc-team-row mc-team-row--upcoming"><span class="mc-t-name">' + an + '</span></div>';
     out += '</div>';
     out += '<div class="mc-upcoming-actions">';
-    out += '<button class="mc-ed-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">EN DIRECT</button>';
-    out += '<button class="mc-stats-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Statistiques">';
-    out += '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14V8M6 14V4M10 14V10M14 14V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-    out += '</button>';
+    out += '<span class="mc-ed-pill">EN DIRECT</span>';
+    out += '<span class="mc-signal-ico" aria-label="Statistiques">';
+    out += '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14V11M6 14V8M10 14V5M14 14V2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    out += '</span>';
     out += '</div>';
     out += '</div>';
   }
