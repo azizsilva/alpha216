@@ -1983,9 +1983,13 @@ function renderBoosted(matches) {
     out += '<div class="sb-meta-text">' + h(m.league ? m.league.name : '') + '</div>';
     out += '<div class="sb-meta-text">' + dateStr + ' · ' + timeStr + '</div>';
     out += '<div class="sb-teams-text"><strong>' + h(m.home ? m.home.name : '') + ' vs. ' + h(m.away ? m.away.name : '') + '</strong></div>';
+    // Picks list wrapped so the green vertical connector between dots
+    // (fcbet216 timeline style) can target adjacent siblings cleanly.
+    out += '<div class="sb-boost-picks">';
     lines.forEach(function(line) {
-      out += '<div class="sb-boost-line"><span class="sb-boost-dot"></span>' + h(line) + '</div>';
+      out += '<div class="sb-boost-line"><span class="sb-boost-dot"></span><span class="sb-boost-line-txt">' + h(line) + '</span></div>';
     });
+    out += '</div>';
     out += '<div class="sb-odds-row">';
     out += '<span class="sb-old-val">' + oldOdd + '</span>';
     // EXACT fcbet216 BoostIcon SVG (user-supplied DevTools markup):

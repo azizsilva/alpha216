@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525j';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525k';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -264,6 +264,17 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .sb-upcoming-tab.active .sb-tab-icon svg{filter:brightness(0)!important;opacity:1!important;}
 /* Championship top tabs — horizontal scroll */
 .sb-root .sb-champ-top-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:0!important;scrollbar-width:none!important;}
+/* Cotes boostées — tight card + timeline dots (fcbet216 ref) */
+.sb-root .sb-boost-header{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;margin:0 0 8px;letter-spacing:.2px;line-height:1;}
+.sb-root .sb-boost-header svg{width:14px;height:14px;color:#fff;fill:#fff;}
+.sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
+.sb-root .sb-boost-card{padding:10px 14px 12px;}
+.sb-root .sb-boost-card .sb-teams-text{margin:2px 0 6px;line-height:1.25;}
+.sb-root .sb-boost-card .sb-boost-picks{margin:0 0 4px;}
+.sb-root .sb-boost-card .sb-boost-line{position:relative;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.85);min-height:18px;padding:1px 0;line-height:1.25;}
+.sb-root .sb-boost-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#70f669;display:inline-block;flex-shrink:0;z-index:2;margin:0;}
+.sb-root .sb-boost-card .sb-boost-picks > .sb-boost-line:not(:last-child) .sb-boost-dot::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:12px;transform:translateX(-50%);background:#70f669;border-radius:1px;z-index:1;}
+.sb-root .sb-odds-row{padding:6px 14px;margin-top:8px;}
 </style>
 
 <!-- Loading splash — visible from the very first paint until app.js
