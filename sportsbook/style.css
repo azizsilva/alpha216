@@ -2743,30 +2743,43 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Stats bar — goals, cards, corners */
+/* Stats bar — fcbet216 reference (image 3):
+ *   1 ⚡ 1 | 1 🟨 0 | 0 🟥 0 | 1 ⚑ 0 | 4 ⚽ 2
+ * Five evenly-spaced cells separated by hairline dividers, the
+ * counters use tabular-nums so digits stay aligned even when they
+ * tick up. */
 .md-stats-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0;
-  padding: 8px 0 4px;
-  border-top: 1px solid var(--sb-border);
-  margin-top: 10px;
-  flex-wrap: wrap;
+  padding: 8px 4px 4px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 8px;
+  flex-wrap: nowrap;
 }
 .md-stat {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 12px;
-  border-right: 1px solid var(--sb-border);
+  gap: 8px;
+  padding: 2px 0;
+  flex: 1 1 0;
+  justify-content: center;
   font-size: 12px;
+  position: relative;
 }
-.md-stat:last-child { border-right: none; }
-.md-sv { font-weight: 700; color: var(--sb-text-1); min-width: 14px; text-align: center; }
-.md-si { font-size: 13px; color: var(--sb-text-2); }
-.md-si-yc { color: #ffd700; font-size: 11px; }
-.md-si-rc { color: var(--sb-red); font-size: 11px; }
+.md-stat + .md-stat::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 1px;
+  background: rgba(255,255,255,0.06);
+}
+.md-sv { font-weight: 700; color: rgba(255,255,255,0.92); min-width: 10px; text-align: center; font-variant-numeric: tabular-nums; }
+.md-si { display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.85); }
+.md-si-ic { display: block; }
+.md-si-ic--atk  { color: rgb(113,246,105); }
+.md-si-ic--ball { color: rgba(255,255,255,0.92); }
 
 /* ── Right-panel match viewer ─────────────────────────── */
 .sb-match-viewer {
@@ -3504,19 +3517,39 @@ body {
 .md-card-league { flex: 1 1 auto !important; color: rgba(255,255,255,0.55) !important; font-size: 12px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500 !important; }
 .md-card-date   { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; flex-shrink: 0; }
 
+/* Period + timer row — fcbet216 image 3 reference.
+ *   ⓘ  1ère mi-temps | 37:20
+ * ⓘ icon = circled 3-dots in soft white, period text in bright
+ * white, vertical pipe in dim white, timer in green with tabular
+ * digits so the seconds tick without horizontal jitter. */
 .md-card-period {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
   padding: 2px 0 !important;
 }
-.md-card-info { color: rgba(255,255,255,0.55); display: inline-flex; align-items: center; flex-shrink: 0; }
-.md-card-info svg { width: 18px; height: 18px; }
-.md-card-period-txt { color: #ffffff !important; font-size: 13px !important; font-weight: 500 !important; }
-.md-card-period-sep { color: rgba(255,255,255,0.30); font-size: 13px; }
-.md-card-timer { color: var(--sb-green) !important; font-size: 15px !important; font-weight: 700 !important; font-variant-numeric: tabular-nums !important; }
-.md-card-timer--ht { color: var(--sb-green) !important; }
+.md-card-info {
+  color: rgba(255,255,255,0.85) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  border: 1.2px solid rgba(255,255,255,0.5) !important;
+}
+.md-card-info svg { width: 14px !important; height: 14px !important; }
+.md-card-period-block {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.md-card-period-txt { color: #ffffff !important; font-size: 14px !important; font-weight: 500 !important; line-height: 1 !important; }
+.md-card-period-sep { color: rgba(255,255,255,0.35) !important; font-size: 14px !important; font-weight: 400 !important; line-height: 1 !important; }
+.md-card-timer { color: rgb(113,246,105) !important; font-size: 15px !important; font-weight: 700 !important; font-variant-numeric: tabular-nums !important; line-height: 1 !important; letter-spacing: 0.2px !important; }
+.md-card-timer--ht { color: rgb(113,246,105) !important; font-size: 14px !important; font-weight: 600 !important; }
 
 .md-card-teams {
   display: grid !important;
@@ -3549,12 +3582,19 @@ body {
 
 .md-card--compact .md-stats-bar {
   border-top: 1px solid rgba(255,255,255,0.06) !important;
-  padding: 10px 0 2px !important;
+  padding: 8px 0 2px !important;
+  margin-top: 4px !important;
   display: flex !important;
-  justify-content: space-around !important;
+  justify-content: space-between !important;
   align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 4px 12px !important;
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+}
+.md-card--compact .md-stat {
+  flex: 1 1 0 !important;
+  padding: 2px 0 !important;
+  font-size: 12px !important;
+  gap: 6px !important;
 }
 
 /* Markets area */

@@ -477,12 +477,20 @@ function renderStatsBar(m, sportId) {
       if (v2 !== null && v2 !== undefined && v2 !== '') return v2;
       return defaultVal;
     }
+    // Stat icons — proper SVGs (no unicode ▮ which renders ugly in
+    // many fonts). Order + glyphs match fcbet216 image 3 exactly:
+    //   ⚡ attacks  | 🟨 yellow card | 🟥 red card | ⚑ corner | ⚽ shots
+    var icAtk  = '<svg class="md-si-ic md-si-ic--atk"  width="10" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>';
+    var icYC   = '<svg class="md-si-ic md-si-ic--yc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#FACC15"/></svg>';
+    var icRC   = '<svg class="md-si-ic md-si-ic--rc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#EF4444"/></svg>';
+    var icCor  = '<svg class="md-si-ic md-si-ic--cor" width="11" height="12" viewBox="0 0 16 16" fill="none"><line x1="3" y1="1" x2="3" y2="15" stroke="#ffffff" stroke-width="1.5"/><path d="M3 2 L13 4.5 L3 7 Z" fill="#22C55E"/></svg>';
+    var icBall = '<svg class="md-si-ic md-si-ic--ball" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><polygon points="12,7 16,10 14.5,15 9.5,15 8,10" fill="currentColor" stroke="none"/></svg>';
     return '<div class="md-stats-bar">'
-      + mdStat(svBest('dangerous_attacks','attacks',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>', svBest('dangerous_attacks','attacks',1))
-      + mdStat(svL('yellow_cards',0), '<span class="md-si-yc">▮</span>', svL('yellow_cards',1))
-      + mdStat(svL('red_cards',0),    '<span class="md-si-rc">▮</span>', svL('red_cards',1))
-      + mdStat(svL('corners',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3v18h2V13c4 0 8 2 12 6V3c-4 4-8 6-12 6V3H5z"/></svg>', svL('corners',1))
-      + mdStat(svL('on_target',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', svL('on_target',1))
+      + mdStat(svBest('dangerous_attacks','attacks',0), icAtk,  svBest('dangerous_attacks','attacks',1))
+      + mdStat(svL('yellow_cards',0),                   icYC,   svL('yellow_cards',1))
+      + mdStat(svL('red_cards',0),                      icRC,   svL('red_cards',1))
+      + mdStat(svL('corners',0),                        icCor,  svL('corners',1))
+      + mdStat(svL('on_target',0),                      icBall, svL('on_target',1))
       + '</div>';
   }
   // Basketball
@@ -3362,22 +3370,54 @@ window.sbOpenMatch = function(mid, _skipPush) {
   // Scroll back to top so the user immediately sees the match header
   // instead of being stuck at their previous home scroll position.
   try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
+
+  // ── INSTANT render from S.matches cache ──────────────────────
+  // Why: the en-direct carousel poll already keeps S.matches fresh
+  // with timer (m.timer.tm/ts/md), score (m.ss) and stats — exactly
+  // the data fcbet216 surfaces in their header. If we wait for
+  // match_detail to return (~200-800ms), the user sees a blank
+  // skeleton and a 00:00 timer for the entire round-trip, which is
+  // what they were complaining about. Instead, we render the
+  // compact card from cache RIGHT AWAY, start the local 1s ticker,
+  // start the 3s live poll, and let match_detail just slide the
+  // real markets in behind once it lands.
   var el = document.getElementById('sb-matches-body');
-  if (el) el.innerHTML = buildMatchDetailSkeleton();
+  var cached = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
+  if (cached && el) {
+    renderMatchDetail(cached, []);
+    startMatchDetailPoll(mid);  // fires _mdPollOnce immediately
+  } else if (el) {
+    el.innerHTML = buildMatchDetailSkeleton();
+  }
 
   fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      var m = (d && d.match) ? d.match : S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
+      var m = (d && d.match) ? d.match : cached;
       var mkts = (d && d.markets) ? d.markets : [];
-      if (m) {
+      if (!m) return;
+      if (cached) {
+        // Already rendered from cache — patch live stats + odds in
+        // place so the visible card doesn't flash/re-mount.
+        patchMatchDetailLive(m, mkts);
+        // Markets weren't drawn on the cache pass — inject them now.
+        var body = document.getElementById('md-markets-body');
+        if (body && mkts && mkts.length) {
+          var bbActive = document.querySelector('.md-tab.md-tab--active');
+          var bbMode = !!(bbActive && /bet builder/i.test(bbActive.textContent || ''));
+          window._mdMarkets = mkts;
+          body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, i < 6, bbMode); }).join('');
+        }
+      } else {
         renderMatchDetail(m, mkts);
         startMatchDetailPoll(mid);
       }
     })
     .catch(function() {
-      var m = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
-      if (m) renderMatchDetail(m, []);
+      if (!cached) {
+        var m = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
+        if (m) renderMatchDetail(m, []);
+      }
     });
 };
 
