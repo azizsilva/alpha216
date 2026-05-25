@@ -488,6 +488,14 @@ function startMatchDetailPoll(mid) {
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
+  // Fast detail polling for football (top European leagues), slower
+  // for other sports to stay within BetsAPI rate limits.
+  var detailMs = 1500;
+  var mObj = window._mdMatch;
+  if (mObj) {
+    var sidNum = parseInt(mObj.sport_id || 0, 10);
+    if (sidNum !== 1 && sidNum !== 36) detailMs = 2500;
+  }
   S._mdPollInterval = setInterval(function() {
     if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) {
       clearInterval(S._mdPollInterval);
@@ -495,7 +503,7 @@ function startMatchDetailPoll(mid) {
       return;
     }
     _mdPollOnce(mid);
-  }, 2000);
+  }, detailMs);
 }
 
 function patchMatchDetailLive(m, markets) {

@@ -580,13 +580,15 @@ function _fetch_event_stats($event_id, $fi = null) {
                 }
             }
 
-            // Timeline-based counts are the most reliable when present.
+            // Timeline first — counts EVERY card/corner event in
+            // the match LA timeline, most reliable for football.
             $tl = _parse_stream_timeline_stats($stream, $home_name, $away_name);
-            if ($tl) $stats = _merge_stats($tl, $stats);
-
-            if (!$stats) {
-                $stats = _parse_bet365_event_stats($ev['results']);
-            }
+            $ev_stat_row = _parse_bet365_event_stats($ev['results']);
+            $built = $tl ?: [];
+            $built = _merge_stats($built, $ev_stat_row ?: []);
+            // v3 / v1 stats only fill in missing keys
+            if ($stats) $built = _merge_stats($built, $stats);
+            $stats = $built ?: $stats;
         }
     }
 
@@ -1725,13 +1727,17 @@ if ($action === 'match_live') {
             break;
         }
 
-        // Stream-based stats — timeline LA parser is most reliable for football
-        $tl_stats = _parse_stream_timeline_stats($stream, $home_n, $away_n);
-        $stream_stats = $tl_stats ?: _parse_bet365_event_stats($ev['results']);
-        if ($stream_stats) {
-            $match_data['stats'] = $fresh_stats
-                ? _merge_stats($stream_stats, $fresh_stats)
-                : $stream_stats;
+        // Stream-based stats — timeline LA parser is most reliable
+        // for football. Then EV.S6/S7/S8 live counters. v3's
+        // _fetch_event_stats is the SLOWEST source and only used as
+        // a last-resort fallback to fill in missing keys.
+        $tl_stats     = _parse_stream_timeline_stats($stream, $home_n, $away_n);
+        $ev_stat_row  = _parse_bet365_event_stats($ev['results']);
+        $built = $tl_stats ?: [];
+        $built = _merge_stats($built, $ev_stat_row ?: []);
+        if ($fresh_stats) $built = _merge_stats($built, $fresh_stats);
+        if (!empty($built)) {
+            $match_data['stats'] = $built;
         }
         if ($pm && ($pm['h'] ?? 0) > 1.01) {
             $pm['ts'] = time();
@@ -2166,17 +2172,21 @@ if ($action === 'live_refresh') {
         if (!$ev || empty($ev['results'])) continue;
 
         // ── Augment stats from the bet365 event stream. v3 often
-        //    misses cards / corners; the bet365 EV row carries them as
-        //    S6 / S7 / S8 (corners / yellow / red) and the ST rows
-        //    carry full event timelines. Both sources merged together
-        //    give the same counters fcbet216 shows on its live cards.
+        //    has STALE cards / corners; the bet365 EV row carries
+        //    them as S6 / S7 / S8 (corners / yellow / red) and the ST
+        //    rows carry the full match event timeline. We BUILD UP
+        //    from the freshest source first (timeline → EV.S* → v3)
+        //    so a stale v3 value never wins over a fresh stream value.
         $ev_stream_stats = _parse_bet365_event_stats($ev['results']);
         $timeline_stats  = _parse_stream_timeline_stats(
             is_array($ev['results'][0] ?? null) ? $ev['results'][0] : $ev['results'],
             $home_nm, $away_nm
         );
-        $stats = _merge_stats($stats, $ev_stream_stats);
-        $stats = _merge_stats($stats, $timeline_stats);
+        // Timeline first (counts every actual event in the match),
+        // then EV.S6/S7/S8 (live counters), then v3 (last-resort).
+        $fresh = $timeline_stats ?: [];
+        $fresh = _merge_stats($fresh, $ev_stream_stats);
+        $stats = _merge_stats($fresh, $stats);
 
         $stream = is_array($ev['results'][0] ?? null) ? $ev['results'][0] : [$ev['results'][0] ?? null];
         $h_o = $x_o = $a_o = $ov_o = $un_o = null;
