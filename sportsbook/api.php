@@ -1483,13 +1483,21 @@ if ($action === 'league_matches') {
     // Runs AFTER response is sent — client does not wait for this
     if (!empty($needs_async) && $db_connected) {
         @set_time_limit(120);
-        foreach ($needs_async as $fi) {
-            if (!$fi) continue;
+        // Build id → r_id map for correct Bet365 FI lookups
+        $id_to_rid = [];
+        foreach ($results as $m) {
+            $mid = $m['id'] ?? '';
+            $rid = $m['r_id'] ?? $mid;
+            if ($mid) $id_to_rid[$mid] = $rid ?: $mid;
+        }
+        foreach ($needs_async as $mid) {
+            if (!$mid) continue;
+            $fi = $id_to_rid[$mid] ?? $mid; // use r_id (real Bet365 FI) if available
             $pm = null;
-            // Try prematch endpoint first
+            // Try prematch endpoint (uses Bet365 FI)
             $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
             if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or);
-            // Fallback: event endpoint
+            // Fallback: event stream
             if (!$pm) {
                 $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
                 if ($or2 && !empty($or2['results'])) {
@@ -1497,16 +1505,21 @@ if ($action === 'league_matches') {
                     if (!$pm) $pm = parse_event_stream_odds($or2['results'] ?? []);
                 }
             }
+            // Also try with the DB id directly (some events use numeric id as FI)
+            if (!$pm && $fi !== $mid) {
+                $or3 = betsapi_get('/v1/bet365/prematch', ['FI' => $mid]);
+                if ($or3 && !empty($or3['results'])) $pm = api_parse_prematch_odds($or3);
+            }
             if (!$pm || ($pm['h'] ?? 0) < 1.01) continue;
             // Store in DB so next poll returns with odds
             try {
                 $rj = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=?");
-                $rj->execute([$fi]);
+                $rj->execute([$mid]);
                 $raw = $rj->fetchColumn();
                 if ($raw) {
                     $mdata = json_decode($raw, true);
                     $mdata['live_odds'] = $pm;
-                    $pdo->prepare("UPDATE sb_matches SET raw_json=? WHERE id=?")->execute([json_encode($mdata), $fi]);
+                    $pdo->prepare("UPDATE sb_matches SET raw_json=? WHERE id=?")->execute([json_encode($mdata), $mid]);
                 }
             } catch (Exception $e) {}
         }

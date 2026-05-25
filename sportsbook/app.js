@@ -3695,6 +3695,45 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
 
       S.champMatches = res; // save so polling can update them
       renderChampionship(id, name, flag, res);
+
+      // ── Odds re-poll: api.php fills prematch odds asynchronously in the background.
+      // If matches have no odds yet (odds_pending > 0), re-fetch after 2.5s so the
+      // user sees real odds instead of lock icons. Retry up to 3 times.
+      var missingOdds = res.filter(function(m) {
+        var lo = m.live_odds;
+        return !(lo && lo.h && parseFloat(lo.h) >= 1.01);
+      });
+      if (missingOdds.length > 0 || (d && d.odds_pending > 0)) {
+        var retries = 0;
+        var maxRetries = 3;
+        var champToken = token;
+        var repoll = function() {
+          if (champToken !== S._champFetchToken) return;
+          if (S.viewMode !== 'championship') return;
+          if (retries >= maxRetries) return;
+          retries++;
+          fetch(url + '&_r=' + Date.now())
+            .then(function(r2) { return r2.json(); })
+            .then(function(d2) {
+              if (champToken !== S._champFetchToken) return;
+              if (S.viewMode !== 'championship') return;
+              var res2 = (d2 && d2.results) ? d2.results : [];
+              var refined2 = res2.filter(function(m) { return m.league && isLeagueMatch(name, m.league.name); });
+              if (refined2.length > 0) res2 = refined2;
+              // Check if we got new odds
+              var gotOdds = res2.some(function(m) { var lo = m.live_odds; return lo && lo.h && parseFloat(lo.h) >= 1.01; });
+              S.champMatches = res2;
+              renderChampionship(id, name, flag, res2);
+              // Keep retrying if still missing odds
+              var stillMissing = res2.filter(function(m) { var lo = m.live_odds; return !(lo && lo.h && parseFloat(lo.h) >= 1.01); });
+              if (stillMissing.length > 0 && retries < maxRetries) {
+                setTimeout(repoll, 3000);
+              }
+            })
+            .catch(function() {});
+        };
+        setTimeout(repoll, 2500);
+      }
     })
     .catch(function() {
       if (token !== S._champFetchToken) return;
