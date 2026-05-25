@@ -220,16 +220,39 @@ function getMatchPeriod(m) {
   return '1ère mi-temps';
 }
 
-/* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ── */
+/* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ──
+   1. Try API timer (m.timer.tm + m.timer.md)
+   2. Fall back to computing the minute from m.time (kickoff unix ts)
+      so we always show something useful when the match is live, even
+      if BetsAPI hasn't pushed the timer field yet. */
 function formatLiveMinute(m) {
-  if (!m || !m.timer) return '';
-  var md = String(m.timer.md || m.timer.MD || '');
-  if (md === '1') return 'Mi-temps';
-  var tm = m.timer.tm;
-  if (tm === undefined || tm === null) tm = m.timer.TM;
-  var tmn = parseInt(tm, 10);
-  if (isNaN(tmn) || tmn < 0) return '';
-  return tmn + "'";
+  if (!m) return '';
+
+  if (m.timer) {
+    var md = String(m.timer.md || m.timer.MD || '');
+    if (md === '1') return 'Mi-temps';
+    if (md === '3') return 'Mi-temps'; // some feeds use 3 for HT
+    var tm = m.timer.tm;
+    if (tm === undefined || tm === null) tm = m.timer.TM;
+    var tmn = parseInt(tm, 10);
+    if (!isNaN(tmn) && tmn >= 0 && tmn < 130) return tmn + "'";
+  }
+
+  // Fallback: compute minute from kickoff timestamp (football only)
+  var sid = parseInt(m.sport_id || 1, 10);
+  if (sid === 1) {
+    var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
+    if (kickoff > 0) {
+      var nowSec = Math.floor(Date.now() / 1000);
+      var elapsed = Math.floor((nowSec - kickoff) / 60);
+      if (elapsed < 0) return '';
+      if (elapsed <= 45) return Math.max(1, elapsed) + "'";
+      if (elapsed <= 60) return 'Mi-temps';
+      if (elapsed <= 105) return Math.max(46, elapsed - 15) + "'";
+      return ''; // probably ended
+    }
+  }
+  return 'En cours';
 }
 
 /* ── Live counting timer (counts up from API snapshot) ─── */
@@ -1443,8 +1466,9 @@ function renderMatches(results) {
   startLiveMinuteTicker();
 }
 
-/* ── Live minute ticker — bumps the displayed minute every 60s between API polls so
-   "41'" naturally advances to "42'", "43'" etc. even if the next poll is delayed. ── */
+/* ── Live minute ticker — bumps the displayed minute between API polls so
+   "41'" naturally advances to "42'", "43'" etc. even if the next poll is
+   delayed. Freezes when the API reports half-time (md=1 or md=3). ── */
 function startLiveMinuteTicker() {
   if (window._mcLiveMinTicker) return; // already running
   window._mcLiveMinTicker = setInterval(function() {
@@ -1453,16 +1477,18 @@ function startLiveMinuteTicker() {
     var now = Date.now();
     nodes.forEach(function(el) {
       var md = el.getAttribute('data-mc-min-md') || '';
-      if (md === '1') return; // half-time freeze
+      if (md === '1' || md === '3') return; // half-time freeze
       var base = parseInt(el.getAttribute('data-mc-min-start') || '0', 10) || 0;
       var renderedAt = parseInt(el.getAttribute('data-mc-min-render') || '0', 10) || now;
       var elapsedMin = Math.floor((now - renderedAt) / 60000);
       var current = base + elapsedMin;
       if (current > 0 && current < 130) {
         el.textContent = current + "'";
+      } else if (base === 0 && current === 0) {
+        // No base minute available — leave whatever the renderer put there
       }
     });
-  }, 15000); // tick every 15s — cheap and smooth
+  }, 10000); // tick every 10s — cheap and smooth
 }
 
 function matchCard(m) {
@@ -1518,10 +1544,23 @@ function matchCard(m) {
   out += '<div class="mc-hdr-live">';
   out += '<div class="mc-hl-left">';
   if (isLive) {
+    // Resolve base minute for the ticker (prefer API timer, fall back to kickoff)
+    var _tmRaw = (m.timer && (m.timer.tm || m.timer.TM)) || 0;
+    var _tmBase = parseInt(_tmRaw, 10) || 0;
+    var _mdRaw = String((m.timer && (m.timer.md || m.timer.MD)) || '');
+    if (_tmBase === 0 && (parseInt(m.sport_id || 1, 10) === 1)) {
+      var _kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
+      if (_kickoff > 0) {
+        var _elapsed = Math.floor((Date.now() / 1000 - _kickoff) / 60);
+        if (_elapsed > 60 && _elapsed <= 105) _tmBase = _elapsed - 15;
+        else if (_elapsed > 45 && _elapsed <= 60) { _tmBase = 45; _mdRaw = '1'; }
+        else if (_elapsed >= 0 && _elapsed <= 45) _tmBase = Math.max(1, _elapsed);
+      }
+    }
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     if (liveMin) {
-      out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + (parseInt((m.timer && (m.timer.tm || m.timer.TM)) || 0, 10)) + '" data-mc-min-md="' + h(String((m.timer && (m.timer.md || m.timer.MD)) || '')) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
+      out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
     }
   } else {
     out += '<span class="mc-badge-bb">BB</span>';

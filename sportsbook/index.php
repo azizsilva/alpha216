@@ -140,7 +140,7 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
    and left/right scroll chevrons. Inline critical CSS matches style.css
    so there's no flicker on first paint. */
 .sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 10px 8px;}
-.sb-sport-nav-inner{display:flex;align-items:stretch;height:64px;gap:6px;padding:6px 32px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;}
+.sb-sport-nav-inner{display:flex;align-items:center;height:70px;gap:6px;padding:7px 36px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;}
 .sb-sport-nav-inner::-webkit-scrollbar{display:none;}
 #sb-sport-nav-list{display:contents;}
 /* Scroll chevrons */
@@ -149,7 +149,7 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 .sb-nav-arrow.left{left:4px;} .sb-nav-arrow.right{right:4px;}
 .sb-nav-arrow svg{width:12px;height:12px;display:block;}
 /* Sport nav tiles — each is its own gray card with border */
-.sb-root .sb-sport-item{background:#252525;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:64px;height:52px;color:#979797;font-family:'Poppins',sans-serif;cursor:pointer;flex-shrink:0;}
+.sb-root .sb-sport-item{background:#2c2c2c;border:1px solid rgba(255,255,255,0.10);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:70px;height:56px;color:#979797;font-family:'Poppins',sans-serif;cursor:pointer;flex-shrink:0;}
 .sb-root .sb-sport-item.active{background:#70f669;color:rgba(0,0,0,.87);border-color:#70f669;font-weight:700;}
 .sb-root .sb-sport-item .sb-sport-icon,.sb-root .sb-sport-item .sb-sport-icon svg{display:flex;width:20px;height:20px;overflow:visible;}
 .sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1);opacity:.55;}

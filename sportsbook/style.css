@@ -706,10 +706,10 @@ body {
 }
 .sb-sport-nav-inner {
   display: flex;
-  align-items: stretch;
-  height: 64px;
+  align-items: center;
+  height: 70px;
   gap: 6px;
-  padding: 6px 32px;       /* horizontal padding leaves room for arrows */
+  padding: 7px 36px;       /* horizontal padding leaves room for arrows */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -768,8 +768,8 @@ body {
 /* Unified nav item style — each tile is its own gray card with border,
    exactly like the fcbet216 Streami / En direct / Football tiles. */
 .sb-sport-item {
-  background: #252525 !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: #2c2c2c !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
   box-shadow: none !important;
   text-shadow: none !important;
   border-radius: 8px;
@@ -786,10 +786,10 @@ body {
   flex-shrink: 0;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
   outline: none;
-  min-width: 64px;
-  height: 52px;
+  min-width: 70px;
+  height: 56px;
 }
-.sb-sport-item:hover { background: #2e2e2e !important; color: var(--sb-text-1); border-color: rgba(255,255,255,0.14) !important; }
+.sb-sport-item:hover { background: #353535 !important; color: var(--sb-text-1); border-color: rgba(255,255,255,0.18) !important; }
 .sb-sport-item.active {
   background: var(--sb-green) !important;
   color: var(--sb-green-font) !important;
