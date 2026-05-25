@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525cn';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525co';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -802,14 +802,12 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
     </div>
 
     <!-- ══ MOBILE RECHERCHE DE PARIS (Bet Code) ══
-         Visible on mobile only, matches fcbet216 image 2 -->
-    <div class="sb-mob-bet-search-panel" style="margin: 0 10px 10px;">
-      <div class="sb-widget-hdr" style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; text-transform: uppercase;">Rechercher des paris</div>
-      <div class="sb-widget-body" style="background: var(--sb-bg-card); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
-        <div class="sb-search-row" style="display: flex; gap: 8px;">
-          <select class="sb-dark-sel" style="background: var(--sb-bg-alt); border: 1px solid var(--sb-border); color: #fff; padding: 8px 10px; border-radius: 4px; font-size: 13px; outline: none;"><option>Bet Code</option></select>
-          <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d..." style="flex: 1; background: var(--sb-bg-alt); border: 1px solid var(--sb-border); color: #fff; padding: 8px 10px; border-radius: 4px; font-size: 13px; outline: none; min-width: 0;">
-        </div>
+         Visible on mobile only, matches fcbet216 image -->
+    <div class="sb-mob-bet-search-panel" style="margin: 0 12px 16px; background: rgb(49, 49, 49); padding: 14px; border-radius: 8px;">
+      <div style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; font-family: 'Roboto', sans-serif;">Rechercher des paris</div>
+      <div class="sb-search-row" style="display: flex; gap: 8px;">
+        <select class="sb-dark-sel" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 4px; font-size: 14px; font-weight: 500; outline: none; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg width=\"10\" height=\"6\" viewBox=\"0 0 10 6\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1 1L5 5L9 1\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;"><option>Bet Code</option></select>
+        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d'identific..." style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 4px; font-size: 14px; outline: none; min-width: 0;">
       </div>
     </div>
 
