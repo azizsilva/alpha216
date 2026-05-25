@@ -438,7 +438,12 @@ function startMatchTimer(m) {
  * straight after click, then continues polling every 3s. */
 function _mdPollOnce(mid) {
   if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) return;
-  fetch(BASE + 'sportsbook/api.php?action=match_live&match_id=' + encodeURIComponent(mid))
+  // Force-bypass any browser / CDN / proxy cache — without this a
+  // stale "0-1" response can be served for many seconds while
+  // BetsAPI has already pushed the new "1-1" upstream.
+  var url = BASE + 'sportsbook/api.php?action=match_live&match_id='
+          + encodeURIComponent(mid) + '&_t=' + Date.now();
+  fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (!d || !d.success || !d.match) return;
@@ -1293,7 +1298,8 @@ function loadCounts() {
 /* ── Apply live_refresh payload to in-memory match list ── */
 function applyLiveRefresh(ids, targetList) {
   if (!ids || !ids.length || !targetList) return Promise.resolve(false);
-  return fetch(BASE + 'sportsbook/api.php?action=live_refresh&ids=' + ids.join(','))
+  return fetch(BASE + 'sportsbook/api.php?action=live_refresh&ids=' + ids.join(',') + '&_t=' + Date.now(),
+               { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (!d || !d.refreshed) return false;
@@ -1444,6 +1450,9 @@ function startPolling() {
       targetList = S.matches;
       isChamp = false;
     }
+    // Force-bypass browser / CDN caches for live data — append a
+    // millisecond timestamp so every poll hits PHP fresh.
+    url += (url.indexOf('?') === -1 ? '?' : '&') + '_t=' + Date.now();
 
     // Stale-response guard: if any of the navigation-defining keys
     // changed between poll start and now, the user navigated and we
@@ -1474,7 +1483,7 @@ function startPolling() {
         }
       } catch (e) {}
     }
-    fetch(url)
+    fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } })
       .then(function(r) { return r.json(); })
       .then(function(d) {
         // CRITICAL: If the user navigated away while this poll fetch
@@ -3973,8 +3982,8 @@ function renderSportPage(sportId, sportName) {
   // sport, Upcoming = the next 48h of non-ended matches. Both are used to
   // compute the four category-card counts AND to populate the matches list
   // that lives BELOW the cards on the sport page (matches fcbet216 layout).
-  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sportId;
-  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId;
+  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sportId + '&_t=' + Date.now();
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId + '&_t=' + Date.now();
 
   Promise.all([
     fetch(liveUrl).then(function(r){ return r.json(); }).catch(function(){ return {results: []}; }),
@@ -4038,17 +4047,19 @@ function sbPollSportPage() {
   var sid = S.activeSportId;
   if (!sid) return;
 
-  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sid;
-  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sid;
+  var t = Date.now();
+  var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sid + '&_t=' + t;
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sid + '&_t=' + t;
 
   // Tick counter — refresh upcoming every 3rd cycle (~15s at 5s poll).
   // First call also refreshes upcoming (handles missed odds on initial load).
   sbPollSportPage._tick = (sbPollSportPage._tick || 0) + 1;
   var refreshUpcoming = (sbPollSportPage._tick === 1) || (sbPollSportPage._tick % 3 === 0);
 
-  var liveP = fetch(liveUrl).then(function(r){ return r.json(); }).catch(function(){ return null; });
+  var fopts = { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } };
+  var liveP = fetch(liveUrl, fopts).then(function(r){ return r.json(); }).catch(function(){ return null; });
   var upP   = refreshUpcoming
-    ? fetch(upUrl).then(function(r){ return r.json(); }).catch(function(){ return null; })
+    ? fetch(upUrl, fopts).then(function(r){ return r.json(); }).catch(function(){ return null; })
     : Promise.resolve(null);
 
   Promise.all([liveP, upP]).then(function(both) {

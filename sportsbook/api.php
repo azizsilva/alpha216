@@ -8,6 +8,11 @@
  */
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
+// HARD no-cache for every response — live odds / timer / score must
+// never be served from any intermediate cache (browser, CDN, proxy).
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
 error_reporting(0);
 
 define('BETSAPI_TOKEN', '254610-7T3dEgVPsVZPNY');
@@ -1660,14 +1665,27 @@ if ($action === 'match_live') {
         $pm = parse_event_stream_odds($ev['results']);
         $stream = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
 
-        // Timer + score from stream EV
+        // Timer + score from stream EV — ALWAYS prefer this over v3
+        // because v3 is a 5–60s snapshot whereas EV is the freshest
+        // bet365 signal. We only fall back to v3 if EV has nothing.
         $home_n = $match_data['home']['name'] ?? '';
         $away_n = $match_data['away']['name'] ?? '';
         foreach ($stream as $sitem) {
-            if (!is_array($sitem) || ($sitem['type'] ?? '') !== 'EV') continue;
-            if (!empty($sitem['SS'])) $match_data['ss'] = $sitem['SS'];
+            if (!is_array($sitem) || (($sitem['type'] ?? $sitem['TYPE'] ?? '') !== 'EV')) continue;
+            $ev_ss = $sitem['SS'] ?? $sitem['ss'] ?? '';
+            if ($ev_ss !== '') $match_data['ss'] = $ev_ss;
             $stimer = _normalize_timer($sitem);
-            if ($stimer) $match_data['timer'] = $stimer;
+            if ($stimer) {
+                $ev_tm_n = (int)($stimer['tm'] ?? 0);
+                $ev_md   = (string)($stimer['md'] ?? '');
+                // Only replace v3's timer if EV carries a non-zero minute
+                // or a period marker; otherwise keep v3 (which we already
+                // wrote above) so we don't downgrade to {tm:0}.
+                if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3'
+                    || empty($match_data['timer'])) {
+                    $match_data['timer'] = $stimer;
+                }
+            }
             if (!$home_n || !$away_n) {
                 $na = (string)($sitem['NA'] ?? '');
                 if (preg_match('/^(.+?)\s+v\s+(.+)$/', $na, $mm)) {
@@ -2139,13 +2157,26 @@ if ($action === 'live_refresh') {
             if (!is_array($item)) continue;
             $type = $item['type'] ?? $item['TYPE'] ?? '';
             if ($type === 'EV' || $type === 'Event') {
-                if (!$ss) $ss = $item['SS'] ?? $item['ss'] ?? null;
-                if (!$timer) {
-                    $timer = _normalize_timer([
-                        'tm' => $item['TM'] ?? $item['tm'] ?? '',
-                        'ts' => $item['TS'] ?? $item['ts'] ?? '',
-                        'md' => $item['MD'] ?? $item['md'] ?? '',
-                    ]);
+                // ALWAYS prefer the live stream's score/timer over v3 — v3
+                // is a snapshot that lags 5–60s; the bet365 EV row is the
+                // freshest signal we have. v3 only acts as fallback.
+                $ev_ss = $item['SS'] ?? $item['ss'] ?? null;
+                if ($ev_ss) $ss = $ev_ss;
+                $ev_tmr = _normalize_timer([
+                    'tm' => $item['TM'] ?? $item['tm'] ?? '',
+                    'ts' => $item['TS'] ?? $item['ts'] ?? '',
+                    'md' => $item['MD'] ?? $item['md'] ?? '',
+                ]);
+                // Use bet365 EV timer if it carries a non-zero minute or a
+                // period marker (md='1' HT, md='3' ET). Otherwise keep v3.
+                if ($ev_tmr) {
+                    $ev_tm_n = (int)($ev_tmr['tm'] ?? 0);
+                    $ev_md   = (string)($ev_tmr['md'] ?? '');
+                    if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3') {
+                        $timer = $ev_tmr;
+                    } elseif (!$timer) {
+                        $timer = $ev_tmr;
+                    }
                 }
             }
             if ($type === 'MA') {
