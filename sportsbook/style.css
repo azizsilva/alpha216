@@ -789,23 +789,24 @@ body {
 @keyframes sb-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
 
 /* Sport tile — EXACT fcbet216 .TopSportBarButton spec:
-   padding 8px, border-radius 4px, Roboto 14px, no visible border. */
+   padding 8px, border-radius 4px, Roboto 14px, no visible border.
+   DEFAULT (idle) state = WHITE label + WHITE SVG (user spec image 2). */
 .sb-sport-item {
-  background: rgb(58,58,58) !important;             /* slightly elevated above the rgb(49,49,49) wrapper */
+  background: rgb(58,58,58) !important;
   border: 1px solid rgba(255,255,255,0.04) !important;
   box-shadow: none !important;
   text-shadow: none !important;
   border-radius: 4px;
-  padding: 8px;                                      /* EXACT fcbet216 */
+  padding: 8px;
   display: grid !important;
   grid-template-rows: auto auto;
   justify-items: center !important;
   align-content: space-around !important;
   row-gap: 4px;
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;                 /* EXACT fcbet216 */
-  font-size: 14px;                                   /* EXACT fcbet216 */
-  color: rgba(255,255,255,0.85);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #ffffff;                                    /* WHITE label */
   white-space: nowrap;
   flex-shrink: 0;
   transition: background 0.12s, color 0.12s;
@@ -815,7 +816,7 @@ body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-.sb-sport-item:hover { background: rgb(66,66,66) !important; color: #fff; }
+.sb-sport-item:hover { background: rgb(66,66,66) !important; }
 .sb-sport-item.active {
   background: var(--sb-green) !important;
   color: var(--sb-green-font) !important;
@@ -830,14 +831,14 @@ body {
 .sb-sport-item .sb-sport-icon svg {
   display: block !important;
   width: 20px !important; height: 20px !important;
-  filter: brightness(0) invert(1) !important;
-  opacity: 0.55 !important;
-  transition: opacity 0.12s;
+  filter: brightness(0) invert(1) !important;       /* recolor to white */
+  opacity: 1 !important;                            /* FULL white, not muted */
+  transition: opacity 0.12s, filter 0.12s;
   overflow: visible !important;
 }
-.sb-sport-item:hover .sb-sport-icon svg { opacity: 0.9 !important; }
+.sb-sport-item:hover .sb-sport-icon svg { opacity: 1 !important; }
 .sb-sport-item.active .sb-sport-icon svg {
-  filter: brightness(0) !important;
+  filter: brightness(0) !important;                 /* dark glyph on the green active surface */
   opacity: 1 !important;
 }
 .sb-sport-lbl {
@@ -5122,5 +5123,97 @@ body {
   flex-direction: column !important;
   padding: 0 0 0 0 !important;
   gap: 0 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SPORT PAGE — opened when a user taps a sport tile in the nav strip.
+   Mirrors fcbet216 /sportsbook/prelive?page=sport&sportId=X.
+   ════════════════════════════════════════════════════════════════════════ */
+.sb-root .sb-sport-page {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 2px;
+}
+.sb-root .sb-sport-page-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 4px 0 6px;
+}
+.sb-root .sb-sp-back {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: rgb(58,58,58);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.sb-root .sb-sp-back:hover { background: rgb(66,66,66); }
+.sb-root .sb-sp-pill {
+  display: inline-flex; align-items: center;
+  background: var(--sb-green);
+  color: var(--sb-green-font);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  line-height: 1;
+}
+/* Category card */
+.sb-root .sb-cat-card {
+  display: grid !important;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.sb-root .sb-cat-card:hover { background: rgb(58,58,58); }
+.sb-root .sb-cat-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.85);
+}
+.sb-root .sb-cat-ico svg { display: block; }
+.sb-root .sb-cat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+.sb-root .sb-cat-count {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  font-variant-numeric: tabular-nums;
+}
+.sb-root .sb-sk-cat-card {
+  height: 52px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  background-size: 200% 100%;
+  animation: sb-sp-shimmer 1.4s linear infinite;
+  border-radius: 10px;
+}
+@keyframes sb-sp-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.sb-root .sb-cat-error {
+  padding: 18px;
+  color: #cfcfcf;
+  background: rgb(49,49,49);
+  border-radius: 10px;
+  text-align: center;
 }
 

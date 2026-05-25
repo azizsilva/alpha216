@@ -441,6 +441,11 @@ function buildSkeleton(count) {
 var S = {
   matches: [], betSlip: [],
   openSport: null, openCountries: {},
+  // userPickedSport tracks whether the user has actually clicked a sport tile.
+  // On the HOME landing the nav strip shows NO active tile (image 2 spec) —
+  // even though we fetch football matches for the initial list, the tile
+  // only turns green after a real user click.
+  userPickedSport: false,
   activeSportId: 1, activeAction: 'inplay',
   activeLeagueId: null, activeLeagueName: null, activeLeagueFlag: null,
   sportCounts: {}, sportLiveCounts: {},
@@ -1195,8 +1200,10 @@ function renderSportNav() {
   // strip never renders the unknown-sport tiles (Baseball, Auto-moto,
   // Cricket, etc.) the user flagged in image 3.
   SPORTS.filter(function(sp){ return sp.icon && sp.icon !== ICON.default; }).forEach(function(sp) {
-    var active = (S.activeSportId === sp.id && !S.activeLeagueId && S.activeDateOffset === 0);
-    out += '<button class="sb-sport-item' + (active ? ' active' : '') + '" data-sid="' + sp.id + '" onclick="window.sbSwitchTab(this,\'inplay\',' + sp.id + ')">';
+    // ONLY mark a tile active once the user has actually clicked something —
+    // home page lands with no tile highlighted, matching the fcbet216 reference.
+    var active = S.userPickedSport && (S.activeSportId === sp.id && !S.activeLeagueId && S.activeDateOffset === 0);
+    out += '<button class="sb-sport-item' + (active ? ' active' : '') + '" data-sid="' + sp.id + '" onclick="window.sbOpenSportPage(' + sp.id + ')">';
     out += '<div class="sb-sport-icon">' + sp.icon + '</div>';
     out += '<span class="sb-sport-lbl">' + h(sp.name) + '</span>';
     out += '</button>';
@@ -2868,6 +2875,146 @@ window.sbFilterByDate = function(btn, dayOffset) {
   // Restart polling so the interval (5s live / 15s upcoming) and the
   // action used by doPoll match the new date selection.
   startPolling();
+};
+
+/* ════════════════════════════════════════════════════════════════════════
+   SPORT PAGE — fcbet216 reference (URL: /sportsbook/prelive?page=sport&sportId=X)
+   Tapping a sport tile opens an intermediate "sport page" with four
+   category cards (Les matches du jour / demain / prochains / meilleurs
+   ligues). Tapping a category card drills into the matches list with
+   the 1x2 dropdown + tabs the user showed in image 5.
+   ════════════════════════════════════════════════════════════════════════ */
+window.sbOpenSportPage = function(sportId) {
+  var sp = null;
+  for (var i = 0; i < SPORTS.length; i++) { if (SPORTS[i].id === sportId) { sp = SPORTS[i]; break; } }
+  var sportName = sp ? sp.name : 'Sport';
+
+  S.userPickedSport = true;
+  S.activeSportId   = sportId;
+  S.activeAction    = 'inplay';
+  S.activeLeagueId  = null;
+  S.activeLeagueName = null;
+  S.activeDateOffset = 0;
+  S.viewMode        = 'sportPage';
+  S.sportPageName   = sportName;
+
+  // Highlight the clicked tile in the nav
+  document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
+  var navBtn = document.querySelector('.sb-sport-item[data-sid="' + sportId + '"]');
+  if (navBtn) navBtn.classList.add('active');
+
+  renderSportPage(sportId, sportName);
+  if (typeof sbPushUrl === 'function') {
+    try { sbPushUrl('sport-' + sportId); } catch (e) {}
+  }
+  window.scrollTo({ top: 0, behavior: 'instant' in window.scrollTo ? 'instant' : 'auto' });
+};
+
+function renderSportPage(sportId, sportName) {
+  var el = document.getElementById('sb-matches-body');
+  if (!el) return;
+
+  // Pre-fetch totals for the four category cards. We use action=upcoming
+  // (which returns ALL non-ended matches for the sport) and bucket client-
+  // side so we don't burn extra API calls.
+  var url = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId;
+  el.innerHTML = '<div class="sb-sport-page sb-sport-page--loading">' +
+    '<div class="sb-sport-page-header">' +
+      '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>' +
+      '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
+    '</div>' +
+    '<div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div><div class="sb-sk-cat-card"></div>' +
+    '</div>';
+
+  fetch(url).then(function(r){ return r.json(); }).then(function(d) {
+    var matches = (d && d.results) ? d.results : [];
+    var now  = Math.floor(Date.now() / 1000);
+    var endToday = now + (24*3600);
+    var endTomorrow = now + (48*3600);
+
+    var jour = 0, demain = 0, prochain = 0, leagues = {};
+    matches.forEach(function(m) {
+      if (!m || !m.id || m.time_status === '3') return;
+      var ts = parseInt(m.time || m.start_time || 0) || 0;
+      if (ts > 0 && ts <= endToday)          jour++;
+      else if (ts > endToday && ts <= endTomorrow) demain++;
+      else                                    prochain++;
+      var ln = (m.league && m.league.name) ? m.league.name : '';
+      if (ln) leagues[ln] = 1;
+    });
+    var leaguesCount = Object.keys(leagues).length;
+
+    el.innerHTML =
+      '<div class="sb-sport-page">' +
+        '<div class="sb-sport-page-header">' +
+          '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+          '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
+        '</div>' +
+        sbCatCard('today',    'Les matches du jour',    jour,        catIconCalendar()) +
+        sbCatCard('tomorrow', 'Les matches de demain',  demain,      catIconArrowIn()) +
+        sbCatCard('soon',     'Les prochains matchs',   prochain,    catIconClock()) +
+        sbCatCard('leagues',  'Les meilleurs ligues',   leaguesCount,catIconTrophy()) +
+      '</div>';
+  }).catch(function(){
+    el.innerHTML =
+      '<div class="sb-sport-page">' +
+        '<div class="sb-sport-page-header">' +
+          '<button class="sb-sp-back" onclick="window.sbBackToHome()" aria-label="Retour">' +
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+          '<span class="sb-sp-pill">' + h(sportName) + '</span>' +
+        '</div>' +
+        '<div class="sb-cat-error">Impossible de charger les matches.</div>' +
+      '</div>';
+  });
+}
+
+function sbCatCard(kind, label, count, iconSvg) {
+  return '<button type="button" class="sb-cat-card" onclick="window.sbOpenCategory(\'' + kind + '\')">' +
+    '<span class="sb-cat-ico">' + iconSvg + '</span>' +
+    '<span class="sb-cat-label">' + h(label) + '</span>' +
+    '<span class="sb-cat-count">' + count + '</span>' +
+  '</button>';
+}
+function catIconCalendar() {
+  return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+}
+function catIconArrowIn() {
+  return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6M12 9l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+function catIconClock() {
+  return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5V12L15 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+function catIconTrophy() {
+  return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4h10v4a5 5 0 01-10 0V4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 6H3v2a3 3 0 003 3M19 6h2v2a3 3 0 01-3 3M10 13h4M12 13v4M9 19h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+
+window.sbOpenCategory = function(kind) {
+  S.viewMode       = 'sportCategory';
+  S.sportCategory  = kind;
+  // Map kind -> date offset / live filter
+  if (kind === 'tomorrow') { S.activeDateOffset = 1; S.activeAction = 'upcoming'; }
+  else if (kind === 'soon'){ S.activeDateOffset = 0; S.activeAction = 'upcoming'; }
+  else                     { S.activeDateOffset = 0; S.activeAction = 'inplay'; }
+  loadAndFilter(S.activeAction, S.activeSportId, null);
+};
+
+window.sbBackToHome = function() {
+  S.userPickedSport  = false;
+  S.viewMode         = 'main';
+  S.activeSportId    = 1;
+  S.activeAction     = 'inplay';
+  S.activeDateOffset = 0;
+  S.activeLeagueId   = null;
+  S.activeLeagueName = null;
+  document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
+  loadAndFilter('inplay', 1, null);
+  if (typeof sbPushUrl === 'function') { try { sbPushUrl('main'); } catch (e) {} }
+  window.scrollTo({ top: 0, behavior: 'instant' in window.scrollTo ? 'instant' : 'auto' });
 };
 
 // Switch to live view (En direct button)

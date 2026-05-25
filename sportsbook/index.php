@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525i';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525j';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -237,12 +237,24 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-nav-arrow.is-hidden{opacity:0;pointer-events:none;}
 .sb-nav-arrow.left{left:8px;} .sb-nav-arrow.right{right:8px;}
 .sb-nav-arrow svg{width:16px!important;height:16px!important;display:block;}
-/* Sport nav tiles — each is its own gray card with border */
-.sb-root .sb-sport-item{background:#2c2c2c;border:1px solid rgba(255,255,255,0.10);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:70px;height:56px;color:#979797;font-family:'Poppins',sans-serif;cursor:pointer;flex-shrink:0;}
+/* Sport nav tiles — default WHITE label + WHITE svg (idle); green only when user explicitly picks. */
+.sb-root .sb-sport-item{background:rgb(58,58,58);border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:8px;display:grid;grid-template-rows:auto auto;justify-items:center;align-content:space-around;row-gap:4px;min-width:72px;height:56px;color:#ffffff;font-family:'Roboto',sans-serif;font-size:14px;cursor:pointer;flex-shrink:0;}
 .sb-root .sb-sport-item.active{background:#70f669;color:rgba(0,0,0,.87);border-color:#70f669;font-weight:700;}
 .sb-root .sb-sport-item .sb-sport-icon,.sb-root .sb-sport-item .sb-sport-icon svg{display:flex;width:20px;height:20px;overflow:visible;}
-.sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1);opacity:.55;}
+.sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1);opacity:1;}
 .sb-root .sb-sport-item.active .sb-sport-icon svg{filter:brightness(0);opacity:1;}
+/* Sport page (after tile click) — header + category cards */
+.sb-root .sb-sport-page{display:flex;flex-direction:column;gap:10px;padding:0 2px;}
+.sb-root .sb-sport-page-header{display:flex;align-items:center;gap:10px;margin:4px 0 6px;}
+.sb-root .sb-sp-back{width:40px;height:40px;border-radius:8px;background:rgb(58,58,58);border:1px solid rgba(255,255,255,0.04);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;}
+.sb-root .sb-sp-pill{display:inline-flex;align-items:center;background:#70f669;color:rgba(0,0,0,.87);font-weight:700;font-size:14px;padding:8px 18px;border-radius:8px;line-height:1;}
+.sb-root .sb-cat-card{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;width:100%;background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:14px 16px;color:#fff;cursor:pointer;text-align:left;}
+.sb-root .sb-cat-card:hover{background:rgb(58,58,58);}
+.sb-root .sb-cat-ico{display:inline-flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);}
+.sb-root .sb-cat-label{font-size:14px;font-weight:600;color:#fff;letter-spacing:.2px;}
+.sb-root .sb-cat-count{font-size:13px;color:rgba(255,255,255,0.65);font-variant-numeric:tabular-nums;}
+.sb-root .sb-sk-cat-card{height:52px;background:linear-gradient(90deg,rgba(255,255,255,0.04),rgba(255,255,255,0.08),rgba(255,255,255,0.04));background-size:200% 100%;animation:sb-sp-shimmer 1.4s linear infinite;border-radius:10px;}
+@keyframes sb-sp-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 /* Sport filter pills — Bootstrap 3 collapses SVG icons */
 .sb-root .sb-upcoming-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:6px!important;padding-bottom:8px!important;}
 .sb-root .sb-upcoming-tab{display:inline-flex!important;align-items:center!important;gap:6px!important;height:38px!important;white-space:nowrap!important;flex-shrink:0!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:12px!important;padding:0 16px!important;font-size:13px!important;font-weight:600!important;color:#fff!important;box-shadow:none!important;}
