@@ -1197,6 +1197,13 @@ function startPolling() {
     fetch(url)
       .then(function(r) { return r.json(); })
       .then(function(d) {
+        // CRITICAL: If the user navigated to the match-detail view
+        // while this poll fetch was in flight, do NOT render — that
+        // would paint the home grid on top of the match detail and
+        // make the page look like it "redirected back". The user
+        // reported needing 3-4 clicks to enter a match because of
+        // exactly this stale poll callback.
+        if (S.viewMode === 'matchDetail') return;
         if (!d || !d.results) {
           if (refreshedEarly) {
             if (isChamp) {
@@ -1216,6 +1223,7 @@ function startPolling() {
         if (!isChamp && Math.abs(newResults.length - targetList.length) >= 3) {
           S.matches = newResults;
           S.matches.forEach(function(m) { m._o = null; });
+          if (S.viewMode === 'matchDetail') return;
           renderMatches(S.matches);
           markLiveSidebarLeagues(S.matches);
           return;
@@ -1274,6 +1282,10 @@ function startPolling() {
 
         if (!updated) return;
 
+        // Guard one more time before re-rendering — in case the user
+        // clicked a match between the score update step above and now.
+        if (S.viewMode === 'matchDetail') return;
+
         // Re-render the correct view
         if (isChamp) {
           renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
@@ -1284,6 +1296,7 @@ function startPolling() {
         }
       })
       .catch(function() {
+        if (S.viewMode === 'matchDetail') return;
         if (refreshedEarly) {
           if (isChamp) {
             renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
@@ -3239,6 +3252,9 @@ function sbPollSportPage() {
     var liveData = both[0], upData = both[1];
     if (liveData && liveData.results) S.sportPageLive = liveData.results;
     if (upData   && upData.results)   S.sportPageUpcoming = upData.results;
+    // Guard: if user clicked into a match between request and now,
+    // don't repaint the sport-page on top of the match detail view.
+    if (S.viewMode === 'matchDetail') return;
     renderSportPageMatches(S.sportPageLive || [], S.sportPageUpcoming || []);
   });
 }
@@ -3486,25 +3502,66 @@ window.sbOpenMatch = function(mid, _skipPush) {
     });
 };
 
+/* Cold-start skeleton — only shown when the clicked match isn't
+ * in S.matches yet (deep-link or browser refresh). Lays out the
+ * exact same boxes as renderMatchDetail so there's zero layout
+ * shift when the real data lands. Shimmer animation is provided
+ * by the .sb-sk-block class (already in style.css). */
 function buildMatchDetailSkeleton() {
-  var out = '<div class="md-view">';
-  out += '<div class="md-nav-bar"><div class="sb-sk-block" style="width:80px;height:16px"></div><div class="sb-sk-block" style="width:120px;height:11px"></div></div>';
-  out += '<div class="md-match-hdr">';
-  out += '<div class="sb-sk-block" style="width:160px;height:11px;margin-bottom:14px"></div>';
-  out += '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">';
-  out += '<div style="flex:1"><div class="sb-sk-block" style="width:56px;height:56px;border-radius:50%;margin-bottom:8px"></div><div class="sb-sk-block" style="width:90px;height:13px"></div></div>';
-  out += '<div style="text-align:center"><div class="sb-sk-block" style="width:70px;height:30px;margin:auto 0 6px"></div><div class="sb-sk-block" style="width:50px;height:11px;margin:0 auto"></div></div>';
-  out += '<div style="flex:1;text-align:right"><div class="sb-sk-block" style="width:56px;height:56px;border-radius:50%;margin:0 0 8px auto"></div><div class="sb-sk-block" style="width:90px;height:13px;margin-left:auto"></div></div>';
-  out += '</div></div>';
-  out += '<div class="md-tabs-row">' + ['','','','',''].map(function(){ return '<div class="sb-sk-block" style="width:70px;height:28px;border-radius:14px;flex-shrink:0"></div>'; }).join('') + '</div>';
-  out += '<div class="md-markets">' + [1,2,3,4].map(function(){
-    return '<div class="md-market-group"><div class="md-mkt-hdr"><div class="sb-sk-block" style="width:100px;height:13px"></div></div>'
-      + '<div class="md-mkt-body"><div class="md-mkt-row">'
-      + '<div class="sb-sk-block" style="height:36px;flex:1;border-radius:4px"></div>'
-      + '<div class="sb-sk-block" style="height:36px;flex:1;border-radius:4px"></div>'
-      + '<div class="sb-sk-block" style="height:36px;flex:1;border-radius:4px"></div>'
-      + '</div></div></div>';
-  }).join('') + '</div></div>';
+  var out = '<div class="md-view md-view--compact">';
+  // Breadcrumb chip row
+  out += '<div class="sb-champ-breadcrumb md-bc-row">'
+    +   '<div class="sb-sk-block" style="width:36px;height:32px;border-radius:8px"></div>'
+    +   '<div class="sb-sk-block" style="width:72px;height:32px;border-radius:8px"></div>'
+    +   '<div class="sb-sk-block" style="width:100px;height:32px;border-radius:8px"></div>'
+    +   '<div class="sb-sk-block" style="width:140px;height:32px;border-radius:8px"></div>'
+    + '</div>';
+  // Compact match card
+  out += '<div class="md-card md-card--compact">'
+    +   '<div class="md-card-top">'
+    +     '<div class="sb-sk-block" style="width:18px;height:13px;border-radius:2px"></div>'
+    +     '<div class="sb-sk-block" style="width:160px;height:12px;flex:1"></div>'
+    +     '<div class="sb-sk-block" style="width:96px;height:12px"></div>'
+    +   '</div>'
+    +   '<div class="md-card-period">'
+    +     '<div class="sb-sk-block" style="width:22px;height:22px;border-radius:50%"></div>'
+    +     '<div class="sb-sk-block" style="width:140px;height:14px"></div>'
+    +   '</div>'
+    +   '<div class="md-card-teams" style="grid-template-columns:1fr auto auto auto 1fr">'
+    +     '<div class="sb-sk-block" style="width:48px;height:14px;justify-self:end"></div>'
+    +     '<div class="sb-sk-block" style="width:28px;height:28px;border-radius:50%"></div>'
+    +     '<div class="sb-sk-block" style="width:56px;height:18px"></div>'
+    +     '<div class="sb-sk-block" style="width:28px;height:28px;border-radius:50%"></div>'
+    +     '<div class="sb-sk-block" style="width:48px;height:14px;justify-self:start"></div>'
+    +   '</div>'
+    +   '<div class="md-stats-bar">'
+    +     [1,2,3,4,5].map(function(){ return '<div class="md-stat"><div class="sb-sk-block" style="width:48px;height:12px"></div></div>'; }).join('')
+    +   '</div>'
+    + '</div>';
+  // Tabs row
+  out += '<div class="md-tabs-row">'
+    + [40,72,90,80,110,90].map(function(w){ return '<div class="sb-sk-block" style="width:'+w+'px;height:36px;border-radius:8px;flex-shrink:0"></div>'; }).join('')
+    + '</div>';
+  // Market group placeholders
+  out += '<div class="md-markets">' + [1,2,3,4].map(function(i){
+    var rows = i === 2 ? 2 : 1;  // Total card gets a second row
+    var btnHtml = '<div class="md-mkt-row">'
+      + '<div class="sb-sk-block" style="height:44px;flex:1;border-radius:6px"></div>'
+      + '<div class="sb-sk-block" style="height:44px;flex:1;border-radius:6px"></div>'
+      + (i === 1 ? '<div class="sb-sk-block" style="height:44px;flex:1;border-radius:6px"></div>' : '')
+      + '</div>';
+    var body = '';
+    for (var r = 0; r < rows; r++) body += btnHtml;
+    return '<div class="md-market-group">'
+      +    '<div class="md-mkt-hdr">'
+      +      '<div class="sb-sk-block" style="width:14px;height:14px;border-radius:50%"></div>'
+      +      '<div class="sb-sk-block" style="width:100px;height:14px;flex:1"></div>'
+      +      '<div class="sb-sk-block" style="width:32px;height:18px;border-radius:3px"></div>'
+      +    '</div>'
+      +    '<div class="md-mkt-body">' + body + '</div>'
+      +  '</div>';
+  }).join('') + '</div>';
+  out += '</div>';
   return out;
 }
 
@@ -4430,10 +4487,17 @@ function loadAndFilter(action, sid, lid) {
 
       res.forEach(function(m) { m._o = null; });
       S.matches = res;
+      // Guard against late callback: if the user clicked into a match
+      // while this list-fetch was in flight, don't re-paint the home
+      // grid on top of their match detail view.
+      if (S.viewMode === 'matchDetail') return;
       renderMatches(S.matches);
       markLiveSidebarLeagues(res);
     })
-    .catch(function() { renderMatches([]); });
+    .catch(function() {
+      if (S.viewMode === 'matchDetail') return;
+      renderMatches([]);
+    });
 }
 
 /* ── Mark sidebar top-league items with EN DIRECT badge when live matches exist ── */
