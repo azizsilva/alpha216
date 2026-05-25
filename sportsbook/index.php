@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525ar';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525as';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -208,15 +208,15 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 /* Upcoming/prelive: per-team rows */
 .sb-root .mc-teams-wrap--rows{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;padding:4px 12px 10px;width:100%;cursor:pointer;}
 .sb-root .mc-teams-wrap--rows .mc-team-row{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
-.sb-root .mc-shirt-cell{width:24px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:flex-start;}
+.sb-root .mc-shirt-cell{width:32px;height:32px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:rgb(48,48,48);border:1px solid rgba(255,255,255,0.05);border-radius:50%;overflow:hidden;}
 .sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;flex-shrink:0;}
 .sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
 /* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
 .sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:10px;padding:2px 12px 4px;width:100%;cursor:pointer;}
 .sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
-/* Live jersey — PLAIN shirt SVG, NO circle wrapper, hairline white edge */
-.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:0;background:transparent;border:none;flex-shrink:0;}
-.sb-root .mc-jersey-cell .mc-jersey-svg{width:26px;height:26px;display:block;stroke:rgba(255,255,255,0.9);stroke-width:0.6;}
+/* Live jersey — dark CIRCLE around each shirt SVG (fcbet216 Notts ref) */
+.sb-root .mc-jersey-cell,.sb-root .mc-jersey-cell--circle{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgb(48,48,48);border:1px solid rgba(255,255,255,0.05);flex-shrink:0;overflow:hidden;}
+.sb-root .mc-jersey-cell .mc-jersey-svg,.sb-root .mc-jersey-cell--circle .mc-jersey-svg{width:20px;height:20px;display:block;stroke:rgba(255,255,255,0.9);stroke-width:0.6;}
 /* UPCOMING — fcbet216 spec: circle-shirt rows + EN DIRECT btn + stats icon */
 /* UPCOMING card (image 3 ref): shirts side-by-side LEFT, stacked names CENTER, EN DIRECT pill + signal RIGHT */
 .sb-root .mc-teams-wrap--upcoming{display:flex;flex-direction:row;align-items:center;gap:10px;padding:2px 12px 6px;width:100%;cursor:pointer;}
@@ -224,8 +224,8 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-teams-wrap--upcoming .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .sb-root .mc-teams-wrap--upcoming .mc-team-row--upcoming{display:flex;align-items:center;width:100%;min-height:18px;}
 .sb-root .mc-teams-wrap--upcoming .mc-team-row--upcoming .mc-t-name{flex:1 1 0;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.25;}
-.sb-root .mc-shirt-cell--circle,.sb-root .mc-shirt-cell{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:0;background:transparent;border:none;flex-shrink:0;}
-.sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:26px;height:26px;display:block;}
+.sb-root .mc-shirt-cell--circle,.sb-root .mc-shirt-cell{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgb(48,48,48);border:1px solid rgba(255,255,255,0.05);flex-shrink:0;overflow:hidden;}
+.sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;}
 .sb-root .mc-upcoming-actions{display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;}
 .sb-root .mc-ed-pill{background:transparent;border:1px solid rgba(255,255,255,0.35);border-radius:4px;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:3px 6px;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;display:inline-flex;align-items:center;}
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}

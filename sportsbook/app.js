@@ -1997,10 +1997,16 @@ function matchCard(m) {
              with scores at the far right (fcbet216 live card spec)
      OTHER → per-team rows: [shirt][name] */
   if (isLive) {
-    // LIVE — fcbet216 reference image 7 (Hantharwady U20 vs Thitsar):
-    //   Clean text-only rows. NO jerseys (matches fcbet216 exactly).
-    //   Each row = team name on the left + score pinned far right.
-    out += '<div class="mc-teams-wrap mc-teams-wrap--rows mc-teams-wrap--text" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    // LIVE — fcbet216 reference (Notts County vs Salford City FC):
+    //   [shirt-circle][shirt-circle]   Team A           2
+    //                                  Team B           0
+    // Two jerseys inside dark CIRCLES on the left, stacked names on the
+    // right with scores pinned far right.
+    out += '<div class="mc-teams-wrap mc-teams-wrap--live mc-teams-wrap--side" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    out += '<div class="mc-jerseys-side">';
+    out += '<span class="mc-jersey-cell mc-jersey-cell--circle">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 18) + '</span>';
+    out += '<span class="mc-jersey-cell mc-jersey-cell--circle">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 18) + '</span>';
+    out += '</div>';
     out += '<div class="mc-teams-stacked mc-teams-stacked--full">';
     out += '<div class="mc-team-row mc-team-row--live">';
     out += '<span class="mc-t-name">' + hn + '</span>';

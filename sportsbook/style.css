@@ -5391,24 +5391,28 @@ button.md-odd-btn,
   flex-shrink: 0 !important;
   padding: 0 4px 0 0 !important;
 }
-/* Live card jersey — plain shirt (NO circle wrapper), just the shirt SVG
-   with a hairline white edge for definition (user spec image 7) */
-.sb-root .mc-jersey-cell {
+/* Live card jersey — dark CIRCLE wrapper around each shirt SVG.
+   fcbet216 reference (Notts County vs Salford City FC): the two team
+   jerseys sit inside small dark gray circles, side-by-side. */
+.sb-root .mc-jersey-cell,
+.sb-root .mc-jersey-cell--circle {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgb(48,48,48) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
   flex-shrink: 0 !important;
+  overflow: hidden !important;
 }
-.sb-root .mc-jersey-cell .mc-jersey-svg {
-  width: 26px !important;
-  height: 26px !important;
+.sb-root .mc-jersey-cell .mc-jersey-svg,
+.sb-root .mc-jersey-cell--circle .mc-jersey-svg {
+  width: 20px !important;
+  height: 20px !important;
   display: block !important;
-  stroke: rgba(255,255,255,0.9) !important;   /* hairline white edge */
+  stroke: rgba(255,255,255,0.9) !important;
   stroke-width: 0.6 !important;
 }
 .sb-root .mc-teams-wrap--side .mc-teams-stacked {
@@ -5553,24 +5557,25 @@ button.md-odd-btn,
   height: 16px !important;
 }
 .sb-root .mc-signal-ico svg { display: block !important; width: 14px !important; height: 14px !important; }
-/* Legacy circle shirt cell — keep declaration so older markup doesn't break,
-   but force it transparent + borderless to match the new plain-shirt design. */
+/* Legacy circle shirt cell — render same dark CIRCLE as the new
+   .mc-jersey-cell so any older markup also shows the correct shape. */
 .sb-root .mc-shirt-cell--circle,
 .sb-root .mc-shirt-cell {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgb(48,48,48) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
   flex-shrink: 0 !important;
+  overflow: hidden !important;
 }
 .sb-root .mc-shirt-cell--circle .mc-jersey-svg,
 .sb-root .mc-shirt-cell .mc-jersey-svg {
-  width: 26px !important;
-  height: 26px !important;
+  width: 20px !important;
+  height: 20px !important;
   display: block !important;
 }
 
