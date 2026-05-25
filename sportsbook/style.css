@@ -3251,77 +3251,91 @@ body {
 /* Market tabs */
 /* Tab bar wrapper + scroll arrow buttons — fcbet style */
 .md-tabs-wrap {
-  display: flex;
-  align-items: stretch;
-  background: #111;
-  border-bottom: 1px solid var(--sb-border);
+  display: flex !important;
+  align-items: center !important;
+  background: #0f0f0f !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
   flex-shrink: 0;
   position: sticky;
   top: 37px;
   z-index: 10;
+  padding: 0 !important;
 }
 .md-tab-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.45);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255,255,255,0.65) !important;
   cursor: pointer;
-  padding: 0 10px;
+  padding: 0 8px !important;
   outline: none;
-  flex-shrink: 0;
-  border-right: 1px solid var(--sb-border);
+  flex-shrink: 0 !important;
+  width: 28px !important;
+  height: 36px !important;
   transition: color 0.12s;
 }
-.md-tab-arrow-r { border-right: none; border-left: 1px solid var(--sb-border); }
-.md-tab-arrow:hover { color: #fff; }
+.md-tab-arrow svg { width: 14px !important; height: 14px !important; }
+.md-tab-arrow-r { border-left: none !important; }
+.md-tab-arrow:hover { color: #fff !important; }
 .md-tabs-row {
-  display: flex;
-  overflow-x: auto;
-  flex: 1;
-  padding: 0 2px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  flex: 1 !important;
+  padding: 6px 8px !important;
   scroll-behavior: smooth;
-  background: #111;
+  background: transparent !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.md-tabs-row::-webkit-scrollbar { height: 0; }
+.md-tabs-row::-webkit-scrollbar { display: none !important; height: 0 !important; width: 0 !important; }
 .md-tab-icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--sb-text-2);
+  background: var(--sb-green) !important;
+  border: none !important;
+  color: #000 !important;
   cursor: pointer;
-  padding: 8px 10px;
+  padding: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
   outline: none;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
 }
-.md-tab-icon-btn svg { width: 14px; height: 14px; }
+.md-tab-icon-btn svg { width: 14px !important; height: 14px !important; color: #000 !important; }
 .md-tab {
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  color: var(--sb-text-2);
+  background: transparent !important;
+  border: none !important;
+  border-bottom: none !important;
+  color: rgba(255,255,255,0.85) !important;
   cursor: pointer;
-  padding: 9px 12px;
-  font-size: 12px;
+  padding: 7px 14px !important;
+  font-size: 13px !important;
   font-family: 'Roboto', sans-serif;
-  flex-shrink: 0;
-  white-space: nowrap;
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-weight: 500 !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
   outline: none;
-  transition: color 0.12s, border-color 0.12s;
+  border-radius: 8px !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  transition: color 0.12s, background 0.12s;
 }
-.md-tab:hover { color: var(--sb-text-1); }
+.md-tab:hover { color: #ffffff !important; background: rgba(255,255,255,0.06) !important; }
 .md-tab.active {
   background: var(--sb-green) !important;
   color: #000 !important;
   border-bottom-color: transparent !important;
-  border-radius: 4px;
-  font-weight: 700;
-  margin: 4px 2px;
-  padding: 5px 12px;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  padding: 7px 14px !important;
 }
 
 /* Markets area */
@@ -3400,6 +3414,22 @@ body {
 }
 .md-odd-btn.sel .md-o-name { color: #000 !important; }
 .md-odd-btn.sel .md-o-val  { color: #000 !important; font-weight: 800 !important; }
+.md-odd-btn.md-odd-btn--locked { cursor: not-allowed; opacity: 0.85; }
+.md-odd-btn.md-odd-btn--locked:hover { background: rgb(74,74,74); }
+.md-odd-btn .md-o-lock { display: inline-flex; align-items: center; justify-content: center; }
+.md-odd-btn .md-o-lock svg { width: 12px; height: 12px; color: rgb(113,246,105); opacity: 0.85; }
+
+.md-empty-tab {
+  padding: 28px 16px;
+  text-align: center;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  background: #282828;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  margin: 12px;
+}
+.md-empty-tab b { color: #fff; }
 .md-o-name { font-size: 12px; color: rgba(255,255,255,0.80); flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .md-o-val  { font-size: 13px; font-weight: 700; color: rgb(113,246,105); flex-shrink: 0; }
 .md-hc     { color: rgba(255,255,255,0.45); font-size: 10px; margin-left: 2px; }

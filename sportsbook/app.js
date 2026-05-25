@@ -345,9 +345,22 @@ function patchMatchDetailLive(m, markets) {
     }
   }
 
-  // Refresh market odds if API returned updated markets
+  // Refresh market odds. Two cases:
+  //   1) API returned real markets → replace whole list.
+  //   2) API returned no markets but live_odds changed → rebuild
+  //      fallback markets from the updated match so the user sees
+  //      the new odds (1x2 etc.) without reloading.
+  var needsRender = false;
   if (markets && markets.length) {
     window._mdMarkets = markets;
+    needsRender = true;
+  } else if (m && m.live_odds) {
+    try {
+      window._mdMarkets = buildFallbackMarkets(m);
+      needsRender = true;
+    } catch (e) {}
+  }
+  if (needsRender) {
     var activeTab = document.querySelector('.md-tab.active');
     if (activeTab && typeof window.sbMdTab === 'function') {
       var tabName = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
@@ -379,9 +392,19 @@ function renderStatsBar(m, sportId) {
       if (v === null || v === undefined || v === '') return defaultVal;
       return v;
     }
+    // fcbet216 reference (single row, no duplicate lightning):
+    //   attacks(⚡) | yellow(▮) | red(▮) | corner(⚑) | shots(◎)
+    // We prefer dangerous_attacks (the more meaningful counter) and
+    // fall back to plain attacks when not present.
+    function svBest(primary, fallback, i) {
+      var v = sv(primary, i, null);
+      if (v !== null && v !== undefined && v !== '') return v;
+      var v2 = sv(fallback, i, null);
+      if (v2 !== null && v2 !== undefined && v2 !== '') return v2;
+      return defaultVal;
+    }
     return '<div class="md-stats-bar">'
-      + mdStat(svL('dangerous_attacks',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>', svL('dangerous_attacks',1))
-      + mdStat(svL('attacks',0),           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 4 13 11 13 11 22 20 11 13 11 13 2"/></svg>', svL('attacks',1))
+      + mdStat(svBest('dangerous_attacks','attacks',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>', svBest('dangerous_attacks','attacks',1))
       + mdStat(svL('yellow_cards',0), '<span class="md-si-yc">▮</span>', svL('yellow_cards',1))
       + mdStat(svL('red_cards',0),    '<span class="md-si-rc">▮</span>', svL('red_cards',1))
       + mdStat(svL('corners',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3v18h2V13c4 0 8 2 12 6V3c-4 4-8 6-12 6V3H5z"/></svg>', svL('corners',1))
@@ -3412,7 +3435,9 @@ function renderMatchDetail(m, markets) {
     + '</button>';
   out += '<div class="md-tabs-row" id="md-tabs-inner">';
   TABS.forEach(function(t, i) {
-    out += '<button type="button" class="md-tab' + (i === 1 ? ' active' : '') + '" onclick="window.sbMdTab(this,\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
+    out += '<button type="button" class="md-tab' + (i === 1 ? ' active' : '') + '"'
+         + ' data-tab="' + h(t) + '"'
+         + ' onclick="window.sbMdTab(this,\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
   });
   out += '</div>';
   out += '<button class="md-tab-arrow md-tab-arrow-r" onclick="window.sbTabsScroll(1)" title="Suivant">'
@@ -3538,26 +3563,34 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
 }
 
 function renderMktBtn(sel, m, bbMode) {
-  var rawOdd = parseFloat(sel.odds) || 1.50;
+  // Guard against malformed selections from the API (saw "X2 undefined"
+  // when a Double Chance entry came through with .odds === undefined).
+  if (!sel) return '';
+  var rawOdd = parseFloat(sel.odds);
+  if (isNaN(rawOdd) || rawOdd < 1.01) rawOdd = 0;
   var val    = applyMargin(rawOdd);
-  var lbl    = h(sel.name) + (sel.handicap != null ? ' <span class="md-hc">' + h(String(sel.handicap)) + '</span>' : '');
-  var bid    = h(m.id) + '_md_' + h(String(sel.id || sel.name));
+  var hasOdd = (val >= 1.01);
+  var safeName = (sel.name != null && sel.name !== '') ? sel.name : '-';
+  var lbl    = h(String(safeName)) + (sel.handicap != null ? ' <span class="md-hc">' + h(String(sel.handicap)) + '</span>' : '');
+  var bid    = h(String(m.id || '')) + '_md_' + h(String(sel.id || safeName));
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
   var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
   // Market name for BB leg display — stored in the button's data-mkt attr if available
   var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
-    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + '" onclick="window.sbBBToggle(\''
-      + bid + '\',\'' + h(sel.name) + '\',' + val + ',\'' + h(mktName) + '\')">'
+    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + '"'
+      + (hasOdd ? ' onclick="window.sbBBToggle(\'' + bid + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
+      + '>'
       + '<span class="md-o-name">' + lbl + '</span>'
-      + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
+      + (hasOdd ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
       + '</button>';
   }
   var matchStr = h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''));
-  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + '" onclick="window.sbAddBet(\''
-    + bid + '\',\'' + matchStr + '\',\'' + h(sel.name) + '\',' + val + ',\'' + h(mktName) + '\')">'
+  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + '"'
+    + (hasOdd ? ' onclick="window.sbAddBet(\'' + bid + '\',\'' + matchStr + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
+    + '>'
     + '<span class="md-o-name">' + lbl + '</span>'
-    + (val > 1.01 ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
+    + (hasOdd ? '<span class="md-o-val">' + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
     + '</button>';
 }
 
@@ -3712,6 +3745,69 @@ function buildFallbackMarkets(m) {
     {id:'r2_n',name:'Nul',odds:Math.max(1.01,+seedRand(s+'r2_n',1.05,1.2).toFixed(2))},
   ]});
 
+  // ── 2ème mi-temps (second half) markets ───────────────────
+  // These mirror the main markets but with slightly different
+  // odds because the second half typically has different stats.
+  // The tab "2ème mi-temps" filters by the keyword "2ème mi-temps"
+  // so each market name must include it verbatim.
+  var hv2 = Math.max(1.20, +(hv * seedRand(s+'2h1',0.85,1.15)).toFixed(2));
+  var xv2 = Math.max(1.20, +(xv * seedRand(s+'2hx',0.85,1.15)).toFixed(2));
+  var av2 = Math.max(1.20, +(av * seedRand(s+'2h2',0.85,1.15)).toFixed(2));
+  mkts.push({id:'1x2_2h', name:'1x2 - 2ème mi-temps', selections:[
+    {id:'1',name:'1',odds:hv2},{id:'X',name:'X',odds:xv2},{id:'2',name:'2',odds:av2}
+  ]});
+  var line2 = 1.5;
+  var ov2 = Math.max(1.05, +seedRand(s+'2hov',1.50,2.30).toFixed(2));
+  var un2 = Math.max(1.05, +seedRand(s+'2hun',1.50,2.30).toFixed(2));
+  mkts.push({id:'tot_2h', name:'Total - 2ème mi-temps', selections:[
+    {id:'ov',name:'Plus de '+line2,odds:ov2,handicap:line2},
+    {id:'un',name:'Moins de '+line2,odds:un2,handicap:line2},
+  ]});
+  mkts.push({id:'btts_2h', name:'Les deux équipes qui marquent - 2ème mi-temps', selections:[
+    {id:'y',name:'Oui',odds:Math.max(1.01,+seedRand(s+'2hby',2.5,4.0).toFixed(2))},
+    {id:'n',name:'Non',odds:Math.max(1.01,+seedRand(s+'2hbn',1.10,1.30).toFixed(2))},
+  ]});
+  mkts.push({id:'dc_2h', name:'Double Chance - 2ème mi-temps', selections:[
+    {id:'1x',name:'1X',odds:Math.max(1.01,+(hv2*0.60).toFixed(2))},
+    {id:'12',name:'12',odds:Math.max(1.01,+((hv2+av2)/2*0.75).toFixed(2))},
+    {id:'x2',name:'X2',odds:Math.max(1.01,+(av2*0.60).toFixed(2))},
+  ]});
+
+  // ── Correct Score (Score exact) — common live market ──────
+  // Provides ~9 most likely scorelines. Used by the "Correct Score" tab.
+  var csList = [['0:0',8.0],['1:0',6.5],['0:1',7.5],['1:1',5.5],['2:0',12],['0:2',14],['2:1',9.5],['1:2',10.5],['2:2',12],['3:0',22],['0:3',26],['3:1',18],['1:3',20]];
+  var csSels = [];
+  csList.forEach(function(c,i){ csSels.push({id:'cs_'+i, name:c[0], odds:Math.max(1.05,+(c[1]*seedRand(s+'cs'+i,0.85,1.15)).toFixed(2))}); });
+  mkts.push({id:'cs', name:'Correct Score', selections:csSels});
+
+  // ── Corners markets ───────────────────────────────────────
+  mkts.push({id:'corn_tot', name:'Total Corners', selections:[
+    {id:'cov',name:'Plus de 9.5',odds:Math.max(1.05,+seedRand(s+'cov',1.70,2.20).toFixed(2)),handicap:9.5},
+    {id:'cun',name:'Moins de 9.5',odds:Math.max(1.05,+seedRand(s+'cun',1.60,2.10).toFixed(2)),handicap:9.5},
+  ]});
+  mkts.push({id:'corn_race', name:'Corners 1x2', selections:[
+    {id:'1',name:'1',odds:Math.max(1.05,+seedRand(s+'cr1',1.80,3.00).toFixed(2))},
+    {id:'X',name:'X',odds:Math.max(1.05,+seedRand(s+'crx',3.00,4.50).toFixed(2))},
+    {id:'2',name:'2',odds:Math.max(1.05,+seedRand(s+'cr2',1.80,3.00).toFixed(2))},
+  ]});
+
+  // ── Multigoals ────────────────────────────────────────────
+  mkts.push({id:'mg', name:'Multigoals', selections:[
+    {id:'mg13',name:'1-3',odds:Math.max(1.05,+seedRand(s+'mg13',1.30,1.70).toFixed(2))},
+    {id:'mg24',name:'2-4',odds:Math.max(1.05,+seedRand(s+'mg24',1.40,1.90).toFixed(2))},
+    {id:'mg35',name:'3-5',odds:Math.max(1.05,+seedRand(s+'mg35',1.80,2.40).toFixed(2))},
+    {id:'mg46',name:'4-6',odds:Math.max(1.05,+seedRand(s+'mg46',2.50,4.00).toFixed(2))},
+    {id:'mg5p',name:'5+', odds:Math.max(1.05,+seedRand(s+'mg5p',3.00,6.00).toFixed(2))},
+  ]});
+
+  // ── 1 minute / Prochain but (already covered via Prochain but) ──
+  // We add a 1-minute next goal flash market for completeness.
+  mkts.push({id:'nm_1min', name:'1 minute - Prochain but', selections:[
+    {id:'1',name:'1',odds:Math.max(1.05,+seedRand(s+'1mn1',3.0,5.0).toFixed(2))},
+    {id:'N',name:'Aucun',odds:Math.max(1.05,+seedRand(s+'1mnn',1.05,1.20).toFixed(2))},
+    {id:'2',name:'2',odds:Math.max(1.05,+seedRand(s+'1mn2',3.0,5.0).toFixed(2))},
+  ]});
+
   return mkts;
 }
 
@@ -3749,16 +3845,54 @@ window.sbMdTab = function(btn, tabName) {
   // Re-render markets (in BB mode or normal mode)
   var filter = null;
   if (!isBB) {
-    if (tabName === 'Principaux') filter = function(mkt) {
-      var nm = (mkt.name || '').toLowerCase();
-      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
-    };
-    if (tabName !== 'Tout' && !filter) {
+    if (tabName === 'Principaux') {
+      filter = function(mkt) {
+        var nm = (mkt.name || '').toLowerCase();
+        // Principaux = main markets only, but EXCLUDE 2ème mi-temps
+        // variants so the second half tab can show its own set.
+        if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
+        return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+      };
+    } else if (tabName === '2ème mi-temps' || tabName === '2eme mi-temps') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1 || nm.indexOf('second half') !== -1 || nm.indexOf('2h') === 0;
+      };
+    } else if (tabName === '1 minute') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+      };
+    } else if (tabName === 'Correct Score') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return nm.indexOf('correct score') !== -1 || nm.indexOf('score exact') !== -1;
+      };
+    } else if (tabName === 'Corners') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return nm.indexOf('corner') !== -1;
+      };
+    } else if (tabName === 'Multigoals') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return nm.indexOf('multigoal') !== -1 || nm.indexOf('multi-goal') !== -1 || nm.indexOf('multigoals') !== -1;
+      };
+    } else if (tabName !== 'Tout') {
       var kw = tabName.toLowerCase();
       filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
     }
   }
   var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
+  // Empty-state fallback: keep filter intent but render an empty card
+  // so the user knows the tab is active (don't silently fall back to ALL).
+  if (!shown.length && tabName !== 'Tout') {
+    mktBody.innerHTML = '<div class="md-empty-tab">Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.</div>';
+    var bbSticky0 = document.getElementById('md-bb-sticky');
+    if (bbSticky0) bbSticky0.style.display = 'none';
+    mktBody.style.paddingBottom = '';
+    return;
+  }
   if (!shown.length) shown = window._mdMarkets;
   var out = '';
   shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
