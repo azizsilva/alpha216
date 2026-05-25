@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525as';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525at';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -281,11 +281,23 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .sb-league-block{margin-bottom:8px!important}
 /* Championship market tabs — must scroll horizontally, never wrap */
 .sb-root .sb-champ-mkt-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;gap:4px!important;padding-bottom:4px!important;margin-bottom:10px!important;scrollbar-width:none!important;}
-/* Market category grid — always 2-col on narrow screens, Bootstrap-proof */
-@media(max-width:600px){
-  .sb-root .sb-champ-cat-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;}
-  .sb-root .sb-ccg-btn{height:36px!important;min-height:36px!important;padding:0 8px!important;font-size:11px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;line-height:1.2!important;}
-}
+/* Old 2-row pill grid is no longer rendered — hide any legacy markup */
+.sb-root .sb-champ-cat-grid{display:none!important;}
+
+/* ── Championship market DROPDOWN — fcbet216 .HeaderMarketsSelectorContainer.
+   Inline critical CSS so it paints right even before style.css loads, and
+   so Bootstrap NEVER wins. Body > .sb-root prefix forces specificity. ── */
+body .sb-root .sb-champ-mkt-acc{background:rgb(38,38,38)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:8px!important;margin:12px 0!important;overflow:hidden!important;padding:0!important;}
+body .sb-root .sb-champ-mkt-acc-hdr{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;background:transparent!important;border:0!important;padding:14px 16px!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:600!important;line-height:16px!important;color:#fff!important;text-align:left!important;outline:none!important;box-shadow:none!important;}
+body .sb-root .sb-champ-mkt-acc-lbl{flex:1 1 auto!important;text-align:left!important;color:#fff!important;}
+body .sb-root .sb-champ-mkt-acc-tgl{flex:0 0 auto!important;font-size:18px!important;font-weight:700!important;color:rgba(255,255,255,0.85)!important;width:16px!important;text-align:center!important;line-height:1!important;margin-left:12px!important;}
+body .sb-root .sb-champ-mkt-acc-body{padding:0!important;border-top:1px solid rgba(255,255,255,0.06)!important;display:flex!important;flex-direction:column!important;background:transparent!important;}
+body .sb-root .sb-champ-mkt-acc.collapsed .sb-champ-mkt-acc-body{display:none!important;}
+/* Each option row — fcbet216 .SelectMenuOptionContainer EXACT */
+body .sb-root .sb-champ-mkt-opt,body .sb-root button.sb-champ-mkt-opt{display:block!important;width:100%!important;text-align:start!important;padding:14px 16px!important;border:0!important;border-radius:2px!important;background:transparent!important;background-color:transparent!important;background-image:none!important;color:rgb(255,255,255)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:500!important;line-height:16px!important;cursor:pointer!important;outline:none!important;box-shadow:none!important;margin:0!important;-webkit-appearance:none!important;-moz-appearance:none!important;appearance:none!important;text-transform:none!important;letter-spacing:0!important;}
+body .sb-root .sb-champ-mkt-opt + .sb-champ-mkt-opt{border-top:1px solid rgba(255,255,255,0.06)!important;}
+body .sb-root .sb-champ-mkt-opt:hover{background:rgba(255,255,255,0.05)!important;}
+body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{background:rgba(255,255,255,0.06)!important;outline:none!important;}
 /* Sport nav — fcbet216 design: rounded contained strip with tile cards
    and left/right scroll chevrons. Inline critical CSS matches style.css
    so there's no flicker on first paint. */
