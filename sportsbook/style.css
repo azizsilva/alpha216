@@ -911,23 +911,24 @@ body {
 }
 .sb-boost-card:hover { background: #404040; }
 
-/* Horizontal Slider Card (En direct/Upcoming at top) */
-/* ── EN DIRECT Carousel Card (slc) ── matches fcbet216 reference ── */
+/* ── EN DIRECT live card (slc) — one per row, FULL WIDTH ──
+   fcbet216 reference: gray rgb(49,49,49) surface, 12px radius. */
 .slc {
   position: relative;          /* needed for sport badge absolute positioning */
-  background: #282828;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 10px;
-  min-width: 230px;
-  max-width: 265px;
-  flex-shrink: 0;
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 12px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  flex-shrink: 1;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: background 0.15s;
 }
-.slc:hover { background: #3a3a3a; }
+.slc:hover { background: rgb(58,58,58); }
 
 /* Sport badge — round circle on top-left of card, exact fcbet style */
 .slc-sport-badge {
@@ -2363,32 +2364,38 @@ body {
   .sb-sport-icon svg { width: 16px; height: 16px; }
 }
 
-/* ── EN DIRECT live cards container ───── */
+/* ── EN DIRECT live cards container ────────────────────────────
+   STACKED VERTICALLY — one card per row, full-width (user spec,
+   replaces the previous horizontal 1.5-card carousel). Each card
+   reads on its own line so nothing gets cut off on narrow screens. */
 .sb-en-direct-row {
   display: flex;
-  gap: 14px;              /* wider gap so sport badge on -10px left has breathing room */
-  overflow-x: auto;
-  padding: 0 4px 4px 14px; /* left padding so badge doesn't get clipped */
+  flex-direction: column;
+  gap: 10px;
+  overflow: visible;
+  padding: 6px 14px 4px;
   margin-bottom: 4px;
-  -webkit-overflow-scrolling: touch;
 }
-.sb-en-direct-row::-webkit-scrollbar { height: 3px; }
+.sb-en-direct-row::-webkit-scrollbar { height: 0; width: 0; display: none; }
 .sb-en-direct-row:empty { display: none; }
 
 /* ════════════════════════════════════════════════════════════
-   LIVE CARDS CAROUSEL  — fcbet216 reference style
+   LIVE CARDS — fcbet216 reference style, full-width per row
    (duplicate rules are intentional overrides for specificity)
    ════════════════════════════════════════════════════════════ */
 .slc {
   position: relative !important;
-  background: #282828 !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  border-radius: 10px !important;
-  min-width: 240px !important;
-  max-width: 275px !important;
-  flex-shrink: 0 !important;
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 12px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  flex-shrink: 1 !important;
+  display: block !important;
+  cursor: pointer !important;
 }
-.slc:hover { background: #333 !important; }
+.slc:hover { background: rgb(58,58,58) !important; }
 
 /* Sport badge in mobile block */
 .slc-sport-badge {
@@ -2454,25 +2461,24 @@ body {
   gap: 10px !important;
   padding: 6px 10px 8px !important;
 }
-/* Left: two overlapping jersey circles */
+/* Left: two SEPARATE jersey circles, each its own round badge (user spec —
+   "they are separate") with rgb(49,49,49) surface to match fcbet216 */
 .slc-jerseys-overlap {
   display: flex !important;
   flex-shrink: 0 !important;
   align-items: center !important;
+  gap: 8px !important;            /* clear separation, no overlap */
 }
-.slc-jerseys-overlap .mc-jersey-wrap:first-child {
-  z-index: 2 !important;
-  position: relative !important;
-}
+.slc-jerseys-overlap .mc-jersey-wrap:first-child,
 .slc-jerseys-overlap .mc-jersey-wrap:last-child {
-  margin-left: -6px !important;  /* less overlap to not break the shirt */
-  z-index: 1 !important;
+  margin: 0 !important;           /* kill any leftover -6px overlap */
+  z-index: auto !important;
   position: relative !important;
 }
 /* Make jersey SVG bigger inside carousel circles */
 .slc-jerseys-overlap .mc-jersey-svg {
-  width: 26px !important;
-  height: 26px !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 /* Right: stacked team rows */
 .slc-teams {
@@ -4335,17 +4341,21 @@ body {
   flex-shrink: 0 !important;
   padding: 0 4px 0 0 !important;
 }
+/* Live card jersey badge — circular, rgb(49,49,49) family (matches fcbet216) */
 .sb-root .mc-jersey-cell {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 30px !important;
-  height: 30px !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  background: rgb(40,40,40) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
   flex-shrink: 0 !important;
 }
 .sb-root .mc-jersey-cell .mc-jersey-svg {
-  width: 26px !important;
-  height: 26px !important;
+  width: 22px !important;
+  height: 22px !important;
   display: block !important;
 }
 .sb-root .mc-teams-wrap--side .mc-teams-stacked {
@@ -4478,12 +4488,21 @@ body {
   margin-left: auto !important;      /* guarantees right-edge alignment */
   padding-left: 8px !important;
 }
-/* Carousel jersey circles — 38px to match fcbet reference */
-.sb-root .slc-jersey-wrap {
+/* Carousel jersey circles — round badges, rgb(49,49,49) surface so they
+   read as the same family as the card background but slightly lifted */
+.sb-root .slc-jersey-wrap,
+.sb-root .mc-jersey-wrap,
+.sb-root .slc-jerseys-overlap .mc-jersey-wrap {
   width: 38px !important;
   height: 38px !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  background: rgba(255,255,255,0.07) !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgb(40,40,40) !important;     /* slightly darker than the card surface */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
 }
 /* Jersey SVG inside the round wrapper */
 .sb-root .mc-jersey-svg {

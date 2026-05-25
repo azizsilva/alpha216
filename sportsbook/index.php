@@ -164,8 +164,9 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 /* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
 .sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:12px;padding:6px 12px 10px;width:100%;cursor:pointer;}
 .sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
-.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;}
-.sb-root .mc-jersey-cell .mc-jersey-svg{width:26px;height:26px;display:block;}
+/* Live jersey badge — circular rgb(40,40,40) on rgb(49,49,49) cards */
+.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgb(40,40,40);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+.sb-root .mc-jersey-cell .mc-jersey-svg{width:22px;height:22px;display:block;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
