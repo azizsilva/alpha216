@@ -3848,35 +3848,37 @@ window.sbToggleMc = function(mid, ev) {
     return;
   }
 
-  // Show skeleton while the real fetch resolves.
+  // Render INSTANTLY from local match data (no skeleton delay).
+  // If we have the match in memory, build fallback markets and paint
+  // right away — the user sees real markets in < 1 frame. Then fire
+  // the API fetch in background and upgrade when it resolves.
   var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
-  box.innerHTML = _mcSkeletonHTML();
+  if (localMatch) {
+    var fb = [];
+    try { fb = buildFallbackMarkets(localMatch); } catch (e) {}
+    window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
+    box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
+  } else {
+    box.innerHTML = _mcSkeletonHTML();
+  }
 
+  // Background fetch — upgrades to real API markets (more selections,
+  // real handicap/total lines) without re-collapsing the card.
   fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      // If user collapsed in the meantime, don't paint stale markup.
       if (box.getAttribute('data-open') !== '1') return;
       var m    = (d && d.match) ? d.match : localMatch;
       var mkts = (d && d.markets && d.markets.length) ? d.markets : null;
-      if (!m) { box.innerHTML = '<div class="mc-md-empty">Marchés indisponibles.</div>'; return; }
+      if (!m) return;
       if (!mkts || !mkts.length) {
         try { mkts = buildFallbackMarkets(m); } catch (e) { mkts = []; }
       }
-      window._mcMktCache[mid] = { match: m, markets: mkts, tab: 'Principaux' };
-      box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, 'Principaux');
+      var activeTab = ((window._mcMktCache[mid] || {}).tab) || 'Principaux';
+      window._mcMktCache[mid] = { match: m, markets: mkts, tab: activeTab };
+      box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, activeTab);
     })
-    .catch(function() {
-      if (box.getAttribute('data-open') !== '1') return;
-      if (localMatch) {
-        var fb = [];
-        try { fb = buildFallbackMarkets(localMatch); } catch (e) {}
-        window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
-        box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
-      } else {
-        box.innerHTML = '<div class="mc-md-empty">Marchés indisponibles.</div>';
-      }
-    });
+    .catch(function() { /* fallback already rendered — nothing to do */ });
 };
 
 /* Diff previous markets vs next markets and annotate each new selection

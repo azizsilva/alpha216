@@ -1064,24 +1064,27 @@ button.sb-btn-live.active .sb-live-badge,
 /* Boosted section */
 .sb-boost-section {
   margin-bottom: 12px;
-  padding: 0 2px;
-  display: block !important;   /* always visible — never hide */
+  padding: 0;
+  display: block !important;
 }
-/* Cotes boostées header — fcbet216 reference image 1:
-   WHITE bolt + WHITE title, tight height, small gap to first card. */
+/* Cotes boostées header — fcbet216 style: dark card, border, padding,
+   bolt icon + bold white title, exact height to match reference image 3. */
 .sb-boost-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 8px;
+  font-size: 14px;
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 8px;
-  padding: 0;
+  padding: 12px 14px;
   letter-spacing: 0.2px;
-  line-height: 1;
+  line-height: 1.2;
+  background: rgb(38,38,38);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
 }
-.sb-boost-header svg { width: 14px; height: 14px; color: #ffffff; fill: #ffffff; }
+.sb-boost-header svg { width: 15px; height: 15px; color: #ffffff; fill: #ffffff; flex-shrink: 0; }
 .sb-boost-header i { color: #ffffff; }
 
 /* Boost row — snap-to-one carousel (matches fcbet216 reference image 1).
@@ -4830,7 +4833,7 @@ body .sb-root .sb-champ-mkt-opt.active {
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: #1a1a1a;
+  background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 10px;
   margin: 10px 10px 0;
@@ -4857,7 +4860,7 @@ body .sb-root .sb-champ-mkt-opt.active {
 .sb-favoris-content {
   margin: 4px 10px 0;
   padding: 10px 14px;
-  background: #1a1a1a;
+  background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 10px;
 }

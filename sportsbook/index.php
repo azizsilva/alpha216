@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bk';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bl';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -486,9 +486,9 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-root[data-view="matchdetail"] .sb-sport-page,
 .sb-root[data-view="matchdetail"] .sb-mob-inline-leagues{display:none!important;}
 .sb-root[data-view="matchdetail"] #sb-matches-body{margin-top:0!important;padding-top:0!important;}
-/* Cotes boostées — tight card + timeline dots (fcbet216 ref) */
-.sb-root .sb-boost-header{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;margin:0 0 8px;letter-spacing:.2px;line-height:1;}
-.sb-root .sb-boost-header svg{width:14px;height:14px;color:#fff;fill:#fff;}
+/* Cotes boostées — dark card header matching fcbet216 (image 3) */
+.sb-root .sb-boost-header{display:flex!important;align-items:center!important;gap:8px!important;font-size:14px!important;font-weight:700!important;color:#fff!important;margin:0 0 8px!important;padding:12px 14px!important;letter-spacing:.2px!important;line-height:1.2!important;background:rgb(38,38,38)!important;border:1px solid rgba(255,255,255,0.07)!important;border-radius:6px!important;}
+.sb-root .sb-boost-header svg{width:15px!important;height:15px!important;color:#fff!important;fill:#fff!important;flex-shrink:0!important;}
 .sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
 .sb-root .sb-boost-card{padding:10px 14px 12px;}
 .sb-root .sb-boost-card .sb-teams-text{margin:2px 0 6px;line-height:1.25;}
