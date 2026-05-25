@@ -3600,6 +3600,10 @@ body {
 /* Markets area */
 .md-markets,
 .sb-root .md-markets { padding: 10px 10px 80px !important; background: #0f0f0f !important; }
+.md-markets--loading { opacity: 0.55 !important; pointer-events: none !important; transition: opacity 0.12s ease !important; }
+
+/* Main content area — stable height during skeleton → content swap */
+#sb-matches-body { contain: layout style; min-height: 240px; }
 
 /* Market card — matches fcbet216 DevTools-extracted CSS exactly:
  *   background: rgb(49,49,49); border: 0; border-radius: 6px;

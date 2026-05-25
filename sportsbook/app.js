@@ -387,7 +387,7 @@ function startMatchDetailPoll(mid) {
       return;
     }
     _mdPollOnce(mid);
-  }, 3000);
+  }, 2000);
 }
 
 function patchMatchDetailLive(m, markets) {
@@ -428,22 +428,17 @@ function patchMatchDetailLive(m, markets) {
     }
   }
 
-  // Sync into main match list
-  var lm = S.matches.find(function(x) { return String(x.id) === String(m.id); });
-  if (lm) {
-    if (m.ss) lm.ss = m.ss;
-    if (m.timer) lm.timer = m.timer;
-    if (m.live_odds) { lm.live_odds = m.live_odds; lm._o = null; }
-    if (m.time_status) lm.time_status = m.time_status;
-    if (m.stats) lm.stats = m.stats;
-  }
+  // Sync into every cached match list so carousel / cards stay fresh.
+  sbSyncMatchCache(m);
 
   // Refresh stats bar (corners, yellow/red cards, attacks, shots on target)
   // in-place so counts tick up live without re-rendering the whole page.
-  if (m.stats) {
+  // Always refresh when live — even if m.stats is empty we re-render
+  // so zeros show correctly instead of stale values.
+  if (isMatchLive(m)) {
     var sportId = parseInt(m.sport_id || 1);
     var newBar  = renderStatsBar(m, sportId);
-    var oldBar  = document.querySelector('.md-stats-bar');
+    var oldBar  = document.querySelector('.md-card--compact .md-stats-bar') || document.querySelector('.md-stats-bar');
     if (oldBar && newBar) {
       var tmp = document.createElement('div');
       tmp.innerHTML = newBar;
@@ -466,6 +461,7 @@ function patchMatchDetailLive(m, markets) {
     try { nextMarkets = buildFallbackMarkets(m); } catch (e) {}
   }
   if (nextMarkets) {
+    sbClearMdTabCache();
     // Diff: annotate each selection with _change ('up'|'down'|null)
     // and a flash class so renderMktBtn can show the ▲ / ▼ arrow.
     var prevIdx = {};
@@ -513,9 +509,23 @@ function renderStatsBar(m, sportId) {
   var st = m.stats || {};
   var s = m.ss ? m.ss.split('-') : [];
 
-  // Helper: get stat value
+  // Helper: get stat value — tries several API key variants because
+  // BetsAPI / Bet365 feeds use inconsistent naming across leagues.
   function sv(key, idx, def) {
-    if (st[key] && st[key][idx] !== undefined) return st[key][idx];
+    if (!st) return def;
+    var aliases = {
+      yellow_cards: ['yellow_cards','yellowcard','yellow card','yellowcards'],
+      red_cards:    ['red_cards','redcard','red card','redcards'],
+      corners:      ['corners','corner','corner_kicks','corner kicks'],
+      on_target:    ['on_target','on target','shots_on_target','shots on target','goal','goals'],
+      dangerous_attacks: ['dangerous_attacks','dangerous attacks','attacks','attack'],
+      attacks:      ['attacks','attack','dangerous_attacks']
+    };
+    var keys = aliases[key] || [key];
+    for (var ki = 0; ki < keys.length; ki++) {
+      var k = keys[ki];
+      if (st[k] && st[k][idx] !== undefined && st[k][idx] !== null && st[k][idx] !== '') return st[k][idx];
+    }
     return def;
   }
   // Football — fcbet216 stat row reference (image 1):
@@ -653,6 +663,64 @@ var S = {
   homeLeagueFilter: null,       // filter "En direct maintenant" after league pick
   activeLiveCat: 'populaire'    // active market category for live section dropdown
 };
+
+/* ── Navigation helpers — keep every view switch instant and race-free.
+ * Problem: a home-list fetch started before the user clicked a match
+ * could resolve AFTER navigation and repaint the home grid on top of
+ * match detail (the "bounce back" bug). We fix that with:
+ *   1) AbortController — cancel in-flight list/detail fetches on nav
+ *   2) navGen token — late callbacks bail if a newer nav happened
+ *   3) sbFindMatch — look up cached match data from every list source
+ *   4) view guards on every render* entry point
+ * ─────────────────────────────────────────────────────────────────── */
+S.navGen = 0;
+S._listAbort = null;
+S._mdAbort   = null;
+
+function sbAbortListFetches() {
+  if (S._listAbort) { try { S._listAbort.abort(); } catch (e) {} }
+  S._listAbort = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+}
+function sbAbortMdFetches() {
+  if (S._mdAbort) { try { S._mdAbort.abort(); } catch (e) {} }
+  S._mdAbort = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+}
+function sbNextNav() {
+  S.navGen++;
+  return S.navGen;
+}
+function sbNavAlive(gen) {
+  return gen === S.navGen;
+}
+function sbFindMatch(mid) {
+  if (!mid) return null;
+  var id = String(mid);
+  var lists = [S.matches, S.champMatches, S.sportPageLive, S.sportPageUpcoming];
+  for (var i = 0; i < lists.length; i++) {
+    if (!lists[i] || !lists[i].length) continue;
+    for (var j = 0; j < lists[i].length; j++) {
+      if (String(lists[i][j].id) === id) return lists[i][j];
+    }
+  }
+  return null;
+}
+function sbSyncMatchCache(m) {
+  if (!m || m.id == null) return;
+  var id = String(m.id);
+  [S.matches, S.champMatches, S.sportPageLive, S.sportPageUpcoming].forEach(function(list) {
+    if (!list) return;
+    var lm = list.find(function(x) { return String(x.id) === id; });
+    if (!lm) return;
+    if (m.ss !== undefined) lm.ss = m.ss;
+    if (m.timer) lm.timer = m.timer;
+    if (m.live_odds) { lm.live_odds = m.live_odds; lm._o = null; }
+    if (m.time_status) lm.time_status = m.time_status;
+    if (m.stats) lm.stats = m.stats;
+  });
+}
+function sbClearMdTabCache() {
+  window._mdTabCache = null;
+}
 
 /* ── SVG Icons (extracted from reference site shadow DOM) ─ */
 var ICON = {
@@ -1197,13 +1265,10 @@ function startPolling() {
     fetch(url)
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        // CRITICAL: If the user navigated to the match-detail view
-        // while this poll fetch was in flight, do NOT render — that
-        // would paint the home grid on top of the match detail and
-        // make the page look like it "redirected back". The user
-        // reported needing 3-4 clicks to enter a match because of
-        // exactly this stale poll callback.
-        if (S.viewMode === 'matchDetail') return;
+        // CRITICAL: If the user navigated away while this poll fetch
+        // was in flight, do NOT render — that paints the wrong view
+        // on top and makes the page look like it "redirected back".
+        if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
         if (!d || !d.results) {
           if (refreshedEarly) {
             if (isChamp) {
@@ -1223,7 +1288,7 @@ function startPolling() {
         if (!isChamp && Math.abs(newResults.length - targetList.length) >= 3) {
           S.matches = newResults;
           S.matches.forEach(function(m) { m._o = null; });
-          if (S.viewMode === 'matchDetail') return;
+          if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
           renderMatches(S.matches);
           markLiveSidebarLeagues(S.matches);
           return;
@@ -1284,7 +1349,7 @@ function startPolling() {
 
         // Guard one more time before re-rendering — in case the user
         // clicked a match between the score update step above and now.
-        if (S.viewMode === 'matchDetail') return;
+        if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
 
         // Re-render the correct view
         if (isChamp) {
@@ -1296,7 +1361,7 @@ function startPolling() {
         }
       })
       .catch(function() {
-        if (S.viewMode === 'matchDetail') return;
+        if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
         if (refreshedEarly) {
           if (isChamp) {
             renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
@@ -1634,6 +1699,8 @@ function renderSportFilterRow(showMarkets) {
 function renderMatches(results) {
   var el = document.getElementById('sb-matches-body');
   if (!el) return;
+  // Never paint the home grid over a dedicated sub-view.
+  if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
 
   results = results || [];
 
@@ -2898,6 +2965,8 @@ window.sbChampDateFilter = function(btn, offset) {
 
 window.sbBackToMain = function() {
   var prevLeague = S.activeLeagueName;
+  sbAbortMdFetches();
+  sbNextNav();
   S.activeLeagueId   = null;
   S.activeLeagueName = null;
   S.activeLeagueFlag = null;
@@ -3106,6 +3175,9 @@ window.sbFilterByDate = function(btn, dayOffset) {
    the 1x2 dropdown + tabs the user showed in image 5.
    ════════════════════════════════════════════════════════════════════════ */
 window.sbOpenSportPage = function(sportId) {
+  sbAbortListFetches();
+  sbAbortMdFetches();
+  sbNextNav();
   var sp = null;
   for (var i = 0; i < SPORTS.length; i++) { if (SPORTS[i].id === sportId) { sp = SPORTS[i]; break; } }
   var sportName = sp ? sp.name : 'Sport';
@@ -3254,7 +3326,7 @@ function sbPollSportPage() {
     if (upData   && upData.results)   S.sportPageUpcoming = upData.results;
     // Guard: if user clicked into a match between request and now,
     // don't repaint the sport-page on top of the match detail view.
-    if (S.viewMode === 'matchDetail') return;
+    if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
     renderSportPageMatches(S.sportPageLive || [], S.sportPageUpcoming || []);
   });
 }
@@ -3435,58 +3507,54 @@ window.sbToggleMc = function(mid) {
 };
 
 window.sbOpenMatch = function(mid, _skipPush) {
+  if (!mid) return;
+  // Already on this match — ignore duplicate clicks (prevents double-fetch).
+  if (S.viewMode === 'matchDetail' && String(S.activeMatchId) === String(mid)) return;
+
+  sbAbortListFetches();   // cancel any in-flight home list fetch
+  sbAbortMdFetches();
+  var navGen = sbNextNav();
+
   S.activeMatchId = mid;
   S.viewMode = 'matchDetail';
   if (!_skipPush) {
     sbPushUrl('liveEvent', {eventId: mid, sportId: S.activeSportId || 1});
   }
-  // Hide the leagues panel and top nav — full viewport for the match.
-  // We also set data-view="matchdetail" on .sb-root so CSS can hide
-  // the date row, favoris row, sport nav, live carousel and boost
-  // section all at once (same pattern as sportpage). Otherwise the
-  // match-detail view appears INSIDE the home layout (user image 6).
   sbSetHomepanelVisible(false);
   var rootMd = document.querySelector('.sb-root');
   if (rootMd) rootMd.setAttribute('data-view', 'matchdetail');
-  // Scroll back to top so the user immediately sees the match header
-  // instead of being stuck at their previous home scroll position.
   try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
 
-  // ── INSTANT render from S.matches cache ──────────────────────
-  // Why: the en-direct carousel poll already keeps S.matches fresh
-  // with timer (m.timer.tm/ts/md), score (m.ss) and stats — exactly
-  // the data fcbet216 surfaces in their header. If we wait for
-  // match_detail to return (~200-800ms), the user sees a blank
-  // skeleton and a 00:00 timer for the entire round-trip, which is
-  // what they were complaining about. Instead, we render the
-  // compact card from cache RIGHT AWAY, start the local 1s ticker,
-  // start the 3s live poll, and let match_detail just slide the
-  // real markets in behind once it lands.
   var el = document.getElementById('sb-matches-body');
-  var cached = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
+  // Look in every cached list — home, league, sport page — so we can
+  // paint instantly even when the user clicked from a sub-view.
+  var cached = sbFindMatch(mid);
   if (cached && el) {
     renderMatchDetail(cached, []);
-    startMatchDetailPoll(mid);  // fires _mdPollOnce immediately
+    startMatchDetailPoll(mid);
   } else if (el) {
     el.innerHTML = buildMatchDetailSkeleton();
   }
 
-  fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid))
+  var fetchOpts = {};
+  if (S._mdAbort) fetchOpts.signal = S._mdAbort.signal;
+  fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(mid), fetchOpts)
     .then(function(r) { return r.json(); })
     .then(function(d) {
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) return;
       var m = (d && d.match) ? d.match : cached;
       var mkts = (d && d.markets) ? d.markets : [];
       if (!m) return;
-      if (cached) {
-        // Already rendered from cache — patch live stats + odds in
-        // place so the visible card doesn't flash/re-mount.
+      sbSyncMatchCache(m);
+      if (cached || document.getElementById('md-period-block')) {
         patchMatchDetailLive(m, mkts);
-        // Markets weren't drawn on the cache pass — inject them now.
         var body = document.getElementById('md-markets-body');
         if (body && mkts && mkts.length) {
           var bbActive = document.querySelector('.md-tab.md-tab--active');
           var bbMode = !!(bbActive && /bet builder/i.test(bbActive.textContent || ''));
           window._mdMarkets = mkts;
+          sbClearMdTabCache();
           body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, i < 6, bbMode); }).join('');
         }
       } else {
@@ -3494,9 +3562,12 @@ window.sbOpenMatch = function(mid, _skipPush) {
         startMatchDetailPoll(mid);
       }
     })
-    .catch(function() {
+    .catch(function(err) {
+      if (err && err.name === 'AbortError') return;
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode !== 'matchDetail') return;
       if (!cached) {
-        var m = S.matches.find(function(x){ return String(x.id) === String(mid); }) || null;
+        var m = sbFindMatch(mid);
         if (m) renderMatchDetail(m, []);
       }
     });
@@ -4140,6 +4211,21 @@ window.sbMdTab = function(btn, tabName) {
 
   var isBB = (tabName === 'Bet Builder');
   window._bbModeActive = isBB;
+  var cacheKey = tabName + (isBB ? '_bb' : '');
+  if (!window._mdTabCache) window._mdTabCache = {};
+
+  // Instant tab switch when we've already built this filter once.
+  if (window._mdTabCache[cacheKey]) {
+    mktBody.innerHTML = window._mdTabCache[cacheKey];
+    var bbStickyC = document.getElementById('md-bb-sticky');
+    if (isBB) {
+      if (bbStickyC && window._bbSelections && window._bbSelections.length > 0) bbStickyC.style.display = '';
+      mktBody.style.paddingBottom = '120px';
+    } else {
+      mktBody.style.paddingBottom = '';
+    }
+    return;
+  }
 
   // Re-render markets (in BB mode or normal mode)
   var filter = null;
@@ -4147,8 +4233,6 @@ window.sbMdTab = function(btn, tabName) {
     if (tabName === 'Principaux') {
       filter = function(mkt) {
         var nm = (mkt.name || '').toLowerCase();
-        // Principaux = main markets only, but EXCLUDE 2ème mi-temps
-        // variants so the second half tab can show its own set.
         if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
         return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
       };
@@ -4193,30 +4277,34 @@ window.sbMdTab = function(btn, tabName) {
     }
   }
   var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
-  // Empty-state fallback: keep filter intent but render an empty card
-  // so the user knows the tab is active (don't silently fall back to ALL).
   if (!shown.length && tabName !== 'Tout') {
-    mktBody.innerHTML = '<div class="md-empty-tab">Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.</div>';
+    var emptyHtml = '<div class="md-empty-tab">Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.</div>';
+    window._mdTabCache[cacheKey] = emptyHtml;
+    mktBody.innerHTML = emptyHtml;
     var bbSticky0 = document.getElementById('md-bb-sticky');
     if (bbSticky0) bbSticky0.style.display = 'none';
     mktBody.style.paddingBottom = '';
     return;
   }
   if (!shown.length) shown = window._mdMarkets;
-  var out = '';
-  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
-  mktBody.innerHTML = out;
 
-  // Show/hide BB hint at top when BB mode
-  var bbSticky = document.getElementById('md-bb-sticky');
-  if (isBB) {
-    // Show sticky footer only if there are already selections
-    if (bbSticky && window._bbSelections && window._bbSelections.length > 0) bbSticky.style.display = '';
-    // Add extra bottom padding so sticky doesn't cover last market
-    mktBody.style.paddingBottom = '120px';
-  } else {
-    mktBody.style.paddingBottom = '';
-  }
+  // Paint on next frame so the active tab highlight lands first (feels instant).
+  mktBody.classList.add('md-markets--loading');
+  requestAnimationFrame(function() {
+    var out = '';
+    shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
+    window._mdTabCache[cacheKey] = out;
+    mktBody.innerHTML = out;
+    mktBody.classList.remove('md-markets--loading');
+
+    var bbSticky = document.getElementById('md-bb-sticky');
+    if (isBB) {
+      if (bbSticky && window._bbSelections && window._bbSelections.length > 0) bbSticky.style.display = '';
+      mktBody.style.paddingBottom = '120px';
+    } else {
+      mktBody.style.paddingBottom = '';
+    }
+  });
 };
 
 window.sbMdQuickFilter = function(btn, filter) {
@@ -4444,16 +4532,25 @@ window.sbSetUpcomingTab = function(sportId, btn) {
 };
 
 function loadAndFilter(action, sid, lid) {
+  // Never clobber a dedicated sub-view with a list skeleton.
+  if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
+
+  sbAbortListFetches();
+  var navGen = sbNextNav();
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildSkeleton(5);
 
   // Use `upcoming` action for future dates, `inplay` for today
   var apiAction = (S.activeDateOffset > 0) ? 'upcoming' : 'inplay';
   var url = BASE + 'sportsbook/api.php?action=' + apiAction + '&sport_id=' + (sid || 1);
+  var fetchOpts = {};
+  if (S._listAbort) fetchOpts.signal = S._listAbort.signal;
 
-  fetch(url)
+  fetch(url, fetchOpts)
     .then(function(r) { return r.json(); })
     .then(function(d) {
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
       var res = (d && d.results) ? d.results : [];
 
       // Filter out invalid and ended matches
@@ -4487,15 +4584,15 @@ function loadAndFilter(action, sid, lid) {
 
       res.forEach(function(m) { m._o = null; });
       S.matches = res;
-      // Guard against late callback: if the user clicked into a match
-      // while this list-fetch was in flight, don't re-paint the home
-      // grid on top of their match detail view.
-      if (S.viewMode === 'matchDetail') return;
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
       renderMatches(S.matches);
       markLiveSidebarLeagues(res);
     })
-    .catch(function() {
-      if (S.viewMode === 'matchDetail') return;
+    .catch(function(err) {
+      if (err && err.name === 'AbortError') return;
+      if (!sbNavAlive(navGen)) return;
+      if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
       renderMatches([]);
     });
 }
