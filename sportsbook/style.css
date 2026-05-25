@@ -2568,8 +2568,8 @@ button.sb-btn-live.active .sb-live-badge,
   .sb-root button.mc-more-btn { width: 28px; height: 32px; }
   /* Championship grid — 2 cols on mobile, Bootstrap-proof */
   .sb-champ-cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .sb-root .sb-champ-cat-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
-  .sb-root .sb-ccg-btn { height: 36px !important; min-height: 36px !important; padding: 0 8px !important; box-sizing: border-box !important; }
+  .sb-root .sb-champ-cat-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .sb-root .sb-ccg-btn { height: 48px !important; min-height: 48px !important; padding: 0 12px !important; box-sizing: border-box !important; font-size: 13px !important; }
   .sb-champ-col-sel { flex-direction: column; }
   .sb-champ-breadcrumb { flex-wrap: wrap; }
   /* Sport nav smaller */
@@ -4246,144 +4246,187 @@ button.md-odd-btn,
 .sb-ctt:hover:not(.active) { color: var(--sb-text-1) !important; }
 .sb-ctt-more { color: var(--sb-text-2); padding: 8px 6px; font-size: 16px; cursor: pointer; }
 
-/* Sub-nav: Par Ligue | Par Heure */
-.sb-champ-subnav {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
+/* ── Sub-nav: Par Ligue | Par Heure ──────────────────────────────────
+   Bootstrap on the host page resets <button> backgrounds, so every
+   championship-view chip must use `.sb-root` + `!important` to survive
+   the cascade. Pills are rounded 8px, dark gray when inactive,
+   fcbet-green (#70f669) with black bold text when active. */
+.sb-root .sb-champ-subnav {
+  display: flex !important;
+  gap: 8px !important;
+  margin-bottom: 10px !important;
+  align-items: center !important;
 }
-.sb-subnav-btn {
-  background: transparent;
-  border: 1px solid var(--sb-border-light);
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
+.sb-root .sb-subnav-btn {
+  background: rgb(58,58,58) !important;
+  background-color: rgb(58,58,58) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 8px !important;
+  padding: 7px 16px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #cfcfcf !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: background 0.12s, color 0.12s !important;
 }
-.sb-subnav-btn.active {
-  background: var(--sb-green);
-  border-color: var(--sb-green);
-  color: var(--sb-green-font);
+.sb-root .sb-subnav-btn.active {
+  background: #70f669 !important;
+  background-color: #70f669 !important;
+  border-color: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
 }
-.sb-subnav-btn:hover:not(.active) { background: var(--sb-border); color: var(--sb-text-1); }
+.sb-root .sb-subnav-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
 
-/* Date filter row */
-.sb-champ-date-row {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-.sb-champ-date {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
-  border-radius: 4px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
-  white-space: nowrap;
-}
-.sb-champ-date.active {
-  background: var(--sb-green);
-  border-color: var(--sb-green);
-  color: var(--sb-green-font);
-}
-.sb-champ-date:hover:not(.active) { background: var(--sb-border); color: var(--sb-text-1); }
-
-/* Market type tabs (horizontal scroll) */
-.sb-champ-mkt-tabs {
+/* ── Date filter row — horizontal scroll, NOT wrap.
+   fcbet216 keeps all dates on a single line that the user can swipe;
+   wrapping made them look like prose ("Tout Lun, 25/05 Mar, 26/05…"). */
+.sb-root .sb-champ-date-row {
   display: flex !important;
   flex-wrap: nowrap !important;
-  align-items: center;
-  gap: 4px;
+  gap: 6px !important;
+  margin-bottom: 10px !important;
   overflow-x: auto !important;
-  overflow-y: hidden;
-  padding-bottom: 4px;
-  margin-bottom: 10px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  padding-bottom: 4px !important;
 }
-.sb-champ-mkt-tabs::-webkit-scrollbar { display: none; }
-.sb-cmt {
-  background: var(--sb-bg-mkt) !important;
-  border: 1px solid transparent !important;
-  border-radius: 20px !important;
-  padding: 5px 12px !important;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
-  white-space: nowrap;
-  flex-shrink: 0;
+.sb-root .sb-champ-date-row::-webkit-scrollbar { display: none !important; }
+.sb-root .sb-champ-date {
+  background: rgb(58,58,58) !important;
+  background-color: rgb(58,58,58) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 8px !important;
+  padding: 7px 14px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #cfcfcf !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: background 0.12s, color 0.12s !important;
 }
-.sb-cmt.active {
-  background: var(--sb-green) !important;
-  border-color: var(--sb-green) !important;
-  color: var(--sb-green-font) !important;
+.sb-root .sb-champ-date.active {
+  background: #70f669 !important;
+  background-color: #70f669 !important;
+  border-color: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
 }
-.sb-cmt:hover:not(.active) { background: var(--sb-border) !important; color: var(--sb-text-1) !important; }
-.sb-cmt-arrow {
-  background: var(--sb-bg-alt);
-  border: 1px solid var(--sb-border);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  flex-shrink: 0;
+.sb-root .sb-champ-date:hover:not(.active) {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
 }
 
-/* Market category grid — 6 columns matching fcbet216 exactly */
-.sb-champ-cat-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 4px;
-  margin-bottom: 4px;
+/* ── Market type tabs (Tout / Principaux / Spéciale joueurs / …) ─── */
+.sb-root .sb-champ-mkt-tabs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding-bottom: 4px !important;
+  margin-bottom: 12px !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
 }
-.sb-ccg-btn {
-  background: var(--sb-bg-mkt);
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 0 8px;
-  height: 36px;
-  min-height: 36px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.25;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
-  /* prevent Bootstrap from adding extra height or padding */
-  box-shadow: none;
-  outline: none;
+.sb-root .sb-champ-mkt-tabs::-webkit-scrollbar { display: none !important; }
+.sb-root .sb-cmt {
+  background: rgb(58,58,58) !important;
+  background-color: rgb(58,58,58) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 20px !important;
+  padding: 7px 16px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #cfcfcf !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: background 0.12s, color 0.12s !important;
 }
-.sb-ccg-btn.active {
-  background: var(--sb-green);
-  border-color: var(--sb-green);
-  color: var(--sb-green-font);
+.sb-root .sb-cmt.active {
+  background: #70f669 !important;
+  background-color: #70f669 !important;
+  border-color: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
 }
-.sb-ccg-btn.green {
-  background: var(--sb-green);
-  border-color: var(--sb-green);
-  color: var(--sb-green-font);
+.sb-root .sb-cmt:hover:not(.active) {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
 }
-.sb-ccg-btn:hover:not(.active):not(.green) { background: #2a2a2a; color: var(--sb-text-1); }
+
+/* ── Market category grid — fcbet216: 2-col mobile, 3-col tablet,
+   6-col on very wide. Inactive cells are dark gray rounded boxes;
+   the active cell turns fcbet-green with bold black text. */
+.sb-root .sb-champ-cat-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+.sb-root .sb-ccg-btn {
+  background: rgb(58,58,58) !important;
+  background-color: rgb(58,58,58) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 8px !important;
+  padding: 0 12px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.25 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  transition: background 0.12s, color 0.12s !important;
+}
+.sb-root .sb-ccg-btn.active,
+.sb-root .sb-ccg-btn.green {
+  background: #70f669 !important;
+  background-color: #70f669 !important;
+  border-color: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+}
+.sb-root .sb-ccg-btn:hover:not(.active):not(.green) {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
+@media (min-width: 720px) {
+  .sb-root .sb-champ-cat-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (min-width: 1100px) {
+  .sb-root .sb-champ-cat-grid { grid-template-columns: repeat(6, 1fr) !important; }
+}
 
 /* Column market selectors */
 .sb-champ-col-sel {
