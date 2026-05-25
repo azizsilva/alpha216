@@ -229,12 +229,14 @@ function computeFallbackTimer(m) {
       return { tm: 45, ts: 0, md: '1' };  // Mi-temps
     }
     // Past HT: subtract the 15 min break and keep counting.
-    // 60 → 46, 90 → 76, 120 → 106 etc. so the clock matches
-    // wall-time played and lines up with FlashScore at 118'.
+    // 60 → 46, 90 → 76, 105 → 91, 120 → 106 …
     var matchMin = 46 + (totalMin - 60);
-    // Safety cap so we never display absurd values (e.g. someone
-    // forgets to close an ended match) — 150 min covers ET + breaks.
-    if (matchMin > 150) matchMin = 150;
+    // Safety cap — anything past 125' is almost certainly an ended
+    // match BetsAPI forgot to close. We never want to display
+    // "150:03" on a fixture, so freeze at 90+' beyond regulation.
+    if (matchMin > 125) {
+      return { tm: 90, ts: 0, md: '0' };
+    }
     return { tm: matchMin, ts: sec, md: '0' };
   }
   // Generic non-football: just count up
@@ -1033,6 +1035,32 @@ function isMatchEnded(m) {
   if (!m) return false;
   if (String(m.time_status) === '3') return true;
   if (m.status === 'ended' || m.status === 'finished') return true;
+  // Heuristic: BetsAPI sometimes leaves time_status='1' on knockout
+  // matches that have actually finished. For football, if it's been
+  // more than 150 min since kickoff (regulation 90 + 15 HT + 30 ET +
+  // breaks ≈ 145 min absolute max), AND all main 1x2 odds are locked
+  // / missing, treat as ended so the match disappears from EN DIRECT
+  // instead of showing "Prolongation | 150:03" forever.
+  var sid = parseInt(m.sport_id || 1, 10);
+  if (sid === 1 || sid === 36) {
+    var kickoff = parseInt(m.time || 0, 10) || 0;
+    if (kickoff > 0) {
+      var elapsedMin = Math.floor((Date.now() / 1000 - kickoff) / 60);
+      if (elapsedMin >= 150) {
+        var lo = m.live_odds || {};
+        var oneX2 = lo['1x2'] || lo.full_time_result || lo.match_winner || {};
+        var hv = parseFloat(oneX2.h || oneX2.home || 0);
+        var av = parseFloat(oneX2.a || oneX2.away || 0);
+        // Locked / missing main market on a 150-min-old football game
+        // ⇒ match has effectively ended.
+        if (!(hv > 1.01) && !(av > 1.01)) return true;
+      }
+      // Absolute safety: 200 min past kickoff with no API ending signal
+      // is unphysical. Treat as ended regardless of odds (covers feeds
+      // that left old fixtures stuck in inplay).
+      if (elapsedMin >= 200) return true;
+    }
+  }
   return false;
 }
 function isMatchLive(m) {
