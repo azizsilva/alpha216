@@ -361,6 +361,14 @@ function patchMatchDetailLive(m, markets) {
     } catch (e) {}
   }
   if (needsRender) {
+    // If the user is searching, preserve the search filter so live
+    // odds refresh doesn't kick them back to "Tout".
+    var searchPanel = document.getElementById('md-search-panel');
+    var searchInput = document.getElementById('md-search-input');
+    if (searchPanel && searchPanel.style.display !== 'none' && searchInput) {
+      if (typeof window.sbMdSearch === 'function') window.sbMdSearch(searchInput.value);
+      return;
+    }
     var activeTab = document.querySelector('.md-tab.active');
     if (activeTab && typeof window.sbMdTab === 'function') {
       var tabName = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
@@ -3417,22 +3425,29 @@ function renderMatchDetail(m, markets) {
 
   out += '</div>'; // md-match-hdr
 
-  // ── Quick-filter tabs row (Flash / 1 min / Marchés rapides)
-  out += '<div class="md-quick-tabs">';
-  out += '<button class="md-tab-icon-btn" title="Rechercher">' + ICON.search + '</button>';
-  out += '<button class="md-qt active" data-filter="flash" onclick="window.sbMdQuickFilter(this,\'flash\')">'
-    + '<svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor"><path d="M6.5 0L0 8h4.5L4 14l7-8H6L6.5 0z"/></svg> Flash</button>';
-  out += '<button class="md-qt" data-filter="1min" onclick="window.sbMdQuickFilter(this,\'1min\')">'
-    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 1 minute</button>';
-  out += '<button class="md-qt" data-filter="all" onclick="window.sbMdQuickFilter(this,\'all\')">Marchés rapides</button>';
+  // ── Main market category tabs — fcbet216 style.
+  // Single horizontal row: [search] Tout Principaux Bet Builder Teams H2H
+  //   1 minute  2ème mi-temps  Correct Score  Corners  Multigoals  [ⓘ alert]
+  // The search button toggles an inline "Search market" input. The
+  // red info button reveals a tooltip with the market lock legend.
+  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals'];
+  out += '<div class="md-tabs-wrap" id="md-tabs-wrap">';
+
+  // Search trigger (expands to input when clicked)
+  out += '<button type="button" class="md-tab-search-btn" id="md-search-btn"'
+       + ' onclick="window.sbMdSearchToggle(true)" title="Rechercher">'
+       + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>'
+       + '</button>';
+
+  // Inline search panel (hidden by default)
+  out += '<div class="md-search-panel" id="md-search-panel" style="display:none">';
+  out += '<button type="button" class="md-tab-search-close" onclick="window.sbMdSearchToggle(false)" title="Fermer">'
+       + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
+       + '</button>';
+  out += '<input type="text" class="md-search-input" id="md-search-input" placeholder="Search market" oninput="window.sbMdSearch(this.value)" />';
   out += '</div>';
 
-  // ── Main market category tabs — fcbet style with scroll arrows
-  var TABS = ['Tout','Principaux','Bet Builder','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals'];
-  out += '<div class="md-tabs-wrap">';
-  out += '<button class="md-tab-arrow md-tab-arrow-l" onclick="window.sbTabsScroll(-1)" title="Précédent">'
-    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>'
-    + '</button>';
+  // Tabs scroll container (hidden when search active)
   out += '<div class="md-tabs-row" id="md-tabs-inner">';
   TABS.forEach(function(t, i) {
     out += '<button type="button" class="md-tab' + (i === 1 ? ' active' : '') + '"'
@@ -3440,9 +3455,13 @@ function renderMatchDetail(m, markets) {
          + ' onclick="window.sbMdTab(this,\'' + t.replace(/'/g,"\\'") + '\')">' + h(t) + '</button>';
   });
   out += '</div>';
-  out += '<button class="md-tab-arrow md-tab-arrow-r" onclick="window.sbTabsScroll(1)" title="Suivant">'
-    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>'
-    + '</button>';
+
+  // Info / alert button at the end
+  out += '<button type="button" class="md-tab-info-btn" id="md-tab-info-btn"'
+       + ' onclick="window.sbMdToggleInfo()" title="Légende des marchés">'
+       + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/></svg>'
+       + '</button>';
+
   out += '</div>';
 
   // ── Markets list (always visible; markets switch to BB-mode when tab is active)
@@ -3878,6 +3897,16 @@ window.sbMdTab = function(btn, tabName) {
         var nm = (mkt.name||'').toLowerCase();
         return nm.indexOf('multigoal') !== -1 || nm.indexOf('multi-goal') !== -1 || nm.indexOf('multigoals') !== -1;
       };
+    } else if (tabName === 'Teams H2H' || tabName === 'Teams H2h' || tabName === 'teams h2h') {
+      filter = function(mkt){
+        var nm = (mkt.name||'').toLowerCase();
+        return nm.indexOf('h2h') !== -1
+            || nm.indexOf('head to head') !== -1
+            || nm.indexOf('face-à-face') !== -1
+            || nm.indexOf('face a face') !== -1
+            || nm === '1x2'
+            || nm.indexOf('1 x 2') !== -1;
+      };
     } else if (tabName !== 'Tout') {
       var kw = tabName.toLowerCase();
       filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
@@ -3932,6 +3961,91 @@ window.sbMdQuickFilter = function(btn, filter) {
   var out = '';
   shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, false); });
   mktBody.innerHTML = out;
+};
+
+// ── Inline market search (fcbet216 parity) ────────────────────
+// Click the search icon → tabs row hides, an input shows ("Search market").
+// Typing filters markets by name. Click the X → restores tabs row.
+window.sbMdSearchToggle = function(open) {
+  var panel  = document.getElementById('md-search-panel');
+  var tabs   = document.getElementById('md-tabs-inner');
+  var btn    = document.getElementById('md-search-btn');
+  var info   = document.getElementById('md-tab-info-btn');
+  var input  = document.getElementById('md-search-input');
+  if (!panel || !tabs) return;
+  if (open) {
+    panel.style.display = 'flex';
+    tabs.style.display  = 'none';
+    if (btn)  btn.style.display  = 'none';
+    if (info) info.style.display = 'none';
+    setTimeout(function(){ if (input) input.focus(); }, 0);
+  } else {
+    panel.style.display = 'none';
+    tabs.style.display  = '';
+    if (btn)  btn.style.display  = '';
+    if (info) info.style.display = '';
+    if (input) input.value = '';
+    // Re-apply the active tab filter so we restore the previous view.
+    var activeTab = document.querySelector('.md-tab.active');
+    if (activeTab) {
+      var nm = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
+      window.sbMdTab(activeTab, nm);
+    }
+  }
+};
+
+window.sbMdSearch = function(query) {
+  var mktBody = document.getElementById('md-markets-body');
+  if (!mktBody || !window._mdMarkets || !window._mdMatch) return;
+  var q = String(query || '').toLowerCase().trim();
+  var shown;
+  if (!q) {
+    shown = window._mdMarkets;
+  } else {
+    shown = window._mdMarkets.filter(function(mkt){
+      var nm  = (mkt.name || '').toLowerCase();
+      if (nm.indexOf(q) !== -1) return true;
+      // Also match by selection name (e.g. typing "BTTS" finds 'Oui'/'Non' inside).
+      if (mkt.selections && mkt.selections.some(function(sel){
+        return String(sel.name || '').toLowerCase().indexOf(q) !== -1;
+      })) return true;
+      return false;
+    });
+  }
+  if (!shown.length) {
+    mktBody.innerHTML = '<div class="md-empty-tab">Aucun marché ne correspond à <b>' + h(q) + '</b>.</div>';
+    return;
+  }
+  var out = '';
+  shown.forEach(function(mkt, i){ out += renderMarketGroup(mkt, window._mdMatch, i < 6, false); });
+  mktBody.innerHTML = out;
+};
+
+window.sbMdToggleInfo = function() {
+  var existing = document.getElementById('md-tab-info-pop');
+  if (existing) { existing.remove(); return; }
+  var btn = document.getElementById('md-tab-info-btn');
+  if (!btn) return;
+  var pop = document.createElement('div');
+  pop.id = 'md-tab-info-pop';
+  pop.className = 'md-tab-info-pop';
+  pop.innerHTML = '<div class="md-tab-info-title">Légende des marchés</div>'
+    + '<div class="md-tab-info-row"><span class="md-tab-info-icon md-tab-info-icon--bb">BB</span> Bet Builder éligible</div>'
+    + '<div class="md-tab-info-row"><span class="md-tab-info-icon md-tab-info-icon--lock">' + ICON.lock + '</span> Marché temporairement suspendu</div>'
+    + '<div class="md-tab-info-row"><span class="md-tab-info-icon md-tab-info-icon--star">★</span> Ajouter aux favoris</div>';
+  document.body.appendChild(pop);
+  var r = btn.getBoundingClientRect();
+  pop.style.top  = (r.bottom + 6) + 'px';
+  pop.style.left = Math.max(8, r.right - 240) + 'px';
+  // Close on outside click
+  setTimeout(function(){
+    document.addEventListener('click', function _cl(e){
+      if (!pop.contains(e.target) && e.target !== btn) {
+        pop.remove();
+        document.removeEventListener('click', _cl);
+      }
+    });
+  }, 0);
 };
 
 // ── Bet Builder ──────────────────────────────────────────────

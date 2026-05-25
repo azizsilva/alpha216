@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525q';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525r';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -295,6 +295,21 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .sb-boost-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#70f669;display:inline-block;flex-shrink:0;z-index:2;margin:0;}
 .sb-root .sb-boost-card .sb-boost-picks > .sb-boost-line:not(:last-child) .sb-boost-dot::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:12px;transform:translateX(-50%);background:#70f669;border-radius:1px;z-index:1;}
 .sb-root .sb-odds-row{padding:6px 14px;margin-top:8px;}
+
+/* ── Match-detail tabs row — critical inline CSS so Bootstrap doesn't
+ * collapse pill spacing ("Bet Builder1 minute2ème mi-ter"). Mirrors
+ * the style.css rules with !important on every property to be safe. */
+.md-tabs-wrap{display:flex!important;align-items:center!important;gap:8px!important;background:#0f0f0f!important;border-bottom:1px solid rgba(255,255,255,.06)!important;padding:8px 10px!important;min-height:50px!important;}
+.md-tabs-row{display:flex!important;align-items:center!important;gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;flex:1 1 auto!important;padding:0!important;margin:0!important;min-width:0!important;-ms-overflow-style:none;scrollbar-width:none;}
+.md-tabs-row::-webkit-scrollbar{display:none!important;height:0!important;width:0!important;}
+.md-tab{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.06)!important;color:rgba(255,255,255,.85)!important;cursor:pointer;padding:8px 14px!important;font-size:13px!important;font-family:'Roboto',sans-serif!important;font-weight:500!important;flex-shrink:0!important;flex-grow:0!important;white-space:nowrap!important;outline:none!important;border-radius:8px!important;margin:0!important;line-height:1.2!important;height:34px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;box-shadow:none!important;text-shadow:none!important;}
+.md-tab.active{background:#70f669!important;border-color:#70f669!important;color:#000!important;font-weight:700!important;border-radius:8px!important;margin:0!important;padding:8px 14px!important;}
+.md-tab-search-btn,.md-tab-search-close{background:#70f669!important;border:none!important;color:#000!important;cursor:pointer;padding:0!important;margin:0!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:8px!important;outline:none!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;box-shadow:none!important;}
+.md-tab-search-btn svg,.md-tab-search-close svg{width:14px!important;height:14px!important;color:#000!important;}
+.md-search-panel{display:flex!important;align-items:center!important;gap:8px!important;flex:1 1 auto!important;min-width:0!important;padding:0!important;margin:0!important;}
+.md-search-input{flex:1 1 auto!important;min-width:0!important;background:#2a2a2a!important;border:1px solid rgba(255,255,255,.08)!important;color:#fff!important;border-radius:8px!important;padding:8px 12px!important;font-size:13px!important;font-family:'Roboto',sans-serif!important;outline:none!important;height:34px!important;box-shadow:none!important;}
+.md-tab-info-btn{background:transparent!important;border:1.5px solid #f04a4a!important;color:#f04a4a!important;cursor:pointer;padding:0!important;width:28px!important;height:28px!important;min-width:28px!important;border-radius:50%!important;outline:none!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;margin:0!important;box-shadow:none!important;}
+.md-tab-info-btn svg{width:14px!important;height:14px!important;color:#f04a4a!important;}
 </style>
 
 <!-- Loading splash — visible from the very first paint until app.js

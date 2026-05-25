@@ -3250,93 +3250,188 @@ body {
 
 /* Market tabs */
 /* Tab bar wrapper + scroll arrow buttons — fcbet style */
+/* ────────────────────────────────────────────────────────────────
+ * Match-detail tabs row — fcbet216 parity
+ * Layout: [search] Tout Principaux Bet Builder Teams H2H ...  [ⓘ]
+ * All buttons share consistent 32–36px pill design with gap: 8px.
+ * Every rule below uses !important to defeat Bootstrap's `.btn` /
+ * `button` resets that previously made tabs flush together.
+ * ──────────────────────────────────────────────────────────────── */
 .md-tabs-wrap {
   display: flex !important;
   align-items: center !important;
+  gap: 8px !important;
   background: #0f0f0f !important;
   border-bottom: 1px solid rgba(255,255,255,0.06) !important;
   flex-shrink: 0;
   position: sticky;
   top: 37px;
   z-index: 10;
-  padding: 0 !important;
+  padding: 8px 10px !important;
+  min-height: 50px !important;
 }
-.md-tab-arrow {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: transparent !important;
-  border: none !important;
-  color: rgba(255,255,255,0.65) !important;
-  cursor: pointer;
-  padding: 0 8px !important;
-  outline: none;
-  flex-shrink: 0 !important;
-  width: 28px !important;
-  height: 36px !important;
-  transition: color 0.12s;
-}
-.md-tab-arrow svg { width: 14px !important; height: 14px !important; }
-.md-tab-arrow-r { border-left: none !important; }
-.md-tab-arrow:hover { color: #fff !important; }
 .md-tabs-row {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
-  flex: 1 !important;
-  padding: 6px 8px !important;
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
   scroll-behavior: smooth;
   background: transparent !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  min-width: 0 !important;
 }
 .md-tabs-row::-webkit-scrollbar { display: none !important; height: 0 !important; width: 0 !important; }
-.md-tab-icon-btn {
+
+/* Search trigger button (green square) */
+.md-tab-search-btn {
   background: var(--sb-green) !important;
   border: none !important;
   color: #000 !important;
   cursor: pointer;
   padding: 0 !important;
-  width: 32px !important;
-  height: 32px !important;
+  margin: 0 !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
   border-radius: 8px !important;
-  outline: none;
+  outline: none !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
+  box-shadow: none !important;
 }
-.md-tab-icon-btn svg { width: 14px !important; height: 14px !important; color: #000 !important; }
-.md-tab {
-  background: transparent !important;
+.md-tab-search-btn svg { width: 14px !important; height: 14px !important; color: #000 !important; }
+.md-tab-search-btn:hover { background: #62de58 !important; }
+
+/* Inline search panel (revealed when search active) */
+.md-search-panel {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.md-tab-search-close {
+  background: var(--sb-green) !important;
   border: none !important;
-  border-bottom: none !important;
+  color: #000 !important;
+  cursor: pointer;
+  padding: 0 !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  box-shadow: none !important;
+}
+.md-tab-search-close svg { width: 14px !important; height: 14px !important; color: #000 !important; }
+.md-tab-search-close:hover { background: #62de58 !important; }
+.md-search-input {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  background: #2a2a2a !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  font-family: 'Roboto', sans-serif !important;
+  outline: none !important;
+  height: 34px !important;
+  box-shadow: none !important;
+}
+.md-search-input::placeholder { color: rgba(255,255,255,0.45) !important; }
+.md-search-input:focus { border-color: var(--sb-green) !important; }
+
+/* Each market tab is a pill */
+.md-tab {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
   color: rgba(255,255,255,0.85) !important;
   cursor: pointer;
-  padding: 7px 14px !important;
+  padding: 8px 14px !important;
   font-size: 13px !important;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif !important;
   font-weight: 500 !important;
   flex-shrink: 0 !important;
+  flex-grow: 0 !important;
   white-space: nowrap !important;
-  outline: none;
+  outline: none !important;
   border-radius: 8px !important;
   margin: 0 !important;
   line-height: 1.2 !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: color 0.12s, background 0.12s;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
-.md-tab:hover { color: #ffffff !important; background: rgba(255,255,255,0.06) !important; }
+.md-tab:hover  { color: #ffffff !important; background: rgba(255,255,255,0.10) !important; }
 .md-tab.active {
   background: var(--sb-green) !important;
+  border-color: var(--sb-green) !important;
   color: #000 !important;
-  border-bottom-color: transparent !important;
-  border-radius: 8px !important;
   font-weight: 700 !important;
+  border-radius: 8px !important;
   margin: 0 !important;
-  padding: 7px 14px !important;
+  padding: 8px 14px !important;
 }
+
+/* Red ⓘ alert button at the end of the tabs row */
+.md-tab-info-btn {
+  background: transparent !important;
+  border: 1.5px solid #f04a4a !important;
+  color: #f04a4a !important;
+  cursor: pointer;
+  padding: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 50% !important;
+  outline: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+.md-tab-info-btn svg { width: 14px !important; height: 14px !important; color: #f04a4a !important; }
+.md-tab-info-btn:hover { background: rgba(240,74,74,0.10) !important; }
+
+/* Info popover (legend) */
+.md-tab-info-pop {
+  position: fixed;
+  z-index: 1000;
+  background: #1c1c1c;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 12px 14px;
+  min-width: 220px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  font-family: 'Roboto', sans-serif;
+}
+.md-tab-info-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: 0.3px; }
+.md-tab-info-row   { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; color: rgba(255,255,255,0.80); }
+.md-tab-info-icon  { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.md-tab-info-icon--bb   { background: var(--sb-green); color: #000; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+.md-tab-info-icon--lock { width: 16px; height: 16px; color: rgb(113,246,105); }
+.md-tab-info-icon--lock svg { width: 14px; height: 14px; }
+.md-tab-info-icon--star { width: 16px; height: 16px; color: rgba(255,255,255,0.65); font-size: 14px; }
 
 /* Markets area */
 .md-markets { padding: 6px 8px 80px; background: #0f0f0f; }
