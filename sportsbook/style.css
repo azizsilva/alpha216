@@ -2744,15 +2744,15 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-en-direct-row {
   display: flex;
   flex-direction: row;
-  gap: 0;                       /* cards are full-width — no inter-card gap */
+  gap: 8px;                     /* visible gap between adjacent cards */
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0;
-  margin: 0 0 16px;            /* visible breathing room before the next section (Cotes boostées) */
+  padding: 0 0 4px;
+  margin: 0 0 16px;            /* breathing room before the next section (Cotes boostées) */
   width: 100%;
 }
 .sb-en-direct-row::-webkit-scrollbar { height: 0 !important; width: 0 !important; display: none; }
@@ -2764,12 +2764,16 @@ button.sb-btn-live.active .sb-live-badge,
 .slc {
   position: relative !important;
   background: rgb(49,49,49) !important;
-  border: none !important;
-  border-radius: 0 !important;        /* user spec — no rounded corners */
-  flex: 0 0 100% !important;          /* one full slide per card */
-  width: 100% !important;
-  min-width: 100% !important;
-  max-width: 100% !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 10px !important;
+  /* "1.5 cards visible" — full first card + half of the next, like
+     the fcbet216 reference. flex-basis controls the visible width:
+     ~72% leaves the next card peeking from the right edge.
+     scroll-snap-align: start keeps each card snapping cleanly. */
+  flex: 0 0 72% !important;
+  width: 72% !important;
+  min-width: 72% !important;
+  max-width: 72% !important;
   scroll-snap-align: start !important;
   scroll-snap-stop: always !important;
   display: flex !important;
@@ -2777,6 +2781,9 @@ button.sb-btn-live.active .sb-live-badge,
   cursor: pointer !important;
   padding: 4px 4px 8px !important;
 }
+/* First card needs a tiny right margin so it doesn't kiss the next card
+   when gap rendering is overridden by Bootstrap. */
+.slc:first-child { margin-left: 0 !important; }
 .slc:hover { background: rgb(58,58,58) !important; }
 
 /* Sport badge — sits INSIDE the card (no negative offset) so it isn't

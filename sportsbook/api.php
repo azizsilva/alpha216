@@ -1396,6 +1396,32 @@ if ($action === 'league_matches') {
             }
         } catch (Exception $e) {}
     }
+    // ── Step 3: BetsAPI direct fallback ──
+    // When the local DB has nothing for this league (typical for far-future
+    // tournaments like FIFA World Cup 2026, EURO 2028 or any league we
+    // haven't started caching yet), hit BetsAPI's /v3/events/upcoming
+    // directly with league_id so we always show SOMETHING instead of
+    // the dreaded "Aucun match disponible pour cette ligue".
+    if (empty($results) && $league_id_q !== '') {
+        $page = 1;
+        while ($page <= 3) {
+            $up = betsapi_get('/v3/events/upcoming', [
+                'sport_id'  => $sport_id,
+                'league_id' => $league_id_q,
+                'page'      => $page,
+            ]);
+            $upr = $up['results'] ?? [];
+            if (!is_array($upr) || empty($upr)) break;
+            foreach ($upr as $m) {
+                if (!is_array($m)) continue;
+                if (empty($m['home']['name']) || empty($m['away']['name'])) continue;
+                if (($m['time_status'] ?? '0') === '3') continue;
+                $results[] = $m;
+            }
+            if (count($upr) < 50) break;   // last page
+            $page++;
+        }
+    }
     // NOTE: No fallback to "all sport matches" — shows empty championship if no matches found,
     // which is correct behaviour (avoids LaLiga click showing Premier League data)
 
