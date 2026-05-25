@@ -18,10 +18,18 @@
   --sb-bg-mkt:      #161616;
   --sb-bg-odd-btn:  rgb(74,74,74);  /* fcbet216 exact: .jgpuF background */
   --sb-bg-odd-hover:#5a5a5a;
+  /* ── REUSABLE GRAY SURFACES (fcbet216 spec, user request) ──
+     --sb-surface-1 = primary card surface (rgb 49,49,49)
+     --sb-surface-2 = elevated tile / hover surface (rgb 58,58,58)
+     Use these everywhere instead of hard-coded rgb(49,49,49) values. */
+  --sb-surface-1:   rgb(49,49,49);
+  --sb-surface-2:   rgb(58,58,58);
+  --sb-surface-hover: rgb(66,66,66);
   /* ── Borders — barely visible, matches fcbet216 .iWVbnj ── */
   --sb-border:      rgba(255,255,255,0.06);
   --sb-border-light:rgba(255,255,255,0.10);
   --sb-border-card: rgba(255,255,255,0.05);
+  --sb-border-subtle: rgba(255,255,255,0.04);
   --sb-text-1:      #ffffff;
   --sb-text-2:      #979797;
   --sb-text-3:      #555555;
@@ -1684,18 +1692,23 @@ body {
 }
 .sb-section-icon svg { width: 24px; height: 24px; filter: invert(0.5); }
 
-/* Sport tabs for Prochainement — fcbet216 spec: rounded 12px, gray bg */
+/* Sport tabs for Prochainement — fcbet216 spec: rounded 12px, gray bg.
+   Scrollbar is FULLY hidden (fcbet216 image 3 reference): the row still
+   scrolls horizontally with touch/wheel, but no visible track. */
 .sb-upcoming-tabs {
   display: flex;
-  flex-direction: row;   /* explicitly horizontal pills only */
+  flex-direction: row;
   flex-wrap: nowrap;
   width: 100%;
   gap: 6px;
   overflow-x: auto;
-  padding: 0 0 10px;
+  overflow-y: hidden;
+  padding: 0 0 6px;
   margin-bottom: 2px;
+  -ms-overflow-style: none;        /* IE / Edge legacy */
+  scrollbar-width: none;           /* Firefox */
 }
-.sb-upcoming-tabs::-webkit-scrollbar { height: 0; }
+.sb-upcoming-tabs::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .sb-upcoming-tab {
   background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.04) !important;
@@ -4065,10 +4078,10 @@ body {
   padding: 0 10px !important;
   height: 36px !important;
 }
-/* Leagues card */
+/* Leagues card — reuses --sb-surface-1 so the gray is consistent everywhere */
 .sb-mob-leagues-panel {
-  background: rgb(49,49,49) !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
+  background: var(--sb-surface-1) !important;
+  border: 1px solid var(--sb-border-subtle) !important;
   border-radius: 10px !important;
   overflow: hidden;
   margin: 0 2px 12px !important;
@@ -4076,11 +4089,42 @@ body {
 .sb-mob-leagues-panel .sb-league-group-hdr {
   background: transparent !important;
   margin: 0 !important;
-  padding: 12px 14px !important;
+  padding: 10px 12px !important;             /* tighter so both tabs fit */
   border-radius: 0 !important;
   border: none !important;
   border-bottom: 1px solid rgba(255,255,255,0.06) !important;
-  gap: 14px !important;
+  gap: 10px !important;                       /* tighter gap between tabs */
+  display: flex !important;
+  align-items: center !important;
+}
+/* Tab labels — BOTH bright (matches fcbet216 image 1), no truncation */
+.sb-mob-leagues-panel .sb-mob-tab {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.4px !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  text-transform: uppercase !important;
+}
+.sb-mob-leagues-panel .sb-mob-tab[data-tab="my"] {
+  /* Inactive tab — slightly muted but still readable, NOT the dim
+     gray we had before. */
+  color: rgba(255,255,255,0.85) !important;
+}
+.sb-mob-leagues-panel .sb-mob-tab.active { color: #ffffff !important; }
+.sb-mob-leagues-panel .sb-mob-tab .sb-mes-cnt {
+  margin-left: 4px !important;
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 10px !important;
+}
+.sb-mob-leagues-panel .sb-lh-minus {
+  margin-left: auto !important;
+  color: #ffffff !important;
+  opacity: 0.85 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
 }
 .sb-mob-leagues-panel .sb-tl-list {
   padding: 0 !important;
@@ -4392,23 +4436,29 @@ body {
   position: relative;
 }
 .sb-live-mkt-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgb(49,49,49);
-  border: 1px solid rgba(255,255,255,0.04);
-  border-radius: 12px;
-  padding: 14px 18px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: var(--sb-surface-1) !important;
+  border: 1px solid var(--sb-border-subtle) !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  color: #ffffff !important;                 /* beats Bootstrap's .btn yellow/dark inherits */
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s;
+  outline: none !important;
+  line-height: 1.2 !important;
 }
-.sb-live-mkt-btn:hover { background: rgb(58,58,58); }
-.sb-live-mkt-btn.open  { background: rgb(49,49,49); border-radius: 12px; }
+.sb-live-mkt-btn #sb-live-mkt-lbl,
+.sb-live-mkt-btn span { color: #ffffff !important; }
+.sb-live-mkt-btn:hover { background: var(--sb-surface-2) !important; }
+.sb-live-mkt-btn.open  { background: var(--sb-surface-1) !important; border-radius: 12px !important; }
 .sb-lmb-arrow {
   color: rgba(255,255,255,0.75);
   font-size: 20px;
@@ -4420,8 +4470,8 @@ body {
 .sb-lmb-arrow svg { display: block; }
 .sb-live-mkt-drop {
   display: none;             /* hidden by default */
-  background: rgb(49,49,49);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: var(--sb-surface-1);
+  border: 1px solid var(--sb-border-subtle);
   border-radius: 12px;
   overflow: hidden;
   position: relative;

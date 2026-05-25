@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525l';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525m';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -189,7 +189,16 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-mob-search-panel .sb-search-wrap{padding:10px 12px;}
 .sb-mob-search-panel .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
 .sb-mob-leagues-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;margin:0 2px 12px;}
-.sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);gap:14px;}
+.sb-mob-leagues-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:10px!important;overflow:hidden;margin:0 2px 12px!important;}
+.sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
+.sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
+.sb-mob-leagues-panel .sb-mob-tab[data-tab="my"]{color:rgba(255,255,255,.85)!important;}
+.sb-mob-leagues-panel .sb-mob-tab.active{color:#fff!important;}
+.sb-mob-leagues-panel .sb-lh-minus{margin-left:auto!important;color:#fff!important;opacity:.85!important;font-size:18px!important;line-height:1!important;}
+.sb-root .sb-upcoming-tabs::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
+.sb-root .sb-upcoming-tabs{scrollbar-width:none!important;-ms-overflow-style:none!important;}
+.sb-root .sb-live-mkt-btn{color:#fff!important;text-shadow:none!important;box-shadow:none!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:12px!important;}
+.sb-root .sb-live-mkt-btn span,.sb-root .sb-live-mkt-btn #sb-live-mkt-lbl{color:#fff!important;}
 .sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-tl-item:last-child{border-bottom:none;}
 .sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -316,12 +325,12 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     <!-- League tabs: LES MEILLEURES LIGUES / MES LIGUES -->
     <div id="sb-favs-content">
     <div class="sb-league-group-hdr">
-      <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
+      <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURS LIGUES</button>
       <button class="sb-mob-tab" data-tab="my" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
       <span class="sb-lh-minus">—</span>
     </div>
 
-    <!-- LES MEILLEURES LIGUES content — always shows the fixed top-league list -->
+    <!-- LES MEILLEURS LIGUES content — always shows the fixed top-league list -->
     <div id="sb-mob-best-leagues">
     <div class="sb-tl-list">
       <?php
@@ -534,12 +543,12 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
     <div class="sb-mob-inline-leagues sb-mob-leagues-panel">
       <!-- League tabs header -->
       <div class="sb-league-group-hdr">
-        <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
+        <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURS LIGUES</button>
         <button class="sb-mob-tab" data-tab="my" onclick="window.sbMobLeagueTab(this,'my')">MES LIGUES <span class="sb-mes-cnt">0</span></button>
         <span class="sb-lh-minus">—</span>
       </div>
 
-      <!-- LES MEILLEURES LIGUES content -->
+      <!-- LES MEILLEURS LIGUES content -->
       <div id="sb-inline-best-leagues">
         <div class="sb-tl-list">
           <?php foreach($top_leagues as $l):
