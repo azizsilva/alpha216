@@ -698,7 +698,7 @@ var S = {
   liveSearchQ: ''               // debounced EN DIRECT search filter
   ,allLiveLeagueNames: []       // multi-sport live leagues for top-league badges
   ,champGroupMode: 'league'     // 'league' | 'hour' — Par Ligue / Par Heure
-  ,champMktAccOpen: true        // collapsed state of the main market accordion
+  ,champMktAccOpen: false       // dropdown starts collapsed (fcbet216 UX)
   ,champLeagueCollapsed: {}     // per-league collapsed map in championship view
 };
 
@@ -2952,56 +2952,41 @@ function renderChampionship(id, name, flag, matches) {
   });
   out += '</div>';
 
-  // ── Market category grid — 6 cols × 2 rows matching fcbet216 exactly ─
-  var activeCat = S.activeMarketCat || 'populaire';
-  var catRow1 = [
-    {key:'populaire', label:'Populaire'},
-    {key:'1x2', label:'1x2'},
-    {key:'total', label:'Total'},
+  // ── Market category dropdown (fcbet216 .HeaderMarketsSelectorContainer)
+  //    A single card: green trigger button on top with the active market
+  //    label + chevron toggle. Expanded body shows the OTHER markets as a
+  //    vertical list of rows (.SelectMenuOptionContainer pattern).
+  //    Selecting one switches the active market and collapses the menu.
+  var activeCat = S.activeMarketCat || '1x2';
+  var marketOpts = [
+    {key:'1x2',           label:'1x2'},
+    {key:'total',         label:'Total'},
     {key:'double_chance', label:'Double chance'},
-    {key:'btts', label:'Les deux équipes qui marquent'},
-    {key:'odd_even', label:'Pair/Impair'}
+    {key:'btts',          label:'Les deux équipes qui marquent'},
+    {key:'handicap',      label:'Handicap'},
+    {key:'ht_1x2',        label:'1ère mi-temps - 1x2'},
+    {key:'ht_total',      label:'1ère mi-temps - total'}
   ];
-  var catRow2 = [
-    {key:'handicap', label:'Handicap'},
-    {key:'goal_range', label:'Plage de buts'},
-    {key:'dnb', label:'Remboursé si match nul'},
-    {key:'handicap_3way', label:'Handicap 3 voies'},
-    {key:'next_goal', label:'Prochain but'},
-    {key:'all_markets', label:'Voir tous les marchés'}
-  ];
-  out += '<div class="sb-champ-cat-grid">';
-  catRow1.forEach(function(c) {
-    var cls = (activeCat === c.key) ? ' active' : '';
-    out += '<button class="sb-ccg-btn' + cls + '" onclick="window.sbSwitchMarketCat(\'' + c.key + '\')">' + c.label + '</button>';
-  });
-  out += '</div>';
-  out += '<div class="sb-champ-cat-grid">';
-  catRow2.forEach(function(c) {
-    var cls = (c.key === 'all_markets') ? ' green' : ((activeCat === c.key) ? ' active' : '');
-    out += '<button class="sb-ccg-btn' + cls + '" onclick="window.sbSwitchMarketCat(\'' + c.key + '\')">' + c.label + '</button>';
-  });
-  out += '</div>';
-
-  // ── Market accordion — replaces the static <select>. Single full-width
-  //    header showing the active market (e.g. "Vainqueur" / "1x2") with a
-  //    +/− toggle that collapses/expands the matches list. Matches the
-  //    fcbet216 reference (image 6 + 8). ────────────────────────────────
-  var catLabel = (catRow1.concat(catRow2)).find(function(c) { return c.key === activeCat; });
-  var mktLabel = (catLabel ? catLabel.label : '1x2');
-  // Populaire bucket shows the canonical "Vainqueur / 1x2" header.
-  if (activeCat === 'populaire' || activeCat === '1x2') mktLabel = 'Vainqueur';
-  var accOpen = (S.champMktAccOpen !== false); // default open
+  var activeOpt = marketOpts.find(function(o){ return o.key === activeCat; }) || marketOpts[0];
+  var accOpen   = !!S.champMktAccOpen; // default collapsed (fcbet216 UX)
   out += '<div class="sb-champ-mkt-acc' + (accOpen ? ' open' : ' collapsed') + '" id="sb-champ-mkt-acc">';
   out += '<button type="button" class="sb-champ-mkt-acc-hdr" onclick="window.sbToggleChampMktAcc()">'
-       +   '<span class="sb-champ-mkt-acc-lbl">' + h(mktLabel) + '</span>'
+       +   '<span class="sb-champ-mkt-acc-lbl">' + h(activeOpt.label) + '</span>'
        +   '<span class="sb-champ-mkt-acc-tgl" aria-hidden="true">' + (accOpen ? '&minus;' : '&#9662;') + '</span>'
        + '</button>';
   out += '<div class="sb-champ-mkt-acc-body"' + (accOpen ? '' : ' style="display:none"') + '>';
+  marketOpts.forEach(function(o) {
+    if (o.key === activeOpt.key) return; // hide the currently selected one
+    out += '<button type="button" class="sb-champ-mkt-opt" onclick="window.sbSwitchMarketCat(\'' + o.key + '\')">'
+         +    h(o.label)
+         + '</button>';
+  });
+  out += '</div>'; // sb-champ-mkt-acc-body
+  out += '</div>'; // sb-champ-mkt-acc
 
-  // ── Match list grouped by league or by hour — each group is its OWN
-  //    accordion. "Par Ligue" groups by m.league.name, "Par Heure"
-  //    groups by start hour (e.g. "14h00").
+  // ── Matches list (always visible, OUTSIDE the dropdown) ───────────────
+  out += '<div class="sb-champ-matches">';
+
   if (!matches.length) {
     out += '<div class="sb-loader" style="margin-top:16px">Aucun match disponible pour cette ligue.</div>';
   } else {
@@ -3049,8 +3034,7 @@ function renderChampionship(id, name, flag, matches) {
     });
   }
 
-  out += '</div>'; // sb-champ-mkt-acc-body
-  out += '</div>'; // sb-champ-mkt-acc
+  out += '</div>'; // sb-champ-matches
 
   out += '</div>'; // sb-champ-view
   el.innerHTML = out;
@@ -3061,6 +3045,7 @@ function renderChampionship(id, name, flag, matches) {
 window.sbSwitchMarketCat = function(cat) {
   if (cat === 'all_markets') return; // TODO: open full markets view
   S.activeMarketCat = cat;
+  S.champMktAccOpen = false; // collapse dropdown after selection (fcbet UX)
   renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
 };
 
