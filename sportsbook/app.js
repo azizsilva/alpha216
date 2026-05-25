@@ -312,10 +312,19 @@ function effectiveTimer(m) {
     if (tmV === undefined || tmV === null) tmV = m.timer.TM;
     var tmn = parseInt(tmV, 10);
     var md = String(m.timer.md || m.timer.MD || '');
-    // Period markers are always trustworthy (HT, ET, etc.)
-    if (md === '1' || md === '3') return m.timer;
     var fb = computeFallbackTimer(m);
     var fbMin = fb ? (parseInt(fb.tm, 10) || 0) : 0;
+    var fbMd  = fb ? String(fb.md || '') : '';
+    // ── Period marker sanity check.
+    //    BetsAPI sometimes leaves md='1' (Mi-temps) stuck even though
+    //    the match has long since restarted. If kickoff time says
+    //    we're well into the 2nd half (or beyond), override the
+    //    stale HT marker with the kickoff-derived timer.
+    if (md === '1') {
+      if (fb && fbMd !== '1' && fbMin >= 46) return fb;
+      return m.timer;
+    }
+    if (md === '3') return m.timer;   // ET — trustworthy
     // Real positive minute → use it
     if (!isNaN(tmn) && tmn > 0 && tmn < 130) {
       // If the kickoff fallback is well ahead of the API timer
@@ -410,7 +419,17 @@ function formatLiveMinute(m) {
 
   if (m.timer) {
     var md = String(m.timer.md || m.timer.MD || '');
-    if (md === '1' || md === '3') return 'Mi-temps';
+    if (md === '1') {
+      // Mi-temps marker — but sanity-check against kickoff. A match
+      // 80 minutes after kick-off cannot still be at HT; BetsAPI
+      // sometimes leaves md='1' stuck.
+      if (elapsedMin >= 61) {
+        var ko1 = kickoffMinute();
+        if (ko1 && ko1 !== 'Mi-temps') return ko1;
+      }
+      return 'Mi-temps';
+    }
+    if (md === '3') return 'Mi-temps';  // injury / ET — keep marker
     var tm = m.timer.tm;
     if (tm === undefined || tm === null) tm = m.timer.TM;
     var tmn = parseInt(tm, 10);
