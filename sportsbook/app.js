@@ -1318,15 +1318,29 @@ window.sbSetLiveCat = function(key, label) {
   }
 };
 
-/* Sort live matches: Football first (sport_id=1), then by league priority */
+/* Sort live matches: Football first (sport_id=1), then by league priority.
+   LEAGUE_PRIORITY_MAP keys are matched with a substring on both sides so
+   "England Premier League", "Premier League England" and "EPL" all hit. */
 var LEAGUE_PRIORITY_MAP = {
+  'FIFA World Cup 2026': 0,
   'UEFA Champions League': 1, 'UEFA Europa League': 2, 'UEFA Conference League': 3,
-  'England Premier League': 4, 'Spain LaLiga': 5, 'Germany Bundesliga': 6,
-  'Italy Serie A': 7, 'France Ligue 1': 8, 'Netherlands Eredivisie': 9,
-  'Portugal Primeira Liga': 10, 'Belgium First Division A': 11,
-  'Turkey Super Lig': 12, 'Russia Premier League': 13,
-  'Brazil Brasileiro Serie A': 14, 'Argentina Liga Profesional': 15,
-  'FIFA World Cup 2026': 0
+  'England Premier League': 4, 'Premier League': 4,
+  'Spain LaLiga': 5, 'Spain La Liga': 5, 'LaLiga': 5, 'La Liga': 5,
+  'Germany Bundesliga': 6, 'Bundesliga': 6,
+  'Italy Serie A': 7, 'Serie A': 7,
+  'France Ligue 1': 8, 'Ligue 1': 8,
+  'Netherlands Eredivisie': 9, 'Eredivisie': 9,
+  'Portugal Primeira Liga': 10, 'Primeira Liga': 10,
+  'Belgium First Division A': 11,
+  'Turkey Super Lig': 12,
+  'Russia Premier League': 13,
+  'Brazil Brasileiro Serie A': 14, 'Brasileiro Serie A': 14,
+  'Argentina Liga Profesional': 15,
+  'England Championship': 16, 'England FA Cup': 17, 'EFL Cup': 18,
+  'Spain Copa del Rey': 19, 'Italy Coppa Italia': 20,
+  'Germany DFB Pokal': 21, 'France Coupe de France': 22,
+  'Saudi Professional League': 25,
+  'USA MLS': 28, 'Major League Soccer': 28
 };
 function getLeaguePriority(league) {
   if (!league || !league.name) return 99;
@@ -1346,6 +1360,27 @@ function sortLiveMatches(list) {
       return sa - sb2;
     }
     return getLeaguePriority(a.league) - getLeaguePriority(b.league);
+  });
+}
+/* Sort UPCOMING matches: Football first, popular leagues first, earliest
+   kickoff first. Ensures Premier League / La Liga / Serie A / Bundesliga
+   / Ligue 1 / Champions League etc. surface at the top of "Prochainement"
+   instead of being buried under lower-profile leagues. */
+function sortUpcomingMatches(list) {
+  return list.slice().sort(function(a, b) {
+    var sa = parseInt(a.sport_id || 1);
+    var sb2 = parseInt(b.sport_id || 1);
+    if (sa !== sb2) {
+      if (sa === 1) return -1;
+      if (sb2 === 1) return 1;
+      return sa - sb2;
+    }
+    var pa = getLeaguePriority(a.league);
+    var pb = getLeaguePriority(b.league);
+    if (pa !== pb) return pa - pb;
+    var ta = parseInt(a.time || a.kickoff || 0, 10) || 0;
+    var tb = parseInt(b.time || b.kickoff || 0, 10) || 0;
+    return ta - tb;                  // earliest kickoff first within same league
   });
 }
 
@@ -1419,12 +1454,15 @@ function renderMatches(results) {
     out += '</div>';
   }
 
-  // ── PROCHAINEMENT (upcoming — date/time header style) ──
+  // ── PROCHAINEMENT (upcoming — date/time header style)
+  //  Sort so famous leagues (PL, La Liga, Serie A, Bundesliga, Ligue 1,
+  //  Champions League, ...) appear first, then earliest kickoff. ──
   var showUpcoming = upcomingList;
   if (!isTodayInplay) showUpcoming = results;
   else if (liveOnlyTab) showUpcoming = [];
 
   if (showUpcoming.length) {
+    showUpcoming = sortUpcomingMatches(showUpcoming);
     out += '<div class="sb-upcoming-block">';
     out += '<div class="sb-section-title"><span>Prochainement</span><div class="sb-section-icon">' + ICON.football + '</div></div>';
     if (!isTodayInplay || !liveList.length) out += renderSportFilterRow(true); // upcoming: pills + market selects
@@ -1568,24 +1606,20 @@ function matchCard(m) {
     out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
   } else {
+    // UPCOMING — inline header that matches fcbet216:
+    //   [sport-icon] [BB] 19:30 25/05 • [flag] Bundesliga
+    out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
     out += '<span class="mc-badge-bb">BB</span>';
-    out += '<span class="mc-date">' + h(dateTimeLabel) + '</span>';
+    out += '<span class="mc-date mc-date--inline">' + h(dateTimeLabel) + '</span>';
+    out += '<span class="mc-live-sep">&bull;</span>';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
   }
   out += '</div>';
   out += '<div class="mc-hl-right">';
   out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
   out += '</div>';
   out += '</div>';
-
-  /* ── Row 2: flag + league name (ONLY for upcoming — live has it inline) ── */
-  if (!isLive) {
-    out += '<div class="mc-league-row mc-league-row--split">';
-    out += '<div class="mc-league-info">';
-    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' \u00b7 ' + countryLabel : '') + '</span>';
-    out += '</div>';
-    out += '</div>';
-  }
 
   out += '<div class="mc-body-col">';
 
@@ -1611,14 +1645,24 @@ function matchCard(m) {
     out += '</div>';
     out += '</div>';
   } else {
-    out += '<div class="mc-teams-wrap mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    // UPCOMING — fcbet216 layout: [circle-shirt][name] rows on the LEFT,
+    // [EN DIRECT btn] + [stats icon] on the FAR right (image 1 reference)
+    out += '<div class="mc-teams-wrap mc-teams-wrap--upcoming" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    out += '<div class="mc-teams-rows">';
     out += '<div class="mc-team-row">';
-    out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
+    out += '<span class="mc-shirt-cell mc-shirt-cell--circle">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
     out += '<span class="mc-t-name">' + hn + '</span>';
     out += '</div>';
     out += '<div class="mc-team-row">';
-    out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
+    out += '<span class="mc-shirt-cell mc-shirt-cell--circle">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
     out += '<span class="mc-t-name">' + an + '</span>';
+    out += '</div>';
+    out += '</div>';
+    out += '<div class="mc-upcoming-actions">';
+    out += '<button class="mc-ed-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">EN DIRECT</button>';
+    out += '<button class="mc-stats-btn" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')" aria-label="Statistiques">';
+    out += '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14V8M6 14V4M10 14V10M14 14V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    out += '</button>';
     out += '</div>';
     out += '</div>';
   }

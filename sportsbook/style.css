@@ -4443,6 +4443,107 @@ body {
   margin-left: 2px !important;
 }
 
+/* ── UPCOMING card layout — fcbet216 reference (image 1) ─────────────────
+   [circle-shirt][name] rows on the left, [EN DIRECT btn] + [stats] on the
+   right, odds row at the bottom. */
+.sb-root .mc-teams-wrap.mc-teams-wrap--upcoming {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 6px 12px 10px !important;
+  width: 100% !important;
+}
+.sb-root .mc-teams-wrap--upcoming .mc-teams-rows {
+  flex: 1 1 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+.sb-root .mc-teams-wrap--upcoming .mc-team-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-height: 28px !important;
+}
+.sb-root .mc-teams-wrap--upcoming .mc-t-name {
+  flex: 1 1 0 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+}
+/* Circular shirt cell — same family as live jersey cells */
+.sb-root .mc-shirt-cell--circle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  background: rgb(40,40,40) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-shirt-cell--circle .mc-jersey-svg {
+  width: 18px !important;
+  height: 18px !important;
+  display: block !important;
+}
+/* Right column: EN DIRECT button + stats trend icon */
+.sb-root .mc-upcoming-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-ed-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  padding: 4px 8px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  font-family: 'Roboto', sans-serif !important;
+  line-height: 1.2 !important;
+}
+.sb-root .mc-ed-btn:hover { background: rgba(255,255,255,0.06) !important; }
+.sb-root .mc-stats-btn {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255,255,255,0.55) !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+}
+.sb-root .mc-stats-btn:hover { color: #fff !important; }
+.sb-root .mc-stats-btn svg { display: block !important; width: 14px !important; height: 14px !important; }
+
+/* Upcoming card: date label looks like the live timer in the inline header */
+.sb-root .mc-hdr-live .mc-date--inline {
+  color: rgba(255,255,255,0.75) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  margin-left: 2px !important;
+  white-space: nowrap !important;
+}
+
 /* Sport icon (soccer ball / basket / etc) BEFORE the BB badge in live header */
 .sb-root .mc-hdr-live .mc-sport-badge-inline {
   width: 18px !important;

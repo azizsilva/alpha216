@@ -160,6 +160,18 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 /* Live jersey badge — circular rgb(40,40,40) on rgb(49,49,49) cards */
 .sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgb(40,40,40);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
 .sb-root .mc-jersey-cell .mc-jersey-svg{width:22px;height:22px;display:block;}
+/* UPCOMING — fcbet216 spec: circle-shirt rows + EN DIRECT btn + stats icon */
+.sb-root .mc-teams-wrap--upcoming{display:flex;flex-direction:row;align-items:center;gap:12px;padding:6px 12px 10px;width:100%;cursor:pointer;}
+.sb-root .mc-teams-wrap--upcoming .mc-teams-rows{flex:1 1 0;display:flex;flex-direction:column;gap:6px;min-width:0;}
+.sb-root .mc-teams-wrap--upcoming .mc-team-row{display:flex;flex-direction:row;align-items:center;gap:10px;width:100%;min-height:28px;}
+.sb-root .mc-teams-wrap--upcoming .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.sb-root .mc-shirt-cell--circle{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgb(40,40,40);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+.sb-root .mc-shirt-cell--circle .mc-jersey-svg{width:18px;height:18px;display:block;}
+.sb-root .mc-upcoming-actions{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;}
+.sb-root .mc-ed-btn{background:transparent;border:1px solid rgba(255,255,255,0.30);border-radius:4px;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;}
+.sb-root .mc-stats-btn{background:transparent;border:none;color:rgba(255,255,255,0.55);width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+.sb-root .mc-stats-btn svg{display:block;width:14px;height:14px;}
+.sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
