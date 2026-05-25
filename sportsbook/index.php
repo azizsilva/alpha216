@@ -95,23 +95,27 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
   .sb-right{bottom:0!important;left:0!important;right:0!important;top:auto!important;width:100%!important;max-height:82vh!important;border-radius:16px 16px 0 0!important;transform:translateY(100%)!important;border-left:none!important;border-top:1px solid rgba(255,255,255,0.10)!important;background:#181818!important;}
   .sb-right.open{transform:translateY(0)!important;box-shadow:0 -10px 60px rgba(0,0,0,0.9)!important;}
 }
-/* ── Match cards — beat Bootstrap 3 from parent site ── */
-.sb-root .mc{background:#282828!important;border:1px solid rgba(255,255,255,0.10)!important;border-radius:10px!important;margin-bottom:6px!important;display:flex!important;flex-direction:column!important}
-.sb-root .mc-hdr-live{display:flex!important;justify-content:space-between!important;padding:10px 12px 4px!important}
-.sb-root .mc-badge-bb{background:#71f669!important;color:rgba(0,0,0,.87)!important;font-size:10px!important;font-weight:700!important;padding:2px 5px!important;border-radius:3px!important}
-.sb-root .mc-live-badge{background:#e02424!important;color:#fff!important;font-size:9px!important;font-weight:800!important;padding:2px 7px!important;border-radius:4px!important;border:none!important}
-.sb-root .mc-live-min{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
-.sb-root .mc-league-row{padding:0 12px 8px!important;display:flex!important;align-items:center!important}
-.sb-root .mc-league-name{color:rgba(255,255,255,0.55)!important;font-size:11px!important}
+/* ── Match cards — fcbet216 prelive design (Bootstrap no longer loaded here) ── */
+.sb-root .mc{background:#282828;border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-bottom:8px;display:flex;flex-direction:column;overflow:hidden;}
+.sb-root .mc-hdr-live{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 4px;}
+.sb-root .mc-hl-left{display:flex;align-items:center;gap:6px;flex:1;min-width:0;}
+.sb-root .mc-hl-right{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.sb-root .mc-badge-bb{background:#71f669;color:rgba(0,0,0,.87);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;line-height:1.5;letter-spacing:.2px;}
+.sb-root .mc-live-badge{background:#e02424;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;border:none;line-height:1.4;letter-spacing:.4px;}
+.sb-root .mc-live-min{color:rgba(255,255,255,0.65);font-size:11px;font-weight:500;margin-left:2px;}
+.sb-root .mc-league-row{padding:0 12px 8px;display:flex;align-items:center;gap:6px;}
+.sb-root .mc-league-info{display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;}
+.sb-root .mc-league-flag{width:16px;height:11px;object-fit:cover;border-radius:1px;flex-shrink:0;}
+.sb-root .mc-league-name{color:rgba(255,255,255,0.55);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* Global font — Roboto matches alpina216.com */
-.sb-root,.sb-root *{font-family:'Roboto',sans-serif!important}
-/* Stacked teams layout */
-.sb-root .mc-teams-wrap{display:flex!important;align-items:center!important;padding:4px 12px 8px!important;width:100%!important;cursor:pointer!important}
-.sb-root .mc-teams-stacked{flex:1!important;display:flex!important;flex-direction:column!important;gap:6px!important;min-width:0!important}
-.sb-root .mc-team-row{display:flex!important;align-items:center!important;gap:8px!important;min-height:24px!important}
-.sb-root .mc-t-name{color:#fff!important;font-size:13px!important;font-weight:500!important;flex:1!important;min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.sb-root .mc-t-score{color:#fff!important;font-size:15px!important;font-weight:700!important;flex-shrink:0!important;min-width:16px!important;text-align:right!important}
-.sb-root .mc-jersey-svg{width:22px!important;height:22px!important;flex-shrink:0!important;display:inline-block!important;overflow:visible!important}
+.sb-root,.sb-root *{font-family:'Roboto',sans-serif;}
+/* Teams: each team on its OWN row, left-aligned, no overlap, plain shirt SVG */
+.sb-root .mc-teams-wrap--rows{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;padding:4px 12px 10px;width:100%;cursor:pointer;}
+.sb-root .mc-teams-wrap--rows .mc-team-row{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
+.sb-root .mc-shirt-cell{width:24px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:flex-start;}
+.sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;flex-shrink:0;}
+.sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 auto;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.sb-root .mc-teams-wrap--rows .mc-t-score{flex-shrink:0;font-size:14px;font-weight:700;color:#fff;min-width:14px;text-align:right;}
 /* Odds row — fcbet216 .jgpuF exact */
 .sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important;align-items:center!important}
 .sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
