@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525av';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525aw';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -239,6 +239,18 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 /* Defensive: any legacy markup using these classes also renders plain shirt */
 .sb-root .mc-shirt-cell--circle,.sb-root .mc-shirt-cell{display:inline-flex!important;align-items:center;justify-content:center;width:20px;height:20px;border-radius:0!important;background:transparent!important;border:0!important;flex-shrink:0;overflow:visible;box-sizing:border-box;margin-right:8px;}
 .sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:18px;height:18px;display:block;stroke:rgba(255,255,255,0.95);stroke-width:0.6;}
+/* SLC carousel (Type B "before Cotes boostées") — fcbet216 image 3 EXACT */
+.sb-root .slc-jersey-wrap,.sb-root .mc-jersey-wrap,.sb-root .slc-jerseys-overlap .mc-jersey-wrap{width:28px!important;height:28px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,0.85)!important;background:rgb(48,48,48)!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;overflow:hidden!important;box-sizing:border-box!important;}
+.sb-root .slc-jerseys-overlap{display:flex!important;flex-shrink:0!important;align-items:center!important;gap:0!important;}
+.sb-root .slc-jerseys-overlap .mc-jersey-wrap:first-child{z-index:2!important;position:relative!important;margin:0!important;}
+.sb-root .slc-jerseys-overlap .mc-jersey-wrap:last-child{margin-left:-8px!important;z-index:1!important;position:relative!important;}
+.sb-root .slc-jerseys-overlap .mc-jersey-svg{width:18px!important;height:18px!important;}
+.sb-root .slc-hdr .slc-sport-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;color:rgba(255,255,255,0.78)!important;margin-right:2px!important;}
+.sb-root .slc-hdr .slc-sport-icon svg{width:14px!important;height:14px!important;display:block!important;}
+.sb-root .slc-hdr{padding:10px 14px 6px!important;}
+.sb-root .slc-mid{padding:4px 14px 8px!important;}
+/* SLC EN DIRECT — fcbet216 .cqljKD EXACT */
+.sb-root .slc-live-badge{background:rgb(251,51,51)!important;color:rgb(255,255,255)!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-weight:500!important;line-height:12px!important;padding:2px 4px!important;border:0!important;border-radius:4px!important;letter-spacing:0!important;text-transform:uppercase!important;flex-shrink:0!important;white-space:nowrap!important;}
 .sb-root .mc-upcoming-actions{display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;}
 .sb-root .mc-ed-pill{background:transparent;border:1px solid rgba(255,255,255,0.35);border-radius:4px;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:3px 6px;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;display:inline-flex;align-items:center;}
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}
@@ -281,7 +293,12 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-score{flex-shrink:0;font-family:'Roboto',sans-serif;font-size:14px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;line-height:18px;}
 /* Odds row — fcbet216 reference image 1: tight gap to team rows + lighter buttons */
 .sb-root .mc-odds-bot{display:flex!important;gap:6px!important;padding:0 12px 10px!important;align-items:center!important;margin-top:2px!important}
-.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(58,58,58)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:6px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
+/* Odds chip — fcbet216 EXACT .glRfhP CSS provided by user:
+   bg rgb(74,74,74), value rgb(113,246,105), radius 4px, 1px
+   transparent border, padding 0 on the wrapper, no shadow. */
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(74,74,74)!important;background-color:rgb(74,74,74)!important;background-image:none!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:rgba(13,13,13,0) 0px 0px 0px 0px,rgba(13,13,13,0) 0px 0px 0px 0px inset!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;color:rgb(113,246,105)!important;text-align:start!important;}
+.sb-root .mc-odd-btn .mc-odd-lbl{color:rgba(255,255,255,0.55)!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-weight:500!important;}
+.sb-root .mc-odd-btn .mc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:700!important;}
 .sb-root .mc-odd-lbl{color:rgba(255,255,255,0.55)!important;font-size:11px!important;font-weight:500!important}
 .sb-root .mc-odd-val{color:rgb(113,246,105)!important;font-size:14px!important;font-weight:700!important}
 /* Chevron button — same gray family as odds buttons */

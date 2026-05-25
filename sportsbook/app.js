@@ -1961,8 +1961,8 @@ function matchCard(m) {
         else if (_elapsed >= 0) _tmBase = Math.max(1, _elapsed);
       }
     }
-    // Sport icon BEFORE BB badge (small soccer/basket/etc — matches fcbet216)
-    out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
+    // fcbet216 Type A (En direct maintenant list) — NO sport icon in header.
+    // Just: BB · EN DIRECT · timer
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     if (!liveMin) liveMin = 'En cours';
@@ -2254,19 +2254,20 @@ function renderEnDirectCards(matches) {
 
     out += '<div class="slc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-    // ── Header: [BB] [EN DIRECT] [timer] [•] [flag] [league] — clean fcbet layout ──
+    // ── Header: [⚽] [BB] [EN DIRECT] [timer] · [flag] [league]
+    //    fcbet216 Type B (before Cotes boostées) — image 3 ref ──
     out += '<div class="slc-hdr">';
+    out += '<span class="slc-sport-icon">' + spIconSm + '</span>';
     out += '<span class="slc-bb">BB</span>';
     if (isLive) {
       out += '<span class="slc-live-badge">EN DIRECT</span>';
       if (timerMin) {
         out += '<span class="slc-time">' + h(timerMin) + '</span>';
-        out += '<span class="slc-sep">&bull;</span>';
       }
     } else {
       out += '<span class="slc-time">' + timeStr + '</span>';
-      out += '<span class="slc-sep">&bull;</span>';
     }
+    out += '<span class="slc-sep">&bull;</span>';
     out += '<img src="' + lgFlagUrl + '" class="slc-flag" onerror="this.style.display=\'none\'">';
     out += '<span class="slc-lg">' + lgName + '</span>';
     out += '</div>';
