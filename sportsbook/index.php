@@ -19,6 +19,31 @@ for($i=0;$i<7;$i++){
   $dates[] = ['day'=>$i===0?"Aujourd'hui":$fr_days[$dow], 'num'=>date('j',$ts)];
 }
 ?>
+<!-- ── INSTANT PAINT — runs before any external CSS loads ──────────────
+     Kills the "black flash on reload" by painting the dark sportsbook
+     background + a centered loading splash the moment the HTML parser
+     reaches this <style>. The splash is removed by app.js once the
+     first matches finish rendering (see sbHideBootSplash in app.js). -->
+<style id="sb-boot-paint">
+html, body { background: #0a0a0a !important; margin: 0; padding: 0; color: #fff; }
+body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
+.sb-root { background: #0a0a0a; min-height: 100vh; }
+#sb-boot-splash {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #0a0a0a;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .25s ease;
+}
+#sb-boot-splash.hide { opacity: 0; pointer-events: none; }
+#sb-boot-splash .ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.10);
+  border-top-color: #70f669;
+  animation: sb-boot-spin .8s linear infinite;
+}
+@keyframes sb-boot-spin { to { transform: rotate(360deg); } }
+</style>
+
 <!-- Fonts: preconnect + swap for zero render blocking -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,10 +57,14 @@ for($i=0;$i<7;$i++){
 $sb_css_v = @filemtime(__DIR__ . '/style.css') ?: time();
 $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 ?>
+<!-- Preload tells the browser to start fetching these at high priority
+     before parsing reaches the actual <link>/<script> tags. -->
+<link rel="preload" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" as="style">
+<link rel="preload" href="<?=$base?>sportsbook/app.js?v=<?=$sb_js_v?>" as="script">
 <link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" id="sb-css-link">
-<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="expires" content="0">
+<!-- Cache the page itself for 60s so a hard-reload over a flaky link still
+     boots fast; the css/js URLs already carry filemtime cache-bust. -->
+<meta http-equiv="cache-control" content="public, max-age=60">
 
 <style id="sb-critical-mobile">
 @media (max-width:1100px){
@@ -164,6 +193,10 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 /* Championship top tabs — horizontal scroll */
 .sb-root .sb-champ-top-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:0!important;scrollbar-width:none!important;}
 </style>
+
+<!-- Loading splash — visible from the very first paint until app.js
+     finishes the initial render. Removed by sbHideBootSplash() in app.js. -->
+<div id="sb-boot-splash"><div class="ring"></div></div>
 
 <div class="sb-root">
 

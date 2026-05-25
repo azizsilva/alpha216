@@ -321,11 +321,12 @@ $__sb_skip_bootstrap = ($__sb_path !== '' && (preg_match('#/sportsbook(?:/|$)#i'
         launchGame(id, name);
     }
   </script>
-  <!-- Bootstrap JS + Owl Carousel are kept loaded everywhere: only their
-       CSS conflicted with the sportsbook UI, the JS is needed by other
-       page initialisers (e.g. $('.owl-carousel').owlCarousel(...)). -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <!-- Bootstrap JS + Owl Carousel — `defer` lets the browser keep parsing
+       the HTML (and start rendering) while these download. They still
+       execute before $(document).ready callbacks fire, so jQuery code
+       that depends on .modal() / .dropdown() / .owlCarousel() works. -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" defer></script>
   <script>  
     (function () {
       try {

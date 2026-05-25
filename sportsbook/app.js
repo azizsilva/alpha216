@@ -3622,6 +3622,19 @@ function _sbUpdateNavArrows() {
   setTimeout(_sbUpdateNavArrows, 1500); // after sport tiles render
 })();
 
+/* ── Boot splash control — hide the loading ring once we've painted ── */
+function sbHideBootSplash() {
+  var el = document.getElementById('sb-boot-splash');
+  if (!el || el.classList.contains('hide')) return;
+  el.classList.add('hide');
+  setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 350);
+}
+// Safety net: never let the splash stick around longer than 4s
+setTimeout(sbHideBootSplash, 4000);
+// Hide as soon as the first real render lands in the DOM
+window.addEventListener('load', function() { setTimeout(sbHideBootSplash, 150); });
+document.addEventListener('DOMContentLoaded', function() { setTimeout(sbHideBootSplash, 800); });
+
 /* ── Init ─────────────────────────────────────────────────── */
 loadCounts();
 startPolling();
@@ -3632,5 +3645,7 @@ renderPopularBets();
 if (!sbRestoreFromUrl()) {
   loadAndFilter('inplay', 1, null);
 }
+// Hide splash now that the page chrome is rendered (data fills in async)
+sbHideBootSplash();
 
 })();
