@@ -210,7 +210,7 @@ body {
 }
 .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 
-/* EN DIRECT — dark container, red badge inside by default */
+/* EN DIRECT — inactive: gray chip + red pill; active: full green + black text */
 .sb-btn-live {
   background: var(--sb-bg-alt);
   color: var(--sb-text-2);
@@ -219,8 +219,7 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* The EN DIRECT badge label inside EN DIRECT button */
-.sb-btn-live .sb-live-badge {
+.sb-btn-live:not(.active) .sb-live-badge {
   background: #e02424;
   color: #fff;
   font-size: 10px;
@@ -231,19 +230,23 @@ body {
   border-radius: 4px;
   white-space: nowrap;
 }
-/* When EN DIRECT tab is ACTIVE — full green, badge disappears */
 .sb-btn-live.active {
-  background: var(--sb-green);
-  color: var(--sb-green-font);
+  background: #70f669 !important;
+  color: rgba(0, 0, 0, 0.87) !important;
   flex: 1;
   width: auto;
 }
 .sb-btn-live.active .sb-live-badge {
-  background: transparent;
-  color: var(--sb-green-font);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
+  background: none !important;
+  background-color: transparent !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .sb-btn-stats {
@@ -2324,15 +2327,18 @@ body {
   border-radius: 4px !important;
   white-space: nowrap !important;
 }
-/* EN DIRECT badge when ACTIVE — transparent on green button */
+/* EN DIRECT badge when ACTIVE — black uppercase on full green (fcbet216) */
 .sb-mobile-topbar .sb-btn-live.active .sb-live-badge {
-  background: transparent !important;
-  color: #fff !important;
-  font-size: 11px !important;
+  background: none !important;
+  background-color: transparent !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
   padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }

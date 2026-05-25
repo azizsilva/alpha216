@@ -3518,6 +3518,20 @@ window.sbSwitchLiveSport = function(sportId, btn) {
 };
 
 // Switch to live view (En direct button)
+// Sync EN DIRECT / Home active state on desktop sidebar + mobile topbar
+function sbSetTopbarActive(mode) {
+  document.querySelectorAll('.sb-top-bar, .sb-mobile-topbar').forEach(function(bar) {
+    var homeBtn = bar.querySelector('.sb-btn-home');
+    var liveBtn = bar.querySelector('.sb-btn-live');
+    bar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
+    if (mode === 'live') {
+      if (liveBtn) liveBtn.classList.add('active');
+    } else if (homeBtn) {
+      homeBtn.classList.add('active');
+    }
+  });
+}
+
 window.sbSwitchLive = function(btn) {
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
@@ -3527,29 +3541,14 @@ window.sbSwitchLive = function(btn) {
   S.userPickedSport = false;
   var rootLive = document.querySelector('.sb-root');
   if (rootLive) rootLive.setAttribute('data-view', 'livepage');
-  var topbar = document.querySelector('.sb-mobile-topbar');
-  if (topbar) {
-    topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
-    var lb = topbar.querySelector('.sb-btn-live');
-    if (lb) lb.classList.add('active');
-  }
+  sbSetTopbarActive('live');
   sbSetHomepanelVisible(false);
   loadAndFilter('inplay', 1, null);
   startPolling();
 };
 
 window.sbSwitchTab = function(btn, action, sportId) {
-  var topbar = document.querySelector('.sb-mobile-topbar');
-  if (topbar) {
-    var homeBtn = topbar.querySelector('.sb-btn-home');
-    var liveBtn = topbar.querySelector('.sb-btn-live');
-    topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
-    if (action === 'live') {
-      if (liveBtn) liveBtn.classList.add('active');
-    } else {
-      if (homeBtn) homeBtn.classList.add('active');
-    }
-  }
+  sbSetTopbarActive(action === 'live' ? 'live' : 'home');
 
   S.activeTab = (action === 'live') ? 'live' : 'home';
   if (action !== 'live') S.liveSearchQ = '';
