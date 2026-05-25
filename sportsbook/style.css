@@ -4413,15 +4413,14 @@ body {
   display: block !important;
 }
 /* ── LIVE card layout — shirts side-by-side LEFT, stacked names+scores RIGHT
-   (fcbet216 prelive live card spec). Each shirt is its own plain SVG inside
-   a small cell with a clear gap between them — no overlap.
-   Tightened vertical padding for reduced height (user spec). ── */
+   (fcbet216 prelive live card spec). Tight bottom padding so the odds row
+   sits flush against the team rows — matches reference image 1. ── */
 .sb-root .mc-teams-wrap.mc-teams-wrap--side {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   gap: 10px !important;
-  padding: 2px 12px 6px !important;
+  padding: 2px 12px 4px !important;
   width: 100% !important;
 }
 .sb-root .mc-jerseys-side {
@@ -4974,34 +4973,42 @@ body {
   white-space: nowrap !important;
 }
 
-/* Odds row — tight vertical padding to reduce card height */
+/* Odds row — fcbet216 reference image 1 (South Melbourne vs Avondale):
+   small gap between buttons, tight 2px top margin so the row sits CLOSE
+   to the team rows instead of floating below them. */
 .sb-root .mc-odds-bot {
   display: flex !important;
-  gap: 5px !important;
-  padding: 0 12px 8px !important;
+  gap: 6px !important;
+  padding: 0 12px 10px !important;
+  margin-top: 2px !important;
   width: 100% !important;
 }
 
-/* Odds button — fcbet216 reference: rgb(40,40,40) on rgb(49,49,49) card */
+/* Odds button — fcbet216 reference: rgb(58,58,58) one step lighter than
+   the card surface (rgb(49,49,49)) so the buttons read as elevated chips
+   in the same gray family — never near-black like the previous
+   rgb(40,40,40). 1px hairline border for definition. */
 .sb-root button.mc-odd-btn,
 .sb-root .mc-odd-btn {
-  background: rgb(40,40,40) !important;
-  border: 1px solid rgba(255,255,255,0) !important;
-  border-radius: 5px !important;
-  height: 38px !important;
-  min-height: 38px !important;
+  background: rgb(58,58,58) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 6px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   padding: 0 12px !important;
 }
+.sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.55) !important; }
+.sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-weight: 700 !important; }
 
-/* Chevron button — matches odds button visual family */
+/* Chevron button — same gray family as odds buttons */
 .sb-root button.mc-chevron-btn,
 .sb-root .mc-chevron-btn {
-  width: 38px !important;
-  min-width: 38px !important;
-  height: 38px !important;
-  background: rgb(40,40,40) !important;
-  border: 1px solid rgba(255,255,255,0) !important;
-  border-radius: 5px !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  background: rgb(58,58,58) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 6px !important;
   box-shadow: none !important;
   display: flex !important;
   align-items: center !important;

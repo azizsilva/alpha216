@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525e';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525f';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -166,7 +166,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;flex-shrink:0;}
 .sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
 /* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
-.sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:10px;padding:2px 12px 6px;width:100%;cursor:pointer;}
+.sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:10px;padding:2px 12px 4px;width:100%;cursor:pointer;}
 .sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
 /* Live jersey — PLAIN shirt SVG, NO circle wrapper, hairline white edge */
 .sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:0;background:transparent;border:none;flex-shrink:0;}
@@ -201,13 +201,13 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-score{flex-shrink:0;font-size:15px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;}
-/* Odds row — fcbet216 .jgpuF exact — tight vertical padding for reduced card height */
-.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 8px!important;align-items:center!important}
-.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(40,40,40)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:5px!important;height:38px!important;min-height:38px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
-.sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:400!important}
+/* Odds row — fcbet216 reference image 1: tight gap to team rows + lighter buttons */
+.sb-root .mc-odds-bot{display:flex!important;gap:6px!important;padding:0 12px 10px!important;align-items:center!important;margin-top:2px!important}
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(58,58,58)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:6px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
+.sb-root .mc-odd-lbl{color:rgba(255,255,255,0.55)!important;font-size:11px!important;font-weight:500!important}
 .sb-root .mc-odd-val{color:rgb(113,246,105)!important;font-size:14px!important;font-weight:700!important}
-/* Chevron button — matches reference style */
-.sb-root button.mc-chevron-btn{width:38px!important;height:40px!important;background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;box-shadow:none!important;flex-shrink:0!important;cursor:pointer!important;}
+/* Chevron button — same gray family as odds buttons */
+.sb-root button.mc-chevron-btn{width:40px!important;height:40px!important;background:rgb(58,58,58)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:6px!important;box-shadow:none!important;flex-shrink:0!important;cursor:pointer!important;}
 /* Collapse hides only odds btns — chevron stays visible to allow re-expand */
 .sb-root .mc.mc-collapsed .mc-odd-btn,.sb-root .mc.mc-collapsed .mc-no-market{display:none!important;}
 .sb-root button.mc-chevron-btn.mc-chevron-up svg{transform:rotate(180deg)!important;}
