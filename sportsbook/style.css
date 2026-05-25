@@ -5594,6 +5594,25 @@ button.md-odd-btn,
   display: none !important;
 }
 
+/* EN DIRECT tab — clean live-only view (fcbet216 mobile live page) */
+.sb-root[data-view="livepage"] .sb-date-row,
+.sb-root[data-view="livepage"] .sb-favoris-row,
+.sb-root[data-view="livepage"] .sb-favoris-content,
+.sb-root[data-view="livepage"] .sb-sport-nav,
+.sb-root[data-view="livepage"] .sb-en-direct-row,
+.sb-root[data-view="livepage"] #sb-en-direct-cards,
+.sb-root[data-view="livepage"] .sb-boost-section,
+.sb-root[data-view="livepage"] #sb-boost-section,
+.sb-root[data-view="livepage"] #sb-boost-dots,
+.sb-root[data-view="livepage"] .sb-mob-leagues-panel,
+.sb-root[data-view="livepage"] .sb-mob-inline-leagues,
+.sb-root[data-view="livepage"] .sb-points-forts-block {
+  display: none !important;
+}
+.sb-root[data-view="livepage"] #sb-matches-body {
+  padding-top: 8px !important;
+}
+
 /* Match detail view — hide every home/sport-page sibling so only the
    match-detail header + tabs + markets are visible. */
 .sb-root[data-view="matchdetail"] .sb-date-row,

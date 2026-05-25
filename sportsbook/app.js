@@ -1192,6 +1192,10 @@ function applyLiveRefresh(ids, targetList) {
           m.time_status = upd.time_status;
           updated = true;
         }
+        if (upd.stats) {
+          m.stats = upd.stats;
+          updated = true;
+        }
       });
       return updated;
     })
@@ -1675,12 +1679,15 @@ function sortUpcomingMatches(list) {
 
 function renderSportFilterRow(showMarkets) {
   var liveSports = SPORTS.filter(function(sp) { return sp.live !== false; }).slice(0, 8);
+  var isLiveView = (S.activeTab === 'live');
   var out = '<div class="sb-upcoming-tabs">';
   liveSports.forEach(function(sp) {
     var isActive = showMarkets ? (sp.id === S.activeUpcomingTab) : (sp.id === S.activeSportId);
     var onClick = showMarkets
       ? 'window.sbSetUpcomingTab(' + sp.id + ',this)'
-      : 'window.sbSwitchTab(null,\'inplay\',' + sp.id + ')';
+      : (isLiveView
+          ? 'window.sbSwitchLiveSport(' + sp.id + ',this)'
+          : 'window.sbSwitchTab(null,\'inplay\',' + sp.id + ')');
     out += '<button type="button" class="sb-upcoming-tab' + (isActive ? ' active' : '') + '" onclick="' + onClick + '">';
     out += '<div class="sb-tab-icon">' + sp.icon + '</div>';
     out += '<span class="sb-tab-name">' + h(sp.name) + '</span>';
@@ -1716,13 +1723,15 @@ function renderMatches(results) {
   var isTodayInplay = (S.activeAction === 'inplay' && S.activeDateOffset === 0);
   var liveOnlyTab = (S.activeTab === 'live');
 
-  // Carousel + boosted — always shown on main homepage (matches fcbet behaviour)
-  if (!S.activeLeagueId && S.viewMode === 'main') {
+  // Carousel + boosted — home page only (NOT on EN DIRECT tab).
+  if (!S.activeLeagueId && S.viewMode === 'main' && !liveOnlyTab) {
     var carouselSrc = liveList.length ? liveList : results;
     renderEnDirectCards(carouselSrc.slice(0, 6));
     renderBoosted(results.slice(0, 4));
-    // Ensure homepage panels are visible (may have been hidden from a previous sub-view)
     sbSetHomepanelVisible(true);
+  } else if (liveOnlyTab) {
+    // EN DIRECT tab: hide carousel / boost / sport nav — show matches only.
+    sbSetHomepanelVisible(false);
   }
 
   var out = '';
@@ -1761,8 +1770,8 @@ function renderMatches(results) {
     out += '</div>';
   }
 
-  // ── POINTS FORTS (featured top-league matches — live + upcoming from big leagues) ──
-  if (!S.activeLeagueId && S.viewMode === 'main') {
+  // ── POINTS FORTS — home page only, not EN DIRECT tab ──
+  if (!S.activeLeagueId && S.viewMode === 'main' && !liveOnlyTab) {
     var TOP_LEAGUE_KEYWORDS = [
       'Champions League','Europa League','Conference League',
       'Premier League','LaLiga','La Liga','Serie A','Bundesliga','Ligue 1',
@@ -3423,6 +3432,23 @@ window.sbBackToHome = function() {
   window.scrollTo({ top: 0, behavior: 'instant' in window.scrollTo ? 'instant' : 'auto' });
 };
 
+// Switch sport while staying on EN DIRECT tab (Football / Basketball / …)
+window.sbSwitchLiveSport = function(sportId, btn) {
+  S.activeTab = 'live';
+  S.activeSportId = sportId || 1;
+  S.activeAction = 'inplay';
+  S.activeDateOffset = 0;
+  S.activeLeagueId = null;
+  S.viewMode = 'main';
+  var root = document.querySelector('.sb-root');
+  if (root) root.setAttribute('data-view', 'livepage');
+  document.querySelectorAll('.sb-upcoming-tab').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  sbSetHomepanelVisible(false);
+  loadAndFilter('inplay', sportId, null);
+  startPolling();
+};
+
 // Switch to live view (En direct button)
 window.sbSwitchLive = function(btn) {
   document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
@@ -3431,17 +3457,17 @@ window.sbSwitchLive = function(btn) {
   S.activeSportId = 1; S.activeAction = 'inplay'; S.activeLeagueId = null; S.activeDateOffset = 0;
   S.viewMode = 'main';
   S.userPickedSport = false;
-  // Exit sport-page mode if we were in it (live view = home view).
   var rootLive = document.querySelector('.sb-root');
-  if (rootLive) rootLive.removeAttribute('data-view');
+  if (rootLive) rootLive.setAttribute('data-view', 'livepage');
   var topbar = document.querySelector('.sb-mobile-topbar');
   if (topbar) {
     topbar.querySelectorAll('.sb-btn-home, .sb-btn-live').forEach(function(b) { b.classList.remove('active'); });
     var lb = topbar.querySelector('.sb-btn-live');
     if (lb) lb.classList.add('active');
   }
+  sbSetHomepanelVisible(false);
   loadAndFilter('inplay', 1, null);
-  startPolling(); // 5s poll for live view
+  startPolling();
 };
 
 window.sbSwitchTab = function(btn, action, sportId) {
@@ -3459,33 +3485,37 @@ window.sbSwitchTab = function(btn, action, sportId) {
 
   S.activeTab = (action === 'live') ? 'live' : 'home';
   S.activeSportId = sportId || 1;
-  // If 'home' or 'live', we actually want 'inplay' internally, UNLESS 'upcoming' is clicked
   S.activeAction = (action === 'live' || action === 'home') ? 'inplay' : action;
   S.activeLeagueId = null;
-  S.activeDateOffset = (action === 'upcoming') ? 1 : 0; // Default to tomorrow for upcoming if clicked from nav
-  // Reset match/league state and clear URL when switching tabs
+  S.activeDateOffset = (action === 'upcoming') ? 1 : 0;
   S.activeLeagueName = null; S.activeLeagueFlag = null;
   S.activeMatchId    = null; S.viewMode         = 'main';
   S.champMatches     = [];
   S.userPickedSport  = false;
-  // Always leave sport-page mode when switching home/live/upcoming tabs.
   var rootHL = document.querySelector('.sb-root');
-  if (rootHL) rootHL.removeAttribute('data-view');
+  if (rootHL) {
+    if (action === 'live') {
+      rootHL.setAttribute('data-view', 'livepage');
+      sbSetHomepanelVisible(false);
+    } else {
+      rootHL.removeAttribute('data-view');
+      sbSetHomepanelVisible(true);
+    }
+  }
   clearInterval(window._mdTimerInterval);
   var _v = document.getElementById('sb-match-viewer');
   if (_v) _v.style.display = 'none';
-  sbSetHomepanelVisible(true);
   sbPushUrl('main');
 
   if (btn && btn.classList.contains('sb-sport-item')) {
      document.querySelectorAll('.sb-sport-item').forEach(function(b) { b.classList.remove('active'); });
      btn.classList.add('active');
-  } else {
+  } else if (action !== 'live') {
      renderSportNav();
   }
 
   loadAndFilter(S.activeAction, S.activeSportId, null);
-  startPolling(); // restart with correct interval (5s live / 15s upcoming)
+  startPolling();
 };
 
 // Scroll the sport nav (whole inner row now scrolls natively)

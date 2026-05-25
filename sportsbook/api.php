@@ -327,6 +327,34 @@ function _normalize_timer($src) {
     return ['tm' => (string)$tm, 'ts' => (string)$ts, 'md' => (string)$md];
 }
 
+// Normalize BetsAPI stats into { yellow_cards:[home,away], ... } arrays.
+function _normalize_stats($raw) {
+    if (!$raw || !is_array($raw)) return null;
+    $aliases = [
+        'yellow_cards'      => ['yellow_cards','yellowcards','yellowcard','yellow card'],
+        'red_cards'         => ['red_cards','redcards','redcard','red card'],
+        'corners'           => ['corners','corner','corner_kicks','corner kicks'],
+        'on_target'         => ['on_target','on target','shots_on_target','shots on target','shots on goal'],
+        'dangerous_attacks' => ['dangerous_attacks','dangerous attacks'],
+        'attacks'           => ['attacks','attack'],
+    ];
+    $out = [];
+    foreach ($aliases as $canonical => $keys) {
+        foreach ($keys as $k) {
+            if (!isset($raw[$k])) continue;
+            $v = $raw[$k];
+            if (is_array($v)) {
+                $out[$canonical] = [
+                    (string)($v[0] ?? $v['home'] ?? '0'),
+                    (string)($v[1] ?? $v['away'] ?? '0'),
+                ];
+            }
+            break;
+        }
+    }
+    return $out ?: $raw;
+}
+
 // ═══ Helper: extract inline 1x2 odds from inplay_filter match object ══════
 function _extract_inplay_match_odds($m) {
     $o = $m['odds'] ?? null;
@@ -1674,14 +1702,15 @@ if ($action === 'live_refresh') {
             } catch (Exception $e) {}
         }
 
-        // v3/event/view — fresh score + timer (half-time, 2nd half)
+        // v3/event/view — fresh score + timer + stats (half-time, 2nd half)
         $v3 = betsapi_get('/v3/event/view', ['event_id' => $db_mid, 'source' => 'bet365']);
-        $ss = null; $timer = null; $ts_stat = '1';
+        $ss = null; $timer = null; $ts_stat = '1'; $stats = null;
         if (!empty($v3['results'][0])) {
             $ev3 = $v3['results'][0];
             $ss = $ev3['ss'] ?? null;
             $timer = _normalize_timer($ev3['timer'] ?? null);
             $ts_stat = (string)($ev3['time_status'] ?? '1');
+            if (!empty($ev3['stats'])) $stats = _normalize_stats($ev3['stats']);
         }
 
         // BetsAPI /v1/bet365/event — fresh live odds stream
@@ -1738,6 +1767,7 @@ if ($action === 'live_refresh') {
                 if ($ss !== null)  $md['ss'] = $ss;
                 if ($timer)        $md['timer'] = $timer;
                 if ($ts_stat)      $md['time_status'] = $ts_stat;
+                if ($stats)        $md['stats'] = $stats;
                 if ($live_odds)    $md['live_odds'] = $live_odds;
                 $pdo->prepare("UPDATE sb_matches SET score=?, timer_info=?, status=?, raw_json=?, updated_at=CURRENT_TIMESTAMP WHERE id=?")
                     ->execute([
@@ -1750,7 +1780,7 @@ if ($action === 'live_refresh') {
             } catch (Exception $e) {}
         }
 
-        $refreshed[$db_mid] = ['ss' => $ss, 'timer' => _normalize_timer($timer), 'time_status' => $ts_stat, 'live_odds' => $live_odds];
+        $refreshed[$db_mid] = ['ss' => $ss, 'timer' => _normalize_timer($timer), 'time_status' => $ts_stat, 'stats' => $stats, 'live_odds' => $live_odds];
     }
     echo json_encode(['success' => 1, 'refreshed' => $refreshed]);
     exit;
