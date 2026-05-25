@@ -989,6 +989,50 @@ if ($action === 'inplay') {
             $results = db_fetch_matches($pdo,"sport_id=? AND status='upcoming'",[$sport_id],500,$sport_id);
     }
 
+    // ── Step 6b: ALWAYS merge DB-live matches for TOP EUROPEAN LEAGUES ──
+    // BetsAPI inplay_filter sometimes drops matches from major leagues
+    // (paginated past p5, transient API hiccup, etc). We refuse to let
+    // Premier League / Bundesliga / La Liga / Serie A / Ligue 1 /
+    // Champions League / Europa / Conference / World Cup / Coupe du
+    // Monde / Eredivisie / Primeira Liga / Allsvenskan etc. disappear
+    // from the home-page live list when the DB has them marked inplay.
+    if ($db_connected && (int)$sport_id === 1) {
+        try {
+            $top_league_patterns = [
+                'Premier League','Bundesliga','LaLiga','La Liga','Serie A',
+                'Ligue 1','Champions League','Europa League','Conference League',
+                'Eredivisie','Primeira Liga','First Division A','Süper Lig',
+                'FIFA World Cup','Copa Libertadores','Copa Sudamericana',
+                'Saudi Professional','MLS','Brasileiro Serie A',
+                'DFB Pokal','Coupe de France','FA Cup','Coppa Italia','Copa del Rey',
+                'Allsvenskan','Bundesliga Play-Offs','Bundesliga II'
+            ];
+            $where = [];
+            $params = [];
+            foreach ($top_league_patterns as $p) {
+                $where[] = 'league_name LIKE ?';
+                $params[] = '%' . $p . '%';
+            }
+            $sql = "SELECT raw_json FROM sb_matches
+                     WHERE sport_id=1 AND status='inplay' AND (" . implode(' OR ', $where) . ")
+                     LIMIT 100";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            $existing_ids = array_flip(array_map(function($m){ return (string)($m['id'] ?? ''); }, $results));
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $d = json_decode($row['raw_json'], true);
+                if (!$d || empty($d['home']['name']) || empty($d['away']['name'])) continue;
+                if (($d['time_status'] ?? '') === '3') continue;
+                $mid = (string)($d['id'] ?? '');
+                if ($mid === '' || isset($existing_ids[$mid])) continue;
+                // Make sure time_status reflects inplay since the DB says so.
+                $d['time_status'] = '1';
+                $results[] = $d;
+                $existing_ids[$mid] = true;
+            }
+        } catch (Exception $e) {}
+    }
+
     // ── Step 7: Mark finished matches in DB immediately ───────────────────
     if ($db_connected) {
         // 7a: Remove time_status=3 from results

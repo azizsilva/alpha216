@@ -1382,6 +1382,20 @@ function startPolling() {
 
     liveRefreshP.then(function(refreshedEarly) {
     if (navChanged()) return;
+    // Render IMMEDIATELY after live_refresh — scores / odds / timers
+    // update in real time instead of waiting for the slower inplay fetch
+    // (which can take 1–2s). This keeps the live cards in sync with
+    // BetsAPI within the 3s poll cadence.
+    if (refreshedEarly) {
+      try {
+        if (isChamp) {
+          renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+        } else {
+          renderMatches(S.matches);
+          markLiveSidebarLeagues(S.matches);
+        }
+      } catch (e) {}
+    }
     fetch(url)
       .then(function(r) { return r.json(); })
       .then(function(d) {
