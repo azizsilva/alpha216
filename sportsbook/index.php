@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bl';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bm';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -266,9 +266,17 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-sidebar-search-card .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
 /* Panel surface — fcbet216 reference: very dark, just slightly above the
    page bg so individual rows read FLAT instead of like lifted boxes. */
-.sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;}
-.sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
+.sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;max-height:520px!important;}
+.sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;flex:0 0 auto;}
 .sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
+.sb-top-leagues-card .sb-tl-list,body .sb-root .sb-top-leagues-card .sb-tl-list{flex:1 1 auto!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;scrollbar-color:rgba(255,255,255,0.18) transparent!important;}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar{width:4px!important;}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18)!important;border-radius:4px!important;}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-track{background:transparent!important;}
+.sb-mob-leagues-panel .sb-tl-list,body .sb-root .sb-mob-leagues-panel .sb-tl-list{max-height:480px!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;scrollbar-color:rgba(255,255,255,0.18) transparent!important;}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar{width:4px!important;}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18)!important;border-radius:4px!important;}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-track{background:transparent!important;}
 .sb-mob-search-panel{background:transparent;border:0;border-radius:0;overflow:visible;margin:0 2px 10px;}
 .sb-mob-search-panel .sb-search-wrap{padding:0;}
 .sb-mob-search-panel .sb-search-box{background:rgb(38,38,38);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;}

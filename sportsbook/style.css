@@ -421,7 +421,25 @@ button.sb-btn-live.active .sb-live-badge,
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   border-radius: 10px !important;
   overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 520px !important;
 }
+/* Inner list scrolls — matches fcbet216 image 7 compact scrollable list */
+.sb-top-leagues-card .sb-tl-list {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255,255,255,0.18) transparent !important;
+}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar { width: 4px !important; }
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.18) !important;
+  border-radius: 4px !important;
+}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-track { background: transparent !important; }
 /* Desktop sidebar tabs row — match fcbet216 image 4 exactly */
 .sb-top-leagues-card .sb-league-group-hdr {
   padding: 12px 14px !important;
@@ -5032,6 +5050,23 @@ body .sb-root .sb-champ-mkt-opt.active {
   background: transparent !important;
   background: rgb(49, 49, 49) !important;
   border-color: currentcolor;
+  max-height: 480px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255,255,255,0.18) transparent !important;
+}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar { width: 4px !important; }
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.18) !important;
+  border-radius: 4px !important;
+}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-track { background: transparent !important; }
+.sb-mob-leagues-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 100% !important;
 }
 .sb-mob-leagues-panel .sb-tl-item {
   background: transparent !important;

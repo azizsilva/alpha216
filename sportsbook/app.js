@@ -1270,6 +1270,16 @@ function startPolling() {
     if (S.viewMode === 'periodPage') return;
 
     var url, targetList, isChamp, liveRefreshP = Promise.resolve(false);
+    // Snapshot view mode at poll start so we can DROP late responses that
+    // arrive after the user navigated away. This stops the bug where
+    // clicking a league briefly opens its page, then the in-flight main
+    // poll response paints renderMatches() back over it.
+    var startView   = S.viewMode;
+    var startLeague = S.activeLeagueId;
+    var startSport  = S.activeSportId;
+    var startTab    = S.activeTab;
+    var startAction = S.activeAction;
+    var startDate   = S.activeDateOffset;
 
     if (S.viewMode === 'championship' && S.activeLeagueName) {
       // Championship view: poll league_matches endpoint for this league
@@ -1315,7 +1325,21 @@ function startPolling() {
       isChamp = false;
     }
 
+    // Stale-response guard: if any of the navigation-defining keys
+    // changed between poll start and now, the user navigated and we
+    // must NOT touch the DOM. This is what previously caused the
+    // "click league -> bounce back to live" flash.
+    function navChanged() {
+      return S.viewMode      !== startView
+          || S.activeLeagueId !== startLeague
+          || S.activeSportId !== startSport
+          || S.activeTab     !== startTab
+          || S.activeAction  !== startAction
+          || S.activeDateOffset !== startDate;
+    }
+
     liveRefreshP.then(function(refreshedEarly) {
+    if (navChanged()) return;
     fetch(url)
       .then(function(r) { return r.json(); })
       .then(function(d) {
@@ -1323,8 +1347,9 @@ function startPolling() {
         // was in flight, do NOT render — that paints the wrong view
         // on top and makes the page look like it "redirected back".
         if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
+        if (navChanged()) return;
         if (!d || !d.results) {
-          if (refreshedEarly) {
+          if (refreshedEarly && !navChanged()) {
             if (isChamp) {
               renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
             } else {
@@ -1340,9 +1365,9 @@ function startPolling() {
 
         // If list count changed significantly, do a full refresh (new matches went live, etc.)
         if (!isChamp && Math.abs(newResults.length - targetList.length) >= 3) {
+          if (navChanged()) return;
           S.matches = newResults;
           S.matches.forEach(function(m) { m._o = null; });
-          if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
           renderMatches(S.matches);
           markLiveSidebarLeagues(S.matches);
           return;
@@ -1402,20 +1427,19 @@ function startPolling() {
         if (!updated) return;
 
         // Guard one more time before re-rendering — in case the user
-        // clicked a match between the score update step above and now.
-        if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
+        // clicked a match / switched view between the score update
+        // step above and now.
+        if (navChanged()) return;
 
-        // Re-render the correct view
         if (isChamp) {
           renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
         } else {
           renderMatches(S.matches);
-          // Also refresh sidebar badges and counts
           markLiveSidebarLeagues(S.matches);
         }
       })
       .catch(function() {
-        if (S.viewMode === 'matchDetail' || S.viewMode === 'sportPage') return;
+        if (navChanged()) return;
         if (refreshedEarly) {
           if (isChamp) {
             renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
@@ -1717,8 +1741,10 @@ function isEuropeanLeague(league) {
    "England Premier League", "Premier League England" and "EPL" all hit. */
 var LEAGUE_PRIORITY_MAP = {
   'FIFA World Cup 2026': 0,
-  'UEFA Champions League': 1, 'UEFA Europa League': 2, 'UEFA Conference League': 3,
-  'England Premier League': 4, 'Premier League': 4,
+  'UEFA Champions League': 1, 'Champions League': 1,
+  'UEFA Europa League':   2, 'Europa League':   2,
+  'UEFA Conference League': 3, 'Conference League': 3,
+  'England Premier League': 4, 'Premier League': 4, 'EPL': 4,
   'Spain LaLiga': 5, 'Spain La Liga': 5, 'LaLiga': 5, 'La Liga': 5,
   'Germany Bundesliga': 6, 'Bundesliga': 6,
   'Italy Serie A': 7, 'Serie A': 7,
@@ -1736,13 +1762,30 @@ var LEAGUE_PRIORITY_MAP = {
   'Saudi Professional League': 25,
   'USA MLS': 28, 'Major League Soccer': 28
 };
+/* Penalty terms — applied to OTHERWISE-UNRANKED leagues that contain
+   substrings like "Play-Offs", "Reserve", "U17", "U19", "Friendly",
+   "Esoccer", "Regional". These sit at the bottom so famous leagues
+   in Europe stay visually on top of the list even when they coexist
+   with low-tier competitions in the same dataset. */
+var LEAGUE_PENALTY_TERMS = [
+  'esoccer','e-soccer','virtual','simulated',
+  'u17','u19','u20','u21','u23','youth','reserve',
+  'friendly','women','feminin','féminin','frauen','femme',
+  'regional','amateur'
+];
 function getLeaguePriority(league) {
-  if (!league || !league.name) return 99;
+  if (!league || !league.name) return 900;
   var n = league.name;
   for (var k in LEAGUE_PRIORITY_MAP) {
     if (n.indexOf(k) >= 0 || k.indexOf(n) >= 0) return LEAGUE_PRIORITY_MAP[k];
   }
-  return 50;
+  // Unknown league — default to 500 (worse than every named European
+  // league above), then push down further if it matches a penalty term.
+  var low = n.toLowerCase();
+  for (var i = 0; i < LEAGUE_PENALTY_TERMS.length; i++) {
+    if (low.indexOf(LEAGUE_PENALTY_TERMS[i]) >= 0) return 800;
+  }
+  return 500;
 }
 function sortLiveMatches(list) {
   return list.slice().sort(function(a, b) {
@@ -2933,6 +2976,10 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildSkeleton(4);
 
+  // Token so a late response from a previous league click can't overwrite
+  // the championship view if the user has since navigated to a different league.
+  var token = (S._champFetchToken = (S._champFetchToken || 0) + 1);
+
   var searchTerm = LEAGUE_DB_SEARCH[name] || name;
   var url = BASE + 'sportsbook/api.php?action=league_matches&sport_id=' + (sid || 1)
           + '&league=' + encodeURIComponent(searchTerm)
@@ -2941,6 +2988,10 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(d) {
+      // Drop late response if the user navigated to a different
+      // championship / left championship view entirely.
+      if (token !== S._champFetchToken) return;
+      if (S.viewMode !== 'championship') return;
       var res = (d && d.results) ? d.results : [];
 
       // Client-side precision filter — ALWAYS apply, return empty if none match
@@ -2967,6 +3018,8 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
       renderChampionship(id, name, flag, res);
     })
     .catch(function() {
+      if (token !== S._champFetchToken) return;
+      if (S.viewMode !== 'championship') return;
       S.champMatches = [];
       renderChampionship(id, name, flag, []);
     });
