@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525aw';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ax';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -241,9 +241,8 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-shirt-cell--circle .mc-jersey-svg,.sb-root .mc-shirt-cell .mc-jersey-svg{width:18px;height:18px;display:block;stroke:rgba(255,255,255,0.95);stroke-width:0.6;}
 /* SLC carousel (Type B "before Cotes boostées") — fcbet216 image 3 EXACT */
 .sb-root .slc-jersey-wrap,.sb-root .mc-jersey-wrap,.sb-root .slc-jerseys-overlap .mc-jersey-wrap{width:28px!important;height:28px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,0.85)!important;background:rgb(48,48,48)!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;overflow:hidden!important;box-sizing:border-box!important;}
-.sb-root .slc-jerseys-overlap{display:flex!important;flex-shrink:0!important;align-items:center!important;gap:0!important;}
-.sb-root .slc-jerseys-overlap .mc-jersey-wrap:first-child{z-index:2!important;position:relative!important;margin:0!important;}
-.sb-root .slc-jerseys-overlap .mc-jersey-wrap:last-child{margin-left:-8px!important;z-index:1!important;position:relative!important;}
+.sb-root .slc-jerseys-overlap{display:flex!important;flex-shrink:0!important;align-items:center!important;gap:6px!important;}
+.sb-root .slc-jerseys-overlap .mc-jersey-wrap:first-child,.sb-root .slc-jerseys-overlap .mc-jersey-wrap:last-child{margin:0!important;z-index:auto!important;position:relative!important;}
 .sb-root .slc-jerseys-overlap .mc-jersey-svg{width:18px!important;height:18px!important;}
 .sb-root .slc-hdr .slc-sport-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;color:rgba(255,255,255,0.78)!important;margin-right:2px!important;}
 .sb-root .slc-hdr .slc-sport-icon svg{width:14px!important;height:14px!important;display:block!important;}

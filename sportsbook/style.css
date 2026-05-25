@@ -2793,22 +2793,18 @@ button.sb-btn-live.active .sb-live-badge,
   gap: 10px !important;
   padding: 4px 14px 8px !important;
 }
-/* Left: two jersey circles — fcbet216 image 3 spec: close together, slight
-   overlap so they read as a paired unit. */
+/* Left: two jersey circles — fcbet216 iphone ref: side-by-side with a clear
+   gap, NOT overlapping. */
 .slc-jerseys-overlap {
   display: flex !important;
   flex-shrink: 0 !important;
   align-items: center !important;
-  gap: 0 !important;
+  gap: 6px !important;
 }
-.slc-jerseys-overlap .mc-jersey-wrap:first-child {
-  z-index: 2 !important;
-  position: relative !important;
-  margin: 0 !important;
-}
+.slc-jerseys-overlap .mc-jersey-wrap:first-child,
 .slc-jerseys-overlap .mc-jersey-wrap:last-child {
-  margin-left: -8px !important;
-  z-index: 1 !important;
+  margin: 0 !important;
+  z-index: auto !important;
   position: relative !important;
 }
 /* Smaller shirt SVG so the 28px circle reads clean. */
@@ -6275,3 +6271,44 @@ body .sb-root .sb-champ-mkt-opt.active {
   font-variant-numeric: tabular-nums !important;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   MOBILE / iPhone (≤1100px) — compact card height + lighter odds buttons.
+   Highest specificity (body .sb-root) + !important so this WINS against
+   every earlier rule, Bootstrap and any cached overrides.
+   ───────────────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  body .sb-root .mc { margin-bottom: 6px !important; }
+  body .sb-root .mc-hdr-live { padding: 8px 12px 0 !important; min-height: 22px !important; }
+  body .sb-root .mc-league-row { padding: 2px 12px 4px !important; }
+  body .sb-root .mc-teams-wrap--rows { padding: 0 12px 6px !important; gap: 2px !important; }
+  body .sb-root .mc-team-row--live { min-height: 22px !important; }
+  body .sb-root .mc-t-score { font-size: 14px !important; font-weight: 700 !important; }
+  body .sb-root .mc-t-name { font-size: 13px !important; }
+  /* Odds row — lighter gray bg + tighter height (iphone) */
+  body .sb-root .mc-odds-bot { padding: 0 10px 8px !important; gap: 6px !important; }
+  body .sb-root .mc-odd-btn,
+  body .sb-root button.mc-odd-btn {
+    background: rgb(74,74,74) !important;
+    background-color: rgb(74,74,74) !important;
+    background-image: none !important;
+    border: 1px solid rgba(255,255,255,0) !important;
+    border-radius: 4px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 10px !important;
+    box-shadow: none !important;
+    color: rgb(113,246,105) !important;
+  }
+  body .sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; }
+  body .sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-size: 14px !important; font-weight: 700 !important; }
+  /* SLC carousel cards — compact on iphone */
+  body .sb-root .slc-hdr { padding: 8px 12px 4px !important; }
+  body .sb-root .slc-mid { padding: 2px 12px 6px !important; }
+  body .sb-root .slc-jerseys-overlap { gap: 6px !important; }
+  body .sb-root .slc-jerseys-overlap .mc-jersey-wrap:first-child,
+  body .sb-root .slc-jerseys-overlap .mc-jersey-wrap:last-child { margin: 0 !important; }
+  body .sb-root .slc-jersey-wrap,
+  body .sb-root .slc-jerseys-overlap .mc-jersey-wrap { width: 26px !important; height: 26px !important; }
+  body .sb-root .slc-jerseys-overlap .mc-jersey-svg { width: 16px !important; height: 16px !important; }
+  body .sb-root .slc-odds { padding: 0 12px 8px !important; }
+}
