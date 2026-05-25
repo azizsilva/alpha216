@@ -215,8 +215,10 @@ function computeFallbackTimer(m) {
   if (elapsed < 0) return null;       // not started yet
   var sid = parseInt(m.sport_id || 1, 10);
   // Football timeline: 0-45 first half, 45-60 (15 min) halftime,
-  // 60-105 second half, >105 stoppage / ET. We map the wall time
-  // back onto match minutes so the timer reads naturally.
+  // 60-105 second half, then stoppage time / extra time.
+  // We KEEP COUNTING past 90 (matches FlashScore behavior) instead
+  // of freezing — most live matches go 1-10 minutes of stoppage
+  // and many knockout matches go to ET.
   if (sid === 1 || sid === 36) {
     var totalMin = Math.floor(elapsed / 60);
     var sec = elapsed % 60;
@@ -226,12 +228,14 @@ function computeFallbackTimer(m) {
     if (totalMin > 45 && totalMin < 60) {
       return { tm: 45, ts: 0, md: '1' };  // Mi-temps
     }
-    // Second half: subtract the 15 min break so the clock reads 46-90
-    var secondHalfMin = 46 + (totalMin - 60);
-    if (secondHalfMin <= 90) {
-      return { tm: secondHalfMin, ts: sec, md: '0' };
-    }
-    return { tm: 90, ts: 0, md: '0' }; // stoppage — frozen at 90
+    // Past HT: subtract the 15 min break and keep counting.
+    // 60 → 46, 90 → 76, 120 → 106 etc. so the clock matches
+    // wall-time played and lines up with FlashScore at 118'.
+    var matchMin = 46 + (totalMin - 60);
+    // Safety cap so we never display absurd values (e.g. someone
+    // forgets to close an ended match) — 150 min covers ET + breaks.
+    if (matchMin > 150) matchMin = 150;
+    return { tm: matchMin, ts: sec, md: '0' };
   }
   // Generic non-football: just count up
   return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
@@ -413,8 +417,13 @@ function formatLiveMinute(m) {
     if (sid !== 1 || elapsedMin < 0) return null;
     if (elapsedMin <= 45)  return Math.max(1, elapsedMin) + "'";
     if (elapsedMin <= 60)  return 'Mi-temps';
-    if (elapsedMin <= 105) return Math.max(46, elapsedMin - 15) + "'";
-    return "90+'";
+    var sh = elapsedMin - 15;          // map wall time onto match minutes
+    if (sh <= 90) return Math.max(46, sh) + "'";
+    // Past 90: keep counting (stoppage / extra time) — matches the
+    // way FlashScore shows e.g. "90+28'" or "118'" deep into ET.
+    var extra = sh - 90;
+    if (extra > 60) extra = 60;        // safety cap
+    return "90+" + extra + "'";
   }
 
   if (m.timer) {
@@ -456,8 +465,8 @@ function startMatchTimer(m) {
   // party hasn't sent a real m.timer for this match.
   var tmr = effectiveTimer(m);
   if (!tmr) return;
-  var isHalfTime = (String(tmr.md || tmr.MD || '') === '1');
-  if (isHalfTime) return;
+  var mdRaw = String(tmr.md || tmr.MD || '');
+  if (mdRaw === '1') return;             // Mi-temps — no ticking
 
   var baseMin = parseInt(tmr.tm || tmr.TM || 0) || 0;
   var baseSec = parseInt(tmr.ts || tmr.TS || 0) || 0;
@@ -589,7 +598,8 @@ function patchMatchDetailLive(m, markets) {
   }
   var effPatch = isMatchEnded(m) ? null : effectiveTimer(m);
   if (effPatch) {
-    var isHTnow = (String(effPatch.md || effPatch.MD || '') === '1');
+    var mdNow   = String(effPatch.md || effPatch.MD || '');
+    var isHTnow = (mdNow === '1');
     var pname  = getMatchPeriod(m);
     var tmStr  = String(effPatch.tm || effPatch.TM || '0').padStart(2, '0');
     var tsStr  = String(effPatch.ts || effPatch.TS || '0').padStart(2, '0');
@@ -598,15 +608,13 @@ function patchMatchDetailLive(m, markets) {
     if (pblock) {
       pblock.innerHTML = buildMdPeriodBlock(pname, isHTnow, clock);
     } else {
-      // Fallback: just update the timer text if the period block
-      // wasn't rendered yet (e.g. user opened a not-yet-live match).
       var timerEl = document.getElementById('md-timer-display');
       if (timerEl) timerEl.textContent = isHTnow ? 'Mi-temps' : clock;
     }
     if (isHTnow) {
       clearInterval(window._mdTimerInterval);
     } else {
-      startMatchTimer(m);
+      startMatchTimer(m);   // keep ticking, even past 90 (stoppage / ET)
     }
   }
 
