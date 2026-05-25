@@ -1235,6 +1235,12 @@ function applyLiveRefresh(ids, targetList) {
           m.live_odds = upd.live_odds;
           m._o = null;
           updated = true;
+          // Propagate fresh odds into any active bet slip leg pointing at
+          // this match — sets _change so the slip can show up/down arrows
+          // and the "cotes ont changées" banner stays accurate.
+          if (typeof syncSlipOddsFromMatch === 'function') {
+            syncSlipOddsFromMatch(m);
+          }
         }
         if (upd.time_status && m.time_status !== upd.time_status) {
           m.time_status = upd.time_status;
@@ -1248,6 +1254,42 @@ function applyLiveRefresh(ids, targetList) {
       return updated;
     })
     .catch(function() { return false; });
+}
+
+/* ── Update odds in the bet slip when a match's live_odds changes.
+   We look at each bet that references this match (b.matchId) and try
+   to re-resolve its odds value from match.live_odds. Sets b._change
+   to 'up' or 'down' so the UI can show coloured arrows + flash. ── */
+function syncSlipOddsFromMatch(match) {
+  if (!match || !match.live_odds || !S.betSlip || !S.betSlip.length) return;
+  var lo = match.live_odds;
+  var changed = false;
+  S.betSlip.forEach(function(b) {
+    if (!b || !b.matchId) return;
+    if (String(b.matchId) !== String(match.id)) return;
+    var newVal = null;
+    var mkt = (b.market || '1x2').toLowerCase();
+    var sel = String(b.sel || '').trim();
+    if (mkt === '1x2' || mkt === '' || mkt === '1 x 2') {
+      if (sel === '1' || /home/i.test(sel)) newVal = parseFloat(lo.h);
+      else if (sel === 'x' || sel === 'X' || /draw/i.test(sel)) newVal = parseFloat(lo.x);
+      else if (sel === '2' || /away/i.test(sel)) newVal = parseFloat(lo.a);
+    } else if (/total|over|under|o\/u/i.test(mkt)) {
+      if (/over|plus|\+/i.test(sel)) newVal = parseFloat(lo.ou_over);
+      else if (/under|moins|\-/i.test(sel)) newVal = parseFloat(lo.ou_under);
+    }
+    if (newVal && !isNaN(newVal) && Math.abs(newVal - b.val) > 0.001) {
+      b._change = newVal > b.val ? 'up' : 'down';
+      b._prevVal = b.val;
+      b.val = newVal;
+      b.isLive = true;
+      changed = true;
+    }
+  });
+  if (changed) {
+    // Re-render slip with new odds + arrows
+    try { renderBetSlip(); } catch (e) {}
+  }
 }
 
 /* ── Real-time polling: updates scores, odds, timer, time_status ───────────
@@ -2542,7 +2584,28 @@ window.sbAddBet = function(id, match, sel, val, market) {
   id = String(id).replace(/'/g, '');
   var idx = S.betSlip.findIndex(function(b) { return b.id === id; });
   if (idx !== -1) S.betSlip.splice(idx, 1);
-  else S.betSlip.push({ id: id, match: match, sel: sel, val: parseFloat(val), isLive: false, market: market || '1x2', stake: SLIP_STAKE });
+  else {
+    // Extract matchId from the slip id (format used by various odds buttons
+    // is "<matchId>-<key>"); we keep it so live polling can find odds again.
+    var matchId = String(id).split('-')[0];
+    // Try to detect live status from the current match in S.matches /
+    // S.champMatches so the EN DIRECT red pill shows in the slip.
+    var live = false;
+    var pool = (S.matches || []).concat(S.champMatches || []);
+    for (var p = 0; p < pool.length; p++) {
+      if (String(pool[p].id) === matchId) { live = isMatchLive(pool[p]); break; }
+    }
+    S.betSlip.push({
+      id: id, match: match, sel: sel,
+      val: parseFloat(val),
+      _origVal: parseFloat(val),
+      _change: null,                       // 'up' / 'down' set by live poll
+      isLive: live,
+      matchId: matchId,
+      market: market || '1x2',
+      stake: SLIP_STAKE
+    });
+  }
   renderBetSlip();
   updateFloatingBetBadge();
   // Update button highlights
@@ -2559,7 +2622,10 @@ window.sbAddBet = function(id, match, sel, val, market) {
   }
 };
 
-/* Floating bet badge — shows count when bets exist */
+/* Floating bet badge — shows count when bets exist.
+   Style matches fcbet216 reference image: circular dark FAB with the
+   document icon, green pill count badge at top-right and a small
+   "Fiche de pari" label below the circle. Tapping it opens the slip. */
 function updateFloatingBetBadge() {
   var badge = document.getElementById('sb-floating-bet-badge');
   if (!badge) {
@@ -2571,9 +2637,12 @@ function updateFloatingBetBadge() {
   }
   var n = S.betSlip.length;
   if (n > 0) {
-    badge.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 10h8M8 14h8M8 18h4" stroke-linecap="round"/></svg>'
-      + '<span>Fiche de pari</span>'
-      + '<span class="sb-fb-count">' + n + '</span>';
+    badge.innerHTML =
+        '<div class="sb-fb-circle">'
+      +   '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>'
+      +   '<span class="sb-fb-count">' + n + '</span>'
+      + '</div>'
+      + '<span class="sb-fb-label">Fiche de pari</span>';
     badge.style.display = 'flex';
   } else {
     badge.style.display = 'none';
@@ -2610,6 +2679,18 @@ window.sbUpdateCombiStake = function(val) { SLIP_COMBI_STAKE = Math.max(0, parse
 window.sbUpdateSysStake = function(type, val) {
   if (type === 'singles') SLIP_SYS_SINGLES_STAKE = Math.max(0, parseFloat(val) || 0);
   else SLIP_SYS_COMBO_STAKE = Math.max(0, parseFloat(val) || 0);
+  renderBetSlip();
+};
+// Per-level stake for Système mode (Seuls / Doublé / Triplé / ...).
+window.sbUpdateSysLevelStake = function(levelId, val) {
+  S._sysStakes = S._sysStakes || {};
+  S._sysStakes[levelId] = Math.max(0, parseFloat(val) || 0);
+  renderBetSlip();
+};
+// Accept all pending odds changes — clears the "cotes ont changées" banner.
+window.sbAcceptOddsChanges = function() {
+  if (!S.betSlip) return;
+  S.betSlip.forEach(function(b) { if (b) b._change = null; });
   renderBetSlip();
 };
 
@@ -2652,7 +2733,10 @@ function renderBetSlip() {
     var isExcl   = !!b.excluded;
     var isBanker = !!b.banker;
 
-    out += '<div class="slip-item' + (isExcl ? ' excluded' : '') + '">';
+    out += '<div class="slip-item'
+      + (isExcl ? ' excluded' : '')
+      + (SLIP_MODE === 'combi' ? ' combi' : '')
+      + '">';
 
     // ── Header row: ⚽ | match name | [−][B][×]
     out += '<div class="slip-item-hdr">';
@@ -2672,6 +2756,21 @@ function renderBetSlip() {
       out += '<div class="slip-market-nm">' + h(b.market || '1x2') + '</div>';
     }
 
+    // Helper that renders the odds pill — adds up/down arrow + colored
+    // frame when live polling shifted the value (b._change).
+    function renderOddsPill(val, change) {
+      var cls = 'slip-odds-pill';
+      if (change === 'up')   cls += ' up';
+      if (change === 'down') cls += ' down';
+      var arrow = '';
+      if (change === 'up') {
+        arrow = '<svg class="slip-odds-arrow" width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,4 22,18 2,18"/></svg>';
+      } else if (change === 'down') {
+        arrow = '<svg class="slip-odds-arrow" width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,20 22,6 2,6"/></svg>';
+      }
+      return '<span class="' + cls + '">' + arrow + (parseFloat(val) || 0).toFixed(2) + '</span>';
+    }
+
     // ── Selection row: EN DIRECT badge + selection + odds
     if (b.isBB && b.legs && b.legs.length) {
       b.legs.forEach(function(leg, li) {
@@ -2685,13 +2784,13 @@ function renderBetSlip() {
       out += '<div class="slip-sel-row">';
       if (b.isLive) out += '<span class="slip-live-badge">EN DIRECT</span>';
       out += '<span class="slip-sel-lbl" style="color:rgba(255,255,255,0.5);font-size:11px">Cote combinée</span>';
-      out += '<span class="slip-sel-odds">' + b.val.toFixed(2) + '</span>';
+      out += renderOddsPill(b.val, b._change);
       out += '</div>';
     } else {
       out += '<div class="slip-sel-row">';
       if (b.isLive) out += '<span class="slip-live-badge">EN DIRECT</span>';
       out += '<span class="slip-sel-lbl">' + h(b.sel) + '</span>';
-      out += '<span class="slip-sel-odds">' + b.val.toFixed(2) + '</span>';
+      out += renderOddsPill(b.val, b._change);
       out += '</div>';
     }
 
@@ -2719,11 +2818,14 @@ function renderBetSlip() {
     + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>'
     + '</button>';
 
-  // ── Odds changed warning ───────────────────────────────────
-  out += '<div class="slip-odds-warning">'
-    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-    + ' Certaines cotes ont changées, veuillez accepter.'
-    + '</div>';
+  // ── Odds changed warning (only when at least one leg actually moved) ──
+  var hasOddsChange = S.betSlip.some(function(b) { return b && b._change; });
+  if (hasOddsChange) {
+    out += '<div class="slip-odds-warning" onclick="window.sbAcceptOddsChanges()" role="button">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+      + ' Certaines cotes ont changées, veuillez accepter.'
+      + '</div>';
+  }
 
   // ═══ MODE-SPECIFIC SUMMARY ═════════════════════════════════
   if (SLIP_MODE === 'simple') {
@@ -2757,19 +2859,65 @@ function renderBetSlip() {
     out += '</div>';
 
   } else if (SLIP_MODE === 'system') {
-    // ── Système mode — matches fcbet exactly ─────────────────
-    // Seuls row: "Seuls  N x  [Fixer la mise]"
-    out += '<div class="slip-sys-row">';
-    out += '<span class="slip-sys-lbl">Seuls</span>';
-    out += '<span class="slip-sys-cnt">' + n + ' x</span>';
-    out += '<input type="number" class="slip-stake-inp" value="' + (SLIP_SYS_SINGLES_STAKE || '') + '" min="0" step="1" placeholder="Fixer la mise" oninput="window.sbUpdateSysStake(\'singles\',this.value)">';
-    out += '</div>';
+    // ── Système mode — fcbet216 parity. Each leg is a "Seul", and
+    // every k-combo is a Doublé / Triplé / ... but we must EXCLUDE
+    // combinations whose legs share the same match (you can't combo
+    // 1+X+2 of the same match — they're mutually exclusive). The same
+    // logic powers fcbet216's counts (e.g. "Doublé 9 x" for a 6-leg
+    // slip made of 3 selections × 2 matches). ───────────────────────
+    var sysLegs = S.betSlip.filter(function(b) { return !b.excluded; });
+
+    // Group legs by match — combos must take 0/1 leg per match.
+    var groups = {};
+    sysLegs.forEach(function(b) {
+      var key = String(b.matchId || b.id);
+      (groups[key] = groups[key] || []).push(b);
+    });
+    var groupCounts = Object.keys(groups).map(function(k){ return groups[k].length; });
+    // valid k-combos = coefficient of x^k in prod((1 + g*x) for each group)
+    // where g = group size (any 1 of g legs).
+    function countCombos(k) {
+      var poly = [1];
+      groupCounts.forEach(function(g) {
+        var next = poly.slice();
+        for (var i = 0; i < poly.length; i++) {
+          next[i + 1] = (next[i + 1] || 0) + poly[i] * g;
+        }
+        poly = next;
+      });
+      return poly[k] || 0;
+    }
+
+    var sysLevels = [
+      { k: 1, lbl: 'Seuls',     id: 'k1' },
+      { k: 2, lbl: 'Doublé',    id: 'k2' },
+      { k: 3, lbl: 'Triplé',    id: 'k3' },
+      { k: 4, lbl: 'Quartetté', id: 'k4' },
+      { k: 5, lbl: 'Quintuplé', id: 'k5' },
+      { k: 6, lbl: 'Sextuplé',  id: 'k6' },
+      { k: 7, lbl: 'Septuplé',  id: 'k7' },
+      { k: 8, lbl: 'Octuplé',   id: 'k8' }
+    ];
+    S._sysStakes = S._sysStakes || {};
+    var totalBetsCount = 0, totalSysMise = 0;
+    sysLevels.forEach(function(lvl) {
+      if (lvl.k > sysLegs.length) return;
+      var combos = countCombos(lvl.k);
+      if (!combos) return;
+      var stake = parseFloat(S._sysStakes[lvl.id] || 0) || 0;
+      totalBetsCount += stake > 0 ? combos : 0;
+      totalSysMise   += stake * combos;
+      out += '<div class="slip-sys-row">';
+      out += '<span class="slip-sys-lbl">' + lvl.lbl + '</span>';
+      out += '<span class="slip-sys-cnt">' + combos + ' x</span>';
+      out += '<input type="number" class="slip-stake-inp" value="' + (stake || '') + '" min="0" step="1" placeholder="Fixer la mise" oninput="window.sbUpdateSysLevelStake(\'' + lvl.id + '\',this.value)">';
+      out += '</div>';
+    });
+
     // Summary
-    var sysSinglesCount = n; // each leg is a single
-    var sysMise = SLIP_SYS_SINGLES_STAKE * sysSinglesCount;
     out += '<div class="slip-summary">';
-    out += '<div class="slip-sum-row"><span>Nombre de paris</span><span>' + (SLIP_SYS_SINGLES_STAKE > 0 ? sysSinglesCount : 0) + '</span></div>';
-    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + sysMise.toFixed(2) + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Nombre de paris</span><span>' + totalBetsCount + '</span></div>';
+    out += '<div class="slip-sum-row"><span>Mise totale</span><span>' + totalSysMise.toFixed(2) + '</span></div>';
     out += '</div>';
   }
 

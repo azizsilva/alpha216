@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bm';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525bn';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -495,8 +495,14 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-root[data-view="matchdetail"] .sb-mob-inline-leagues{display:none!important;}
 .sb-root[data-view="matchdetail"] #sb-matches-body{margin-top:0!important;padding-top:0!important;}
 /* Cotes boostées — dark card header matching fcbet216 (image 3) */
-.sb-root .sb-boost-header{display:flex!important;align-items:center!important;gap:8px!important;font-size:14px!important;font-weight:700!important;color:#fff!important;margin:0 0 8px!important;padding:12px 14px!important;letter-spacing:.2px!important;line-height:1.2!important;background:rgb(38,38,38)!important;border:1px solid rgba(255,255,255,0.07)!important;border-radius:6px!important;}
+.sb-root .sb-boost-header,body .sb-root .sb-boost-header{display:flex!important;align-items:center!important;gap:8px!important;font-size:14px!important;font-weight:700!important;color:#fff!important;margin:0 0 8px!important;padding:12px 14px!important;letter-spacing:.2px!important;line-height:1.2!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.07)!important;border-radius:6px!important;}
 .sb-root .sb-boost-header svg{width:15px!important;height:15px!important;color:#fff!important;fill:#fff!important;flex-shrink:0!important;}
+/* Circular floating bet slip FAB — fcbet216 reference image */
+.sb-floating-bet-badge,body .sb-root .sb-floating-bet-badge{display:none;position:fixed;bottom:88px;right:16px;z-index:3000;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:'Roboto',sans-serif;user-select:none;-webkit-tap-highlight-color:transparent;}
+.sb-fb-circle,body .sb-root .sb-fb-circle{position:relative;width:52px;height:52px;border-radius:50%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.55);}
+.sb-fb-circle svg{color:rgba(255,255,255,0.88);width:22px;height:22px;}
+.sb-fb-count,body .sb-root .sb-fb-count{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;background:rgb(113,246,105);color:#000;border-radius:999px;font-size:11px;font-weight:800;line-height:22px;text-align:center;border:2px solid #1e1e1e;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
+.sb-fb-label,body .sb-root .sb-fb-label{font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.7);white-space:nowrap;}
 .sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
 .sb-root .sb-boost-card{padding:10px 14px 12px;}
 .sb-root .sb-boost-card .sb-teams-text{margin:2px 0 6px;line-height:1.25;}
