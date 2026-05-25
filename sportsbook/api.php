@@ -1109,6 +1109,25 @@ if ($action === 'inplay') {
         }
     }
 
+    // ── Step 7.5: Append Upcoming Matches (for Prochainement & Points forts) ──
+    // The home page 'inplay' request needs upcoming matches for the "Prochainement" 
+    // and "Points forts" sections. We fetch them from the local DB.
+    if ($db_connected) {
+        try {
+            $up_res = db_fetch_matches($pdo, "sport_id=? AND status='upcoming'", [$sport_id], 150, $sport_id);
+            if (!empty($up_res)) {
+                $existing_ids = array_flip(array_map(function($m){ return (string)($m['id'] ?? ''); }, $results));
+                foreach ($up_res as $um) {
+                    $mid = (string)($um['id'] ?? '');
+                    if ($mid && !isset($existing_ids[$mid])) {
+                        $results[] = $um;
+                        $existing_ids[$mid] = true;
+                    }
+                }
+            }
+        } catch (Exception $e) {}
+    }
+
     // Sort by priority leagues
     if (!empty($results) && $sport_id > 0) {
         usort($results, function($a,$b) use ($sport_id) {
