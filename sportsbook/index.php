@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525ao';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ap';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -148,11 +148,14 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
   .sb-mobile-topbar .sb-btn-live.active{
     background:#70f669!important;color:rgba(0,0,0,0.87)!important;
   }
-  /* EN DIRECT red badge (shown when button is NOT active) */
+  /* EN DIRECT red badge (shown when button is NOT active) — fcbet216 .cqljKD EXACT */
   .sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge{
-    background:#e02424!important;color:#fff!important;
-    font-size:9px!important;font-weight:800!important;letter-spacing:0.8px!important;
-    text-transform:uppercase!important;padding:3px 7px!important;border-radius:4px!important;
+    background:rgb(251,51,51)!important;background-color:rgb(251,51,51)!important;
+    color:rgb(255,255,255)!important;
+    font-family:'Roboto',sans-serif!important;
+    font-size:12px!important;font-weight:500!important;line-height:12px!important;
+    padding:2px 4px!important;border:0!important;border-radius:4px!important;
+    letter-spacing:0!important;text-transform:uppercase!important;
     white-space:nowrap!important;
   }
   /* EN DIRECT badge when active — black uppercase on green (no red pill) */
@@ -187,7 +190,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-hl-left{display:flex;align-items:center;gap:6px;flex:1;min-width:0;}
 .sb-root .mc-hl-right{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 .sb-root .mc-badge-bb{background:#71f669;color:rgba(0,0,0,.87);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;line-height:1.5;letter-spacing:.2px;}
-.sb-root .mc-live-badge{background:#e02424;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;border:none;line-height:1.3;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.sb-root .mc-live-badge{background:rgb(251,51,51);color:rgb(255,255,255);font-family:'Roboto',sans-serif;font-size:12px;font-weight:500;line-height:12px;padding:2px 4px;border:0;border-radius:4px;letter-spacing:0;text-transform:uppercase;white-space:nowrap;display:inline-flex;align-items:center;}
 .sb-root .mc-live-min{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:4px;white-space:nowrap;}
 /* Sport icon BEFORE BB — flat on card surface, no badge bg (images 3 & 4) */
 .sb-root .mc-hdr-live .mc-sport-badge-inline{width:auto;height:auto;border-radius:0;border:none;background:transparent;color:rgba(255,255,255,0.78);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:6px;padding:0;}
@@ -254,7 +257,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sb-globe-icon{width:22px;height:22px;border-radius:5px;background:#4dd0c8;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sb-mob-leagues-panel .sb-flag-icon{width:22px;height:16px;object-fit:cover;border-radius:3px;flex-shrink:0;}
-.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:#e02424;color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:10px;letter-spacing:0.4px;text-transform:uppercase;}
+.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:rgb(251,51,51);color:rgb(255,255,255);font-family:'Roboto',sans-serif;font-size:12px;font-weight:500;line-height:12px;padding:2px 4px;border:0;border-radius:4px;letter-spacing:0;text-transform:uppercase;}
 .sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
