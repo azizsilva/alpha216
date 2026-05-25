@@ -823,8 +823,10 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
             if (!empty($m_chk['id'])) $needs_async_up[] = $m_chk['id'];
         }
     }
-    // Cap to avoid hammering BetsAPI per request — daemon picks up the rest
-    $needs_async_up = array_slice(array_values(array_unique($needs_async_up)), 0, 12);
+    // Cap to avoid hammering BetsAPI per request — daemon picks up the rest.
+    // Bumped from 12 to 20 so sports with many matches (basketball, tennis)
+    // fill their odds within ~3-4 poll cycles instead of 8-10.
+    $needs_async_up = array_slice(array_values(array_unique($needs_async_up)), 0, 20);
 
     $json_out_up = json_encode(['success' => 1, 'results' => $results,
                                  'odds_pending' => count($needs_async_up)]);

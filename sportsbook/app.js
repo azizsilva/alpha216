@@ -2931,6 +2931,10 @@ window.sbOpenSportPage = function(sportId) {
   S.viewMode        = 'sportPage';
   S.sportPageName   = sportName;
 
+  // Reset poll tick so the first sbPollSportPage cycle re-fetches
+  // upcoming as well (catches odds that the async fill just wrote).
+  if (typeof sbPollSportPage !== 'undefined') sbPollSportPage._tick = 0;
+
   // Switch the page into "sport page" mode — CSS hides the home-only
   // sections (date row, favoris, sport nav, EN DIRECT carousel, Cotes
   // boostées, mobile leagues panel) so the user gets a dedicated
@@ -3035,17 +3039,33 @@ function renderSportPage(sportId, sportName) {
 }
 
 // Light poll for the sport page — refreshes the live matches every poll
-// cycle so timers tick and scores update, but leaves the four category
-// cards untouched (their counts are pre-computed once on open).
+// cycle so timers tick and scores update, AND re-fetches upcoming every
+// few cycles so prematch odds that the server-side async fill writes to
+// the DB (lock icons -> real values) show up automatically. Counts on
+// the four category cards stay stable (computed once on open).
 function sbPollSportPage() {
   var sid = S.activeSportId;
   if (!sid) return;
+
   var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sid;
-  fetch(liveUrl).then(function(r){ return r.json(); }).then(function(d) {
-    var live = (d && d.results) ? d.results : [];
-    S.sportPageLive = live;
-    renderSportPageMatches(live, S.sportPageUpcoming || []);
-  }).catch(function(){});
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sid;
+
+  // Tick counter — refresh upcoming every 3rd cycle (~15s at 5s poll).
+  // First call also refreshes upcoming (handles missed odds on initial load).
+  sbPollSportPage._tick = (sbPollSportPage._tick || 0) + 1;
+  var refreshUpcoming = (sbPollSportPage._tick === 1) || (sbPollSportPage._tick % 3 === 0);
+
+  var liveP = fetch(liveUrl).then(function(r){ return r.json(); }).catch(function(){ return null; });
+  var upP   = refreshUpcoming
+    ? fetch(upUrl).then(function(r){ return r.json(); }).catch(function(){ return null; })
+    : Promise.resolve(null);
+
+  Promise.all([liveP, upP]).then(function(both) {
+    var liveData = both[0], upData = both[1];
+    if (liveData && liveData.results) S.sportPageLive = liveData.results;
+    if (upData   && upData.results)   S.sportPageUpcoming = upData.results;
+    renderSportPageMatches(S.sportPageLive || [], S.sportPageUpcoming || []);
+  });
 }
 
 // Render live + upcoming matches BELOW the four category cards. Each match
