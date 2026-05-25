@@ -1977,7 +1977,11 @@ function renderBoosted(matches) {
     });
     out += '<div class="sb-odds-row">';
     out += '<span class="sb-old-val">' + oldOdd + '</span>';
-    out += '<svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5H17M13 1L17 5L13 9" stroke="var(--sb-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    // Double-chevron arrow (≫) sized to match the odds text — fcbet216
+    // reference image 1. Uses currentColor so it inherits the green.
+    out += '<span class="sb-boost-arrow" aria-hidden="true">';
+    out += '<svg viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L10 9L4 14M11 4L17 9L11 14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    out += '</span>';
     out += '<span class="sb-new-val">' + h(formatOdd(parseFloat(newOdd))) + '</span>';
     out += '</div></div>';
   });

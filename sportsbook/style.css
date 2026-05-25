@@ -887,27 +887,36 @@ body {
 .sb-boost-header svg { width: 16px; height: 16px; color: var(--sb-green); fill: var(--sb-green); }
 .sb-boost-header i { color: var(--sb-green); }
 
+/* Boost row — snap-to-one carousel (matches fcbet216 reference image 1).
+   Horizontal scrollbar is fully hidden; user swipes one card per view. */
 .sb-boost-row {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  overflow-y: hidden;
+  padding: 0 0 4px;
   margin-bottom: 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* Firefox */
 }
-.sb-boost-row::-webkit-scrollbar { height: 3px; }
+.sb-boost-row::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
+/* Each boost card is FULL viewport width with a small peek of the next */
 .sb-boost-card {
-  background: rgb(49, 49, 49);
-  border-width: 0px;
-  border-radius: 6px;
-  min-width: 270px;
-  max-width: 300px;
-  padding: 14px;
-  flex-shrink: 0;
+  background: rgb(58,58,58);                       /* same gray family as fcbet216 */
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+  flex: 0 0 calc(100% - 22px);                     /* full width, peek next card */
+  min-width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+  padding: 14px 16px 16px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   cursor: pointer;
   transition: background 0.15s;
 }
-.sb-boost-card:hover { background: #404040; }
+.sb-boost-card:hover { background: rgb(66,66,66); }
 
 /* ── EN DIRECT live card (slc) — one full-width slide ──
    fcbet216 reference: gray rgb(49,49,49) surface, NO radius (user spec). */
@@ -1092,32 +1101,56 @@ body {
   letter-spacing: 0.3px;
   text-transform: uppercase;
 }
-.sb-meta-text  { font-size: 11px; color: var(--sb-text-2); font-weight: 500; }
-.sb-teams-text { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.sb-boost-card .sb-meta-text  { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 500; line-height: 1.45; }
+.sb-boost-card .sb-teams-text { font-size: 14px; font-weight: 700; color: #fff; margin: 4px 0 8px; }
 .sb-boost-dot  {
-  width: 7px; height: 7px;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--sb-green);
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 8px;
   flex-shrink: 0;
 }
-.sb-boost-line { font-size: 11px; color: var(--sb-text-2); margin-bottom: 3px; display: flex; align-items: center; }
+.sb-boost-card .sb-boost-line { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 4px; display: flex; align-items: center; }
 
+/* Boost odds pill — old (strikethrough) → arrow → new value.
+   Arrow now sized to MATCH the odds text (the user explicitly asked for
+   the arrow to be the same size as the text). */
 .sb-odds-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(0,0,0,0.3);
-  padding: 10px 16px;
-  border-radius: 6px;
+  gap: 14px;
+  background: rgb(40,40,40);
+  padding: 12px 16px;
+  border-radius: 8px;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 12px;
 }
-.sb-old-val { color: var(--sb-text-2); text-decoration: line-through; font-size: 13px; font-weight: 500; }
-.sb-new-val { color: var(--sb-green); font-size: 17px; font-weight: 900; }
+.sb-old-val {
+  color: var(--sb-text-2);
+  text-decoration: line-through;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+}
+.sb-new-val {
+  color: var(--sb-green);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+/* Double-chevron arrow (>>) — matches fcbet216 reference image 1 */
+.sb-boost-arrow {
+  color: var(--sb-green);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+.sb-boost-arrow svg { width: 22px; height: 18px; display: block; }
 .sb-odds-row i,
-.sb-odds-row svg { color: var(--sb-green); fill: var(--sb-green); width: 14px; }
+.sb-odds-row svg { color: var(--sb-green); fill: var(--sb-green); }
 
 /* ════════════════════════════════════════════════════════════
    MATCH CARDS — Premium reference site layout
