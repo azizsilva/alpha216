@@ -4179,12 +4179,13 @@ body {
 }
 
 .sb-root .mc {
-  background: #282828 !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-  border-radius: 10px !important;
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 8px !important;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  margin-bottom: 6px !important;
+  margin-bottom: 8px !important;
+  width: 100% !important;
 }
 
 /* ── Live section market dropdown (En direct maintenant) — fcbet216 spec ──
@@ -4346,13 +4347,14 @@ body {
 }
 /* ── LIVE card layout — shirts side-by-side LEFT, stacked names+scores RIGHT
    (fcbet216 prelive live card spec). Each shirt is its own plain SVG inside
-   a small cell with a clear gap between them — no overlap. ── */
+   a small cell with a clear gap between them — no overlap.
+   Tightened vertical padding for reduced height (user spec). ── */
 .sb-root .mc-teams-wrap.mc-teams-wrap--side {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  gap: 12px !important;
-  padding: 6px 12px 10px !important;
+  gap: 10px !important;
+  padding: 2px 12px 6px !important;
   width: 100% !important;
 }
 .sb-root .mc-jerseys-side {
@@ -4363,28 +4365,31 @@ body {
   flex-shrink: 0 !important;
   padding: 0 4px 0 0 !important;
 }
-/* Live card jersey badge — circular, rgb(49,49,49) family (matches fcbet216) */
+/* Live card jersey — plain shirt (NO circle wrapper), just the shirt SVG
+   with a hairline white edge for definition (user spec image 7) */
 .sb-root .mc-jersey-cell {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 38px !important;
-  height: 38px !important;
-  border-radius: 50% !important;
-  background: rgb(40,40,40) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
   flex-shrink: 0 !important;
 }
 .sb-root .mc-jersey-cell .mc-jersey-svg {
-  width: 22px !important;
-  height: 22px !important;
+  width: 26px !important;
+  height: 26px !important;
   display: block !important;
+  stroke: rgba(255,255,255,0.9) !important;   /* hairline white edge */
+  stroke-width: 0.6 !important;
 }
 .sb-root .mc-teams-wrap--side .mc-teams-stacked {
   flex: 1 1 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 2px !important;
   min-width: 0 !important;
 }
 .sb-root .mc-teams-wrap--side .mc-team-row--live {
@@ -4394,7 +4399,7 @@ body {
   justify-content: flex-start !important;
   gap: 8px !important;
   width: 100% !important;
-  min-height: 22px !important;
+  min-height: 20px !important;
 }
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name {
   flex: 1 1 0 !important;
@@ -4544,23 +4549,25 @@ body {
   white-space: nowrap !important;
 }
 
-/* Sport icon (soccer ball / basket / etc) BEFORE the BB badge in live header */
+/* Sport icon (soccer ball / basket / etc) BEFORE the BB badge in live header.
+   Darker recess (rgb(20,20,20)) so it reads as embossed into the card —
+   matches the fcbet216 reference image 10. */
 .sb-root .mc-hdr-live .mc-sport-badge-inline {
-  width: 18px !important;
-  height: 18px !important;
+  width: 22px !important;
+  height: 22px !important;
   border-radius: 50% !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  background: rgba(255,255,255,0.04) !important;
+  border: none !important;
+  background: rgb(20,20,20) !important;
   color: rgba(255,255,255,0.85) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
-  margin-right: 2px !important;
+  margin-right: 4px !important;
 }
 .sb-root .mc-hdr-live .mc-sport-badge-inline svg {
-  width: 12px !important;
-  height: 12px !important;
+  width: 13px !important;
+  height: 13px !important;
   display: block !important;
 }
 
@@ -4806,7 +4813,7 @@ body {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 10px 12px 4px !important;
+  padding: 8px 12px 2px !important;     /* tighter — reduced card height */
 }
 .sb-root .mc-hdr-live--inline {
   padding: 10px 12px 8px !important;
@@ -4890,24 +4897,34 @@ body {
   white-space: nowrap !important;
 }
 
-/* Odds row */
+/* Odds row — tight vertical padding to reduce card height */
 .sb-root .mc-odds-bot {
   display: flex !important;
   gap: 5px !important;
-  padding: 0 12px 12px !important;
+  padding: 0 12px 8px !important;
   width: 100% !important;
 }
 
-/* Chevron button */
-/* Chevron button — matches fcbet216: same style as odds buttons */
+/* Odds button — fcbet216 reference: rgb(40,40,40) on rgb(49,49,49) card */
+.sb-root button.mc-odd-btn,
+.sb-root .mc-odd-btn {
+  background: rgb(40,40,40) !important;
+  border: 1px solid rgba(255,255,255,0) !important;
+  border-radius: 5px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 12px !important;
+}
+
+/* Chevron button — matches odds button visual family */
 .sb-root button.mc-chevron-btn,
 .sb-root .mc-chevron-btn {
   width: 38px !important;
   min-width: 38px !important;
-  height: 40px !important;
-  background: rgb(74, 74, 74) !important;
+  height: 38px !important;
+  background: rgb(40,40,40) !important;
   border: 1px solid rgba(255,255,255,0) !important;
-  border-radius: 4px !important;
+  border-radius: 5px !important;
   box-shadow: none !important;
   display: flex !important;
   align-items: center !important;

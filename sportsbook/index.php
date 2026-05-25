@@ -62,9 +62,12 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 <link rel="preload" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" as="style">
 <link rel="preload" href="<?=$base?>sportsbook/app.js?v=<?=$sb_js_v?>" as="script">
 <link rel="stylesheet" href="<?=$base?>sportsbook/style.css?v=<?=$sb_css_v?>" id="sb-css-link">
-<!-- Cache the page itself for 60s so a hard-reload over a flaky link still
-     boots fast; the css/js URLs already carry filemtime cache-bust. -->
-<meta http-equiv="cache-control" content="public, max-age=60">
+<!-- HTML page is NOT cached — every navigation pulls the latest markup with
+     the freshest CSS/JS filemtime version stamps so we never serve stale UI.
+     (The CSS/JS files themselves are still long-cached via filemtime.) -->
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
 
 <style id="sb-critical-mobile">
 @media (max-width:1100px){
@@ -128,16 +131,16 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
   .sb-right.open{transform:translateY(0)!important;box-shadow:0 -10px 60px rgba(0,0,0,0.9)!important;}
 }
 /* ── Match cards — fcbet216 prelive design (Bootstrap no longer loaded here) ── */
-.sb-root .mc{background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;display:flex;flex-direction:column;overflow:hidden;}
-.sb-root .mc-hdr-live{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 4px;}
+.sb-root .mc{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:8px;margin-bottom:8px;width:100%;display:flex;flex-direction:column;overflow:hidden;}
+.sb-root .mc-hdr-live{display:flex;justify-content:space-between;align-items:center;padding:8px 12px 2px;}
 .sb-root .mc-hl-left{display:flex;align-items:center;gap:6px;flex:1;min-width:0;}
 .sb-root .mc-hl-right{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 .sb-root .mc-badge-bb{background:#71f669;color:rgba(0,0,0,.87);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;line-height:1.5;letter-spacing:.2px;}
 .sb-root .mc-live-badge{background:#e02424;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;border:none;line-height:1.3;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
 .sb-root .mc-live-min{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:4px;white-space:nowrap;}
-/* Sport icon BEFORE BB badge in live header */
-.sb-root .mc-hdr-live .mc-sport-badge-inline{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;}
-.sb-root .mc-hdr-live .mc-sport-badge-inline svg{width:12px;height:12px;display:block;}
+/* Sport icon BEFORE BB badge — darker recess, matches fcbet216 reference */
+.sb-root .mc-hdr-live .mc-sport-badge-inline{width:22px;height:22px;border-radius:50%;border:none;background:rgb(20,20,20);color:rgba(255,255,255,0.85);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:4px;}
+.sb-root .mc-hdr-live .mc-sport-badge-inline svg{width:13px;height:13px;display:block;}
 /* Inline league bullet/flag/name on the live header row */
 .sb-root .mc-live-sep{color:rgba(255,255,255,0.35);font-size:10px;margin:0 2px 0 4px;flex-shrink:0;}
 .sb-root .mc-league-flag--inline{width:16px;height:11px;object-fit:cover;border-radius:1px;flex-shrink:0;}
@@ -155,11 +158,11 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 .sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;flex-shrink:0;}
 .sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
 /* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
-.sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:12px;padding:6px 12px 10px;width:100%;cursor:pointer;}
+.sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:10px;padding:2px 12px 6px;width:100%;cursor:pointer;}
 .sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
-/* Live jersey badge — circular rgb(40,40,40) on rgb(49,49,49) cards */
-.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgb(40,40,40);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
-.sb-root .mc-jersey-cell .mc-jersey-svg{width:22px;height:22px;display:block;}
+/* Live jersey — PLAIN shirt SVG, NO circle wrapper, hairline white edge */
+.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:0;background:transparent;border:none;flex-shrink:0;}
+.sb-root .mc-jersey-cell .mc-jersey-svg{width:26px;height:26px;display:block;stroke:rgba(255,255,255,0.9);stroke-width:0.6;}
 /* UPCOMING — fcbet216 spec: circle-shirt rows + EN DIRECT btn + stats icon */
 .sb-root .mc-teams-wrap--upcoming{display:flex;flex-direction:row;align-items:center;gap:12px;padding:6px 12px 10px;width:100%;cursor:pointer;}
 .sb-root .mc-teams-wrap--upcoming .mc-teams-rows{flex:1 1 0;display:flex;flex-direction:column;gap:6px;min-width:0;}
@@ -176,9 +179,9 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-score{flex-shrink:0;font-size:15px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;}
-/* Odds row — fcbet216 .jgpuF exact */
-.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important;align-items:center!important}
-.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
+/* Odds row — fcbet216 .jgpuF exact — tight vertical padding for reduced card height */
+.sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 8px!important;align-items:center!important}
+.sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(40,40,40)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:5px!important;height:38px!important;min-height:38px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 12px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
 .sb-root .mc-odd-lbl{color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:400!important}
 .sb-root .mc-odd-val{color:rgb(113,246,105)!important;font-size:14px!important;font-weight:700!important}
 /* Chevron button — matches reference style */
