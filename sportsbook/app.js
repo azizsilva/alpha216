@@ -1185,10 +1185,10 @@ function applyMargin(rawOdd) {
 // Map sidebar display names → EXACT DB search terms (avoids cross-country false matches)
 // e.g. 'Premier League' must be 'England Premier League' to exclude Australian leagues
 var LEAGUE_DB_SEARCH = {
-  // Football top leagues — use EXACT BetsAPI country-prefixed names
-  'Coupe du Monde 2026':   'FIFA World Cup 2026',
+  // Football top leagues — MUST match EXACT league_name stored in DB
+  'Coupe du Monde 2026':   'World Cup 2026',          // DB stores "World Cup 2026"
   'Ligue des Champions':   'UEFA Champions League',
-  'Ligue Conférence':      'UEFA Europa Conference League',
+  'Ligue Conférence':      'UEFA Conference League',  // DB: "UEFA Conference League"
   'Premier League':        'England Premier League',
   'LaLiga':                'Spain La Liga',
   'Serie A':               'Italy Serie A',
@@ -1219,8 +1219,9 @@ function isLeagueMatch(n, apiLeagueName) {
     'conference':         ['uefa europa conference league'],
     'premier league':     ['england premier league'],
     'division 1a':        ['belgium first division a', 'belgium pro league'],
-    'monde':              ['fifa world cup', 'world cup 2026'],
-    'world cup':          ['fifa world cup', 'world cup 2026'],
+    'monde':              ['fifa world cup', 'world cup 2026', 'world cup'],
+    'world cup':          ['fifa world cup', 'world cup 2026', 'world cup'],
+    'coupe du monde':     ['fifa world cup', 'world cup 2026', 'world cup'],
     'serie a':            ['italy serie a'],
     'bundesliga':         ['germany bundesliga'],
     'ligue 1':            ['france ligue 1'],
