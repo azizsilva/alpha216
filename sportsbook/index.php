@@ -90,6 +90,15 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
     background:#252525!important;color:#979797!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
+  /* Live tab: soccer icon BESIDE the EN DIRECT badge, clear separation */
+  .sb-mobile-topbar .sb-btn-live{gap:8px!important;padding:0 5px 0 12px!important;}
+  .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:18px!important;height:18px!important;border-radius:50%!important;
+    background:rgba(255,255,255,0.06)!important;color:currentColor!important;flex-shrink:0!important;
+  }
+  .sb-mobile-topbar .sb-btn-live.active .sb-btn-live-sport{background:rgba(0,0,0,0.10)!important;}
+  .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport svg{display:block!important;width:12px!important;height:12px!important;}
   /* ACTIVE: only change color — size stays equal */
   .sb-mobile-topbar .sb-btn-home.active,
   .sb-mobile-topbar .sb-btn-live.active{
@@ -132,19 +141,34 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 .sb-root .mc-badge-bb{background:#71f669;color:rgba(0,0,0,.87);font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;line-height:1.5;letter-spacing:.2px;}
 .sb-root .mc-live-badge{background:#e02424;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;border:none;line-height:1.3;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
 .sb-root .mc-live-min{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:4px;white-space:nowrap;}
+/* Sport icon BEFORE BB badge in live header */
+.sb-root .mc-hdr-live .mc-sport-badge-inline{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;}
+.sb-root .mc-hdr-live .mc-sport-badge-inline svg{width:12px;height:12px;display:block;}
+/* Inline league bullet/flag/name on the live header row */
+.sb-root .mc-live-sep{color:rgba(255,255,255,0.35);font-size:10px;margin:0 2px 0 4px;flex-shrink:0;}
+.sb-root .mc-league-flag--inline{width:16px;height:11px;object-fit:cover;border-radius:1px;flex-shrink:0;}
+.sb-root .mc-league-name--inline{font-size:11px;color:rgba(255,255,255,0.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-left:2px;}
 .sb-root .mc-league-row{padding:0 12px 8px;display:flex;align-items:center;gap:6px;}
 .sb-root .mc-league-info{display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;}
 .sb-root .mc-league-flag{width:16px;height:11px;object-fit:cover;border-radius:1px;flex-shrink:0;}
 .sb-root .mc-league-name{color:rgba(255,255,255,0.55);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* Global font — Roboto matches alpina216.com */
 .sb-root,.sb-root *{font-family:'Roboto',sans-serif;}
-/* Teams: each team on its OWN row, left-aligned, score on the FAR right */
+/* Upcoming/prelive: per-team rows */
 .sb-root .mc-teams-wrap--rows{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;padding:4px 12px 10px;width:100%;cursor:pointer;}
 .sb-root .mc-teams-wrap--rows .mc-team-row{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
 .sb-root .mc-shirt-cell{width:24px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:flex-start;}
 .sb-root .mc-shirt-cell .mc-jersey-svg{width:20px;height:20px;display:block;flex-shrink:0;}
 .sb-root .mc-teams-wrap--rows .mc-t-name{flex:1 1 0;text-align:left;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
-.sb-root .mc-teams-wrap--rows .mc-t-score{flex-shrink:0;flex-grow:0;font-size:15px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;}
+/* LIVE: two shirts SIDE-BY-SIDE on the left + stacked names+scores on the right */
+.sb-root .mc-teams-wrap--side{display:flex;flex-direction:row;align-items:center;gap:12px;padding:6px 12px 10px;width:100%;cursor:pointer;}
+.sb-root .mc-jerseys-side{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0 4px 0 0;}
+.sb-root .mc-jersey-cell{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;}
+.sb-root .mc-jersey-cell .mc-jersey-svg{width:26px;height:26px;display:block;}
+.sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
+.sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
+.sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name{flex:1 1 0;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:auto;}
+.sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-score{flex-shrink:0;font-size:15px;font-weight:700;color:#fff;min-width:16px;text-align:right;margin-left:auto;padding-left:8px;}
 /* Odds row — fcbet216 .jgpuF exact */
 .sb-root .mc-odds-bot{display:flex!important;gap:5px!important;padding:0 12px 12px!important;align-items:center!important}
 .sb-root button.mc-odd-btn,.sb-root .mc-odd-btn{background:rgb(74,74,74)!important;border:1px solid rgba(255,255,255,0)!important;border-radius:4px!important;height:40px!important;min-height:40px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:0 10px!important;flex:1 1 0!important;width:auto!important;min-width:0!important;box-shadow:none!important;text-shadow:none!important;overflow:hidden!important;position:relative!important;touch-action:manipulation!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important;cursor:pointer!important;}
@@ -168,9 +192,10 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 /* Sport nav — fcbet216 design: rounded contained strip with tile cards
    and left/right scroll chevrons. Inline critical CSS matches style.css
    so there's no flicker on first paint. */
-.sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 10px 8px;}
-.sb-sport-nav-inner{display:flex;align-items:center;height:70px;gap:6px;padding:7px 36px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;}
-.sb-sport-nav-inner::-webkit-scrollbar{display:none;}
+.sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 5px 8px 12px;}
+.sb-sport-nav-inner{display:flex;align-items:center;height:70px;gap:6px;padding:7px 36px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;width:100%;}
+.sb-sport-nav-inner::-webkit-scrollbar{display:none;height:0!important;width:0!important;}
+.sb-sport-nav-inner::-webkit-scrollbar-thumb,.sb-sport-nav-inner::-webkit-scrollbar-track{display:none!important;}
 #sb-sport-nav-list{display:contents;}
 /* Scroll chevrons */
 .sb-nav-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(40,40,40,0.92);border:1px solid rgba(255,255,255,0.10);color:rgba(255,255,255,0.85);align-items:center;justify-content:center;cursor:pointer;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.45);}
@@ -321,7 +346,15 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
   <!-- Mobile-only top bar (hidden on desktop) -->
   <div class="sb-mobile-topbar">
     <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'home',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
+    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)">
+      <span class="sb-btn-live-sport" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M12 3v6m0 6v6M3 12h6m6 0h6M6.2 6.2l4.2 4.2m3.2 3.2 4.2 4.2M6.2 17.8l4.2-4.2m3.2-3.2 4.2-4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="sb-live-badge">EN DIRECT</span>
+    </button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 

@@ -1554,6 +1554,8 @@ function matchCard(m) {
         else if (_elapsed >= 0) _tmBase = Math.max(1, _elapsed);
       }
     }
+    // Sport icon BEFORE BB badge (small soccer/basket/etc — matches fcbet216)
+    out += '<span class="mc-sport-badge-inline">' + spIconSm + '</span>';
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     // ALWAYS render the timer span for live matches; formatLiveMinute()
@@ -1561,6 +1563,10 @@ function matchCard(m) {
     // live card gets a visible minute label.
     if (!liveMin) liveMin = 'En cours';
     out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
+    // Inline league bullet • flag • name (fcbet216 LIVE card header)
+    out += '<span class="mc-live-sep">&bull;</span>';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
   } else {
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-date">' + h(dateTimeLabel) + '</span>';
@@ -1571,32 +1577,51 @@ function matchCard(m) {
   out += '</div>';
   out += '</div>';
 
-  /* ── Row 2: flag + league name ── */
-  out += '<div class="mc-league-row mc-league-row--split">';
-  out += '<div class="mc-league-info">';
-  out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
-  out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' \u00b7 ' + countryLabel : '') + '</span>';
-  out += '</div>';
-  out += '</div>';
+  /* ── Row 2: flag + league name (ONLY for upcoming — live has it inline) ── */
+  if (!isLive) {
+    out += '<div class="mc-league-row mc-league-row--split">';
+    out += '<div class="mc-league-info">';
+    out += '<img src="' + flagUrl + '" class="mc-league-flag" onerror="this.style.display=\'none\'">';
+    out += '<span class="mc-league-name">' + leagueName + (countryLabel ? ' \u00b7 ' + countryLabel : '') + '</span>';
+    out += '</div>';
+    out += '</div>';
+  }
 
   out += '<div class="mc-body-col">';
 
-  /* ── Per-team rows: [shirt][name].........[score] (matches fcbet216) ── */
-  out += '<div class="mc-teams-wrap mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
-
-  out += '<div class="mc-team-row">';
-  out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
-  out += '<span class="mc-t-name">' + hn + '</span>';
-  if (isLive) out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
-  out += '</div>';
-
-  out += '<div class="mc-team-row">';
-  out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
-  out += '<span class="mc-t-name">' + an + '</span>';
-  if (isLive) out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
-  out += '</div>';
-
-  out += '</div>'; // close mc-teams-wrap
+  /* ── Teams layout ──────────────────────────────────────────────────────
+     LIVE  → two shirts side-by-side on the LEFT + stacked names on RIGHT
+             with scores at the far right (fcbet216 live card spec)
+     OTHER → per-team rows: [shirt][name] */
+  if (isLive) {
+    out += '<div class="mc-teams-wrap mc-teams-wrap--side" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    out += '<div class="mc-jerseys-side">';
+    out += '<span class="mc-jersey-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 26) + '</span>';
+    out += '<span class="mc-jersey-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 26) + '</span>';
+    out += '</div>';
+    out += '<div class="mc-teams-stacked">';
+    out += '<div class="mc-team-row mc-team-row--live">';
+    out += '<span class="mc-t-name">' + hn + '</span>';
+    out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
+    out += '</div>';
+    out += '<div class="mc-team-row mc-team-row--live">';
+    out += '<span class="mc-t-name">' + an + '</span>';
+    out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
+    out += '</div>';
+    out += '</div>';
+    out += '</div>';
+  } else {
+    out += '<div class="mc-teams-wrap mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
+    out += '<div class="mc-team-row">';
+    out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 22) + '</span>';
+    out += '<span class="mc-t-name">' + hn + '</span>';
+    out += '</div>';
+    out += '<div class="mc-team-row">';
+    out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 22) + '</span>';
+    out += '<span class="mc-t-name">' + an + '</span>';
+    out += '</div>';
+    out += '</div>';
+  }
 
   // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)
   out += '<div class="mc-odds-bot" onclick="event.stopPropagation()">';

@@ -702,24 +702,28 @@ body {
   overflow: visible;
   position: relative;
   padding: 0;
-  margin: 12px 10px 8px;  /* gap above (after Favoris) + below (before cards) */
+  margin: 12px 5px 8px 12px;  /* gap above + user spec: left 12px / right 5px */
 }
 .sb-sport-nav-inner {
   display: flex;
   align-items: center;
   height: 70px;
   gap: 6px;
-  padding: 7px 36px;       /* horizontal padding leaves room for arrows */
+  padding: 7px 36px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/old Edge */
   background: #1a1a1a;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 10px;
   scroll-behavior: smooth;
+  width: 100%;
 }
-.sb-sport-nav-inner::-webkit-scrollbar { display: none; }
+.sb-sport-nav-inner::-webkit-scrollbar { display: none; height: 0 !important; width: 0 !important; }
+.sb-sport-nav-inner::-webkit-scrollbar-thumb,
+.sb-sport-nav-inner::-webkit-scrollbar-track { display: none !important; }
 
 /* Legacy sb-sport-scroll becomes inline flex (items flow into the scroll container) */
 .sb-sport-scroll {
@@ -4306,6 +4310,121 @@ body {
   height: 20px !important;
   display: block !important;
 }
+/* ── LIVE card layout — shirts side-by-side LEFT, stacked names+scores RIGHT
+   (fcbet216 prelive live card spec). Each shirt is its own plain SVG inside
+   a small cell with a clear gap between them — no overlap. ── */
+.sb-root .mc-teams-wrap.mc-teams-wrap--side {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 6px 12px 10px !important;
+  width: 100% !important;
+}
+.sb-root .mc-jerseys-side {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;         /* SEPARATION between the two t-shirts */
+  flex-shrink: 0 !important;
+  padding: 0 4px 0 0 !important;
+}
+.sb-root .mc-jersey-cell {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-jersey-cell .mc-jersey-svg {
+  width: 26px !important;
+  height: 26px !important;
+  display: block !important;
+}
+.sb-root .mc-teams-wrap--side .mc-teams-stacked {
+  flex: 1 1 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+.sb-root .mc-teams-wrap--side .mc-team-row--live {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-height: 22px !important;
+}
+.sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-name {
+  flex: 1 1 0 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+  margin-right: auto !important;
+}
+.sb-root .mc-teams-wrap--side .mc-team-row--live .mc-t-score {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  min-width: 16px !important;
+  text-align: right !important;
+  margin-left: auto !important;
+  padding-left: 8px !important;
+}
+
+/* Live-card header: inline league bullet/flag/name after the timer */
+.sb-root .mc-live-sep {
+  color: rgba(255,255,255,0.35) !important;
+  font-size: 10px !important;
+  margin: 0 2px 0 4px !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-league-flag--inline {
+  width: 16px !important;
+  height: 11px !important;
+  object-fit: cover !important;
+  border-radius: 1px !important;
+  flex-shrink: 0 !important;
+}
+.sb-root .mc-league-name--inline {
+  font-size: 11px !important;
+  color: rgba(255,255,255,0.55) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+  margin-left: 2px !important;
+}
+
+/* Sport icon (soccer ball / basket / etc) BEFORE the BB badge in live header */
+.sb-root .mc-hdr-live .mc-sport-badge-inline {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: rgba(255,255,255,0.85) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  margin-right: 2px !important;
+}
+.sb-root .mc-hdr-live .mc-sport-badge-inline svg {
+  width: 12px !important;
+  height: 12px !important;
+  display: block !important;
+}
+
 /* Rows layout for teams inside the card — LEFT-aligned, full-width rows
    (the parent .mc-teams-wrap inherits align-items:center from the inline
    critical CSS; in column direction that would center each row on the
