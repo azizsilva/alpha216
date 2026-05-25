@@ -2550,6 +2550,11 @@ button.sb-btn-live.active .sb-live-badge,
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+/* Collapsed slip body — keeps the header visible but hides the
+   tabs / numpad / cart so the user can see the rest of the page. */
+.sb-slip-panel.slip-collapsed > div:not(.sb-slip-hdr) { display: none !important; }
+.sb-slip-panel.slip-collapsed .sb-slip-hdr-close { transform: rotate(180deg); }
+.sb-slip-hdr-close { transition: transform 0.2s ease; }
 .sb-floating-bet-badge:hover { opacity: 0.92; }
 .sb-floating-bet-badge:active { transform: translateY(1px); }
 
@@ -4473,23 +4478,34 @@ button.md-odd-btn,
   cursor: pointer; flex-shrink: 0; outline: none;
 }
 .slip-bookmark-btn:hover { color: #fff; }
-.slip-place-btn {
-  flex: 1;
-  height: 46px;
-  background: var(--sb-green);
-  color: var(--sb-green-font);
-  border: none;
-  border-radius: 6px;
-  font-weight: 800;
-  font-size: 13px;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  outline: none;
-  transition: background 0.15s, transform 0.1s;
-  letter-spacing: 0.2px;
+.slip-place-btn,
+.sb-root .slip-place-btn,
+body .sb-root .slip-place-btn {
+  flex: 1 !important;
+  height: 46px !important;
+  background: var(--sb-green, #71f669) !important;
+  background-color: var(--sb-green, #71f669) !important;
+  background-image: none !important;
+  color: #000 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  font-family: 'Poppins', sans-serif !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: background 0.15s, transform 0.1s !important;
+  letter-spacing: 0.2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(113,246,105,0.2) !important;
 }
-.slip-place-btn:hover { background: var(--sb-green-dark); transform: translateY(-1px); }
-.slip-place-btn:active { transform: translateY(0); }
+.slip-place-btn:hover,
+.sb-root .slip-place-btn:hover { background: #5fe05a !important; transform: translateY(-1px) !important; }
+.slip-place-btn:active,
+.sb-root .slip-place-btn:active { transform: translateY(0) !important; }
 
 /* ════════════════════════════════════════════════════════════
    CHAMPIONSHIP VIEW — Reference: fcbet216.com/prelive?page=championship

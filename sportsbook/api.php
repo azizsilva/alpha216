@@ -1398,28 +1398,55 @@ if ($action === 'league_matches') {
     }
     // ── Step 3: BetsAPI direct fallback ──
     // When the local DB has nothing for this league (typical for far-future
-    // tournaments like FIFA World Cup 2026, EURO 2028 or any league we
-    // haven't started caching yet), hit BetsAPI's /v3/events/upcoming
-    // directly with league_id so we always show SOMETHING instead of
-    // the dreaded "Aucun match disponible pour cette ligue".
-    if (empty($results) && $league_id_q !== '') {
-        $page = 1;
-        while ($page <= 3) {
-            $up = betsapi_get('/v3/events/upcoming', [
-                'sport_id'  => $sport_id,
-                'league_id' => $league_id_q,
-                'page'      => $page,
-            ]);
-            $upr = $up['results'] ?? [];
-            if (!is_array($upr) || empty($upr)) break;
-            foreach ($upr as $m) {
-                if (!is_array($m)) continue;
-                if (empty($m['home']['name']) || empty($m['away']['name'])) continue;
-                if (($m['time_status'] ?? '0') === '3') continue;
-                $results[] = $m;
+    // tournaments like FIFA World Cup 2026, UEFA Conference League off-
+    // season, or any league we haven't started caching yet), hit BetsAPI
+    // directly so we always show SOMETHING instead of "Aucun match
+    // disponible pour cette ligue".
+    if (empty($results)) {
+        // Build the list of BetsAPI league_ids we should hit. Start with
+        // whatever the client passed (might already match), then search
+        // by name to discover the real BetsAPI ids.
+        $api_league_ids = [];
+        if ($league_id_q !== '' && ctype_digit((string)$league_id_q)) {
+            $api_league_ids[] = (string)$league_id_q;
+        }
+        if ($league_q !== '') {
+            $sr = betsapi_get('/v1/league', ['sport_id' => $sport_id, 'search' => $league_q]);
+            if (!empty($sr['results']) && is_array($sr['results'])) {
+                foreach ($sr['results'] as $lg) {
+                    $lid = (string)($lg['id'] ?? '');
+                    $lname = strtolower((string)($lg['name'] ?? ''));
+                    if (!$lid) continue;
+                    // Loose name match — must contain at least one significant
+                    // word from the query so we don't pull random leagues.
+                    $qlc = strtolower($league_q);
+                    if (strpos($lname, $qlc) !== false || strpos($qlc, $lname) !== false) {
+                        if (!in_array($lid, $api_league_ids, true)) $api_league_ids[] = $lid;
+                    }
+                }
             }
-            if (count($upr) < 50) break;   // last page
-            $page++;
+        }
+        // Fetch upcoming for each candidate league_id (up to 3 pages each).
+        foreach ($api_league_ids as $lid) {
+            $page = 1;
+            while ($page <= 3) {
+                $up = betsapi_get('/v3/events/upcoming', [
+                    'sport_id'  => $sport_id,
+                    'league_id' => $lid,
+                    'page'      => $page,
+                ]);
+                $upr = $up['results'] ?? [];
+                if (!is_array($upr) || empty($upr)) break;
+                foreach ($upr as $m) {
+                    if (!is_array($m)) continue;
+                    if (empty($m['home']['name']) || empty($m['away']['name'])) continue;
+                    if (($m['time_status'] ?? '0') === '3') continue;
+                    $results[] = $m;
+                }
+                if (count($upr) < 50) break;
+                $page++;
+            }
+            if (!empty($results)) break;   // one match found is enough
         }
     }
     // NOTE: No fallback to "all sport matches" — shows empty championship if no matches found,

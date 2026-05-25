@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525cf';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525cg';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -868,11 +868,11 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
   <div class="sb-drawer-handle" onclick="window.sbToggleRight()"></div>
 
   <!-- ═══ FICHE DE PARI — always first ═══ -->
-  <div class="sb-slip-panel">
+  <div class="sb-slip-panel" id="sb-slip-panel">
     <div class="sb-slip-hdr">
       <span class="sb-slip-hdr-title">FICHE DE PARI</span>
       <span class="sb-slip-hdr-badge" id="sb-slip-count" style="display:none">0</span>
-      <button class="sb-slip-hdr-close" onclick="window.sbToggleRight()">&#8212;</button>
+      <button class="sb-slip-hdr-close" onclick="window.sbCollapseSlip()" title="Réduire">&#8212;</button>
     </div>
     <div id="sb-slip-body"></div>
   </div>

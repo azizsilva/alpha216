@@ -4022,6 +4022,22 @@ window.sbToggleRight = function() {
   }
 };
 
+/* Collapse / expand just the slip body (the body, tabs, numpad…).
+ * On mobile this also closes the right drawer so the user sees the
+ * rest of the page. Triggered by the "—" button in the FICHE DE PARI
+ * header. */
+window.sbCollapseSlip = function() {
+  var panel = document.getElementById('sb-slip-panel');
+  if (panel) panel.classList.toggle('slip-collapsed');
+  if (window.innerWidth < 1101) {
+    // Mobile / tablet: also close the drawer so the page is usable.
+    var right = document.getElementById('sb-right');
+    if (right) right.classList.remove('open');
+    var fab = document.getElementById('sb-floating-bet-badge');
+    if (fab && S.betSlip && S.betSlip.length) fab.style.visibility = '';
+  }
+};
+
 window.sbFilterByDate = function(btn, dayOffset) {
   document.querySelectorAll('.sb-date-item').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
