@@ -361,22 +361,54 @@ button.sb-btn-live.active .sb-live-badge,
 }
 
 /* Desktop sidebar — search card + leagues card (fcbet216: two separate boxes) */
+/* Sidebar search card — fcbet216 image 6: spacious pill input with the
+   placeholder fully visible (no ellipsis truncation). */
 .sb-sidebar-search-card {
   margin: 8px 8px 10px;
-  background: rgb(49, 49, 49);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
 }
 .sb-sidebar-search-card .sb-search-wrap {
-  padding: 10px 12px;
+  padding: 0;
 }
 .sb-sidebar-search-card .sb-search-box {
-  background: rgba(0, 0, 0, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  height: 36px;
-  padding: 0 10px;
+  background: rgb(38,38,38) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px !important;
+  height: 44px !important;
+  padding: 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.sb-sidebar-search-card .sb-search-box svg,
+.sb-sidebar-search-card .sb-search-box .sb-search-icon {
+  width: 18px !important;
+  height: 18px !important;
+  color: rgba(255,255,255,0.55) !important;
+  flex-shrink: 0 !important;
+}
+.sb-sidebar-search-card .sb-sidebar-search {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  color: #fff !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  padding: 0 !important;
+  text-overflow: ellipsis !important;
+}
+.sb-sidebar-search-card .sb-sidebar-search::placeholder {
+  color: rgba(255,255,255,0.45) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  opacity: 1 !important;
 }
 .sb-top-leagues-card {
   margin: 0 8px 10px;
@@ -385,10 +417,62 @@ button.sb-btn-live.active .sb-live-badge,
   border-radius: 10px !important;
   overflow: hidden;
 }
+/* Desktop sidebar tabs row — match fcbet216 image 4 exactly */
 .sb-top-leagues-card .sb-league-group-hdr {
-  padding: 10px 12px !important;
+  padding: 12px 14px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-  gap: 10px;
+  gap: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+}
+.sb-top-leagues-card .sb-mob-tab,
+.sb-top-leagues-card .sb-league-group-hdr .sb-mob-tab {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: 0 0 auto !important;
+}
+.sb-top-leagues-card .sb-mob-tab.active { color: #ffffff !important; }
+.sb-top-leagues-card .sb-mob-tab:not(.active) { color: rgba(255,255,255,0.45) !important; }
+.sb-top-leagues-card .sb-mob-tab .sb-mes-cnt {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  min-width: 22px !important;
+  height: 18px !important;
+  padding: 0 6px !important;
+  border-radius: 10px !important;
+  letter-spacing: 0 !important;
+  margin-left: 4px !important;
+}
+.sb-top-leagues-card .sb-lh-minus {
+  margin-left: auto !important;
+  color: rgba(255,255,255,0.85) !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  flex: 0 0 auto !important;
 }
 .sb-top-leagues-card .sb-tl-item {
   background: transparent !important;
@@ -4671,11 +4755,39 @@ button.md-odd-btn,
   background: transparent !important;
 }
 .sb-mob-search-panel .sb-search-box {
-  background: rgba(0,0,0,0.30) !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
-  border-radius: 8px !important;
-  padding: 0 10px !important;
-  height: 36px !important;
+  background: rgb(38,38,38) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.sb-mob-search-panel .sb-search-box svg,
+.sb-mob-search-panel .sb-search-box .sb-search-icon {
+  width: 18px !important;
+  height: 18px !important;
+  color: rgba(255,255,255,0.55) !important;
+  flex-shrink: 0 !important;
+}
+.sb-mob-search-panel .sb-sidebar-search {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  color: #fff !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 13px !important;
+  padding: 0 !important;
+  text-overflow: ellipsis !important;
+}
+.sb-mob-search-panel .sb-sidebar-search::placeholder {
+  color: rgba(255,255,255,0.45) !important;
+  font-size: 13px !important;
+  opacity: 1 !important;
 }
 /* Leagues card — reuses --sb-surface-1 so the gray is consistent everywhere */
 .sb-mob-leagues-panel {
@@ -4685,45 +4797,70 @@ button.md-odd-btn,
   overflow: hidden;
   margin: 0 2px 12px !important;
 }
+/* Tabs row — fcbet216 layout: ACTIVE tab bright white, INACTIVE muted
+   gray, then a SOLID GREEN pill with the count, then a "—" collapse
+   icon on the far right. Tabs must NEVER truncate — show full text. */
 .sb-mob-leagues-panel .sb-league-group-hdr {
   background: transparent !important;
   margin: 0 !important;
-  padding: 10px 12px !important;             /* tighter so both tabs fit */
+  padding: 12px 14px !important;
   border-radius: 0 !important;
   border: none !important;
   border-bottom: 1px solid rgba(255,255,255,0.06) !important;
-  gap: 10px !important;                       /* tighter gap between tabs */
+  gap: 16px !important;
   display: flex !important;
   align-items: center !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
 }
-/* Tab labels — BOTH bright (matches fcbet216 image 1), no truncation */
 .sb-mob-leagues-panel .sb-mob-tab {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  flex: 0 0 auto !important;
+}
+/* Active tab — bright white (fcbet216) */
+.sb-mob-leagues-panel .sb-mob-tab.active { color: #ffffff !important; opacity: 1 !important; }
+/* Inactive tab — muted gray like fcbet's "MES LIGUES" label */
+.sb-mob-leagues-panel .sb-mob-tab:not(.active) { color: rgba(255,255,255,0.45) !important; opacity: 1 !important; }
+/* "0" count badge — SOLID green pill with black text (fcbet216) */
+.sb-mob-leagues-panel .sb-mob-tab .sb-mes-cnt {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #70f669 !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-family: 'Roboto', sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  color: #ffffff !important;
-  letter-spacing: 0.4px !important;
-  white-space: nowrap !important;
-  opacity: 1 !important;
-  text-transform: uppercase !important;
-}
-.sb-mob-leagues-panel .sb-mob-tab[data-tab="my"] {
-  /* Inactive tab — slightly muted but still readable, NOT the dim
-     gray we had before. */
-  color: rgba(255,255,255,0.85) !important;
-}
-.sb-mob-leagues-panel .sb-mob-tab.active { color: #ffffff !important; }
-.sb-mob-leagues-panel .sb-mob-tab .sb-mes-cnt {
-  margin-left: 4px !important;
-  width: 18px !important;
+  line-height: 1 !important;
+  min-width: 22px !important;
   height: 18px !important;
-  font-size: 10px !important;
+  padding: 0 6px !important;
+  border-radius: 10px !important;
+  letter-spacing: 0 !important;
+  margin-left: 4px !important;
 }
 .sb-mob-leagues-panel .sb-lh-minus {
   margin-left: auto !important;
-  color: #ffffff !important;
-  opacity: 0.85 !important;
+  color: rgba(255,255,255,0.85) !important;
   font-size: 18px !important;
   line-height: 1 !important;
+  cursor: pointer !important;
+  flex: 0 0 auto !important;
 }
 .sb-mob-leagues-panel .sb-tl-list {
   padding: 0 !important;
@@ -5784,7 +5921,7 @@ button.md-odd-btn,
   padding: 0 12px !important;
 }
 .sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.60) !important; }
-.sb-root .mc-odd-btn .mc-odd-val { color: rgb(13,246,105) !important; font-weight: 700 !important; }
+.sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-weight: 700 !important; }
 
 /* Chevron button — same fcbet gray as odds chips */
 .sb-root button.mc-chevron-btn,

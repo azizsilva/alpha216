@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525ap';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525aq';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -237,9 +237,12 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-top-leagues-card{margin:0 8px 10px;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;}
 .sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
-.sb-mob-search-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:0 2px 10px;}
-.sb-mob-search-panel .sb-search-wrap{padding:10px 12px;}
-.sb-mob-search-panel .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
+.sb-mob-search-panel{background:transparent;border:0;border-radius:0;overflow:visible;margin:0 2px 10px;}
+.sb-mob-search-panel .sb-search-wrap{padding:0;}
+.sb-mob-search-panel .sb-search-box{background:rgb(38,38,38);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;}
+.sb-mob-search-panel .sb-search-box svg,.sb-mob-search-panel .sb-search-box .sb-search-icon{width:18px;height:18px;color:rgba(255,255,255,0.55);flex-shrink:0;}
+.sb-mob-search-panel .sb-sidebar-search{flex:1 1 auto;width:100%;min-width:0;background:transparent;border:0;outline:none;color:#fff;font-family:'Roboto',sans-serif;font-size:13px;padding:0;}
+.sb-mob-search-panel .sb-sidebar-search::placeholder{color:rgba(255,255,255,0.45);font-size:13px;opacity:1;}
 .sb-mob-leagues-panel{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden;margin:0 2px 12px!important;}
 .sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
