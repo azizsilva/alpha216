@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525s';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525t';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -284,6 +284,24 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root[data-view="sportpage"] #sb-boost-section,
 .sb-root[data-view="sportpage"] #sb-boost-dots,
 .sb-root[data-view="sportpage"] .sb-mob-leagues-panel{display:none!important;}
+/* Match-detail view: hide ALL home siblings + the mobile topbar / date /
+ * favoris / sport nav / live carousel / boost section so the match-detail
+ * header is the only thing on screen (fcbet216 parity). */
+.sb-root[data-view="matchdetail"] .sb-date-row,
+.sb-root[data-view="matchdetail"] .sb-favoris-row,
+.sb-root[data-view="matchdetail"] .sb-favoris-content,
+.sb-root[data-view="matchdetail"] .sb-sport-nav,
+.sb-root[data-view="matchdetail"] .sb-en-direct-row,
+.sb-root[data-view="matchdetail"] #sb-en-direct-cards,
+.sb-root[data-view="matchdetail"] .sb-boost-section,
+.sb-root[data-view="matchdetail"] #sb-boost-section,
+.sb-root[data-view="matchdetail"] #sb-boost-dots,
+.sb-root[data-view="matchdetail"] .sb-mob-leagues-panel,
+.sb-root[data-view="matchdetail"] .sb-mobile-topbar,
+.sb-root[data-view="matchdetail"] .sb-upcoming-tabs,
+.sb-root[data-view="matchdetail"] .sb-sport-page,
+.sb-root[data-view="matchdetail"] .sb-mob-inline-leagues{display:none!important;}
+.sb-root[data-view="matchdetail"] #sb-matches-body{margin-top:0!important;padding-top:0!important;}
 /* Cotes boostées — tight card + timeline dots (fcbet216 ref) */
 .sb-root .sb-boost-header{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;margin:0 0 8px;letter-spacing:.2px;line-height:1;}
 .sb-root .sb-boost-header svg{width:14px;height:14px;color:#fff;fill:#fff;}
@@ -306,7 +324,11 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .md-tab.active{background:#70f669!important;border-color:#70f669!important;color:#000!important;font-weight:700!important;border-radius:8px!important;margin:0!important;padding:8px 14px!important;}
 .md-tab-search-btn,.md-tab-search-close{background:#70f669!important;border:none!important;color:#000!important;cursor:pointer;padding:0!important;margin:0!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:8px!important;outline:none!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;box-shadow:none!important;}
 .md-tab-search-btn svg,.md-tab-search-close svg{width:14px!important;height:14px!important;color:#000!important;}
-.md-search-panel{display:flex!important;align-items:center!important;gap:8px!important;flex:1 1 auto!important;min-width:0!important;padding:0!important;margin:0!important;}
+.md-search-panel{display:none!important;align-items:center!important;gap:8px!important;flex:1 1 auto!important;min-width:0!important;padding:0!important;margin:0!important;}
+.md-tabs-wrap.md-tabs-wrap--search .md-search-panel{display:flex!important;}
+.md-tabs-wrap.md-tabs-wrap--search .md-tabs-row,
+.md-tabs-wrap.md-tabs-wrap--search .md-tab-search-btn,
+.md-tabs-wrap.md-tabs-wrap--search .md-tab-info-btn{display:none!important;}
 .md-search-input{flex:1 1 auto!important;min-width:0!important;background:#2a2a2a!important;border:1px solid rgba(255,255,255,.08)!important;color:#fff!important;border-radius:8px!important;padding:8px 12px!important;font-size:13px!important;font-family:'Roboto',sans-serif!important;outline:none!important;height:34px!important;box-shadow:none!important;}
 .md-tab-info-btn{background:transparent!important;border:1.5px solid #f04a4a!important;color:#f04a4a!important;cursor:pointer;padding:0!important;width:28px!important;height:28px!important;min-width:28px!important;border-radius:50%!important;outline:none!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;margin:0!important;box-shadow:none!important;}
 .md-tab-info-btn svg{width:14px!important;height:14px!important;color:#f04a4a!important;}

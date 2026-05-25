@@ -3309,9 +3309,11 @@ body {
 .md-tab-search-btn svg { width: 14px !important; height: 14px !important; color: #000 !important; }
 .md-tab-search-btn:hover { background: #62de58 !important; }
 
-/* Inline search panel (revealed when search active) */
+/* Inline search panel — hidden by default, shown only when the
+   wrapper has the .md-tabs-wrap--search class. Selectors include
+   .md-tabs-wrap to beat the baseline !important on .md-tabs-row. */
 .md-search-panel {
-  display: flex !important;
+  display: none !important;
   align-items: center !important;
   gap: 8px !important;
   flex: 1 1 auto !important;
@@ -3319,6 +3321,10 @@ body {
   padding: 0 !important;
   margin: 0 !important;
 }
+.md-tabs-wrap.md-tabs-wrap--search .md-search-panel { display: flex !important; }
+.md-tabs-wrap.md-tabs-wrap--search .md-tabs-row,
+.md-tabs-wrap.md-tabs-wrap--search .md-tab-search-btn,
+.md-tabs-wrap.md-tabs-wrap--search .md-tab-info-btn { display: none !important; }
 .md-tab-search-close {
   background: var(--sb-green) !important;
   border: none !important;
@@ -5364,6 +5370,26 @@ body {
 .sb-root[data-view="sportpage"] .sb-mob-leagues-panel {
   display: none !important;
 }
+
+/* Match detail view — hide every home/sport-page sibling so only the
+   match-detail header + tabs + markets are visible. */
+.sb-root[data-view="matchdetail"] .sb-date-row,
+.sb-root[data-view="matchdetail"] .sb-favoris-row,
+.sb-root[data-view="matchdetail"] .sb-favoris-content,
+.sb-root[data-view="matchdetail"] .sb-sport-nav,
+.sb-root[data-view="matchdetail"] .sb-en-direct-row,
+.sb-root[data-view="matchdetail"] #sb-en-direct-cards,
+.sb-root[data-view="matchdetail"] .sb-boost-section,
+.sb-root[data-view="matchdetail"] #sb-boost-section,
+.sb-root[data-view="matchdetail"] #sb-boost-dots,
+.sb-root[data-view="matchdetail"] .sb-mob-leagues-panel,
+.sb-root[data-view="matchdetail"] .sb-mobile-topbar,
+.sb-root[data-view="matchdetail"] .sb-upcoming-tabs,
+.sb-root[data-view="matchdetail"] .sb-sport-page,
+.sb-root[data-view="matchdetail"] .sb-mob-inline-leagues {
+  display: none !important;
+}
+.sb-root[data-view="matchdetail"] #sb-matches-body { margin-top: 0 !important; padding-top: 0 !important; }
 
 .sb-root .sb-sport-page {
   display: flex;

@@ -2761,10 +2761,15 @@ window.sbBackToMain = function() {
   // Clear URL back to base path
   sbPushUrl('main');
 
-  // Restore all homepage panels
+  // Restore all homepage panels and exit any data-view mode so the
+  // date row, favoris, sport nav, live carousel and boost section all
+  // come back.
   sbSetHomepanelVisible(true);
+  var rootB = document.querySelector('.sb-root');
+  if (rootB) rootB.removeAttribute('data-view');
 
   loadAndFilter(S.activeAction, S.activeSportId, null);
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
 };
 
 /* Mobile league tab switcher — syncs BOTH sidebar + inline league sections */
@@ -3280,8 +3285,17 @@ window.sbOpenMatch = function(mid, _skipPush) {
   if (!_skipPush) {
     sbPushUrl('liveEvent', {eventId: mid, sportId: S.activeSportId || 1});
   }
-  // Hide the leagues panel and top nav — full viewport for the match
+  // Hide the leagues panel and top nav — full viewport for the match.
+  // We also set data-view="matchdetail" on .sb-root so CSS can hide
+  // the date row, favoris row, sport nav, live carousel and boost
+  // section all at once (same pattern as sportpage). Otherwise the
+  // match-detail view appears INSIDE the home layout (user image 6).
   sbSetHomepanelVisible(false);
+  var rootMd = document.querySelector('.sb-root');
+  if (rootMd) rootMd.setAttribute('data-view', 'matchdetail');
+  // Scroll back to top so the user immediately sees the match header
+  // instead of being stuck at their previous home scroll position.
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
   var el = document.getElementById('sb-matches-body');
   if (el) el.innerHTML = buildMatchDetailSkeleton();
 
@@ -3986,25 +4000,19 @@ window.sbMdQuickFilter = function(btn, filter) {
 // Click the search icon → tabs row hides, an input shows ("Search market").
 // Typing filters markets by name. Click the X → restores tabs row.
 window.sbMdSearchToggle = function(open) {
-  var panel  = document.getElementById('md-search-panel');
-  var tabs   = document.getElementById('md-tabs-inner');
-  var btn    = document.getElementById('md-search-btn');
-  var info   = document.getElementById('md-tab-info-btn');
+  // Use a class on the wrapper instead of inline display:none, because
+  // the critical inline CSS forces `.md-tabs-row { display: flex !important }`
+  // and that beats JS-set inline style. With the class on the wrapper
+  // we win specificity (.md-tabs-wrap.md-tabs-wrap--search .md-tabs-row).
+  var wrap   = document.getElementById('md-tabs-wrap');
   var input  = document.getElementById('md-search-input');
-  if (!panel || !tabs) return;
+  if (!wrap) return;
   if (open) {
-    panel.style.display = 'flex';
-    tabs.style.display  = 'none';
-    if (btn)  btn.style.display  = 'none';
-    if (info) info.style.display = 'none';
+    wrap.classList.add('md-tabs-wrap--search');
     setTimeout(function(){ if (input) input.focus(); }, 0);
   } else {
-    panel.style.display = 'none';
-    tabs.style.display  = '';
-    if (btn)  btn.style.display  = '';
-    if (info) info.style.display = '';
+    wrap.classList.remove('md-tabs-wrap--search');
     if (input) input.value = '';
-    // Re-apply the active tab filter so we restore the previous view.
     var activeTab = document.querySelector('.md-tab.active');
     if (activeTab) {
       var nm = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
