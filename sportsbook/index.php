@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525aa';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525ab';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -342,8 +342,8 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .md-market-group,.md-market-group{background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0!important;border-color:rgba(255,255,255,0)!important;border-radius:6px!important;margin-bottom:8px!important;overflow:hidden;box-shadow:rgba(13,13,13,0) 0 0 0 0!important;}
 .sb-root .md-mkt-body,.md-mkt-body{padding:2px 10px 12px!important;display:flex!important;flex-direction:column!important;gap:6px!important;}
 .sb-root .md-mkt-row,.md-mkt-row{display:flex!important;gap:8px!important;align-items:stretch!important;}
-.sb-root button.md-odd-btn,.sb-root .md-odd-btn,button.md-odd-btn,.md-odd-btn{flex:1 1 0!important;min-width:0!important;background:rgb(38,38,38)!important;background-color:rgb(38,38,38)!important;background-image:none!important;border:1px solid rgba(255,255,255,.04)!important;border-radius:6px!important;padding:10px 14px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;outline:none!important;min-height:44px!important;height:44px!important;gap:10px!important;box-shadow:none!important;text-shadow:none!important;margin:0!important;color:#fff!important;}
-.sb-root button.md-odd-btn:hover,.sb-root .md-odd-btn:hover,.md-odd-btn:hover{background:rgb(46,46,46)!important;background-color:rgb(46,46,46)!important;border-color:rgba(255,255,255,.08)!important;}
+.sb-root button.md-odd-btn,.sb-root .md-odd-btn,button.md-odd-btn,.md-odd-btn{flex:1 1 0!important;min-width:0!important;background:rgb(74,74,74)!important;background-color:rgb(74,74,74)!important;background-image:none!important;border:1px solid rgba(255,255,255,.04)!important;border-radius:6px!important;padding:10px 14px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;cursor:pointer!important;font-family:'Roboto',sans-serif!important;outline:none!important;min-height:44px!important;height:44px!important;gap:10px!important;box-shadow:none!important;text-shadow:none!important;margin:0!important;color:#fff!important;}
+.sb-root button.md-odd-btn:hover,.sb-root .md-odd-btn:hover,.md-odd-btn:hover{background:rgb(82,82,82)!important;background-color:rgb(82,82,82)!important;border-color:rgba(255,255,255,.08)!important;}
 .md-mkt-hdr{display:flex!important;align-items:center!important;padding:12px 14px 10px!important;gap:10px!important;border-bottom:0!important;font-family:'Roboto',sans-serif!important;}
 .md-mkt-star{color:rgba(255,255,255,.35)!important;flex-shrink:0;}
 .md-mkt-star svg{width:14px!important;height:14px!important;}
