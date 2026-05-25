@@ -328,6 +328,21 @@ function patchMatchDetailLive(m, markets) {
     if (m.timer) lm.timer = m.timer;
     if (m.live_odds) { lm.live_odds = m.live_odds; lm._o = null; }
     if (m.time_status) lm.time_status = m.time_status;
+    if (m.stats) lm.stats = m.stats;
+  }
+
+  // Refresh stats bar (corners, yellow/red cards, attacks, shots on target)
+  // in-place so counts tick up live without re-rendering the whole page.
+  if (m.stats) {
+    var sportId = parseInt(m.sport_id || 1);
+    var newBar  = renderStatsBar(m, sportId);
+    var oldBar  = document.querySelector('.md-stats-bar');
+    if (oldBar && newBar) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = newBar;
+      var fresh = tmp.firstElementChild;
+      if (fresh) oldBar.replaceWith(fresh);
+    }
   }
 
   // Refresh market odds if API returned updated markets
@@ -351,17 +366,26 @@ function renderStatsBar(m, sportId) {
     if (st[key] && st[key][idx] !== undefined) return st[key][idx];
     return def;
   }
-  // Football
+  // Football — fcbet216 stat row reference (image 1):
+  //   attacks ⚡ | yellow ▮ | red ▮ | corner flag | shots on target ◎
+  // Falls back to '0' (not '-') when the API confirms the match is
+  // live but the stat hasn't been seen yet — this matches fcbet216
+  // which always shows numeric counters during a live match.
   if (sportId === 1) {
-    var goalsH = s[0] !== undefined ? s[0] : sv('goals',0,'0');
-    var goalsA = s[1] !== undefined ? s[1] : sv('goals',1,'0');
+    var isLiveNow = m && (m.time_status === '1');
+    var defaultVal = isLiveNow ? '0' : '-';
+    function svL(k, i) {
+      var v = sv(k, i, null);
+      if (v === null || v === undefined || v === '') return defaultVal;
+      return v;
+    }
     return '<div class="md-stats-bar">'
-      + mdStat(goalsH, '⚽', goalsA)
-      + mdStat(sv('yellow_cards',0,'-'), '<span class="md-si-yc">▮</span>', sv('yellow_cards',1,'-'))
-      + mdStat(sv('red_cards',0,'-'),    '<span class="md-si-rc">▮</span>', sv('red_cards',1,'-'))
-      + mdStat(sv('attacks',0,sv('dangerous_attacks',0,'-')), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>', sv('attacks',1,sv('dangerous_attacks',1,'-')))
-      + mdStat(sv('corners',0,'-'), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18v-2H5V3H3zm4 14l4-5 3 3 3-4 4 5H7z"/></svg>', sv('corners',1,'-'))
-      + mdStat(sv('on_target',0,'-'), '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', sv('on_target',1,'-'))
+      + mdStat(svL('dangerous_attacks',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>', svL('dangerous_attacks',1))
+      + mdStat(svL('attacks',0),           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 4 13 11 13 11 22 20 11 13 11 13 2"/></svg>', svL('attacks',1))
+      + mdStat(svL('yellow_cards',0), '<span class="md-si-yc">▮</span>', svL('yellow_cards',1))
+      + mdStat(svL('red_cards',0),    '<span class="md-si-rc">▮</span>', svL('red_cards',1))
+      + mdStat(svL('corners',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3v18h2V13c4 0 8 2 12 6V3c-4 4-8 6-12 6V3H5z"/></svg>', svL('corners',1))
+      + mdStat(svL('on_target',0), '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', svL('on_target',1))
       + '</div>';
   }
   // Basketball
@@ -3564,12 +3588,12 @@ function buildFallbackMarkets(m) {
     {id:'h2',name:'2 -0',odds:Math.max(1.01,+seedRand(s+'ha',1.6,2.5).toFixed(2)),handicap:'-0'},
   ]});
 
-  // Plage de buts
+  // Plage de buts — fcbet216 exact ranges (2-3, 4-6, 7+) shown as a
+  // vertical list with one option per row.
   mkts.push({id:'gr',name:'Plage de buts',selections:[
-    {id:'g01',name:'0-1',odds:Math.max(1.01,+seedRand(s+'g01',3.0,6.0).toFixed(2))},
     {id:'g23',name:'2-3',odds:Math.max(1.01,+seedRand(s+'g23',2.0,3.5).toFixed(2))},
-    {id:'g45',name:'4-5',odds:Math.max(1.01,+seedRand(s+'g45',4.0,8.0).toFixed(2))},
-    {id:'g6p',name:'6+',odds:Math.max(1.01,+seedRand(s+'g6p',12.0,26.0).toFixed(2))},
+    {id:'g46',name:'4-6',odds:Math.max(1.01,+seedRand(s+'g46',1.4,2.5).toFixed(2))},
+    {id:'g7p',name:'7+',odds:Math.max(1.01,+seedRand(s+'g7p',6.0,18.0).toFixed(2))},
   ]});
 
   // Mi-temps/Fin de match (HT/FT 3x3)
@@ -3600,6 +3624,72 @@ function buildFallbackMarkets(m) {
     {id:'t2un05',name:'Moins de 0.5',odds:Math.max(1.01,+seedRand(s+'t2b',3.8,5.0).toFixed(2))},
     {id:'t2ov15',name:'Plus de 1.5',odds:Math.max(1.01,+seedRand(s+'t2c',1.7,2.1).toFixed(2))},
     {id:'t2un15',name:'Moins de 1.5',odds:Math.max(1.01,+seedRand(s+'t2d',1.65,2.0).toFixed(2))},
+  ]});
+
+  // Nombre exact de buts (Exact goals) — fcbet216 image 8.
+  // 0..5+ with realistic Poisson-style spread (high odds at extremes).
+  mkts.push({id:'eg',name:'Nombre exact de buts',selections:[
+    {id:'eg0', name:'0',  odds:Math.max(1.01,+seedRand(s+'eg0', 8.0,18.0).toFixed(2))},
+    {id:'eg1', name:'1',  odds:Math.max(1.01,+seedRand(s+'eg1', 5.0,12.0).toFixed(2))},
+    {id:'eg2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg2', 4.0, 7.5).toFixed(2))},
+    {id:'eg3', name:'3',  odds:Math.max(1.01,+seedRand(s+'eg3', 2.8, 4.5).toFixed(2))},
+    {id:'eg4', name:'4',  odds:Math.max(1.01,+seedRand(s+'eg4', 2.5, 4.0).toFixed(2))},
+    {id:'eg5p',name:'5+', odds:Math.max(1.01,+seedRand(s+'eg5',1.85, 3.0).toFixed(2))},
+  ]});
+
+  // 1 exact goals (home team) — fcbet216 image 9
+  mkts.push({id:'eg1team',name:'1 exact goals',selections:[
+    {id:'eg1t0', name:'0',  odds:Math.max(1.01,+seedRand(s+'eg1a',1.2,1.6).toFixed(2))},
+    {id:'eg1t1', name:'1',  odds:Math.max(1.01,+seedRand(s+'eg1b',2.6,4.0).toFixed(2))},
+    {id:'eg1t2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg1c',8.0,15.0).toFixed(2))},
+    {id:'eg1t3p',name:'3+', odds:Math.max(1.01,+seedRand(s+'eg1d',12.0,18.0).toFixed(2))},
+  ]});
+
+  // 2 exact goals (away team)
+  mkts.push({id:'eg2team',name:'2 exact goals',selections:[
+    {id:'eg2t2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg2a',3.5,5.0).toFixed(2))},
+    {id:'eg2t3p',name:'3+', odds:Math.max(1.01,+seedRand(s+'eg2b',1.1,1.3).toFixed(2))},
+  ]});
+
+  // Troisième but (Third goal scorer) — fcbet216 image 6
+  mkts.push({id:'3rd',name:'Troisième but',selections:[
+    {id:'3rd1', name:'1',     odds:Math.max(1.01,+seedRand(s+'3rd1',4.0,7.0).toFixed(2))},
+    {id:'3rdN', name:'Aucun', odds:Math.max(1.01,+seedRand(s+'3rdn',4.0,7.0).toFixed(2))},
+    {id:'3rd2', name:'2',     odds:Math.max(1.01,+seedRand(s+'3rd2',1.15,1.5).toFixed(2))},
+  ]});
+
+  // Dernier but (Last goal scorer)
+  mkts.push({id:'last',name:'Dernier but',selections:[
+    {id:'last1',name:'1',     odds:Math.max(1.01,+seedRand(s+'last1',3.0,5.0).toFixed(2))},
+    {id:'lastN',name:'Aucun', odds:Math.max(1.01,+seedRand(s+'lastn',4.0,8.0).toFixed(2))},
+    {id:'last2',name:'2',     odds:Math.max(1.01,+seedRand(s+'last2',1.05,1.3).toFixed(2))},
+  ]});
+
+  // Prochain but (Next goal)
+  mkts.push({id:'next',name:'Prochain but',selections:[
+    {id:'next1',name:'1',     odds:Math.max(1.01,+seedRand(s+'next1',3.0,5.0).toFixed(2))},
+    {id:'nextN',name:'Aucun', odds:Math.max(1.01,+seedRand(s+'nextn',4.0,8.0).toFixed(2))},
+    {id:'next2',name:'2',     odds:Math.max(1.01,+seedRand(s+'next2',1.05,1.3).toFixed(2))},
+  ]});
+
+  // 1 marque (Home team to score)
+  mkts.push({id:'h_score',name:'1 marque',selections:[
+    {id:'hsy',name:'Oui',odds:Math.max(1.01,+seedRand(s+'hsy',2.0,3.5).toFixed(2))},
+    {id:'hsn',name:'Non',odds:Math.max(1.01,+seedRand(s+'hsn',1.2,1.6).toFixed(2))},
+  ]});
+
+  // Quelle équipe va marquer (Which team will score)
+  mkts.push({id:'team_score',name:'Quelle équipe va marquer',selections:[
+    {id:'ts1', name:'Seulement 1',     odds:Math.max(1.01,+seedRand(s+'ts1', 4.0,9.0).toFixed(2))},
+    {id:'ts2', name:'Seulement 2',     odds:Math.max(1.01,+seedRand(s+'ts2', 1.15,1.5).toFixed(2))},
+    {id:'tsB', name:'Les deux équipes',odds:Math.max(1.01,+seedRand(s+'tsB', 2.5,4.0).toFixed(2))},
+    {id:'tsN', name:'Aucun',           odds:Math.max(1.01,+seedRand(s+'tsN', 4.0,8.0).toFixed(2))},
+  ]});
+
+  // 2 remboursé si victoire (Insurance — refund if 2 wins)
+  mkts.push({id:'refund2',name:'2 remboursé si victoire',selections:[
+    {id:'r2_1',name:'1',  odds:Math.max(1.01,+seedRand(s+'r2_1',5.0,8.0).toFixed(2))},
+    {id:'r2_n',name:'Nul',odds:Math.max(1.01,+seedRand(s+'r2_n',1.05,1.2).toFixed(2))},
   ]});
 
   return mkts;
