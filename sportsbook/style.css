@@ -5745,31 +5745,36 @@ button.md-odd-btn,
   width: 100% !important;
 }
 
-/* Odds button — fcbet216 reference: rgb(58,58,58) one step lighter than
-   the card surface (rgb(49,49,49)) so the buttons read as elevated chips
-   in the same gray family — never near-black like the previous
-   rgb(40,40,40). 1px hairline border for definition. */
+/* Odds button — fcbet216 exact `.jgpuF` background `rgb(74,74,74)`
+   (sampled from DevTools — image 1). Was previously overridden to
+   `rgb(58,58,58)` which made the buttons read too dark. 4px radius
+   matches fcbet, transparent border so the button reads as a flat
+   filled chip. */
 .sb-root button.mc-odd-btn,
 .sb-root .mc-odd-btn {
-  background: rgb(58,58,58) !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
-  border-radius: 6px !important;
+  background: rgb(74,74,74) !important;
+  background-color: rgb(74,74,74) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0) !important;
+  border-radius: 4px !important;
   height: 40px !important;
   min-height: 40px !important;
   padding: 0 12px !important;
 }
-.sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.55) !important; }
-.sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-weight: 700 !important; }
+.sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.60) !important; }
+.sb-root .mc-odd-btn .mc-odd-val { color: rgb(13,246,105) !important; font-weight: 700 !important; }
 
-/* Chevron button — same gray family as odds buttons */
+/* Chevron button — same fcbet gray as odds chips */
 .sb-root button.mc-chevron-btn,
 .sb-root .mc-chevron-btn {
   width: 40px !important;
   min-width: 40px !important;
   height: 40px !important;
-  background: rgb(58,58,58) !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
-  border-radius: 6px !important;
+  background: rgb(74,74,74) !important;
+  background-color: rgb(74,74,74) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0) !important;
+  border-radius: 4px !important;
   box-shadow: none !important;
   display: flex !important;
   align-items: center !important;
