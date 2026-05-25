@@ -3568,8 +3568,10 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
     }
   }
 
-  // Slider for Total market (only non-BB mode to keep BB clean)
-  if (!bbMode && hasRange && sels.length >= 2) {
+  // Slider for Total market — fcbet216 only shows the slider when the
+  // Total has a single handicap line. When we render a ladder (3+ lines)
+  // the slider is redundant and we omit it.
+  if (!bbMode && hasRange && sels.length >= 2 && sels.length <= 2) {
     var lineVal = parseFloat(sels[0].handicap || 2.5);
     out += '<div class="md-slider-wrap">';
     out += '<span class="md-slider-val">' + lineVal + '</span>';
@@ -3590,7 +3592,12 @@ function renderMktBtn(sel, m, bbMode) {
   var val    = applyMargin(rawOdd);
   var hasOdd = (val >= 1.01);
   var safeName = (sel.name != null && sel.name !== '') ? sel.name : '-';
-  var lbl    = h(String(safeName)) + (sel.handicap != null ? ' <span class="md-hc">' + h(String(sel.handicap)) + '</span>' : '');
+  // Suppress the trailing handicap badge when the selection name already
+  // contains the line value (e.g. "Plus de 4.5"). fcbet216 never shows
+  // the line twice — we previously rendered "Plus de 2.5 2.5".
+  var hcStr = (sel.handicap != null) ? String(sel.handicap) : '';
+  var nameHasHc = hcStr && String(safeName).indexOf(hcStr) !== -1;
+  var lbl = h(String(safeName)) + (sel.handicap != null && !nameHasHc ? ' <span class="md-hc">' + h(hcStr) + '</span>' : '');
   var bid    = h(String(m.id || '')) + '_md_' + h(String(sel.id || safeName));
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
   var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
@@ -3626,14 +3633,26 @@ function buildFallbackMarkets(m) {
     ]});
   }
 
-  // Total
-  var ov = parseFloat(o.ov) || +seedRand(s+'ov',1.55,2.4).toFixed(2);
-  var un = parseFloat(o.un) || +seedRand(s+'un',1.55,2.4).toFixed(2);
+  // Total — fcbet216 shows a *ladder* of Plus/Moins rows centered on
+  // the current bookmaker line (e.g. 4.5, 5, 5.5 visible at once).
+  // Build 3 rows: line - 0.5, line, line + 0.5 with realistic odds
+  // that walk in opposite directions for Plus vs Moins.
+  var ov   = parseFloat(o.ov) || +seedRand(s+'ov',1.55,2.4).toFixed(2);
+  var un   = parseFloat(o.un) || +seedRand(s+'un',1.55,2.4).toFixed(2);
   var line = parseFloat(o.ou) || 2.5;
-  mkts.push({ id:'total', name:'Total', selections:[
-    {id:'ov',name:'Plus de '+line,odds:Math.max(1.01,ov),handicap:line},
-    {id:'un',name:'Moins de '+line,odds:Math.max(1.01,un),handicap:line},
-  ]});
+  function _mk(name, odd, hc) { return { id:'tot_'+name.replace(/\s+/g,'_')+'_'+hc, name:name, odds:Math.max(1.01,+odd.toFixed(2)), handicap:hc }; }
+  // Generate ladder: low / mid / high lines.
+  var lL = +(line - 0.5).toFixed(1);
+  var lH = +(line + 0.5).toFixed(1);
+  var totSels = [
+    _mk('Plus de '  + lL, ov * 0.70, lL),
+    _mk('Moins de ' + lL, un * 1.45, lL),
+    _mk('Plus de '  + line, ov, line),
+    _mk('Moins de ' + line, un, line),
+    _mk('Plus de '  + lH, ov * 1.45, lH),
+    _mk('Moins de ' + lH, un * 0.70, lH),
+  ];
+  mkts.push({ id:'total', name:'Total', selections: totSels });
 
   // Double Chance
   mkts.push({id:'dc',name:'Double Chance',selections:[
