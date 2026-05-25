@@ -695,6 +695,9 @@ if ($action === 'inplay') {
     $ev_refresh_cap = $is_football ? 40 : 20;
 
     // ── Step 1: Get or refresh inplay_filter per sport ─────────────────────
+    // CACHE TTL is intentionally low (3s for football, 5s for other) so the
+    // /v1/bet365/inplay_filter endpoint is hit at most once per cache_ttl.
+    // We NEVER serve a cached response that is older than cache_ttl seconds.
     $use_sport_cache = file_exists($sport_cache) && (time()-filemtime($sport_cache)) < $cache_ttl;
     if ($use_sport_cache) {
         $results = json_decode(file_get_contents($sport_cache), true) ?: [];
@@ -716,7 +719,9 @@ if ($action === 'inplay') {
         if (!empty($live_api)) {
             $results = $live_api;
             @file_put_contents($sport_cache, json_encode($results));
-            // Also update DB for league_matches / championship view
+            // DB write is fire-and-forget — it persists league_matches /
+            // championship lookups but MUST NOT delay the live response.
+            // We do it ONLY when we just refreshed inplay_filter.
             if ($db_connected) cache_to_db($pdo, $results, $sport_id);
         }
     }
@@ -738,6 +743,7 @@ if ($action === 'inplay') {
     $stream_stats = [];      // keyed by FI
     $stream_stats_rid = [];  // keyed by r_id base
     $stream_ss = [];         // keyed by FI — fresh score from EV.SS
+    $stream_ss_rid = [];     // keyed by r_id base — fallback when FI map fails
     $rid_to_fi   = [];       // r_id (inplay_filter) → FI (stream EV)
     $curr_fi = null; $curr_h = $curr_x = $curr_a = null;
     $curr_ou_line = 2.5; $curr_ou_over = $curr_ou_under = null;
@@ -762,8 +768,9 @@ if ($action === 'inplay') {
             if ($ev_stats && $curr_fi) {
                 $stream_stats[$curr_fi] = $ev_stats;
             }
-            if ($curr_fi && !empty($item['SS'])) {
-                $stream_ss[$curr_fi] = $item['SS'];
+            $ev_ss = $item['SS'] ?? $item['ss'] ?? null;
+            if ($curr_fi && $ev_ss !== null && $ev_ss !== '') {
+                $stream_ss[$curr_fi] = $ev_ss;
             }
             if (!empty($item['ID'])) {
                 // ID format: "194088383C1A_1_3" → base "194088383C1A" matches r_id in inplay_filter
@@ -772,12 +779,14 @@ if ($action === 'inplay') {
                     $rid_to_fi[$id_base] = $curr_fi;
                     if ($ev_timer) $stream_timers_rid[$id_base] = $ev_timer;
                     if ($ev_stats) $stream_stats_rid[$id_base] = $ev_stats;
+                    if ($ev_ss !== null && $ev_ss !== '') $stream_ss_rid[$id_base] = $ev_ss;
                 }
                 // Also map numeric prefix (e.g. "194088383") in case r_id strips suffix
                 $num_only = preg_replace('/[^0-9].*$/', '', $id_base);
                 if ($num_only && $num_only !== $id_base) {
                     $rid_to_fi[$num_only] = $curr_fi;
                     if ($ev_timer) $stream_timers_rid[$num_only] = $ev_timer;
+                    if ($ev_ss !== null && $ev_ss !== '') $stream_ss_rid[$num_only] = $ev_ss;
                 }
             }
             $curr_h=$curr_x=$curr_a=$curr_ou_over=$curr_ou_under=null;
@@ -954,8 +963,29 @@ if ($action === 'inplay') {
             if ($m_stats) {
                 $m['stats'] = $m_stats;
             }
-            if ($fi && !empty($stream_ss[$fi])) {
-                $m['ss'] = $stream_ss[$fi];
+            // ── Live score: prefer fresh EV.SS from the bet365 stream.
+            //    Lookup by FI first, then by r_id base / numeric prefix /
+            //    match id — covers every format BetsAPI returns.
+            $fresh_ss = null;
+            if ($fi && isset($stream_ss[$fi]))     $fresh_ss = $stream_ss[$fi];
+            elseif (isset($stream_ss_rid[$rid]))   $fresh_ss = $stream_ss_rid[$rid];
+            elseif (isset($stream_ss_rid[$rid_num])) $fresh_ss = $stream_ss_rid[$rid_num];
+            elseif (isset($stream_ss_rid[$mid]))   $fresh_ss = $stream_ss_rid[$mid];
+            if ($fresh_ss !== null && $fresh_ss !== '') {
+                // Score regression guard — goals don't un-happen. If the
+                // stream feed somehow lags behind a fresher EV row we
+                // already wrote (via /live_refresh per-match), keep the
+                // higher total. Same rule the client applies.
+                $old_ss = (string)($m['ss'] ?? '');
+                if ($old_ss === '') {
+                    $m['ss'] = $fresh_ss;
+                } else {
+                    $op = explode('-', $old_ss);
+                    $np = explode('-', $fresh_ss);
+                    $oTot = ((int)($op[0] ?? 0)) + ((int)($op[1] ?? 0));
+                    $nTot = ((int)($np[0] ?? 0)) + ((int)($np[1] ?? 0));
+                    if ($nTot >= $oTot) $m['ss'] = $fresh_ss;
+                }
             }
         }
     }

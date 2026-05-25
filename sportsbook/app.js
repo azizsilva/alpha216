@@ -237,6 +237,27 @@ function computeFallbackTimer(m) {
   return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
 }
 
+/* ── Score regression guard. Goals don't un-happen. Sometimes a
+ * stale BetsAPI snapshot (v3 / inplay_filter) arrives AFTER the
+ * fresher /live_refresh result and would otherwise revert the
+ * score (e.g. 1-1 → 0-1 → 1-1). Returns TRUE iff the new score
+ * has the same OR more total goals than the old. We also accept
+ * any change when the totals are equal so a side correction
+ * (1-0 → 0-1) can still propagate.                                  */
+function _acceptScoreUpdate(oldSs, newSs) {
+  if (!newSs) return false;
+  if (!oldSs) return true;
+  var op = String(oldSs).split('-'), np = String(newSs).split('-');
+  var oh = parseInt(op[0], 10) || 0;
+  var oa = parseInt(op[1], 10) || 0;
+  var nh = parseInt(np[0], 10) || 0;
+  var na = parseInt(np[1], 10) || 0;
+  var oTot = oh + oa, nTot = nh + na;
+  if (nTot < oTot) return false;        // never lose goals
+  // Tied totals → allow change (e.g. 1-0 ↔ 0-1 corrections)
+  return true;
+}
+
 /* ── Timer regression guard. Sometimes BetsAPI / v3 momentarily
  * returns timer.tm = 0 while the match is well past minute 0 — we
  * never want to "reset" the live clock back to zero because that
@@ -1308,7 +1329,8 @@ function applyLiveRefresh(ids, targetList) {
         var upd = d.refreshed[mid];
         var m = targetList.find(function(x) { return String(x.id) === String(mid); });
         if (!m) return;
-        if (upd.ss !== undefined && upd.ss !== null && m.ss !== upd.ss) {
+        if (upd.ss !== undefined && upd.ss !== null && m.ss !== upd.ss
+            && _acceptScoreUpdate(m.ss, upd.ss)) {
           m.ss = upd.ss;
           updated = true;
         }
@@ -1524,8 +1546,14 @@ function startPolling() {
             return;
           }
 
-          // ── Score update ──────────────────────────────────────────
-          if (m.ss !== nm.ss) { m.ss = nm.ss; updated = true; }
+          // ── Score update (regression-guarded) ─────────────────────
+          // Goals don't "un-happen". The slower /inplay snapshot can
+          // arrive with a stale score AFTER /live_refresh already wrote
+          // the fresher one (e.g. 1-1 → 0-1). Only accept a new score
+          // if it has the same OR more total goals than what we have.
+          if (m.ss !== nm.ss && _acceptScoreUpdate(m.ss, nm.ss)) {
+            m.ss = nm.ss; updated = true;
+          }
 
           // ── Live odds update (accept when values or timestamp changed) ──
           var newOdds = nm.live_odds;
