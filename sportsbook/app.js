@@ -223,15 +223,13 @@ function getMatchPeriod(m) {
 /* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ──
    1. Try API timer (m.timer.tm + m.timer.md)
    2. Fall back to computing the minute from m.time (kickoff unix ts)
-      so we always show something useful when the match is live, even
-      if BetsAPI hasn't pushed the timer field yet. */
+   3. Last resort: "En cours" so every LIVE card always shows something. */
 function formatLiveMinute(m) {
   if (!m) return '';
 
   if (m.timer) {
     var md = String(m.timer.md || m.timer.MD || '');
-    if (md === '1') return 'Mi-temps';
-    if (md === '3') return 'Mi-temps'; // some feeds use 3 for HT
+    if (md === '1' || md === '3') return 'Mi-temps';
     var tm = m.timer.tm;
     if (tm === undefined || tm === null) tm = m.timer.TM;
     var tmn = parseInt(tm, 10);
@@ -243,13 +241,12 @@ function formatLiveMinute(m) {
   if (sid === 1) {
     var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
     if (kickoff > 0) {
-      var nowSec = Math.floor(Date.now() / 1000);
+      var nowSec  = Math.floor(Date.now() / 1000);
       var elapsed = Math.floor((nowSec - kickoff) / 60);
-      if (elapsed < 0) return '';
-      if (elapsed <= 45) return Math.max(1, elapsed) + "'";
-      if (elapsed <= 60) return 'Mi-temps';
-      if (elapsed <= 105) return Math.max(46, elapsed - 15) + "'";
-      return ''; // probably ended
+      if (elapsed >= 0 && elapsed <= 45) return Math.max(1, elapsed) + "'";
+      if (elapsed > 45 && elapsed <= 60) return 'Mi-temps';
+      if (elapsed > 60 && elapsed <= 105) return Math.max(46, elapsed - 15) + "'";
+      if (elapsed > 105) return "90+'";   // never return empty here — match is in stoppage / ET
     }
   }
   return 'En cours';
@@ -1479,13 +1476,12 @@ function startLiveMinuteTicker() {
       var md = el.getAttribute('data-mc-min-md') || '';
       if (md === '1' || md === '3') return; // half-time freeze
       var base = parseInt(el.getAttribute('data-mc-min-start') || '0', 10) || 0;
+      if (base <= 0) return; // unknown base ("En cours"/extra-time) — don't touch
       var renderedAt = parseInt(el.getAttribute('data-mc-min-render') || '0', 10) || now;
       var elapsedMin = Math.floor((now - renderedAt) / 60000);
       var current = base + elapsedMin;
       if (current > 0 && current < 130) {
         el.textContent = current + "'";
-      } else if (base === 0 && current === 0) {
-        // No base minute available — leave whatever the renderer put there
       }
     });
   }, 10000); // tick every 10s — cheap and smooth
@@ -1552,16 +1548,19 @@ function matchCard(m) {
       var _kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
       if (_kickoff > 0) {
         var _elapsed = Math.floor((Date.now() / 1000 - _kickoff) / 60);
-        if (_elapsed > 60 && _elapsed <= 105) _tmBase = _elapsed - 15;
-        else if (_elapsed > 45 && _elapsed <= 60) { _tmBase = 45; _mdRaw = '1'; }
-        else if (_elapsed >= 0 && _elapsed <= 45) _tmBase = Math.max(1, _elapsed);
+        if (_elapsed > 105) { _tmBase = 90; }                            // stoppage/ET — freeze around 90+
+        else if (_elapsed > 60) _tmBase = _elapsed - 15;
+        else if (_elapsed > 45) { _tmBase = 45; _mdRaw = '1'; }
+        else if (_elapsed >= 0) _tmBase = Math.max(1, _elapsed);
       }
     }
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
-    if (liveMin) {
-      out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
-    }
+    // ALWAYS render the timer span for live matches; formatLiveMinute()
+    // guarantees a non-empty string ("En cours" as last resort) so every
+    // live card gets a visible minute label.
+    if (!liveMin) liveMin = 'En cours';
+    out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
   } else {
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-date">' + h(dateTimeLabel) + '</span>';
