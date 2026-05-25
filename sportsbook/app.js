@@ -237,25 +237,32 @@ function computeFallbackTimer(m) {
   return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
 }
 
-/* ── Score regression guard. Goals don't un-happen. Sometimes a
- * stale BetsAPI snapshot (v3 / inplay_filter) arrives AFTER the
- * fresher /live_refresh result and would otherwise revert the
- * score (e.g. 1-1 → 0-1 → 1-1). Returns TRUE iff the new score
- * has the same OR more total goals than the old. We also accept
- * any change when the totals are equal so a side correction
- * (1-0 → 0-1) can still propagate.                                  */
+/* ── Score regression guard. Goals don't un-happen for EITHER team.
+ * Sometimes a stale BetsAPI snapshot (v3 / inplay_filter) arrives
+ * AFTER the fresher /live_refresh result and would otherwise revert
+ * the score (e.g. 1-1 → 0-1 → 1-1, or 1-1 → 1-0).
+ *
+ * Rule: BOTH sides must be ≥ the old value for us to accept the
+ * new score. This kills flicker like 1-1 → 1-0 → 1-1.
+ * Tolerant of "1:1" / "1 - 1" formatting from various BetsAPI endpoints. */
+function _parseScore(s) {
+  if (!s) return null;
+  var m = String(s).replace(/\s+/g, '').split(/[-:]/);
+  if (m.length < 2) return null;
+  var h = parseInt(m[0], 10);
+  var a = parseInt(m[1], 10);
+  if (isNaN(h) || isNaN(a)) return null;
+  return [h, a];
+}
 function _acceptScoreUpdate(oldSs, newSs) {
   if (!newSs) return false;
   if (!oldSs) return true;
-  var op = String(oldSs).split('-'), np = String(newSs).split('-');
-  var oh = parseInt(op[0], 10) || 0;
-  var oa = parseInt(op[1], 10) || 0;
-  var nh = parseInt(np[0], 10) || 0;
-  var na = parseInt(np[1], 10) || 0;
-  var oTot = oh + oa, nTot = nh + na;
-  if (nTot < oTot) return false;        // never lose goals
-  // Tied totals → allow change (e.g. 1-0 ↔ 0-1 corrections)
-  return true;
+  var op = _parseScore(oldSs);
+  var np = _parseScore(newSs);
+  if (!np) return false;
+  if (!op) return true;
+  // BOTH sides must be ≥ what we have. Catches "0-1 → 1-0" downgrade.
+  return (np[0] >= op[0]) && (np[1] >= op[1]);
 }
 
 /* ── Timer regression guard. Sometimes BetsAPI / v3 momentarily

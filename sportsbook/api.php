@@ -972,19 +972,18 @@ if ($action === 'inplay') {
             elseif (isset($stream_ss_rid[$rid_num])) $fresh_ss = $stream_ss_rid[$rid_num];
             elseif (isset($stream_ss_rid[$mid]))   $fresh_ss = $stream_ss_rid[$mid];
             if ($fresh_ss !== null && $fresh_ss !== '') {
-                // Score regression guard — goals don't un-happen. If the
-                // stream feed somehow lags behind a fresher EV row we
-                // already wrote (via /live_refresh per-match), keep the
-                // higher total. Same rule the client applies.
+                // Score regression guard — neither side's goals can
+                // go DOWN. Catches "1-1 → 1-0" downgrade caused by a
+                // stale snapshot arriving after a fresh stream update.
                 $old_ss = (string)($m['ss'] ?? '');
                 if ($old_ss === '') {
                     $m['ss'] = $fresh_ss;
                 } else {
-                    $op = explode('-', $old_ss);
-                    $np = explode('-', $fresh_ss);
-                    $oTot = ((int)($op[0] ?? 0)) + ((int)($op[1] ?? 0));
-                    $nTot = ((int)($np[0] ?? 0)) + ((int)($np[1] ?? 0));
-                    if ($nTot >= $oTot) $m['ss'] = $fresh_ss;
+                    $op = preg_split('/[-:]/', preg_replace('/\s+/', '', $old_ss));
+                    $np = preg_split('/[-:]/', preg_replace('/\s+/', '', $fresh_ss));
+                    $oh = (int)($op[0] ?? 0); $oa = (int)($op[1] ?? 0);
+                    $nh = (int)($np[0] ?? 0); $na = (int)($np[1] ?? 0);
+                    if ($nh >= $oh && $na >= $oa) $m['ss'] = $fresh_ss;
                 }
             }
         }
