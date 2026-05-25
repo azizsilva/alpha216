@@ -3909,62 +3909,128 @@ body {
 .mc-t-logo { display: none; }
 
 /* ════════════════════════════════════════════════════════════
-   MOBILE INLINE LEAGUES SECTION
-   Inline search + league list in center scroll (mobile only)
+   MOBILE INLINE PANELS — fcbet216 reference image 1
+   Two SEPARATE rounded cards on rgb(49,49,49):
+     1. .sb-mob-search-panel   — stand-alone search field
+     2. .sb-mob-leagues-panel  — tabs + league list
    ════════════════════════════════════════════════════════════ */
 .sb-mob-inline-leagues {
-  display: none; /* hidden on desktop — shown on mobile via media query */
+  display: none;                        /* hidden on desktop */
   flex-direction: column;
-  background: var(--sb-bg-root);
-  margin-bottom: 10px;
+  background: transparent;
 }
-.sb-mob-leagues-panel {
-  background: var(--sb-bg-card);
-  border: 1px solid var(--sb-border);
-  border-radius: var(--sb-radius-card);
+/* Search card — ABOVE leagues card, clearly detached */
+.sb-mob-search-panel {
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 10px !important;
   overflow: hidden;
-  margin: 0 2px 12px;
+  margin: 0 2px 10px !important;       /* clean gap to the leagues card */
 }
-.sb-mob-leagues-panel .sb-search-wrap {
-  border-bottom: 1px solid var(--sb-border);
+.sb-mob-search-panel .sb-search-wrap {
+  padding: 10px 12px !important;
+  border-bottom: none !important;
+  background: transparent !important;
+}
+.sb-mob-search-panel .sb-search-box {
+  background: rgba(0,0,0,0.30) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 8px !important;
+  padding: 0 10px !important;
+  height: 36px !important;
+}
+/* Leagues card */
+.sb-mob-leagues-panel {
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  margin: 0 2px 12px !important;
 }
 .sb-mob-leagues-panel .sb-league-group-hdr {
-  background: var(--sb-bg-root);
-  margin: 0;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid var(--sb-border);
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  gap: 14px !important;
 }
+.sb-mob-leagues-panel .sb-tl-list {
+  padding: 0 !important;
+  background: transparent !important;
+}
+.sb-mob-leagues-panel .sb-tl-item {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 12px 14px !important;
+  border-radius: 0 !important;
+  min-height: 44px !important;
+  gap: 12px !important;
+}
+.sb-mob-leagues-panel .sb-tl-item:last-child {
+  border-bottom: none !important;
+}
+.sb-mob-leagues-panel .sb-tl-item:hover {
+  background: rgba(255,255,255,0.03) !important;
+}
+.sb-mob-leagues-panel .sb-league-name {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+/* Empty state for MES LIGUES */
+.sb-mob-leagues-panel .sb-empty-leagues-state {
+  padding: 28px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(255,255,255,0.55) !important;
+  font-size: 13px !important;
+}
+
 .sb-tl-item.sb-tl-selected {
-  background: #2a2a2a;
+  background: rgba(255,255,255,0.06) !important;
   box-shadow: inset 3px 0 0 var(--sb-green);
 }
-.sb-live-now-block {
-  margin-top: 4px;
+.sb-live-now-block { margin-top: 4px; }
+.sb-upcoming-block { margin-top: 8px; }
+
+/* ── Globe icon for international competitions (teal rounded square,
+     fcbet216 reference image 1: Coupe du Monde, UEFA, Copa, etc.) ── */
+.sb-globe-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: #4dd0c8;             /* teal/cyan from fcbet216 */
+  color: #1f2937;                  /* dark glyph */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
-.sb-upcoming-block {
-  margin-top: 8px;
+.sb-globe-icon svg { display: block; }
+/* Flag icon — slightly bigger so it visually balances the globe square */
+.sb-mob-leagues-panel .sb-flag-icon {
+  width: 22px !important;
+  height: 16px !important;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
-.sb-mob-inline-leagues .sb-search-wrap {
-  padding: 10px 12px 8px;
-  border-bottom: 1px solid var(--sb-border);
-}
-.sb-mob-inline-leagues .sb-league-group-hdr {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--sb-border);
-  gap: 12px;
-}
-.sb-mob-inline-leagues .sb-tl-list {
-  padding: 0;
-}
-.sb-mob-inline-leagues .sb-tl-item {
-  background: var(--sb-bg-card);
-  border-bottom: 1px solid var(--sb-border);
-  padding: 12px 14px;
-  border-radius: 0;
-}
-.sb-mob-inline-leagues .sb-tl-item:last-child {
-  border-bottom: none;
+/* EN DIRECT pill on a league row — pinned far right */
+.sb-mob-leagues-panel .sb-tl-live-badge {
+  margin-left: auto !important;
+  background: #e02424 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
 }
 
 /* ════════════════════════════════════════════════════════════

@@ -58,7 +58,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525c';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525d';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -181,6 +181,18 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
 .sb-root .mc-ed-pill{background:transparent;border:1px solid rgba(255,255,255,0.35);border-radius:4px;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:3px 6px;white-space:nowrap;font-family:'Roboto',sans-serif;line-height:1.2;display:inline-flex;align-items:center;}
 .sb-root .mc-signal-ico{color:rgba(255,255,255,0.65);display:inline-flex;align-items:flex-end;justify-content:center;width:16px;height:16px;}
 .sb-root .mc-signal-ico svg{display:block;width:14px;height:14px;}
+/* Sidebar leagues panel — separate from search card, fcbet216 image 1 */
+.sb-mob-search-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;margin:0 2px 10px;}
+.sb-mob-search-panel .sb-search-wrap{padding:10px 12px;}
+.sb-mob-search-panel .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
+.sb-mob-leagues-panel{background:rgb(49,49,49);border:1px solid rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;margin:0 2px 12px;}
+.sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);gap:14px;}
+.sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
+.sb-mob-leagues-panel .sb-tl-item:last-child{border-bottom:none;}
+.sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sb-globe-icon{width:22px;height:22px;border-radius:5px;background:#4dd0c8;color:#1f2937;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-mob-leagues-panel .sb-flag-icon{width:22px;height:16px;object-fit:cover;border-radius:3px;flex-shrink:0;}
+.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:#e02424;color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:0.4px;text-transform:uppercase;}
 .sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:22px;}
@@ -291,9 +303,17 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
         ['id'=>'rg1', 'name'=>'Roland Garros, Féminin Simple', 'flag'=>'fr',     'sport'=>13],
         ['id'=>'rg2', 'name'=>'Roland Garros, Hommes Simple',  'flag'=>'fr',     'sport'=>13],
       ];
-      foreach($top_leagues as $l): ?>
+      foreach($top_leagues as $l):
+        $is_intl_d = in_array($l['flag'], ['un','eu'], true);
+      ?>
       <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
-        <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
+        <?php if ($is_intl_d): ?>
+          <span class="sb-globe-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </span>
+        <?php else: ?>
+          <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon">
+        <?php endif; ?>
         <span class="sb-league-name"><?=$l['name']?></span>
       </div>
       <?php endforeach; ?>
@@ -454,19 +474,21 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
       </div>
     </div>
 
-    <!-- ══ MOBILE INLINE LEAGUE SECTION ══
-         Search bar + LES MEILLEURES LIGUES / MES LIGUES tabs
-         Visible on mobile only (hidden on desktop via CSS)
-         Appears inline in the main scroll — matches fcbet216 mobile layout -->
-    <div class="sb-mob-inline-leagues sb-mob-leagues-panel">
-      <!-- Search bar -->
+    <!-- ══ MOBILE INLINE SEARCH ══
+         Stand-alone card ABOVE the leagues panel (fcbet216 layout) -->
+    <div class="sb-mob-inline-leagues sb-mob-search-panel">
       <div class="sb-search-wrap">
         <div class="sb-search-box">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
         </div>
       </div>
+    </div><!-- /sb-mob-search-panel -->
 
+    <!-- ══ MOBILE INLINE LEAGUES PANEL ══
+         Separate card: LES MEILLEURES LIGUES / MES LIGUES tabs + list.
+         Visible on mobile only (hidden on desktop via CSS). -->
+    <div class="sb-mob-inline-leagues sb-mob-leagues-panel">
       <!-- League tabs header -->
       <div class="sb-league-group-hdr">
         <button class="sb-mob-tab active" data-tab="best" onclick="window.sbMobLeagueTab(this,'best')">LES MEILLEURES LIGUES</button>
@@ -477,9 +499,20 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
       <!-- LES MEILLEURES LIGUES content -->
       <div id="sb-inline-best-leagues">
         <div class="sb-tl-list">
-          <?php foreach($top_leagues as $l): ?>
+          <?php foreach($top_leagues as $l):
+            // International / continental competitions use a teal globe icon
+            // (matches fcbet216 reference image 1). National leagues keep
+            // their country flag.
+            $is_intl = in_array($l['flag'], ['un','eu'], true);
+          ?>
           <div class="sb-tl-item" onclick="window.sbOpenLeague('<?=$l['id']?>','<?=$l['name']?>','https://flagcdn.com/w20/<?=$l['flag']?>.png',<?=$l['sport']?>)">
-            <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon" alt="<?=$l['name']?>">
+            <?php if ($is_intl): ?>
+              <span class="sb-globe-icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </span>
+            <?php else: ?>
+              <img src="https://flagcdn.com/w20/<?=$l['flag']?>.png" class="sb-flag-icon" alt="<?=$l['name']?>">
+            <?php endif; ?>
             <span class="sb-league-name"><?=$l['name']?></span>
           </div>
           <?php endforeach; ?>
@@ -489,11 +522,11 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
       <!-- MES LIGUES empty state -->
       <div id="sb-inline-my-leagues" style="display:none">
         <div class="sb-empty-leagues-state">
-          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#444;margin-bottom:10px"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#666;margin-bottom:10px"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span>Aucune ligue ajoutée</span>
         </div>
       </div>
-    </div><!-- /sb-mob-inline-leagues -->
+    </div><!-- /sb-mob-leagues-panel -->
 
     <!-- Match listings — richer skeleton until JS renders -->
     <div id="sb-matches-body">
