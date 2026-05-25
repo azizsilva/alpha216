@@ -4248,6 +4248,56 @@ button.md-odd-btn,
 }
 .slip-quick-stake:hover { background: rgb(60,60,60); }
 .slip-quick-stake:active { background: rgb(40,40,40); }
+
+/* ── Virtual stake numpad — fcbet216 image 2 / 8 ──
+   7 columns: keys 1–9, 0, ".", "⌫" fill rows 1–2, OK spans both rows
+   on column 7. */
+.slip-numpad {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr) 1.4fr;
+  gap: 8px;
+  padding: 0 12px 12px;
+  font-family: 'Roboto', sans-serif;
+}
+.slip-np-key {
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  color: rgb(113,246,105);
+  font-size: 17px;
+  font-weight: 700;
+  padding: 12px 0;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.12s;
+  min-height: 44px;
+}
+.slip-np-key:hover { background: rgb(60,60,60); }
+.slip-np-key:active { background: rgb(40,40,40); }
+.slip-np-del {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.75);
+}
+.slip-np-del svg { display: block; }
+.slip-np-ok {
+  grid-row: 1 / span 2;
+  grid-column: 7;
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  color: rgb(113,246,105);
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  outline: none;
+  align-self: stretch;
+  transition: background 0.12s;
+}
+.slip-np-ok:hover { background: rgb(60,60,60); }
+.slip-np-ok:active { background: rgb(40,40,40); }
+
 /* BB legs under bet card */
 .slip-leg-row {
   display: flex; align-items: flex-start; gap: 8px; padding: 3px 0 3px 23px;
@@ -4272,6 +4322,11 @@ button.md-odd-btn,
   border-radius: 6px;
   color: #fff; font-family: 'Roboto',sans-serif; font-size: 13px; font-weight: 600;
   padding: 5px 8px; outline: none; text-align: center;
+  transition: border-color 0.15s;
+}
+.slip-stake-inp:focus,
+.slip-stake-inp.active {
+  border-color: rgb(113,246,105);
 }
 .slip-gagner { font-size: 12px; color: rgba(255,255,255,0.6); margin-left: auto; white-space: nowrap; }
 .slip-gagner strong { color: var(--sb-green); font-size: 13px; }

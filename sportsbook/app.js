@@ -2670,13 +2670,9 @@ window.sbAddBet = function(id, match, sel, val, market) {
     var oc = btn.getAttribute('onclick') || '';
     btn.classList.toggle('sel', S.betSlip.some(function(b) { return oc.indexOf(b.id) !== -1; }));
   });
-  // On mobile, auto-open right panel if bet added
-  if (S.betSlip.length > 0 && window.innerWidth <= 1100) {
-    var right = document.getElementById('sb-right');
-    if (right && !right.classList.contains('open')) {
-      right.classList.add('open');
-    }
-  }
+  // DO NOT auto-open the drawer on mobile — fcbet216 shows the FAB
+  // circle first; the user taps it to open the slip. Auto-opening
+  // hides the FAB and hijacks the flow.
 };
 
 /* Floating bet badge — shows count when bets exist.
@@ -2736,6 +2732,77 @@ window.sbUpdateCombiStake = function(val) { SLIP_COMBI_STAKE = Math.max(0, parse
 // Quick-stake chips on the Combiné tab — bump the stake by N (fcbet216).
 window.sbCombiQuickStake = function(delta) {
   SLIP_COMBI_STAKE = Math.max(0, (parseFloat(SLIP_COMBI_STAKE) || 0) + (parseFloat(delta) || 0));
+  renderBetSlip();
+};
+// Quick-stake chips on the Simple tab — bump bet[idx].stake by N.
+window.sbSimpleQuickStake = function(delta, idx) {
+  if (!S.betSlip[idx]) return;
+  S.betSlip[idx].stake = Math.max(0, (parseFloat(S.betSlip[idx].stake) || 0) + (parseFloat(delta) || 0));
+  S._activeStakeIdx = idx;
+  renderBetSlip();
+};
+window.sbActivateStake = function(idx) {
+  S._activeStakeIdx = idx;
+  // Don't re-render — would lose focus / cursor. Just update internal state.
+};
+
+/* ── Stake numpad — 1..9, 0, "." , ⌫, OK ──
+   Mode = 'simple'  → operates on S.betSlip[idx].stake
+   Mode = 'combi'   → operates on SLIP_COMBI_STAKE              */
+function renderStakeNumpad(mode, idx) {
+  var out = '<div class="slip-numpad">';
+  var keys = ['1','2','3','4','5','.','6','7','8','9','0','del'];
+  keys.forEach(function(k) {
+    if (k === 'del') {
+      out += '<button class="slip-np-key slip-np-del" onclick="window.sbNumpadDel(\'' + mode + '\',' + (idx || 0) + ')" aria-label="Effacer">'
+        + '<svg width="18" height="14" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H7L1 9l6 6h15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/><line x1="18" y1="7" x2="12" y2="13"/><line x1="12" y1="7" x2="18" y2="13"/></svg>'
+        + '</button>';
+    } else {
+      out += '<button class="slip-np-key" onclick="window.sbNumpadKey(\'' + k + '\',\'' + mode + '\',' + (idx || 0) + ')">' + k + '</button>';
+    }
+  });
+  out += '<button class="slip-np-ok" onclick="window.sbNumpadOk(\'' + mode + '\',' + (idx || 0) + ')">OK</button>';
+  out += '</div>';
+  return out;
+}
+function _readStake(mode, idx) {
+  if (mode === 'combi') return String(SLIP_COMBI_STAKE || '');
+  if (mode === 'simple' && S.betSlip[idx]) return String(S.betSlip[idx].stake || '');
+  return '';
+}
+function _writeStake(mode, idx, str) {
+  var v = parseFloat(str);
+  if (isNaN(v) || v < 0) v = 0;
+  if (mode === 'combi') SLIP_COMBI_STAKE = v;
+  else if (mode === 'simple' && S.betSlip[idx]) {
+    S.betSlip[idx].stake = v;
+    S._activeStakeIdx = idx;
+  }
+}
+window.sbNumpadKey = function(key, mode, idx) {
+  var cur = _readStake(mode, idx);
+  // Avoid leading zero "00" and multiple dots
+  if (key === '.' && cur.indexOf('.') !== -1) return;
+  if (cur === '0' && key !== '.') cur = '';
+  cur = cur + key;
+  // Truncate to 2 decimal places
+  if (cur.indexOf('.') !== -1) {
+    var parts = cur.split('.');
+    cur = parts[0] + '.' + (parts[1] || '').slice(0, 2);
+  }
+  _writeStake(mode, idx, cur);
+  renderBetSlip();
+};
+window.sbNumpadDel = function(mode, idx) {
+  var cur = _readStake(mode, idx);
+  cur = cur.slice(0, -1);
+  _writeStake(mode, idx, cur);
+  renderBetSlip();
+};
+window.sbNumpadOk = function(mode, idx) {
+  // OK currently just closes any kind of "edit mode" — placeholder for
+  // future "confirm and place bet" flow.
+  if (mode === 'simple') S._activeStakeIdx = idx;
   renderBetSlip();
 };
 window.sbUpdateSysStake = function(type, val) {
@@ -2873,14 +2940,32 @@ function renderBetSlip() {
     // ── Stake + Gagner (Simple mode only)
     if (SLIP_MODE === 'simple') {
       var gain = +((b.stake || SLIP_STAKE) * b.val).toFixed(2);
+      var activeCls = (i === (S._activeStakeIdx || 0)) ? ' active' : '';
       out += '<div class="slip-stake-row">';
-      out += '<input type="number" class="slip-stake-inp" value="' + (b.stake || SLIP_STAKE) + '" min="1" step="1" oninput="window.sbUpdateBetStake(' + i + ',this.value)">';
+      out += '<input type="number" class="slip-stake-inp' + activeCls + '" value="' + (b.stake || SLIP_STAKE) + '" min="1" step="1" oninput="window.sbUpdateBetStake(' + i + ',this.value)" onfocus="window.sbActivateStake(' + i + ')">';
       out += '<span class="slip-gagner">Gagner: <strong>' + gain.toFixed(2) + '</strong></span>';
       out += '</div>';
     }
 
     out += '</div>'; // slip-item
   });
+
+  // ── Simple-mode stake editor: quick stake chips + virtual numpad ──
+  // (Matches fcbet216 reference image 2 — appears immediately below
+  //  the bet card, BEFORE the promo banner.) For Combiné/Système modes
+  //  the editor lives further down inside the mode-specific block.
+  if (SLIP_MODE === 'simple') {
+    var simpleActiveIdxA = (typeof S._activeStakeIdx === 'number')
+      ? Math.min(S._activeStakeIdx, S.betSlip.length - 1)
+      : 0;
+    if (simpleActiveIdxA < 0) simpleActiveIdxA = 0;
+    out += '<div class="slip-quick-stakes">';
+    [5, 10, 20, 50].forEach(function(v) {
+      out += '<button class="slip-quick-stake" onclick="window.sbSimpleQuickStake(' + v + ',' + simpleActiveIdxA + ')">+' + v + '</button>';
+    });
+    out += '</div>';
+    out += renderStakeNumpad('simple', simpleActiveIdxA);
+  }
 
   // ── Promo hint (always shown, matches fcbet) ───────────────
   out += '<div class="slip-promo">'
@@ -2964,6 +3049,8 @@ function renderBetSlip() {
       out += '<button class="slip-quick-stake" onclick="window.sbCombiQuickStake(' + v + ')">+' + v + '</button>';
     });
     out += '</div>';
+    // Virtual numpad — operates on the Combo stake (fcbet216 image 8)
+    out += renderStakeNumpad('combi');
 
     // Summary (cotes / mise / bonus / gain total)
     var baseGain = stake * combiOdds;

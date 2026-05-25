@@ -97,7 +97,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260525bq';   // bump this when you ship a new deploy
+$sb_build_stamp = 'b20260525br';   // bump this when you ship a new deploy
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -503,6 +503,13 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-fb-circle svg{color:rgba(255,255,255,0.88);width:22px;height:22px;}
 .sb-fb-count,body .sb-root .sb-fb-count{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;background:rgb(113,246,105);color:#000;border-radius:999px;font-size:11px;font-weight:800;line-height:22px;text-align:center;border:2px solid #1e1e1e;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
 .sb-fb-label,body .sb-root .sb-fb-label{font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.7);white-space:nowrap;}
+/* ── Virtual stake numpad — critical inline CSS, fcbet216 image 2 ── */
+.slip-quick-stakes,body .sb-root .slip-quick-stakes{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;padding:0 12px 12px!important;}
+.slip-quick-stake,body .sb-root .slip-quick-stake{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;font-weight:700!important;padding:12px 0!important;cursor:pointer!important;outline:none!important;}
+.slip-numpad,body .sb-root .slip-numpad{display:grid!important;grid-template-columns:repeat(6,1fr) 1.4fr!important;gap:8px!important;padding:0 12px 12px!important;font-family:'Roboto',sans-serif!important;}
+.slip-np-key,body .sb-root .slip-np-key{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-size:17px!important;font-weight:700!important;padding:12px 0!important;cursor:pointer!important;outline:none!important;min-height:44px!important;}
+.slip-np-del,body .sb-root .slip-np-del{display:flex!important;align-items:center!important;justify-content:center!important;color:rgba(255,255,255,0.75)!important;}
+.slip-np-ok,body .sb-root .slip-np-ok{grid-row:1/span 2!important;grid-column:7!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-size:18px!important;font-weight:800!important;cursor:pointer!important;outline:none!important;align-self:stretch!important;}
 .sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
 .sb-root .sb-boost-card{padding:10px 14px 12px;}
 .sb-root .sb-boost-card .sb-teams-text{margin:2px 0 6px;line-height:1.25;}
