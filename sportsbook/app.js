@@ -1838,10 +1838,7 @@ function renderEnDirectCards(matches) {
 
     out += '<div class="slc" onclick="window.sbOpenMatch(\'' + mid + '\')">';
 
-    // ── Sport badge — round circle on top-left outside card (matches fcbet reference) ──
-    out += '<div class="slc-sport-badge">' + spIconSm + '</div>';
-
-    // ── Header: [BB] [EN DIRECT] [timer] [•] [flag] [league] — exact fcbet layout ──
+    // ── Header: [BB] [EN DIRECT] [timer] [•] [flag] [league] — clean fcbet layout ──
     out += '<div class="slc-hdr">';
     out += '<span class="slc-bb">BB</span>';
     if (isLive) {

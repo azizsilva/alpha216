@@ -77,29 +77,22 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
     position:sticky!important;
     top:0!important;
     z-index:200!important;
-    background:#101010!important;
-    border-bottom:1px solid #2a2a2a!important;
+    background:rgb(49,49,49)!important;
+    border-bottom:1px solid rgba(255,255,255,0.04)!important;
   }
-  /* All 3 topbar buttons — equal flex share, consistent height
-     Dark gray surface (fcbet216 spec — user-supplied rgb(49,49,49)) */
+  /* All 3 topbar buttons — equal flex share, EN DIRECT centered (no icon) */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats{
     flex:1!important;min-width:0!important;
     height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;
     border:none!important;border-radius:8px!important;cursor:pointer!important;
-    background:rgb(49,49,49)!important;color:#979797!important;
+    background:rgba(0,0,0,0.45)!important;color:#979797!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
+    padding:0!important;
   }
-  /* Live tab: soccer icon BESIDE the EN DIRECT badge, clear separation */
-  .sb-mobile-topbar .sb-btn-live{gap:8px!important;padding:0 5px 0 12px!important;}
-  .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport{
-    display:inline-flex!important;align-items:center!important;justify-content:center!important;
-    width:18px!important;height:18px!important;border-radius:50%!important;
-    background:rgba(255,255,255,0.06)!important;color:currentColor!important;flex-shrink:0!important;
-  }
-  .sb-mobile-topbar .sb-btn-live.active .sb-btn-live-sport{background:rgba(0,0,0,0.10)!important;}
-  .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport svg{display:block!important;width:12px!important;height:12px!important;}
+  /* Defensive: in case the inline soccer-icon span sneaks back in, hide it */
+  .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport{display:none!important;}
   /* ACTIVE: only change color — size stays equal */
   .sb-mobile-topbar .sb-btn-home.active,
   .sb-mobile-topbar .sb-btn-live.active{
@@ -348,15 +341,7 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
   <!-- Mobile-only top bar (hidden on desktop) -->
   <div class="sb-mobile-topbar">
     <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'home',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)">
-      <span class="sb-btn-live-sport" aria-hidden="true">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
-          <path d="M12 3v6m0 6v6M3 12h6m6 0h6M6.2 6.2l4.2 4.2m3.2 3.2 4.2 4.2M6.2 17.8l4.2-4.2m3.2-3.2 4.2-4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-      </span>
-      <span class="sb-live-badge">EN DIRECT</span>
-    </button>
+    <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 
