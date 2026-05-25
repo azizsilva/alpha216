@@ -1735,7 +1735,8 @@ function startPolling() {
 
   // Faster live updates for minimal delay (football stricter).
   var isFootball = (parseInt(S.activeSportId || 0, 10) === 1);
-  var pollMs = (S.activeAction === 'inplay') ? (isFootball ? 3000 : 5000) : 10000;
+  var isLiveView = (S.activeAction === 'inplay') || (S.viewMode === 'championship' && S.champMatches && S.champMatches.some(function(m) { return m.time_status === '1'; }));
+  var pollMs = isLiveView ? (isFootball ? 3000 : 5000) : 10000;
   S.pollingInterval = setInterval(function() {
     doPoll();
     refreshLiveTopLeagues();

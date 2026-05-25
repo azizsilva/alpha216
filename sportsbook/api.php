@@ -691,18 +691,16 @@ if ($action === 'inplay') {
     $stream_cache = $cache_dir . '/inplay_stream.json';
     $is_football  = ((int)$sport_id === 1);
     // ── Cache TTLs ─────────────────────────────────────────────
-    // If the tick_live.php daemon is running it refreshes the
-    // stream every ~2s and each sport every ~4s, so we can trust
-    // the file for the same window. When the daemon is OFFLINE
-    // (tick_live.lock missing) we fall back to a self-refresh
-    // path so the site still works.
+    // Use aggressive 2s TTL always — when daemon runs it writes every 2s
+    // so cache is always fresh. When daemon is off, api.php self-refreshes
+    // directly (2s = near-real-time without daemon).
     $tick_lock     = $cache_dir . '/tick_live.lock';
     $daemon_alive  = file_exists($tick_lock) && (time() - filemtime($tick_lock)) < 10;
-    $cache_ttl     = $daemon_alive ? ($is_football ? 5 : 8) : ($is_football ? 3 : 5);
-    $ev_cache_ttl  = $is_football ? 6 : 10;
-    $ev_stale_ttl  = $is_football ? 4 : 8;
-    $odds_bg_ttl   = $is_football ? 10 : 18;
-    $ev_refresh_cap = $is_football ? 40 : 20;
+    $cache_ttl     = 2;   // ALWAYS 2s — real-time for all sports
+    $ev_cache_ttl  = $is_football ? 4 : 6;
+    $ev_stale_ttl  = 2;   // ev_ files re-fetched every 2s
+    $odds_bg_ttl   = $is_football ? 8 : 12;
+    $ev_refresh_cap = 50; // refresh up to 50 live events per cycle (all sports)
 
     // ── Step 1: Get or refresh inplay_filter per sport ─────────────────────
     // CACHE TTL is intentionally low (3s for football, 5s for other) so the
@@ -2242,27 +2240,32 @@ if ($action === 'live_refresh') {
         }
 
         // BetsAPI /v1/bet365/event — fresh live odds stream
-        $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
-        if (!$ev || empty($ev['results'])) continue;
+        // Try r_id first (real Bet365 FI), then DB id, then skip BUT still use v3 data
+        $ev = null;
+        if ($fi && $fi !== $db_mid) {
+            $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
+        }
+        if ((!$ev || empty($ev['results'])) && $db_mid) {
+            $ev = betsapi_get('/v1/bet365/event', ['FI' => $db_mid]);
+        }
+        // DO NOT skip if event API empty — v3 score/stats/timer are still valid
 
         // ── Augment stats from the bet365 event stream. v3 often
         //    has STALE cards / corners; the bet365 EV row carries
         //    them as S6 / S7 / S8 (corners / yellow / red) and the ST
-        //    rows carry the full match event timeline. We BUILD UP
-        //    from the freshest source first (timeline → EV.S* → v3)
-        //    so a stale v3 value never wins over a fresh stream value.
-        $ev_stream_stats = _parse_bet365_event_stats($ev['results']);
-        $timeline_stats  = _parse_stream_timeline_stats(
-            is_array($ev['results'][0] ?? null) ? $ev['results'][0] : $ev['results'],
-            $home_nm, $away_nm
-        );
-        // Timeline first (counts every actual event in the match),
-        // then EV.S6/S7/S8 (live counters), then v3 (last-resort).
-        $fresh = $timeline_stats ?: [];
-        $fresh = _merge_stats($fresh, $ev_stream_stats);
-        $stats = _merge_stats($fresh, $stats);
+        //    rows carry the full match event timeline.
+        if (!empty($ev['results'])) {
+            $ev_stream_stats = _parse_bet365_event_stats($ev['results']);
+            $timeline_stats  = _parse_stream_timeline_stats(
+                is_array($ev['results'][0] ?? null) ? $ev['results'][0] : $ev['results'],
+                $home_nm, $away_nm
+            );
+            $fresh = $timeline_stats ?: [];
+            $fresh = _merge_stats($fresh, $ev_stream_stats);
+            $stats = _merge_stats($fresh, $stats);
+        }
 
-        $stream = is_array($ev['results'][0] ?? null) ? $ev['results'][0] : [$ev['results'][0] ?? null];
+        $stream = !empty($ev['results']) ? (is_array($ev['results'][0] ?? null) ? $ev['results'][0] : [$ev['results'][0] ?? null]) : [];
         $h_o = $x_o = $a_o = $ov_o = $un_o = null;
         $ou_line = 2.5;
 
