@@ -80,14 +80,15 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
     background:#101010!important;
     border-bottom:1px solid #2a2a2a!important;
   }
-  /* All 3 topbar buttons — equal flex share, consistent height */
+  /* All 3 topbar buttons — equal flex share, consistent height
+     Dark gray surface (fcbet216 spec — user-supplied rgb(49,49,49)) */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats{
     flex:1!important;min-width:0!important;
     height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;
     border:none!important;border-radius:8px!important;cursor:pointer!important;
-    background:#252525!important;color:#979797!important;
+    background:rgb(49,49,49)!important;color:#979797!important;
     font-family:'Poppins',sans-serif!important;outline:none!important;
   }
   /* Live tab: soccer icon BESIDE the EN DIRECT badge, clear separation */
@@ -209,8 +210,8 @@ $sb_js_v  = @filemtime(__DIR__ . '/app.js') ?: time();
 .sb-root .sb-sport-item .sb-sport-icon svg{filter:brightness(0) invert(1);opacity:.55;}
 .sb-root .sb-sport-item.active .sb-sport-icon svg{filter:brightness(0);opacity:1;}
 /* Sport filter pills — Bootstrap 3 collapses SVG icons */
-.sb-root .sb-upcoming-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:4px!important;padding-bottom:8px!important;}
-.sb-root .sb-upcoming-tab{display:inline-flex!important;align-items:center!important;gap:6px!important;height:34px!important;white-space:nowrap!important;flex-shrink:0!important;background:#252525!important;border:1px solid rgba(255,255,255,0.10)!important;border-radius:20px!important;padding:0 13px!important;font-size:12px!important;color:#fff!important;box-shadow:none!important;}
+.sb-root .sb-upcoming-tabs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:6px!important;padding-bottom:8px!important;}
+.sb-root .sb-upcoming-tab{display:inline-flex!important;align-items:center!important;gap:6px!important;height:38px!important;white-space:nowrap!important;flex-shrink:0!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:12px!important;padding:0 16px!important;font-size:13px!important;font-weight:600!important;color:#fff!important;box-shadow:none!important;}
 .sb-root .sb-upcoming-tab.active{background:#70f669!important;border-color:#70f669!important;color:rgba(0,0,0,.87)!important;}
 .sb-root .sb-upcoming-tab .sb-tab-icon{display:inline-flex!important;align-items:center!important;width:16px!important;height:16px!important;flex-shrink:0!important;overflow:visible!important;}
 .sb-root .sb-upcoming-tab .sb-tab-icon svg{display:block!important;width:16px!important;height:16px!important;filter:brightness(0) invert(1)!important;opacity:.8!important;overflow:visible!important;}

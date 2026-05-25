@@ -635,31 +635,35 @@ body {
 .sb-date-row {
   display: flex;
   overflow-x: auto;
-  border-bottom: 1px solid var(--sb-border);
-  background: var(--sb-bg-root);
+  overflow-y: hidden;
+  border-bottom: none;
+  background: transparent;
   flex-shrink: 0;
   align-items: center;
-  padding: 8px 8px;
-  gap: 5px;
+  padding: 8px 12px 10px;
+  gap: 8px;
+  margin-top: 4px;             /* small breathing gap below the top bar */
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.sb-date-row::-webkit-scrollbar { height: 0; width: 0; }
+.sb-date-row::-webkit-scrollbar { height: 0 !important; width: 0 !important; display: none; }
 
 .sb-date-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 8px 16px;
-  background: #1e1e1e;
-  border: 1px solid #2d2d2d;
-  border-radius: 6px;
-  color: var(--sb-text-2);
+  gap: 6px;
+  padding: 9px 16px;
+  background: rgb(49,49,49);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.55);
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
-  min-width: 90px;
+  min-width: 88px;
   white-space: nowrap;
   outline: none;
   flex-shrink: 0;
@@ -667,16 +671,16 @@ body {
   -webkit-user-select: none;
 }
 .sb-date-item:hover {
-  background: #282828;
-  color: var(--sb-text-1);
-  border-color: #3a3a3a;
+  background: rgb(58,58,58);
+  color: #fff;
 }
 .sb-date-item.active {
-  background: #1e1e1e;
-  color: var(--sb-text-1);
-  border-color: #ffffff;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+  background: rgb(49,49,49);
+  color: #fff;
+  border-color: rgba(255,255,255,0.32);
+  box-shadow: none;
 }
+.sb-date-item.active .sb-date-num { color: #fff; }
 .sb-date-lbl {
   font-size: 12px;
   font-weight: 500;
@@ -1555,31 +1559,31 @@ body {
 }
 .sb-section-icon svg { width: 24px; height: 24px; filter: invert(0.5); }
 
-/* Sport tabs for Prochainement */
+/* Sport tabs for Prochainement — fcbet216 spec: rounded 12px, gray bg */
 .sb-upcoming-tabs {
   display: flex;
   flex-direction: row;   /* explicitly horizontal pills only */
   flex-wrap: nowrap;
   width: 100%;
-  gap: 4px;
+  gap: 6px;
   overflow-x: auto;
   padding: 0 0 10px;
   margin-bottom: 2px;
 }
 .sb-upcoming-tabs::-webkit-scrollbar { height: 0; }
 .sb-upcoming-tab {
-  background: #252525 !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-  border-radius: 20px !important;
-  padding: 0 13px !important;
-  height: 34px !important;
+  background: rgb(49,49,49) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 12px !important;          /* 12px — user spec, not full pill */
+  padding: 0 16px !important;
+  height: 38px !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
   cursor: pointer !important;
-  font-family: 'Poppins', sans-serif !important;
-  color: var(--sb-text-1) !important;
-  font-size: 12px !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #fff !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
   flex-shrink: 0 !important;
@@ -1588,9 +1592,8 @@ body {
   box-shadow: none !important;
   text-shadow: none !important;
   line-height: 1 !important;
-  height: 30px !important;
 }
-.sb-upcoming-tab:hover { background: #303030 !important; border-color: var(--sb-border-light) !important; }
+.sb-upcoming-tab:hover { background: rgb(58,58,58) !important; border-color: rgba(255,255,255,0.08) !important; }
 .sb-upcoming-tab.active {
   background: var(--sb-green) !important;
   border-color: var(--sb-green) !important;
@@ -2072,15 +2075,16 @@ body {
   color: var(--sb-text-2);
   font-family: 'Poppins', sans-serif;
 }
-/* Mobile Top Bar — exact fcbet216 design */
+/* Mobile Top Bar — exact fcbet216 design
+   Bar is BLACK (#101010) so the rgb(49,49,49) buttons stand out clearly */
 .sb-mobile-topbar {
   display: none; /* shown via media query */
   flex-direction: row;
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  background: rgb(49, 49, 49);
-  border-bottom: 1px solid var(--sb-border);
+  background: #101010;
+  border-bottom: 1px solid #2a2a2a;
 }
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
@@ -2096,25 +2100,23 @@ body {
   outline: none;
   flex-shrink: 0;
 }
-/* ── Mobile top bar: FLEX layout, active tab expands (matches fcbet216 exactly) ── */
+/* ── Mobile top bar: EQUAL flex share — all 3 buttons same width
+   (matches fcbet216 reference image; user-supplied rgb(49,49,49) gray) ── */
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
 .sb-mobile-topbar .sb-btn-stats {
   height: 40px !important;
   border-radius: 8px !important;
-  flex: none !important;
-  width: 48px !important;
-  min-width: 48px !important;
- /* background: rgb(49, 49, 49) !important; */
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  background: rgb(49,49,49) !important;
   color: #979797 !important;
   border: none !important;
 }
-/* Active button expands to fill remaining space — like fcbet216 */
+/* Active state — keeps the same flex share, just changes color */
 .sb-mobile-topbar .sb-btn-home.active,
 .sb-mobile-topbar .sb-btn-live.active {
-  flex: 1 !important;
-  width: auto !important;
-  min-width: 0 !important;
   background: #70f669 !important;
   color: rgba(0,0,0,0.87) !important;
 }
@@ -2141,7 +2143,6 @@ body {
   padding: 0 !important;
 }
 .sb-mobile-topbar .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
-.sb-mobile-topbar .sb-btn-stats { width: 48px !important; min-width: 48px !important; }
 .sb-mobile-topbar .sb-btn-stats svg { width: 16px; height: 16px; stroke: currentColor; }
 
 .sb-mob-footer {
@@ -2239,22 +2240,21 @@ body {
     align-items: stretch !important;
   /*  background: rgb(49, 49, 49) !important; */
   }
-  /* All buttons default: fixed 48px */
+  /* All 3 buttons: EQUAL flex share — match fcbet216 reference */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
   .sb-mobile-topbar .sb-btn-stats {
-    flex: none !important;
-    width: 48px !important;
-    min-width: 48px !important;
-    height: 40px !important;
-    background: rgb(49, 49, 49) !important;
-  }
-  /* Active button expands (flex:1) and turns green */
-  .sb-mobile-topbar .sb-btn-home.active,
-  .sb-mobile-topbar .sb-btn-live.active {
-    flex: 1 !important;
+    flex: 1 1 0 !important;
     width: auto !important;
     min-width: 0 !important;
+    height: 40px !important;
+    background: rgb(49, 49, 49) !important;
+    border-radius: 8px !important;
+  }
+  /* Active state — keeps the same flex share, just changes color */
+  .sb-mobile-topbar .sb-btn-home.active,
+  .sb-mobile-topbar .sb-btn-live.active {
+    background: #70f669 !important;
   }
   .sb-mobile-sidebar-content { display: flex !important; }
   /* Leagues panel visible on mobile (fcbet216: LES MEILLEURES / MES LIGUES) */
@@ -2284,7 +2284,7 @@ body {
     position: sticky !important;
     top: 0 !important;
     z-index: 200 !important;
-    background: rgb(49, 49, 49) !important;
+    background: #101010 !important;
     border-bottom: 1px solid #2a2a2a !important;
   }
 
@@ -4159,11 +4159,15 @@ body {
   margin-bottom: 6px !important;
 }
 
-/* ── Live section market dropdown (En direct maintenant) ── */
+/* ── Live section market dropdown (En direct maintenant) — fcbet216 spec ──
+   Trigger and the open panel are TWO independently rounded cards with a
+   small gap between them (image 5/7). Items inside the panel are FLAT
+   (no rounded inner corners). All surfaces use the fcbet216 gray
+   rgb(49,49,49). 12px radius matches the user spec for tabs. */
 .sb-live-mkt-wrap {
   display: block !important;  /* must be full-width block, never inline */
   width: 100%;
-  margin: 6px 0 4px;
+  margin: 8px 0 4px;
   position: relative;
 }
 .sb-live-mkt-btn {
@@ -4171,22 +4175,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #1e1e1e;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 6px;
-  padding: 12px 14px;
-  color: var(--sb-text-1);
-  font-size: 13px;
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s;
 }
-.sb-live-mkt-btn:hover,
-.sb-live-mkt-btn.open { background: #252525; border-radius: 6px 6px 0 0; }
+.sb-live-mkt-btn:hover { background: rgb(58,58,58); }
+.sb-live-mkt-btn.open  { background: rgb(49,49,49); border-radius: 12px; }
 .sb-lmb-arrow {
-  color: var(--sb-text-1);
-  font-size: 18px;
+  color: rgba(255,255,255,0.75);
+  font-size: 20px;
   line-height: 1;
   font-weight: 400;
   display: flex;
@@ -4195,13 +4199,13 @@ body {
 .sb-lmb-arrow svg { display: block; }
 .sb-live-mkt-drop {
   display: none;             /* hidden by default */
-  background: #1e1e1e;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-top: none;
-  border-radius: 0 0 6px 6px;
+  background: rgb(49,49,49);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
   z-index: 10;
+  margin-top: 6px;           /* small gap to the trigger above (image 7) */
 }
 /* Open state driven by class — beats Bootstrap's display rules */
 .sb-live-mkt-wrap.sb-lmdt-open .sb-live-mkt-drop {
@@ -4212,17 +4216,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
+  padding: 14px 18px;
   background: transparent;
   border: none;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.85);
-  font-size: 13px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.92);
+  font-size: 14px;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.sb-lmk-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.sb-lmk-item:first-child { border-top: none; }
+.sb-lmk-item:hover { background: rgba(255,255,255,0.04); color: #fff; }
 .sb-lmk-minus { font-size: 18px; color: var(--sb-text-2); line-height: 1; }
 
 /* "Market not available" message in match card */
