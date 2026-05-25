@@ -481,10 +481,10 @@ function _mdPollOnce(mid) {
 }
 function startMatchDetailPoll(mid) {
   if (S._mdPollInterval) clearInterval(S._mdPollInterval);
-  // Reset the per-match timer high-water-mark so a different match's
-  // last-known timer can't leak into this one (avoid the "stuck at 42'"
-  // glitch when navigating between live matches).
+  // Reset per-match high-water-marks so a different match's last
+  // known timer/stats can't leak into this one.
   window._mdLastTimer = null;
+  window._mdLastStats = null;
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
@@ -507,6 +507,37 @@ function startMatchDetailPoll(mid) {
 }
 
 function patchMatchDetailLive(m, markets) {
+  // ── Sticky stats: BetsAPI sometimes drops stats during the
+  //    half-time transition or for a few seconds around a goal/card
+  //    event. Counters never go backwards (5 yellow cards do not
+  //    become 0), so we keep the highest per-key value we've seen.
+  if (m) {
+    var prevStats = window._mdLastStats || {};
+    var newStats  = m.stats || {};
+    var merged = {};
+    Object.keys(prevStats).forEach(function(k) { merged[k] = prevStats[k]; });
+    Object.keys(newStats).forEach(function(k) {
+      var pv = prevStats[k], nv = newStats[k];
+      function pairTot(v) {
+        if (!v) return -1;
+        var arr = Array.isArray(v) ? v : (typeof v === 'string' ? v.split(',') : [v[0], v[1]]);
+        var a = parseInt(arr[0], 10) || 0, b = parseInt(arr[1], 10) || 0;
+        return a + b;
+      }
+      // Take the side with the higher total, OR the new value if
+      // it's the only one present.
+      if (!pv) merged[k] = nv;
+      else if (!nv) merged[k] = pv;
+      else if (pairTot(nv) >= pairTot(pv)) merged[k] = nv;
+      else merged[k] = pv;
+    });
+    if (Object.keys(merged).length) {
+      m.stats = merged;
+      window._mdLastStats = merged;
+    } else if (window._mdLastStats) {
+      m.stats = window._mdLastStats;
+    }
+  }
   window._mdMatch = m;
 
   // Ended match — freeze clock, keep score/stats fresh
