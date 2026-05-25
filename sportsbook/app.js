@@ -3879,10 +3879,38 @@ window.sbToggleMc = function(mid, ev) {
     });
 };
 
+/* Diff previous markets vs next markets and annotate each new selection
+   with _change = 'up' | 'down' | null so renderMktBtn() shows the ▲/▼
+   arrow + flash animation. Mirrors the diff inside patchMatchDetailLive(). */
+function _mcDiffMarkets(prevMarkets, nextMarkets) {
+  var prevIdx = {};
+  (prevMarkets || []).forEach(function(pm) {
+    (pm.selections || []).forEach(function(ps) {
+      var key = (pm.id || pm.name || '') + '|' + (ps.id || ps.name || '');
+      var pv = parseFloat(ps.odds);
+      if (!isNaN(pv) && pv > 1.01) prevIdx[key] = pv;
+    });
+  });
+  (nextMarkets || []).forEach(function(nm) {
+    (nm.selections || []).forEach(function(ns) {
+      var key = (nm.id || nm.name || '') + '|' + (ns.id || ns.name || '');
+      var nv  = parseFloat(ns.odds);
+      var pv  = prevIdx[key];
+      if (pv && !isNaN(nv) && nv > 1.01 && Math.abs(nv - pv) >= 0.01) {
+        ns._change = (nv > pv) ? 'up' : 'down';
+      } else {
+        ns._change = null;
+      }
+    });
+  });
+}
+
 /* Re-apply inline expansion to every card the user had previously opened.
    Called after every match-list re-render (renderMatches, renderMatchGroups,
    period page, championship view) so polling refreshes don't silently
-   collapse the user's open cards. */
+   collapse the user's open cards. Also re-builds the inline markets from
+   the fresh match data so live odds stay accurate (green ▲ / red ▼
+   arrows on changes). */
 window.sbRestoreExpandedCards = function() {
   var set = window._mcExpandedSet || {};
   Object.keys(set).forEach(function(mid) {
@@ -3900,9 +3928,27 @@ window.sbRestoreExpandedCards = function() {
     card.classList.add('mc-inline-open');
     var chev = card.querySelector('.mc-chevron-btn');
     if (chev) chev.classList.add('mc-chevron-up');
-    if (cached && cached.match && cached.markets) {
-      box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, cached.tab || 'Principaux');
+    if (!cached || !cached.markets) return;
+
+    // Pull the FRESH match data from the in-memory list. If odds changed,
+    // rebuild fallback markets, annotate _change for the arrows, and
+    // re-paint. Keeps the inline view truly live across poll cycles.
+    var fresh = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
+    if (fresh) {
+      var prevOdds = cached.match && cached.match.live_odds ? JSON.stringify(cached.match.live_odds) : '';
+      var nextOdds = fresh.live_odds ? JSON.stringify(fresh.live_odds) : '';
+      if (prevOdds !== nextOdds) {
+        var nextMkts = null;
+        try { nextMkts = buildFallbackMarkets(fresh); } catch (e) {}
+        if (nextMkts && nextMkts.length) {
+          _mcDiffMarkets(cached.markets, nextMkts);
+          cached.match   = fresh;
+          cached.markets = nextMkts;
+        }
+      }
     }
+
+    box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, cached.tab || 'Principaux');
   });
 };
 
