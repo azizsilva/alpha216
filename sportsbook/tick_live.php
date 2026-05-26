@@ -49,21 +49,24 @@ define('LOCK_FILE',     CACHE_DIR . '/tick_live.lock');
 if (!is_dir(CACHE_DIR)) @mkdir(CACHE_DIR, 0755, true);
 
 // ── Tunable parameters ─────────────────────────────────────────
-// RATE-LIMIT-SAFE defaults. BetsAPI free/standard plans have a quota
-// of ~500-1000 req/min. With TICK_SECONDS=5:
-//   - /v1/bet365/inplay (stream)           : 1 call / 5s  = 12/min
-//   - /v1/bet365/inplay_filter (football)  : 1 call / 10s =  6/min
-//   - Other sports round-robin (5 sports)  : 1 call / 20s =  3/min each
-//   Total: ~33 req/min — well within any plan.
-// If you have a Volume Package (higher quota), you can lower TICK_SECONDS.
-$TICK_SECONDS      = 5;     // base loop interval — change to 2 with Volume Package
-$STREAM_EVERY      = 1;     // refresh /v1/bet365/inplay every tick
-$FOOTBALL_EVERY    = 2;     // refresh football inplay_filter every 2 ticks (10s)
-$OTHER_SPORT_EVERY = 4;     // refresh non-football sport round-robin every 4 ticks (20s)
-$FOOTBALL_SPORT_ID = 1;
-$OTHER_LIVE_SPORTS = [18, 13, 91, 17, 78];  // basketball, tennis, volleyball, ice hockey, handball
-$MAX_INPLAY_PAGES  = 3;     // 3 pages = 150 matches — reduces calls vs 5 pages
-$LOG_EVERY_N_TICKS = 12;    // log a stats line every N ticks (~60s)
+// STREAM-ONLY mode: we call /v1/bet365/inplay ONCE per tick and
+// extract everything from it (scores, timers, stats, odds stubs,
+// team names). This is 1 API call per tick instead of 7+, so we
+// can safely run at 2s intervals on any BetsAPI plan:
+//   - /v1/bet365/inplay (stream): 1 call / 2s = 30/min
+//   - /v1/bet365/inplay_filter (football, fallback for team names):
+//     1 call every 30 ticks = 1/min
+//   Total: ~31 req/min — safe on all plans including free tier.
+//
+// To go faster: lower TICK_SECONDS (need Volume Package for <2s).
+$TICK_SECONDS         = 2;    // base loop interval — safe on all plans
+$STREAM_EVERY         = 1;    // refresh stream every tick (2s)
+$FOOTBALL_FILTER_EVERY = 30;  // refresh football inplay_filter every 30 ticks (60s, for team names)
+$OTHER_FILTER_EVERY   = 60;   // other sports every 60 ticks (120s)
+$FOOTBALL_SPORT_ID    = 1;
+$OTHER_LIVE_SPORTS    = [18, 13, 91, 17, 78];
+$MAX_INPLAY_PAGES     = 3;
+$LOG_EVERY_N_TICKS    = 30;   // log every ~60s
 
 // ── Lock: only one instance runs ──────────────────────────────
 //   We use a real OS-level advisory lock via flock(LOCK_EX | LOCK_NB).
@@ -143,12 +146,104 @@ function tick_atomic_write($path, $data) {
     return true;
 }
 
-/* ── Refresh /v1/bet365/inplay (the live stream) ──────────── */
+/* ── Refresh /v1/bet365/inplay (the live stream) ──────────────
+ * Also parses the stream to extract per-match score/timer/stats
+ * and patches the per-sport live_X.json files in-place.
+ * This is the KEY optimisation: one API call updates everything.
+ * ─────────────────────────────────────────────────────────── */
 function tick_refresh_stream() {
     $resp = tick_http_get('/v1/bet365/inplay');
     if (!$resp || empty($resp['results'][0]) || !is_array($resp['results'][0])) return 0;
-    tick_atomic_write(CACHE_DIR . '/inplay_stream.json', $resp['results'][0]);
-    return count($resp['results'][0]);
+    $stream = $resp['results'][0];
+    tick_atomic_write(CACHE_DIR . '/inplay_stream.json', $stream);
+
+    // ── Parse stream: extract score / timer / stats per FI / r_id ──
+    // The stream is a flat array of typed items: EV, MA, PA, LA …
+    // Each EV item is one live match and carries SS (score), TM/TS/MD
+    // (timer), S1-S8 (stats: corners, cards, attacks …).
+    $ev_by_fi    = [];   // FI → match patch {ss, timer, stats}
+    $ev_by_id    = [];   // ID-base → match patch
+    $curr_fi     = null;
+    $curr_id     = null;
+    foreach ($stream as $item) {
+        if (!is_array($item)) continue;
+        $type = $item['type'] ?? $item['TYPE'] ?? '';
+        if ($type === 'EV') {
+            $curr_fi  = $item['OI'] ?? $item['FI'] ?? null;
+            $id_raw   = $item['ID'] ?? '';
+            $curr_id  = $id_raw ? explode('_', $id_raw)[0] : null;
+            $patch = [];
+            $ss = $item['SS'] ?? $item['ss'] ?? null;
+            if ($ss !== null && $ss !== '') $patch['ss'] = $ss;
+            // Timer: TM=minute, TS=seconds, MD=period
+            $tm = $item['TM'] ?? $item['tm'] ?? null;
+            $ts = $item['TS'] ?? $item['ts'] ?? null;
+            $md = $item['MD'] ?? $item['md'] ?? null;
+            if ($tm !== null) {
+                $patch['timer'] = [
+                    'tm' => (int)$tm,
+                    'ts' => (int)($ts ?? 0),
+                    'md' => (string)($md ?? '0'),
+                ];
+            }
+            // Stats S1-S8 (corners, yellow cards, red cards, etc.)
+            $stats = [];
+            foreach (['S1','S2','S3','S4','S5','S6','S7','S8'] as $sk) {
+                $sv = $item[$sk] ?? null;
+                if ($sv !== null && $sv !== '') $stats[$sk] = $sv;
+            }
+            if ($stats) $patch['stats_ev'] = $stats;
+            if ($curr_fi)  $ev_by_fi[$curr_fi]  = $patch;
+            if ($curr_id)  $ev_by_id[$curr_id]  = $patch;
+        }
+    }
+
+    // ── Patch per-sport live_X.json with fresh scores/timers ──
+    // Load each cached sport file, update matching matches, write back.
+    $patched_total = 0;
+    foreach (glob(CACHE_DIR . '/live_*.json') ?: [] as $lf) {
+        $arr = json_decode(@file_get_contents($lf), true);
+        if (!is_array($arr) || empty($arr)) continue;
+        $changed = false;
+        foreach ($arr as &$m) {
+            if (!is_array($m)) continue;
+            $mid  = (string)($m['id']   ?? '');
+            $rid  = (string)($m['r_id'] ?? '');
+            $rid_n = $rid ? explode('_', $rid)[0] : $mid;
+            // Find the stream patch for this match
+            $patch = $ev_by_fi[$rid] ?? $ev_by_fi[$rid_n] ?? $ev_by_id[$rid_n] ?? $ev_by_id[$mid] ?? null;
+            if (!$patch) continue;
+            if (isset($patch['ss'])    && $patch['ss']    !== '') { $m['ss']    = $patch['ss'];    $changed = true; }
+            if (isset($patch['timer']))                            { $m['timer'] = $patch['timer']; $changed = true; }
+            if (isset($patch['stats_ev'])) {
+                // Map EV S1-S8 to named stats keys used by the frontend.
+                // BetsAPI stream S-fields for football (sport 1):
+                //   S1=corners, S2=yellow_cards, S3=red_cards,
+                //   S4=dangerous_attacks, S5=shots_on_target, S6=attacks,
+                //   S7=on_target (alt), S8=off_target (alt)
+                $se = $patch['stats_ev'];
+                $ns = $m['stats'] ?? [];
+                $map = ['S1'=>'corners','S2'=>'yellow_cards','S3'=>'red_cards',
+                        'S4'=>'dangerous_attacks','S5'=>'shots_on_target','S6'=>'attacks'];
+                foreach ($map as $sk => $nk) {
+                    if (!isset($se[$sk])) continue;
+                    $raw = $se[$sk];
+                    // Values come as "H,A" pairs e.g. "3,2"
+                    $parts = explode(',', (string)$raw);
+                    if (count($parts) >= 2) {
+                        $ns[$nk] = [(int)$parts[0], (int)$parts[1]];
+                        $changed = true;
+                    }
+                }
+                if ($changed) $m['stats'] = $ns;
+            }
+            $patched_total++;
+        }
+        unset($m);
+        if ($changed) tick_atomic_write($lf, $arr);
+    }
+
+    return count($stream);
 }
 
 /* ── Refresh /v1/bet365/inplay_filter per sport ────────────── */
@@ -177,45 +272,51 @@ $started_at = time();
 $total_stream_items = 0;
 $total_sport_matches = 0;
 
-fwrite(STDOUT, "[tick_live] Started PID=" . getmypid() . " interval={$TICK_SECONDS}s football=every{$FOOTBALL_EVERY}t others=[" . implode(',', $OTHER_LIVE_SPORTS) . "] every{$OTHER_SPORT_EVERY}t\n");
+$all_sports = array_merge([$FOOTBALL_SPORT_ID], $OTHER_LIVE_SPORTS);
+fwrite(STDOUT, "[tick_live] Started PID=" . getmypid()
+    . " interval={$TICK_SECONDS}s stream=every{$STREAM_EVERY}t"
+    . " football_filter=every{$FOOTBALL_FILTER_EVERY}t"
+    . " other_filter=every{$OTHER_FILTER_EVERY}t\n");
+fwrite(STDOUT, "[tick_live] STREAM-ONLY mode: 1 API call per tick = ~" . round(60/$TICK_SECONDS) . " req/min\n");
 
 while (true) {
     $tick++;
     $loop_start = microtime(true);
 
-    // Always refresh global inplay stream every tick — it's the freshest
-    // source and contains EV.SS / EV.TM / EV.MD / S1-S8 stats for ALL
-    // live matches in one call. This is what powers live_refresh.
+    // ── PRIMARY: stream every tick ────────────────────────────
+    // ONE call gives us fresh SS/TM/MD/stats for ALL live matches.
+    // tick_refresh_stream() also patches per-sport live_X.json files
+    // in-place so the home page and match detail page both see fresh
+    // data within $TICK_SECONDS seconds.
     if ($tick % $STREAM_EVERY === 0) {
         $n = tick_refresh_stream();
         if ($n > 0) $total_stream_items += $n;
     }
 
-    // FOOTBALL FIRST. Refresh /v1/bet365/inplay_filter?sport_id=1 every
-    // FOOTBALL_EVERY ticks (default 2s). Football is the only sport where
-    // sub-2s freshness materially changes the UX (goals, cards, HT).
-    if ($tick % $FOOTBALL_EVERY === 0) {
+    // ── SECONDARY: inplay_filter for team names / league ──────
+    // Team names and league names almost never change mid-match.
+    // We only need this to populate the match list initially and
+    // to pick up newly-started matches. Very infrequent calls.
+    if ($tick % $FOOTBALL_FILTER_EVERY === 0) {
         $cnt = tick_refresh_sport($FOOTBALL_SPORT_ID, $MAX_INPLAY_PAGES);
         if ($cnt > 0) $total_sport_matches += $cnt;
     }
-
-    // Other sports: round-robin every OTHER_SPORT_EVERY ticks (4s).
-    // Each sport refreshes every (count*OTHER_SPORT_EVERY) = 20s.
-    // That's fine for basketball/tennis/etc. (slower-changing scores).
-    if ($tick % $OTHER_SPORT_EVERY === 0) {
-        $rr_idx = (intdiv($tick, $OTHER_SPORT_EVERY) - 1) % count($OTHER_LIVE_SPORTS);
-        $sid = $OTHER_LIVE_SPORTS[$rr_idx];
-        $cnt = tick_refresh_sport($sid, $MAX_INPLAY_PAGES);
+    if ($tick % $OTHER_FILTER_EVERY === 0) {
+        $rr_idx = (intdiv($tick, $OTHER_FILTER_EVERY) - 1) % count($OTHER_LIVE_SPORTS);
+        $sid    = $OTHER_LIVE_SPORTS[$rr_idx];
+        $cnt    = tick_refresh_sport($sid, $MAX_INPLAY_PAGES);
         if ($cnt > 0) $total_sport_matches += $cnt;
     }
 
     if ($tick % $LOG_EVERY_N_TICKS === 0) {
         $uptime = time() - $started_at;
-        fwrite(STDOUT, sprintf("[tick_live] tick=%d uptime=%ds stream_items=%d sport_matches=%d\n",
-            $tick, $uptime, $total_stream_items, $total_sport_matches));
+        fwrite(STDOUT, sprintf(
+            "[tick_live] tick=%d uptime=%ds stream_items=%d sport_matches=%d\n",
+            $tick, $uptime, $total_stream_items, $total_sport_matches
+        ));
     }
 
-    $elapsed = microtime(true) - $loop_start;
+    $elapsed   = microtime(true) - $loop_start;
     $sleep_for = max(0, $TICK_SECONDS - $elapsed);
     if ($sleep_for > 0) usleep((int)($sleep_for * 1_000_000));
 }
