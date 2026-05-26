@@ -518,22 +518,28 @@ body .sb-root .slip-tabs,.sb-root .slip-tabs{display:flex!important;gap:4px!impo
 body .sb-root .slip-tab,.sb-root .slip-tab{flex:1!important;background:transparent!important;border:none!important;border-radius:6px 6px 0 0!important;color:rgba(255,255,255,0.5)!important;font-size:13px!important;padding:11px 6px!important;cursor:pointer!important;}
 body .sb-root .slip-tab.active,.sb-root .slip-tab.active{background:rgb(49,49,49)!important;color:#fff!important;font-weight:600!important;}
 body .sb-root .slip-item,.sb-root .slip-item{margin:10px 12px!important;padding:0!important;border-radius:8px!important;background:rgb(49,49,49)!important;border:none!important;overflow:hidden!important;}
-body .sb-root .slip-item.combi,.sb-root .slip-item.combi{background:rgba(120,75,65,0.35)!important;}
+body .sb-root .slip-item.combi,.sb-root .slip-item.combi{background:rgb(49,49,49)!important;}
 body .sb-root .slip-item-body,.sb-root .slip-item-body{padding:12px 14px 14px!important;}
 body .sb-root .slip-item-hdr,.sb-root .slip-item-hdr{display:flex!important;align-items:flex-start!important;gap:8px!important;padding:12px 14px 0!important;}
 body .sb-root .slip-match-nm,.sb-root .slip-match-nm{font-size:13px!important;font-weight:700!important;color:#fff!important;flex:1!important;}
+body .sb-root .slip-item-btns,.sb-root .slip-item-btns{display:flex!important;gap:4px!important;align-items:center!important;}
+body .sb-root .slip-excl-btn,body .sb-root .slip-banker-btn,.sb-root .slip-excl-btn,.sb-root .slip-banker-btn{background:transparent!important;border:1px solid rgba(255,255,255,0.2)!important;border-radius:2px!important;color:rgba(255,255,255,0.6)!important;font-size:11px!important;font-weight:700!important;cursor:pointer!important;height:18px!important;min-width:18px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0 4px!important;}
+body .sb-root .slip-remove-btn,.sb-root .slip-remove-btn{background:transparent!important;border:none!important;color:rgba(255,255,255,0.6)!important;font-size:16px!important;font-weight:700!important;cursor:pointer!important;padding:0 4px!important;margin-left:4px!important;}
+body .sb-root .slip-excl-btn.excluded,body .sb-root .slip-banker-btn.active,.sb-root .slip-excl-btn.excluded,.sb-root .slip-banker-btn.active{background:rgb(113,246,105)!important;border-color:rgb(113,246,105)!important;color:#000!important;}
 body .sb-root .slip-market-nm,.sb-root .slip-market-nm{font-size:11px!important;color:rgba(255,255,255,0.45)!important;margin:6px 0 4px!important;padding:0!important;}
 body .sb-root .slip-sel-row,.sb-root .slip-sel-row{display:flex!important;align-items:center!important;margin:0 0 10px!important;padding:0!important;}
 body .sb-root .slip-sel-lbl,.sb-root .slip-sel-lbl{font-size:15px!important;font-weight:700!important;color:#fff!important;flex:1!important;}
 body .sb-root .slip-stake-row,.sb-root .slip-stake-row{display:flex!important;align-items:center!important;gap:12px!important;margin:4px 0 0!important;padding:0!important;}
-body .sb-root .slip-stake-inp,.sb-root .slip-stake-inp{width:96px!important;min-width:96px!important;height:40px!important;background:rgb(38,38,38)!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:6px!important;color:#fff!important;font-size:14px!important;font-weight:600!important;padding:0 12px!important;text-align:left!important;box-shadow:none!important;-webkit-appearance:none!important;}
+body .sb-root .slip-stake-inp,.sb-root .slip-stake-inp{width:96px!important;min-width:96px!important;height:32px!important;background:rgb(49,49,49)!important;border:1px solid rgb(113,246,105)!important;border-radius:4px!important;color:#fff!important;font-size:14px!important;font-weight:700!important;padding:0 8px!important;text-align:left!important;box-shadow:none!important;-webkit-appearance:none!important;}
 body .sb-root .slip-stake-inp:focus,body .sb-root .slip-stake-inp.active,.sb-root .slip-stake-inp:focus,.sb-root .slip-stake-inp.active{border-color:rgb(113,246,105)!important;}
 body .sb-root .slip-gagner,.sb-root .slip-gagner{font-size:12px!important;color:rgba(255,255,255,0.55)!important;margin-left:auto!important;}
 body .sb-root .slip-gagner strong,.sb-root .slip-gagner strong{color:rgb(113,246,105)!important;font-weight:700!important;}
 body .sb-root .slip-promo,.sb-root .slip-promo{margin:10px 12px!important;padding:12px 14px!important;border:1px solid rgba(112,246,105,0.3)!important;border-radius:8px!important;}
-body .sb-root .slip-clear-btn,.sb-root .slip-clear-btn{width:calc(100% - 24px)!important;margin:8px 12px!important;padding:12px!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:8px!important;color:rgb(113,246,105)!important;}
+body .sb-root .slip-clear-btn,.sb-root .slip-clear-btn{width:calc(100% - 24px)!important;margin:8px 12px!important;padding:12px!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:8px!important;color:rgb(113,246,105)!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:8px!important;font-weight:700!important;background:transparent!important;}
+body .sb-root .slip-bookmark-btn,.sb-root .slip-bookmark-btn{background:rgb(49,49,49)!important;border:none!important;border-radius:8px!important;width:44px!important;height:44px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:rgb(113,246,105)!important;}
 body .sb-root .slip-summary,.sb-root .slip-summary{border-top:1px solid rgba(255,255,255,0.08)!important;padding:12px 14px!important;}
-body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:#000!important;border:0!important;border-radius:8px!important;font-weight:800!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+body .sb-root .slip-place-wrap,.sb-root .slip-place-wrap{display:flex!important;gap:8px!important;margin:0 12px 16px!important;align-items:stretch!important;}
+body .sb-root .slip-place-btn,.sb-root .slip-place-btn{flex:1!important;background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:#000!important;border:0!important;border-radius:8px!important;font-weight:800!important;font-size:15px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:12px!important;}
 .slip-stake-editor{display:none!important;}
 .slip-stake-editor.slip-stake-editor--open{display:block!important;}
 @media(min-width:1101px){.slip-stake-editor{display:none!important;}}
@@ -544,24 +550,27 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
 .slip-np-key,body .sb-root .slip-np-key{background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-size:17px!important;font-weight:700!important;padding:12px 0!important;cursor:pointer!important;outline:none!important;min-height:44px!important;}
 .slip-np-del,body .sb-root .slip-np-del{display:flex!important;align-items:center!important;justify-content:center!important;color:rgba(255,255,255,0.75)!important;}
 .slip-np-ok,body .sb-root .slip-np-ok{grid-row:1/span 2!important;grid-column:7!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-size:18px!important;font-weight:800!important;cursor:pointer!important;outline:none!important;align-self:stretch!important;}
-.sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
-.sb-root .sb-boost-card{padding:10px 14px 12px; border-width: 0px 0px 0px 2px; border-style: solid; border-radius: 6px; background: rgb(74, 74, 74); border-color: transparent; transition: border-color 0.2s; margin-right: 6px;}
+.sb-root .sb-boost-row{padding:0;margin-bottom:4px; display:flex; gap:8px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:8px; -ms-overflow-style:none; scrollbar-width:none;}
+.sb-root .sb-boost-row::-webkit-scrollbar{display:none;}
+.sb-root .sb-boost-card{min-width:85%; scroll-snap-align:center; padding:10px 14px 12px; border-width: 0px 0px 0px 2px; border-style: solid; border-radius: 6px; background: rgb(74, 74, 74); border-color: transparent; transition: border-color 0.2s; margin-right: 0;}
 .sb-root .sb-boost-card.is-active{border-color: rgb(33, 151, 243);}
 .sb-root .sb-badge-blue{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 2px 4px; border-radius: 2px; font-family: Roboto, sans-serif; font-size: 12px; font-style: normal; font-weight: 500; line-height: 12px; background: rgb(33, 151, 243); color: rgb(255, 255, 255); text-transform: uppercase;}
-.sb-root .sb-badge-bb{background: #70f669; color: #000; font-size: 11px; font-weight: bold; padding: 2px 4px; border-radius: 2px; margin-right: 4px;}
-.sb-root .sb-boost-card-top{display:flex; align-items:center; margin-bottom:4px;}
-.sb-root .sb-boost-sport-icon{margin-right:6px; color:rgba(255,255,255,0.7); display:flex;}
+.sb-root .sb-badge-bb{white-space:nowrap; padding:2px; border:1px solid rgb(113,246,105); border-radius:2px; font-family:Roboto, sans-serif; font-size:12px; font-weight:500; line-height:12px; color:rgba(0,0,0,0.87); text-transform:uppercase; background:rgb(113,246,105); margin-right:4px;}
+.sb-root .sb-boost-card-top{display:flex; align-items:center; margin-bottom:8px;}
+.sb-root .sb-boost-sport-icon{margin-right:6px; color:#313131; display:flex;}
 .sb-root .sb-boost-sport-icon svg{width:14px; height:14px;}
-.sb-root .sb-boost-card .sb-meta-text{font-size:12px; color:rgba(255,255,255,0.5); line-height:1.2;}
-.sb-root .sb-boost-card .sb-teams-text{margin:4px 0 8px; line-height:1.25; font-size:14px; color:#fff;}
-.sb-root .sb-boost-card .sb-boost-picks{margin:0 0 10px;}
+.sb-root .sb-boost-meta-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;}
+.sb-root .sb-boost-league{font-size:12px; color:rgba(255,255,255,0.6); font-weight:500; line-height:1.2;}
+.sb-root .sb-boost-date{font-size:12px; color:#fff; font-weight:700; line-height:1.2;}
+.sb-root .sb-boost-card .sb-teams-text{margin:4px 0 10px; line-height:1.25; font-size:14px; font-weight:700; color:#fff;}
+.sb-root .sb-boost-card .sb-boost-picks{margin:0 0 12px;}
 .sb-root .sb-boost-card .sb-boost-line{position:relative;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.85);min-height:18px;padding:1px 0;line-height:1.25;}
 .sb-root .sb-boost-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#70f669;display:inline-block;flex-shrink:0;z-index:2;margin:0;}
 .sb-root .sb-boost-card .sb-boost-picks > .sb-boost-line:not(:last-child) .sb-boost-dot::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:12px;transform:translateX(-50%);background:#70f669;border-radius:1px;z-index:1;}
-.sb-root .sb-odds-row{display: flex; gap: 8px; align-items: center; justify-content: center; padding: 8px; background: rgb(49, 49, 49); border-radius: 4px; margin-top:8px;}
+.sb-root .sb-odds-row{display: flex; gap: 8px; align-items: center; justify-content: center; padding: 0px; background: rgb(49, 49, 49); color: rgb(113, 246, 105); border: 1px solid rgba(255, 255, 255, 0); border-radius: 4px; min-height:34px; margin-top:8px;}
 .sb-root .sb-odds-row .sb-old-val{color: rgba(255,255,255,0.5); text-decoration: line-through; font-size: 14px; font-weight: 500;}
 .sb-root .sb-odds-row .sb-boost-arrow{color: rgb(33, 151, 243); display:flex; align-items:center;}
-.sb-root .sb-odds-row .sb-new-val{color: rgb(113, 246, 105); font-size: 15px; font-weight: bold;}
+.sb-root .sb-odds-row .sb-new-val{color: rgb(113, 246, 105); font-size: 14px; font-weight: bold;}
 
 /* ── Match-detail tabs row — critical inline CSS so Bootstrap doesn't
  * collapse pill spacing ("Bet Builder1 minute2ème mi-ter"). Mirrors
