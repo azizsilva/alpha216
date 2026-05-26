@@ -732,24 +732,39 @@ if ($action === 'inplay') {
     // ── Cache TTLs ─────────────────────────────────────────────
     // Use aggressive 2s TTL always — when daemon runs it writes every 2s
     // so cache is always fresh. When daemon is off, api.php self-refreshes
-    // directly (2s = near-real-time without daemon).
-    $tick_lock     = $cache_dir . '/tick_live.lock';
-    $daemon_alive  = file_exists($tick_lock) && (time() - filemtime($tick_lock)) < 10;
-    $cache_ttl     = 2;   // ALWAYS 2s — real-time for all sports
-    // EV per-match odds cache TTL — matches tick_live TICK_SECONDS (2s).
+    // ── Daemon-aware cache strategy ────────────────────────────────────────
+    // tick_live.php is the ONLY process that should call BetsAPI for live
+    // data. api.php must read from the files tick_live writes — never call
+    // BetsAPI itself for inplay / stream data, regardless of cache age.
+    //
+    // Why: if api.php also calls BetsAPI, every user page-load burns quota
+    // on top of tick_live. With 1s frontend polling and many users, this
+    // exhausts the quota in minutes and causes the 429 death-spiral.
+    //
+    // Rule: when tick_live's lock file exists (daemon is running or was
+    // running recently), NEVER call BetsAPI for inplay/stream — serve from
+    // cache file however old it is (tick_live will update it shortly).
+    // Only fall back to a direct BetsAPI call when no lock file exists AND
+    // no cache file exists (truly cold start with no daemon).
+    $tick_lock    = $cache_dir . '/tick_live.lock';
+    $daemon_alive = file_exists($tick_lock); // lock exists = daemon ever ran
+    // How old is the cache allowed to be before we show "no matches"?
+    // When daemon is alive: infinite — tick_live will refresh it.
+    // When daemon is dead and no cache: 0 — must fetch live.
+    $cache_max_age = $daemon_alive ? PHP_INT_MAX : 30;
+    $cache_ttl     = 2;
     $ev_cache_ttl  = $is_football ? 2 : 4;
     $ev_stale_ttl  = 2;
     $odds_bg_ttl   = $is_football ? 8 : 12;
-    $ev_refresh_cap = 50; // refresh up to 50 live events per cycle (all sports)
+    $ev_refresh_cap = 50;
 
-    // ── Step 1: Get or refresh inplay_filter per sport ─────────────────────
-    // CACHE TTL is intentionally low (3s for football, 5s for other) so the
-    // /v1/bet365/inplay_filter endpoint is hit at most once per cache_ttl.
-    // We NEVER serve a cached response that is older than cache_ttl seconds.
-    $use_sport_cache = file_exists($sport_cache) && (time()-filemtime($sport_cache)) < $cache_ttl;
+    // ── Step 1: Get inplay_filter per sport ────────────────────────────────
+    $sport_cache_age = file_exists($sport_cache) ? (time() - filemtime($sport_cache)) : PHP_INT_MAX;
+    $use_sport_cache = ($sport_cache_age < $cache_max_age);
     if ($use_sport_cache) {
         $results = json_decode(file_get_contents($sport_cache), true) ?: [];
-    } else {
+    } elseif (!$daemon_alive) {
+        // No daemon, no usable cache — fetch directly (cold start only).
         $live_api = []; $seen_ids = [];
         for ($pg=1; $pg<=5; $pg++) {
             $resp = betsapi_get('/v1/bet365/inplay_filter', ['sport_id'=>$sport_id,'page'=>$pg]);
@@ -767,16 +782,17 @@ if ($action === 'inplay') {
         if (!empty($live_api)) {
             $results = $live_api;
             @file_put_contents($sport_cache, json_encode($results));
-            // DB write is fire-and-forget — it persists league_matches /
-            // championship lookups but MUST NOT delay the live response.
-            // We do it ONLY when we just refreshed inplay_filter.
             if ($db_connected) cache_to_db($pdo, $results, $sport_id);
         }
     }
+    // else: daemon alive but cache missing — tick_live will write it soon,
+    // just return empty for this request. No BetsAPI call.
 
-    // ── Step 2: Get or refresh global inplay stream (for live OU odds) ─────
-    $use_stream_cache = file_exists($stream_cache) && (time()-filemtime($stream_cache)) < $cache_ttl;
-    if (!$use_stream_cache) {
+    // ── Step 2: Get global inplay stream ───────────────────────────────────
+    $stream_cache_age = file_exists($stream_cache) ? (time() - filemtime($stream_cache)) : PHP_INT_MAX;
+    $use_stream_cache = ($stream_cache_age < $cache_max_age);
+    if (!$use_stream_cache && !$daemon_alive) {
+        // Cold start only — daemon is dead and no cache.
         $sresp = betsapi_get('/v1/bet365/inplay', []);
         if (!empty($sresp['results'][0]) && is_array($sresp['results'][0])) {
             @file_put_contents($stream_cache, json_encode($sresp['results'][0]));
