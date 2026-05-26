@@ -250,27 +250,55 @@ if ($mode === 'live' || $mode === 'full') {
         $stream = $resp['results'][0]; // flat array: EV, MA, PA items
     }
 
-    // Parse stream into a map of FI => odds
-    $odds_map = [];
+    // Parse stream into a map of FI => odds AND stats
+    $odds_map  = [];
+    $stats_map = []; // keyed by FI — corners, yellow/red cards, attacks
     $rid_to_fi = []; // Map r_id (from inplay_filter) to FI/OI (from stream)
     $curr_fi = null;
     $odds_h = null; $odds_x = null; $odds_a = null;
     $ou_over = null; $ou_under = null;
+    // EV S-field → canonical stat name (Bet365 inplay stream)
+    // S1=on_target S2=off_target S3=attacks S4=dangerous_attacks
+    // S6=corners S7=yellow_cards S8=red_cards
+    $ev_stat_map = [
+        'S3' => 'attacks',
+        'S4' => 'dangerous_attacks',
+        'S6' => 'corners',
+        'S7' => 'yellow_cards',
+        'S8' => 'red_cards',
+    ];
+
+    // Validate a stat value — reject timestamps / crazy numbers
+    $valid_stat = function($v) {
+        $s = trim((string)$v);
+        if (!preg_match('/^\d+$/', $s)) return false;
+        $n = (int)$s;
+        return $n >= 0 && $n <= 999;
+    };
+    // Parse a "home,away" stat pair from an EV S-field value
+    $parse_stat_pair = function($raw) use ($valid_stat) {
+        if ($raw === null || $raw === '') return null;
+        if (is_string($raw) && strpos($raw, ',') !== false) {
+            $p = array_map('trim', explode(',', $raw, 2));
+            if ($valid_stat($p[0]) && $valid_stat($p[1])) return [(string)$p[0], (string)$p[1]];
+        }
+        if (is_array($raw) && isset($raw[0]) && isset($raw[1])) {
+            if ($valid_stat($raw[0]) && $valid_stat($raw[1])) return [(string)$raw[0], (string)$raw[1]];
+        }
+        return null;
+    };
 
     foreach ($stream as $item) {
         if (!is_array($item)) continue;
         $type = $item['type'] ?? $item['TYPE'] ?? '';
 
         if ($type === 'EV' || $type === 'Event') {
-            // Save previous event odds: require home at minimum (2-way sports: h+x; 3-way: h+x+a)
+            // Save previous event's odds
             if ($curr_fi && $odds_h) {
-                // For 2-way markets (basketball, tennis): OR=0→h, OR=1→x, OR=2 doesn't exist
-                // Normalize: if no 'a' but we have 'x', treat 'x' as 'a' for 2-way display
-                $eff_a = $odds_a ?? ($odds_x && !$odds_a ? null : $odds_a);
                 $odds_map[$curr_fi] = [
                     'h'        => $odds_h,
-                    'x'        => $odds_x,   // null for 2-way (tennis, basketball)
-                    'a'        => $odds_a,   // null for 2-way
+                    'x'        => $odds_x,
+                    'a'        => $odds_a,
                     'ou_line'  => 2.5,
                     'ou_over'  => $ou_over,
                     'ou_under' => $ou_under,
@@ -278,25 +306,32 @@ if ($mode === 'live' || $mode === 'full') {
                 ];
             }
             $curr_fi = $item['FI'] ?? $item['OI'] ?? null;
-            // Map the base ID (e.g. 194922778C1A from 194922778C1A_1_3) to the FI
             if ($curr_fi && !empty($item['ID'])) {
                 $base_id = explode('_', $item['ID'])[0];
                 $rid_to_fi[$base_id] = $curr_fi;
+                // Also map numeric-only prefix
+                $num_only = preg_replace('/[^0-9].*$/', '', $base_id);
+                if ($num_only && $num_only !== $base_id) $rid_to_fi[$num_only] = $curr_fi;
             }
+            // ── Parse live stats from EV S-fields ──────────────
+            $ev_stats = [];
+            foreach ($ev_stat_map as $sk => $canonical) {
+                if (!isset($item[$sk]) || $item[$sk] === '') continue;
+                $pair = $parse_stat_pair($item[$sk]);
+                if ($pair) $ev_stats[$canonical] = $pair;
+            }
+            if ($ev_stats && $curr_fi) $stats_map[$curr_fi] = $ev_stats;
             $odds_h = $odds_x = $odds_a = $ou_over = $ou_under = null;
         }
 
         if ($type === 'PA' && $curr_fi) {
-            $n2  = (string)($item['N2'] ?? $item['NA'] ?? ''); // BetsAPI PA: N2="1","X","2" or empty
-            $or  = (string)($item['OR'] ?? '');                // OR is INTEGER 0,1,2 — must cast to string
+            $n2  = (string)($item['N2'] ?? $item['NA'] ?? '');
+            $or  = (string)($item['OR'] ?? '');
             $dec = frac_to_dec($item['OD'] ?? '');
             if (!$dec || $dec < 1.01) continue;
-            
-            // Match by name (N2) OR by position (OR) — OR is the reliable field
             if (($n2 === '1' || $or === '0') && !$odds_h) $odds_h = $dec;
             if (($n2 === 'X' || $or === '1') && !$odds_x) $odds_x = $dec;
             if (($n2 === '2' || $or === '2') && !$odds_a) $odds_a = $dec;
-            
             if ((stripos($n2,'over')  !== false) && !$ou_over)  $ou_over  = $dec;
             if ((stripos($n2,'under') !== false) && !$ou_under) $ou_under = $dec;
         }
@@ -322,10 +357,16 @@ if ($mode === 'live' || $mode === 'full') {
         $n = 0;
         foreach ($live as &$m) {
             $rid = $m['r_id'] ?? '';
-            $fi = $rid_to_fi[$rid] ?? null;
+            // Try r_id direct, then base strip
+            $base_rid = explode('_', $rid)[0];
+            $fi = $rid_to_fi[$rid] ?? $rid_to_fi[$base_rid] ?? null;
             if ($fi && isset($odds_map[$fi])) {
                 $m['live_odds'] = $odds_map[$fi];
                 $odds_fetched++;
+            }
+            // Inject live stats (corners, cards, attacks) from stream
+            if ($fi && isset($stats_map[$fi])) {
+                $m['stats'] = $stats_map[$fi];
             }
             if (save_match($upsert, $m, $sid)) {
                 $n++;

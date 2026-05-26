@@ -3756,12 +3756,12 @@ function renderChampionship(id, name, flag, matches) {
 
   var out = '<div class="sb-champ-view">';
 
-  // ── Breadcrumb: [<] [Football] [Angleterre] [Premier League] — bordered pills
+  // ── Breadcrumb: [<] [Football] [Angleterre] [Premier League] — bordered pills (all clickable)
   out += '<div class="sb-champ-breadcrumb">';
   out += '<button class="sb-bc-pill sb-champ-back-btn" onclick="window.sbBackToMain()" aria-label="Retour">' + ICON.arrowLeft + '</button>';
-  out += '<button class="sb-bc-pill" onclick="window.sbBackToMain()">' + h(sport.name) + '</button>';
+  out += '<button class="sb-bc-pill" onclick="window.sbBcSport(' + sport.id + ')">' + h(sport.name) + '</button>';
   if (country && country !== 'International') {
-    out += '<button class="sb-bc-pill">' + h(country) + '</button>';
+    out += '<button class="sb-bc-pill" onclick="window.sbBcCountry(\'' + country.replace(/'/g,"\\'") + '\',' + (sport.id||1) + ')">' + h(country) + '</button>';
   }
   out += '<button class="sb-bc-pill sb-bc-active">' + h(displayName) + '</button>';
   out += '</div>';
@@ -3973,6 +3973,68 @@ window.sbChampDateFilter = function(btn, offset) {
   });
   renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, res);
 };
+
+/* ── Breadcrumb navigation helpers ─────────────────────────────────────────
+   Sport pill  → go back to sport live view
+   Country pill → filter league list to show that country's leagues
+   League pill  → open championship page for that league              */
+window.sbBcSport = function(sportId) {
+  // Reset back to main live view for the sport
+  S.activeLeagueId   = null;
+  S.activeLeagueName = null;
+  S.activeLeagueFlag = null;
+  S.activeMatchId    = null;
+  S.champMatches     = [];
+  S.viewMode         = 'main';
+  clearInterval(window._mdTimerInterval);
+  if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
+  var viewer = document.getElementById('sb-match-viewer');
+  if (viewer) viewer.style.display = 'none';
+  sbSetHomepanelVisible(true);
+  var root = document.querySelector('.sb-root');
+  if (root) root.removeAttribute('data-view');
+  S.activeSportId = sportId || 1;
+  S.activeAction  = 'inplay';
+  sbPushUrl('main');
+  loadAndFilter('inplay', S.activeSportId, null);
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { window.scrollTo(0,0); }
+};
+
+window.sbBcCountry = function(country, sportId) {
+  // Filter: show all matches for this country by filtering league names
+  S.activeLeagueId   = null;
+  S.activeLeagueName = null;
+  S.activeLeagueFlag = null;
+  S.activeMatchId    = null;
+  S.champMatches     = [];
+  S.viewMode         = 'main';
+  S.activeCountryFilter = country; // used by rendering to highlight
+  clearInterval(window._mdTimerInterval);
+  if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
+  var viewer = document.getElementById('sb-match-viewer');
+  if (viewer) viewer.style.display = 'none';
+  sbSetHomepanelVisible(true);
+  var root = document.querySelector('.sb-root');
+  if (root) root.removeAttribute('data-view');
+  S.activeSportId = sportId || 1;
+  S.activeAction  = 'inplay';
+  sbPushUrl('main');
+  // Apply country filter by setting homeLeagueFilter to country name
+  S.homeLeagueFilter = country;
+  loadAndFilter('inplay', S.activeSportId, null);
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { window.scrollTo(0,0); }
+};
+
+window.sbBcLeague = function(leagueName, leagueId, sportId, flag) {
+  // Navigate to championship page for the league
+  window.sbGoChampionship(leagueId, leagueName, flag || '', sportId || S.activeSportId || 1);
+};
+
+window.sbGoChampionship = function(id, name, flag, sid) {
+  // Delegate to the actual championship / league loader
+  window.sbOpenLeague(id || null, name, flag || getFlag(guessCountry(name)), sid || S.activeSportId || 1);
+};
+
 
 window.sbBackToMain = function() {
   var prevLeague = S.activeLeagueName;
@@ -5030,17 +5092,18 @@ function renderMatchDetail(m, markets) {
 
   var out = '<div class="md-view md-view--compact">';
 
-  // ── Breadcrumb pill row: [<] Football | Country | League | TeamShort
-  // Mirrors fcbet216 (user image 5). Single back arrow only — no
-  // "Retour" text — to match the reference compact header.
+  // ── Breadcrumb pill row: [<] Football | Country | League | TeamShort (all clickable)
   out += '<div class="sb-champ-breadcrumb md-bc-row">';
   out += '<button class="sb-bc-pill sb-champ-back-btn" onclick="window.sbBackToMain()" aria-label="Retour">' + ICON.arrowLeft + '</button>';
-  out += '<button class="sb-bc-pill" onclick="window.sbBackToMain()">' + h(sportName) + '</button>';
+  out += '<button class="sb-bc-pill" onclick="window.sbBcSport(' + sportId + ')">' + h(sportName) + '</button>';
   if (countryDisplay && countryDisplay !== 'International') {
-    out += '<button class="sb-bc-pill">' + h(countryDisplay) + '</button>';
+    out += '<button class="sb-bc-pill" onclick="window.sbBcCountry(\'' + countryDisplay.replace(/'/g,"\\'") + '\',' + sportId + ')">' + h(countryDisplay) + '</button>';
   }
   if (leagueDisplay) {
-    out += '<button class="sb-bc-pill">' + h(leagueDisplay) + '</button>';
+    var _lgId  = h(String(m.league && m.league.id ? m.league.id : ''));
+    var _lgNm  = leagueDisplay.replace(/'/g,"\\'");
+    var _lgFlg = flagUrl.replace(/'/g,"\\'");
+    out += '<button class="sb-bc-pill" onclick="window.sbBcLeague(\'' + _lgNm + '\',\'' + _lgId + '\',' + sportId + ',\'' + _lgFlg + '\')">' + h(leagueDisplay) + '</button>';
   }
   out += '<button class="sb-bc-pill sb-bc-active">' + h(hShort) + '</button>';
   out += '</div>';
@@ -5152,29 +5215,7 @@ function renderMatchDetail(m, markets) {
   markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
   out += '</div>';
 
-  // ── Bet Builder sticky footer — shown once 1+ selection made ──────────────
-  var matchTitle = h((m.home ? m.home.name : '') + ' vs. ' + (m.away ? m.away.name : ''));
-  out += '<div class="md-bb-sticky" id="md-bb-sticky" style="display:none">';
-  out += '<div class="md-bb-header">';
-  out += '<div class="md-bb-match-row">'
-    + '<span class="md-bb-sport-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></span>'
-    + '<span class="md-bb-badge">BB</span>'
-    + '<button class="md-bb-close-btn" onclick="document.getElementById(\'md-bb-sticky\').style.display=\'none\'">&times;</button>'
-    + '</div>';
-  out += '<div class="md-bb-match-title">'
-    + (isLive ? '<span class="md-bb-live-badge">EN DIRECT</span> ' : '')
-    + matchTitle
-    + '<span class="md-bb-combined-val" id="md-bb-combined-val"> 1.00</span>'
-    + '</div>';
-  out += '</div>';
-  out += '<div class="md-bb-legs" id="md-bb-legs"></div>';
-  out += '<div class="md-bb-foot">';
-  out += '<div class="md-bb-stake-row">'
-    + '<input type="number" class="md-bb-stake-input" id="md-bb-stake" value="10" min="1" oninput="window.sbBBRefreshStake()">'
-    + '<span class="md-bb-gagner-lbl">Gagner: <strong id="md-bb-gagner">0.00</strong></span>'
-    + '</div>';
-  out += '<button type="button" class="md-bb-add-btn" onclick="window.sbBBAddToSlip()">Ajouter au slip</button>';
-  out += '</div></div>';
+  // Bet Builder sticky footer removed to add bets directly to the betslip (fcbet216 parity).
 
   out += '</div>'; // md-view
 
@@ -5184,7 +5225,6 @@ function renderMatchDetail(m, markets) {
   if (isLive && !isHT) startMatchTimer(m);
   else clearInterval(window._mdTimerInterval);
   showMatchViewer(m);
-  window._bbSelections = [];
 }
 
 function renderMarketGroup(mkt, m, expanded, bbMode) {
@@ -5302,7 +5342,8 @@ function renderMktBtn(sel, m, bbMode) {
     flashCls  = ' md-odd-flash--down';
   }
   var isSel  = S.betSlip.some(function(b){ return b.id === bid; });
-  var isBB   = window._bbSelections && window._bbSelections.some(function(b){ return b.id === bid; });
+  var bbBet  = S.betSlip.find(function(b){ return b.id === 'bb_' + String(m.id || ''); });
+  var isBB   = bbBet && bbBet.legs && bbBet.legs.some(function(l){ return l.id === bid; });
   // Market name for BB leg display — stored in the button's data-mkt attr if available
   var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
@@ -5781,102 +5822,56 @@ window.sbMdToggleInfo = function() {
 };
 
 // ── Bet Builder ──────────────────────────────────────────────
-window._bbSelections = [];
-
 window.sbBBToggle = function(id, name, odds, market) {
-  var idx = window._bbSelections.findIndex(function(s){ return s.id === id; });
-  if (idx >= 0) {
-    window._bbSelections.splice(idx, 1);
-  } else {
-    window._bbSelections.push({ id: id, name: name, odds: odds, market: market || '' });
+  var match = window._mdMatch;
+  if (!match) return;
+  var bbBetId = 'bb_' + match.id;
+  
+  var bIdx = S.betSlip.findIndex(function(b) { return b.id === bbBetId; });
+  var bet = (bIdx >= 0) ? S.betSlip[bIdx] : null;
+
+  if (!bet) {
+    bet = {
+      id: bbBetId,
+      match: (match.home ? match.home.name : '') + ' vs. ' + (match.away ? match.away.name : ''),
+      sel: '',
+      val: 1.00,
+      _origVal: 1.00,
+      _change: null,
+      isLive: isMatchLive(match),
+      isBB: true,
+      matchId: String(match.id),
+      legs: [],
+      stake: SLIP_STAKE
+    };
+    S.betSlip.push(bet);
   }
-  sbBBRefresh();
+
+  var legIdx = bet.legs.findIndex(function(l) { return l.id === id; });
+  if (legIdx >= 0) {
+    bet.legs.splice(legIdx, 1);
+  } else {
+    bet.legs.push({ id: id, name: name, odds: parseFloat(odds), market: market || '' });
+  }
+
+  if (!bet.legs.length) {
+    S.betSlip = S.betSlip.filter(function(b) { return b.id !== bbBetId; });
+  } else {
+    bet.val = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
+    bet._origVal = bet.val;
+    bet.sel = bet.legs.map(function(s){ return s.name; }).join(' + ');
+  }
+
+  renderBetSlip();
+  updateFloatingBetBadge();
+
   // Highlight/unhighlight clicked button
   document.querySelectorAll('.md-bb-btn').forEach(function(btn){
     var oc = btn.getAttribute('onclick') || '';
     if (oc.indexOf("'" + id + "'") !== -1) {
-      btn.classList.toggle('sel', idx < 0);
+      btn.classList.toggle('sel', legIdx < 0);
     }
   });
-};
-
-function sbBBRefresh() {
-  var sels    = window._bbSelections || [];
-  var sticky  = document.getElementById('md-bb-sticky');
-  var legs    = document.getElementById('md-bb-legs');
-  var combVal = document.getElementById('md-bb-combined-val');
-
-  // If no sticky panel rendered yet (e.g. match not opened), ignore
-  if (!sticky) return;
-
-  if (!sels.length) {
-    if (legs) legs.innerHTML = '';
-    sticky.style.display = 'none';
-    var mktBody = document.getElementById('md-markets-body');
-    if (mktBody) mktBody.style.paddingBottom = '';
-    return;
-  }
-
-  var combined = bbCombinedOdds(sels);
-  var out = '';
-  sels.forEach(function(s){
-    out += '<div class="md-bb-leg">'
-      + '<span class="md-bb-leg-dot"></span>'
-      + '<div class="md-bb-leg-info">'
-      + '<span class="md-bb-leg-mkt">' + h(s.market || '') + '</span>'
-      + '<span class="md-bb-leg-name">' + h(s.name) + '</span>'
-      + '</div>'
-      + '<button type="button" class="md-bb-leg-del" onclick="window.sbBBToggle(\'' + s.id + '\',\'' + s.name.replace(/'/g,"\\'") + '\',' + s.odds + ',\'' + (s.market||'').replace(/'/g,"\\'") + '\')">&times;</button>'
-      + '</div>';
-  });
-  if (legs) legs.innerHTML = out;
-  if (combVal) combVal.textContent = combined.toFixed(2);
-
-  window.sbBBRefreshStake();
-
-  // Show the sticky BB footer panel
-  sticky.style.removeProperty('display');
-  sticky.style.display = 'block';
-  var mktBody = document.getElementById('md-markets-body');
-  if (mktBody) mktBody.style.paddingBottom = '170px';
-}
-
-window.sbBBRefreshStake = function() {
-  var sels = window._bbSelections || [];
-  var combined = bbCombinedOdds(sels);
-  var stakeEl = document.getElementById('md-bb-stake');
-  var gagnerEl = document.getElementById('md-bb-gagner');
-  var stake = stakeEl ? (parseFloat(stakeEl.value) || 10) : 10;
-  if (gagnerEl) gagnerEl.textContent = (stake * combined).toFixed(2);
-};
-
-window.sbBBAddToSlip = function() {
-  var sels = window._bbSelections;
-  if (!sels.length) return;
-  var combined = bbCombinedOdds(sels);
-  var bid = 'bb_' + Date.now();
-  var matchName = (window._mdMatch ? (window._mdMatch.home ? window._mdMatch.home.name : '') + ' vs. ' + (window._mdMatch.away ? window._mdMatch.away.name : '') : 'Bet Builder');
-  var isLive = window._mdMatch ? isMatchLive(window._mdMatch) : false;
-  // Store as a BB bet with legs array — renderBetSlip will render legs separately
-  S.betSlip.push({
-    id: bid,
-    match: matchName,
-    sel: sels.map(function(s){ return s.name; }).join(' + '),
-    val: parseFloat(combined.toFixed(2)),
-    isLive: isLive,
-    isBB: true,
-    legs: sels.map(function(s){ return { market: s.market || '', name: s.name, odds: s.odds }; }),
-    stake: SLIP_STAKE
-  });
-  renderBetSlip();
-  updateFloatingBetBadge();
-  // Open bet slip on mobile
-  if (window.innerWidth <= 1100) {
-    var right = document.getElementById('sb-right');
-    if (right) right.classList.add('open');
-  }
-  window._bbSelections = [];
-  sbBBRefresh();
 };
 
 // Removed duplicate sbSwitchTab
