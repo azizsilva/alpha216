@@ -2657,10 +2657,10 @@ button.sb-btn-live.active .sb-live-badge,
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important; /* iOS momentum scroll */
   }
-  /* sb-root fills #mkApp and grows beyond 100vh, triggering scroll */
-  .sb-root { height: auto !important; min-height: 100% !important; overflow: visible !important; }
-  .sb-center { width: 100%; height: auto; overflow: visible; }
-  .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; }
+  /* sb-root fills #mkApp fully — width:100% ensures no right-side gap */
+  .sb-root { height: auto !important; min-height: 100% !important; overflow: visible !important; width: 100% !important; }
+  .sb-center { width: 100% !important; height: auto !important; overflow: visible !important; min-width: 0 !important; }
+  .sb-center-scroll { flex: initial; overflow: visible; height: auto; padding: 10px 10px 80px; width: 100% !important; }
 
   /* Mobile top bar sticky within #mkApp scroll container */
   .sb-mobile-topbar {

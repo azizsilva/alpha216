@@ -177,9 +177,10 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
   }
   /* SCROLL FIX */
   body.mk-game-no-chrome #mkApp{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;}
-  .sb-root{height:auto!important;min-height:100%!important;overflow:visible!important;}
-  .sb-center{width:100%;height:auto;overflow:visible;}
-  .sb-center-scroll{flex:initial!important;overflow:visible!important;height:auto!important;padding:10px 10px 80px!important;}
+  /* sb-root must fill its parent (#mkApp) — full width so panels are symmetric left/right */
+  .sb-root{height:auto!important;min-height:100%!important;overflow:visible!important;width:100%!important;}
+  .sb-center{width:100%!important;height:auto!important;overflow:visible!important;min-width:0!important;}
+  .sb-center-scroll{flex:initial!important;overflow:visible!important;height:auto!important;padding:10px 10px 80px!important;width:100%!important;}
   /* FOOTER */
   .sb-mob-footer{display:flex!important;}
   /* SIDEBAR CONTENT */
