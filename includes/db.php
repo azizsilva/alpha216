@@ -5,7 +5,6 @@ if (file_exists($local_env)) {
 }
 
 $host = getenv('DB_HOST') ?: 'localhost';
-$user = getenv('DB_USER') ?: 'admin'; 
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -13,29 +12,40 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-// Try multiple databases and passwords to auto-connect on any environment
-$databases_to_try = [
-    getenv('DB_NAME') ?: 'alpha216_db',
+// Try multiple databases, users and passwords to auto-connect on any environment
+$databases_to_try = array_unique(array_filter([
+    getenv('DB_NAME') ?: null,
+    'alpina216_db',   // production domain
+    'alpha216_db',    // legacy name
     'forza_db',
     'xbet_db',
     'u842075676_tanichub'
-];
-$passwords_to_try = [
+]));
+$users_to_try = array_unique(array_filter([
+    getenv('DB_USER') ?: null,
+    'root',
+    'admin',
+    'alpina216_usr',
+]));
+$passwords_to_try = array_unique([
     getenv('DB_PASS') ?: 'Alpina@2026',
+    'Alpina@2026',
     '',
     'root'
-];
+]);
 
 $pdo = null;
 foreach ($databases_to_try as $db) {
     if (!$db) continue;
-    foreach ($passwords_to_try as $pass) {
-        try {
-            $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
-            $pdo = new PDO($dsn, $user, $pass, $options);
-            break 2; // Success! Break out of both loops
-        } catch (\PDOException $e) {
-            // Ignore and try the next combination
+    foreach ($users_to_try as $user) {
+        foreach ($passwords_to_try as $pass) {
+            try {
+                $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+                $pdo = new PDO($dsn, $user, $pass, $options);
+                break 3; // Success — break all three loops
+            } catch (\PDOException $e) {
+                // try next combination
+            }
         }
     }
 }
