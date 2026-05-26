@@ -5265,20 +5265,21 @@ body .sb-root .sb-champ-mkt-opt.active {
   background: transparent !important;
 }
 .sb-mob-search-panel .sb-search-box {
-  background: rgb(38,38,38) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 12px !important;
+  background: rgb(74,74,74) !important;
+  border: 1px solid rgb(120,118,118) !important;
+  border-radius: 4px !important;
   padding: 0 14px !important;
   height: 44px !important;
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
+  box-shadow: rgba(13,13,13,0) 0px 0px 0px 0px inset !important;
 }
 .sb-mob-search-panel .sb-search-box svg,
 .sb-mob-search-panel .sb-search-box .sb-search-icon {
-  width: 18px !important;
-  height: 18px !important;
-  color: rgba(255,255,255,0.55) !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: rgba(255,255,255,0.54) !important;
   flex-shrink: 0 !important;
 }
 .sb-mob-search-panel .sb-sidebar-search {
@@ -5288,15 +5289,16 @@ body .sb-root .sb-champ-mkt-opt.active {
   background: transparent !important;
   border: 0 !important;
   outline: none !important;
-  color: #fff !important;
+  color: rgba(255,255,255,0.54) !important;
   font-family: 'Roboto', sans-serif !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   padding: 0 !important;
+  text-align: left !important;
   text-overflow: ellipsis !important;
 }
 .sb-mob-search-panel .sb-sidebar-search::placeholder {
-  color: rgba(255,255,255,0.45) !important;
-  font-size: 13px !important;
+  color: rgba(255,255,255,0.54) !important;
+  font-size: 14px !important;
   opacity: 1 !important;
 }
 /* Leagues card â€” bg rgb(49,49,49), no border, 8px radius */
