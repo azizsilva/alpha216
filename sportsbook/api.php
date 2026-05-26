@@ -38,6 +38,44 @@ foreach ($db_paths as $p) {
     }
 }
 
+// --- PROVIDER ODDS ENGINE (MARGIN) ---
+$global_margin_pct = 11.0;
+try {
+    if ($db_connected && $pdo) {
+        $c_stmt = $pdo->query("SELECT setting_value FROM provider_config WHERE setting_key='global_margin_percent'");
+        if ($c_row = $c_stmt->fetch(PDO::FETCH_ASSOC)) {
+            $global_margin_pct = (float)$c_row['setting_value'];
+        }
+    }
+} catch (Exception $e) {}
+
+function apply_margin_to_odds($odds_decimal) {
+    global $global_margin_pct;
+    $odds = (float)$odds_decimal;
+    if ($odds <= 1.05) return $odds;
+    $prob = 1 / $odds;
+    $new_prob = $prob * (1 + ($global_margin_pct / 100));
+    if ($new_prob >= 1) return 1.01;
+    return round(1 / $new_prob, 2);
+}
+
+function apply_margin_to_markets(&$markets) {
+    if (!is_array($markets)) return;
+    foreach ($markets as &$m) {
+        if (isset($m['selections']) && is_array($m['selections'])) {
+            foreach ($m['selections'] as &$sel) {
+                if (isset($sel['odds'])) {
+                    $sel['odds'] = apply_margin_to_odds($sel['odds']);
+                }
+            }
+        }
+        if (isset($m['h'])) $m['h'] = apply_margin_to_odds($m['h']);
+        if (isset($m['x'])) $m['x'] = apply_margin_to_odds($m['x']);
+        if (isset($m['a'])) $m['a'] = apply_margin_to_odds($m['a']);
+    }
+}
+// -------------------------------------
+
 // ── BetsAPI helper — returns full decoded response ──────────────────────────
 function betsapi_get($path, $params = []) {
     $params['token'] = BETSAPI_TOKEN;
