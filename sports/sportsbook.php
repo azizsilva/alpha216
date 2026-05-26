@@ -407,7 +407,7 @@ body { overflow: hidden !important; }
       <div class="sp-pop-name">Vérone vs. AS Roma</div>
       <div class="sp-pop-meta">1x2 <span class="sp-pop-odd">10.00</span></div>
     </div>
-  </aside>
+  </aside>  
 
 </div>
 
