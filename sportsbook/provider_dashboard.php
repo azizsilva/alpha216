@@ -43,6 +43,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }
         }
         exit;
+    if ($action === 'create_player') {
+        $username = trim($_POST['username']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        
+        if ($username && $email && $password) {
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("INSERT INTO users (username, email, password, password_text, role, status, balance, mobile) VALUES (?, ?, ?, ?, 'player', 'active', 0, '00000000')");
+            try {
+                if ($stmt->execute([$username, $email, $hashed, $password])) {
+                    echo json_encode(['success' => true, 'msg' => "Joueur créé avec succès !"]);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'msg' => "Erreur: Email ou Username existe déjà."]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'msg' => "Remplissez tous les champs."]);
+        }
+        exit;
     }
 }
 
@@ -151,6 +170,20 @@ $players = $pdo->query("
         input[type="number"]:focus { border-color: var(--primary); }
         
         .flex-row { display: flex; gap: 10px; align-items: center; }
+
+        /* Modals and Tabs */
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
+        .modal-content h3 { margin-bottom: 20px; color: #fff; }
+        .modal-content .form-group { margin-bottom: 15px; }
+        .modal-content label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 13px; }
+        .modal-content input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border); padding: 10px; color: #fff; border-radius: 6px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -162,10 +195,9 @@ $players = $pdo->query("
             <h2>PROVIDER HUB</h2>
         </div>
         <ul class="nav-links">
-            <li class="nav-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
-            <li class="nav-item"><i class="fa-solid fa-users"></i> Credit Management</li>
-            <li class="nav-item"><i class="fa-solid fa-sliders"></i> Odds Configurator</li>
-            <li class="nav-item"><i class="fa-solid fa-shield-halved"></i> Risk & Exposure</li>
+            <li class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+            <li class="nav-item" onclick="switchTab('credit', this)"><i class="fa-solid fa-users"></i> Credit Management</li>
+            <li class="nav-item" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Odds Configurator</li>
         </ul>
     </div>
 
@@ -216,7 +248,7 @@ $players = $pdo->query("
             </div>
 
             <!-- Configuration & Risk -->
-            <div class="section-card">
+            <div id="odds" class="page-section section-card">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-gears"></i> Odds Engine (GGR Margin)</h3>
                 </div>
@@ -231,10 +263,10 @@ $players = $pdo->query("
             </div>
 
             <!-- Player Credit Distribution -->
-            <div class="section-card">
+            <div id="credit" class="page-section section-card">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-building-columns"></i> Central Bank (Credit Distribution)</h3>
-                    <button class="btn btn-outline"><i class="fa-solid fa-user-plus"></i> Create Player</button>
+                    <button class="btn btn-outline" onclick="openCreatePlayerModal()"><i class="fa-solid fa-user-plus"></i> Create Player</button>
                 </div>
                 <table>
                     <thead>
@@ -274,7 +306,71 @@ $players = $pdo->query("
         </div>
     </div>
 
+    <!-- Create Player Modal -->
+    <div id="createPlayerModal" class="modal">
+        <div class="modal-content">
+            <h3>Create New Player</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="new_username" placeholder="player123">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="new_email" placeholder="player@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="text" id="new_password" placeholder="password">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn" onclick="submitCreatePlayer()">Create</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Init active tab
+        document.querySelectorAll('.page-section').forEach(el => el.classList.add('active'));
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            if(tabId === 'dashboard') {
+                document.querySelectorAll('.page-section').forEach(el => el.classList.add('active'));
+            } else {
+                document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            }
+        }
+
+        function openCreatePlayerModal() {
+            document.getElementById('createPlayerModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('createPlayerModal').classList.remove('active');
+        }
+
+        function submitCreatePlayer() {
+            let user = document.getElementById('new_username').value;
+            let email = document.getElementById('new_email').value;
+            let pass = document.getElementById('new_password').value;
+
+            if(!user || !email || !pass) return alert("Remplissez tout!");
+
+            fetch('', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=create_player&username=${encodeURIComponent(user)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`
+            })
+            .then(r => r.json())
+            .then(res => {
+                alert(res.msg);
+                if (res.success) location.reload();
+            });
+        }
         function addBalance(userId, username) {
             let amount = prompt("Entrez le montant de crédit à ajouter pour " + username + " :");
             if (amount && !isNaN(amount)) {
