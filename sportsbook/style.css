@@ -342,20 +342,23 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-tl-item:hover { background: rgba(255,255,255,0.03); }
 .sb-tl-item .sb-league-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sb-flag-icon { width: 22px; height: 16px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
-/* Live EN DIRECT badge for sidebar/top-league rows — fcbet216 red pill */
+/* Live EN DIRECT badge for sidebar/top-league rows — fcbet216 exact */
 .sb-tl-live-badge {
   background: rgb(251,51,51);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 10px;
-  letter-spacing: 0.4px;
+  color: rgb(255,255,255);
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  padding: 2px 4px;
+  border: 0px solid rgb(251,51,51);
+  border-radius: 4px;
   text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: auto;
-  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 /* Favoris collapsible */
@@ -416,30 +419,21 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-top-leagues-card {
   margin: 0 8px 10px;
-  background: #1c1c1c !important;  /* fcbet216 dark panel — rows read flat */
-  background-color: #1c1c1c !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
-  border-radius: 10px !important;
+  background: rgb(49,49,49) !important;
+  background-color: rgb(49,49,49) !important;
+  border: 0px solid rgba(255,255,255,0) !important;
+  border-radius: 8px !important;
   overflow: hidden;
   display: flex !important;
   flex-direction: column !important;
-  max-height: 520px !important;
 }
-/* Inner list scrolls — matches fcbet216 image 7 compact scrollable list */
+/* Inner list — no scroll, full height */
 .sb-top-leagues-card .sb-tl-list {
   flex: 1 1 auto !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(255,255,255,0.18) transparent !important;
+  overflow: visible !important;
+  scrollbar-width: none !important;
 }
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar { width: 4px !important; }
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.18) !important;
-  border-radius: 4px !important;
-}
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-track { background: transparent !important; }
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar { width: 0 !important; display: none !important; }
 /* Desktop sidebar tabs row — match fcbet216 image 4 exactly */
 .sb-top-leagues-card .sb-league-group-hdr {
   padding: 12px 14px !important;
@@ -5292,12 +5286,12 @@ body .sb-root .sb-champ-mkt-opt.active {
   font-size: 13px !important;
   opacity: 1 !important;
 }
-/* Leagues card — fcbet216: very dark panel so rows blend in flat (not lifted) */
+/* Leagues card — bg rgb(49,49,49), no border, 8px radius */
 .sb-mob-leagues-panel {
-  background: #1c1c1c !important;
-  background-color: #1c1c1c !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
-  border-radius: 10px !important;
+  background: rgb(49,49,49) !important;
+  background-color: rgb(49,49,49) !important;
+  border: 0px solid rgba(255,255,255,0) !important;
+  border-radius: 8px !important;
   overflow: hidden;
   margin: 0 2px 12px !important;
 }
@@ -5368,26 +5362,14 @@ body .sb-root .sb-champ-mkt-opt.active {
 }
 .sb-mob-leagues-panel .sb-tl-list {
   padding: 0 !important;
-  background: transparent !important;
-  background: rgb(49, 49, 49) !important;
-  border-color: currentcolor;
-  max-height: 480px !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(255,255,255,0.18) transparent !important;
+  background: rgb(49,49,49) !important;
+  overflow: visible !important;
+  scrollbar-width: none !important;
 }
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar { width: 4px !important; }
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.18) !important;
-  border-radius: 4px !important;
-}
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-track { background: transparent !important; }
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar { width: 0 !important; display: none !important; }
 .sb-mob-leagues-panel {
   display: flex !important;
   flex-direction: column !important;
-  max-height: 100% !important;
 }
 .sb-mob-leagues-panel .sb-tl-item {
   background: transparent !important;
@@ -5455,18 +5437,23 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   border-radius: 3px;
   flex-shrink: 0;
 }
-/* EN DIRECT pill on a league row — pinned far right */
-.sb-mob-leagues-panel .sb-tl-live-badge {
+/* EN DIRECT badge on a league row — pinned far right, exact fcbet216 style */
+.sb-mob-leagues-panel .sb-tl-live-badge,
+.sb-top-leagues-card .sb-tl-live-badge {
   margin-left: auto !important;
   background: rgb(251,51,51) !important;
-  color: #fff !important;
-  font-size: 9px !important;
-  font-weight: 800 !important;
-  padding: 3px 8px !important;
-  border-radius: 10px !important;
-  letter-spacing: 0.4px !important;
+  color: rgb(255,255,255) !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: 12px !important;
+  padding: 2px 4px !important;
+  border: 0px solid rgb(251,51,51) !important;
+  border-radius: 4px !important;
   text-transform: uppercase !important;
-  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  letter-spacing: 0 !important;
 }
 
 /* ════════════════════════════════════════════════════════════

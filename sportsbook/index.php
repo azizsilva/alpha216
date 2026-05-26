@@ -271,24 +271,20 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-sidebar-search-card .sb-search-box{background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0 10px;height:36px;display:flex;align-items:center;gap:8px;}
 /* Panel surface — fcbet216 reference: very dark, just slightly above the
    page bg so individual rows read FLAT instead of like lifted boxes. */
-.sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;max-height:520px!important;}
+.sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0px solid rgba(255,255,255,0)!important;border-radius:8px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;}
 .sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;flex:0 0 auto;}
 .sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
-.sb-top-leagues-card .sb-tl-list,body .sb-root .sb-top-leagues-card .sb-tl-list{flex:1 1 auto!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;scrollbar-color:rgba(255,255,255,0.18) transparent!important;}
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar{width:4px!important;}
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18)!important;border-radius:4px!important;}
-.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar-track{background:transparent!important;}
-.sb-mob-leagues-panel .sb-tl-list,body .sb-root .sb-mob-leagues-panel .sb-tl-list{max-height:480px!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:thin!important;scrollbar-color:rgba(255,255,255,0.18) transparent!important;}
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar{width:4px!important;}
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18)!important;border-radius:4px!important;}
-.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar-track{background:transparent!important;}
+.sb-top-leagues-card .sb-tl-list,body .sb-root .sb-top-leagues-card .sb-tl-list{flex:1 1 auto!important;overflow:visible!important;scrollbar-width:none!important;}
+.sb-top-leagues-card .sb-tl-list::-webkit-scrollbar{width:0!important;display:none!important;}
+.sb-mob-leagues-panel .sb-tl-list,body .sb-root .sb-mob-leagues-panel .sb-tl-list{overflow:visible!important;scrollbar-width:none!important;}
+.sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar{width:0!important;display:none!important;}
 .sb-mob-search-panel{background:transparent;border:0;border-radius:0;overflow:visible;margin:0 2px 10px;}
 .sb-mob-search-panel .sb-search-wrap{padding:0;}
 .sb-mob-search-panel .sb-search-box{background:rgb(38,38,38);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;}
 .sb-mob-search-panel .sb-search-box svg,.sb-mob-search-panel .sb-search-box .sb-search-icon{width:18px;height:18px;color:rgba(255,255,255,0.55);flex-shrink:0;}
 .sb-mob-search-panel .sb-sidebar-search{flex:1 1 auto;width:100%;min-width:0;background:transparent;border:0;outline:none;color:#fff;font-family:'Roboto',sans-serif;font-size:13px;padding:0;}
 .sb-mob-search-panel .sb-sidebar-search::placeholder{color:rgba(255,255,255,0.45);font-size:13px;opacity:1;}
-.sb-mob-leagues-panel,body .sb-root .sb-mob-leagues-panel{background:#1c1c1c!important;background-color:#1c1c1c!important;border:1px solid rgba(255,255,255,0.06)!important;border-radius:10px!important;overflow:hidden!important;margin:0 2px 12px!important;}
+.sb-mob-leagues-panel,body .sb-root .sb-mob-leagues-panel{background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0px solid rgba(255,255,255,0)!important;border-radius:8px!important;overflow:hidden!important;margin:0 2px 12px!important;}
 .sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
 .sb-mob-leagues-panel .sb-mob-tab[data-tab="my"]{color:rgba(255,255,255,.85)!important;}
@@ -312,7 +308,7 @@ body .sb-root .sb-lmk-item:hover,.sb-root .sb-lmk-item:hover,.sb-lmk-item:hover{
 body .sb-root .sb-globe-icon svg{display:block!important;}
 body .sb-root .sb-globe-icon svg circle,body .sb-root .sb-globe-icon svg path{stroke:#fff!important;}
 .sb-mob-leagues-panel .sb-flag-icon{width:22px;height:16px;object-fit:cover;border-radius:3px;flex-shrink:0;}
-.sb-mob-leagues-panel .sb-tl-live-badge{margin-left:auto;background:rgb(251,51,51);color:rgb(255,255,255);font-family:'Roboto',sans-serif;font-size:12px;font-weight:500;line-height:12px;padding:2px 4px;border:0;border-radius:4px;letter-spacing:0;text-transform:uppercase;}
+.sb-mob-leagues-panel .sb-tl-live-badge,.sb-top-leagues-card .sb-tl-live-badge,.sb-tl-live-badge{margin-left:auto!important;background:rgb(251,51,51)!important;color:rgb(255,255,255)!important;font-family:'Roboto',sans-serif!important;font-size:12px!important;font-style:normal!important;font-weight:500!important;line-height:12px!important;padding:2px 4px!important;border:0px solid rgb(251,51,51)!important;border-radius:4px!important;letter-spacing:0!important;text-transform:uppercase!important;white-space:nowrap!important;}
 .sb-root .mc-hdr-live .mc-date--inline{color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;margin-left:2px;white-space:nowrap;}
 .sb-root .mc-teams-wrap--side .mc-teams-stacked{flex:1 1 0;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sb-root .mc-teams-wrap--side .mc-team-row--live{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;width:100%;min-height:20px;}
