@@ -2920,9 +2920,8 @@ window.sbAddBet = function(id, match, sel, val, market) {
   var idx = S.betSlip.findIndex(function(b) { return b.id === id; });
   if (idx !== -1) S.betSlip.splice(idx, 1);
   else {
-    // Extract matchId from the slip id (format used by various odds buttons
-    // is "<matchId>-<key>"); we keep it so live polling can find odds again.
-    var matchId = String(id).split('-')[0];
+    // Extract matchId from the slip id (format: "matchId_sel" or "matchId_md_sel")
+    var matchId = String(id).split('_')[0];
     // Try to detect live status from the current match in S.matches /
     // S.champMatches so the EN DIRECT red pill shows in the slip.
     var live = false;
@@ -2984,7 +2983,11 @@ function updateFloatingBetBadge() {
   }
 }
 
-window.sbSlipMode = function(mode) { SLIP_MODE = mode; renderBetSlip(); };
+window.sbSlipMode = function(mode) {
+  if ((mode === 'combi' || mode === 'system') && S.betSlip.length < 2) return;
+  SLIP_MODE = mode;
+  renderBetSlip();
+};
 window.sbClearSlip = function() { S.betSlip = []; renderBetSlip(); updateFloatingBetBadge(); var right = document.getElementById('sb-right'); if (right && right.classList.contains('open')) window.sbToggleRight(); };
 window.sbRemoveBet = function(id) { window.sbAddBet(id, '', '', 0); };
 window.sbToggleExclude = function(idx) {
@@ -3231,9 +3234,14 @@ function renderBetSlip() {
 
   var n = S.betSlip.length;
 
+  // Force back to Simple when fewer than 2 selections (Combiné/Système need 2+)
+  if (n < 2 && SLIP_MODE !== 'simple') {
+    SLIP_MODE = 'simple';
+  }
+
   if (cntEl) {
     cntEl.innerText = n || '';
-    cntEl.style.display = n ? 'inline-block' : 'none';
+    cntEl.style.display = n ? 'inline-flex' : 'none';
   }
 
   // Hide / show the secondary widgets (CODE RAPIDE / RECHERCHER DES PARIS
@@ -3244,13 +3252,21 @@ function renderBetSlip() {
 
   var out = '';
 
-  // ── Mode tabs ──────────────────────────────────────────────
-  out += '<div class="slip-tabs">';
+  // ── Mode tabs (Combiné & Système disabled when < 2 selections) ──────
+  var tabsLocked = n < 2;
+  out += '<div class="slip-tabs"><div class="slip-tabs-inner">';
   ['simple','combi','system'].forEach(function(m) {
     var lbl = m === 'simple' ? 'Simple' : m === 'combi' ? 'Combiné' : 'Système';
-    out += '<button class="slip-tab' + (SLIP_MODE === m ? ' active' : '') + '" onclick="window.sbSlipMode(\'' + m + '\')">' + lbl + '</button>';
+    var isActive = SLIP_MODE === m;
+    var isDisabled = tabsLocked && m !== 'simple';
+    out += '<button class="slip-tab'
+      + (isActive ? ' active' : '')
+      + (isDisabled ? ' tab-disabled' : '')
+      + '"'
+      + (isDisabled ? ' disabled' : ' onclick="window.sbSlipMode(\'' + m + '\')"')
+      + '>' + lbl + '</button>';
   });
-  out += '</div>';
+  out += '</div></div>';
 
   // ── Empty state ────────────────────────────────────────────
   // Just the centered document icon — the CODE RAPIDE / RECHERCHER /
@@ -3305,16 +3321,18 @@ function renderBetSlip() {
     // Helper that renders the odds pill — adds up/down arrow + colored
     // frame when live polling shifted the value (b._change).
     function renderOddsPill(val, change) {
-      var cls = 'slip-odds-pill';
-      if (change === 'up')   cls += ' up';
-      if (change === 'down') cls += ' down';
-      var arrow = '';
+      var boxCls = 'slip-odds-box';
+      if (change === 'up')   boxCls += ' up';
+      if (change === 'down') boxCls += ' down';
+      var indicator = '';
       if (change === 'up') {
-        arrow = '<svg class="slip-odds-arrow" width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,4 22,18 2,18"/></svg>';
+        indicator = '<svg class="slip-odds-arrow slip-odds-arrow--up" width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,4 22,18 2,18"/></svg>';
       } else if (change === 'down') {
-        arrow = '<svg class="slip-odds-arrow" width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,20 22,6 2,6"/></svg>';
+        indicator = '<svg class="slip-odds-arrow slip-odds-arrow--down" width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,20 22,6 2,6"/></svg>';
+      } else {
+        indicator = '<span class="slip-odds-minus">&#8722;</span>';
       }
-      return '<span class="' + cls + '">' + arrow + (parseFloat(val) || 0).toFixed(2) + '</span>';
+      return '<span class="' + boxCls + '">' + indicator + '<span class="slip-odds-num">' + (parseFloat(val) || 0).toFixed(2) + '</span></span>';
     }
 
     // ── Selection row: EN DIRECT badge + selection + odds
@@ -3548,10 +3566,19 @@ function renderBetSlip() {
     // system mode — sum all level stakes * combos
     _btnStake = 0; // already shown in summary
   }
-  var _btnLbl = _btnStake > 0
-    ? 'Placer votre pari (' + _btnStake.toFixed(2) + ' TND)'
-    : 'Placer votre pari';
-  out += '<button class="slip-place-btn" onclick="window.sbPlaceBet()">' + _btnLbl + '</button>';
+  var _isLoggedIn = (typeof isLoggedIn !== 'undefined') ? isLoggedIn : true;
+  var _btnLbl, _btnClick;
+  if (!_isLoggedIn) {
+    _btnLbl = 'Connectez-vous pour placer des paris';
+    _btnClick = 'window.location.href="/"';
+  } else if (_btnStake > 0) {
+    _btnLbl = 'Placer votre pari (' + _btnStake.toFixed(2) + ' TND)';
+    _btnClick = 'window.sbPlaceBet()';
+  } else {
+    _btnLbl = 'Placer votre pari';
+    _btnClick = 'window.sbPlaceBet()';
+  }
+  out += '<button class="slip-place-btn" onclick="' + _btnClick + '">' + _btnLbl + '</button>';
   out += '</div>';
 
   el.innerHTML = out;

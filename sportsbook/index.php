@@ -513,11 +513,19 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-fb-count,body .sb-root .sb-fb-count{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;background:rgb(113,246,105);color:#000;border-radius:999px;font-size:11px;font-weight:800;line-height:22px;text-align:center;border:2px solid #1e1e1e;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
 .sb-fb-label,body .sb-root .sb-fb-label{font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.7);white-space:nowrap;}
 /* ── Fiche de Pari — critical inline (fcbet216 reference) ── */
-body .sb-root .slip-tabs,.sb-root .slip-tabs{display:flex!important;gap:4px!important;padding:10px 12px 0!important;background:rgb(49,49,49)!important;}
-body .sb-root .slip-tab,.sb-root .slip-tab{flex:1!important;background:transparent!important;border:none!important;border-radius:6px 6px 0 0!important;color:rgba(255,255,255,0.5)!important;font-size:13px!important;padding:11px 6px!important;cursor:pointer!important;}
-body .sb-root .slip-tab.active,.sb-root .slip-tab.active{background:rgb(49,49,49)!important;color:#fff!important;font-weight:600!important;}
-body .sb-root .slip-item,.sb-root .slip-item{margin:10px 12px!important;padding:0!important;border-radius:8px!important;background:rgb(49,49,49)!important;border:none!important;overflow:hidden!important;}
-body .sb-root .slip-item.combi,.sb-root .slip-item.combi{background:rgb(49,49,49)!important;}
+/* Slip tabs — outer block, inner pill wrapper handles flex */
+body .sb-root .slip-tabs,.sb-root .slip-tabs{display:block!important;padding:6px 12px 12px!important;background:rgb(49,49,49)!important;}
+body .sb-root .slip-tabs-inner,.sb-root .slip-tabs-inner{display:flex!important;background:rgb(77,79,79)!important;border-radius:6px!important;overflow:hidden!important;padding:2px!important;gap:2px!important;}
+body .sb-root .slip-tab,.sb-root .slip-tab{flex:1!important;background:transparent!important;border:none!important;border-radius:4px!important;color:rgba(255,255,255,0.45)!important;font-size:13px!important;font-weight:500!important;padding:9px 4px!important;cursor:pointer!important;text-align:center!important;white-space:nowrap!important;outline:none!important;line-height:1!important;}
+body .sb-root .slip-tab.active,.sb-root .slip-tab.active{background:rgb(49,49,49)!important;color:#fff!important;font-weight:700!important;}
+body .sb-root .slip-tab.tab-disabled,.sb-root .slip-tab.tab-disabled{color:rgba(255,255,255,0.22)!important;cursor:not-allowed!important;pointer-events:none!important;}
+/* Selection card — rgb(74,74,74) to match fcbet216 .fEasPu */
+body .sb-root .slip-item,.sb-root .slip-item{margin:8px 12px!important;padding:0!important;border-radius:6px!important;background:rgb(74,74,74)!important;border:none!important;overflow:hidden!important;}
+body .sb-root .slip-item.combi,.sb-root .slip-item.combi{background:rgb(74,74,74)!important;}
+/* EN DIRECT badge — fcbet216 .cqljKD exact */
+body .sb-root .slip-live-badge,.sb-root .slip-live-badge{white-space:nowrap!important;padding:2px 4px!important;background:rgb(251,51,51)!important;color:rgb(255,255,255)!important;text-transform:uppercase!important;border-width:0px!important;border-color:rgb(251,51,51)!important;border-style:solid!important;border-radius:4px!important;font-family:Roboto,sans-serif!important;font-size:12px!important;font-style:normal!important;font-weight:500!important;line-height:12px!important;display:inline-flex!important;align-items:center!important;flex-shrink:0!important;}
+/* Odds warning bar */
+body .sb-root .slip-odds-warning,.sb-root .slip-odds-warning{margin:6px 12px 8px!important;padding:10px 12px!important;background:rgb(231,137,0)!important;border-radius:6px!important;color:#fff!important;font-size:12px!important;font-weight:600!important;display:flex!important;align-items:center!important;gap:8px!important;cursor:pointer!important;}
 body .sb-root .slip-item-body,.sb-root .slip-item-body{padding:12px 14px 14px!important;}
 body .sb-root .slip-item-hdr,.sb-root .slip-item-hdr{display:flex!important;align-items:flex-start!important;gap:8px!important;padding:12px 14px 0!important;}
 body .sb-root .slip-match-nm,.sb-root .slip-match-nm{font-size:13px!important;font-weight:700!important;color:#fff!important;flex:1!important;}
@@ -535,10 +543,16 @@ body .sb-root .slip-gagner,.sb-root .slip-gagner{font-size:12px!important;color:
 body .sb-root .slip-gagner strong,.sb-root .slip-gagner strong{color:rgb(113,246,105)!important;font-weight:700!important;}
 body .sb-root .slip-promo,.sb-root .slip-promo{margin:10px 12px!important;padding:12px 14px!important;border:1px solid rgba(112,246,105,0.3)!important;border-radius:8px!important;}
 body .sb-root .slip-clear-btn,.sb-root .slip-clear-btn{width:calc(100% - 24px)!important;margin:8px 12px!important;padding:12px!important;border:1px solid rgba(255,255,255,0.14)!important;border-radius:8px!important;color:rgb(113,246,105)!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:8px!important;font-weight:700!important;background:transparent!important;}
-body .sb-root .slip-bookmark-btn,.sb-root .slip-bookmark-btn{background:rgb(49,49,49)!important;border:none!important;border-radius:8px!important;width:44px!important;height:44px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:rgb(113,246,105)!important;}
-body .sb-root .slip-summary,.sb-root .slip-summary{border-top:1px solid rgba(255,255,255,0.08)!important;padding:12px 14px!important;}
-body .sb-root .slip-place-wrap,.sb-root .slip-place-wrap{display:flex!important;gap:8px!important;margin:0 12px 16px!important;align-items:stretch!important;}
-body .sb-root .slip-place-btn,.sb-root .slip-place-btn{flex:1!important;background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:#000!important;border:0!important;border-radius:8px!important;font-weight:800!important;font-size:15px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:12px!important;}
+body .sb-root .slip-bookmark-btn,.sb-root .slip-bookmark-btn{background:rgb(58,58,58)!important;border:none!important;border-radius:8px!important;width:44px!important;min-width:44px!important;height:auto!important;display:flex!important;align-items:center!important;justify-content:center!important;color:rgba(255,255,255,0.65)!important;flex-shrink:0!important;cursor:pointer!important;}
+body .sb-root .slip-summary,.sb-root .slip-summary{border-top:1px solid rgba(255,255,255,0.08)!important;padding:10px 14px!important;background:rgb(49,49,49)!important;}
+body .sb-root .slip-place-wrap,.sb-root .slip-place-wrap{display:flex!important;gap:8px!important;margin:8px 12px 16px!important;align-items:stretch!important;}
+body .sb-root .slip-place-btn,.sb-root .slip-place-btn{flex:1!important;background:rgb(113,246,105)!important;background-color:rgb(113,246,105)!important;color:rgba(0,0,0,0.87)!important;border:0!important;border-radius:8px!important;font-weight:800!important;font-size:14px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:13px 10px!important;font-family:'Roboto',sans-serif!important;text-align:center!important;}
+/* Slip header badge — hard size lock (prevents Bootstrap or parent CSS inflating it) */
+body .sb-root .sb-slip-hdr-badge,#sb-slip-count{background:rgb(113,246,105)!important;color:rgba(0,0,0,0.87)!important;font-size:11px!important;font-weight:800!important;border-radius:50%!important;min-width:20px!important;max-width:24px!important;width:20px!important;height:20px!important;line-height:20px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:0!important;flex-shrink:0!important;box-sizing:border-box!important;text-align:center!important;}
+/* Slip collapsed — hide body, keep header visible */
+body .sb-root .sb-slip-panel.slip-collapsed #sb-slip-body{display:none!important;}
+/* Slip header bg explicit (fixes "broken" toggle look on open/close) */
+body .sb-root .sb-slip-hdr,.sb-root .sb-slip-hdr{background:rgb(49,49,49)!important;padding:12px 14px!important;display:flex!important;align-items:center!important;gap:8px!important;flex-shrink:0!important;min-height:48px!important;border-bottom:1px solid rgba(255,255,255,0.08)!important;}
 .slip-stake-editor{display:none!important;}
 .slip-stake-editor.slip-stake-editor--open{display:block!important;}
 @media(min-width:1101px){.slip-stake-editor{display:none!important;}}
