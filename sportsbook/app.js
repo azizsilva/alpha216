@@ -1027,32 +1027,47 @@ function h(s) {
 /** Live match — BetsAPI uses string or number time_status */
 function isMatchEnded(m) {
   if (!m) return false;
+  // Primary signals from BetsAPI / our DB ─ always trust these.
   if (String(m.time_status) === '3') return true;
   if (m.status === 'ended' || m.status === 'finished') return true;
-  // Heuristic: BetsAPI sometimes leaves time_status='1' on knockout
-  // matches that have actually finished. For football, if it's been
-  // more than 150 min since kickoff (regulation 90 + 15 HT + 30 ET +
-  // breaks ≈ 145 min absolute max), AND all main 1x2 odds are locked
-  // / missing, treat as ended so the match disappears from EN DIRECT
-  // instead of showing "Prolongation | 150:03" forever.
+  // BetsAPI v3 sometimes fills scores.fulltime with the final score
+  // before flipping time_status. If we see a full-time score, the match
+  // is over for our purposes.
+  if (m.scores && m.scores.fulltime && (m.scores.fulltime.home != null || m.scores.fulltime.away != null)) {
+    return true;
+  }
+  // Heuristic for football (sport_id 1, 36): regular matches end at
+  // ~95-100 min wall (90 reg + 15 HT + 0-5 stoppage). Knockout / ET
+  // matches can go to ~135 min wall. BetsAPI's time_status sometimes
+  // sticks at '1' for 30+ min after a real match ends — that's the
+  // "still showing live in EN DIRECT" bug. We declare the match ended
+  // when the wall clock + odds-locked signals make it obvious.
   var sid = parseInt(m.sport_id || 1, 10);
   if (sid === 1 || sid === 36) {
     var kickoff = parseInt(m.time || 0, 10) || 0;
     if (kickoff > 0) {
       var elapsedMin = Math.floor((Date.now() / 1000 - kickoff) / 60);
-      if (elapsedMin >= 150) {
+      // 105 min wall + main odds locked  →  regulation 90 ended, no ET
+      //  underway. BetsAPI hasn't flipped status yet but we know.
+      if (elapsedMin >= 105) {
         var lo = m.live_odds || {};
-        var oneX2 = lo['1x2'] || lo.full_time_result || lo.match_winner || {};
+        var oneX2 = lo['1x2'] || lo.full_time_result || lo.match_winner || lo || {};
         var hv = parseFloat(oneX2.h || oneX2.home || 0);
         var av = parseFloat(oneX2.a || oneX2.away || 0);
-        // Locked / missing main market on a 150-min-old football game
-        // ⇒ match has effectively ended.
+        // Locked / missing main market on a 105+ min football game
+        // ⇒ regulation has ended and there's no ET being offered.
         if (!(hv > 1.01) && !(av > 1.01)) return true;
       }
-      // Absolute safety: 200 min past kickoff with no API ending signal
-      // is unphysical. Treat as ended regardless of odds (covers feeds
-      // that left old fixtures stuck in inplay).
-      if (elapsedMin >= 200) return true;
+      // 135 min wall + odds locked  →  ET also done. Anything past
+      // this with odds locked must be over.
+      if (elapsedMin >= 135) {
+        var lo2 = m.live_odds || {};
+        var oneX2b = lo2['1x2'] || lo2.full_time_result || lo2.match_winner || lo2 || {};
+        var hv2 = parseFloat(oneX2b.h || oneX2b.home || 0);
+        if (!(hv2 > 1.01)) return true;
+      }
+      // 150 min absolute: unphysical, definitely over regardless of odds.
+      if (elapsedMin >= 150) return true;
     }
   }
   return false;

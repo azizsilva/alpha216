@@ -59,25 +59,48 @@ $MAX_INPLAY_PAGES  = 5;     // up to 250 matches per sport
 $LOG_EVERY_N_TICKS = 20;    // log a stats line every N ticks (~20s)
 
 // ── Lock: only one instance runs ──────────────────────────────
-if (file_exists(LOCK_FILE)) {
-    $age = time() - filemtime(LOCK_FILE);
-    if ($age < 10) {
-        fwrite(STDERR, "[tick_live] Another instance is running (lock age {$age}s). Exiting.\n");
-        exit(1);
-    }
-    @unlink(LOCK_FILE);
+//   We use a real OS-level advisory lock via flock(LOCK_EX | LOCK_NB).
+//   Two big advantages over the old mtime-based pseudo-lock:
+//     (1) the OS auto-releases the lock when the process dies, even
+//         on SIGKILL — no more "stale lock from crashed parent blocks
+//         every restart for 10s" failure mode that bit systemd.
+//     (2) it's atomic — no race between file_exists() and touch().
+//
+//   We keep the file handle open for the lifetime of the process in a
+//   global so the GC doesn't close it. The handle is closed (and the
+//   lock released) automatically on shutdown.
+$lock_fh = @fopen(LOCK_FILE, 'c');
+if (!$lock_fh) {
+    fwrite(STDERR, "[tick_live] Cannot open lock file at " . LOCK_FILE . " — is the cache dir writable?\n");
+    exit(2);
 }
-@touch(LOCK_FILE);
+if (!flock($lock_fh, LOCK_EX | LOCK_NB)) {
+    // Read the holder PID for a useful error message.
+    rewind($lock_fh);
+    $holder = trim((string)@fread($lock_fh, 32));
+    @fclose($lock_fh);
+    fwrite(STDERR, "[tick_live] Another instance already holds the lock (pid={$holder}). Exiting.\n");
+    fwrite(STDERR, "[tick_live] If you're sure no other instance is running, kill pid {$holder} or rm " . LOCK_FILE . "\n");
+    exit(1);
+}
+// Write our PID into the lock file so external tools can identify the holder.
+@ftruncate($lock_fh, 0);
+rewind($lock_fh);
+@fwrite($lock_fh, getmypid() . "\n");
+@fflush($lock_fh);
+// Keep handle alive for process lifetime.
+$GLOBALS['_tick_lock_fh'] = $lock_fh;
 
-// Cleanup lock on exit
-register_shutdown_function(function() { @unlink(LOCK_FILE); });
 // POSIX signal handlers — pcntl is unavailable on Windows, no-op there.
+// On clean signal, flush + close so we exit cleanly. flock release is
+// automatic so we don't need to unlink the file.
 if (function_exists('pcntl_signal') && function_exists('pcntl_async_signals')) {
     @call_user_func('pcntl_async_signals', true);
     foreach (['SIGINT', 'SIGTERM'] as $sig_name) {
         if (defined($sig_name)) {
             @call_user_func('pcntl_signal', constant($sig_name), function() {
-                @unlink(LOCK_FILE); exit(0);
+                fwrite(STDOUT, "[tick_live] Received signal — exiting cleanly.\n");
+                exit(0);
             });
         }
     }
@@ -108,7 +131,8 @@ function tick_atomic_write($path, $data) {
     $tmp = $path . '.tmp.' . getmypid();
     if (@file_put_contents($tmp, json_encode($data)) === false) return false;
     @rename($tmp, $path);
-    @touch(LOCK_FILE);   // keep lock fresh
+    // No need to touch LOCK_FILE — we hold an flock() for the
+    // lifetime of the process. The OS guarantees mutual exclusion.
     return true;
 }
 
