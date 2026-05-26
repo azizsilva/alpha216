@@ -2783,16 +2783,16 @@ button.sb-btn-live.active .sb-live-badge,
      the fcbet216 reference. flex-basis controls the visible width:
      ~72% leaves the next card peeking from the right edge.
      scroll-snap-align: start keeps each card snapping cleanly. */
-  flex: 0 0 72% !important;
-  width: 72% !important;
-  min-width: 72% !important;
-  max-width: 72% !important;
+  flex: 0 0 85% !important;
+  width: 85% !important;
+  min-width: 85% !important;
+  max-width: 85% !important;
   scroll-snap-align: start !important;
   scroll-snap-stop: always !important;
   display: flex !important;
   flex-direction: column !important;
   cursor: pointer !important;
-  padding: 4px 4px 8px !important;
+  padding: 4px 4px 10px !important;
 }
 /* First card needs a tiny right margin so it doesn't kiss the next card
    when gap rendering is overridden by Bootstrap. */
@@ -2919,7 +2919,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .slc-tname {
   flex: 1 !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   color: #fff !important;
   white-space: nowrap !important;
@@ -2949,7 +2949,7 @@ button.sb-btn-live.active .sb-live-badge,
 .slc-odds {
   display: flex !important;
   gap: 6px !important;
-  padding: 6px 16px 14px !important;
+  padding: 8px 14px 10px !important;
 }
 /* SLC odds chip â€” fcbet216 .glRfhP EXACT spec the user provided
    bg rgb(74,74,74), value rgb(113,246,105), radius 4px, transparent
