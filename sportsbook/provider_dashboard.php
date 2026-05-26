@@ -92,31 +92,6 @@ $margin = $configs['global_margin_percent'] ?? 11;
 $token_rate = $configs['token_exchange_rate'] ?? 27;
 $deposit_fee = $configs['deposit_ggr_fee'] ?? 11;
 
-// Ensure tables exist to prevent 500 error
-// Ensure sportsbook_bets has the FULL schema (place_bet.php depends on all these columns)
-$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    user_id         INT NOT NULL DEFAULT 0,
-    amount          DECIMAL(15,2) NOT NULL DEFAULT 0,
-    total_odds      DECIMAL(10,4) NOT NULL DEFAULT 1,
-    potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0,
-    slip            JSON NULL,
-    status          ENUM('pending','won','lost','refunded') NOT NULL DEFAULT 'pending',
-    settled_at      DATETIME NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    KEY idx_status (status),
-    KEY idx_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-// Patch old minimal schema — add missing columns if they don't exist yet
-$existing = array_column($pdo->query("SHOW COLUMNS FROM sportsbook_bets")->fetchAll(PDO::FETCH_ASSOC), 'Field');
-if (!in_array('user_id', $existing))           $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN user_id INT NOT NULL DEFAULT 0 AFTER id");
-if (!in_array('total_odds', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN total_odds DECIMAL(10,4) NOT NULL DEFAULT 1");
-if (!in_array('potential_returns', $existing)) $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0");
-if (!in_array('slip', $existing))              $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN slip JSON NULL");
-if (!in_array('settled_at', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN settled_at DATETIME NULL");
-if (!in_array('created_at', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
-$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_ggr (id INT AUTO_INCREMENT PRIMARY KEY, bet_id INT DEFAULT 0, user_id INT DEFAULT 0, stake DECIMAL(15,2) DEFAULT 0, payout DECIMAL(15,2) DEFAULT 0, ggr DECIMAL(15,2) DEFAULT 0, result VARCHAR(30) DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-
 // Global Stats
 try {
     $stats = $pdo->query("
@@ -156,7 +131,7 @@ try {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Provider Dashboard - Control Center</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -169,26 +144,33 @@ try {
             --text-muted: #94a3b8;
             --danger: #ef4444;
             --accent: #3b82f6;
+            --sidebar-width: 260px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
         body { background: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
         
         /* Sidebar */
-        .sidebar { width: 260px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-        .sidebar-header i { font-size: 24px; color: var(--primary); }
+        .sidebar { width: var(--sidebar-width); background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: transform 0.3s ease; flex-shrink: 0; z-index: 1001; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .sidebar-brand { display: flex; align-items: center; gap: 12px; }
+        .sidebar-header i.brand-icon { font-size: 24px; color: var(--primary); }
         .sidebar-header h2 { font-size: 16px; font-weight: 700; letter-spacing: 0.5px; }
+        .sidebar-close { display: none; background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        
         .nav-links { list-style: none; padding: 20px 0; flex: 1; }
         .nav-item { padding: 12px 24px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
         .nav-item:hover, .nav-item.active { background: rgba(18, 193, 86, 0.1); color: var(--primary); border-right: 3px solid var(--primary); }
         
         /* Main Content */
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .header { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: var(--bg-card); }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; min-width: 0; position: relative; }
+        .header { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: var(--bg-card); flex-shrink: 0; position: sticky; top: 0; z-index: 999; }
+        .header-left { display: flex; align-items: center; }
+        .mobile-toggle { display: none; background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; margin-right: 15px; }
+        
         .user-profile { display: flex; align-items: center; gap: 10px; }
         .user-profile .role-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         
-        .container { padding: 30px; }
+        .container { padding: 30px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
         /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
@@ -199,67 +181,109 @@ try {
         
         /* Sections */
         .section-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 30px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .section-header h3 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .section-header h3 i { color: var(--primary); }
         
         /* Tables */
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px 16px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { text-align: left; padding: 12px 16px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
         td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 14px; color: #cbd5e1; }
+        tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(255,255,255,0.02); }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .badge.active { background: rgba(18, 193, 86, 0.15); color: var(--primary); }
         
         /* Controls */
-        .btn { background: var(--primary); color: #000; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn:hover { opacity: 0.9; }
+        .btn { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
         .btn-sm { padding: 6px 12px; font-size: 12px; }
         .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
         .btn-outline:hover { background: var(--primary); color: #000; }
         
-        input[type="number"] { background: var(--bg-dark); border: 1px solid var(--border); color: #fff; padding: 8px 12px; border-radius: 6px; outline: none; }
-        input[type="number"]:focus { border-color: var(--primary); }
+        input[type="number"], input[type="text"], input[type="email"] { background: var(--bg-dark); border: 1px solid var(--border); color: #fff; padding: 10px 14px; border-radius: 6px; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(18, 193, 86, 0.1); }
         
-        .flex-row { display: flex; gap: 10px; align-items: center; }
+        .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        /* Modals and Tabs */
-        .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Config Grid */
+        .config-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
         .modal.active { display: flex; }
-        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
-        .modal-content h3 { margin-bottom: 20px; color: #fff; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; }
+        .modal-content h3 { margin-bottom: 20px; color: #fff; font-size: 20px; }
         .modal-content .form-group { margin-bottom: 15px; }
-        .modal-content label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 13px; }
-        .modal-content input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border); padding: 10px; color: #fff; border-radius: 6px; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .modal-content label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+        .modal-content input { width: 100%; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; backdrop-filter: blur(2px); }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            :root { --sidebar-width: 240px; }
+            .header { padding: 0 20px; }
+            .container { padding: 20px; }
+        }
+
+        @media (max-width: 992px) {
+            body { height: auto; overflow: auto; }
+            .sidebar { position: fixed; transform: translateX(-100%); top: 0; bottom: 0; height: 100vh; }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-close { display: block; }
+            .sidebar-overlay.active { display: block; }
+            .mobile-toggle { display: block; }
+            .header { padding: 0 15px; }
+            .container { padding: 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .config-grid { grid-template-columns: 1fr; gap: 20px; }
+            .main-content { overflow: visible; }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .header { justify-content: space-between; }
+            .search-bar { display: none; }
+            .user-profile span:not(.role-badge) { display: none; }
+            .section-card { padding: 15px; }
+            .modal-content { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <i class="fa-solid fa-bolt"></i>
-            <h2>PROVIDER HUB</h2>
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-bolt brand-icon"></i>
+                <h2>PROVIDER HUB</h2>
+            </div>
+            <button class="sidebar-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <ul class="nav-links">
-            <li class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
-            <li class="nav-item" onclick="switchTab('credit', this)"><i class="fa-solid fa-users"></i> Credit Management</li>
-            <li class="nav-item" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Engine Configs</li>
-            <li class="nav-item" onclick="switchTab('risk', this)"><i class="fa-solid fa-shield-halved"></i> Risk & Exposure</li>
+            <li class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+            <li class="nav-item" id="nav-credit" onclick="switchTab('credit', this)"><i class="fa-solid fa-users"></i> Credit Management</li>
+            <li class="nav-item" id="nav-odds" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Engine Configs</li>
+            <li class="nav-item" id="nav-risk" onclick="switchTab('risk', this)"><i class="fa-solid fa-shield-halved"></i> Risk & Exposure</li>
             <li style="margin-top:auto;" class="nav-item" onclick="window.location.href='../logout.php'"><i class="fa-solid fa-arrow-right-from-bracket" style="color:var(--danger)"></i> Logout</li>
         </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <div class="header">
-            <div class="search-bar">
-                <span style="color:var(--text-muted); font-size:14px;"><i class="fa-solid fa-lock"></i> Provider Level Access</span>
+            <div class="header-left">
+                <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                <div class="search-bar">
+                    <span style="color:var(--text-muted); font-size:14px;"><i class="fa-solid fa-lock"></i> Provider Level Access</span>
+                </div>
             </div>
             <div class="user-profile">
                 <span class="role-badge">PROVIDER</span>
@@ -307,7 +331,7 @@ try {
                     <h3><i class="fa-solid fa-gears"></i> Engine Configurations</h3>
                 </div>
                 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
+                <div class="config-grid">
                     <div>
                         <h4 style="color:#fff; margin-bottom:10px;">Sportsbook Odds Margin (GGR)</h4>
                         <p style="color:var(--text-muted); font-size:13px; margin-bottom:10px;">
@@ -345,39 +369,41 @@ try {
                     <h3><i class="fa-solid fa-building-columns"></i> Central Bank (Credit Distribution)</h3>
                     <button class="btn btn-outline" onclick="openCreatePlayerModal()"><i class="fa-solid fa-user-plus"></i> Create Player</button>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Current Balance</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($players as $p): ?>
-                        <tr>
-                            <td>#<?=$p['id']?></td>
-                            <td style="color:#fff; font-weight:500;"><?=htmlspecialchars($p['username'])?></td>
-                            <td><?=htmlspecialchars($p['email'])?></td>
-                            <td><span class="badge active"><?=strtoupper($p['status'])?></span></td>
-                            <td style="color:var(--primary); font-weight:700; font-family:monospace; font-size:15px;">
-                                <?=number_format($p['balance'], 2)?> TND
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline" onclick="addBalance(<?=$p['id']?>, '<?=htmlspecialchars($p['username'])?>')">
-                                    <i class="fa-solid fa-plus"></i> Add Credit
-                                </button>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php if(empty($players)): ?>
-                        <tr><td colspan="6" style="text-align:center;">Aucun joueur trouvé.</td></tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Current Balance</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($players as $p): ?>
+                            <tr>
+                                <td>#<?=$p['id']?></td>
+                                <td style="color:#fff; font-weight:500;"><?=htmlspecialchars($p['username'])?></td>
+                                <td><?=htmlspecialchars($p['email'])?></td>
+                                <td><span class="badge active"><?=strtoupper($p['status'])?></span></td>
+                                <td style="color:var(--primary); font-weight:700; font-family:monospace; font-size:15px;">
+                                    <?=number_format($p['balance'], 2)?> TND
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline" onclick="addBalance(<?=$p['id']?>, '<?=htmlspecialchars($p['username'])?>')">
+                                        <i class="fa-solid fa-plus"></i> Add Credit
+                                    </button>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php if(empty($players)): ?>
+                            <tr><td colspan="6" style="text-align:center;">Aucun joueur trouvé.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Risk & Exposure (Live Bet Tracker) -->
@@ -386,45 +412,47 @@ try {
                     <h3><i class="fa-solid fa-tower-observation"></i> Live Bet Tracker (Pending)</h3>
                     <span class="badge active"><i class="fa-solid fa-circle-play"></i> Auto-Settle Daemon Active</span>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ticket</th>
-                            <th>Player</th>
-                            <th>Slip (Selections)</th>
-                            <th>Stake</th>
-                            <th>Potential Win</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($pending_bets as $bet): 
-                            $slip = json_decode($bet['slip'], true);
-                            $selections = [];
-                            foreach($slip as $leg) {
-                                $selections[] = "{$leg['match']} ({$leg['sel']})";
-                            }
-                        ?>
-                        <tr>
-                            <td style="color:var(--text-muted);">#<?=$bet['id']?></td>
-                            <td style="font-weight:600; color:#fff;"><?=$bet['username']?></td>
-                            <td style="font-size:12px; max-width:300px; white-space:pre-wrap;"><?=implode(" \n+ ", $selections)?></td>
-                            <td style="color:var(--danger); font-weight:600;"><?=number_format($bet['amount'], 2)?></td>
-                            <td style="color:var(--primary); font-weight:600;"><?=number_format($bet['potential_returns'], 2)?></td>
-                            <td>
-                                <div style="display:flex; gap:5px;">
-                                    <button class="btn btn-sm" style="background:#22c55e;" onclick="manualSettle(<?=$bet['id']?>, 'won')">Win</button>
-                                    <button class="btn btn-sm" style="background:#ef4444;" onclick="manualSettle(<?=$bet['id']?>, 'lost')">Loss</button>
-                                    <button class="btn btn-sm btn-outline" onclick="manualSettle(<?=$bet['id']?>, 'refunded')">Refund</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php if(empty($pending_bets)): ?>
-                        <tr><td colspan="6" style="text-align:center;">Aucun pari en attente.</td></tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ticket</th>
+                                <th>Player</th>
+                                <th>Slip (Selections)</th>
+                                <th>Stake</th>
+                                <th>Potential Win</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($pending_bets as $bet): 
+                                $slip = json_decode($bet['slip'], true);
+                                $selections = [];
+                                foreach($slip as $leg) {
+                                    $selections[] = "{$leg['match']} ({$leg['sel']})";
+                                }
+                            ?>
+                            <tr>
+                                <td style="color:var(--text-muted);">#<?=$bet['id']?></td>
+                                <td style="font-weight:600; color:#fff;"><?=$bet['username']?></td>
+                                <td style="font-size:12px; max-width:300px; white-space:pre-wrap;"><?=implode(" \n+ ", $selections)?></td>
+                                <td style="color:var(--danger); font-weight:600;"><?=number_format($bet['amount'], 2)?></td>
+                                <td style="color:var(--primary); font-weight:600;"><?=number_format($bet['potential_returns'], 2)?></td>
+                                <td>
+                                    <div style="display:flex; gap:5px;">
+                                        <button class="btn btn-sm" style="background:#22c55e;" onclick="manualSettle(<?=$bet['id']?>, 'won')">Win</button>
+                                        <button class="btn btn-sm" style="background:#ef4444;" onclick="manualSettle(<?=$bet['id']?>, 'lost')">Loss</button>
+                                        <button class="btn btn-sm btn-outline" onclick="manualSettle(<?=$bet['id']?>, 'refunded')">Refund</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php if(empty($pending_bets)): ?>
+                            <tr><td colspan="6" style="text-align:center;">Aucun pari en attente.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
@@ -457,6 +485,11 @@ try {
         // Init active tab
         document.querySelectorAll('.page-section').forEach(el => el.classList.add('active'));
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
@@ -466,6 +499,11 @@ try {
             } else {
                 document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
+            }
+            
+            // Close sidebar on mobile after pick
+            if (window.innerWidth <= 992) {
+                toggleSidebar();
             }
         }
 
