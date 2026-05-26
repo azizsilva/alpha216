@@ -736,8 +736,13 @@ if ($action === 'inplay') {
     $tick_lock     = $cache_dir . '/tick_live.lock';
     $daemon_alive  = file_exists($tick_lock) && (time() - filemtime($tick_lock)) < 10;
     $cache_ttl     = 2;   // ALWAYS 2s — real-time for all sports
-    $ev_cache_ttl  = $is_football ? 4 : 6;
-    $ev_stale_ttl  = 2;   // ev_ files re-fetched every 2s
+    // EV per-match odds cache TTL. We dropped this from 4s/6s to 1s/2s
+    // because BetsAPI's own delay is the bottleneck, not our cache —
+    // a tighter TTL means score / odds changes propagate to the UI as
+    // soon as upstream has them. The async refresh below keeps the
+    // file fresh in the background so 99% of requests still hit warm.
+    $ev_cache_ttl  = $is_football ? 1 : 2;
+    $ev_stale_ttl  = 1;   // ev_ files re-fetched every 1s
     $odds_bg_ttl   = $is_football ? 8 : 12;
     $ev_refresh_cap = 50; // refresh up to 50 live events per cycle (all sports)
 
@@ -1760,6 +1765,58 @@ if ($action === 'match_live') {
     $match_id = trim($_GET['match_id'] ?? '');
     if (!$match_id) { echo json_encode(['success' => 0, 'error' => 'match_id required']); exit; }
 
+    // ── PER-MATCH RESPONSE CACHE ─────────────────────────────────────────────
+    //   match_live used to fire 3 fresh BetsAPI calls (/v3/event/view,
+    //   _fetch_event_stats, /v1/bet365/event) on every single poll —
+    //   600-2400ms per request, multiplied by every user on the page.
+    //
+    //   We now coalesce identical requests inside a 1-second window
+    //   into a single backend call. The first request in a window does
+    //   the work and writes ml_<id>.json; concurrent and follow-up
+    //   requests during the same second read the cached blob in <10ms.
+    //
+    //   Latency budget after this change (football match detail page):
+    //     BetsAPI source delay :  2-10s  (upstream, immutable)
+    //     Response cache TTL   :  0-1s
+    //     Frontend poll        :  0-1s
+    //     ── Total perceived  :  ~2-3s best case, ~12s worst case
+    //
+    //   To go faster than this we'd need either:
+    //     (a) Sportradar / Stats Perform (paid feeds, no 2-10s delay)
+    //     (b) SSE/WebSocket push from this server to the browser
+    //         (eliminates the 0-1s poll component only — BetsAPI
+    //          source delay still dominates).
+    //
+    $ml_cache_dir = __DIR__ . '/cache';
+    if (!is_dir($ml_cache_dir)) @mkdir($ml_cache_dir, 0755, true);
+    $ml_cache_file = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.json';
+    $ml_lock_file  = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.lock';
+    $ml_ttl_seconds = 1; // 1s for live match detail — see budget above
+
+    if (file_exists($ml_cache_file) && (time() - filemtime($ml_cache_file)) < $ml_ttl_seconds) {
+        header('X-SB-Cache: HIT');
+        echo @file_get_contents($ml_cache_file);
+        exit;
+    }
+
+    // Stampede protection: if a sibling request is already fetching for
+    // this match, serve the stale cache (up to 5s old) rather than
+    // piling more BetsAPI calls on. Only takes effect if a request is
+    // mid-flight (lock file fresh).
+    if (file_exists($ml_lock_file)) {
+        $lock_age = time() - filemtime($ml_lock_file);
+        if ($lock_age < 5 && file_exists($ml_cache_file)) {
+            $stale_age = time() - filemtime($ml_cache_file);
+            if ($stale_age < 8) { // accept stale up to 8s
+                header('X-SB-Cache: STALE-WHILE-REFRESH age=' . $stale_age);
+                echo @file_get_contents($ml_cache_file);
+                exit;
+            }
+        }
+    }
+    @touch($ml_lock_file);
+    register_shutdown_function(function() use ($ml_lock_file) { @unlink($ml_lock_file); });
+
     $match_data = null;
     $fi = $match_id;
     if ($db_connected) {
@@ -1884,7 +1941,13 @@ if ($action === 'match_live') {
         $markets = [];
     }
 
-    echo json_encode(['success' => 1, 'match' => $match_data, 'markets' => $markets]);
+    $ml_resp = json_encode(['success' => 1, 'match' => $match_data, 'markets' => $markets]);
+    // Write to per-match response cache so the next poll within
+    // $ml_ttl_seconds returns instantly without hitting BetsAPI.
+    @file_put_contents($ml_cache_file, $ml_resp);
+    @unlink($ml_lock_file);
+    header('X-SB-Cache: MISS');
+    echo $ml_resp;
     exit;
 }
 

@@ -49,12 +49,14 @@ define('LOCK_FILE',     CACHE_DIR . '/tick_live.lock');
 if (!is_dir(CACHE_DIR)) @mkdir(CACHE_DIR, 0755, true);
 
 // ── Tunable parameters ─────────────────────────────────────────
-$TICK_SECONDS    = 2;     // base loop interval
-$STREAM_EVERY    = 1;     // refresh /v1/bet365/inplay every N ticks (2s)
-$SPORT_EVERY     = 2;     // refresh inplay_filter every N ticks (4s)
-$LIVE_SPORTS     = [1, 18, 13, 91, 17, 78];  // football, basketball, tennis, vb, ice hockey, handball
-$MAX_INPLAY_PAGES = 5;    // up to 250 matches per sport
-$LOG_EVERY_N_TICKS = 10;  // log a stats line every N ticks
+$TICK_SECONDS      = 1;     // base loop interval (was 2s — now 1s for tighter live updates)
+$STREAM_EVERY      = 1;     // refresh /v1/bet365/inplay every tick (1s)
+$FOOTBALL_EVERY    = 2;     // refresh football inplay_filter every 2s (high priority)
+$OTHER_SPORT_EVERY = 4;     // refresh non-football sport in round-robin every 4 ticks (4s)
+$FOOTBALL_SPORT_ID = 1;
+$OTHER_LIVE_SPORTS = [18, 13, 91, 17, 78];  // basketball, tennis, volleyball, ice hockey, handball
+$MAX_INPLAY_PAGES  = 5;     // up to 250 matches per sport
+$LOG_EVERY_N_TICKS = 20;    // log a stats line every N ticks (~20s)
 
 // ── Lock: only one instance runs ──────────────────────────────
 if (file_exists(LOCK_FILE)) {
@@ -144,23 +146,34 @@ $started_at = time();
 $total_stream_items = 0;
 $total_sport_matches = 0;
 
-fwrite(STDOUT, "[tick_live] Started PID=" . getmypid() . " interval={$TICK_SECONDS}s sports=[" . implode(',', $LIVE_SPORTS) . "]\n");
+fwrite(STDOUT, "[tick_live] Started PID=" . getmypid() . " interval={$TICK_SECONDS}s football=every{$FOOTBALL_EVERY}t others=[" . implode(',', $OTHER_LIVE_SPORTS) . "] every{$OTHER_SPORT_EVERY}t\n");
 
 while (true) {
     $tick++;
     $loop_start = microtime(true);
 
-    // Always refresh stream every tick — it's the freshest source.
+    // Always refresh global inplay stream every tick — it's the freshest
+    // source and contains EV.SS / EV.TM / EV.MD / S1-S8 stats for ALL
+    // live matches in one call. This is what powers live_refresh.
     if ($tick % $STREAM_EVERY === 0) {
         $n = tick_refresh_stream();
         if ($n > 0) $total_stream_items += $n;
     }
 
-    // Rotate sports — refresh each in a round-robin so we don't burn rate limit.
-    // At every 2nd tick, refresh ONE sport from the list.
-    if ($tick % $SPORT_EVERY === 0) {
-        $sport_idx = (intdiv($tick, $SPORT_EVERY) - 1) % count($LIVE_SPORTS);
-        $sid = $LIVE_SPORTS[$sport_idx];
+    // FOOTBALL FIRST. Refresh /v1/bet365/inplay_filter?sport_id=1 every
+    // FOOTBALL_EVERY ticks (default 2s). Football is the only sport where
+    // sub-2s freshness materially changes the UX (goals, cards, HT).
+    if ($tick % $FOOTBALL_EVERY === 0) {
+        $cnt = tick_refresh_sport($FOOTBALL_SPORT_ID, $MAX_INPLAY_PAGES);
+        if ($cnt > 0) $total_sport_matches += $cnt;
+    }
+
+    // Other sports: round-robin every OTHER_SPORT_EVERY ticks (4s).
+    // Each sport refreshes every (count*OTHER_SPORT_EVERY) = 20s.
+    // That's fine for basketball/tennis/etc. (slower-changing scores).
+    if ($tick % $OTHER_SPORT_EVERY === 0) {
+        $rr_idx = (intdiv($tick, $OTHER_SPORT_EVERY) - 1) % count($OTHER_LIVE_SPORTS);
+        $sid = $OTHER_LIVE_SPORTS[$rr_idx];
         $cnt = tick_refresh_sport($sid, $MAX_INPLAY_PAGES);
         if ($cnt > 0) $total_sport_matches += $cnt;
     }
