@@ -351,11 +351,13 @@ function effectiveTimer(m) {
     var fbMd  = fb ? String(fb.md || '') : '';
     // ── Period marker sanity check.
     //    BetsAPI sometimes leaves md='1' (Mi-temps) stuck even though
-    //    the match has long since restarted. If kickoff time says
-    //    we're well into the 2nd half (or beyond), override the
-    //    stale HT marker with the kickoff-derived timer.
+    //    the match has long since restarted. Only override the stale
+    //    HT marker when the kickoff-derived clock is FIVE minutes
+    //    past the start of the 2nd half (fbMin >= 51) — that's the
+    //    earliest a real "stuck" condition can manifest. Anything
+    //    less and we'd suppress a legit Mi-temps display.
     if (md === '1') {
-      if (fb && fbMd !== '1' && fbMin >= 46) return fb;
+      if (fb && fbMd !== '1' && fbMin >= 51) return fb;
       return m.timer;
     }
     if (md === '3') return m.timer;   // ET — trustworthy
@@ -507,12 +509,13 @@ function startMatchDetailPoll(mid) {
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
   // Fast detail polling for football (top European leagues), slower
-  // for other sports to stay within BetsAPI rate limits.
-  var detailMs = 1500;
+  // for other sports to stay within BetsAPI rate limits. Backend is
+  // pre-warmed by tick_live.php so 1s is safe for football detail.
+  var detailMs = 1000;
   var mObj = window._mdMatch;
   if (mObj) {
     var sidNum = parseInt(mObj.sport_id || 0, 10);
-    if (sidNum !== 1 && sidNum !== 36) detailMs = 2500;
+    if (sidNum !== 1 && sidNum !== 36) detailMs = 2000;
   }
   S._mdPollInterval = setInterval(function() {
     if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) {
@@ -1724,10 +1727,13 @@ function startPolling() {
     });
   }
 
-  // Faster live updates for minimal delay (football stricter).
+  // Faster live updates for minimal delay (football stricter). The
+  // tick_live.php daemon already pre-warms our local cache every 2s,
+  // so polling our own backend at 1.5s for football is fine and gives
+  // the user a sub-2-second perceived delay end-to-end.
   var isFootball = (parseInt(S.activeSportId || 0, 10) === 1);
   var isLiveView = (S.activeAction === 'inplay') || (S.viewMode === 'championship' && S.champMatches && S.champMatches.some(function(m) { return m.time_status === '1'; }));
-  var pollMs = isLiveView ? (isFootball ? 3000 : 5000) : 10000;
+  var pollMs = isLiveView ? (isFootball ? 1500 : 2500) : 10000;
   S.pollingInterval = setInterval(function() {
     doPoll();
     refreshLiveTopLeagues();
@@ -2315,32 +2321,26 @@ function renderMatches(results) {
 
 /* ── Live minute ticker — bumps the displayed minute between API polls so
    "41'" naturally advances to "42'", "43'" etc. even if the next poll is
-   delayed. Freezes when the API reports half-time (md=1 or md=3). ── */
+   delayed. Freezes when the API reports half-time (md=1 or md=3).
+   Tick every 1s so the displayed minute is never more than 1s stale. ── */
 function startLiveMinuteTicker() {
-  if (window._mcLiveMinTicker) return; 
+  if (window._mcLiveMinTicker) return;
   window._mcLiveMinTicker = setInterval(function() {
-    var allM = (S.matches || []).concat(S.champMatches || []);
-    // Update match cards
-    document.querySelectorAll('.mc-live-min').forEach(function(el) {
-      var mid = el.getAttribute('data-mid');
-      if (!mid) return;
-      var m = allM.find(function(x) { return String(x.id) === String(mid); });
-      if (m && m.time_status === '1') {
-        var str = formatLiveMinute(m);
-        if (str && el.textContent !== str) el.textContent = str;
-      }
-    });
-    // Update carousel cards
-    document.querySelectorAll('.slc-time').forEach(function(el) {
-      var mid = el.getAttribute('data-mid');
-      if (!mid) return;
-      var m = allM.find(function(x) { return String(x.id) === String(mid); });
-      if (m && m.time_status === '1') {
-        var str = formatLiveMinute(m);
-        if (str && el.textContent !== str) el.textContent = str;
-      }
-    });
-  }, 10000); // tick every 10s
+    var allM = (S.matches || []).concat(S.champMatches || []).concat(S.sportPageLive || []);
+    function patch(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        var mid = el.getAttribute('data-mid');
+        if (!mid) return;
+        var m = allM.find(function(x) { return String(x.id) === String(mid); });
+        if (m && m.time_status === '1') {
+          var str = formatLiveMinute(m);
+          if (str && el.textContent !== str) el.textContent = str;
+        }
+      });
+    }
+    patch('.mc-live-min');
+    patch('.slc-time');
+  }, 1000);
 }
 
 function matchCard(m) {
