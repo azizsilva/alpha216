@@ -118,13 +118,17 @@ $players = $pdo->query("
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 // Pending Bets
-$pending_bets = $pdo->query("
-    SELECT b.id, b.user_id, u.username, b.amount, b.total_odds, b.potential_returns, b.slip, b.created_at
-    FROM sportsbook_bets b
-    JOIN users u ON b.user_id = u.id
-    WHERE b.status = 'pending'
-    ORDER BY b.id DESC LIMIT 50
-")->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $pending_bets = $pdo->query("
+        SELECT b.id, b.user_id, u.username, b.amount, b.total_odds, b.potential_returns, b.slip, b.created_at
+        FROM sportsbook_bets b
+        JOIN users u ON b.user_id = u.id
+        WHERE b.status = 'pending'
+        ORDER BY b.id DESC LIMIT 50
+    ")->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $pending_bets = [];
+}
 
 ?>
 <!DOCTYPE html>
@@ -224,8 +228,9 @@ $pending_bets = $pdo->query("
         <ul class="nav-links">
             <li class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
             <li class="nav-item" onclick="switchTab('credit', this)"><i class="fa-solid fa-users"></i> Credit Management</li>
-            <li class="nav-item" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Odds Configurator</li>
+            <li class="nav-item" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Engine Configs</li>
             <li class="nav-item" onclick="switchTab('risk', this)"><i class="fa-solid fa-shield-halved"></i> Risk & Exposure</li>
+            <li style="margin-top:auto;" class="nav-item" onclick="window.location.href='../logout.php'"><i class="fa-solid fa-arrow-right-from-bracket" style="color:var(--danger)"></i> Logout</li>
         </ul>
     </div>
 
