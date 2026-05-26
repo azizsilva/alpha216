@@ -3872,20 +3872,13 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
       // specifically for this league query, show the server's matches instead of nothing.
       if (refined.length > 0) res = refined;
 
-      // Date filter if a future date is selected
-      if (S.activeDateOffset > 0) {
-        var now2 = new Date();
-        var target2 = new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() + S.activeDateOffset);
-        var targetStr2 = target2.toDateString();
-        res = res.filter(function(m) {
-          var ts = parseInt(m.time || m.start_time || 0) || 0;
-          if (!ts) return false;
-          return new Date(ts * 1000).toDateString() === targetStr2;
-        });
+      // Initialize date offset if entering from period page
+      if (typeof S.champDateOffset === 'undefined') {
+        S.champDateOffset = (S.activeDateOffset > 0) ? S.activeDateOffset : 'tout';
       }
 
       S.champMatches = res; // save so polling can update them
-      renderChampionship(id, name, flag, res);
+      renderChampionship(id, name, flag, window.sbGetFilteredChampMatches());
 
       // ── Odds re-poll: api.php fills prematch odds asynchronously in the background.
       // If matches have no odds yet (odds_pending > 0), re-fetch after 2.5s so the
@@ -3914,7 +3907,7 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
               // Check if we got new odds
               var gotOdds = res2.some(function(m) { var lo = m.live_odds; return lo && lo.h && parseFloat(lo.h) >= 1.01; });
               S.champMatches = res2;
-              renderChampionship(id, name, flag, res2);
+              renderChampionship(id, name, flag, window.sbGetFilteredChampMatches());
               // Keep retrying if still missing odds
               var stillMissing = res2.filter(function(m) { var lo = m.live_odds; return !(lo && lo.h && parseFloat(lo.h) >= 1.01); });
               if (stillMissing.length > 0 && retries < maxRetries) {
@@ -3932,6 +3925,22 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
       S.champMatches = [];
       renderChampionship(id, name, flag, []);
     });
+};
+
+window.sbGetFilteredChampMatches = function() {
+  var res = S.champMatches || [];
+  var offset = typeof S.champDateOffset !== 'undefined' ? S.champDateOffset : 'tout';
+  if (offset !== 'tout') {
+    var now = new Date(); now.setHours(0,0,0,0);
+    var target = new Date(now); target.setDate(target.getDate() + offset);
+    res = res.filter(function(m) {
+      var ts = parseInt(m.time || m.start_time || 0) || 0;
+      if (!ts) return false;
+      var md = new Date(ts * 1000); md.setHours(0,0,0,0);
+      return md.getTime() === target.getTime();
+    });
+  }
+  return res;
 };
 
 function renderChampionship(id, name, flag, matches) {
@@ -3990,7 +3999,7 @@ function renderChampionship(id, name, flag, matches) {
   S.champMktTab = (typeof S.champMktTab !== 'undefined') ? S.champMktTab : 1;
   out += '<div class="sb-champ-mkt-tabs">';
   mktTypeTabs.forEach(function(t, i) {
-    out += '<button class="sb-cmt' + (S.champMktTab === i ? ' active' : '') + '" onclick="window.sbChampMktTab(' + i + ')">' + t + '</button>';
+    out += '<button class="sb-cmt' + (S.champMktTab === i ? ' active' : '') + '" onclick="window.sbChampMktTab(' + i + ', \'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
   });
   out += '</div>';
 
@@ -4131,7 +4140,7 @@ window.sbToggleChampMktAcc = function() {
 window.sbChampGroupMode = function(mode) {
   S.champGroupMode = (mode === 'hour') ? 'hour' : 'league';
   S.champLeagueCollapsed = {}; // reset accordion state on regroup
-  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, window.sbGetFilteredChampMatches());
 };
 
 /* ── Toggle a single league section open/close (chevron / minus) ─────── */
@@ -4154,27 +4163,22 @@ window.sbToggleChampLeague = function(lgKey) {
 
 window.sbChampDateFilter = function(offset) {
   S.champDateOffset = offset;
-  // Re-render with date filter
-  var res = S.champMatches.filter(function(m) {
-    if (offset === 'tout') return true;
-    var ts = parseInt(m.time || m.start_time || 0) || 0;
-    if (!ts) return false;
-    var now = new Date(); now.setHours(0,0,0,0);
-    var target = new Date(now); target.setDate(target.getDate() + offset);
-    var md = new Date(ts * 1000); md.setHours(0,0,0,0);
-    return md.getTime() === target.getTime();
-  });
-  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, res);
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, window.sbGetFilteredChampMatches());
 };
 
 window.sbChampTopTab = function(index) {
   S.champTopTab = index;
-  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, window.sbGetFilteredChampMatches());
 };
 
-window.sbChampMktTab = function(index) {
+window.sbChampMktTab = function(index, label) {
   S.champMktTab = index;
-  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+  var l = (label || '').toLowerCase();
+  if (l.indexOf('mi-temps') !== -1) S.activeMarketCat = 'ht_1x2';
+  else if (l.indexOf('principaux') !== -1 || l.indexOf('tout') !== -1) S.activeMarketCat = '1x2';
+  else if (l.indexOf('total') !== -1 || l.indexOf('buts') !== -1 || l.indexOf('multigoals') !== -1) S.activeMarketCat = 'total';
+  
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, window.sbGetFilteredChampMatches());
 };
 
 /* ── Breadcrumb navigation helpers ─────────────────────────────────────────
@@ -6223,9 +6227,11 @@ function renderPeriodPage(dayOffset, matches) {
   out += '</div>';
 
   // Market type tabs (horizontal scroll)
+  var pMktTypeTabs = ['Tout','Principaux','Spéciale joueurs','1 minute','Mi-temps 1','Mi-temps 2','Teams H2H','Correct Score','Corners','Cartes','Combo'];
+  S.periodMktTab = (typeof S.periodMktTab !== 'undefined') ? S.periodMktTab : 1;
   out += '<div class="sb-champ-mkt-tabs">';
-  ['Tout','Principaux','Spéciale joueurs','1 minute','Mi-temps 1','Mi-temps 2','Teams H2H','Correct Score','Corners','Cartes','Combo'].forEach(function(t, i) {
-    out += '<button class="sb-cmt' + (i === 1 ? ' active' : '') + '" onclick="this.parentNode.querySelectorAll(\'.sb-cmt\').forEach(function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">' + t + '</button>';
+  pMktTypeTabs.forEach(function(t, i) {
+    out += '<button class="sb-cmt' + (S.periodMktTab === i ? ' active' : '') + '" onclick="window.sbPeriodMktTab(' + i + ', \'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
   });
   out += '</div>';
 
@@ -6377,6 +6383,16 @@ window.sbPeriodSetShortcut = function(key) {
   if (key && key !== 'popular' && key !== 'all_markets') {
     S.activeMarketCat = key;
   }
+  renderPeriodPage(S.activeDateOffset, S.periodMatches || []);
+};
+
+window.sbPeriodMktTab = function(index, label) {
+  S.periodMktTab = index;
+  var l = (label || '').toLowerCase();
+  if (l.indexOf('mi-temps') !== -1) S.activeMarketCat = 'ht_1x2';
+  else if (l.indexOf('principaux') !== -1 || l.indexOf('tout') !== -1) S.activeMarketCat = '1x2';
+  else if (l.indexOf('total') !== -1 || l.indexOf('buts') !== -1 || l.indexOf('multigoals') !== -1) S.activeMarketCat = 'total';
+  
   renderPeriodPage(S.activeDateOffset, S.periodMatches || []);
 };
 
