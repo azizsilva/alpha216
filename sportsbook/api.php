@@ -449,6 +449,7 @@ function _merge_stats($a, $b) {
 // Bet365 inplay EV row — S1..S8 map to soccer counters (fcbet216 stat bar order).
 function _parse_stream_ev_stats($ev) {
     if (!$ev || !is_array($ev)) return null;
+
     $map = [
         'S1' => 'on_target',
         'S2' => 'off_target',
@@ -1249,7 +1250,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
             @touch($pm_lock);
             $pm = null;
             $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
-            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or);
+            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or); if ($pm) apply_margin_to_markets($pm);
             if (!$pm) {
                 $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
                 if ($or2 && !empty($or2['results'])) {
@@ -1513,7 +1514,7 @@ if ($action === 'league_matches') {
             $pm = null;
             // Try prematch endpoint (uses Bet365 FI)
             $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
-            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or);
+            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or); if ($pm) apply_margin_to_markets($pm);
             // Fallback: event stream
             if (!$pm) {
                 $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
@@ -2077,7 +2078,7 @@ function md_parse_markets($event_arr) {
 function md_synthetic_markets($m) {
     $o = $m['live_odds'] ?? null;
     $markets = [];
-    if (!$o || !isset($o['h'])) return $markets;
+    if (!$o || !isset($o['h'])) apply_margin_to_markets($markets); return $markets;
 
     $h = (float)$o['h']; $x = (float)($o['x'] ?? 3.5); $a = (float)($o['a'] ?? 3.0);
     $seed = abs(intval(preg_replace('/\D/', '', $m['id'] ?? '0')) % 999983);
@@ -2193,7 +2194,7 @@ function md_synthetic_markets($m) {
     foreach ($tot2 as $i => $c) { $tot2Sels[] = ['id'=>"t2_$i",'name'=>$c[0],'odds'=>max(1.01,round($c[1]*$srand(70+$i,0.9,1.1),2))]; }
     $markets[] = ['id'=>'t2','name'=>'2 total','selections'=>$tot2Sels];
 
-    return $markets;
+    apply_margin_to_markets($markets); return $markets;
 }
 
 /* ── Fractional → Decimal conversion ── */
@@ -2330,7 +2331,7 @@ if ($action === 'live_refresh') {
                 if (stripos($n2, 'under') !== false && !$un_o) $un_o = $od;
             }
         }
-        $live_odds = $h_o ? ['h'=>$h_o,'x'=>$x_o,'a'=>$a_o,'ou_line'=>$ou_line,'ou_over'=>$ov_o,'ou_under'=>$un_o,'ts'=>time()] : null;
+        $live_odds = $h_o ? ['h'=>$h_o,'x'=>$x_o,'a'=>$a_o,'ou_line'=>$ou_line,'ou_over'=>$ov_o,'ou_under'=>$un_o,'ts'=>time()] : null; if ($live_odds) apply_margin_to_markets($live_odds);
 
         // Persist to DB + ev_ cache
         if ($live_odds) {
@@ -2412,7 +2413,7 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
         if ($is_live_bm) {
             $or_ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
             if (!empty($or_ev['results'])) {
-                $pm = parse_event_stream_odds($or_ev['results']);
+                $pm = parse_event_stream_odds($or_ev['results']); if ($pm) apply_margin_to_markets($pm);
                 if (!$pm) $pm = api_parse_prematch_odds($or_ev); // fallback to sp structure
             }
         }
@@ -2425,7 +2426,7 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
             $pm = ($or && !empty($or['results'])) ? api_parse_prematch_odds($or) : null;
             // last resort: try stream parse on the event response
             if (!$pm && $or && !empty($or['results'])) {
-                $pm = parse_event_stream_odds($or['results']);
+                $pm = parse_event_stream_odds($or['results']); if ($pm) apply_margin_to_markets($pm);
             }
         }
         if ($pm && $pm['h'] > 1.01) {
@@ -2510,7 +2511,7 @@ if ($action === 'bg_sync_upcoming' && ($_GET['_k'] ?? '') === 'sbodds') {
         if ($is_live_bgu) {
             $or_ev_bgu = betsapi_get('/v1/bet365/event', ['FI' => $fi_bgu]);
             if (!empty($or_ev_bgu['results'])) {
-                $pm_bgu = parse_event_stream_odds($or_ev_bgu['results']);
+                $pm_bgu = parse_event_stream_odds($or_ev_bgu['results']); if ($pm_bgu) apply_margin_to_markets($pm_bgu);
                 if (!$pm_bgu) $pm_bgu = api_parse_prematch_odds($or_ev_bgu);
             }
         }
@@ -2521,7 +2522,7 @@ if ($action === 'bg_sync_upcoming' && ($_GET['_k'] ?? '') === 'sbodds') {
             }
             $pm_bgu = ($or_bgu && !empty($or_bgu['results'])) ? api_parse_prematch_odds($or_bgu) : null;
             if (!$pm_bgu && $or_bgu && !empty($or_bgu['results'])) {
-                $pm_bgu = parse_event_stream_odds($or_bgu['results']);
+                $pm_bgu = parse_event_stream_odds($or_bgu['results']); if ($pm_bgu) apply_margin_to_markets($pm_bgu);
             }
         }
         if ($pm_bgu && $pm_bgu['h'] > 1.01) {
@@ -2569,14 +2570,14 @@ if ($action === 'fetch_event_odds') {
     $feo_pm = null;
     $feo_ev = betsapi_get('/v1/bet365/event', ['FI' => $feo_id]);
     if (!empty($feo_ev['results'])) {
-        $feo_pm = parse_event_stream_odds($feo_ev['results']);
+        $feo_pm = parse_event_stream_odds($feo_ev['results']); if ($feo_pm) apply_margin_to_markets($feo_pm);
         // Also try prematch structure parser as fallback
-        if (!$feo_pm) $feo_pm = api_parse_prematch_odds($feo_ev);
+        if (!$feo_pm) $feo_pm = api_parse_prematch_odds($feo_ev); if ($feo_pm) apply_margin_to_markets($feo_pm);
     }
     // 2. Fallback: prematch endpoint
     if (!$feo_pm) {
         $feo_pre = betsapi_get('/v1/bet365/prematch', ['FI' => $feo_id]);
-        if (!empty($feo_pre['results'])) $feo_pm = api_parse_prematch_odds($feo_pre);
+        if (!empty($feo_pre['results'])) $feo_pm = api_parse_prematch_odds($feo_pre); if ($feo_pm) apply_margin_to_markets($feo_pm);
     }
     if ($feo_pm && $feo_pm['h'] > 1.01) {
         @file_put_contents($feo_file, json_encode($feo_pm));

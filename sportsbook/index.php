@@ -4,6 +4,11 @@ if (!$mk_fragment) { require_once __DIR__.'/../app/index.php'; exit; }
 // Session-only check — no full db.php needed here (all DB ops are via AJAX to api.php)
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { echo '<script>window.location.href="/";</script>'; exit; }
+require_once __DIR__.'/../includes/db.php';
+$stmt = $pdo->prepare("SELECT balance FROM users WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$u = $stmt->fetch();
+$user_balance = $u ? (float)$u['balance'] : 0;
 $base = '/';
 $script_name = $_SERVER['SCRIPT_NAME'];
 if (($pos = strpos($script_name, '/sportsbook/')) !== false) {
@@ -605,7 +610,25 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
      finishes the initial render. Removed by sbHideBootSplash() in app.js. -->
 <div id="sb-boot-splash"><div class="ring"></div></div>
 
-<div class="sb-root">
+<?php
+$zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
+?>
+<div class="sb-root<?=$zero_class?>">
+  <?php if ($user_balance <= 0): ?>
+  <div class="sb-zero-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);color:#fff;font-family:'Roboto',sans-serif;text-align:center;padding:20px;flex-direction:column;">
+    <i class="fa fa-lock" style="font-size:48px;margin-bottom:16px;color:#ef4444;"></i>
+    <h2 style="margin-bottom:12px;font-size:24px;">Accès Restreint</h2>
+    <p style="font-size:16px;max-width:400px;line-height:1.5;color:#e2e8f0;">Votre solde est de 0 TND. L'accès aux cotes et aux paris est bloqué. Veuillez contacter votre fournisseur (Provider) pour recharger votre compte.</p>
+  </div>
+  <style>
+    .sb-zero-balance > *:not(.sb-zero-overlay) {
+      filter: blur(8px) grayscale(80%);
+      pointer-events: none;
+      user-select: none;
+      opacity: 0.5;
+    }
+  </style>
+  <?php endif; ?>
 
 <!-- ══ LEFT SIDEBAR ══ -->
 <aside class="sb-left" id="sb-left">
