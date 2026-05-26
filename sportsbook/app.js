@@ -2031,7 +2031,7 @@ var LEAGUE_PENALTY_TERMS = [
   'iceland','faroe','malta','cyprus','gibraltar',
   'liechtenstein','andorra','san marino','kosovo',
   'moldova','armenia','georgia','azerbaijan','belarus',
-  'play-off','playoff','relegation','promotion','qualifier'
+  'relegation','promotion','qualifier'
 ];
 
 /* Exact country prefixes that indicate a top-tier league match.

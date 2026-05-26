@@ -2249,8 +2249,7 @@ function md_frac_to_dec($frac) {
     return ($v > 0) ? round($v + 1, 2) : null;
 }
 
-// ══ LIVE REFRESH — directly fetches fresh scores/odds from BetsAPI for live match IDs ══
-// Called by championship view poller to ensure live matches are always up-to-date
+// ══ LIVE REFRESH — FAST CACHE READ ONLY ══
 // POST ?action=live_refresh with JSON body: {"ids":["matchId1",...]} (max 24)
 if ($action === 'live_refresh') {
     $ids = [];
@@ -2264,142 +2263,114 @@ if ($action === 'live_refresh') {
     }
 
     $refreshed = [];
+    $stream_cache = __DIR__ . '/cache/inplay_stream.json';
+    $stream = json_decode(@file_get_contents($stream_cache)?:'[]', true) ?: [];
+
+    // Parse stream
+    $stream_odds = []; $stream_timers_rid = []; $stream_ss_rid = []; $stream_stats_rid = [];
+    $rid_to_fi = [];
+    $curr_fi = null; $curr_h = null; $curr_x = null; $curr_a = null;
+    $curr_ou_line = 2.5; $curr_ou_over = null; $curr_ou_under = null;
+
+    foreach ($stream as $item) {
+        if (!is_array($item)) continue;
+        $type = $item['type'] ?? $item['TYPE'] ?? '';
+
+        if ($type === 'EV') {
+            if ($curr_fi && $curr_h) {
+                $stream_odds[$curr_fi] = ['h'=>$curr_h,'x'=>$curr_x,'a'=>$curr_a,'ou_line'=>$curr_ou_line,'ou_over'=>$curr_ou_over,'ou_under'=>$curr_ou_under,'ts'=>time()];
+            }
+            $curr_fi = $item['OI'] ?? $item['FI'] ?? null;
+            $ev_timer = _normalize_timer($item);
+            $ev_stats = _parse_stream_ev_stats($item);
+            $ev_ss = $item['SS'] ?? $item['ss'] ?? null;
+            $id_base = !empty($item['ID']) ? explode('_', $item['ID'])[0] : null;
+            if ($id_base) {
+                if ($ev_timer) $stream_timers_rid[$id_base] = $ev_timer;
+                if ($ev_stats) $stream_stats_rid[$id_base] = $ev_stats;
+                if ($ev_ss !== null && $ev_ss !== '') $stream_ss_rid[$id_base] = $ev_ss;
+                $rid_to_fi[$id_base] = $curr_fi;
+            }
+            $curr_h = $curr_x = $curr_a = $curr_ou_over = $curr_ou_under = null; $curr_ou_line = 2.5;
+            continue;
+        }
+        if ($type === 'MA') {
+            $curr_ma = $item['NA'] ?? $item['N2'] ?? '';
+            if (preg_match('/(\d+\.?\d*)/', $curr_ma, $mat)) $curr_ou_line = (float)$mat[1];
+            continue;
+        }
+        if ($type === 'PA') {
+            $n2 = (string)($item['N2'] ?? $item['NA'] ?? '');
+            $or = (string)($item['OR'] ?? '');
+            $od = md_frac_to_dec($item['OD'] ?? $item['od'] ?? '');
+            if (!$od || $od < 1.01) continue;
+            if (($n2 === '1' || $or === '0') && !$curr_h) $curr_h = $od;
+            if (($n2 === 'X' || $or === '1') && !$curr_x) $curr_x = $od;
+            if (($n2 === '2' || $or === '2') && !$curr_a) $curr_a = $od;
+            if (stripos($n2, 'over')  !== false && !$curr_ou_over)  $curr_ou_over = $od;
+            if (stripos($n2, 'under') !== false && !$curr_ou_under) $curr_ou_under = $od;
+        }
+    }
+    if ($curr_fi && $curr_h) {
+        $stream_odds[$curr_fi] = ['h'=>$curr_h,'x'=>$curr_x,'a'=>$curr_a,'ou_line'=>$curr_ou_line,'ou_over'=>$curr_ou_over,'ou_under'=>$curr_ou_under,'ts'=>time()];
+    }
+
+    $all_live = [];
+    foreach ([1, 13, 18, 17, 12, 78, 91, 36] as $sid) {
+        $j = json_decode(@file_get_contents(__DIR__ . '/cache/live_' . $sid . '.json')?:'[]', true) ?: [];
+        foreach ($j as $m) {
+            $mid = (string)($m['id'] ?? '');
+            if ($mid) $all_live[$mid] = $m;
+        }
+    }
+
     foreach ($ids as $match_id) {
-        $match_id = preg_replace('/[^a-zA-Z0-9_\-]/', '', $match_id);
-        if (!$match_id) continue;
-
-        // Resolve r_id (Bet365 FI) from DB
-        $fi = $match_id;
-        $db_mid = $match_id;
-        if ($db_connected) {
-            try {
-                $lq = $pdo->prepare("SELECT id, r_id, raw_json FROM sb_matches WHERE id=? OR r_id=? LIMIT 1");
-                $lq->execute([$match_id, $match_id]);
-                $lr = $lq->fetch(PDO::FETCH_ASSOC);
-                if ($lr) {
-                    $db_mid = $lr['id'];
-                    $fi = $lr['r_id'] ?: $match_id;
-                }
-            } catch (Exception $e) {}
+        $m = $all_live[$match_id] ?? null;
+        if (!$m) {
+            if ($db_connected) {
+                try {
+                    $rq = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=? LIMIT 1");
+                    $rq->execute([$match_id]);
+                    $rj = $rq->fetchColumn();
+                    if ($rj) $m = json_decode($rj, true);
+                } catch (Exception $e) {}
+            }
+            if (!$m) continue;
         }
+        
+        $ss = $m['ss'] ?? null;
+        $timer = $m['timer'] ?? null;
+        $ts_stat = (string)($m['time_status'] ?? '1');
+        $stats = $m['stats'] ?? null;
+        $live_odds = null;
+        
+        $rid = (string)($m['r_id'] ?? '');
+        $id_base = $rid ? preg_replace('/[^0-9A-Z].*$/', '', $rid) : null;
 
-        // v3/event/view — fresh score + timer + stats (half-time, 2nd half)
-        $v3 = betsapi_get('/v3/event/view', ['event_id' => $db_mid, 'source' => 'bet365']);
-        $ss = null; $timer = null; $ts_stat = '1'; $stats = null;
-        $home_nm = ''; $away_nm = '';
-        if (!empty($v3['results'][0])) {
-            $ev3 = $v3['results'][0];
-            $ss = $ev3['ss'] ?? null;
-            $timer = _normalize_timer($ev3['timer'] ?? null);
-            $ts_stat = (string)($ev3['time_status'] ?? '1');
-            if (!empty($ev3['stats'])) $stats = _normalize_stats($ev3['stats']);
-            $home_nm = (string)($ev3['home']['name'] ?? '');
-            $away_nm = (string)($ev3['away']['name'] ?? '');
-        }
-
-        // BetsAPI /v1/bet365/event — fresh live odds stream
-        // Try r_id first (real Bet365 FI), then DB id, then skip BUT still use v3 data
-        $ev = null;
-        if ($fi && $fi !== $db_mid) {
-            $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
-        }
-        if ((!$ev || empty($ev['results'])) && $db_mid) {
-            $ev = betsapi_get('/v1/bet365/event', ['FI' => $db_mid]);
-        }
-        // DO NOT skip if event API empty — v3 score/stats/timer are still valid
-
-        // ── Augment stats from the bet365 event stream. v3 often
-        //    has STALE cards / corners; the bet365 EV row carries
-        //    them as S6 / S7 / S8 (corners / yellow / red) and the ST
-        //    rows carry the full match event timeline.
-        if (!empty($ev['results'])) {
-            $ev_stream_stats = _parse_bet365_event_stats($ev['results']);
-            $timeline_stats  = _parse_stream_timeline_stats(
-                is_array($ev['results'][0] ?? null) ? $ev['results'][0] : $ev['results'],
-                $home_nm, $away_nm
-            );
-            $fresh = $timeline_stats ?: [];
-            $fresh = _merge_stats($fresh, $ev_stream_stats);
-            $stats = _merge_stats($fresh, $stats);
-        }
-
-        $stream = !empty($ev['results']) ? (is_array($ev['results'][0] ?? null) ? $ev['results'][0] : [$ev['results'][0] ?? null]) : [];
-        $h_o = $x_o = $a_o = $ov_o = $un_o = null;
-        $ou_line = 2.5;
-
-        foreach ($stream as $item) {
-            if (!is_array($item)) continue;
-            $type = $item['type'] ?? $item['TYPE'] ?? '';
-            if ($type === 'EV' || $type === 'Event') {
-                // ALWAYS prefer the live stream's score/timer over v3 — v3
-                // is a snapshot that lags 5–60s; the bet365 EV row is the
-                // freshest signal we have. v3 only acts as fallback.
-                $ev_ss = $item['SS'] ?? $item['ss'] ?? null;
-                if ($ev_ss) $ss = $ev_ss;
-                $ev_tmr = _normalize_timer([
-                    'tm' => $item['TM'] ?? $item['tm'] ?? '',
-                    'ts' => $item['TS'] ?? $item['ts'] ?? '',
-                    'md' => $item['MD'] ?? $item['md'] ?? '',
-                ]);
-                // Use bet365 EV timer if it carries a non-zero minute or a
-                // period marker (md='1' HT, md='3' ET). Otherwise keep v3.
-                if ($ev_tmr) {
-                    $ev_tm_n = (int)($ev_tmr['tm'] ?? 0);
-                    $ev_md   = (string)($ev_tmr['md'] ?? '');
-                    if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3') {
-                        $timer = $ev_tmr;
-                    } elseif (!$timer) {
-                        $timer = $ev_tmr;
-                    }
+        if ($id_base) {
+            if (isset($stream_ss_rid[$id_base])) $ss = $stream_ss_rid[$id_base];
+            if (isset($stream_stats_rid[$id_base])) $stats = _merge_stats($stream_stats_rid[$id_base], $stats);
+            if (isset($stream_timers_rid[$id_base])) {
+                $ev_tm_n = (int)($stream_timers_rid[$id_base]['tm'] ?? 0);
+                $ev_md   = (string)($stream_timers_rid[$id_base]['md'] ?? '');
+                if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3' || empty($timer)) {
+                    $timer = $stream_timers_rid[$id_base];
                 }
             }
-            if ($type === 'MA') {
-                $mkt = $item['NA'] ?? $item['N2'] ?? '';
-                if (preg_match('/(\d+\.?\d*)/', $mkt, $mat)) $ou_line = (float)$mat[1];
-            }
-            if ($type === 'PA') {
-                $n2 = (string)($item['N2'] ?? $item['NA'] ?? '');
-                $or = (string)($item['OR'] ?? '');
-                $od = md_frac_to_dec($item['OD'] ?? $item['od'] ?? '');
-                if (!$od || $od < 1.01) continue;
-                if (($n2 === '1' || $or === '0') && !$h_o) $h_o = $od;
-                if (($n2 === 'X' || $or === '1') && !$x_o) $x_o = $od;
-                if (($n2 === '2' || $or === '2') && !$a_o) $a_o = $od;
-                if (stripos($n2, 'over')  !== false && !$ov_o) $ov_o = $od;
-                if (stripos($n2, 'under') !== false && !$un_o) $un_o = $od;
+            $fi = $rid_to_fi[$id_base] ?? null;
+            if ($fi && isset($stream_odds[$fi])) {
+                $live_odds = $stream_odds[$fi];
+                apply_margin_to_markets($live_odds);
             }
         }
-        $live_odds = $h_o ? ['h'=>$h_o,'x'=>$x_o,'a'=>$a_o,'ou_line'=>$ou_line,'ou_over'=>$ov_o,'ou_under'=>$un_o,'ts'=>time()] : null; if ($live_odds) apply_margin_to_markets($live_odds);
-
-        // Persist to DB + ev_ cache
-        if ($live_odds) {
-            $ev_file = __DIR__ . '/cache/ev_' . $fi . '.json';
-            @file_put_contents($ev_file, json_encode($live_odds));
-            @file_put_contents(__DIR__ . '/cache/ev_' . $db_mid . '.json', json_encode($live_odds));
-        }
-        if ($db_connected) {
-            try {
-                $rq = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=? LIMIT 1");
-                $rq->execute([$db_mid]);
-                $rj = $rq->fetchColumn();
-                $md = $rj ? (json_decode($rj, true) ?: []) : [];
-                if ($ss !== null)  $md['ss'] = $ss;
-                if ($timer)        $md['timer'] = $timer;
-                if ($ts_stat)      $md['time_status'] = $ts_stat;
-                if ($stats)        $md['stats'] = $stats;
-                if ($live_odds)    $md['live_odds'] = $live_odds;
-                $pdo->prepare("UPDATE sb_matches SET score=?, timer_info=?, status=?, raw_json=?, updated_at=CURRENT_TIMESTAMP WHERE id=?")
-                    ->execute([
-                        $ss,
-                        $timer ? json_encode($timer) : null,
-                        ($ts_stat === '1' ? 'inplay' : ($ts_stat === '3' ? 'ended' : 'upcoming')),
-                        json_encode($md),
-                        $db_mid
-                    ]);
-            } catch (Exception $e) {}
-        }
-
-        $refreshed[$db_mid] = ['ss' => $ss, 'timer' => _normalize_timer($timer), 'time_status' => $ts_stat, 'stats' => $stats, 'live_odds' => $live_odds];
+        
+        $refreshed[$match_id] = [
+            'ss' => $ss,
+            'timer' => _normalize_timer($timer),
+            'time_status' => $ts_stat,
+            'stats' => $stats,
+            'live_odds' => $live_odds
+        ];
     }
     echo json_encode(['success' => 1, 'refreshed' => $refreshed]);
     exit;
