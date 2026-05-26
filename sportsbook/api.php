@@ -872,12 +872,13 @@ if ($action === 'inplay') {
     // ── Step 4: Batch-load live_odds + timer from DB raw_json ────────────
     $db_odds = [];
     $db_timers = [];
+    $db_ss = [];
     if ($db_connected && !empty($results)) {
         $ids = array_values(array_filter(array_column($results,'id')));
         if (!empty($ids)) {
             $ph = implode(',',array_fill(0,count($ids),'?'));
             try {
-                $st = $pdo->prepare("SELECT id, JSON_EXTRACT(raw_json,'$.live_odds') as lo, JSON_EXTRACT(raw_json,'$.timer') as tm FROM sb_matches WHERE id IN ($ph)");
+                $st = $pdo->prepare("SELECT id, JSON_EXTRACT(raw_json,'$.live_odds') as lo, JSON_EXTRACT(raw_json,'$.timer') as tm, JSON_UNQUOTE(JSON_EXTRACT(raw_json,'$.ss')) as ss FROM sb_matches WHERE id IN ($ph)");
                 $st->execute($ids);
                 while ($row=$st->fetch(PDO::FETCH_ASSOC)) {
                     $rid_key = (string)$row['id'];
@@ -885,6 +886,9 @@ if ($action === 'inplay') {
                     if ($row['tm'] && $row['tm']!=='null') {
                         $t = _normalize_timer(json_decode($row['tm'], true));
                         if ($t) $db_timers[$rid_key] = $t;
+                    }
+                    if ($row['ss'] && $row['ss']!=='null') {
+                        $db_ss[$rid_key] = $row['ss'];
                     }
                 }
             } catch (Exception $e) {}
@@ -1018,20 +1022,13 @@ if ($action === 'inplay') {
             elseif (isset($stream_ss_rid[$rid]))   $fresh_ss = $stream_ss_rid[$rid];
             elseif (isset($stream_ss_rid[$rid_num])) $fresh_ss = $stream_ss_rid[$rid_num];
             elseif (isset($stream_ss_rid[$mid]))   $fresh_ss = $stream_ss_rid[$mid];
+            
+            if ($fresh_ss === null || $fresh_ss === '') {
+                $fresh_ss = $db_ss[$mid] ?? $db_ss[$rid] ?? null;
+            }
+
             if ($fresh_ss !== null && $fresh_ss !== '') {
-                // Score regression guard — neither side's goals can
-                // go DOWN. Catches "1-1 → 1-0" downgrade caused by a
-                // stale snapshot arriving after a fresh stream update.
-                $old_ss = (string)($m['ss'] ?? '');
-                if ($old_ss === '') {
-                    $m['ss'] = $fresh_ss;
-                } else {
-                    $op = preg_split('/[-:]/', preg_replace('/\s+/', '', $old_ss));
-                    $np = preg_split('/[-:]/', preg_replace('/\s+/', '', $fresh_ss));
-                    $oh = (int)($op[0] ?? 0); $oa = (int)($op[1] ?? 0);
-                    $nh = (int)($np[0] ?? 0); $na = (int)($np[1] ?? 0);
-                    if ($nh >= $oh && $na >= $oa) $m['ss'] = $fresh_ss;
-                }
+                $m['ss'] = $fresh_ss;
             }
         }
     }
