@@ -635,7 +635,6 @@ button.sb-btn-live.active .sb-live-badge,
   font-family: 'Roboto', sans-serif !important;
   font-size: 12px !important;
   font-weight: 500 !important;
-  line-height: 12px !important;
   padding: 2px 4px !important;
   border: 0 !important;
   border-radius: 4px !important;
@@ -917,7 +916,7 @@ button.sb-btn-live.active .sb-live-badge,
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 44px;                    /* 8px wrapper padding + arrow room */
+  padding: 8px;                         /* Removed 44px padding to start from beginning per image 2/3 */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -993,7 +992,6 @@ button.sb-btn-live.active .sb-live-badge,
   justify-items: center !important;
   justify-content: space-around !important;
   align-content: space-around !important;
-  row-gap: 4px;
   gap: 4px;
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
@@ -4721,14 +4719,12 @@ body .sb-root .slip-place-btn {
 .sb-ctt {
   background: transparent !important;
   border: none !important;
-  border-bottom: 2px solid transparent;
   padding: 8px 14px;
   font-size: 14px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: var(--sb-text-2);
   cursor: pointer;
-  white-space: nowrap;
   flex-shrink: 0;
   outline: none !important;
   box-shadow: none !important;
