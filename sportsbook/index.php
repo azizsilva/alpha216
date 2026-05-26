@@ -545,13 +545,23 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
 .slip-np-del,body .sb-root .slip-np-del{display:flex!important;align-items:center!important;justify-content:center!important;color:rgba(255,255,255,0.75)!important;}
 .slip-np-ok,body .sb-root .slip-np-ok{grid-row:1/span 2!important;grid-column:7!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.05)!important;border-radius:6px!important;color:rgb(113,246,105)!important;font-size:18px!important;font-weight:800!important;cursor:pointer!important;outline:none!important;align-self:stretch!important;}
 .sb-root .sb-boost-row{padding:0;margin-bottom:4px;}
-.sb-root .sb-boost-card{padding:10px 14px 12px;}
-.sb-root .sb-boost-card .sb-teams-text{margin:2px 0 6px;line-height:1.25;}
-.sb-root .sb-boost-card .sb-boost-picks{margin:0 0 4px;}
+.sb-root .sb-boost-card{padding:10px 14px 12px; border-width: 0px 0px 0px 2px; border-style: solid; border-radius: 6px; background: rgb(74, 74, 74); border-color: transparent; transition: border-color 0.2s; margin-right: 6px;}
+.sb-root .sb-boost-card.is-active{border-color: rgb(33, 151, 243);}
+.sb-root .sb-badge-blue{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 2px 4px; border-radius: 2px; font-family: Roboto, sans-serif; font-size: 12px; font-style: normal; font-weight: 500; line-height: 12px; background: rgb(33, 151, 243); color: rgb(255, 255, 255); text-transform: uppercase;}
+.sb-root .sb-badge-bb{background: #70f669; color: #000; font-size: 11px; font-weight: bold; padding: 2px 4px; border-radius: 2px; margin-right: 4px;}
+.sb-root .sb-boost-card-top{display:flex; align-items:center; margin-bottom:4px;}
+.sb-root .sb-boost-sport-icon{margin-right:6px; color:rgba(255,255,255,0.7); display:flex;}
+.sb-root .sb-boost-sport-icon svg{width:14px; height:14px;}
+.sb-root .sb-boost-card .sb-meta-text{font-size:12px; color:rgba(255,255,255,0.5); line-height:1.2;}
+.sb-root .sb-boost-card .sb-teams-text{margin:4px 0 8px; line-height:1.25; font-size:14px; color:#fff;}
+.sb-root .sb-boost-card .sb-boost-picks{margin:0 0 10px;}
 .sb-root .sb-boost-card .sb-boost-line{position:relative;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.85);min-height:18px;padding:1px 0;line-height:1.25;}
 .sb-root .sb-boost-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#70f669;display:inline-block;flex-shrink:0;z-index:2;margin:0;}
 .sb-root .sb-boost-card .sb-boost-picks > .sb-boost-line:not(:last-child) .sb-boost-dot::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:12px;transform:translateX(-50%);background:#70f669;border-radius:1px;z-index:1;}
-.sb-root .sb-odds-row{padding:6px 14px;margin-top:8px;}
+.sb-root .sb-odds-row{display: flex; gap: 8px; align-items: center; justify-content: center; padding: 8px; background: rgb(49, 49, 49); border-radius: 4px; margin-top:8px;}
+.sb-root .sb-odds-row .sb-old-val{color: rgba(255,255,255,0.5); text-decoration: line-through; font-size: 14px; font-weight: 500;}
+.sb-root .sb-odds-row .sb-boost-arrow{color: rgb(33, 151, 243); display:flex; align-items:center;}
+.sb-root .sb-odds-row .sb-new-val{color: rgb(113, 246, 105); font-size: 15px; font-weight: bold;}
 
 /* ── Match-detail tabs row — critical inline CSS so Bootstrap doesn't
  * collapse pill spacing ("Bet Builder1 minute2ème mi-ter"). Mirrors
