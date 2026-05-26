@@ -3891,7 +3891,7 @@ function renderChampionship(id, name, flag, matches) {
       out += '<span class="sb-lh-star" onclick="event.stopPropagation()">' + ICON.star + '</span>';
       out += '<img src="' + lf + '" class="sb-league-f" onerror="this.src=\'https://flagcdn.com/w20/un.png\'">';
       out += '<span class="sb-league-n">' + h(stripCountryPrefix(lg)||lg) + lcl + '</span>';
-      if (hasLive) out += '<span class="sb-en-direct-badge" style="font-size:7px;padding:1px 4px;margin-left:6px">EN DIRECT</span>';
+      if (hasLive) out += '<span class="mc-live-badge" style="margin-left:auto;font-size:10px;padding:2px 5px;line-height:12px;height:16px;">EN DIRECT</span>';
       out += '<span class="sb-league-acc-tgl" aria-hidden="true">' + (isCollapsed ? '&#9662;' : '&minus;') + '</span>';
       out += '</button>';
       out += '<div class="sb-league-acc-body"' + (isCollapsed ? ' style="display:none"' : '') + '>';
