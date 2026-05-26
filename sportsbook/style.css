@@ -1,4 +1,4 @@
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SPORTSBOOK â€” Premium Dark Theme v2
    Colors extracted from reference: fcbet216.com (Altenar wsdk)
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -3840,11 +3840,14 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   padding: 10px 14px 14px !important;
 }
 .md-card-team-abbr {
-  font-size: 18px !important;
-  font-weight: 800 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
   color: #ffffff !important;
-  letter-spacing: 0.4px !important;
+  letter-spacing: 0.2px !important;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
 }
 .md-card-team-home { text-align: right !important; }
 .md-card-team-away { text-align: left !important; }

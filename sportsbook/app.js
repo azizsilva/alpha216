@@ -1,4 +1,4 @@
-/**
+﻿/**
  * sportsbook/app.js — Premium Sportsbook UI
  * Design reference: fcbet216.com (Altenar wsdk)
  * Colors: #70f669 green, #979797 gray, #101010 bg
@@ -261,14 +261,8 @@ function _parseScore(s) {
   return [h, a];
 }
 function _acceptScoreUpdate(oldSs, newSs) {
-  if (!newSs) return false;
-  if (!oldSs) return true;
-  var op = _parseScore(oldSs);
-  var np = _parseScore(newSs);
-  if (!np) return false;
-  if (!op) return true;
-  // BOTH sides must be ≥ what we have. Catches "0-1 → 1-0" downgrade.
-  return (np[0] >= op[0]) && (np[1] >= op[1]);
+  // Trust the live API directly — VAR reversals, corrections all valid.
+  return (newSs != null && newSs !== '' && newSs !== oldSs);
 }
 
 /* ── Timer regression guard. Sometimes BetsAPI / v3 momentarily
@@ -756,10 +750,18 @@ function renderStatsBar(m, sportId) {
       if (v === null || v === undefined || v === '') return defaultVal;
       return v;
     }
-    // fcbet216 reference (single row, no duplicate lightning):
-    //   attacks(⚡) | yellow(▮) | red(▮) | corner(⚑) | shots(◎)
-    // We prefer dangerous_attacks (the more meaningful counter) and
-    // fall back to plain attacks when not present.
+    // Stat icons — SVGs matching reference site exactly:
+    //   ⚽ Goals | 🟨 Yellow | 🟥 Red | ⚑ Corner | 👟 Shots on target
+    var icBall = '<svg class="md-si-ic md-si-ic--ball" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><polygon points="12,7 16,10 14.5,15 9.5,15 8,10" fill="currentColor" stroke="none"/></svg>';
+    var icYC   = '<svg class="md-si-ic md-si-ic--yc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#FACC15"/></svg>';
+    var icRC   = '<svg class="md-si-ic md-si-ic--rc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#EF4444"/></svg>';
+    var icCor  = '<svg class="md-si-ic md-si-ic--cor" width="11" height="12" viewBox="0 0 16 16" fill="none"><line x1="3" y1="1" x2="3" y2="15" stroke="#ffffff" stroke-width="1.5"/><path d="M3 2 L13 4.5 L3 7 Z" fill="#22C55E"/></svg>';
+    var icShot = '<svg class="md-si-ic md-si-ic--shot" width="11" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><line x1="8" y1="4" x2="8" y2="12"/><line x1="4" y1="8" x2="12" y2="8"/></svg>';
+    // Goals derived from live score (m.ss) — always accurate
+    var goalParts = m.ss ? String(m.ss).replace(/\s+/g,'').split(/[-:]/) : [];
+    var goalH = goalParts[0] !== undefined && goalParts[0] !== '' ? goalParts[0] : (isLiveNow ? '0' : '-');
+    var goalA = goalParts[1] !== undefined && goalParts[1] !== '' ? goalParts[1] : (isLiveNow ? '0' : '-');
+    // shots_on_target with fallback to shots_total
     function svBest(primary, fallback, i) {
       var v = sv(primary, i, null);
       if (v !== null && v !== undefined && v !== '') return v;
@@ -767,27 +769,12 @@ function renderStatsBar(m, sportId) {
       if (v2 !== null && v2 !== undefined && v2 !== '') return v2;
       return defaultVal;
     }
-    // Stat icons — proper SVGs (no unicode ▮ which renders ugly in
-    // many fonts). Order + glyphs match fcbet216 image 3 exactly:
-    //   ⚡ attacks  | 🟨 yellow card | 🟥 red card | ⚑ corner | ⚽ goals
-    var icAtk  = '<svg class="md-si-ic md-si-ic--atk"  width="10" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13H10l-1 9 9.5-12H14l-1-8z"/></svg>';
-    var icYC   = '<svg class="md-si-ic md-si-ic--yc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#FACC15"/></svg>';
-    var icRC   = '<svg class="md-si-ic md-si-ic--rc"  width="9"  height="12" viewBox="0 0 9 12"><rect x="0" y="0" width="9" height="12" rx="1.6" ry="1.6" fill="#EF4444"/></svg>';
-    var icCor  = '<svg class="md-si-ic md-si-ic--cor" width="11" height="12" viewBox="0 0 16 16" fill="none"><line x1="3" y1="1" x2="3" y2="15" stroke="#ffffff" stroke-width="1.5"/><path d="M3 2 L13 4.5 L3 7 Z" fill="#22C55E"/></svg>';
-    var icBall = '<svg class="md-si-ic md-si-ic--ball" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><polygon points="12,7 16,10 14.5,15 9.5,15 8,10" fill="currentColor" stroke="none"/></svg>';
-    // Goals counter — derived directly from the live score (m.ss).
-    // The football icon naturally reads as a goal counter; showing
-    // "0 ⚽ 0" while the score above is 1:1 looked broken, so we now
-    // mirror m.ss into the stat bar. on_target moves to a (future) row.
-    var goalParts = m.ss ? String(m.ss).replace(/\s+/g,'').split(/[-:]/) : [];
-    var goalH = goalParts[0] !== undefined && goalParts[0] !== '' ? goalParts[0] : (isLiveNow ? '0' : '-');
-    var goalA = goalParts[1] !== undefined && goalParts[1] !== '' ? goalParts[1] : (isLiveNow ? '0' : '-');
     return '<div class="md-stats-bar">'
-      + mdStat(svBest('dangerous_attacks','attacks',0), icAtk,  svBest('dangerous_attacks','attacks',1))
-      + mdStat(svL('yellow_cards',0),                   icYC,   svL('yellow_cards',1))
-      + mdStat(svL('red_cards',0),                      icRC,   svL('red_cards',1))
-      + mdStat(svL('corners',0),                        icCor,  svL('corners',1))
-      + mdStat(goalH,                                   icBall, goalA)
+      + mdStat(goalH,                                              icBall, goalA)
+      + mdStat(svL('yellow_cards',0),                             icYC,   svL('yellow_cards',1))
+      + mdStat(svL('red_cards',0),                                icRC,   svL('red_cards',1))
+      + mdStat(svL('corners',0),                                  icCor,  svL('corners',1))
+      + mdStat(svBest('shots_on_target','shots_total',0),         icShot, svBest('shots_on_target','shots_total',1))
       + '</div>';
   }
   // Basketball
@@ -5126,8 +5113,12 @@ function renderMatchDetail(m, markets) {
   var isEnded  = isMatchEnded(m);
   var hn       = m.home ? m.home.name : '';
   var an       = m.away ? m.away.name : '';
+  // Full names for display; short only for the breadcrumb pill (3 chars)
   var hShort   = hn.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'').substring(0,3).toUpperCase();
   var aShort   = an.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'').substring(0,3).toUpperCase();
+  // Shorten only if name > 14 chars (to avoid overflow in the compact card)
+  var hDisplay = hn.length > 14 ? hn.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'') : hn;
+  var aDisplay = an.length > 14 ? an.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'') : an;
   var scores   = m.ss ? m.ss.split('-') : ['',''];
   var scoreH   = scores[0] !== undefined ? scores[0].trim() : '';
   var scoreA   = scores[1] !== undefined ? scores[1].trim() : '';
@@ -5212,7 +5203,7 @@ function renderMatchDetail(m, markets) {
 
   // Row 3: team1 [jersey] score [jersey] team2 — compact single line
   out += '<div class="md-card-teams">';
-  out += '<span class="md-card-team-abbr md-card-team-home">' + h(hShort) + '</span>';
+  out += '<span class="md-card-team-abbr md-card-team-home">' + h(hDisplay) + '</span>';
   out += shirtSVG(hn, 'md-card-jersey', 28);
   out += '<div class="md-card-score-col">';
   if (scoreH !== '' && scoreA !== '') {
@@ -5225,7 +5216,7 @@ function renderMatchDetail(m, markets) {
   }
   out += '</div>';
   out += shirtSVG(an, 'md-card-jersey', 28);
-  out += '<span class="md-card-team-abbr md-card-team-away">' + h(aShort) + '</span>';
+  out += '<span class="md-card-team-abbr md-card-team-away">' + h(aDisplay) + '</span>';
   out += '</div>';
 
   // Row 4: stats bar (corners, cards, attacks, shots)
@@ -5393,7 +5384,9 @@ function renderMktBtn(sel, m, bbMode) {
   var rawOdd = parseFloat(sel.odds);
   if (isNaN(rawOdd) || rawOdd < 1.01) rawOdd = 0;
   var val    = applyMargin(rawOdd);
-  var hasOdd = (val >= 1.01);
+  // Lock ALL odds when match is finished — cannot bet on ended matches
+  var matchEnded = (String(m.time_status || '') === '3');
+  var hasOdd = !matchEnded && (val >= 1.01);
   var safeName = (sel.name != null && sel.name !== '') ? sel.name : '-';
   // Suppress the trailing handicap badge when the selection name already
   // contains the line value (e.g. "Plus de 4.5"). fcbet216 never shows
