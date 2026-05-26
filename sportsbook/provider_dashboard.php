@@ -55,14 +55,22 @@ while ($row = $c_stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 $margin = $configs['global_margin_percent'] ?? 11;
 
+// Ensure tables exist to prevent 500 error
+$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (id INT AUTO_INCREMENT PRIMARY KEY, amount DECIMAL(15,2) DEFAULT 0, status VARCHAR(20) DEFAULT 'pending')");
+$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_ggr (id INT AUTO_INCREMENT PRIMARY KEY, ggr DECIMAL(15,2) DEFAULT 0)");
+
 // Global Stats
-$stats = $pdo->query("
-    SELECT 
-        (SELECT COUNT(*) FROM users WHERE role='player') as total_players,
-        (SELECT COALESCE(SUM(balance),0) FROM users WHERE role='player') as total_player_balances,
-        (SELECT COALESCE(SUM(amount),0) FROM sportsbook_bets WHERE status='pending') as current_exposure,
-        (SELECT COALESCE(SUM(ggr),0) FROM sportsbook_ggr) as lifetime_ggr
-")->fetch(PDO::FETCH_ASSOC);
+try {
+    $stats = $pdo->query("
+        SELECT 
+            (SELECT COUNT(*) FROM users WHERE role='player') as total_players,
+            (SELECT COALESCE(SUM(balance),0) FROM users WHERE role='player') as total_player_balances,
+            (SELECT COALESCE(SUM(amount),0) FROM sportsbook_bets WHERE status='pending') as current_exposure,
+            (SELECT COALESCE(SUM(ggr),0) FROM sportsbook_ggr) as lifetime_ggr
+    ")->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $stats = ['total_players' => 0, 'total_player_balances' => 0, 'current_exposure' => 0, 'lifetime_ggr' => 0];
+}
 
 // Player List
 $players = $pdo->query("
