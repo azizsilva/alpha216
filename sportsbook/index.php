@@ -844,11 +844,11 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
 
     <!-- ══ MOBILE RECHERCHE DE PARIS (Bet Code) ══
          Visible on mobile only, matches fcbet216 image -->
-    <div class="sb-mob-bet-search-panel" style="margin: 0 12px 16px; background: rgb(49, 49, 49); padding: 14px; border-radius: 8px;">
+    <div class="sb-mob-bet-search-panel" style="margin: 0 1px 16px; background: rgb(49, 49, 49); padding: 14px; border-radius: 8px;">
       <div style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; font-family: 'Roboto', sans-serif;">Rechercher des paris</div>
       <div class="sb-search-row" style="display: flex; gap: 8px;">
-        <select class="sb-dark-sel" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 4px; font-size: 14px; font-weight: 500; outline: none; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg width=\"10\" height=\"6\" viewBox=\"0 0 10 6\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1 1L5 5L9 1\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;"><option>Bet Code</option></select>
-        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d'identific..." style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 4px; font-size: 14px; outline: none; min-width: 0;">
+        <button type="button" class="sb-betcode-btn" style="background: rgb(74,74,74); border: 1px solid rgb(120,118,118); color: #fff; padding: 12px 14px; border-radius: 4px; font-size: 14px; font-weight: 700; outline: none; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Bet Code</button>
+        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d'identific..." style="flex: 1; background: rgb(74,74,74); box-shadow: rgba(13,13,13,0) 0px 0px 0px 0px inset; color: rgba(255,255,255,0.54); text-align: left; padding: 12px 10px; border-width: 1px; border-style: solid; border-color: rgb(120,118,118); border-radius: 4px; font-size: 14px; outline: none; min-width: 0;">
       </div>
     </div>
 
