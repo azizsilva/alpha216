@@ -3464,7 +3464,20 @@ function renderBetSlip() {
   out += '<button class="slip-bookmark-btn" title="Sauvegarder">'
     + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>'
     + '</button>';
-  out += '<button class="slip-place-btn" onclick="window.sbPlaceBet()">Connectez-vous pour placer des paris</button>';
+  // Determine the total stake for the button label
+  var _btnStake = 0;
+  if (SLIP_MODE === 'combi') {
+    _btnStake = SLIP_COMBI_STAKE || 0;
+  } else if (SLIP_MODE === 'simple') {
+    S.betSlip.forEach(function(b) { _btnStake += (b.stake || SLIP_STAKE || 0); });
+  } else {
+    // system mode — sum all level stakes * combos
+    _btnStake = 0; // already shown in summary
+  }
+  var _btnLbl = _btnStake > 0
+    ? 'Placer votre pari (' + _btnStake.toFixed(2) + ' TND)'
+    : 'Placer votre pari';
+  out += '<button class="slip-place-btn" onclick="window.sbPlaceBet()">' + _btnLbl + '</button>';
   out += '</div>';
 
   el.innerHTML = out;
@@ -3472,39 +3485,81 @@ function renderBetSlip() {
 
 window.sbPlaceBet = function() {
   if (!S.betSlip.length) return;
-  var confirmed = confirm('Confirmer votre pari ?\n\nMise: ' + SLIP_STAKE + '\nCotes: ' + S.betSlip.map(function(b){ return b.sel + ' @ ' + b.val.toFixed(2); }).join(', '));
-  if (confirmed) {
-    // Calculate total odds
-    var totalOdds = SLIP_MODE === 'combi' ? 1 : S.betSlip[0].val;
-    if (SLIP_MODE === 'combi') {
-      S.betSlip.forEach(function(b) { totalOdds *= b.val; });
-    }
 
+  // Calculate total amount and odds based on mode
+  var totalAmount = 0;
+  var totalOdds = 1;
+
+  if (SLIP_MODE === 'combi') {
+    totalAmount = SLIP_COMBI_STAKE || 0;
+    S.betSlip.filter(function(b) { return !b.excluded; }).forEach(function(b) {
+      totalOdds *= (parseFloat(b.val) || 1);
+    });
+  } else if (SLIP_MODE === 'simple') {
+    S.betSlip.forEach(function(b) { totalAmount += (b.stake || SLIP_STAKE || 0); });
+    // Simple: each bet is independent — sum potential returns
+    totalOdds = S.betSlip.length ? (S.betSlip.reduce(function(acc, b) {
+      return acc + (b.stake || SLIP_STAKE || 0) * (parseFloat(b.val) || 1);
+    }, 0) / totalAmount) : 1;
+  } else {
+    // System mode
+    S.betSlip.filter(function(b) { return !b.excluded; }).forEach(function(b) {
+      totalOdds *= (parseFloat(b.val) || 1);
+    });
+    totalAmount = SLIP_STAKE || 0;
+  }
+
+  if (totalAmount <= 0) {
+    alert('Veuillez entrer une mise valide.');
+    return;
+  }
+
+  var confirmMsg = 'Confirmer votre pari ?\n\nMise: ' + totalAmount.toFixed(2) + ' TND\n';
+  confirmMsg += 'Sélections: ' + S.betSlip.map(function(b) {
+    return b.sel + ' @ ' + (parseFloat(b.val) || 0).toFixed(2);
+  }).join(', ');
+  confirmMsg += '\nGain potentiel: ' + (totalAmount * totalOdds).toFixed(2) + ' TND';
+
+  var confirmed = confirm(confirmMsg);
+  if (confirmed) {
     var payload = {
-      amount: SLIP_STAKE,
+      mode: SLIP_MODE,
+      amount: totalAmount,
       total_odds: totalOdds,
       slip: S.betSlip
     };
 
-    fetch('place_bet.php', {
+    fetch(BASE + 'sportsbook/place_bet.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       if (data.success) {
-        alert(data.message);
+        // Update the balance display in the header if present
+        if (typeof data.new_balance !== 'undefined') {
+          var balEls = document.querySelectorAll('.sb-balance-val, .user-balance, [data-balance]');
+          balEls.forEach(function(el) {
+            el.textContent = parseFloat(data.new_balance).toFixed(2) + ' TND';
+          });
+        }
+        alert('✅ ' + data.message + (data.bet_id ? '\n\nTicket #' + data.bet_id : ''));
         S.betSlip = [];
+        SLIP_COMBI_STAKE = 0;
+        SLIP_STAKE = 0;
         renderBetSlip();
-        // optionally update balance if needed
       } else {
-        alert('Erreur: ' + data.message);
+        alert('❌ Erreur: ' + data.message);
       }
     })
-    .catch(err => alert('Erreur de connexion.'));
+    .catch(function(err) {
+      alert('❌ Erreur de connexion. Vérifiez votre connexion et réessayez.');
+      console.error('[place_bet]', err);
+    });
   }
 };
+
 
 /* ── Popular Bets ─────────────────────────────────────────── */
 function renderPopularBets() {

@@ -30,6 +30,40 @@ if ($amount <= 0) {
     exit;
 }
 
+// ── Ensure schema exists BEFORE opening the transaction (DDL auto-commits in MySQL) ──
+$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    user_id         INT NOT NULL DEFAULT 0,
+    amount          DECIMAL(15,2) NOT NULL DEFAULT 0,
+    total_odds      DECIMAL(10,4) NOT NULL DEFAULT 1,
+    potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0,
+    slip            JSON NULL,
+    status          ENUM('pending','won','lost','refunded') NOT NULL DEFAULT 'pending',
+    settled_at      DATETIME NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_status (status),
+    KEY idx_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+// Patch if table was created with old minimal schema
+$_cols = array_column($pdo->query("SHOW COLUMNS FROM sportsbook_bets")->fetchAll(PDO::FETCH_ASSOC), 'Field');
+if (!in_array('user_id', $_cols))           $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN user_id INT NOT NULL DEFAULT 0 AFTER id");
+if (!in_array('total_odds', $_cols))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN total_odds DECIMAL(10,4) NOT NULL DEFAULT 1");
+if (!in_array('potential_returns', $_cols)) $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0");
+if (!in_array('slip', $_cols))              $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN slip JSON NULL");
+if (!in_array('settled_at', $_cols))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN settled_at DATETIME NULL");
+// transactions table fallback
+$pdo->exec("CREATE TABLE IF NOT EXISTS transactions (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    sender_id   INT NOT NULL DEFAULT 0,
+    receiver_id INT NOT NULL DEFAULT 0,
+    amount      DECIMAL(15,2) NOT NULL DEFAULT 0,
+    type        VARCHAR(50) NOT NULL DEFAULT 'withdrawal',
+    description TEXT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_sender (sender_id),
+    KEY idx_receiver (receiver_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 try {
     $pdo->beginTransaction();
 
@@ -43,25 +77,13 @@ try {
     }
 
     if ((float)$user['balance'] < $amount) {
-        throw new Exception("Solde insuffisant.");
+        throw new Exception("Solde insuffisant. Solde actuel: " . number_format((float)$user['balance'], 2) . " TND");
     }
 
     // Deduct balance
     $new_balance = (float)$user['balance'] - $amount;
     $stmt = $pdo->prepare("UPDATE users SET balance = ? WHERE id = ?");
     $stmt->execute([$new_balance, $user_id]);
-
-    // Ensure bets table exists
-    $pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        amount DECIMAL(15,2) NOT NULL,
-        total_odds DECIMAL(10,2) NOT NULL,
-        potential_returns DECIMAL(15,2) NOT NULL,
-        slip JSON NOT NULL,
-        status ENUM('pending', 'won', 'lost', 'refunded') DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
 
     // Insert Bet
     $potential_returns = $amount * $total_odds;
@@ -71,7 +93,6 @@ try {
 
     // Insert Transaction History
     $stmt = $pdo->prepare("INSERT INTO transactions (sender_id, receiver_id, amount, type, description) VALUES (?, ?, ?, 'withdrawal', ?)");
-    // sender is user, receiver is 0 (system)
     $stmt->execute([$user_id, 0, $amount, 'Pari Sportif - Ticket #' . $bet_id]);
 
     $pdo->commit();

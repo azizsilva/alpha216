@@ -93,8 +93,29 @@ $token_rate = $configs['token_exchange_rate'] ?? 27;
 $deposit_fee = $configs['deposit_ggr_fee'] ?? 11;
 
 // Ensure tables exist to prevent 500 error
-$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (id INT AUTO_INCREMENT PRIMARY KEY, amount DECIMAL(15,2) DEFAULT 0, status VARCHAR(20) DEFAULT 'pending')");
-$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_ggr (id INT AUTO_INCREMENT PRIMARY KEY, ggr DECIMAL(15,2) DEFAULT 0)");
+// Ensure sportsbook_bets has the FULL schema (place_bet.php depends on all these columns)
+$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    user_id         INT NOT NULL DEFAULT 0,
+    amount          DECIMAL(15,2) NOT NULL DEFAULT 0,
+    total_odds      DECIMAL(10,4) NOT NULL DEFAULT 1,
+    potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0,
+    slip            JSON NULL,
+    status          ENUM('pending','won','lost','refunded') NOT NULL DEFAULT 'pending',
+    settled_at      DATETIME NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_status (status),
+    KEY idx_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+// Patch old minimal schema — add missing columns if they don't exist yet
+$existing = array_column($pdo->query("SHOW COLUMNS FROM sportsbook_bets")->fetchAll(PDO::FETCH_ASSOC), 'Field');
+if (!in_array('user_id', $existing))           $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN user_id INT NOT NULL DEFAULT 0 AFTER id");
+if (!in_array('total_odds', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN total_odds DECIMAL(10,4) NOT NULL DEFAULT 1");
+if (!in_array('potential_returns', $existing)) $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN potential_returns DECIMAL(15,2) NOT NULL DEFAULT 0");
+if (!in_array('slip', $existing))              $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN slip JSON NULL");
+if (!in_array('settled_at', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN settled_at DATETIME NULL");
+if (!in_array('created_at', $existing))        $pdo->exec("ALTER TABLE sportsbook_bets ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+$pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_ggr (id INT AUTO_INCREMENT PRIMARY KEY, bet_id INT DEFAULT 0, user_id INT DEFAULT 0, stake DECIMAL(15,2) DEFAULT 0, payout DECIMAL(15,2) DEFAULT 0, ggr DECIMAL(15,2) DEFAULT 0, result VARCHAR(30) DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 
 // Global Stats
 try {
