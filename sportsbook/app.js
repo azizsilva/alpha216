@@ -400,56 +400,18 @@ function getMatchPeriod(m) {
    3. Last resort: "En cours" so every LIVE card always shows something. */
 function formatLiveMinute(m) {
   if (!m) return '';
-
-  var sid = parseInt(m.sport_id || 1, 10);
-  var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
-  var nowSec  = Math.floor(Date.now() / 1000);
-  var elapsedMin = (kickoff > 0) ? Math.floor((nowSec - kickoff) / 60) : -1;
-
-  // Helper: kickoff-based fallback for football. We use this whenever
-  // the API hasn't given us a non-zero tm yet (or when the match has
-  // clearly progressed past the period BetsAPI is reporting).
-  function kickoffMinute() {
-    if (sid !== 1 || elapsedMin < 0) return null;
-    if (elapsedMin <= 45)  return Math.max(1, elapsedMin) + "'";
-    if (elapsedMin <= 60)  return 'Mi-temps';
-    var sh = elapsedMin - 15;          // map wall time onto match minutes
-    if (sh <= 90) return Math.max(46, sh) + "'";
-    // Past 90: keep counting (stoppage / extra time) — matches the
-    // way FlashScore shows e.g. "90+28'" or "118'" deep into ET.
-    var extra = sh - 90;
-    if (extra > 60) extra = 60;        // safety cap
-    return "90+" + extra + "'";
-  }
-
-  if (m.timer) {
-    var md = String(m.timer.md || m.timer.MD || '');
-    if (md === '1') {
-      // Mi-temps marker — but sanity-check against kickoff. A match
-      // 80 minutes after kick-off cannot still be at HT; BetsAPI
-      // sometimes leaves md='1' stuck.
-      if (elapsedMin >= 61) {
-        var ko1 = kickoffMinute();
-        if (ko1 && ko1 !== 'Mi-temps') return ko1;
-      }
-      return 'Mi-temps';
+  var t = effectiveTimer(m);
+  if (!t) return 'En cours';
+  var md = String(t.md || t.MD || '');
+  if (md === '1' || md === '3') return 'Mi-temps';
+  if (md === '2') return 'Pause'; 
+  var tm = parseInt(t.tm || t.TM || 0, 10);
+  if (!isNaN(tm) && tm > 0 && tm < 130) {
+    if (t.ts && String(t.ts).indexOf('+') > -1) {
+      return tm + String(t.ts).substring(String(t.ts).indexOf('+')) + "'";
     }
-    if (md === '3') return 'Mi-temps';  // injury / ET — keep marker
-    var tm = m.timer.tm;
-    if (tm === undefined || tm === null) tm = m.timer.TM;
-    var tmn = parseInt(tm, 10);
-    // ── Real, non-zero, in-range timer minute → use as-is.
-    if (!isNaN(tmn) && tmn > 0 && tmn < 130) return tmn + "'";
-    // ── tm === 0 is BetsAPI's "I don't know" sentinel. Don't display
-    //    "0'" on a live match — fall through to the kickoff fallback so
-    //    the user sees the real elapsed minute (e.g. 42' or Mi-temps).
-    var ko = kickoffMinute();
-    if (ko) return ko;
+    return tm + "'";
   }
-
-  // No timer object at all — pure kickoff fallback (football only)
-  var koOnly = kickoffMinute();
-  if (koOnly) return koOnly;
   return 'En cours';
 }
 
@@ -2314,24 +2276,30 @@ function renderMatches(results) {
    "41'" naturally advances to "42'", "43'" etc. even if the next poll is
    delayed. Freezes when the API reports half-time (md=1 or md=3). ── */
 function startLiveMinuteTicker() {
-  if (window._mcLiveMinTicker) return; // already running
+  if (window._mcLiveMinTicker) return; 
   window._mcLiveMinTicker = setInterval(function() {
-    var nodes = document.querySelectorAll('.mc-live-min[data-mc-min-start]');
-    if (!nodes.length) return;
-    var now = Date.now();
-    nodes.forEach(function(el) {
-      var md = el.getAttribute('data-mc-min-md') || '';
-      if (md === '1' || md === '3') return; // half-time freeze
-      var base = parseInt(el.getAttribute('data-mc-min-start') || '0', 10) || 0;
-      if (base <= 0) return; // unknown base ("En cours"/extra-time) — don't touch
-      var renderedAt = parseInt(el.getAttribute('data-mc-min-render') || '0', 10) || now;
-      var elapsedMin = Math.floor((now - renderedAt) / 60000);
-      var current = base + elapsedMin;
-      if (current > 0 && current < 130) {
-        el.textContent = current + "'";
+    var allM = (S.matches || []).concat(S.champMatches || []);
+    // Update match cards
+    document.querySelectorAll('.mc-live-min').forEach(function(el) {
+      var mid = el.getAttribute('data-mid');
+      if (!mid) return;
+      var m = allM.find(function(x) { return String(x.id) === String(mid); });
+      if (m && m.time_status === '1') {
+        var str = formatLiveMinute(m);
+        if (str && el.textContent !== str) el.textContent = str;
       }
     });
-  }, 10000); // tick every 10s — cheap and smooth
+    // Update carousel cards
+    document.querySelectorAll('.slc-time').forEach(function(el) {
+      var mid = el.getAttribute('data-mid');
+      if (!mid) return;
+      var m = allM.find(function(x) { return String(x.id) === String(mid); });
+      if (m && m.time_status === '1') {
+        var str = formatLiveMinute(m);
+        if (str && el.textContent !== str) el.textContent = str;
+      }
+    });
+  }, 10000); // tick every 10s
 }
 
 function matchCard(m) {
@@ -2413,7 +2381,7 @@ function matchCard(m) {
     out += '<span class="mc-badge-bb">BB</span>';
     out += '<span class="mc-live-badge">EN DIRECT</span>';
     if (!liveMin) liveMin = 'En cours';
-    out += '<span class="mc-live-min" data-mc-min-id="' + mid + '" data-mc-min-start="' + _tmBase + '" data-mc-min-md="' + h(_mdRaw) + '" data-mc-min-render="' + Date.now() + '">' + h(liveMin) + '</span>';
+    out += '<span class="mc-live-min" data-mid="' + mid + '">' + h(liveMin) + '</span>';
   } else {
     // UPCOMING — inline header that matches fcbet216:
     //   [sport-icon] [BB] 19:30 25/05 • [flag] Bundesliga
@@ -2714,7 +2682,7 @@ function renderEnDirectCards(matches) {
     if (isLive) {
       out += '<span class="slc-live-badge">EN DIRECT</span>';
       if (timerMin) {
-        out += '<span class="slc-time">' + h(timerMin) + '</span>';
+        out += '<span class="slc-time" data-mid="' + mid + '">' + h(timerMin) + '</span>';
       }
     } else {
       out += '<span class="slc-time">' + timeStr + '</span>';
