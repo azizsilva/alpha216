@@ -327,10 +327,6 @@ function effectiveTimer(m) {
     if (md === '3') return m.timer;   // ET — trustworthy
     // Real positive minute → use it
     if (!isNaN(tmn) && tmn > 0 && tmn < 130) {
-      // If the kickoff fallback is well ahead of the API timer
-      // (more than 4 minutes), BetsAPI is feeding us stale data —
-      // trust the fallback so the clock reflects reality.
-      if (fb && fbMin > tmn + 4) return fb;
       return m.timer;
     }
     // tm = 0 or missing → only believe it if kickoff confirms minute 0

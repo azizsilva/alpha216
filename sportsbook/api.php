@@ -2345,25 +2345,46 @@ if ($action === 'live_refresh') {
         $live_odds = null;
         
         $rid = (string)($m['r_id'] ?? '');
-        $id_base = $rid ? preg_replace('/[^0-9A-Z].*$/', '', $rid) : null;
+        $rid_num = $rid ? preg_replace('/[^0-9].*$/', '', $rid) : null;
+        $fi = $rid_to_fi[$rid] ?? $rid_to_fi[$rid_num] ?? $rid_to_fi[$match_id] ?? null;
 
-        if ($id_base) {
-            if (isset($stream_ss_rid[$id_base])) $ss = $stream_ss_rid[$id_base];
-            if (isset($stream_stats_rid[$id_base])) $stats = _merge_stats($stream_stats_rid[$id_base], $stats);
-            if (isset($stream_timers_rid[$id_base])) {
-                $ev_tm_n = (int)($stream_timers_rid[$id_base]['tm'] ?? 0);
-                $ev_md   = (string)($stream_timers_rid[$id_base]['md'] ?? '');
-                if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3' || empty($timer)) {
-                    $timer = $stream_timers_rid[$id_base];
-                }
-            }
-            $fi = $rid_to_fi[$id_base] ?? null;
-            if ($fi && isset($stream_odds[$fi])) {
-                $live_odds = $stream_odds[$fi];
-                apply_margin_to_markets($live_odds);
+        // Score
+        $fresh_ss = null;
+        if ($fi && isset($stream_ss[$fi]))     $fresh_ss = $stream_ss[$fi];
+        elseif (isset($stream_ss_rid[$rid]))   $fresh_ss = $stream_ss_rid[$rid];
+        elseif (isset($stream_ss_rid[$rid_num])) $fresh_ss = $stream_ss_rid[$rid_num];
+        elseif (isset($stream_ss_rid[$match_id])) $fresh_ss = $stream_ss_rid[$match_id];
+        if ($fresh_ss !== null && $fresh_ss !== '') $ss = $fresh_ss;
+
+        // Timer
+        $fresh_timer = null;
+        if ($fi && isset($stream_timers[$fi]))     $fresh_timer = $stream_timers[$fi];
+        elseif (isset($stream_timers_rid[$rid]))   $fresh_timer = $stream_timers_rid[$rid];
+        elseif (isset($stream_timers_rid[$rid_num])) $fresh_timer = $stream_timers_rid[$rid_num];
+        elseif (isset($stream_timers_rid[$match_id])) $fresh_timer = $stream_timers_rid[$match_id];
+        
+        if ($fresh_timer) {
+            $ev_tm_n = (int)($fresh_timer['tm'] ?? 0);
+            $ev_md   = (string)($fresh_timer['md'] ?? '');
+            if ($ev_tm_n > 0 || $ev_md === '1' || $ev_md === '3' || empty($timer)) {
+                $timer = $fresh_timer;
             }
         }
-        
+
+        // Stats
+        $fresh_stats = null;
+        if ($fi && isset($stream_stats[$fi]))     $fresh_stats = $stream_stats[$fi];
+        elseif (isset($stream_stats_rid[$rid]))   $fresh_stats = $stream_stats_rid[$rid];
+        elseif (isset($stream_stats_rid[$rid_num])) $fresh_stats = $stream_stats_rid[$rid_num];
+        elseif (isset($stream_stats_rid[$match_id])) $fresh_stats = $stream_stats_rid[$match_id];
+        if ($fresh_stats) $stats = _merge_stats($fresh_stats, $stats);
+
+        // Odds
+        if ($fi && isset($stream_odds[$fi])) {
+            $live_odds = $stream_odds[$fi];
+            apply_margin_to_markets($live_odds);
+        }
+
         $refreshed[$match_id] = [
             'ss' => $ss,
             'timer' => _normalize_timer($timer),
