@@ -116,7 +116,7 @@ if (function_exists('pcntl_signal') && function_exists('pcntl_async_signals')) {
     }
 }
 
-/* ── HTTP fetch ─────────────────────────────────────────────── */
+/* ── HTTP fetch — returns decoded array or null on any error ── */
 function tick_http_get($path, $params = [], $timeout = 8) {
     $params['token'] = BETSAPI_TOKEN;
     $url = BETSAPI_BASE . $path . '?' . http_build_query($params);
@@ -130,10 +130,32 @@ function tick_http_get($path, $params = [], $timeout = 8) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_FOLLOWLOCATION => true,
     ]);
-    $body = curl_exec($ch);
+    $body  = curl_exec($ch);
+    $errno = curl_errno($ch);
+    $http  = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    if (!$body) return null;
-    return json_decode($body, true) ?: null;
+
+    if ($errno || !$body) {
+        fwrite(STDERR, "[tick_live] curl error={$errno} http={$http} path={$path}\n");
+        return null;
+    }
+    $data = json_decode($body, true);
+    if (!$data) {
+        fwrite(STDERR, "[tick_live] JSON parse failed path={$path} body=" . substr($body,0,120) . "\n");
+        return null;
+    }
+    // Log API-level errors (429, auth, etc.) so we always see them in the log.
+    if (empty($data['success'])) {
+        $err = $data['error'] ?? 'unknown';
+        $det = $data['error_detail'] ?? '';
+        fwrite(STDOUT, "[tick_live] API error http={$http} error=\"{$err}\" detail=\"{$det}\" path={$path}\n");
+        // 429 = quota exhausted — store the timestamp so the loop can back off.
+        if ($http === 429 || strpos($err, 'TOO_MANY') !== false) {
+            $GLOBALS['_tick_429_at'] = time();
+        }
+        return null;
+    }
+    return $data;
 }
 
 /* ── Atomically write the JSON cache file ──────────────────── */
@@ -282,6 +304,23 @@ fwrite(STDOUT, "[tick_live] STREAM-ONLY mode: 1 API call per tick = ~" . round(6
 while (true) {
     $tick++;
     $loop_start = microtime(true);
+
+    // ── 429 back-off ──────────────────────────────────────────
+    // If the last API call returned 429 (quota exhausted), pause all
+    // BetsAPI calls for 60 seconds and log once per minute so the
+    // operator knows what's happening. Quota typically resets at the
+    // top of the hour. Only the log + lock-file touch happen here.
+    $last_429 = $GLOBALS['_tick_429_at'] ?? 0;
+    if ($last_429 > 0 && (time() - $last_429) < 60) {
+        if ($tick % 10 === 0) {
+            $wait = 60 - (time() - $last_429);
+            fwrite(STDOUT, "[tick_live] 429 quota exhausted — backing off, retry in ~{$wait}s\n");
+        }
+        $elapsed   = microtime(true) - $loop_start;
+        $sleep_for = max(0, $TICK_SECONDS - $elapsed);
+        if ($sleep_for > 0) usleep((int)($sleep_for * 1_000_000));
+        continue;
+    }
 
     // ── PRIMARY: stream every tick ────────────────────────────
     // ONE call gives us fresh SS/TM/MD/stats for ALL live matches.
