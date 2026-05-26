@@ -357,14 +357,14 @@ body .sb-root .sb-champ-mkt-opt:focus,body .sb-root .sb-champ-mkt-opt:active{bac
 /* Sport nav — fcbet216 design: rounded contained strip with tile cards
    and left/right scroll chevrons. Inline critical CSS matches style.css
    so there's no flicker on first paint. */
-.sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 5px 8px 12px;}
-.sb-sport-nav-inner{display:flex;align-items:center;height:70px;gap:6px;padding:7px 36px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;width:100%;}
+.sb-sport-nav{position:relative;background:transparent;border:none;height:auto;min-height:70px;flex-shrink:0;overflow:visible;padding:0;margin:12px 0 8px 0 !important;}
+.sb-sport-nav-inner{display:flex;align-items:center;justify-content:flex-start!important;height:70px;gap:6px;padding:8px 8px 8px 0 !important;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;scroll-behavior:smooth;width:100%;}
 .sb-sport-nav-inner::-webkit-scrollbar{display:none;height:0!important;width:0!important;}
 .sb-sport-nav-inner::-webkit-scrollbar-thumb,.sb-sport-nav-inner::-webkit-scrollbar-track{display:none!important;}
 #sb-sport-nav-list{display:contents;}
 /* Scroll chevrons */
 /* Sport nav — EXACT fcbet216 spec (user-provided DevTools CSS) */
-.sb-sport-nav-inner{background:rgb(49,49,49)!important;border:none!important;border-radius:6px!important;padding:8px 44px!important;gap:8px!important;}
+.sb-sport-nav-inner{background:rgb(49,49,49)!important;border:none!important;border-radius:6px!important;padding:8px 8px 8px 0 !important;gap:8px!important;justify-content:flex-start!important;}
 .sb-sport-item{background:rgb(58,58,58)!important;border:1px solid rgba(255,255,255,0.04)!important;border-radius:4px!important;padding:8px!important;font-family:'Roboto',sans-serif!important;font-size:14px!important;min-width:72px!important;height:56px!important;}
 .sb-nav-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);width:32px!important;height:32px!important;border-radius:100px!important;background:rgba(255,255,255,0.54)!important;border:none!important;color:rgba(0,0,0,0.87)!important;align-items:center;justify-content:center;cursor:pointer;z-index:3;padding:0!important;margin:0!important;box-shadow:none!important;}
 .sb-nav-arrow.is-hidden{opacity:0;pointer-events:none;}

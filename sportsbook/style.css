@@ -910,13 +910,14 @@ button.sb-btn-live.active .sb-live-badge,
   overflow: visible;
   position: relative;
   padding: 0;
-  margin: 12px 8px 8px;
+  margin: 12px 0 8px 0 !important;       /* Forced start margin per image 1/2 */
 }
 .sb-sport-nav-inner {
   display: flex;
   align-items: center;
+  justify-content: flex-start !important;
   gap: 8px;
-  padding: 8px;                         /* Removed 44px padding to start from beginning per image 2/3 */
+  padding: 8px 8px 8px 0 !important;    /* Forced start padding per image 1/2 */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
