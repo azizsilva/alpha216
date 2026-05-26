@@ -261,8 +261,21 @@ function _parseScore(s) {
   return [h, a];
 }
 function _acceptScoreUpdate(oldSs, newSs) {
-  // Trust the live API directly — VAR reversals, corrections all valid.
-  return (newSs != null && newSs !== '' && newSs !== oldSs);
+  if (newSs == null || newSs === '') return false;
+  if (newSs === oldSs) return false;
+  // ── Per-side regression guard. A real goal is never un-scored on
+  //    a refresh — the snapshot endpoint sometimes lags one cycle
+  //    behind the EV stream, so it can briefly send "1-0" right
+  //    after we've already moved to "1-1". Reject any update that
+  //    DECREASES either home or away. (VAR cancellations are rare
+  //    enough that flicker is a worse UX than the 30s delay.)
+  var oldP = _parseScore(oldSs);
+  var newP = _parseScore(newSs);
+  if (oldP && newP) {
+    if (newP[0] < oldP[0]) return false;
+    if (newP[1] < oldP[1]) return false;
+  }
+  return true;
 }
 
 /* ── Timer regression guard. Sometimes BetsAPI / v3 momentarily
@@ -279,17 +292,38 @@ function _acceptTimerUpdate(oldT, newT) {
   if (oldMd !== newMd) return true;
   var oldTm = parseInt(oldT.tm || oldT.TM || 0, 10) || 0;
   var newTm = parseInt(newT.tm || newT.TM || 0, 10) || 0;
-  // Obvious regression: clock fell back by >2 minutes inside same period.
-  if (newTm + 2 < oldTm) return false;
-  // Reset-to-zero glitch inside an active period.
+  // Reset-to-zero glitch inside an active period — almost certainly noise.
   if (newTm === 0 && oldTm > 3) return false;
+  // SMALL backwards drift (1-3 min) inside the same period is the classic
+  // v3-snapshot-vs-EV-stream race — reject it to avoid flicker.
+  if (newTm > 0 && oldTm - newTm >= 1 && oldTm - newTm <= 3) return false;
+  // LARGE drops (≥ 4 min) are the OPPOSITE problem: we previously
+  // locked onto a bogus high spike (e.g. one stray "tm=78" while
+  // BetsAPI is really at 56). Accept the correction — the display
+  // will snap back to the real value next render.
   return true;
 }
 /* Helper: in-place merge of m.timer with newTimer, respecting the
- * regression guard. Returns true if any field was updated.        */
+ * regression guard. Returns true if any field was updated.
+ *
+ * In addition to the standard guard, we also accept the new timer
+ * if it's a large drop (≥ 4 min) within the same period — that
+ * means our previous cached value was a bad spike and we should
+ * snap back to the API's truth. */
 function _mergeTimer(m, newTimer) {
   if (!m || !newTimer) return false;
-  if (!_acceptTimerUpdate(m.timer, newTimer)) return false;
+  if (!_acceptTimerUpdate(m.timer, newTimer)) {
+    // Large-drop snap-back: same period, new tm well below cached tm.
+    if (m.timer) {
+      var sameMd = String(m.timer.md || m.timer.MD || '') ===
+                   String(newTimer.md || newTimer.MD || '');
+      var oTm = parseInt(m.timer.tm || m.timer.TM || 0, 10) || 0;
+      var nTm = parseInt(newTimer.tm || newTimer.TM || 0, 10) || 0;
+      if (!(sameMd && nTm > 0 && oTm - nTm >= 4)) return false;
+    } else {
+      return false;
+    }
+  }
   if (JSON.stringify(m.timer) === JSON.stringify(newTimer)) return false;
   m.timer = newTimer;
   return true;
@@ -547,9 +581,20 @@ function patchMatchDetailLive(m, markets) {
   if (!isMatchEnded(m)) {
     if (m.timer && _acceptTimerUpdate(window._mdLastTimer, m.timer)) {
       window._mdLastTimer = m.timer;
-    } else if (window._mdLastTimer) {
-      // Keep ticking off the last-known-good timer.
-      m.timer = window._mdLastTimer;
+    } else if (m.timer && window._mdLastTimer) {
+      // Large-drop sanity check: if the API reports a value that's
+      // 4+ minutes BELOW what we have cached, our cache is the one
+      // that's wrong (we locked onto an upstream spike). Snap back
+      // to the API by dropping the cache.
+      var oTm = parseInt(window._mdLastTimer.tm || window._mdLastTimer.TM || 0, 10) || 0;
+      var nTm = parseInt(m.timer.tm || m.timer.TM || 0, 10) || 0;
+      var sameMd = String(window._mdLastTimer.md || '') === String(m.timer.md || '');
+      if (sameMd && nTm > 0 && oTm - nTm >= 4) {
+        window._mdLastTimer = m.timer;
+      } else {
+        // Keep ticking off the last-known-good timer.
+        m.timer = window._mdLastTimer;
+      }
     }
   }
   var effPatch = isMatchEnded(m) ? null : effectiveTimer(m);
