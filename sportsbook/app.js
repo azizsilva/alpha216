@@ -2985,6 +2985,7 @@ function updateFloatingBetBadge() {
 
 window.sbSlipMode = function(mode) {
   if ((mode === 'combi' || mode === 'system') && S.betSlip.length < 2) return;
+  if ((mode === 'combi' || mode === 'system') && S.betSlip.some(function(b){ return b && b.isBB; })) return;
   SLIP_MODE = mode;
   renderBetSlip();
 };
@@ -3234,8 +3235,10 @@ function renderBetSlip() {
 
   var n = S.betSlip.length;
 
-  // Force back to Simple when fewer than 2 selections (Combiné/Système need 2+)
-  if (n < 2 && SLIP_MODE !== 'simple') {
+  // Bet Builder bets cannot be combined/systemised — force Simple
+  var hasBB = S.betSlip.some(function(b) { return b && b.isBB; });
+  // Force back to Simple when < 2 selections OR when a BB bet is present
+  if ((n < 2 || hasBB) && SLIP_MODE !== 'simple') {
     SLIP_MODE = 'simple';
   }
 
@@ -3252,8 +3255,8 @@ function renderBetSlip() {
 
   var out = '';
 
-  // ── Mode tabs (Combiné & Système disabled when < 2 selections) ──────
-  var tabsLocked = n < 2;
+  // ── Mode tabs — disabled when < 2 selections OR Bet Builder is present ──────
+  var tabsLocked = n < 2 || hasBB;
   out += '<div class="slip-tabs"><div class="slip-tabs-inner">';
   ['simple','combi','system'].forEach(function(m) {
     var lbl = m === 'simple' ? 'Simple' : m === 'combi' ? 'Combiné' : 'Système';
@@ -3303,8 +3306,13 @@ function renderBetSlip() {
     out += '<span class="slip-sport-icon">' + ICON.football + '</span>';
     out += '<span class="slip-match-nm">' + h(b.match) + '</span>';
     out += '<div class="slip-item-btns">';
-    out += '<button type="button" class="slip-excl-btn' + (isExcl ? ' excluded' : '') + '" title="Exclure/Inclure" onclick="window.sbToggleExclude(' + i + ')">&#8722;</button>';
-    out += '<button type="button" class="slip-banker-btn' + (isBanker ? ' active' : '') + '" title="Banker" onclick="window.sbToggleBanker(' + i + ')">B</button>';
+    // Exclude (−) only in Combiné, Banker (B) only in Système/Combiné — not in Simple
+    if (SLIP_MODE === 'combi' && !b.isBB) {
+      out += '<button type="button" class="slip-excl-btn' + (isExcl ? ' excluded' : '') + '" title="Exclure/Inclure" onclick="window.sbToggleExclude(' + i + ')">&#8722;</button>';
+    }
+    if ((SLIP_MODE === 'combi' || SLIP_MODE === 'system') && !b.isBB) {
+      out += '<button type="button" class="slip-banker-btn' + (isBanker ? ' active' : '') + '" title="Banker" onclick="window.sbToggleBanker(' + i + ')">B</button>';
+    }
     out += '<button type="button" class="slip-remove-btn" onclick="window.sbRemoveBet(\'' + h(b.id) + '\')">&#215;</button>';
     out += '</div>';
     out += '</div>';
@@ -3390,11 +3398,13 @@ function renderBetSlip() {
     out += '</div>';
   }
 
-  // ── Promo hint (always shown, matches fcbet) ───────────────
-  out += '<div class="slip-promo">'
-    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
-    + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>5 %</strong>'
-    + '</div>';
+  // ── Promo hint — shown for Simple and Système only; Combiné has its own ──
+  if (SLIP_MODE !== 'combi') {
+    out += '<div class="slip-promo">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
+      + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>5&nbsp;%</strong>'
+      + '</div>';
+  }
 
   // ── Tout effacer ───────────────────────────────────────────
   out += '<button class="slip-clear-btn" onclick="window.sbClearSlip()">'
@@ -3444,7 +3454,7 @@ function renderBetSlip() {
     // Progressive bonus, fcbet216-style
     var bonusPct = combiCount >= 4 ? 10 : combiCount >= 3 ? 7 : combiCount >= 2 ? 5 : 0;
 
-    // Promo banner shown when fewer than 4 legs (encourage more)
+    // Promo banner (one only — universal promo is suppressed in combi mode above)
     if (combiCount >= 1 && combiCount < 4) {
       var nextBonus = combiCount < 2 ? 5 : combiCount < 3 ? 7 : 10;
       out += '<div class="slip-promo">'
@@ -3453,7 +3463,15 @@ function renderBetSlip() {
         + '</div>';
     }
 
-    // Combo row + active quick-stake chips
+    // "Can't combine" warning when same match has duplicate selections
+    if (combiLegs.length !== validCombiLegs.length) {
+      out += '<div class="slip-odds-warning" role="alert">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+        + ' Certaines de vos sélections ne peuvent pas être combinées.'
+        + '</div>';
+    }
+
+    // Combo row
     var stake = SLIP_COMBI_STAKE || 0;
     out += '<div class="slip-combo-row">';
     out += '<span class="slip-combo-lbl">Combo</span>';
@@ -3466,7 +3484,7 @@ function renderBetSlip() {
     out += '<input type="text" inputmode="decimal" class="slip-stake-inp slip-combi-stake" id="slip-combi-stake" value="' + stake + '" autocomplete="off" oninput="window.sbUpdateCombiStake(this.value)" onfocus="document.getElementById(\'slip-stake-editor\')&&document.getElementById(\'slip-stake-editor\').classList.add(\'slip-stake-editor--open\')">';
     out += '</div>';
 
-    out += '<div class="slip-stake-editor slip-stake-editor--open" id="slip-stake-editor">';
+    out += '<div class="slip-stake-editor" id="slip-stake-editor">';
     out += '<div class="slip-quick-stakes">';
     [5, 10, 20, 50].forEach(function(v) {
       out += '<button type="button" class="slip-quick-stake" onclick="window.sbCombiQuickStake(' + v + ')">+' + v + '</button>';
@@ -3939,10 +3957,12 @@ function renderChampionship(id, name, flag, matches) {
   out += '</div>';
 
   // ── Top tabs: Cotes de match | Victoire finale | Cotes boostées ─────────────
+  var topTabs = ['Cotes de match', 'Victoire finale', 'Cotes boostées'];
+  S.champTopTab = (typeof S.champTopTab !== 'undefined') ? S.champTopTab : 0;
   out += '<div class="sb-champ-top-tabs">';
-  out += '<button type="button" class="sb-ctt active">Cotes de match</button>';
-  out += '<button type="button" class="sb-ctt">Victoire finale</button>';
-  out += '<button type="button" class="sb-ctt">Cotes boostées</button>';
+  topTabs.forEach(function(t, i) {
+    out += '<button type="button" class="sb-ctt' + (S.champTopTab === i ? ' active' : '') + '" onclick="window.sbChampTopTab(' + i + ')">' + t + '</button>';
+  });
   out += '<span class="sb-ctt-more">&rsaquo;</span>';
   out += '</div>';
 
@@ -3955,20 +3975,22 @@ function renderChampionship(id, name, flag, matches) {
 
   // ── Date filter: Tout + upcoming dates ────────────────────────────────
   out += '<div class="sb-champ-date-row">';
-  out += '<button class="sb-champ-date active" onclick="window.sbChampDateFilter(this,0)">Tout</button>';
+  var activeDate = (typeof S.champDateOffset !== 'undefined') ? S.champDateOffset : 'tout';
+  out += '<button class="sb-champ-date' + (activeDate === 'tout' ? ' active' : '') + '" onclick="window.sbChampDateFilter(\'tout\')">Tout</button>';
   var fr_days_short = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
   for (var di = 0; di < 7; di++) {
     var dts = new Date(); dts.setDate(dts.getDate() + di);
     var dlbl = fr_days_short[dts.getDay()] + ', ' + String(dts.getDate()).padStart(2,'0') + '/' + String(dts.getMonth()+1).padStart(2,'0');
-    out += '<button class="sb-champ-date" onclick="window.sbChampDateFilter(this,' + di + ')">' + dlbl + '</button>';
+    out += '<button class="sb-champ-date' + (activeDate === di ? ' active' : '') + '" onclick="window.sbChampDateFilter(' + di + ')">' + dlbl + '</button>';
   }
   out += '</div>';
 
   // ── Market type tabs (horizontal scroll) ──────────────────────────────
   var mktTypeTabs = ['Tout','Principaux','Spéciale joueurs','1 minute','Mi-temps 1','Mi-temps 2','Teams H2H','Correct Score','Corners','Cartes','Multi Chance','Multigoals','Combo'];
+  S.champMktTab = (typeof S.champMktTab !== 'undefined') ? S.champMktTab : 1;
   out += '<div class="sb-champ-mkt-tabs">';
   mktTypeTabs.forEach(function(t, i) {
-    out += '<button class="sb-cmt' + (i === 1 ? ' active' : '') + '" onclick="this.parentNode.querySelectorAll(\'.sb-cmt\').forEach(function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">' + t + '</button>';
+    out += '<button class="sb-cmt' + (S.champMktTab === i ? ' active' : '') + '" onclick="window.sbChampMktTab(' + i + ')">' + t + '</button>';
   });
   out += '</div>';
 
@@ -4130,12 +4152,11 @@ window.sbToggleChampLeague = function(lgKey) {
   if (tgl)  tgl.innerHTML = nextCollapsed ? '&#9662;' : '&minus;';
 };
 
-window.sbChampDateFilter = function(btn, offset) {
-  btn.closest('.sb-champ-date-row').querySelectorAll('.sb-champ-date').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
+window.sbChampDateFilter = function(offset) {
+  S.champDateOffset = offset;
   // Re-render with date filter
   var res = S.champMatches.filter(function(m) {
-    if (offset === 0) return true;
+    if (offset === 'tout') return true;
     var ts = parseInt(m.time || m.start_time || 0) || 0;
     if (!ts) return false;
     var now = new Date(); now.setHours(0,0,0,0);
@@ -4144,6 +4165,16 @@ window.sbChampDateFilter = function(btn, offset) {
     return md.getTime() === target.getTime();
   });
   renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, res);
+};
+
+window.sbChampTopTab = function(index) {
+  S.champTopTab = index;
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
+};
+
+window.sbChampMktTab = function(index) {
+  S.champMktTab = index;
+  renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
 };
 
 /* ── Breadcrumb navigation helpers ─────────────────────────────────────────
