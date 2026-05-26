@@ -1880,6 +1880,9 @@ function renderMatchGroups(matches, out, opts) {
   var showLeagueHeader = (opts.showLeagueHeader !== false);
   var collapsible     = !!opts.collapsible;
   var defaultOpenN    = (typeof opts.defaultOpenCount === 'number') ? opts.defaultOpenCount : 999;
+  // Strip ended matches before rendering — they must never appear in
+  // any live or upcoming list regardless of what the API reports.
+  matches = (matches || []).filter(function(m) { return !isMatchEnded(m); });
   var groups = {}, order = [];
   matches.forEach(function(m) {
     var k = (m.league && m.league.name) ? m.league.name : 'Autre championnat';
@@ -2359,6 +2362,10 @@ function startLiveMinuteTicker() {
 }
 
 function matchCard(m) {
+  // Ended matches must never appear in live lists.
+  // (Callers already filter, but this is a belt-and-suspenders guard
+  // for any path that renders a card without pre-filtering.)
+  if (isMatchEnded(m)) return '';
   var o = odds(m);
   var isLive = isMatchLive(m);
   var hn = h(m.home ? m.home.name : '');
@@ -2512,6 +2519,14 @@ function matchCard(m) {
 
   // Odds buttons — full width bottom row (stopPropagation here so clicking odds ≠ opening match)
   out += '<div class="mc-odds-bot" onclick="event.stopPropagation()">';
+
+  // When the match is over show a "Terminé" bar instead of odds
+  if (isMatchEnded(m)) {
+    out += '<div class="mc-ended-bar">Terminé</div>';
+    out += '</div></div></div>';
+    return out;
+  }
+
   var cat = (S.viewMode === 'championship')
     ? (S.activeMarketCat || 'populaire')
     : (S.activeLiveCat || 'populaire');
