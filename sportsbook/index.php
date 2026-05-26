@@ -273,10 +273,13 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
    page bg so individual rows read FLAT instead of like lifted boxes. */
 .sb-top-leagues-card,body .sb-root .sb-top-leagues-card{margin:0 8px 10px!important;background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0px solid rgba(255,255,255,0)!important;border-radius:8px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;}
 .sb-top-leagues-card .sb-league-group-hdr{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;flex:0 0 auto;}
-.sb-top-leagues-card .sb-tl-item{border-bottom:1px solid rgba(255,255,255,0.06)!important;}
-.sb-top-leagues-card .sb-tl-list,body .sb-root .sb-top-leagues-card .sb-tl-list{flex:1 1 auto!important;overflow:visible!important;scrollbar-width:none!important;}
+/* League item — fcbet216 .hMiKGz EXACT grid layout + rgb(74,74,74) bg */
+.sb-top-leagues-card .sb-tl-item,.sb-mob-leagues-panel .sb-tl-item,.sb-tl-item{display:grid!important;grid-template-columns:max-content auto!important;grid-auto-flow:column!important;grid-auto-columns:max-content!important;-webkit-box-align:center!important;align-items:center!important;column-gap:12px!important;user-select:none!important;cursor:pointer!important;-webkit-tap-highlight-color:transparent!important;position:relative!important;padding:12px!important;border:none!important;color:rgb(255,255,255)!important;background:rgb(74,74,74)!important;min-height:44px!important;}
+.sb-top-leagues-card .sb-tl-item:hover,.sb-mob-leagues-panel .sb-tl-item:hover{background:rgb(82,82,82)!important;}
+/* List: grid + 1px gap so panel bg shows as thin divider between items */
+.sb-top-leagues-card .sb-tl-list,body .sb-root .sb-top-leagues-card .sb-tl-list{display:grid!important;gap:1px!important;overflow:visible!important;scrollbar-width:none!important;}
 .sb-top-leagues-card .sb-tl-list::-webkit-scrollbar{width:0!important;display:none!important;}
-.sb-mob-leagues-panel .sb-tl-list,body .sb-root .sb-mob-leagues-panel .sb-tl-list{overflow:visible!important;scrollbar-width:none!important;}
+.sb-mob-leagues-panel .sb-tl-list,body .sb-root .sb-mob-leagues-panel .sb-tl-list{display:grid!important;gap:1px!important;overflow:visible!important;scrollbar-width:none!important;}
 .sb-mob-leagues-panel .sb-tl-list::-webkit-scrollbar{width:0!important;display:none!important;}
 .sb-mob-search-panel{background:transparent;border:0;border-radius:0;overflow:visible;margin:0 2px 10px;}
 .sb-mob-search-panel .sb-search-wrap{padding:0;}
@@ -284,7 +287,7 @@ body .sb-root .slc-odd-val{color:rgb(113,246,105)!important;font-family:'Roboto'
 .sb-mob-search-panel .sb-search-box svg,.sb-mob-search-panel .sb-search-box .sb-search-icon{width:18px;height:18px;color:rgba(255,255,255,0.55);flex-shrink:0;}
 .sb-mob-search-panel .sb-sidebar-search{flex:1 1 auto;width:100%;min-width:0;background:transparent;border:0;outline:none;color:#fff;font-family:'Roboto',sans-serif;font-size:13px;padding:0;}
 .sb-mob-search-panel .sb-sidebar-search::placeholder{color:rgba(255,255,255,0.45);font-size:13px;opacity:1;}
-.sb-mob-leagues-panel,body .sb-root .sb-mob-leagues-panel{background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0px solid rgba(255,255,255,0)!important;border-radius:8px!important;overflow:hidden!important;margin:0 2px 12px!important;}
+.sb-mob-leagues-panel,body .sb-root .sb-mob-leagues-panel{background:rgb(49,49,49)!important;background-color:rgb(49,49,49)!important;border:0px solid rgba(255,255,255,0)!important;border-radius:8px!important;overflow:hidden!important;margin:0 0 12px!important;width:100%!important;}
 .sb-mob-leagues-panel .sb-league-group-hdr{background:transparent;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);gap:10px;display:flex;align-items:center;}
 .sb-mob-leagues-panel .sb-mob-tab{font-size:11px!important;font-weight:700!important;color:#fff!important;letter-spacing:.4px!important;white-space:nowrap!important;text-transform:uppercase!important;opacity:1!important;background:none;border:none;padding:0;cursor:pointer;}
 .sb-mob-leagues-panel .sb-mob-tab[data-tab="my"]{color:rgba(255,255,255,.85)!important;}
@@ -301,8 +304,7 @@ body .sb-root .sb-lmk-item,.sb-root .sb-lmk-item,.sb-lmk-item{width:100%!importa
 body .sb-root .sb-lmk-item:hover,.sb-root .sb-lmk-item:hover,.sb-lmk-item:hover{background:rgba(255,255,255,0.08)!important;color:#fff!important;}
 .sb-root[data-view="livepage"] .sb-mob-search-panel{display:flex!important;}
 .sb-root[data-view="livepage"] .sb-mob-search-panel .sb-search-box{border:1px solid #70f669!important;}
-.sb-mob-leagues-panel .sb-tl-item{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 14px;border-radius:0;min-height:44px;gap:12px;display:flex;align-items:center;}
-.sb-mob-leagues-panel .sb-tl-item:last-child{border-bottom:none;}
+/* .sb-tl-item override — see unified rule above */
 .sb-mob-leagues-panel .sb-league-name{font-size:13px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sb-globe-icon,body .sb-root .sb-globe-icon,body .sb-mob-leagues-panel .sb-globe-icon,body .sb-top-leagues-card .sb-globe-icon{width:22px!important;height:22px!important;border-radius:5px!important;background:#4dd0e1!important;color:#fff!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important;}
 body .sb-root .sb-globe-icon svg{display:block!important;}

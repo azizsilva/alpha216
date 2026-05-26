@@ -1,8 +1,8 @@
-/* ════════════════════════════════════════════════════════════
-   SPORTSBOOK — Premium Dark Theme v2
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SPORTSBOOK â€” Premium Dark Theme v2
    Colors extracted from reference: fcbet216.com (Altenar wsdk)
-   ════════════════════════════════════════════════════════════ */
-/* Google Fonts loaded via <link> in HTML — no @import to block rendering */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* Google Fonts loaded via <link> in HTML â€” no @import to block rendering */
 
 :root {
   --sb-green:       #70f669;   /* primary-color from reference */
@@ -10,7 +10,7 @@
   --sb-green-dark:  #5bc355;
   --sb-red:         rgb(251,51,51); /* fcbet216 .cqljKD background */
   --sb-live-red:    rgb(251,51,51); /* fcbet216 EN DIRECT badge bg */
-  /* ── Backgrounds — extracted from fcbet216 DOM (DevTools confirmed) ── */
+  /* â”€â”€ Backgrounds â€” extracted from fcbet216 DOM (DevTools confirmed) â”€â”€ */
   --sb-bg-root:     #0a0a0a;
   --sb-bg-card:     #1a1a1a;   /* dark like fcbet216 reference card */
   --sb-bg-boost:    #1a1a1a;
@@ -18,14 +18,14 @@
   --sb-bg-mkt:      #161616;
   --sb-bg-odd-btn:  rgb(74,74,74);  /* fcbet216 exact: .jgpuF background */
   --sb-bg-odd-hover:#5a5a5a;
-  /* ── REUSABLE GRAY SURFACES (fcbet216 spec, user request) ──
+  /* â”€â”€ REUSABLE GRAY SURFACES (fcbet216 spec, user request) â”€â”€
      --sb-surface-1 = primary card surface (rgb 49,49,49)
      --sb-surface-2 = elevated tile / hover surface (rgb 58,58,58)
      Use these everywhere instead of hard-coded rgb(49,49,49) values. */
   --sb-surface-1:   rgb(49,49,49);
   --sb-surface-2:   rgb(58,58,58);
   --sb-surface-hover: rgb(66,66,66);
-  /* ── Borders — barely visible, matches fcbet216 .iWVbnj ── */
+  /* â”€â”€ Borders â€” barely visible, matches fcbet216 .iWVbnj â”€â”€ */
   --sb-border:      rgba(255,255,255,0.06);
   --sb-border-light:rgba(255,255,255,0.10);
   --sb-border-card: rgba(255,255,255,0.05);
@@ -42,7 +42,7 @@
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Global scrollbar — EXACT fcbet216 spec (user-inspected --wsdk-Scrollbar* tokens):
+/* Global scrollbar â€” EXACT fcbet216 spec (user-inspected --wsdk-Scrollbar* tokens):
    thumb rgba(151,151,151,1) = #979797, thin width. Applies on Firefox via
    the standard scrollbar-* properties; WebKit/Blink browsers use the
    ::-webkit-scrollbar pseudo-elements below. */
@@ -62,12 +62,12 @@ body {
   overflow: hidden;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   .sb-root HARD RESET — neutralises ANY style leaking in from the
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   .sb-root HARD RESET â€” neutralises ANY style leaking in from the
    parent template (custom-style.css typography/colors, Bootstrap if
    ever loaded, etc.). Uses :where() so specificity stays at 0 and our
    real rules below win without needing !important everywhere.
-   ════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 :where(.sb-root, .sb-root *) {
   box-sizing: border-box;
   font-family: 'Roboto', 'Poppins', system-ui, -apple-system, Segoe UI, sans-serif;
@@ -92,12 +92,12 @@ body {
 :where(.sb-root ul, .sb-root ol) { list-style: none; padding: 0; margin: 0; }
 :where(.sb-root img) { max-width: 100%; }
 
-/* Global font override — Roboto matches alpina216.com */
+/* Global font override â€” Roboto matches alpina216.com */
 .sb-root, .sb-root * {
   font-family: 'Roboto', sans-serif !important;
 }
 
-/* Scoped button reset — prevents Bootstrap .btn and parent rules
+/* Scoped button reset â€” prevents Bootstrap .btn and parent rules
    from giving sportsbook buttons borders, shadows or oversized padding. */
 .sb-root button:not(.md-odd-btn):not(.md-tab):not(.md-tab-search-btn):not(.md-tab-search-close):not(.md-tab-info-btn),
 .sb-root input[type="button"],
@@ -143,13 +143,13 @@ body {
   float: none;
 }
 
-/* ── Scrollbar ─────────────────────────────────────────── */
+/* â”€â”€ Scrollbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--sb-text-2); border-radius: 6px; opacity: 0.6; }
 ::-webkit-scrollbar-thumb:hover { background: var(--sb-border-light); }
 
-/* ── Root Layout ───────────────────────────────────────── */
+/* â”€â”€ Root Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .sb-root {
   display: flex;
   height: 100vh;
@@ -159,9 +159,9 @@ body {
   border: none !important;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    LEFT SIDEBAR
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-left {
   width: var(--sb-sidebar-w);
   height: 100vh;
@@ -183,7 +183,7 @@ body {
   padding: 10px 10px 8px;
   background: var(--sb-bg-root);
 }
-/* ── Mobile Top Action Buttons (base — overridden in mobile media queries) ── */
+/* â”€â”€ Mobile Top Action Buttons (base â€” overridden in mobile media queries) â”€â”€ */
 .sb-btn-home, .sb-btn-live, .sb-btn-stats {
   border: none;
   border-radius: var(--sb-radius);
@@ -210,7 +210,7 @@ body {
 }
 .sb-btn-home svg { width: 18px; height: 18px; stroke: currentColor; }
 
-/* EN DIRECT — inactive: gray chip + red pill; active: full green + black text */
+/* EN DIRECT â€” inactive: gray chip + red pill; active: full green + black text */
 .sb-btn-live {
   background: var(--sb-bg-alt);
   color: var(--sb-text-2);
@@ -219,9 +219,9 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* EN DIRECT badge — fcbet216 .cqljKD EXACT (sampled from DevTools):
-   bg rgb(251,51,51) · white · 12px Roboto · weight 500 · 12px line-height
-   · 2px 4px padding · 4px radius · no border · uppercase. */
+/* EN DIRECT badge â€” fcbet216 .cqljKD EXACT (sampled from DevTools):
+   bg rgb(251,51,51) Â· white Â· 12px Roboto Â· weight 500 Â· 12px line-height
+   Â· 2px 4px padding Â· 4px radius Â· no border Â· uppercase. */
 .sb-btn-live:not(.active) .sb-live-badge {
   background: rgb(251,51,51);
   color: rgb(255,255,255);
@@ -242,7 +242,7 @@ body {
   flex: 1;
   width: auto;
 }
-/* Active state: KEEP the red pill on top of the green tab — fcbet216 image 3.
+/* Active state: KEEP the red pill on top of the green tab â€” fcbet216 image 3.
    The pill stays rgb(251,51,51) with white text exactly like the inactive
    state; only the surrounding tab turns green. Max specificity so this
    wins regardless of cascade order. */
@@ -320,29 +320,36 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-mes-ligues span { color: #fff; }
 
-/* Sidebar league items (top leagues) — rows live inside .sb-top-leagues-card */
-.sb-tl-list { padding: 0; }
+/* Sidebar league items (top leagues) â€” rows live inside .sb-top-leagues-card */
+/* List: grid with 1px gap so panel bg (rgb 49,49,49) shows as thin divider */
+.sb-tl-list { padding: 0; display: grid; gap: 1px; }
+/* Item: fcbet216 .hMiKGz EXACT (user-provided DevTools CSS) */
 .sb-tl-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  cursor: pointer;
-  border-radius: 0;
+  display: grid !important;
+  grid-template-columns: max-content auto !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: max-content !important;
+  -webkit-box-align: center !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+  user-select: none !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  position: relative !important;
+  padding: 12px !important;
+  border: none !important;
+  color: rgb(255, 255, 255) !important;
+  background: rgb(74, 74, 74) !important;
   transition: background 0.12s;
-  color: var(--sb-text-1);
   font-size: 13px;
   font-weight: 600;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--sb-border);
   min-height: 44px;
 }
 .sb-tl-item:last-child { border-bottom: none; }
-.sb-tl-item:hover { background: rgba(255,255,255,0.03); }
+.sb-tl-item:hover { background: rgb(82, 82, 82) !important; }
 .sb-tl-item .sb-league-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sb-flag-icon { width: 22px; height: 16px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
-/* Live EN DIRECT badge for sidebar/top-league rows — fcbet216 exact */
+/* Live EN DIRECT badge for sidebar/top-league rows â€” fcbet216 exact */
 .sb-tl-live-badge {
   background: rgb(251,51,51);
   color: rgb(255,255,255);
@@ -367,8 +374,8 @@ button.sb-btn-live.active .sb-live-badge,
   overflow: hidden;
 }
 
-/* Desktop sidebar — search card + leagues card (fcbet216: two separate boxes) */
-/* Sidebar search card — fcbet216 image 6: spacious pill input with the
+/* Desktop sidebar â€” search card + leagues card (fcbet216: two separate boxes) */
+/* Sidebar search card â€” fcbet216 image 6: spacious pill input with the
    placeholder fully visible (no ellipsis truncation). */
 .sb-sidebar-search-card {
   margin: 8px 8px 10px;
@@ -427,14 +434,14 @@ button.sb-btn-live.active .sb-live-badge,
   display: flex !important;
   flex-direction: column !important;
 }
-/* Inner list — no scroll, full height */
+/* Inner list â€” no scroll, full height */
 .sb-top-leagues-card .sb-tl-list {
   flex: 1 1 auto !important;
   overflow: visible !important;
   scrollbar-width: none !important;
 }
 .sb-top-leagues-card .sb-tl-list::-webkit-scrollbar { width: 0 !important; display: none !important; }
-/* Desktop sidebar tabs row — match fcbet216 image 4 exactly */
+/* Desktop sidebar tabs row â€” match fcbet216 image 4 exactly */
 .sb-top-leagues-card .sb-league-group-hdr {
   padding: 12px 14px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
@@ -492,15 +499,20 @@ button.sb-btn-live.active .sb-live-badge,
   flex: 0 0 auto !important;
 }
 .sb-top-leagues-card .sb-tl-item {
-  background: transparent !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-  padding: 12px 14px !important;
+  background: rgb(74, 74, 74) !important;
+  border: none !important;
+  padding: 12px !important;
 }
 .sb-top-leagues-card .sb-tl-item:last-child {
   border-bottom: none !important;
 }
+/* List inside desktop card — grid + 1px gap to match fcbet216 */
+.sb-top-leagues-card .sb-tl-list {
+  display: grid !important;
+  gap: 1px !important;
+}
 
-/* Sidebar search (legacy wrap — kept for any leftover markup) */
+/* Sidebar search (legacy wrap â€” kept for any leftover markup) */
 .sb-search-wrap { padding: 8px 8px 4px; }
 .sb-search-box {
   background: var(--sb-bg-alt);
@@ -601,7 +613,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-sport-icon svg {
   width: 24px;
   height: 24px;
-  /* Dark #313131 SVG paths → pure white via brightness(0) then invert(1) */
+  /* Dark #313131 SVG paths â†’ pure white via brightness(0) then invert(1) */
   filter: brightness(0) invert(1);
   opacity: 0.75;
   transition: opacity 0.15s;
@@ -616,7 +628,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-sport-name { flex: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
 .sb-sport-cnt  { font-size: 12px; color: var(--sb-text-2); flex-shrink: 0; font-weight: 600; }
-/* EN DIRECT badge — fcbet216 .cqljKD EXACT */
+/* EN DIRECT badge â€” fcbet216 .cqljKD EXACT */
 .sb-en-direct-badge {
   background: rgb(251,51,51) !important;
   color: rgb(255,255,255) !important;
@@ -661,7 +673,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-chevron svg { width: 10px; height: 10px; }
 
-/* Country row — matches reference expanded view */
+/* Country row â€” matches reference expanded view */
 .sb-country-row {
   display: flex;
   align-items: center;
@@ -742,7 +754,7 @@ button.sb-btn-live.active .sb-live-badge,
   background: var(--sb-green);
   box-shadow: 0 0 4px var(--sb-green);
 }
-/* EP badge — Early Prices / Featured league */
+/* EP badge â€” Early Prices / Featured league */
 .sb-ep-badge {
   background: transparent;
   color: var(--sb-text-2);
@@ -803,9 +815,9 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-cotes-opt .sb-cotes-check { font-size: 14px; color: var(--sb-text-3); font-weight: 400; }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CENTER PANEL
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-center {
   flex: 1;
   display: flex;
@@ -820,7 +832,7 @@ button.sb-btn-live.active .sb-live-badge,
   background: var(--sb-bg-root);
 }
 
-/* ════ Date Row — dark BOXES design matching fcbet216 reference ════
+/* â•â•â•â• Date Row â€” dark BOXES design matching fcbet216 reference â•â•â•â•
    Uses <div> not <button> so Bootstrap cannot interfere */
 .sb-date-row {
   display: flex;
@@ -847,7 +859,7 @@ button.sb-btn-live.active .sb-live-badge,
   gap: 6px;
   padding: 9px 16px;
   background: rgb(49,49,49);
-  border-radius: 5px;                /* user spec — flatter pill */
+  border-radius: 5px;                /* user spec â€” flatter pill */
   color: rgba(255,255,255,0.55);
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
@@ -881,15 +893,15 @@ button.sb-btn-live.active .sb-live-badge,
   line-height: 1;
 }
 
-/* ════ Sport Nav — fcbet216 prelive style: scrollable row of individual
+/* â•â•â•â• Sport Nav â€” fcbet216 prelive style: scrollable row of individual
    tile-cards with gray bg + border, plus left/right chevron arrows on
    the edges. The whole strip sits in its own outer card with margin
-   below so it doesn't touch the Favoris row above or the cards below. ════ */
-/* ════ Sport nav — EXACT fcbet216 spec from user-provided DevTools CSS ════
+   below so it doesn't touch the Favoris row above or the cards below. â•â•â•â• */
+/* â•â•â•â• Sport nav â€” EXACT fcbet216 spec from user-provided DevTools CSS â•â•â•â•
    .ScrollerWrapper: background rgb(49,49,49), padding 8px, border-radius 6px
    .ScrollButton:    width/height 32px, border-radius 100px (circle),
                      background rgba(255,255,255,0.54), color rgba(0,0,0,0.87)
-   .TopSportBarButton: padding 8px, border-radius 4px, font Roboto 14px ════ */
+   .TopSportBarButton: padding 8px, border-radius 4px, font Roboto 14px â•â•â•â• */
 .sb-sport-nav {
   background: transparent;
   border: none;
@@ -925,7 +937,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-sport-scroll { display: contents; }
 .sb-sport-scroll::-webkit-scrollbar { height: 0; }
 
-/* Scroll chevrons — EXACT fcbet216 .ScrollButton spec the user supplied:
+/* Scroll chevrons â€” EXACT fcbet216 .ScrollButton spec the user supplied:
    width/height 32px, border-radius 100px (circular), light translucent
    white background, dark glyph. */
 .sb-nav-arrow {
@@ -966,7 +978,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 @keyframes sb-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
 
-/* Sport tile — EXACT fcbet216 .TopSportBarButton spec:
+/* Sport tile â€” EXACT fcbet216 .TopSportBarButton spec:
    padding 8px, border-radius 4px, Roboto 14px, no visible border.
    DEFAULT (idle) state = WHITE label + WHITE SVG (user spec image 2). */
 .sb-sport-item {
@@ -1036,7 +1048,7 @@ button.sb-btn-live.active .sb-live-badge,
   white-space: nowrap;
 }
 
-/* Streaming item — with LIVE dot badge */
+/* Streaming item â€” with LIVE dot badge */
 .sb-nav-streaming .sb-sport-icon { position: relative; }
 .sb-nav-live-dot {
   position: absolute;
@@ -1052,7 +1064,7 @@ button.sb-btn-live.active .sb-live-badge,
   50% { opacity: 0.6; transform: scale(0.85); }
 }
 
-/* En direct — bold label */
+/* En direct â€” bold label */
 .sb-nav-endirect { font-weight: 600; }
 
 /* Nav arrow */
@@ -1079,7 +1091,7 @@ button.sb-btn-live.active .sb-live-badge,
   padding: 0;
   display: block !important;
 }
-/* Cotes boostées header — fcbet216 style: dark card, border, padding,
+/* Cotes boostÃ©es header â€” fcbet216 style: dark card, border, padding,
    bolt icon + bold white title, exact height to match reference image 3. */
 .sb-boost-header {
   display: flex;
@@ -1099,7 +1111,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-boost-header svg { width: 15px; height: 15px; color: #ffffff; fill: #ffffff; flex-shrink: 0; }
 .sb-boost-header i { color: #ffffff; }
 
-/* Boost row — snap-to-one carousel (matches fcbet216 reference image 1).
+/* Boost row â€” snap-to-one carousel (matches fcbet216 reference image 1).
    Horizontal scrollbar is fully hidden; user swipes one card per view. */
 .sb-boost-row {
   display: flex;
@@ -1132,7 +1144,7 @@ button.sb-btn-live.active .sb-live-badge,
   position: relative;
 }
 .sb-boost-card:hover { background: rgb(66,66,66); }
-/* Active card — 1px blue LEFT border highlights the currently-snapped
+/* Active card â€” 1px blue LEFT border highlights the currently-snapped
    card, matches the fcbet216 reference. Driven by scroll position
    in JS (see sbUpdateBoostActive). */
 .sb-boost-card.is-active {
@@ -1162,7 +1174,7 @@ button.sb-btn-live.active .sb-live-badge,
   background: var(--sb-green);
 }
 
-/* ── EN DIRECT live card (slc) — one full-width slide ──
+/* â”€â”€ EN DIRECT live card (slc) â€” one full-width slide â”€â”€
    fcbet216 reference: gray rgb(49,49,49) surface, NO radius (user spec). */
 .slc {
   position: relative;
@@ -1182,7 +1194,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .slc:hover { background: rgb(58,58,58); }
 
-/* Sport badge — round circle on top-left of card, exact fcbet style */
+/* Sport badge â€” round circle on top-left of card, exact fcbet style */
 .slc-sport-badge {
   position: absolute;
   top: 8px;
@@ -1201,7 +1213,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .slc-sport-badge svg { width: 13px !important; height: 13px !important; }
 
-/* Header — expanded paddings so the full-width slide breathes */
+/* Header â€” expanded paddings so the full-width slide breathes */
 .slc-hdr {
   display: flex;
   align-items: center;
@@ -1243,7 +1255,7 @@ button.sb-btn-live.active .sb-live-badge,
 .slc-flag { width: 14px; height: 10px; object-fit: cover; border-radius: 1px; flex-shrink: 0; }
 .slc-lg { color: var(--sb-text-2); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
 
-/* Middle: teams stacked, jersey inline per row — expanded paddings */
+/* Middle: teams stacked, jersey inline per row â€” expanded paddings */
 .slc-mid {
   padding: 10px 16px 8px;
 }
@@ -1333,7 +1345,7 @@ button.sb-btn-live.active .sb-live-badge,
   line-height: 1.4;
   flex-shrink: 0;
 }
-/* COTES BOOSTÉES badge — EXACT fcbet216 blue rgb(33,151,243) */
+/* COTES BOOSTÃ‰ES badge â€” EXACT fcbet216 blue rgb(33,151,243) */
 .sb-badge-blue {
   display: inline-flex;
   align-items: center;
@@ -1350,7 +1362,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-boost-card .sb-meta-text  { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 500; line-height: 1.4; }
 .sb-boost-card .sb-teams-text { font-size: 14px; font-weight: 700; color: #fff; margin: 2px 0 6px; line-height: 1.25; }
 
-/* ── Boost picks list — TIMELINE STYLE ──
+/* â”€â”€ Boost picks list â€” TIMELINE STYLE â”€â”€
    Each green dot is connected to the next by a thin green vertical
    line (matches fcbet216 reference image 4). The connector is drawn
    as a ::after pseudo on every dot except the last, anchored to the
@@ -1395,7 +1407,7 @@ button.sb-btn-live.active .sb-live-badge,
   z-index: 1;
 }
 
-/* Boost odds pill — fcbet216 reference image 4 (23.10 >> 21.10).
+/* Boost odds pill â€” fcbet216 reference image 4 (23.10 >> 21.10).
    Tighter than before: smaller padding, smaller text, 16px BoostIcon. */
 .sb-odds-row {
   display: flex;
@@ -1420,7 +1432,7 @@ button.sb-btn-live.active .sb-live-badge,
   font-weight: 800;
   line-height: 1;
 }
-/* Double-chevron BoostIcon — EXACT fcbet216 SVG (16x16, currentColor green) */
+/* Double-chevron BoostIcon â€” EXACT fcbet216 SVG (16x16, currentColor green) */
 .sb-boost-arrow {
   color: var(--sb-green);
   display: inline-flex;
@@ -1431,11 +1443,11 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-odds-row i,
 .sb-odds-row svg { color: var(--sb-green); }
 
-/* ════════════════════════════════════════════════════════════
-   MATCH CARDS — Premium reference site layout
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MATCH CARDS â€” Premium reference site layout
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* League Section Header — matches reference: ☆ [flag] League · Country  [BB] — */
+/* League Section Header â€” matches reference: â˜† [flag] League Â· Country  [BB] â€” */
 .sb-league-section-hdr {
   display: flex;
   align-items: center;
@@ -1474,7 +1486,7 @@ button.sb-btn-live.active .sb-live-badge,
   font-style: italic;
 }
 
-/* ── Match Card Row ── */
+/* â”€â”€ Match Card Row â”€â”€ */
 .mc {
   background: var(--sb-bg-card);
   border: 1px solid var(--sb-border);
@@ -1491,8 +1503,8 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .mc:hover { background: #212121; }
 
-/* Top info row — compact, matches fcbet216 reference */
-/* ── Row 1: BB | EN DIRECT | time | spacer | ☆ ── */
+/* Top info row â€” compact, matches fcbet216 reference */
+/* â”€â”€ Row 1: BB | EN DIRECT | time | spacer | â˜† â”€â”€ */
 .mc-hdr-live {
   display: flex;
   align-items: center;
@@ -1532,7 +1544,7 @@ button.sb-btn-live.active .sb-live-badge,
   align-items: center;
 }
 
-/* ── Row 2: flag | league · country | right badge/icon ── */
+/* â”€â”€ Row 2: flag | league Â· country | right badge/icon â”€â”€ */
 .mc-league-row {
   display: flex;
   align-items: center;
@@ -1611,7 +1623,7 @@ button.sb-btn-live.active .sb-live-badge,
   min-width: 0;
 }
 
-/* Match live minute — plain text (e.g. "78'") matching fcbet216 reference */
+/* Match live minute â€” plain text (e.g. "78'") matching fcbet216 reference */
 .mc-live-min {
   color: var(--sb-text-2);
   font-size: 11px;
@@ -1632,7 +1644,7 @@ button.sb-btn-live.active .sb-live-badge,
   color: rgba(255,255,255,0.75);
   font-size: 11px;
 }
-/* EN DIRECT badge — fcbet216 .cqljKD EXACT */
+/* EN DIRECT badge â€” fcbet216 .cqljKD EXACT */
 .mc-live-badge {
   background: rgb(251,51,51);
   color: rgb(255,255,255);
@@ -1680,7 +1692,7 @@ button.sb-btn-live.active .sb-live-badge,
   gap: 12px;
 }
 
-/* ── H2H Teams layout: [jersey home | name] [score / VS] [name | jersey away] ── */
+/* â”€â”€ H2H Teams layout: [jersey home | name] [score / VS] [name | jersey away] â”€â”€ */
 .mc-h2h {
   display: flex;
   align-items: center;
@@ -1748,7 +1760,7 @@ button.sb-btn-live.active .sb-live-badge,
 .mc-team-row { display: flex; align-items: center; gap: 10px; }
 .mc-t-score { color: var(--sb-text-1); font-weight: 800; font-size: 15px; flex-shrink: 0; }
 
-/* Odds container — full width row at the bottom */
+/* Odds container â€” full width row at the bottom */
 .mc-odds-bot {
   display: flex;
   align-items: center;
@@ -1756,7 +1768,7 @@ button.sb-btn-live.active .sb-live-badge,
   width: 100%;
 }
 
-/* ── Label cell: "1", "X", "2", "Plus de 2.5", "Moins de 2.5" ── */
+/* â”€â”€ Label cell: "1", "X", "2", "Plus de 2.5", "Moins de 2.5" â”€â”€ */
 .mc-o-lbl-cell {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
@@ -1774,7 +1786,7 @@ button.sb-btn-live.active .sb-live-badge,
   flex-shrink: 0;
   user-select: none;
 }
-/* Over/Under label cells — wider for longer text */
+/* Over/Under label cells â€” wider for longer text */
 .mc-o-lbl-cell.ou {
   font-size: 11px;
   padding: 0 8px;
@@ -1782,7 +1794,7 @@ button.sb-btn-live.active .sb-live-badge,
 
 .mc-odd-btn {
   background: rgb(74, 74, 74);      /* fcbet216 .jgpuF exact */
-  border: 1px solid rgba(255,255,255,0);  /* transparent — no visible border */
+  border: 1px solid rgba(255,255,255,0);  /* transparent â€” no visible border */
   border-radius: 4px;               /* fcbet216 .jgpuF exact */
   height: 40px;
   display: flex;
@@ -1831,7 +1843,7 @@ button.sb-btn-live.active .sb-live-badge,
   color: var(--sb-green);
 }
 
-/* Chevron / more button — bordered cell to match */
+/* Chevron / more button â€” bordered cell to match */
 .sb-root button.mc-chevron-btn {
   background: var(--sb-bg-odd-btn);
   border: 1px solid var(--sb-border-light);
@@ -1857,7 +1869,7 @@ button.sb-btn-live.active .sb-live-badge,
   color: #fff; 
 }
 
-/* ── Prochainement Section ── */
+/* â”€â”€ Prochainement Section â”€â”€ */
 .sb-section-title {
   display: flex;
   align-items: center;
@@ -1874,7 +1886,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-section-icon svg { width: 24px; height: 24px; filter: invert(0.5); }
 
-/* Sport tabs for Prochainement — fcbet216 spec: rounded 12px, gray bg.
+/* Sport tabs for Prochainement â€” fcbet216 spec: rounded 12px, gray bg.
    Scrollbar is FULLY hidden (fcbet216 image 3 reference): the row still
    scrolls horizontally with touch/wheel, but no visible track. */
 .sb-upcoming-tabs {
@@ -1894,7 +1906,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-upcoming-tab {
   background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.04) !important;
-  border-radius: 12px !important;          /* 12px — user spec, not full pill */
+  border-radius: 12px !important;          /* 12px â€” user spec, not full pill */
   padding: 0 16px !important;
   height: 38px !important;
   display: inline-flex !important;
@@ -1919,7 +1931,7 @@ button.sb-btn-live.active .sb-live-badge,
   border-color: var(--sb-green) !important;
   color: var(--sb-green-font) !important;
 }
-/* ── Force icon visibility — Bootstrap 3 overrides display/overflow on svg ── */
+/* â”€â”€ Force icon visibility â€” Bootstrap 3 overrides display/overflow on svg â”€â”€ */
 .sb-upcoming-tab .sb-tab-icon {
   display: inline-flex !important;
   align-items: center !important;
@@ -1975,9 +1987,9 @@ button.sb-btn-live.active .sb-live-badge,
   padding-right: 28px;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    RIGHT SIDEBAR
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-right {
   width: var(--sb-right-w);
   height: 100vh;
@@ -1995,7 +2007,7 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-right::-webkit-scrollbar { width: 3px; }
 
 .sb-widget { border-bottom: 1px solid var(--sb-border); }
-/* ── Drawer handle + Fiche de Pari header ── */
+/* â”€â”€ Drawer handle + Fiche de Pari header â”€â”€ */
 .sb-drawer-handle {
   width: 40px; height: 4px;
   background: rgba(255,255,255,0.2);
@@ -2147,9 +2159,9 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-pop-market { font-size: 10px; color: var(--sb-text-3); margin-top: 1px; }
 .sb-pop-odd { font-size: 13px; font-weight: 700; color: var(--sb-green); }
 
-/* ════════════════════════════════════════════════════════════
-   SKELETONS — Full-fidelity shimmer matching real card anatomy
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SKELETONS â€” Full-fidelity shimmer matching real card anatomy
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-skeleton-container { padding: 4px 0; }
 
 /* Shimmer animation shared by all skeleton blocks */
@@ -2181,7 +2193,7 @@ button.sb-btn-live.active .sb-live-badge,
   border-radius: var(--sb-radius);
 }
 
-/* ── Group (one league block) */
+/* â”€â”€ Group (one league block) */
 .sb-sk-group {
   background: var(--sb-bg-card);
   border: 1px solid var(--sb-border);
@@ -2190,7 +2202,7 @@ button.sb-btn-live.active .sb-live-badge,
   overflow: hidden;
 }
 
-/* ── Header row inside group */
+/* â”€â”€ Header row inside group */
 .sb-sk-row {
   display: flex;
   align-items: center;
@@ -2201,7 +2213,7 @@ button.sb-btn-live.active .sb-live-badge,
   background: var(--sb-bg-alt);
 }
 
-/* ── Match row inside group */
+/* â”€â”€ Match row inside group */
 .sb-sk-match {
   display: flex;
   align-items: center;
@@ -2225,20 +2237,20 @@ button.sb-btn-live.active .sb-live-badge,
   flex-shrink: 0;
 }
 
-/* ── Inline placeholder blocks */
+/* â”€â”€ Inline placeholder blocks */
 .sb-sk-block {
   display: inline-block;
   height: 11px;
 }
 
-/* ── Odds buttons placeholder */
+/* â”€â”€ Odds buttons placeholder */
 .sb-sk-btn {
   width: 52px;
   height: 30px;
   border-radius: 4px;
 }
 
-/* ── Sidebar sport row skeleton */
+/* â”€â”€ Sidebar sport row skeleton */
 .sb-sk-sports-list { padding: 0; }
 .sb-sk-sport-row {
   display: flex;
@@ -2247,7 +2259,7 @@ button.sb-btn-live.active .sb-live-badge,
   border-bottom: 1px solid var(--sb-border);
 }
 
-/* ── Boosted odds placeholder */
+/* â”€â”€ Boosted odds placeholder */
 .sb-sk-boost-card {
   width: 280px;
   height: 130px;
@@ -2257,9 +2269,9 @@ button.sb-btn-live.active .sb-live-badge,
   border: 1px solid var(--sb-border);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CHAMPIONSHIP VIEW
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .mc-more-link {
   background: transparent;
   border: none;
@@ -2269,9 +2281,9 @@ button.sb-btn-live.active .sb-live-badge,
   outline: none;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BET SLIP
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-slip-item {
   background: var(--sb-bg-alt);
   border-radius: var(--sb-radius);
@@ -2281,11 +2293,11 @@ button.sb-btn-live.active .sb-live-badge,
   position: relative;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MOBILE
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* Mobile-only top bar — shown only on mobile, hidden on desktop */
+/* Mobile-only top bar â€” shown only on mobile, hidden on desktop */
 .sb-mobile-topbar {
   display: none;
   gap: 6px;
@@ -2293,7 +2305,7 @@ button.sb-btn-live.active .sb-live-badge,
   background: rgb(49, 49, 49) !important;
 }
 
-/* Mobile-only sidebar content (search, leagues, tabs) — hidden on desktop */
+/* Mobile-only sidebar content (search, leagues, tabs) â€” hidden on desktop */
 .sb-mobile-sidebar-content {
   display: none;
   flex-direction: column;
@@ -2373,13 +2385,11 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-mob-league-tabs.collapsed .sb-mob-my-leagues,
 .sb-mob-league-tabs.collapsed .sb-mob-best-leagues { display: none !important; }
 
-/* Scrollable league list on mobile */
+/* Scrollable league list on mobile — no max-height, let it grow naturally */
 .sb-mob-best-leagues .sb-tl-list {
-  max-height: 55vh;
-  overflow-y: auto;
+  overflow: visible;
 }
-.sb-mob-best-leagues .sb-tl-list::-webkit-scrollbar { width: 3px; }
-.sb-mob-best-leagues .sb-tl-list::-webkit-scrollbar-thumb { background: var(--sb-border-light); border-radius: 3px; }
+.sb-mob-best-leagues .sb-tl-list::-webkit-scrollbar { display: none; }
 
 .sb-mob-empty-state {
   text-align: center;
@@ -2395,7 +2405,7 @@ button.sb-btn-live.active .sb-live-badge,
   color: var(--sb-text-2);
   font-family: 'Poppins', sans-serif;
 }
-/* Mobile Top Bar — fcbet216 design
+/* Mobile Top Bar â€” fcbet216 design
    Bar is gray rgb(49,49,49); inactive buttons sit on a darker recess so
    they stay visible against the gray bar. */
 .sb-mobile-topbar {
@@ -2421,10 +2431,10 @@ button.sb-btn-live.active .sb-live-badge,
   outline: none;
   flex-shrink: 0;
 }
-/* ── Mobile top bar: EQUAL flex share — all 3 buttons same width.
+/* â”€â”€ Mobile top bar: EQUAL flex share â€” all 3 buttons same width.
    Bar surface = rgb(49,49,49); chips sit one step lighter (rgb(58,58,58))
-   so they read as the SAME gray family as the bar — no near-black recess.
-   EN DIRECT badge sits centered inside its chip with no extra icon. ── */
+   so they read as the SAME gray family as the bar â€” no near-black recess.
+   EN DIRECT badge sits centered inside its chip with no extra icon. â”€â”€ */
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
 .sb-mobile-topbar .sb-btn-stats {
@@ -2440,7 +2450,7 @@ button.sb-btn-live.active .sb-live-badge,
   gap: 0 !important;
   justify-content: center !important;
 }
-/* Active state — keeps the same flex share, just changes color */
+/* Active state â€” keeps the same flex share, just changes color */
 .sb-mobile-topbar .sb-btn-home.active,
 .sb-mobile-topbar .sb-btn-live.active {
   background: #70f669 !important;
@@ -2448,7 +2458,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 /* Defensive: hide any leftover soccer-icon span inside the EN DIRECT button */
 .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport { display: none !important; }
-/* EN DIRECT badge inside button when NOT active — fcbet216 .cqljKD EXACT */
+/* EN DIRECT badge inside button when NOT active â€” fcbet216 .cqljKD EXACT */
 .sb-mobile-topbar .sb-btn-live:not(.active) .sb-live-badge {
   background: rgb(251,51,51) !important;
   background-color: rgb(251,51,51) !important;
@@ -2464,7 +2474,7 @@ button.sb-btn-live.active .sb-live-badge,
   text-transform: uppercase !important;
   white-space: nowrap !important;
 }
-/* EN DIRECT badge when ACTIVE — KEEP the red pill (fcbet216 image 3 ref).
+/* EN DIRECT badge when ACTIVE â€” KEEP the red pill (fcbet216 image 3 ref).
    Same look as inactive: rgb(251,51,51) bg, white text, pill shape. */
 .sb-mobile-topbar .sb-btn-live.active .sb-live-badge,
 .sb-mobile-topbar button.sb-btn-live.active .sb-live-badge,
@@ -2526,10 +2536,10 @@ button.sb-btn-live.active .sb-live-badge,
   margin-left: 4px;
 }
 
-/* ── Floating bet badge — appears bottom-right when bets exist ── */
-/* ── Floating Fiche de Pari button — fcbet style ── */
-/* ── Floating bet slip FAB — circular dark button + green count pill +
-   "Fiche de pari" label, matches fcbet216 reference image. ── */
+/* â”€â”€ Floating bet badge â€” appears bottom-right when bets exist â”€â”€ */
+/* â”€â”€ Floating Fiche de Pari button â€” fcbet style â”€â”€ */
+/* â”€â”€ Floating bet slip FAB â€” circular dark button + green count pill +
+   "Fiche de pari" label, matches fcbet216 reference image. â”€â”€ */
 .sb-floating-bet-badge {
   display: none;
   position: fixed;
@@ -2545,7 +2555,7 @@ button.sb-btn-live.active .sb-live-badge,
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-/* Collapsed slip body — keeps the header visible but hides the
+/* Collapsed slip body â€” keeps the header visible but hides the
    tabs / numpad / cart so the user can see the rest of the page. */
 .sb-slip-panel.slip-collapsed > div:not(.sb-slip-hdr) { display: none !important; }
 .sb-slip-panel.slip-collapsed .sb-slip-hdr-close { transform: rotate(180deg); }
@@ -2595,14 +2605,14 @@ button.sb-btn-live.active .sb-live-badge,
   white-space: nowrap;
 }
 
-/* On desktop, always show right sidebar — hide floating badge */
+/* On desktop, always show right sidebar â€” hide floating badge */
 @media (min-width: 1101px) {
   .sb-floating-bet-badge { display: none !important; }
 }
 
 @media (max-width: 1100px) {
   .sb-mob-footer { display: flex !important; }
-  /* Mobile top bar — FLEX layout, active tab expands (matches fcbet216 reference) */
+  /* Mobile top bar â€” FLEX layout, active tab expands (matches fcbet216 reference) */
   .sb-mobile-topbar {
     display: flex !important;
     gap: 8px !important;
@@ -2624,7 +2634,7 @@ button.sb-btn-live.active .sb-live-badge,
     padding: 0 !important;
     justify-content: center !important;
   }
-  /* Active state — keeps the same flex share, just changes color */
+  /* Active state â€” keeps the same flex share, just changes color */
   .sb-mobile-topbar .sb-btn-home.active,
   .sb-mobile-topbar .sb-btn-live.active {
     background: #70f669 !important;
@@ -2639,9 +2649,9 @@ button.sb-btn-live.active .sb-live-badge,
   .mc-t-name { font-size: 12px; }
   .sb-center-scroll { padding: 8px 8px 80px !important; }
 
-  /* ── Single-scroll: ONLY override overflow-y, keep position:fixed for SPA ── */
+  /* â”€â”€ Single-scroll: ONLY override overflow-y, keep position:fixed for SPA â”€â”€ */
   /* body.mk-game-no-chrome #mkApp has position:fixed; height:100vh; overflow:hidden */
-  /* We change ONLY overflow — the fixed container becomes a scroll viewport */
+  /* We change ONLY overflow â€” the fixed container becomes a scroll viewport */
   body.mk-game-no-chrome #mkApp {
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -2661,10 +2671,10 @@ button.sb-btn-live.active .sb-live-badge,
     border-bottom: 1px solid #2a2a2a !important;
   }
 
-  /* Left sidebar — slides in from left */
+  /* Left sidebar â€” slides in from left */
   .sb-left { position: fixed; top: 0; bottom: 0; left: 0; z-index: 2000; transform: translateX(-100%); width: 280px; }
   .sb-left.open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,0.9); }
-  /* Right panel (Fiche de Pari) — BOTTOM DRAWER on mobile */
+  /* Right panel (Fiche de Pari) â€” BOTTOM DRAWER on mobile */
   .sb-right {
     position: fixed !important;
     bottom: 0 !important; left: 0 !important; right: 0 !important; top: auto !important;
@@ -2694,21 +2704,21 @@ button.sb-btn-live.active .sb-live-badge,
     z-index: -1;
     pointer-events: all;
   }
-  /* Slip panel fills drawer — secondary widgets scroll below */
+  /* Slip panel fills drawer â€” secondary widgets scroll below */
   .sb-slip-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
   #sb-slip-body { overflow-y: auto; flex: 1; min-height: 0; -webkit-overflow-scrolling: touch; }
   .sb-right-secondary { overflow-y: auto; flex-shrink: 0; }
 
-  /* Championship grid — 3 cols on tablet */
+  /* Championship grid â€” 3 cols on tablet */
   .sb-champ-cat-grid { grid-template-columns: repeat(3, 1fr); }
 
-  /* Mobile sidebar content — full width block, no max-height constraint */
+  /* Mobile sidebar content â€” full width block, no max-height constraint */
   .sb-mobile-sidebar-content {
     flex-direction: column;
     width: 100%;
     background: var(--sb-bg-root);
   }
-  /* League list full height — scrolls with page, no cap */
+  /* League list full height â€” scrolls with page, no cap */
   .sb-mob-best-leagues .sb-tl-list {
     max-height: none !important;
     overflow: visible !important;
@@ -2725,7 +2735,7 @@ button.sb-btn-live.active .sb-live-badge,
   .mc-o-lbl-cell { padding: 0 6px; font-size: 11px; height: 32px; }
   .sb-root button.mc-o-val-cell { padding: 0 6px; font-size: 11px; height: 32px; min-width: 38px; }
   .sb-root button.mc-more-btn { width: 28px; height: 32px; }
-  /* Championship grid — 2 cols on mobile, Bootstrap-proof */
+  /* Championship grid â€” 2 cols on mobile, Bootstrap-proof */
   .sb-champ-cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .sb-root .sb-champ-cat-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
   .sb-root .sb-ccg-btn { height: 48px !important; min-height: 48px !important; padding: 0 12px !important; box-sizing: border-box !important; font-size: 13px !important; }
@@ -2736,7 +2746,7 @@ button.sb-btn-live.active .sb-live-badge,
   .sb-sport-icon svg { width: 16px; height: 16px; }
 }
 
-/* ── EN DIRECT live cards container ────────────────────────────
+/* â”€â”€ EN DIRECT live cards container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    SLIDE-PER-ONE horizontal carousel (user spec): one card occupies
    the FULL viewport width at a time, swipe to advance. Scroll-snap
    guarantees the next card aligns to the start, so you never see
@@ -2752,21 +2762,21 @@ button.sb-btn-live.active .sb-live-badge,
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0 0 4px;
-  margin: 0 0 16px;            /* breathing room before the next section (Cotes boostées) */
+  margin: 0 0 16px;            /* breathing room before the next section (Cotes boostÃ©es) */
   width: 100%;
 }
 .sb-en-direct-row::-webkit-scrollbar { height: 0 !important; width: 0 !important; display: none; }
 .sb-en-direct-row:empty { display: none; }
 
-/* ════════════════════════════════════════════════════════════
-   LIVE CARDS — fcbet216 reference style, one card per slide
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   LIVE CARDS â€” fcbet216 reference style, one card per slide
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .slc {
   position: relative !important;
   background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.04) !important;
   border-radius: 10px !important;
-  /* "1.5 cards visible" — full first card + half of the next, like
+  /* "1.5 cards visible" â€” full first card + half of the next, like
      the fcbet216 reference. flex-basis controls the visible width:
      ~72% leaves the next card peeking from the right edge.
      scroll-snap-align: start keeps each card snapping cleanly. */
@@ -2786,7 +2796,7 @@ button.sb-btn-live.active .sb-live-badge,
 .slc:first-child { margin-left: 0 !important; }
 .slc:hover { background: rgb(58,58,58) !important; }
 
-/* Sport badge — sits INSIDE the card (no negative offset) so it isn't
+/* Sport badge â€” sits INSIDE the card (no negative offset) so it isn't
    clipped by the carousel's scroll-snap container */
 .slc-sport-badge {
   position: absolute !important;
@@ -2809,7 +2819,7 @@ button.sb-btn-live.active .sb-live-badge,
 .slc-odd-lbl { font-size: 10px !important; font-weight: 500 !important; color: rgba(255,255,255,0.50) !important; }
 .slc-odd-val { font-size: 14px !important; font-weight: 700 !important; color: rgb(113,246,105) !important; }
 
-/* Header row — tightened for fcbet216 image 3 compact look */
+/* Header row â€” tightened for fcbet216 image 3 compact look */
 .slc-hdr {
   display: flex !important;
   align-items: center !important;
@@ -2827,7 +2837,7 @@ button.sb-btn-live.active .sb-live-badge,
   border-radius: 3px !important;
   flex-shrink: 0 !important;
 }
-/* EN DIRECT — fcbet216 .cqljKD EXACT spec the user provided */
+/* EN DIRECT â€” fcbet216 .cqljKD EXACT spec the user provided */
 .slc-live-badge {
   background: rgb(251,51,51) !important;
   color: rgb(255,255,255) !important;
@@ -2850,14 +2860,14 @@ button.sb-btn-live.active .sb-live-badge,
 .slc-sport-ico svg { width: 14px !important; height: 14px !important; }
 .slc-lg { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; flex: 1 !important; min-width: 0 !important; }
 
-/* Middle — overlapping jerseys LEFT + stacked teams RIGHT (fcbet216 image 3) */
+/* Middle â€” overlapping jerseys LEFT + stacked teams RIGHT (fcbet216 image 3) */
 .slc-mid {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
   padding: 4px 14px 8px !important;
 }
-/* Left: two jersey circles — fcbet216 iphone ref: side-by-side with a clear
+/* Left: two jersey circles â€” fcbet216 iphone ref: side-by-side with a clear
    gap, NOT overlapping. */
 .slc-jerseys-overlap {
   display: flex !important;
@@ -2925,7 +2935,7 @@ button.sb-btn-live.active .sb-live-badge,
 .slc-stats-ico { flex-shrink: 0 !important; color: rgba(255,255,255,0.45) !important; display: flex !important; align-items: center !important; }
 .slc-stats-ico svg { width: 13px !important; height: 13px !important; }
 
-/* Legacy — hide replaced elements */
+/* Legacy â€” hide replaced elements */
 .slc-overlapping-jerseys, .slc-j, .slc-j1, .slc-j2 { display: none !important; }
 .slc-teams-horiz { display: none !important; }
 .slc-right       { display: none !important; }
@@ -2938,7 +2948,7 @@ button.sb-btn-live.active .sb-live-badge,
   gap: 6px !important;
   padding: 6px 16px 14px !important;
 }
-/* SLC odds chip — fcbet216 .glRfhP EXACT spec the user provided
+/* SLC odds chip â€” fcbet216 .glRfhP EXACT spec the user provided
    bg rgb(74,74,74), value rgb(113,246,105), radius 4px, transparent
    border, no shadow. */
 body .sb-root .slc-odd-btn,
@@ -2976,10 +2986,10 @@ body .sb-root button.slc-odd-btn,
 body .sb-root .slc-odd-lbl { color: rgba(255,255,255,0.55) !important; font-family: 'Roboto',sans-serif !important; font-size: 12px !important; font-weight: 500 !important; }
 body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'Roboto',sans-serif !important; font-size: 14px !important; font-weight: 700 !important; }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MATCH DETAIL ENHANCEMENTS
    Period row, counting timer, stats bar, pitch viewer
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 /* Period + Timer row */
 .md-period-row {
@@ -3002,8 +3012,8 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   font-variant-numeric: tabular-nums;
 }
 
-/* Stats bar — fcbet216 reference (image 3):
- *   1 ⚡ 1 | 1 🟨 0 | 0 🟥 0 | 1 ⚑ 0 | 4 ⚽ 2
+/* Stats bar â€” fcbet216 reference (image 3):
+ *   1 âš¡ 1 | 1 ðŸŸ¨ 0 | 0 ðŸŸ¥ 0 | 1 âš‘ 0 | 4 âš½ 2
  * Five evenly-spaced cells separated by hairline dividers, the
  * counters use tabular-nums so digits stay aligned even when they
  * tick up. */
@@ -3040,7 +3050,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-si-ic--atk  { color: rgb(113,246,105); }
 .md-si-ic--ball { color: rgba(255,255,255,0.92); }
 
-/* ── Right-panel match viewer ─────────────────────────── */
+/* â”€â”€ Right-panel match viewer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .sb-match-viewer {
   border-bottom: 1px solid var(--sb-border);
   background: #121212;
@@ -3141,9 +3151,9 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .sb-vt i { font-size: 10px; }
 .sb-vt svg { width: 10px; height: 10px; }
 
-/* ════════════════════════════════════════════════════════════
-   MATCH DETAIL VIEW  — images 3 & 4
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MATCH DETAIL VIEW  â€” images 3 & 4
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .md-view {
   display: flex;
   flex-direction: column;
@@ -3300,7 +3310,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-period-txt { font-weight: 600; color: var(--sb-text-1); }
 .md-period-sep { color: var(--sb-text-3); }
 
-/* Quick filter tab row (Flash / 1min / Marchés rapides) */
+/* Quick filter tab row (Flash / 1min / MarchÃ©s rapides) */
 .md-quick-tabs {
   display: flex;
   align-items: center;
@@ -3333,8 +3343,8 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-qt:hover { background: rgba(255,255,255,0.09); color: var(--sb-text-1); }
 .md-qt.active { background: var(--sb-green) !important; color: #000 !important; border-color: var(--sb-green) !important; font-weight: 600; }
 
-/* ── Bet Builder — sticky footer (fixed to bottom of .md-view) ── */
-/* ── Bet Builder sticky panel — exact fcbet reference ── */
+/* â”€â”€ Bet Builder â€” sticky footer (fixed to bottom of .md-view) â”€â”€ */
+/* â”€â”€ Bet Builder sticky panel â€” exact fcbet reference â”€â”€ */
 .md-bb-sticky {
   position: sticky;
   bottom: 0;
@@ -3521,14 +3531,14 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 }
 
 /* Market tabs */
-/* Tab bar wrapper + scroll arrow buttons — fcbet style */
-/* ────────────────────────────────────────────────────────────────
- * Match-detail tabs row — fcbet216 parity
- * Layout: [search] Tout Principaux Bet Builder Teams H2H ...  [ⓘ]
- * All buttons share consistent 32–36px pill design with gap: 8px.
+/* Tab bar wrapper + scroll arrow buttons â€” fcbet style */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * Match-detail tabs row â€” fcbet216 parity
+ * Layout: [search] Tout Principaux Bet Builder Teams H2H ...  [â“˜]
+ * All buttons share consistent 32â€“36px pill design with gap: 8px.
  * Every rule below uses !important to defeat Bootstrap's `.btn` /
  * `button` resets that previously made tabs flush together.
- * ──────────────────────────────────────────────────────────────── */
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .md-tabs-wrap {
   display: flex !important;
   align-items: center !important;
@@ -3581,7 +3591,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-tab-search-btn svg { width: 14px !important; height: 14px !important; color: #000 !important; }
 .md-tab-search-btn:hover { background: #62de58 !important; }
 
-/* Inline search panel — hidden by default, shown only when the
+/* Inline search panel â€” hidden by default, shown only when the
    wrapper has the .md-tabs-wrap--search class. Selectors include
    .md-tabs-wrap to beat the baseline !important on .md-tabs-row. */
 .md-search-panel {
@@ -3669,7 +3679,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   padding: 8px 14px !important;
 }
 
-/* Red ⓘ alert button at the end of the tabs row */
+/* Red â“˜ alert button at the end of the tabs row */
 .md-tab-info-btn {
   background: transparent !important;
   border: 1.5px solid #f04a4a !important;
@@ -3711,14 +3721,14 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-tab-info-icon--lock svg { width: 14px; height: 14px; }
 .md-tab-info-icon--star { width: 16px; height: 16px; color: rgba(255,255,255,0.65); font-size: 14px; }
 
-/* ════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  * COMPACT match-detail header (fcbet216 parity, user image 2/4/5)
  * Layout: breadcrumb row + a single dark card with:
  *   1) flag + league + date
- *   2) (live only) ⓘ + period + green timer
+ *   2) (live only) â“˜ + period + green timer
  *   3) ABBR [shirt] score [shirt] ABBR
  *   4) stats bar (corners, cards, attacks, shots)
- * ════════════════════════════════════════════════════════════════ */
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .md-view--compact { padding: 12px 10px 0 !important; background: #0f0f0f; }
 .md-view--compact .md-bc-row {
   display: flex !important;
@@ -3756,7 +3766,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   font-weight: 700 !important;
 }
 
-/* Match-detail compact card — fcbet216 reference.
+/* Match-detail compact card â€” fcbet216 reference.
    Surface uses a slightly cooler/lighter dark gray (rgb(40,42,48)) to
    match fcbet's elevated card look, with a subtle inner top-strip via
    a 1px bottom border under the league header that visually separates
@@ -3785,9 +3795,9 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .md-card-league { flex: 1 1 auto !important; color: rgba(255,255,255,0.72) !important; font-size: 13px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600 !important; }
 .md-card-date   { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; flex-shrink: 0; }
 
-/* Period + timer row — fcbet216 image 3 reference.
- *   ⓘ  1ère mi-temps | 37:20
- * ⓘ icon = circled 3-dots in soft white, period text in bright
+/* Period + timer row â€” fcbet216 image 3 reference.
+ *   â“˜  1Ã¨re mi-temps | 37:20
+ * â“˜ icon = circled 3-dots in soft white, period text in bright
  * white, vertical pipe in dim white, timer in green with tabular
  * digits so the seconds tick without horizontal jitter. */
 .md-card-period {
@@ -3871,10 +3881,10 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 .sb-root .md-markets { padding: 10px 10px 80px !important; background: #0f0f0f !important; }
 .md-markets--loading { opacity: 0.55 !important; pointer-events: none !important; transition: opacity 0.12s ease !important; }
 
-/* Main content area — stable height during skeleton → content swap */
+/* Main content area â€” stable height during skeleton â†’ content swap */
 #sb-matches-body { contain: layout style; min-height: 240px; }
 
-/* Market card — matches fcbet216 DevTools-extracted CSS exactly:
+/* Market card â€” matches fcbet216 DevTools-extracted CSS exactly:
  *   background: rgb(49,49,49); border: 0; border-radius: 6px;
  * The card is the LIGHTER gray, the odds pills inside sit on a
  * DARKER gray so they read as distinct hit-targets. We had the
@@ -3922,7 +3932,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
 }
 .md-mkt-ctrl { color: rgba(255,255,255,0.45) !important; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; min-width: 18px; }
 .md-mkt-ctrl svg { width: 14px !important; height: 14px !important; }
-/* Chevron-down points down when collapsed, minus when open — exact fcbet216 UX */
+/* Chevron-down points down when collapsed, minus when open â€” exact fcbet216 UX */
 .md-mkt-ctrl--closed { color: rgba(255,255,255,0.55) !important; }
 .md-mkt-ctrl--open { color: rgba(255,255,255,0.55) !important; }
 .md-mkt-body { padding: 2px 10px 12px !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
@@ -3935,7 +3945,7 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   padding: 4px 10px; border-radius: 4px; margin: 4px 0 2px;
 }
 
-/* Odds pill — fcbet216 reference. The card is the LIGHTER gray
+/* Odds pill â€” fcbet216 reference. The card is the LIGHTER gray
  * (rgb 49,49,49) and the pill is a DARKER gray (rgb 38,38,38)
  * with a barely-visible 1px outline so it reads as a distinct
  * hit-target on the card background.
@@ -4004,9 +4014,9 @@ button.md-odd-btn,
 .md-o-val  { font-size: 15px !important; font-weight: 700 !important; color: rgb(113,246,105) !important; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; font-family: 'Roboto', sans-serif !important; line-height: 1.2 !important; letter-spacing: 0 !important; }
 .md-hc     { color: rgba(255,255,255,0.45) !important; font-size: 11px !important; margin-left: 4px !important; font-weight: 400 !important; font-family: 'Roboto', sans-serif !important; }
 
-/* Odds direction arrow — shown briefly when the live odds move.
- * sel._change === 'up'   → green ▲ next to the value
- * sel._change === 'down' → red   ▼ next to the value
+/* Odds direction arrow â€” shown briefly when the live odds move.
+ * sel._change === 'up'   â†’ green â–² next to the value
+ * sel._change === 'down' â†’ red   â–¼ next to the value
  * The arrow fades back to neutral after ~6s via the .md-odd-flash
  * animation, matching fcbet216's transient indicator behaviour. */
 .md-o-arrow { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; font-size: 9px; }
@@ -4017,7 +4027,7 @@ button.md-odd-btn,
 .md-odd-btn.md-odd-flash--up   { animation: mdOddFlashUp   2.4s ease-out 1; }
 .md-odd-btn.md-odd-flash--down { animation: mdOddFlashDown 2.4s ease-out 1; }
 
-/* Handicap slider — fcbet216 reference: centered value above the
+/* Handicap slider â€” fcbet216 reference: centered value above the
    track, bright green progress with a large white-ringed dot. */
 .md-slider-wrap {
   display: flex !important;
@@ -4068,10 +4078,10 @@ button.md-odd-btn,
   border: none !important;
 }
 
-/* ════════════════════════════════════════════════════════════
-   BET SLIP — Altenar reference design (Simple/Combiné/Système)
-   ════════════════════════════════════════════════════════════ */
-/* ── Fiche de Pari — fcbet216 exact match ── */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BET SLIP â€” Altenar reference design (Simple/CombinÃ©/SystÃ¨me)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* â”€â”€ Fiche de Pari â€” fcbet216 exact match â”€â”€ */
 body .sb-root .slip-tabs,
 .sb-root .slip-tabs,
 .slip-tabs {
@@ -4238,7 +4248,7 @@ body .sb-root .slip-gagner strong,
   font-weight: 700 !important;
 }
 
-/* Stake editor — numpad hidden until input focused (mobile); never on desktop */
+/* Stake editor â€” numpad hidden until input focused (mobile); never on desktop */
 .slip-stake-editor { display: none !important; }
 .slip-stake-editor.slip-stake-editor--open { display: block !important; }
 @media (min-width: 1101px) {
@@ -4350,7 +4360,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
   line-height: 1.35;
   flex: 1;
 }
-/* [−][B][×] action buttons */
+/* [âˆ’][B][Ã—] action buttons */
 .slip-item-btns {
   display: flex;
   align-items: center;
@@ -4358,7 +4368,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
   flex-shrink: 0;
   margin-top: 1px;
 }
-/* Include/exclude toggle — like a checkbox. Green minus when included,
+/* Include/exclude toggle â€” like a checkbox. Green minus when included,
    empty outline when excluded (fcbet216 reference image 3 vs 4). */
 .slip-excl-btn {
   width: 22px; height: 22px;
@@ -4377,7 +4387,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
 .slip-excl-btn.excluded {
   background: transparent;
   border-color: rgba(112,246,105,0.55);
-  color: transparent;             /* hide the "−" sign when excluded */
+  color: transparent;             /* hide the "âˆ’" sign when excluded */
 }
 .slip-excl-btn.excluded:hover { background: rgba(112,246,105,0.06); }
 .slip-banker-btn {
@@ -4420,7 +4430,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
 }
 .slip-sel-lbl { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
 .slip-sel-odds { font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
-/* Odds pill — used in slip selection rows. Colored frame + arrow when
+/* Odds pill â€” used in slip selection rows. Colored frame + arrow when
    odds shifted up (green) or down (red) since the bet was added. */
 .slip-odds-pill {
   font-size: 13px;
@@ -4448,7 +4458,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
   background: rgba(251,51,51,0.10);
 }
 .slip-odds-arrow { display: inline-block; }
-/* Combiné mode visually combines all legs into one ticket — highlighted
+/* CombinÃ© mode visually combines all legs into one ticket â€” highlighted
    warmer background per fcbet216 reference image. */
 .slip-item.combi {
   background: rgba(140,90,80,0.28) !important;
@@ -4464,7 +4474,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
   padding: 32px 16px 24px;
   color: rgba(255,255,255,0.55);
 }
-/* Combiné quick stake chips — fcbet216 reference image 8 */
+/* CombinÃ© quick stake chips â€” fcbet216 reference image 8 */
 .slip-quick-stakes {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -4487,8 +4497,8 @@ body .sb-root .slip-sys-row .slip-stake-inp,
 .slip-quick-stake:hover { background: rgb(60,60,60); }
 .slip-quick-stake:active { background: rgb(40,40,40); }
 
-/* ── Virtual stake numpad — fcbet216 image 2 / 8 ──
-   7 columns: keys 1–9, 0, ".", "⌫" fill rows 1–2, OK spans both rows
+/* â”€â”€ Virtual stake numpad â€” fcbet216 image 2 / 8 â”€â”€
+   7 columns: keys 1â€“9, 0, ".", "âŒ«" fill rows 1â€“2, OK spans both rows
    on column 7. */
 .slip-numpad {
   display: grid;
@@ -4550,7 +4560,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
 .slip-leg-del { background: none; border: none; color: rgba(255,255,255,0.35); cursor: pointer; font-size: 13px; padding: 0 2px; outline: none; }
 .slip-leg-del:hover { color: rgb(251,51,51); }
 
-/* Odds changed warning — orange background (exact fcbet) */
+/* Odds changed warning â€” orange background (exact fcbet) */
 .slip-odds-warning {
   margin: 0 12px 8px;
   padding: 10px 12px;
@@ -4572,7 +4582,7 @@ body .sb-root .slip-sys-row .slip-stake-inp,
 
 .slip-sys-lbl { font-size: 14px; font-weight: 700; color: #fff; min-width: 55px; }
 .slip-sys-cnt { font-size: 13px; color: rgba(255,255,255,0.5); }
-/* Excluded bet card — dimmed */
+/* Excluded bet card â€” dimmed */
 .slip-item.excluded { opacity: 0.45; }
 .slip-item.excluded .slip-sel-odds { text-decoration: line-through; }
 
@@ -4648,9 +4658,9 @@ body .sb-root .slip-place-btn {
 .slip-place-btn:active,
 .sb-root .slip-place-btn:active { transform: translateY(0) !important; }
 
-/* ════════════════════════════════════════════════════════════
-   CHAMPIONSHIP VIEW — Reference: fcbet216.com/prelive?page=championship
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CHAMPIONSHIP VIEW â€” Reference: fcbet216.com/prelive?page=championship
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-champ-view { padding-bottom: 20px; }
 
 /* Breadcrumb */
@@ -4675,7 +4685,7 @@ body .sb-root .slip-place-btn {
   font-size: 14px;
 }
 .sb-champ-back-btn:hover { background: var(--sb-border); }
-/* Breadcrumb pills — bordered dark buttons matching fcbet216 */
+/* Breadcrumb pills â€” bordered dark buttons matching fcbet216 */
 .sb-root button.sb-bc-pill {
   background: #1c1c1c;
   border: 1px solid rgba(255,255,255,0.10);
@@ -4694,7 +4704,7 @@ body .sb-root .slip-place-btn {
 .sb-root button.sb-bc-pill.sb-champ-back-btn { padding: 7px 10px; }
 .sb-bc-pill.sb-champ-back-btn svg { width: 13px; height: 13px; }
 
-/* Top tabs: Cotes de match | Victoire finale | Cotes boostées */
+/* Top tabs: Cotes de match | Victoire finale | Cotes boostÃ©es */
 .sb-champ-top-tabs {
   display: flex;
   align-items: center;
@@ -4728,7 +4738,7 @@ body .sb-root .slip-place-btn {
 .sb-ctt:hover:not(.active) { color: var(--sb-text-1) !important; }
 .sb-ctt-more { color: var(--sb-text-2); padding: 8px 6px; font-size: 16px; cursor: pointer; }
 
-/* ── Sub-nav: Par Ligue | Par Heure ──────────────────────────────────
+/* â”€â”€ Sub-nav: Par Ligue | Par Heure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Bootstrap on the host page resets <button> backgrounds, so every
    championship-view chip must use `.sb-root` + `!important` to survive
    the cascade. Pills are rounded 8px, dark gray when inactive,
@@ -4769,9 +4779,9 @@ body .sb-root .slip-place-btn {
   color: #fff !important;
 }
 
-/* ── Date filter row — horizontal scroll, NOT wrap.
+/* â”€â”€ Date filter row â€” horizontal scroll, NOT wrap.
    fcbet216 keeps all dates on a single line that the user can swipe;
-   wrapping made them look like prose ("Tout Lun, 25/05 Mar, 26/05…"). */
+   wrapping made them look like prose ("Tout Lun, 25/05 Mar, 26/05â€¦"). */
 .sb-root .sb-champ-date-row {
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -4814,7 +4824,7 @@ body .sb-root .slip-place-btn {
   color: #fff !important;
 }
 
-/* ── Market type tabs (Tout / Principaux / Spéciale joueurs / …) ─── */
+/* â”€â”€ Market type tabs (Tout / Principaux / SpÃ©ciale joueurs / â€¦) â”€â”€â”€ */
 .sb-root .sb-champ-mkt-tabs {
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -4858,7 +4868,7 @@ body .sb-root .slip-place-btn {
   color: #fff !important;
 }
 
-/* ── Market category grid — fcbet216: 2-col mobile, 3-col tablet,
+/* â”€â”€ Market category grid â€” fcbet216: 2-col mobile, 3-col tablet,
    6-col on very wide. Inactive cells are dark gray rounded boxes;
    the active cell turns fcbet-green with bold black text. */
 .sb-root .sb-champ-cat-grid {
@@ -4918,10 +4928,10 @@ body .sb-root .slip-place-btn {
 }
 .sb-champ-col-sel .sb-market-sel { flex: 1; }
 
-/* ── Championship market dropdown — fcbet216 .HeaderMarketsSelectorContainer
-   A single dark card with a header (active market label + "−"/"▾") and a
+/* â”€â”€ Championship market dropdown â€” fcbet216 .HeaderMarketsSelectorContainer
+   A single dark card with a header (active market label + "âˆ’"/"â–¾") and a
    collapsible body that lists the OTHER markets as clickable rows. The
-   matches list is rendered separately below this card. ──────────────── */
+   matches list is rendered separately below this card. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* fcbet216 .HeaderMarketsSelectorContainer:
    - container bg rgb(49,49,49) (darker page-like wrap)
    - header & every option = .hMbNfr: bg rgb(74,74,74), grid 1fr 20px,
@@ -4978,7 +4988,7 @@ body .sb-root .slip-place-btn {
 }
 .sb-root .sb-champ-mkt-acc.collapsed .sb-champ-mkt-acc-body { display: none !important; }
 
-/* Each dropdown option row — fcbet216 .SelectMenuOptionContainer / .hMbNfr.
+/* Each dropdown option row â€” fcbet216 .SelectMenuOptionContainer / .hMbNfr.
    Bg rgb(74,74,74), padding 12px 10px, grid 1fr 20px, no border.
    Max-specificity selectors so Bootstrap NEVER wins. */
 body .sb-root .sb-champ-mkt-opt,
@@ -5009,7 +5019,7 @@ body .sb-root button.sb-champ-mkt-opt {
   text-transform: none !important;
   letter-spacing: 0 !important;
 }
-/* No border-top — fcbet uses gap: 4px between rows, not visible borders */
+/* No border-top â€” fcbet uses gap: 4px between rows, not visible borders */
 body .sb-root .sb-champ-mkt-opt + .sb-champ-mkt-opt { border-top: 0 !important; }
 body .sb-root .sb-champ-mkt-opt:hover {
   background: rgb(82,82,82) !important;
@@ -5031,7 +5041,7 @@ body .sb-root .sb-champ-mkt-opt.active {
    class neutered so any legacy markup doesn't break the layout. */
 .sb-root .sb-champ-cat-grid { display: none !important; }
 
-/* ── League accordion (per-league section inside the market acc) ───── */
+/* â”€â”€ League accordion (per-league section inside the market acc) â”€â”€â”€â”€â”€ */
 .sb-league-acc {
   background: rgb(58,58,58);
   border: 1px solid rgba(255,255,255,0.04);
@@ -5090,13 +5100,13 @@ body .sb-root .sb-champ-mkt-opt.active {
 .sb-league-acc.collapsed .sb-league-acc-body { display: none; }
 .sb-league-acc.collapsed .sb-league-acc-hdr { border-bottom: 0; }
 
-/* ════════════════════════════════════════════════════════════════════════
-   PERIOD PAGE — override the championship league-accordion look to match
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PERIOD PAGE â€” override the championship league-accordion look to match
    fcbet216 /sportsbook/prelive?page=period&date=... exactly:
    - background rgb(49,49,49)
    - no border / no radius (flat rows, hairline separators)
    - more compact header height (~36px)
-   ════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-root[data-view="periodpage"] .sb-league-acc {
   background: rgb(49,49,49) !important;
   border: 0 !important;
@@ -5154,12 +5164,12 @@ body .sb-root .sb-champ-mkt-opt.active {
 .sb-lh-gift svg { width: 14px; height: 14px; }
 .sb-lh-icons { margin-left: 6px; }
 
-/* ════════════════════════════════════════════════════════════
-   FAVORIS ROW — between date bar and sport tabs (fcbet216 match).
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FAVORIS ROW â€” between date bar and sport tabs (fcbet216 match).
    Now styled as its own dark card with rounded corners + subtle
    border + horizontal margin, with a small bottom margin so it
    never touches the sport-nav strip below it.
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-favoris-row {
   display: flex;
   align-items: center;
@@ -5204,9 +5214,9 @@ body .sb-root .sb-champ-mkt-opt.active {
   padding: 4px 0;
 }
 
-/* ════════════════════════════════════════════════════════════
-   MATCH CARD JERSEY — team badge images (fcbet216 style)
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MATCH CARD JERSEY â€” team badge images (fcbet216 style)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .mc-jersey {
   width: 26px;
   height: 26px;
@@ -5226,19 +5236,19 @@ body .sb-root .sb-champ-mkt-opt.active {
 /* Remove old hidden logo rule */
 .mc-t-logo { display: none; }
 
-/* ════════════════════════════════════════════════════════════
-   MOBILE INLINE PANELS — fcbet216 reference image 1
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MOBILE INLINE PANELS â€” fcbet216 reference image 1
    Two SEPARATE rounded cards on rgb(49,49,49):
-     1. .sb-mob-search-panel   — stand-alone search field
-     2. .sb-mob-leagues-panel  — tabs + league list
-   ════════════════════════════════════════════════════════════ */
+     1. .sb-mob-search-panel   â€” stand-alone search field
+     2. .sb-mob-leagues-panel  â€” tabs + league list
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-mob-inline-leagues {
   display: none;                        /* hidden on desktop */
   flex-direction: column;
   background: transparent;
   margin-top: 12px;                     /* breathing room above mobile panels */
 }
-/* Search card — ABOVE leagues card, clearly detached */
+/* Search card â€” ABOVE leagues card, clearly detached */
 .sb-mob-search-panel {
   background: rgb(49,49,49) !important;
   border: 1px solid rgba(255,255,255,0.06) !important;
@@ -5286,7 +5296,7 @@ body .sb-root .sb-champ-mkt-opt.active {
   font-size: 13px !important;
   opacity: 1 !important;
 }
-/* Leagues card — bg rgb(49,49,49), no border, 8px radius */
+/* Leagues card â€” bg rgb(49,49,49), no border, 8px radius */
 .sb-mob-leagues-panel {
   background: rgb(49,49,49) !important;
   background-color: rgb(49,49,49) !important;
@@ -5295,9 +5305,9 @@ body .sb-root .sb-champ-mkt-opt.active {
   overflow: hidden;
   margin: 0 2px 12px !important;
 }
-/* Tabs row — fcbet216 layout: ACTIVE tab bright white, INACTIVE muted
-   gray, then a SOLID GREEN pill with the count, then a "—" collapse
-   icon on the far right. Tabs must NEVER truncate — show full text. */
+/* Tabs row â€” fcbet216 layout: ACTIVE tab bright white, INACTIVE muted
+   gray, then a SOLID GREEN pill with the count, then a "â€”" collapse
+   icon on the far right. Tabs must NEVER truncate â€” show full text. */
 .sb-mob-leagues-panel .sb-league-group-hdr {
   background: transparent !important;
   margin: 0 !important;
@@ -5330,11 +5340,11 @@ body .sb-root .sb-champ-mkt-opt.active {
   cursor: pointer !important;
   flex: 0 0 auto !important;
 }
-/* Active tab — bright white (fcbet216) */
+/* Active tab â€” bright white (fcbet216) */
 .sb-mob-leagues-panel .sb-mob-tab.active { color: #ffffff !important; opacity: 1 !important; }
-/* Inactive tab — muted gray like fcbet's "MES LIGUES" label */
+/* Inactive tab â€” muted gray like fcbet's "MES LIGUES" label */
 .sb-mob-leagues-panel .sb-mob-tab:not(.active) { color: rgba(255,255,255,0.45) !important; opacity: 1 !important; }
-/* "0" count badge — SOLID green pill with black text (fcbet216) */
+/* "0" count badge â€” SOLID green pill with black text (fcbet216) */
 .sb-mob-leagues-panel .sb-mob-tab .sb-mes-cnt {
   display: inline-flex !important;
   align-items: center !important;
@@ -5409,8 +5419,8 @@ body .sb-root .sb-champ-mkt-opt.active {
 .sb-live-now-block { margin-top: 4px; }
 .sb-upcoming-block { margin-top: 8px; }
 
-/* ── Globe icon for international competitions (teal rounded square,
-     fcbet216 reference image 1: Coupe du Monde, UEFA, Copa, etc.) ── */
+/* â”€â”€ Globe icon for international competitions (teal rounded square,
+     fcbet216 reference image 1: Coupe du Monde, UEFA, Copa, etc.) â”€â”€ */
 .sb-globe-icon,
 body .sb-root .sb-globe-icon,
 body .sb-mob-leagues-panel .sb-globe-icon,
@@ -5429,7 +5439,7 @@ body .sb-top-leagues-card .sb-globe-icon {
 body .sb-root .sb-globe-icon svg { display: block !important; }
 body .sb-root .sb-globe-icon svg circle,
 body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
-/* Flag icon — slightly bigger so it visually balances the globe square */
+/* Flag icon â€” slightly bigger so it visually balances the globe square */
 .sb-mob-leagues-panel .sb-flag-icon {
   width: 22px !important;
   height: 16px !important;
@@ -5437,7 +5447,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   border-radius: 3px;
   flex-shrink: 0;
 }
-/* EN DIRECT badge on a league row — pinned far right, exact fcbet216 style */
+/* EN DIRECT badge on a league row â€” pinned far right, exact fcbet216 style */
 .sb-mob-leagues-panel .sb-tl-live-badge,
 .sb-top-leagues-card .sb-tl-live-badge {
   margin-left: auto !important;
@@ -5456,9 +5466,9 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   letter-spacing: 0 !important;
 }
 
-/* ════════════════════════════════════════════════════════════
-   FEATURED CARD — EN DIRECT badge in header
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FEATURED CARD â€” EN DIRECT badge in header
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .slc-live-badge {
   background: rgb(251,51,51);
   color: #fff;
@@ -5471,9 +5481,9 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   text-transform: uppercase;
 }
 
-/* ════════════════════════════════════════════════════════════
-   LEAGUE LIST — flat style matching fcbet216 exactly
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   LEAGUE LIST â€” flat style matching fcbet216 exactly
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-mob-league-tabs {
   margin: 0;
   background: var(--sb-bg-root);
@@ -5487,7 +5497,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   border-bottom: 1px solid var(--sb-border);
   background: var(--sb-bg-root);
 }
-/* Each league row — flat with divider, matching fcbet216 */
+/* Each league row â€” flat with divider, matching fcbet216 */
 .sb-mob-best-leagues .sb-tl-item,
 .sb-tl-item {
   background: var(--sb-bg-card);
@@ -5496,15 +5506,15 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
 }
 .sb-mob-best-leagues .sb-tl-item:last-child { border-bottom: none; }
 
-/* Remove old max-height scroll constraint — page now scrolls as one unit */
+/* Remove old max-height scroll constraint â€” page now scrolls as one unit */
 .sb-mob-best-leagues .sb-tl-list {
   max-height: none !important;
   overflow: visible !important;
 }
 
-/* ════════════════════════════════════════════════════════════
-   MOBILE FOOTER — 5 items matching fcbet216
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MOBILE FOOTER â€” 5 items matching fcbet216
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-mob-footer {
   display: none;
   background: var(--sb-bg-root);
@@ -5543,10 +5553,10 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   .sb-mob-footer { display: flex; }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FCBET216 MATCH CARDS v4 + Bootstrap 3 isolation
-   Parent site loads Bootstrap 3 — these rules MUST win
-   ════════════════════════════════════════════════════════════ */
+   Parent site loads Bootstrap 3 â€” these rules MUST win
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .sb-root *,
 .sb-root *::before,
@@ -5620,7 +5630,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   padding-top: 0;
   gap: 0;
 }
-/* Live timer minute — small muted text right after EN DIRECT badge */
+/* Live timer minute â€” small muted text right after EN DIRECT badge */
 .sb-root .mc-live-min {
   font-size: 11px !important;
   color: rgba(255,255,255,0.65) !important;
@@ -5628,7 +5638,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   margin-left: 2px !important;
 }
 
-/* Odds row — fcbet216 .jgpuF exact CSS */
+/* Odds row â€” fcbet216 .jgpuF exact CSS */
 .sb-root .mc-odd-btn,
 .sb-root button.mc-odd-btn {
   background: rgb(74, 74, 74) !important;
@@ -5677,7 +5687,7 @@ body .sb-root .sb-globe-icon svg path { stroke: #ffffff !important; }
   width: 100% !important;
 }
 
-/* ── Live section market dropdown (En direct maintenant) — fcbet216 accordion ──
+/* â”€â”€ Live section market dropdown (En direct maintenant) â€” fcbet216 accordion â”€â”€
    ONE connected card: header + list share border/radius; minus when open. */
 .sb-live-mkt-wrap {
   display: block !important;
@@ -5795,11 +5805,11 @@ body .sb-root .sb-lmk-item:hover,
   transform: rotate(180deg);
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   INLINE MATCH MARKETS — chevron on a match card expands the full
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   INLINE MATCH MARKETS â€” chevron on a match card expands the full
    markets list (tabs + accordions) right inside the card, no nav.
    Mirrors fcbet216 prelive card expansion (images 7-9 in spec).
-   ════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-root .mc-inline-md {
   margin: 6px 0 0;
   padding: 0;
@@ -5815,7 +5825,7 @@ body .sb-root .sb-lmk-item:hover,
   text-align: center;
 }
 .sb-root .mc-inline-md .mc-md-inner { padding: 6px 4px 4px; }
-/* Inline tabs row (Principaux / Bet Builder / Teams H2H / 1 minute / ⓘ) */
+/* Inline tabs row (Principaux / Bet Builder / Teams H2H / 1 minute / â“˜) */
 .sb-root .mc-inline-md .mc-md-tabs {
   display: flex;
   flex-wrap: nowrap;
@@ -5858,12 +5868,12 @@ body .sb-root .sb-lmk-item:hover,
   cursor: pointer;
   margin-left: 2px;
 }
-/* The market accordions reuse .md-market-group from the detail page — but
+/* The market accordions reuse .md-market-group from the detail page â€” but
    inside a card they need a tiny padding tweak so they sit flush. */
 .sb-root .mc-inline-md .mc-md-markets { padding: 0; }
 .sb-root .mc-inline-md .md-market-group { margin-top: 8px; }
 .sb-root .mc-inline-md .md-market-group:first-child { margin-top: 0; }
-/* Loading skeleton — matches the real UI so there is zero layout shift */
+/* Loading skeleton â€” matches the real UI so there is zero layout shift */
 .sb-root .mc-inline-md .mc-sk {
   display: inline-block;
   background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.10), rgba(255,255,255,0.06));
@@ -5884,7 +5894,7 @@ body .sb-root .sb-lmk-item:hover,
   100% { background-position: -200% 0; }
 }
 
-/* Teams area pointer cursor — signals it opens match detail */
+/* Teams area pointer cursor â€” signals it opens match detail */
 .sb-root .mc-teams-wrap {
   cursor: pointer;
 }
@@ -5907,8 +5917,8 @@ body .sb-root .sb-lmk-item:hover,
   margin-bottom: 2px !important;
 }
 
-/* ── League header BB pill (fcbet216 image 2 ref): solid green pill
-   sitting before the toggle icon on every league accordion row. ── */
+/* â”€â”€ League header BB pill (fcbet216 image 2 ref): solid green pill
+   sitting before the toggle icon on every league accordion row. â”€â”€ */
 .sb-root .sb-lh-bb {
   background: #70f669 !important;
   color: rgba(0,0,0,0.87) !important;
@@ -5929,7 +5939,7 @@ body .sb-root .sb-lmk-item:hover,
 .sb-root .sb-league-section-hdr--toggle:hover {
   background: #232323 !important;
 }
-/* Collapsed body — hidden via inline style:display:none on render; this
+/* Collapsed body â€” hidden via inline style:display:none on render; this
    rule is a defensive fallback in case the inline style is stripped. */
 .sb-root .sb-league-block.collapsed > .sb-league-matches {
   display: none !important;
@@ -5947,10 +5957,10 @@ body .sb-root .sb-lmk-item:hover,
   font-weight: 400 !important;
 }
 
-/* ══ FCBET216 MATCH CARD v6 — Stacked layout, fcbet .jgpuF odds CSS
+/* â•â• FCBET216 MATCH CARD v6 â€” Stacked layout, fcbet .jgpuF odds CSS
    These rules are the final authority. They win every specificity battle.    */
 
-/* ── Round jersey container — matches fcbet216 circular shirt ── */
+/* â”€â”€ Round jersey container â€” matches fcbet216 circular shirt â”€â”€ */
 .sb-root .mc-jersey-wrap {
   width: 32px !important;
   height: 32px !important;
@@ -5965,7 +5975,7 @@ body .sb-root .sb-lmk-item:hover,
 }
 .sb-root .mc-jersey-wrap.mc-jersey-up { opacity: 0.50 !important; }
 
-/* ── In-card per-row shirt cell — plain SVG (no circle, no border) ── */
+/* â”€â”€ In-card per-row shirt cell â€” plain SVG (no circle, no border) â”€â”€ */
 .sb-root .mc-shirt-cell {
   width: 24px !important;
   flex-shrink: 0 !important;
@@ -5978,9 +5988,9 @@ body .sb-root .sb-lmk-item:hover,
   height: 20px !important;
   display: block !important;
 }
-/* ── LIVE card layout — shirts side-by-side LEFT, stacked names+scores RIGHT
+/* â”€â”€ LIVE card layout â€” shirts side-by-side LEFT, stacked names+scores RIGHT
    (fcbet216 prelive live card spec). Tight bottom padding so the odds row
-   sits flush against the team rows — matches reference image 1. ── */
+   sits flush against the team rows â€” matches reference image 1. â”€â”€ */
 .sb-root .mc-teams-wrap.mc-teams-wrap--side {
   display: flex !important;
   flex-direction: row !important;
@@ -5993,11 +6003,11 @@ body .sb-root .sb-lmk-item:hover,
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  gap: 4px !important;         /* fcbet216 — shirts almost touching */
+  gap: 4px !important;         /* fcbet216 â€” shirts almost touching */
   flex-shrink: 0 !important;
   padding: 0 6px 0 0 !important;
 }
-/* Live card jersey — fcbet216 EXACT (Notts County vs Salford City FC):
+/* Live card jersey â€” fcbet216 EXACT (Notts County vs Salford City FC):
    small dark gray circle, 1px white border, smaller shirt inside,
    tight gap between the two jerseys so they sit close together. */
 .sb-root .mc-jersey-cell,
@@ -6085,7 +6095,7 @@ body .sb-root .sb-lmk-item:hover,
   margin-left: 2px !important;
 }
 
-/* ── UPCOMING card layout — fcbet216 reference IMAGE 3 (Paderborn) ───────
+/* â”€â”€ UPCOMING card layout â€” fcbet216 reference IMAGE 3 (Paderborn) â”€â”€â”€â”€â”€â”€â”€
      [shirt][shirt]  Team A      [EN DIRECT pill][signal icon]
                      Team B
    Two PLAIN shirts side-by-side on the LEFT (no circle wrapper, the shirt
@@ -6164,7 +6174,7 @@ body .sb-root .sb-lmk-item:hover,
   height: 16px !important;
 }
 .sb-root .mc-signal-ico svg { display: block !important; width: 14px !important; height: 14px !important; }
-/* Legacy circle shirt cell — same compact fcbet216 spec */
+/* Legacy circle shirt cell â€” same compact fcbet216 spec */
 .sb-root .mc-shirt-cell--circle,
 .sb-root .mc-shirt-cell {
   display: inline-flex !important;
@@ -6197,7 +6207,7 @@ body .sb-root .sb-lmk-item:hover,
 
 /* Sport icon (soccer ball / basket / etc) BEFORE the BB badge.
    fcbet216 reference (images 3 & 4): the icon sits FLAT on the card
-   surface — no badge, no fill, no border. Just the icon glyph itself,
+   surface â€” no badge, no fill, no border. Just the icon glyph itself,
    slightly muted, with a small right margin. */
 .sb-root .mc-hdr-live .mc-sport-badge-inline {
   width: auto !important;
@@ -6219,7 +6229,7 @@ body .sb-root .sb-lmk-item:hover,
   display: block !important;
 }
 
-/* Rows layout for teams inside the card — LEFT-aligned, full-width rows
+/* Rows layout for teams inside the card â€” LEFT-aligned, full-width rows
    (the parent .mc-teams-wrap inherits align-items:center from the inline
    critical CSS; in column direction that would center each row on the
    cross axis, so we force align-items:stretch + width:100% here.) */
@@ -6266,7 +6276,7 @@ body .sb-root .sb-lmk-item:hover,
   margin-left: auto !important;      /* guarantees right-edge alignment */
   padding-left: 8px !important;
 }
-/* Carousel jersey circles — fcbet216 image 3 EXACT (Notts ref):
+/* Carousel jersey circles â€” fcbet216 image 3 EXACT (Notts ref):
    smaller compact circles, 1px white border, dark surface, slight
    overlap so the two team jerseys read as a paired unit. */
 .sb-root .slc-jersey-wrap,
@@ -6326,7 +6336,7 @@ body .sb-root .sb-lmk-item:hover,
   gap: 8px !important;
   min-height: 26px !important;
 }
-/* Team name — flex:1 pushes the score to far right */
+/* Team name â€” flex:1 pushes the score to far right */
 .sb-root .mc-t-name {
   flex: 1 !important;
   min-width: 0 !important;
@@ -6337,7 +6347,7 @@ body .sb-root .sb-lmk-item:hover,
   font-weight: 500 !important;
   color: #fff !important;
 }
-/* Score — far right, bold white */
+/* Score â€” far right, bold white */
 .sb-root .mc-t-score {
   flex-shrink: 0 !important;
   font-size: 15px !important;
@@ -6364,7 +6374,7 @@ body .sb-root .sb-lmk-item:hover,
   width: 100% !important;
   cursor: pointer !important;
 }
-/* H2H classes — kept so no JS errors, display none */
+/* H2H classes â€” kept so no JS errors, display none */
 .sb-root .mc-h2h { display: flex !important; align-items: center !important; gap: 6px !important; width: 100% !important; }
 .sb-root .mc-h2h-score {
   display: flex !important;
@@ -6437,7 +6447,7 @@ body .sb-root .sb-lmk-item:hover,
   border: none !important;
 }
 
-/* Stats icon button — in league row actions */
+/* Stats icon button â€” in league row actions */
 .sb-root button.mc-stats-icon,
 .sb-root .mc-stats-icon {
   background: none !important;
@@ -6463,7 +6473,7 @@ body .sb-root .sb-lmk-item:hover,
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 8px 12px 2px !important;     /* tighter — reduced card height */
+  padding: 8px 12px 2px !important;     /* tighter â€” reduced card height */
 }
 .sb-root .mc-hdr-live--inline {
   padding: 10px 12px 8px !important;
@@ -6522,7 +6532,7 @@ body .sb-root .sb-lmk-item:hover,
   line-height: 1.4 !important;
 }
 
-/* EN DIRECT red badge — fcbet216 .cqljKD EXACT (sampled from DevTools):
+/* EN DIRECT red badge â€” fcbet216 .cqljKD EXACT (sampled from DevTools):
    bg rgb(251,51,51), white, 12px/12px Roboto weight 500, padding 2px 4px,
    border-radius 4px, no border, uppercase, no letter-spacing. */
 .sb-root .mc-live-badge {
@@ -6542,7 +6552,7 @@ body .sb-root .sb-lmk-item:hover,
   display: inline-flex !important;
   align-items: center !important;
 }
-/* "Mi-temps" / "34'" — clear medium-grey label right after the EN DIRECT badge */
+/* "Mi-temps" / "34'" â€” clear medium-grey label right after the EN DIRECT badge */
 .sb-root .mc-hdr-live .mc-live-min {
   color: rgba(255,255,255,0.75) !important;
   font-size: 12px !important;
@@ -6551,7 +6561,7 @@ body .sb-root .sb-lmk-item:hover,
   white-space: nowrap !important;
 }
 
-/* Odds row — fcbet216 reference image 1 (South Melbourne vs Avondale):
+/* Odds row â€” fcbet216 reference image 1 (South Melbourne vs Avondale):
    small gap between buttons, tight 2px top margin so the row sits CLOSE
    to the team rows instead of floating below them. */
 .sb-root .mc-odds-bot {
@@ -6562,8 +6572,8 @@ body .sb-root .sb-lmk-item:hover,
   width: 100% !important;
 }
 
-/* Odds button — fcbet216 exact `.jgpuF` background `rgb(74,74,74)`
-   (sampled from DevTools — image 1). Was previously overridden to
+/* Odds button â€” fcbet216 exact `.jgpuF` background `rgb(74,74,74)`
+   (sampled from DevTools â€” image 1). Was previously overridden to
    `rgb(58,58,58)` which made the buttons read too dark. 4px radius
    matches fcbet, transparent border so the button reads as a flat
    filled chip. */
@@ -6581,7 +6591,7 @@ body .sb-root .sb-lmk-item:hover,
 .sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.60) !important; }
 .sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-weight: 700 !important; }
 
-/* Chevron button — same fcbet gray as odds chips */
+/* Chevron button â€” same fcbet gray as odds chips */
 .sb-root button.mc-chevron-btn,
 .sb-root .mc-chevron-btn {
   width: 40px !important;
@@ -6624,15 +6634,15 @@ body .sb-root .sb-lmk-item:hover,
   gap: 0 !important;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SPORT PAGE — opened when a user taps a sport tile in the nav strip.
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SPORT PAGE â€” opened when a user taps a sport tile in the nav strip.
    Mirrors fcbet216 /sportsbook/prelive?page=sport&sportId=X.
 
    When .sb-root has data-view="sportpage", the home-only sections are
    hidden so the user sees ONLY the sport-detail content (mobile top
    bar + search bar + back-pill + category cards). Polling is also
    skipped server-side so the matches list doesn't overwrite the view.
-   ════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sb-root[data-view="sportpage"] .sb-date-row,
 .sb-root[data-view="sportpage"] .sb-favoris-row,
 .sb-root[data-view="sportpage"] .sb-favoris-content,
@@ -6646,7 +6656,7 @@ body .sb-root .sb-lmk-item:hover,
   display: none !important;
 }
 
-/* EN DIRECT tab — clean live-only view (fcbet216 mobile live page) */
+/* EN DIRECT tab â€” clean live-only view (fcbet216 mobile live page) */
 .sb-root[data-view="livepage"] .sb-date-row,
 .sb-root[data-view="livepage"] .sb-favoris-row,
 .sb-root[data-view="livepage"] .sb-favoris-content,
@@ -6660,7 +6670,7 @@ body .sb-root .sb-lmk-item:hover,
 .sb-root[data-view="livepage"] .sb-points-forts-block {
   display: none !important;
 }
-/* Keep search visible on EN DIRECT — fcbet216 live page */
+/* Keep search visible on EN DIRECT â€” fcbet216 live page */
 .sb-root[data-view="livepage"] .sb-mob-search-panel {
   display: flex !important;
   flex-direction: column;
@@ -6676,7 +6686,7 @@ body .sb-root .sb-lmk-item:hover,
   padding-top: 8px !important;
 }
 
-/* Match detail view — hide every home/sport-page sibling so only the
+/* Match detail view â€” hide every home/sport-page sibling so only the
    match-detail header + tabs + markets are visible. */
 .sb-root[data-view="matchdetail"] .sb-date-row,
 .sb-root[data-view="matchdetail"] .sb-favoris-row,
@@ -6695,7 +6705,7 @@ body .sb-root .sb-lmk-item:hover,
   display: none !important;
 }
 .sb-root[data-view="matchdetail"] #sb-matches-body { margin-top: 0 !important; padding-top: 0 !important; }
-/* Match-detail view should ALWAYS scroll vertically — never get stuck
+/* Match-detail view should ALWAYS scroll vertically â€” never get stuck
    when the markets list grows past the viewport (fcbet216 parity). */
 .sb-root[data-view="matchdetail"] .sb-center-scroll {
   overflow-y: auto !important;
@@ -6801,7 +6811,7 @@ body .sb-root .sb-lmk-item:hover,
   text-align: center;
 }
 
-/* ── Sport page matches list (BELOW the 4 category cards) ──
+/* â”€â”€ Sport page matches list (BELOW the 4 category cards) â”€â”€
    Lives in #sb-sport-matches. Reuses the standard match cards so the
    row format (BB + EN DIRECT + timer + flag + league + teams + odds)
    stays identical to the home view. */
@@ -6825,7 +6835,7 @@ body .sb-root .sb-lmk-item:hover,
   margin-bottom: 10px;
 }
 
-/* ── LIVE card without jerseys (fcbet216 image 4/5/7 spec) ──
+/* â”€â”€ LIVE card without jerseys (fcbet216 image 4/5/7 spec) â”€â”€
    When the live card uses .mc-teams-wrap--text, the team rows take
    the full width of the card (no left jersey column). Names left,
    scores far right, exactly like fcbet216. */
@@ -6867,11 +6877,11 @@ body .sb-root .sb-lmk-item:hover,
   font-variant-numeric: tabular-nums !important;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   MOBILE / iPhone (≤1100px) — compact card height + lighter odds buttons.
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   MOBILE / iPhone (â‰¤1100px) â€” compact card height + lighter odds buttons.
    Highest specificity (body .sb-root) + !important so this WINS against
    every earlier rule, Bootstrap and any cached overrides.
-   ───────────────────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 1100px) {
   body .sb-root .mc { margin-bottom: 6px !important; }
   body .sb-root .mc-hdr-live { padding: 8px 12px 0 !important; min-height: 22px !important; }
@@ -6880,7 +6890,7 @@ body .sb-root .sb-lmk-item:hover,
   body .sb-root .mc-team-row--live { min-height: 22px !important; }
   body .sb-root .mc-t-score { font-size: 14px !important; font-weight: 700 !important; }
   body .sb-root .mc-t-name { font-size: 13px !important; }
-  /* Odds row — lighter gray bg + tighter height (iphone) */
+  /* Odds row â€” lighter gray bg + tighter height (iphone) */
   body .sb-root .mc-odds-bot { padding: 0 10px 8px !important; gap: 6px !important; }
   body .sb-root .mc-odd-btn,
   body .sb-root button.mc-odd-btn {
@@ -6897,7 +6907,7 @@ body .sb-root .sb-lmk-item:hover,
   }
   body .sb-root .mc-odd-btn .mc-odd-lbl { color: rgba(255,255,255,0.55) !important; font-size: 12px !important; font-weight: 500 !important; }
   body .sb-root .mc-odd-btn .mc-odd-val { color: rgb(113,246,105) !important; font-size: 14px !important; font-weight: 700 !important; }
-  /* SLC carousel cards — compact on iphone */
+  /* SLC carousel cards â€” compact on iphone */
   body .sb-root .slc-hdr { padding: 8px 12px 4px !important; }
   body .sb-root .slc-mid { padding: 2px 12px 6px !important; }
   body .sb-root .slc-jerseys-overlap { gap: 6px !important; }
@@ -6908,9 +6918,8 @@ body .sb-root .sb-lmk-item:hover,
   body .sb-root .slc-jerseys-overlap .mc-jersey-svg { width: 16px !important; height: 16px !important; }
   body .sb-root .slc-odds { padding: 0 12px 8px !important; }
 }
-. s b - c h a m p - v i e w  
-   p a d d i n g :   0   1 0 p x ;    
- 
+.sb-champ-view { padding: 0 10px; }
+
 /* Mobile Recherche de paris */
 @media (min-width: 1025px) { .sb-mob-bet-search-panel { display: none !important; } }
 
