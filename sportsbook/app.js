@@ -1,4 +1,4 @@
-﻿/**
+/**
  * sportsbook/app.js — Premium Sportsbook UI
  * Design reference: fcbet216.com (Altenar wsdk)
  * Colors: #70f669 green, #979797 gray, #101010 bg
@@ -2012,62 +2012,110 @@ function isEuropeanLeague(league) {
 }
 
 /* Sort live matches: Football first (sport_id=1), then by league priority.
-   LEAGUE_PRIORITY_MAP keys are matched with a substring on both sides so
-   "England Premier League", "Premier League England" and "EPL" all hit. */
+   Lower number = higher priority. Exact match beats substring. */
 var LEAGUE_PRIORITY_MAP = {
-  'FIFA World Cup 2026': 0,
+  // Tier 0 — Global
+  'FIFA World Cup': 0, 'World Cup': 0,
+  // Tier 1 — UEFA Club Competitions
   'UEFA Champions League': 1, 'Champions League': 1,
-  'UEFA Europa League':   2, 'Europa League':   2,
+  'UEFA Europa League': 2, 'Europa League': 2,
   'UEFA Conference League': 3, 'Conference League': 3,
-  'England Premier League': 4, 'Premier League': 4, 'EPL': 4,
-  'Spain LaLiga': 5, 'Spain La Liga': 5, 'LaLiga': 5, 'La Liga': 5,
+  // Tier 2 — Big 5 European Leagues
+  'England Premier League': 4, 'English Premier League': 4,
+  'Spain LaLiga': 5, 'Spain La Liga': 5, 'LaLiga': 5, 'La Liga': 5, 'LaLiga Santander': 5,
   'Germany Bundesliga': 6, 'Bundesliga': 6,
   'Italy Serie A': 7, 'Serie A': 7,
   'France Ligue 1': 8, 'Ligue 1': 8,
-  'Netherlands Eredivisie': 9, 'Eredivisie': 9,
-  'Portugal Primeira Liga': 10, 'Primeira Liga': 10,
-  'Belgium First Division A': 11,
-  'Turkey Super Lig': 12,
-  'Russia Premier League': 13,
-  'Brazil Brasileiro Serie A': 14, 'Brasileiro Serie A': 14,
-  'Argentina Liga Profesional': 15,
-  'England Championship': 16, 'England FA Cup': 17, 'EFL Cup': 18,
-  'Spain Copa del Rey': 19, 'Italy Coppa Italia': 20,
-  'Germany DFB Pokal': 21, 'France Coupe de France': 22,
-  'Saudi Professional League': 25,
-  'USA MLS': 28, 'Major League Soccer': 28
+  // Tier 3 — Second tier European
+  'Netherlands Eredivisie': 10, 'Eredivisie': 10,
+  'Portugal Primeira Liga': 11, 'Primeira Liga': 11, 'Portugal Liga': 11,
+  'Belgium First Division A': 12, 'Belgium Pro League': 12,
+  'Turkey Super Lig': 13, 'Turkey Süper Lig': 13,
+  'Scotland Premiership': 14, 'Scotland Premier': 14,
+  'Russia Premier League': 15,
+  // Tier 4 — Other European
+  'Austria Bundesliga': 16,
+  'Switzerland Super League': 17,
+  'Greece Super League': 18,
+  'Czech Republic First League': 19,
+  'Poland Ekstraklasa': 20,
+  'Ukraine Premier League': 21,
+  'Denmark Superliga': 22,
+  'Sweden Allsvenskan': 23,
+  'Norway Eliteserien': 24,
+  'Germany Bundesliga II': 25, 'Bundesliga II': 25, '2. Bundesliga': 25,
+  'Spain Segunda': 26, 'LaLiga 2': 26,
+  'Italy Serie B': 27,
+  'France Ligue 2': 28,
+  'England Championship': 29,
+  // Tier 5 — Cup competitions
+  'England FA Cup': 32, 'EFL Cup': 33,
+  'Spain Copa del Rey': 34, 'Italy Coppa Italia': 35,
+  'Germany DFB Pokal': 36, 'France Coupe de France': 37,
+  // Tier 6 — Americas & Global
+  'Brazil Brasileiro Serie A': 40, 'Brasileiro Serie A': 40,
+  'Argentina Liga Profesional': 41,
+  'USA MLS': 45, 'Major League Soccer': 45,
+  'Saudi Professional League': 50, 'Saudi Pro League': 50
 };
-/* Penalty terms — applied to OTHERWISE-UNRANKED leagues that contain
-   substrings like "Play-Offs", "Reserve", "U17", "U19", "Friendly",
-   "Esoccer", "Regional". These sit at the bottom so famous leagues
-   in Europe stay visually on top of the list even when they coexist
-   with low-tier competitions in the same dataset. */
+
+/* Penalty terms — these leagues go to the BOTTOM regardless of name. */
 var LEAGUE_PENALTY_TERMS = [
   'esoccer','e-soccer','virtual','simulated',
   'u17','u19','u20','u21','u23','youth','reserve',
   'friendly','women','feminin','féminin','frauen','femme',
-  'regional','amateur'
+  'regional','amateur',
+  // Small nations whose "Premier League" name should NOT rank with England's
+  'iceland','faroe','malta','cyprus','gibraltar',
+  'liechtenstein','andorra','san marino','kosovo',
+  'moldova','armenia','georgia','azerbaijan','belarus',
+  'play-off','playoff','relegation','promotion','qualifier'
 ];
+
+/* Exact country prefixes that indicate a top-tier league match.
+   Used to confirm "Premier League" or "Bundesliga" is from the right country. */
+var ELITE_LEAGUE_PREFIXES = [
+  'England','English','Spain','Spain ','Germany','Italy','France',
+  'Netherlands','Portugal','Belgium','Turkey','Scotland',
+  'Russia','Austria','Switzerland','Greece','Czech','Poland',
+  'Ukraine','Denmark','Sweden','Norway'
+];
+
 function getLeaguePriority(league) {
   if (!league || !league.name) return 900;
   var n   = league.name;
   var low = n.toLowerCase();
 
-  // ── Penalty check FIRST. If a league name contains a penalty term
-  //    (women, U17/U19/U21/U23, reserve, youth, friendly, esoccer,
-  //    regional, amateur), it never gets top priority — even when its
-  //    name happens to contain "Premier League" or "Bundesliga". This
-  //    is what was previously letting "Iceland Premier League Women"
-  //    or "Germany Bundesliga U19" jump to the top of the list.
+  // Penalty check FIRST — small nations and non-competitive leagues go to bottom
   for (var pi = 0; pi < LEAGUE_PENALTY_TERMS.length; pi++) {
     if (low.indexOf(LEAGUE_PENALTY_TERMS[pi]) >= 0) return 850;
   }
 
+  // Exact match
+  if (LEAGUE_PRIORITY_MAP.hasOwnProperty(n)) return LEAGUE_PRIORITY_MAP[n];
+
+  // Substring match — key inside name OR name inside key
+  var best = 500;
   for (var k in LEAGUE_PRIORITY_MAP) {
-    if (n.indexOf(k) >= 0 || k.indexOf(n) >= 0) return LEAGUE_PRIORITY_MAP[k];
+    if (n.indexOf(k) >= 0 || k.indexOf(n) >= 0) {
+      var rank = LEAGUE_PRIORITY_MAP[k];
+      // For generic terms like "Premier League", "Bundesliga" — only accept
+      // if the league name starts with a known elite country prefix
+      var isGenericTerm = (k === 'Premier League' || k === 'Bundesliga' ||
+                           k === 'Serie A' || k === 'Ligue 1' || k === 'Eredivisie' ||
+                           k === 'Champions League' || k === 'Europa League');
+      if (isGenericTerm) {
+        var hasElitePrefix = ELITE_LEAGUE_PREFIXES.some(function(pfx) {
+          return n.indexOf(pfx) === 0 || n.indexOf(pfx + ' ') >= 0;
+        });
+        if (!hasElitePrefix) continue; // skip — e.g. "Iceland Premier League"
+      }
+      if (rank < best) best = rank;
+    }
   }
-  return 500;
+  return best;
 }
+
 function sortLiveMatches(list) {
   return list.slice().sort(function(a, b) {
     var sa = parseInt(a.sport_id || 1);
