@@ -22,11 +22,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     
     if ($action === 'add_balance') {
         $target_id = (int)$_POST['user_id'];
-        $amount = (float)$_POST['amount'];
-        if ($amount > 0) {
+        $fiat_amount = (float)$_POST['amount'];
+        $token_rate = (float)($_POST['token_rate'] ?? 27); // Default 1 USD = 27 Tokens
+        $deposit_fee = (float)($_POST['deposit_fee'] ?? 11); // Default 11% GGR cut on deposit
+        
+        if ($fiat_amount > 0) {
+            // Calculate final tokens: (Fiat * Rate) - Fee%
+            $gross_tokens = $fiat_amount * $token_rate;
+            $fee_tokens = $gross_tokens * ($deposit_fee / 100);
+            $net_tokens = $gross_tokens - $fee_tokens;
+            
             $stmt = $pdo->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
-            if ($stmt->execute([$amount, $target_id])) {
-                echo json_encode(['success' => true, 'msg' => "Solde ajouté avec succès !"]);
+            if ($stmt->execute([$net_tokens, $target_id])) {
+                // Log the GGR profit for the house
+                $pdo->prepare("INSERT INTO sportsbook_ggr (bet_id, user_id, stake, payout, ggr, result) VALUES (0, ?, ?, 0, ?, 'deposit_fee')")
+                    ->execute([$target_id, $gross_tokens, $fee_tokens]);
+                    
+                echo json_encode([
+                    'success' => true, 
+                    'msg' => "Dépôt de {$fiat_amount} traité. \nTokens bruts : {$gross_tokens}\nFrais GGR ({$deposit_fee}%) : -{$fee_tokens}\nTokens nets ajoutés : {$net_tokens}"
+                ]);
             } else {
                 echo json_encode(['success' => false, 'msg' => "Erreur DB."]);
             }
@@ -74,6 +89,8 @@ while ($row = $c_stmt->fetch(PDO::FETCH_ASSOC)) {
     $configs[$row['setting_key']] = $row['setting_value'];
 }
 $margin = $configs['global_margin_percent'] ?? 11;
+$token_rate = $configs['token_exchange_rate'] ?? 27;
+$deposit_fee = $configs['deposit_ggr_fee'] ?? 11;
 
 // Ensure tables exist to prevent 500 error
 $pdo->exec("CREATE TABLE IF NOT EXISTS sportsbook_bets (id INT AUTO_INCREMENT PRIMARY KEY, amount DECIMAL(15,2) DEFAULT 0, status VARCHAR(20) DEFAULT 'pending')");
@@ -261,15 +278,38 @@ $pending_bets = $pdo->query("
             <!-- Configuration & Risk -->
             <div id="odds" class="page-section section-card">
                 <div class="section-header">
-                    <h3><i class="fa-solid fa-gears"></i> Odds Engine (GGR Margin)</h3>
+                    <h3><i class="fa-solid fa-gears"></i> Engine Configurations</h3>
                 </div>
-                <p style="color:var(--text-muted); font-size:14px; margin-bottom:15px;">
-                    Control the global overround applied to raw BetsAPI odds. A higher margin increases your GGR but lowers odds for players. Default is 11%.
-                </p>
-                <div class="flex-row">
-                    <input type="number" id="ggr_margin" value="<?=$margin?>" min="0" max="50" step="0.1" style="width:100px;">
-                    <span style="font-size:18px; color:var(--text-muted);">%</span>
-                    <button class="btn" onclick="updateMargin()"><i class="fa-solid fa-save"></i> Save Global Margin</button>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
+                    <div>
+                        <h4 style="color:#fff; margin-bottom:10px;">Sportsbook Odds Margin (GGR)</h4>
+                        <p style="color:var(--text-muted); font-size:13px; margin-bottom:10px;">
+                            Lowers all live odds by this percentage.
+                        </p>
+                        <div class="flex-row">
+                            <input type="number" id="ggr_margin" value="<?=$margin?>" min="0" max="50" step="0.1" style="width:100px;">
+                            <span style="font-size:18px; color:var(--text-muted);">%</span>
+                            <button class="btn btn-sm" onclick="updateMargin()"><i class="fa-solid fa-save"></i> Save</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color:#fff; margin-bottom:10px;">Deposit Token Rate & Fee</h4>
+                        <p style="color:var(--text-muted); font-size:13px; margin-bottom:10px;">
+                            Convert Fiat deposits to Tokens automatically and take a GGR cut upfront.
+                        </p>
+                        <div class="flex-row" style="margin-bottom:10px;">
+                            <span style="color:var(--text-muted); font-size:13px; width:70px;">Rate:</span>
+                            <input type="number" id="token_rate" value="<?=$token_rate?>" style="width:100px;">
+                            <span style="font-size:13px; color:var(--text-muted);">Tokens / Fiat</span>
+                        </div>
+                        <div class="flex-row">
+                            <span style="color:var(--text-muted); font-size:13px; width:70px;">Fee (Cut):</span>
+                            <input type="number" id="deposit_fee" value="<?=$deposit_fee?>" style="width:100px;">
+                            <span style="font-size:18px; color:var(--text-muted);">%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -430,12 +470,15 @@ $pending_bets = $pdo->query("
             });
         }
         function addBalance(userId, username) {
-            let amount = prompt("Entrez le montant de crédit à ajouter pour " + username + " :");
+            let amount = prompt("DÉPÔT EN FIAT (ex: USD/TND)\nEntrez le montant reçu de " + username + " :");
             if (amount && !isNaN(amount)) {
+                let tokenRate = document.getElementById('token_rate') ? document.getElementById('token_rate').value : 27;
+                let depositFee = document.getElementById('deposit_fee') ? document.getElementById('deposit_fee').value : 11;
+                
                 fetch('', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=add_balance&user_id=' + userId + '&amount=' + amount
+                    body: 'action=add_balance&user_id=' + userId + '&amount=' + amount + '&token_rate=' + tokenRate + '&deposit_fee=' + depositFee
                 })
                 .then(r => r.json())
                 .then(res => {
