@@ -2904,7 +2904,7 @@ function updateFloatingBetBadge() {
 }
 
 window.sbSlipMode = function(mode) { SLIP_MODE = mode; renderBetSlip(); };
-window.sbClearSlip = function() { S.betSlip = []; renderBetSlip(); updateFloatingBetBadge(); };
+window.sbClearSlip = function() { S.betSlip = []; renderBetSlip(); updateFloatingBetBadge(); var right = document.getElementById('sb-right'); if (right && right.classList.contains('open')) window.sbToggleRight(); };
 window.sbRemoveBet = function(id) { window.sbAddBet(id, '', '', 0); };
 window.sbToggleExclude = function(idx) {
   if (S.betSlip[idx]) { S.betSlip[idx].excluded = !S.betSlip[idx].excluded; renderBetSlip(); }
@@ -3241,7 +3241,7 @@ function renderBetSlip() {
       b.legs.forEach(function(leg, li) {
         out += '<div class="slip-leg-row">';
         out += '<span class="slip-leg-dot"></span>';
-        out += '<div class="slip-leg-info"><span class="slip-leg-mkt">' + h(leg.market || '') + '</span><span class="slip-leg-sel">' + h(leg.name) + '</span></div>';
+        out += '<div class="slip-leg-info"><span class="slip-leg-mkt">' + h(leg.market || '') + '</span><span class="slip-leg-sep"> — </span><span class="slip-leg-sel">' + h(leg.name) + '</span></div>';
         out += '<button class="slip-leg-del" onclick="window.sbRemoveBBLeg(\'' + h(b.id) + '\',' + li + ')">&#215;</button>';
         out += '</div>';
       });

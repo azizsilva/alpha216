@@ -870,11 +870,11 @@ button.sb-btn-live.active .sb-live-badge,
   color: #fff;
 }
 .sb-date-item.active {
-  background: rgb(58,58,58);          /* slightly lifted instead of bordered */
-  color: #fff;
+  background: rgb(113,246,105);
+  color: rgb(0,0,0);
   box-shadow: none;
 }
-.sb-date-item.active .sb-date-num { color: #fff; }
+.sb-date-item.active .sb-date-num { color: rgb(0,0,0); }
 .sb-date-lbl {
   font-size: 12px;
   font-weight: 500;
@@ -2539,8 +2539,9 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-floating-bet-badge {
   display: none;
   position: fixed;
-  bottom: 88px;            /* above mobile footer */
-  right: 16px;
+  bottom: 80px;            /* above mobile footer */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3000;
   flex-direction: column;
   align-items: center;

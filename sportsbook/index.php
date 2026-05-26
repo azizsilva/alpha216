@@ -183,7 +183,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
   .sb-left,.sb-right{position:fixed!important;top:0!important;bottom:0!important;z-index:2000!important;}
   .sb-left{left:0!important;transform:translateX(-100%)!important;width:280px!important;}
   .sb-left.open{transform:translateX(0)!important;box-shadow:10px 0 40px rgba(0,0,0,0.9)!important;}
-  .sb-right{bottom:0!important;left:0!important;right:0!important;top:auto!important;width:100%!important;max-height:82vh!important;border-radius:16px 16px 0 0!important;transform:translateY(100%)!important;border-left:none!important;border-top:1px solid rgba(255,255,255,0.10)!important;background:#181818!important;}
+  .sb-right{bottom:0!important;left:0!important;right:0!important;top:auto!important;width:100%!important;max-height:82vh!important;border-radius:16px 16px 0 0!important;transform:translateY(100%)!important;border-left:none!important;border-top:1px solid rgba(255,255,255,0.10)!important;background:rgb(49,49,49)!important;}
   .sb-right.open{transform:translateY(0)!important;box-shadow:0 -10px 60px rgba(0,0,0,0.9)!important;}
 }
 /* ── Match cards — fcbet216 prelive design (Bootstrap no longer loaded here) ── */
@@ -503,13 +503,13 @@ body .sb-root .sb-champ-mkt-opt.active{background:rgb(113,246,105)!important;bac
 .sb-root .sb-boost-header,body .sb-root .sb-boost-header{display:flex!important;align-items:center!important;gap:8px!important;font-size:14px!important;font-weight:700!important;color:#fff!important;margin:0 0 8px!important;padding:12px 14px!important;letter-spacing:.2px!important;line-height:1.2!important;background:rgb(49,49,49)!important;border:1px solid rgba(255,255,255,0.07)!important;border-radius:6px!important;}
 .sb-root .sb-boost-header svg{width:15px!important;height:15px!important;color:#fff!important;fill:#fff!important;flex-shrink:0!important;}
 /* Circular floating bet slip FAB — fcbet216 reference image */
-.sb-floating-bet-badge,body .sb-root .sb-floating-bet-badge{display:none;position:fixed;bottom:88px;right:16px;z-index:3000;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:'Roboto',sans-serif;user-select:none;-webkit-tap-highlight-color:transparent;}
+.sb-floating-bet-badge,body .sb-root .sb-floating-bet-badge{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:3000;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:'Roboto',sans-serif;user-select:none;-webkit-tap-highlight-color:transparent;}
 .sb-fb-circle,body .sb-root .sb-fb-circle{position:relative;width:52px;height:52px;border-radius:50%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.55);}
 .sb-fb-circle svg{color:rgba(255,255,255,0.88);width:22px;height:22px;}
 .sb-fb-count,body .sb-root .sb-fb-count{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;background:rgb(113,246,105);color:#000;border-radius:999px;font-size:11px;font-weight:800;line-height:22px;text-align:center;border:2px solid #1e1e1e;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
 .sb-fb-label,body .sb-root .sb-fb-label{font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.7);white-space:nowrap;}
 /* ── Fiche de Pari — critical inline (fcbet216 reference) ── */
-body .sb-root .slip-tabs,.sb-root .slip-tabs{display:flex!important;gap:4px!important;padding:10px 12px 0!important;background:#121212!important;}
+body .sb-root .slip-tabs,.sb-root .slip-tabs{display:flex!important;gap:4px!important;padding:10px 12px 0!important;background:rgb(49,49,49)!important;}
 body .sb-root .slip-tab,.sb-root .slip-tab{flex:1!important;background:transparent!important;border:none!important;border-radius:6px 6px 0 0!important;color:rgba(255,255,255,0.5)!important;font-size:13px!important;padding:11px 6px!important;cursor:pointer!important;}
 body .sb-root .slip-tab.active,.sb-root .slip-tab.active{background:rgb(49,49,49)!important;color:#fff!important;font-weight:600!important;}
 body .sb-root .slip-item,.sb-root .slip-item{margin:10px 12px!important;padding:0!important;border-radius:8px!important;background:rgb(49,49,49)!important;border:none!important;overflow:hidden!important;}
@@ -911,46 +911,7 @@ body .sb-root .slip-place-btn,.sb-root .slip-place-btn{background:rgb(113,246,10
     <div id="sb-slip-body"></div>
   </div>
 
-  <!-- ═══ Secondary widgets (below bet slip) ═══ -->
-  <div class="sb-right-secondary">
-
-    <div class="sb-widget">
-      <div class="sb-widget-hdr">Code rapide <i class="fa fa-info-circle"></i></div>
-      <div class="sb-widget-body">
-        <input type="text" class="sb-dark-inp" placeholder="Entrez le code rapide">
-        <label class="sb-quick-toggle">
-          <input type="checkbox"> <span>Utilisez le mode rapide</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="sb-widget">
-      <div class="sb-widget-hdr">Rechercher des paris</div>
-      <div class="sb-widget-body">
-        <div class="sb-search-row">
-          <select class="sb-dark-sel"><option>Bet Code</option></select>
-          <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d...">
-        </div>
-      </div>
-    </div>
-
-    <!-- Team / championship search — added above Paris populaires per
-         the reference image (matches the fcbet216 sidebar order). -->
-    <div class="sb-widget sb-widget--team-search">
-      <div class="sb-widget-body" style="padding-top:6px">
-        <div class="sb-search-box sb-search-box--right">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--sb-text-2);flex-shrink:0"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <input type="text" class="sb-sidebar-search" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbSearchMatches(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <div class="sb-widget">
-      <div class="sb-widget-hdr">Paris populaires</div>
-      <div id="sb-popular-bets"></div>
-    </div>
-
-  </div><!-- end sb-right-secondary -->
+  
 
 </aside>
 
