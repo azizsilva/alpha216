@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }
         }
         exit;
+    }
     if ($action === 'create_player') {
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
