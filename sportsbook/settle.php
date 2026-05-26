@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 $stmt = $pdo->prepare("SELECT role FROM users WHERE id=?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$user || !in_array($user['role'], ['admin','super_admin'])) {
+if (!$user || !in_array($user['role'], ['admin','super_admin','provider'])) {
     echo json_encode(['success'=>false,'message'=>'Admin requis']);
     exit;
 }

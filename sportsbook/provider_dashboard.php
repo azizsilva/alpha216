@@ -100,6 +100,15 @@ $players = $pdo->query("
     ORDER BY id DESC LIMIT 100
 ")->fetchAll(PDO::FETCH_ASSOC);
 
+// Pending Bets
+$pending_bets = $pdo->query("
+    SELECT b.id, b.user_id, u.username, b.amount, b.total_odds, b.potential_returns, b.slip, b.created_at
+    FROM sportsbook_bets b
+    JOIN users u ON b.user_id = u.id
+    WHERE b.status = 'pending'
+    ORDER BY b.id DESC LIMIT 50
+")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -199,6 +208,7 @@ $players = $pdo->query("
             <li class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
             <li class="nav-item" onclick="switchTab('credit', this)"><i class="fa-solid fa-users"></i> Credit Management</li>
             <li class="nav-item" onclick="switchTab('odds', this)"><i class="fa-solid fa-sliders"></i> Odds Configurator</li>
+            <li class="nav-item" onclick="switchTab('risk', this)"><i class="fa-solid fa-shield-halved"></i> Risk & Exposure</li>
         </ul>
     </div>
 
@@ -304,6 +314,53 @@ $players = $pdo->query("
                 </table>
             </div>
 
+            <!-- Risk & Exposure (Live Bet Tracker) -->
+            <div id="risk" class="page-section section-card">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-tower-observation"></i> Live Bet Tracker (Pending)</h3>
+                    <span class="badge active"><i class="fa-solid fa-circle-play"></i> Auto-Settle Daemon Active</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Player</th>
+                            <th>Slip (Selections)</th>
+                            <th>Stake</th>
+                            <th>Potential Win</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($pending_bets as $bet): 
+                            $slip = json_decode($bet['slip'], true);
+                            $selections = [];
+                            foreach($slip as $leg) {
+                                $selections[] = "{$leg['match']} ({$leg['sel']})";
+                            }
+                        ?>
+                        <tr>
+                            <td style="color:var(--text-muted);">#<?=$bet['id']?></td>
+                            <td style="font-weight:600; color:#fff;"><?=$bet['username']?></td>
+                            <td style="font-size:12px; max-width:300px; white-space:pre-wrap;"><?=implode(" \n+ ", $selections)?></td>
+                            <td style="color:var(--danger); font-weight:600;"><?=number_format($bet['amount'], 2)?></td>
+                            <td style="color:var(--primary); font-weight:600;"><?=number_format($bet['potential_returns'], 2)?></td>
+                            <td>
+                                <div style="display:flex; gap:5px;">
+                                    <button class="btn btn-sm" style="background:#22c55e;" onclick="manualSettle(<?=$bet['id']?>, 'won')">Win</button>
+                                    <button class="btn btn-sm" style="background:#ef4444;" onclick="manualSettle(<?=$bet['id']?>, 'lost')">Loss</button>
+                                    <button class="btn btn-sm btn-outline" onclick="manualSettle(<?=$bet['id']?>, 'refunded')">Refund</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php if(empty($pending_bets)): ?>
+                        <tr><td colspan="6" style="text-align:center;">Aucun pari en attente.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 
@@ -398,6 +455,21 @@ $players = $pdo->query("
             .then(r => r.json())
             .then(res => {
                 alert(res.msg);
+                if (res.success) location.reload();
+            });
+        }
+        
+        function manualSettle(betId, result) {
+            if(!confirm("Êtes-vous sûr de vouloir marquer ce ticket comme " + result.toUpperCase() + " ?")) return;
+            
+            fetch('settle.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'action=settle&bet_id=' + betId + '&result=' + result
+            })
+            .then(r => r.json())
+            .then(res => {
+                alert(res.message);
                 if (res.success) location.reload();
             });
         }
