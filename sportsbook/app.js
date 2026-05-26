@@ -3544,11 +3544,20 @@ window.sbPlaceBet = function() {
             el.textContent = parseFloat(data.new_balance).toFixed(2) + ' TND';
           });
         }
-        alert('✅ ' + data.message + (data.bet_id ? '\n\nTicket #' + data.bet_id : ''));
+        // Clear slip
         S.betSlip = [];
         SLIP_COMBI_STAKE = 0;
         SLIP_STAKE = 0;
         renderBetSlip();
+        // ── Auto-close the FICHE DE PARI drawer ──
+        var right = document.getElementById('sb-right');
+        if (right) right.classList.remove('open');
+        var fab = document.getElementById('sb-floating-bet-badge');
+        if (fab) fab.style.visibility = 'hidden';
+        // Show a non-blocking toast instead of alert
+        var toastMsg = '✅ Pari placé ! Ticket #' + (data.bet_id || '');
+        if (data.new_balance !== undefined) toastMsg += '\nNouveau solde: ' + parseFloat(data.new_balance).toFixed(2) + ' TND';
+        alert(toastMsg);
       } else {
         alert('❌ Erreur: ' + data.message);
       }
