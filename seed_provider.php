@@ -61,7 +61,7 @@ try {
         $stmt->execute([$hashed, $password, $user['id']]);
         echo "Updated provider user.\n";
     } else {
-        $stmt = $pdo->prepare("INSERT INTO users (username, email, password, password_text, role, status, balance) VALUES (?, ?, ?, ?, 'provider', 'active', 0)");
+        $stmt = $pdo->prepare("INSERT INTO users (username, email, password, password_text, role, status, balance, mobile) VALUES (?, ?, ?, ?, 'provider', 'active', 0, '00000000')");
         // Username can be Provider
         $stmt->execute(['Provider', $email, $hashed, $password]);
         echo "Inserted new provider user.\n";
