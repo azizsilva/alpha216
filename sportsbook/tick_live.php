@@ -49,14 +49,21 @@ define('LOCK_FILE',     CACHE_DIR . '/tick_live.lock');
 if (!is_dir(CACHE_DIR)) @mkdir(CACHE_DIR, 0755, true);
 
 // ── Tunable parameters ─────────────────────────────────────────
-$TICK_SECONDS      = 1;     // base loop interval (was 2s — now 1s for tighter live updates)
-$STREAM_EVERY      = 1;     // refresh /v1/bet365/inplay every tick (1s)
-$FOOTBALL_EVERY    = 2;     // refresh football inplay_filter every 2s (high priority)
-$OTHER_SPORT_EVERY = 4;     // refresh non-football sport in round-robin every 4 ticks (4s)
+// RATE-LIMIT-SAFE defaults. BetsAPI free/standard plans have a quota
+// of ~500-1000 req/min. With TICK_SECONDS=5:
+//   - /v1/bet365/inplay (stream)           : 1 call / 5s  = 12/min
+//   - /v1/bet365/inplay_filter (football)  : 1 call / 10s =  6/min
+//   - Other sports round-robin (5 sports)  : 1 call / 20s =  3/min each
+//   Total: ~33 req/min — well within any plan.
+// If you have a Volume Package (higher quota), you can lower TICK_SECONDS.
+$TICK_SECONDS      = 5;     // base loop interval — change to 2 with Volume Package
+$STREAM_EVERY      = 1;     // refresh /v1/bet365/inplay every tick
+$FOOTBALL_EVERY    = 2;     // refresh football inplay_filter every 2 ticks (10s)
+$OTHER_SPORT_EVERY = 4;     // refresh non-football sport round-robin every 4 ticks (20s)
 $FOOTBALL_SPORT_ID = 1;
 $OTHER_LIVE_SPORTS = [18, 13, 91, 17, 78];  // basketball, tennis, volleyball, ice hockey, handball
-$MAX_INPLAY_PAGES  = 5;     // up to 250 matches per sport
-$LOG_EVERY_N_TICKS = 20;    // log a stats line every N ticks (~20s)
+$MAX_INPLAY_PAGES  = 3;     // 3 pages = 150 matches — reduces calls vs 5 pages
+$LOG_EVERY_N_TICKS = 12;    // log a stats line every N ticks (~60s)
 
 // ── Lock: only one instance runs ──────────────────────────────
 //   We use a real OS-level advisory lock via flock(LOCK_EX | LOCK_NB).

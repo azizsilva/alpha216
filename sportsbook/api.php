@@ -736,13 +736,11 @@ if ($action === 'inplay') {
     $tick_lock     = $cache_dir . '/tick_live.lock';
     $daemon_alive  = file_exists($tick_lock) && (time() - filemtime($tick_lock)) < 10;
     $cache_ttl     = 2;   // ALWAYS 2s — real-time for all sports
-    // EV per-match odds cache TTL. We dropped this from 4s/6s to 1s/2s
-    // because BetsAPI's own delay is the bottleneck, not our cache —
-    // a tighter TTL means score / odds changes propagate to the UI as
-    // soon as upstream has them. The async refresh below keeps the
-    // file fresh in the background so 99% of requests still hit warm.
-    $ev_cache_ttl  = $is_football ? 1 : 2;
-    $ev_stale_ttl  = 1;   // ev_ files re-fetched every 1s
+    // EV per-match odds cache TTL — must match tick_live TICK_SECONDS (5s).
+    // Do NOT lower below tick_live's interval or api.php will fire its own
+    // BetsAPI calls and burn quota. Raise tick_live speed first, then lower this.
+    $ev_cache_ttl  = $is_football ? 5 : 8;
+    $ev_stale_ttl  = 5;   // ev_ files re-fetched every 5s
     $odds_bg_ttl   = $is_football ? 8 : 12;
     $ev_refresh_cap = 50; // refresh up to 50 live events per cycle (all sports)
 
@@ -1791,7 +1789,9 @@ if ($action === 'match_live') {
     if (!is_dir($ml_cache_dir)) @mkdir($ml_cache_dir, 0755, true);
     $ml_cache_file = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.json';
     $ml_lock_file  = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.lock';
-    $ml_ttl_seconds = 1; // 1s for live match detail — see budget above
+    // TTL is 5s to match tick_live's polling interval. If you upgrade
+    // your BetsAPI plan and lower TICK_SECONDS in tick_live, lower this too.
+    $ml_ttl_seconds = 5;
 
     if (file_exists($ml_cache_file) && (time() - filemtime($ml_cache_file)) < $ml_ttl_seconds) {
         header('X-SB-Cache: HIT');
