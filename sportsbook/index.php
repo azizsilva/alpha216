@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260527vpD';  // FAB circle reliably reappears after closing drawer + clicking new odds
+$sb_build_stamp = 'b20260527vpE';  // remove mobile "Rechercher des paris / Bet Code" panel
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -852,16 +852,6 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
       <div class="sb-boost-row" id="sb-boosted-odds">
         <div class="sb-sk-boost-card"></div>
         <div class="sb-sk-boost-card"></div>
-      </div>
-    </div>
-
-    <!-- ══ MOBILE RECHERCHE DE PARIS (Bet Code) ══
-         Visible on mobile only, matches fcbet216 image -->
-    <div class="sb-mob-bet-search-panel" style="margin: 0 1px 16px; background: rgb(49, 49, 49); padding: 14px; border-radius: 8px;">
-      <div style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; font-family: 'Roboto', sans-serif;">Rechercher des paris</div>
-      <div class="sb-search-row" style="display: flex; gap: 8px;">
-        <button type="button" class="sb-betcode-btn" style="background: rgb(74,74,74); border: 1px solid rgb(120,118,118); color: #fff; padding: 12px 14px; border-radius: 4px; font-size: 14px; font-weight: 700; outline: none; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Bet Code</button>
-        <input type="text" class="sb-dark-inp" placeholder="Entrez le numéro d'identific..." style="flex: 1; background: rgb(74,74,74); box-shadow: rgba(13,13,13,0) 0px 0px 0px 0px inset; color: rgba(255,255,255,0.54); text-align: left; padding: 12px 10px; border-width: 1px; border-style: solid; border-color: rgb(120,118,118); border-radius: 4px; font-size: 14px; outline: none; min-width: 0;">
       </div>
     </div>
 
