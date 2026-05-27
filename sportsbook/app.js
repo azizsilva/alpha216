@@ -5473,24 +5473,34 @@ function renderMatchDetail(m, markets) {
  */
 function filterMarketByScore(mkt, m) {
   if (!mkt || !mkt.selections) return mkt;
-  var nm = String(mkt.name || '').toLowerCase();
+  var nm = String(mkt.name || '').toLowerCase().trim();
   // Only filter score-dependent markets. 1x2 / Double Chance / etc.
   // are not score-settled in the same simple way.
-  var isTotal     = /\btotal\b|plus\/moins|over\/under/i.test(nm);
+  // Match: "Total", "Total de buts", "1 total", "2 total", "Total mi-temps",
+  //        "Plus/Moins", "Over/Under", "Goals"
+  var isTotalAll  = /\btotal\b|plus\/moins|over\/under|goals\b/i.test(nm);
+  var isTotalHome = /^1\s*total/i.test(nm);   // "1 total de buts" → home only
+  var isTotalAway = /^2\s*total/i.test(nm);   // "2 total" → away only
   var isCorners   = /corner/i.test(nm);
   var isCards     = /carton|card/i.test(nm);
-  if (!(isTotal || isCorners || isCards)) return mkt;
+  if (!(isTotalAll || isTotalHome || isTotalAway || isCorners || isCards)) return mkt;
 
   // Pick the right "current count" depending on market type
   var current = 0;
-  if (isTotal) {
-    // Goals: sum of m.ss "H-A"
-    if (m && m.ss) {
-      var p = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
-      if (p.length >= 2) {
-        current = (parseInt(p[0], 10) || 0) + (parseInt(p[1], 10) || 0);
-      }
+  var home_g = 0, away_g = 0;
+  if (m && m.ss) {
+    var p = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
+    if (p.length >= 2) {
+      home_g = parseInt(p[0], 10) || 0;
+      away_g = parseInt(p[1], 10) || 0;
     }
+  }
+  if (isTotalHome) {
+    current = home_g;
+  } else if (isTotalAway) {
+    current = away_g;
+  } else if (isTotalAll) {
+    current = home_g + away_g;
   } else if (isCorners) {
     if (m && m.stats && m.stats.corners) {
       var c = m.stats.corners;
@@ -5503,6 +5513,10 @@ function filterMarketByScore(mkt, m) {
       var yca = Array.isArray(yc) ? yc : String(yc).split(',');
       current = (parseInt(yca[0], 10) || 0) + (parseInt(yca[1], 10) || 0);
     }
+  }
+  // Diagnostic: log when filtering for debugging. Remove later.
+  if (window._sbDebugFilter) {
+    console.log('[filterMarketByScore]', mkt.name, 'current=', current, 'sels=', mkt.selections.length);
   }
 
   // Filter selections — drop anything where the line is already settled
@@ -5779,22 +5793,34 @@ function buildFallbackMarkets(m) {
   vm.forEach(function(c,i) { vmSels.push({id:'vm_'+i,name:c[0],odds:Math.max(1.01,+(c[1]*seedRand(s+'vm'+i,0.9,1.1)).toFixed(2))}); });
   mkts.push({id:'vm',name:'Marge de victoire',selections:vmSels});
 
-  // 1 total de buts
+  // 1 total de buts — DYNAMIC per-team total based on home goals
+  // The home score is the first half of m.ss ("3-0" → 3 home goals).
+  // fcbet216 shows lines ABOVE the current home count so the bet is alive.
+  var home_goals = 0, away_goals = 0;
+  if (m.ss) {
+    var hp = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
+    if (hp.length >= 2) {
+      home_goals = parseInt(hp[0], 10) || 0;
+      away_goals = parseInt(hp[1], 10) || 0;
+    }
+  }
+  var h_l1 = home_goals + 0.5;
+  var h_l2 = home_goals + 1.5;
   mkts.push({id:'t1',name:'1 total de buts',selections:[
-    {id:'t1ov05',name:'Plus de 0.5',odds:Math.max(1.01,+seedRand(s+'t1a',1.1,1.2).toFixed(2))},
-    {id:'t1un05',name:'Moins de 0.5',odds:Math.max(1.01,+seedRand(s+'t1b',4.0,5.0).toFixed(2))},
-    {id:'t1ov15',name:'Plus de 1.5',odds:Math.max(1.01,+seedRand(s+'t1c',1.7,2.0).toFixed(2))},
-    {id:'t1un15',name:'Moins de 1.5',odds:Math.max(1.01,+seedRand(s+'t1d',1.7,2.0).toFixed(2))},
-    {id:'t1ov25',name:'Plus de 2.5',odds:Math.max(1.01,+seedRand(s+'t1e',3.5,4.5).toFixed(2))},
-    {id:'t1un25',name:'Moins de 2.5',odds:Math.max(1.01,+seedRand(s+'t1f',1.2,1.35).toFixed(2))},
+    {id:'t1ov_'+h_l1,name:'Plus de '+h_l1,odds:Math.max(1.01,+seedRand(s+'t1a',1.7,2.1).toFixed(2)),handicap:h_l1},
+    {id:'t1un_'+h_l1,name:'Moins de '+h_l1,odds:Math.max(1.01,+seedRand(s+'t1b',1.7,2.1).toFixed(2)),handicap:h_l1},
+    {id:'t1ov_'+h_l2,name:'Plus de '+h_l2,odds:Math.max(1.01,+seedRand(s+'t1c',2.5,4.0).toFixed(2)),handicap:h_l2},
+    {id:'t1un_'+h_l2,name:'Moins de '+h_l2,odds:Math.max(1.01,+seedRand(s+'t1d',1.2,1.5).toFixed(2)),handicap:h_l2},
   ]});
 
-  // 2 total
+  // 2 total — DYNAMIC per-team total based on away goals
+  var a_l1 = away_goals + 0.5;
+  var a_l2 = away_goals + 1.5;
   mkts.push({id:'t2',name:'2 total',selections:[
-    {id:'t2ov05',name:'Plus de 0.5',odds:Math.max(1.01,+seedRand(s+'t2a',1.1,1.25).toFixed(2))},
-    {id:'t2un05',name:'Moins de 0.5',odds:Math.max(1.01,+seedRand(s+'t2b',3.8,5.0).toFixed(2))},
-    {id:'t2ov15',name:'Plus de 1.5',odds:Math.max(1.01,+seedRand(s+'t2c',1.7,2.1).toFixed(2))},
-    {id:'t2un15',name:'Moins de 1.5',odds:Math.max(1.01,+seedRand(s+'t2d',1.65,2.0).toFixed(2))},
+    {id:'t2ov_'+a_l1,name:'Plus de '+a_l1,odds:Math.max(1.01,+seedRand(s+'t2a',1.7,2.1).toFixed(2)),handicap:a_l1},
+    {id:'t2un_'+a_l1,name:'Moins de '+a_l1,odds:Math.max(1.01,+seedRand(s+'t2b',1.7,2.1).toFixed(2)),handicap:a_l1},
+    {id:'t2ov_'+a_l2,name:'Plus de '+a_l2,odds:Math.max(1.01,+seedRand(s+'t2c',2.5,4.0).toFixed(2)),handicap:a_l2},
+    {id:'t2un_'+a_l2,name:'Moins de '+a_l2,odds:Math.max(1.01,+seedRand(s+'t2d',1.2,1.5).toFixed(2)),handicap:a_l2},
   ]});
 
   // Nombre exact de buts (Exact goals) — fcbet216 image 8.
