@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260527vpI';  // football matches past 135 min wall clock (or 105 min in fallback mode) drop out of EN DIRECT
+$sb_build_stamp = 'b20260527vpJ';  // Mes Paris page + print receipt (alpina216 branded)
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
@@ -138,6 +138,7 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
      a chip without ever falling into the near-black look of rgba black). */
   .sb-mobile-topbar .sb-btn-home,
   .sb-mobile-topbar .sb-btn-live,
+  .sb-mobile-topbar .sb-btn-mybets,
   .sb-mobile-topbar .sb-btn-stats{
     flex:1!important;min-width:0!important;
     height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;
@@ -150,7 +151,8 @@ $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time(
   .sb-mobile-topbar .sb-btn-live .sb-btn-live-sport{display:none!important;}
   /* ACTIVE: only change color — size stays equal */
   .sb-mobile-topbar .sb-btn-home.active,
-  .sb-mobile-topbar .sb-btn-live.active{
+  .sb-mobile-topbar .sb-btn-live.active,
+  .sb-mobile-topbar .sb-btn-mybets.active{
     background:#70f669!important;color:rgba(0,0,0,0.87)!important;
   }
   /* EN DIRECT red badge (shown when button is NOT active) — fcbet216 .cqljKD EXACT */
@@ -671,6 +673,7 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
     <div class="sb-top-bar">
       <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'inplay',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
+      <button class="sb-btn-mybets" title="Mes Paris" onclick="window.sbOpenMyBets()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3.5" width="13" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 6.5h13" stroke="currentColor" stroke-width="1.4"/><path d="M4 9.5h2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9.5 9.5l1.2 1.2 2-2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     
@@ -766,6 +769,7 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
   <div class="sb-mobile-topbar">
     <button class="sb-btn-home active" onclick="window.sbSwitchTab(this,'home',1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <button class="sb-btn-live" onclick="window.sbSwitchTab(this,'live',1)"><span class="sb-live-badge">EN DIRECT</span></button>
+    <button class="sb-btn-mybets" title="Mes Paris" onclick="window.sbOpenMyBets()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3.5" width="13" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 6.5h13" stroke="currentColor" stroke-width="1.4"/><path d="M4 9.5h2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9.5 9.5l1.2 1.2 2-2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <button class="sb-btn-stats"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 
@@ -895,6 +899,36 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
         </div>
       </div>
     </div><!-- /sb-mob-leagues-panel -->
+
+    <!-- ══ MES PARIS (My Bets) page — hidden by default, toggled by sbOpenMyBets() ══ -->
+    <div id="sb-mybets-page" style="display:none">
+      <div class="sb-mybets-wrap">
+        <div class="sb-mybets-search">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14L11.1 11.1M7.33 2C5.92 2 4.56 2.56 3.56 3.56C2.56 4.56 2 5.92 2 7.33C2 8.74 2.56 10.1 3.56 11.1C4.56 12.1 5.92 12.67 7.33 12.67C8.74 12.67 10.1 12.1 11.1 11.1C12.1 10.1 12.67 8.74 12.67 7.33C12.67 5.92 12.1 4.56 11.1 3.56C10.1 2.56 8.74 2 7.33 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" id="sb-mybets-q" placeholder="Entrez l'équipe ou le nom du championnat" oninput="window.sbMyBetsSearch(this.value)">
+        </div>
+        <div class="sb-mybets-filters" id="sb-mybets-filters">
+          <button class="sb-mybets-filter active" data-st="open"     onclick="window.sbMyBetsFilter(this,'open')">Ouvrir</button>
+          <button class="sb-mybets-filter"        data-st="settled"  onclick="window.sbMyBetsFilter(this,'settled')">Calculé</button>
+          <button class="sb-mybets-filter"        data-st="won"      onclick="window.sbMyBetsFilter(this,'won')">Gagné</button>
+          <button class="sb-mybets-filter"        data-st="lost"     onclick="window.sbMyBetsFilter(this,'lost')">Perdu</button>
+          <button class="sb-mybets-filter"        data-st="refunded" onclick="window.sbMyBetsFilter(this,'refunded')">Retirer</button>
+        </div>
+        <div class="sb-mybets-dates">
+          <label class="sb-mybets-date">
+            <input type="date" id="sb-mybets-from" onchange="window.sbMyBetsReload()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 6h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </label>
+          <label class="sb-mybets-date">
+            <input type="date" id="sb-mybets-to" onchange="window.sbMyBetsReload()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 6h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </label>
+        </div>
+        <div id="sb-mybets-list">
+          <div class="sb-mybets-loading">Chargement…</div>
+        </div>
+      </div>
+    </div>
 
     <!-- Match listings — richer skeleton until JS renders -->
     <div id="sb-matches-body">

@@ -4125,22 +4125,42 @@ window.sbPlaceBet = function() {
             el.textContent = parseFloat(data.new_balance).toFixed(2) + ' TND';
           });
         }
+        var placedBetId   = data.bet_id || 0;
+        var placedAmount  = totalAmount;
+        var placedReturns = totalAmount * totalOdds;
+        var placedMode    = SLIP_MODE === 'combine' ? 'Combiné' : (SLIP_MODE === 'system' ? 'Système' : 'Simple');
         // Clear slip
         S.betSlip = [];
         SLIP_COMBI_STAKE = 0;
         SLIP_STAKE = 0;
         renderBetSlip();
-        // ── Auto-close the FICHE DE PARI drawer ──
-        var right = document.getElementById('sb-right');
-        if (right) right.classList.remove('open');
+        // Replace slip body with success card (image 2 reference) — but keep
+        // the drawer open so the user can immediately access "Mes paris" or
+        // print the ticket.
+        var bodyEl = document.querySelector('.sb-right .sb-slip-body, .sb-slip-body');
+        if (bodyEl && placedBetId) {
+          bodyEl.innerHTML =
+            '<div class="sb-bet-card" style="margin:8px 0;">' +
+              '<div class="sb-bet-card-body" style="display:block;padding:14px;border-top:0">' +
+                '<div class="sb-bet-card-row" style="border-bottom:1px dashed rgba(255,255,255,0.06)"><span>Numéro d\'identification</span><span class="v">' + placedBetId + '</span></div>' +
+                '<div class="sb-bet-card-row"><span>Mise totale</span><span class="v">TND ' + placedAmount.toFixed(2) + '</span></div>' +
+                '<div class="sb-bet-card-row"><span>Gagner</span><span class="v green">TND ' + placedReturns.toFixed(2) + '</span></div>' +
+                '<div class="sb-bet-card-row" style="border-bottom:0"><span>Type</span><span class="v">' + placedMode + '</span></div>' +
+              '</div>' +
+              '<div class="sb-bet-card-foot" style="justify-content:space-between">' +
+                '<button class="btn-icon" title="Imprimer" onclick="window.sbPrintBet(' + placedBetId + ',\'copy\')">' +
+                  '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4V1.5h8V4M4 12H2.5V6.5h11V12H12M4 9.5h8V15H4V9.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>' +
+                '</button>' +
+                '<div style="display:flex;gap:8px;flex:1;justify-content:flex-end">' +
+                  '<button class="sb-slip-btn sb-slip-btn-green" style="padding:7px 14px;border-radius:6px;border:0;background:#2bcd62;color:#000;font-weight:700;cursor:pointer" onclick="window.sbOpenMyBets()">Mes paris</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        }
         // Update the floating bet badge — will hide cleanly since the
         // slip is empty, and will properly reset visibility so it can
         // reappear on the next bet click.
         updateFloatingBetBadge();
-        // Show a non-blocking toast instead of alert
-        var toastMsg = '✅ Pari placé ! Ticket #' + (data.bet_id || '');
-        if (data.new_balance !== undefined) toastMsg += '\nNouveau solde: ' + parseFloat(data.new_balance).toFixed(2) + ' TND';
-        alert(toastMsg);
       } else {
         alert('❌ Erreur: ' + data.message);
       }
@@ -5322,6 +5342,15 @@ window.sbSwitchLive = function(btn) {
 };
 
 window.sbSwitchTab = function(btn, action, sportId) {
+  // Close Mes Paris page if it was open
+  var _mb = document.getElementById('sb-mybets-page');
+  if (_mb && _mb.style.display !== 'none') {
+    _mb.style.display = 'none';
+    var _mbody = document.getElementById('sb-matches-body');
+    if (_mbody) _mbody.style.display = '';
+    document.querySelectorAll('.sb-btn-mybets').forEach(function(b){ b.classList.remove('active'); });
+  }
+
   sbSetTopbarActive(action === 'live' ? 'live' : 'home');
 
   S.activeTab = (action === 'live') ? 'live' : 'home';
@@ -7495,5 +7524,257 @@ if (!sbRestoreFromUrl()) {
 }
 // Hide splash now that the page chrome is rendered (data fills in async)
 sbHideBootSplash();
+
+/* ══════════════════════════════════════════════════════════
+   MES PARIS (My Bets) — fcbet216 image 3 reference.
+   Replaces the home stream with a list of the logged-in user's
+   bets, scoped by status (Ouvrir/Calculé/Gagné/Perdu/Retirer)
+   and date range. Print actions open bet_print.php.
+   ══════════════════════════════════════════════════════════ */
+window._mbState = window._mbState || { status: 'open', q: '', from: '', to: '', bets: [] };
+
+function _mbFmtAmount(n) {
+  var v = (parseFloat(n) || 0).toFixed(2);
+  return 'TND ' + v;
+}
+function _mbFmtDateShort(iso) {
+  if (!iso) return '';
+  var d = new Date(iso.replace(' ', 'T'));
+  if (isNaN(d.getTime())) return iso;
+  var p = function(x){ return x < 10 ? '0' + x : ('' + x); };
+  return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' • ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function _mbDefaultFrom() {
+  var d = new Date(); d.setDate(d.getDate() - 10);
+  return d.toISOString().slice(0, 10);
+}
+function _mbDefaultTo() {
+  return new Date().toISOString().slice(0, 10);
+}
+function _mbPillForStatus(s) {
+  if (s === 'pending')  return '<span class="sb-bet-card-pill is-open">OUVRIR</span>';
+  if (s === 'won')      return '<span class="sb-bet-card-pill is-won">GAGNÉ</span>';
+  if (s === 'lost')     return '<span class="sb-bet-card-pill is-lost">PERDU</span>';
+  if (s === 'refunded') return '<span class="sb-bet-card-pill is-ref">RETIRÉ</span>';
+  return '<span class="sb-bet-card-pill">' + String(s || '').toUpperCase() + '</span>';
+}
+function _mbRenderLegInline(leg) {
+  // Slip schema (from app.js): match (string), sel, market, isBB, legs[]{name,market,odds}
+  var teams = (leg.match || '').trim();
+  if (!teams) teams = (leg.home || '') + (leg.away ? ' vs. ' + leg.away : '');
+  var pick, market;
+  if (leg.isBB && Array.isArray(leg.legs)) {
+    market = 'BetBuilder';
+    pick = leg.legs.map(function(L){
+      var mk = (L.market || '').trim();
+      var pk = (L.name || L.pick || '').trim();
+      return (mk ? mk + ': ' : '') + pk;
+    }).join(' | ');
+  } else {
+    market = (leg.market || '').trim();
+    pick   = (leg.sel || leg.pick || '').trim();
+  }
+  return '<div class="sb-bet-leg">' +
+           '<div class="lg-mk">' + _escHtml(teams) + (market ? ' — ' + _escHtml(market) : '') + '</div>' +
+           '<div class="lg-pk">' + _escHtml(pick) + '</div>' +
+         '</div>';
+}
+function _escHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function _mbBetMatchesQuery(bet, q) {
+  if (!q) return true;
+  q = q.toLowerCase();
+  var slip = Array.isArray(bet.slip) ? bet.slip : [];
+  for (var i = 0; i < slip.length; i++) {
+    var L = slip[i];
+    var hay = ((L.match || '') + ' ' + (L.home || '') + ' ' + (L.away || '') + ' ' + (L.league || '') + ' ' + (L.sel || '')).toLowerCase();
+    if (hay.indexOf(q) !== -1) return true;
+  }
+  return false;
+}
+
+function _mbRenderCard(bet) {
+  var slip = Array.isArray(bet.slip) ? bet.slip : [];
+  var first = slip[0] || {};
+  // Title: first match's teams, or "Combiné (N)" if multiple matches
+  var title;
+  if (slip.length > 1) {
+    title = 'Combiné (' + slip.length + ' sélections)';
+  } else {
+    title = (first.match || '').trim();
+    if (!title) title = (first.home || '') + (first.away ? ' vs. ' + first.away : '');
+    if (!title) title = '#' + bet.id;
+  }
+  var statusPill = _mbPillForStatus(bet.status);
+  var oddsLabel  = (parseFloat(bet.total_odds) || 1).toFixed(2);
+
+  var body = '';
+  body += '<div class="sb-bet-card-row"><span>Cotes totales</span><span class="v green">' + oddsLabel + '</span></div>';
+  body += '<div class="sb-bet-card-row"><span>Mise totale</span><span class="v">' + _mbFmtAmount(bet.amount) + '</span></div>';
+  body += '<div class="sb-bet-card-row"><span>Gain total</span><span class="v">' + _mbFmtAmount(bet.potential_returns) + '</span></div>';
+  // Expanded selections
+  if (slip.length) {
+    body += '<div class="sb-bet-card-row" style="border-bottom:0;padding-bottom:2px"><span style="font-size:11px;color:#888">SÉLECTIONS</span></div>';
+    body += slip.map(_mbRenderLegInline).join('');
+  }
+
+  return '<div class="sb-bet-card" id="sb-bet-card-' + bet.id + '">' +
+           '<div class="sb-bet-card-hdr" onclick="window.sbMyBetsToggle(' + bet.id + ')">' +
+             '<svg class="sb-bet-card-hdr-chev" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+             '<span class="sb-bet-card-title">' + _escHtml(title) + '</span>' +
+             statusPill +
+           '</div>' +
+           '<div class="sb-bet-card-body" style="display:none">' + body + '</div>' +
+           '<div class="sb-bet-card-foot">' +
+             '<span class="meta">' + _mbFmtDateShort(bet.created_at) + '  Numéro d\'identification: ' + bet.id + '</span>' +
+             '<button class="btn-icon" title="Imprimer" onclick="event.stopPropagation();window.sbPrintBet(' + bet.id + ',\'copy\')">' +
+               '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4V1.5h8V4M4 12H2.5V6.5h11V12H12M4 9.5h8V15H4V9.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>' +
+             '</button>' +
+             '<button class="btn-icon" title="Plus d\'options" onclick="event.stopPropagation();window.sbToggleMyBetsMenu(' + bet.id + ', event)">' +
+               '<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="13" cy="8" r="1.4"/></svg>' +
+             '</button>' +
+           '</div>' +
+         '</div>';
+}
+
+window.sbMyBetsToggle = function(id) {
+  var card = document.getElementById('sb-bet-card-' + id);
+  if (!card) return;
+  var body = card.querySelector('.sb-bet-card-body');
+  if (!body) return;
+  var open = card.classList.toggle('is-open');
+  body.style.display = open ? 'block' : 'none';
+};
+
+window.sbToggleMyBetsMenu = function(id, ev) {
+  // Close any open menu first
+  document.querySelectorAll('.sb-bet-print-menu').forEach(function(m){ m.parentNode.removeChild(m); });
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  var btn = ev && ev.currentTarget;
+  if (!btn) return;
+  var menu = document.createElement('div');
+  menu.className = 'sb-bet-print-menu';
+  menu.innerHTML =
+    '<div class="item" onclick="window.sbPrintBet(' + id + ',\'copy\')">Imprimer</div>' +
+    '<div class="item" onclick="window.sbPrintBet(' + id + ',\'combinations\')">Imprimer les combinaisons</div>';
+  btn.appendChild(menu);
+  // Click-outside to close
+  setTimeout(function() {
+    var off = function(e) {
+      if (!menu.contains(e.target)) {
+        if (menu.parentNode) menu.parentNode.removeChild(menu);
+        document.removeEventListener('click', off, true);
+      }
+    };
+    document.addEventListener('click', off, true);
+  }, 0);
+};
+
+window.sbPrintBet = function(id, mode) {
+  var url = 'bet_print.php?id=' + encodeURIComponent(id) + '&mode=' + encodeURIComponent(mode || 'copy');
+  window.open(url, '_blank', 'width=720,height=900,scrollbars=1,resizable=1');
+};
+
+window.sbOpenMyBets = function() {
+  // Toggle: if already open, go back to main
+  var page = document.getElementById('sb-mybets-page');
+  if (!page) return;
+  if (page.style.display !== 'none') {
+    window.sbCloseMyBets();
+    return;
+  }
+  // Hide all home panels + match listings
+  sbSetHomepanelVisible(false);
+  var body = document.getElementById('sb-matches-body');
+  if (body) body.style.display = 'none';
+  page.style.display = 'block';
+  // Default date range (last 10 days → today)
+  var fromEl = document.getElementById('sb-mybets-from');
+  var toEl   = document.getElementById('sb-mybets-to');
+  if (fromEl && !fromEl.value) fromEl.value = _mbDefaultFrom();
+  if (toEl   && !toEl.value)   toEl.value   = _mbDefaultTo();
+  window._mbState.from = fromEl ? fromEl.value : '';
+  window._mbState.to   = toEl   ? toEl.value   : '';
+  // Highlight the mybets button
+  document.querySelectorAll('.sb-btn-home,.sb-btn-live,.sb-btn-mybets').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.sb-btn-mybets').forEach(function(b){ b.classList.add('active'); });
+  window.sbMyBetsReload();
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
+};
+
+window.sbCloseMyBets = function() {
+  var page = document.getElementById('sb-mybets-page');
+  if (page) page.style.display = 'none';
+  var body = document.getElementById('sb-matches-body');
+  if (body) body.style.display = '';
+  sbSetHomepanelVisible(true);
+  // Re-activate the right tab (default home/inplay)
+  document.querySelectorAll('.sb-btn-mybets').forEach(function(b){ b.classList.remove('active'); });
+  sbSetTopbarActive(S.activeTab === 'live' ? 'live' : 'home');
+};
+
+window.sbMyBetsFilter = function(btn, status) {
+  document.querySelectorAll('#sb-mybets-filters .sb-mybets-filter').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  window._mbState.status = status || 'open';
+  window.sbMyBetsReload();
+};
+
+window.sbMyBetsSearch = function(v) {
+  window._mbState.q = (v || '').trim().toLowerCase();
+  _mbRenderList();
+};
+
+window.sbMyBetsReload = function() {
+  var fromEl = document.getElementById('sb-mybets-from');
+  var toEl   = document.getElementById('sb-mybets-to');
+  window._mbState.from = fromEl ? fromEl.value : '';
+  window._mbState.to   = toEl   ? toEl.value   : '';
+  var listEl = document.getElementById('sb-mybets-list');
+  if (listEl) listEl.innerHTML = '<div class="sb-mybets-loading">Chargement…</div>';
+  var url = 'api.php?action=my_bets'
+          + '&status=' + encodeURIComponent(window._mbState.status || 'open')
+          + '&from='   + encodeURIComponent(window._mbState.from   || '')
+          + '&to='     + encodeURIComponent(window._mbState.to     || '')
+          + '&_t='     + Date.now();
+  fetch(url, { credentials: 'same-origin', cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      window._mbState.bets = (d && d.bets) ? d.bets : [];
+      _mbRenderList();
+    })
+    .catch(function(){
+      if (listEl) listEl.innerHTML = '<div class="sb-mybets-empty"><div class="sb-mybets-empty-txt">Erreur de chargement</div></div>';
+    });
+};
+
+function _mbRenderList() {
+  var listEl = document.getElementById('sb-mybets-list');
+  if (!listEl) return;
+  var st = window._mbState.status || 'open';
+  var bets = (window._mbState.bets || []).filter(function(b){
+    return _mbBetMatchesQuery(b, window._mbState.q);
+  });
+  if (!bets.length) {
+    var label = 'Vous n\'avez pas de paris ouverts';
+    if (st === 'settled')  label = 'Aucun pari calculé';
+    if (st === 'won')      label = 'Aucun pari gagné';
+    if (st === 'lost')     label = 'Aucun pari perdu';
+    if (st === 'refunded') label = 'Aucun pari retiré';
+    listEl.innerHTML =
+      '<div class="sb-mybets-empty">' +
+        '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+          '<circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2.5"/>' +
+          '<path d="M24 14v10l7 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>' +
+        '<div class="sb-mybets-empty-txt">' + label + '</div>' +
+      '</div>';
+    return;
+  }
+  listEl.innerHTML = bets.map(_mbRenderCard).join('');
+}
 
 })();

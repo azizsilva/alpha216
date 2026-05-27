@@ -2780,6 +2780,73 @@ if ($action === 'fetch_event_odds') {
     echo json_encode(['success'=>1,'h'=>$feo_pm['h']??null]); exit;
 }
 
+// ═══ MY BETS — list user's placed bets with optional status / date filter ═══
+if ($action === 'my_bets') {
+    if (session_status() === PHP_SESSION_NONE) @session_start();
+    if (empty($_SESSION['user_id'])) {
+        echo json_encode(['success'=>0,'error'=>'Non autorisé','bets'=>[]]); exit;
+    }
+    if (!$db_connected) {
+        echo json_encode(['success'=>0,'error'=>'DB indisponible','bets'=>[]]); exit;
+    }
+    $uid    = (int)$_SESSION['user_id'];
+    $status = isset($_GET['status']) ? trim($_GET['status']) : 'open';
+    $from   = isset($_GET['from'])   ? trim($_GET['from'])   : '';
+    $to     = isset($_GET['to'])     ? trim($_GET['to'])     : '';
+
+    // Map UI tab names to DB status values
+    // 'open'    → pending (Ouvrir)
+    // 'settled' → won|lost|refunded (Calculé)
+    // 'won'     → won (Gagné)
+    // 'lost'    → lost (Perdu)
+    // 'refunded'→ refunded (Retirer)
+    $where  = ['user_id = ?'];
+    $params = [$uid];
+    if ($status === 'open' || $status === 'pending') {
+        $where[] = "status = 'pending'";
+    } elseif ($status === 'settled' || $status === 'calcule') {
+        $where[] = "status IN ('won','lost','refunded')";
+    } elseif ($status === 'won' || $status === 'gagne') {
+        $where[] = "status = 'won'";
+    } elseif ($status === 'lost' || $status === 'perdu') {
+        $where[] = "status = 'lost'";
+    } elseif ($status === 'refunded' || $status === 'retirer') {
+        $where[] = "status = 'refunded'";
+    }
+    if ($from !== '') { $where[] = "created_at >= ?"; $params[] = $from . ' 00:00:00'; }
+    if ($to   !== '') { $where[] = "created_at <= ?"; $params[] = $to   . ' 23:59:59'; }
+
+    try {
+        $sql = "SELECT id, amount, total_odds, potential_returns, slip, status,
+                       settled_at, created_at
+                FROM sportsbook_bets
+                WHERE " . implode(' AND ', $where) . "
+                ORDER BY created_at DESC
+                LIMIT 200";
+        $st = $pdo->prepare($sql);
+        $st->execute($params);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        $bets = [];
+        foreach ($rows as $r) {
+            $slip = json_decode($r['slip'], true);
+            $bets[] = [
+                'id'                => (int)$r['id'],
+                'amount'            => (float)$r['amount'],
+                'total_odds'        => (float)$r['total_odds'],
+                'potential_returns' => (float)$r['potential_returns'],
+                'status'            => $r['status'],
+                'created_at'        => $r['created_at'],
+                'settled_at'        => $r['settled_at'],
+                'slip'              => is_array($slip) ? $slip : [],
+            ];
+        }
+        echo json_encode(['success'=>1, 'bets'=>$bets]);
+    } catch (Exception $e) {
+        echo json_encode(['success'=>0, 'error'=>'DB error', 'bets'=>[]]);
+    }
+    exit;
+}
+
 // ═══ TOP LEAGUES LIVE — league names with in-play matches (multi-sport) ═══
 if ($action === 'top_leagues_live') {
     $cache_dir_tl = __DIR__ . '/cache';
