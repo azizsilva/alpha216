@@ -668,6 +668,11 @@ function patchMatchDetailLive(m, markets) {
     });
     window._mdMarkets = nextMarkets;
     needsRender = true;
+    // ── Refresh bet slip BB legs with live odds ─────────────────
+    // When polling brings new odds, every BB leg in the slip must
+    // pick up the new value so the combined Bet Builder odds stay
+    // accurate. Single bets are handled by their own updater.
+    try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
   }
   if (needsRender) {
     // If the user is searching, preserve the search filter so live
@@ -1082,6 +1087,73 @@ function bbCombinedOdds(sels) {
   var raw = sels.reduce(function(acc, s) { return acc * (parseFloat(s.odds) || 1.0); }, 1.0);
   var corr = BB_CORR[sels.length] !== undefined ? BB_CORR[sels.length] : BB_CORR[4];
   return Math.max(1.01, parseFloat((raw * corr).toFixed(2)));
+}
+
+/* ── refreshBetSlipLegOdds ────────────────────────────────────────
+ * Called from patchMatchDetailLive when new markets arrive. Walks the
+ * bet slip, finds every leg whose selection ID matches one in the new
+ * market tree, copies the fresh odds across, and recomputes the BB
+ * combined value. Also tags each leg with _change ('up'|'down') so the
+ * slip can flash the same way the market buttons do. */
+function refreshBetSlipLegOdds(markets, m) {
+  if (!Array.isArray(S.betSlip) || !S.betSlip.length || !markets || !markets.length) return;
+  // Build a quick lookup: btnId -> { odds, name }
+  // btnId format matches renderMktBtn: '<matchId>_md_<selId>'
+  var matchIdStr = String((m && m.id) || '');
+  var lookup = {};
+  markets.forEach(function(mk) {
+    (mk.selections || []).forEach(function(s) {
+      var selKey = String(s.id != null ? s.id : (s.name != null ? s.name : ''));
+      if (!selKey) return;
+      var bid = matchIdStr + '_md_' + selKey;
+      var v   = applyMargin(parseFloat(s.odds) || 0);
+      if (v >= 1.01) lookup[bid] = { odds: v, name: s.name, market: mk.name || '' };
+    });
+  });
+  var slipDirty = false;
+  S.betSlip.forEach(function(b) {
+    if (b.isBB && Array.isArray(b.legs)) {
+      var legChanged = false;
+      b.legs.forEach(function(leg) {
+        var fresh = lookup[leg.id];
+        if (!fresh) return;
+        var prev = parseFloat(leg.odds);
+        var nv   = parseFloat(fresh.odds);
+        if (!isNaN(nv) && nv >= 1.01 && Math.abs(nv - prev) >= 0.01) {
+          leg._change = nv > prev ? 'up' : 'down';
+          leg.odds = nv;
+          legChanged = true;
+        }
+      });
+      if (legChanged) {
+        var prevCombined = parseFloat(b.val);
+        var newCombined  = parseFloat(bbCombinedOdds(b.legs).toFixed(2));
+        if (!isNaN(prevCombined) && Math.abs(newCombined - prevCombined) >= 0.01) {
+          b._change = newCombined > prevCombined ? 'up' : 'down';
+        }
+        b.val = newCombined;
+        b._origVal = newCombined;
+        slipDirty = true;
+      }
+    } else if (b.matchId && String(b.matchId) === matchIdStr) {
+      // Single bet on a market in this match — keep its odds fresh too.
+      var fresh2 = lookup[b.id];
+      if (fresh2) {
+        var pv2 = parseFloat(b.val);
+        var nv2 = parseFloat(fresh2.odds);
+        if (!isNaN(nv2) && nv2 >= 1.01 && Math.abs(nv2 - pv2) >= 0.01) {
+          b._change = nv2 > pv2 ? 'up' : 'down';
+          b.val = nv2;
+          b._origVal = nv2;
+          slipDirty = true;
+        }
+      }
+    }
+  });
+  if (slipDirty) {
+    try { renderBetSlip(); } catch (e) {}
+    try { updateFloatingBetBadge(); } catch (e) {}
+  }
 }
 
 // Stable seeded random — same match always shows same odds
@@ -6062,7 +6134,38 @@ window.sbMdTab = function(btn, tabName) {
 
   // Re-render markets (in BB mode or normal mode)
   var filter = null;
-  if (!isBB) {
+  if (isBB) {
+    // Bet Builder: only combinable Same-Game-Multi markets.
+    // Excludes single-outcome novelty markets (Penalty taken?, Goal in last X
+    // minutes?, etc.) that fcbet216 / Altenar don't expose for SGM.
+    var BB_COMBINABLE = [
+      '1x2', '1 x 2', 'match winner', 'résultat',
+      'double chance',
+      'total',                       // goals over/under (any line)
+      'handicap',
+      'les deux équipes', 'btts', 'both teams to score',
+      'pair', 'impair', 'odd', 'even',
+      'mi-temps', 'half-time', 'first half', '1ère mi-temps', '1ere mi-temps',
+      '2ème mi-temps', '2eme mi-temps', 'second half',
+      'ht/ft', 'mi-temps/fin', 'half-time/full-time',
+      'correct score', 'score exact',
+      'corner', 'corners',
+      'card', 'cartons', 'cartes',
+      'plage de buts', 'goal range',
+      'next goal', 'prochain but',
+      'player', 'joueur', 'buteur',  // player props (when available)
+      'multigoal', 'multigoals'
+    ];
+    filter = function(mkt) {
+      var nm = (mkt.name || '').toLowerCase();
+      // Filter requires at least one combinable keyword AND at least one
+      // selection with a real odds value (lock-only markets are useless in BB).
+      var combinable = BB_COMBINABLE.some(function(k){ return nm.indexOf(k) !== -1; });
+      if (!combinable) return false;
+      var sels = mkt.selections || [];
+      return sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; });
+    };
+  } else if (!isBB) {
     if (tabName === 'Principaux') {
       filter = function(mkt) {
         var nm = (mkt.name || '').toLowerCase();
