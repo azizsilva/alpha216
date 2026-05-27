@@ -3172,6 +3172,12 @@ function updateFloatingBetBadge() {
     document.querySelector('.sb-root').appendChild(badge);
   }
   var n = S.betSlip.length;
+  // Is the slip drawer currently open? If yes, keep the FAB hidden
+  // (it would overlap the open slip on mobile). If no, show whenever
+  // there's at least one bet — and IMPORTANTLY reset any stale
+  // visibility:hidden left over from a previous open/close cycle.
+  var right     = document.getElementById('sb-right');
+  var drawerOpen = right && right.classList.contains('open');
   if (n > 0) {
     badge.innerHTML =
         '<div class="sb-fb-circle">'
@@ -3179,9 +3185,13 @@ function updateFloatingBetBadge() {
       +   '<span class="sb-fb-count">' + n + '</span>'
       + '</div>'
       + '<span class="sb-fb-label">Fiche de pari</span>';
-    badge.style.display = 'flex';
+    badge.style.display    = 'flex';
+    badge.style.visibility = drawerOpen ? 'hidden' : '';
+    badge.style.opacity    = drawerOpen ? '' : '1';
+    badge.style.pointerEvents = drawerOpen ? '' : 'auto';
   } else {
-    badge.style.display = 'none';
+    badge.style.display    = 'none';
+    badge.style.visibility = '';
   }
 }
 
@@ -3897,8 +3907,10 @@ window.sbPlaceBet = function() {
         // ── Auto-close the FICHE DE PARI drawer ──
         var right = document.getElementById('sb-right');
         if (right) right.classList.remove('open');
-        var fab = document.getElementById('sb-floating-bet-badge');
-        if (fab) fab.style.visibility = 'hidden';
+        // Update the floating bet badge — will hide cleanly since the
+        // slip is empty, and will properly reset visibility so it can
+        // reappear on the next bet click.
+        updateFloatingBetBadge();
         // Show a non-blocking toast instead of alert
         var toastMsg = '✅ Pari placé ! Ticket #' + (data.bet_id || '');
         if (data.new_balance !== undefined) toastMsg += '\nNouveau solde: ' + parseFloat(data.new_balance).toFixed(2) + ' TND';
@@ -4688,13 +4700,10 @@ window.sbToggleRight = function() {
   var right = document.getElementById('sb-right');
   if (!right) return;
   right.classList.toggle('open');
-  // Hide the floating FAB while the drawer is open (it would otherwise
-  // sit on top of the slip content on mobile). Restored when closing.
-  var fab = document.getElementById('sb-floating-bet-badge');
-  if (fab) {
-    if (right.classList.contains('open')) fab.style.visibility = 'hidden';
-    else if (S.betSlip && S.betSlip.length) fab.style.visibility = '';
-  }
+  // Defer to updateFloatingBetBadge which handles the open/closed drawer
+  // case AND resets any stale visibility so the FAB reliably reappears
+  // when the user closes the drawer and then adds more bets.
+  updateFloatingBetBadge();
 };
 
 /* Collapse / expand just the slip body (the body, tabs, numpad…).
@@ -4708,8 +4717,7 @@ window.sbCollapseSlip = function() {
     // Mobile / tablet: also close the drawer so the page is usable.
     var right = document.getElementById('sb-right');
     if (right) right.classList.remove('open');
-    var fab = document.getElementById('sb-floating-bet-badge');
-    if (fab && S.betSlip && S.betSlip.length) fab.style.visibility = '';
+    updateFloatingBetBadge();
   }
 };
 
