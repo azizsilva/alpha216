@@ -205,7 +205,9 @@ function formatOdd(decVal) {
  * scheduled kickoff (referees, anthems, late teams). Subtract a
  * 2-minute offset so our estimate roughly matches FlashScore (which
  * counts from actual play, not scheduled time). */
-var KICKOFF_DELAY_SEC = 120;
+// 3 min average start delay (referees, anthems, late teams, VAR checks).
+// Matches the typical FlashScore offset against scheduled kickoff.
+var KICKOFF_DELAY_SEC = 180;
 function computeFallbackTimer(m) {
   if (!m) return null;
   if (isMatchEnded(m)) return null;
@@ -6009,10 +6011,8 @@ function renderMktBtn(sel, m, bbMode) {
   // Market name for BB leg display — stored in the button's data-mkt attr if available
   var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
-    // Pass handicap so the BB toggle knows different O/U lines (1.5 vs 2.5)
-    // are NOT mutually exclusive even though they share a market name.
     var hcArg = (sel.handicap != null) ? String(sel.handicap) : '';
-    return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
+    return '<button type="button" data-bid="' + bid + '" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
       + (hasOdd ? ' onclick="window.sbBBToggle(\'' + bid + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\',\'' + h(hcArg) + '\')"' : ' disabled')
       + '>'
       + '<span class="md-o-name">' + lbl + '</span>'
@@ -6020,7 +6020,7 @@ function renderMktBtn(sel, m, bbMode) {
       + '</button>';
   }
   var matchStr = h((m.home ? m.home.name : '') + ' v ' + (m.away ? m.away.name : ''));
-  return '<button type="button" class="md-odd-btn' + (isSel ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
+  return '<button type="button" data-bid="' + bid + '" class="md-odd-btn' + (isSel ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
     + (hasOdd ? ' onclick="window.sbAddBet(\'' + bid + '\',\'' + matchStr + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
     + '>'
     + '<span class="md-o-name">' + lbl + '</span>'
@@ -6090,8 +6090,10 @@ function buildFallbackMarkets(m) {
   return mkts;
 }
 
-// ── Flash keywords: markets shown in "Flash" quick view
-var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts','pair','pari combiné'];
+// ── Flash keywords: markets shown in "Flash" quick view (Principaux)
+var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts',
+  'pair','impair','odd','even','pari combiné','corner','corners','plage de buts','goal range',
+  'multigoal','multigoals'];
 var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
 
 window._bbModeActive = false;
@@ -6411,16 +6413,15 @@ window.sbBBToggle = function(id, name, odds, market, handicap) {
   renderBetSlip();
   updateFloatingBetBadge();
 
-  // Refresh BB button highlights: the clicked one (added/removed) and
-  // any previously-selected button in the same market that we just bumped.
+  // Refresh BB button highlights via EXACT data-bid match (no fragile
+  // substring scan on the onclick attribute — that broke when one bid
+  // was a substring of another, e.g. ov_1.5 vs ov_15).
   document.querySelectorAll('.md-bb-btn').forEach(function(btn){
-    var oc = btn.getAttribute('onclick') || '';
-    if (oc.indexOf("'" + id + "'") !== -1) {
-      btn.classList.toggle('sel', sameLegIdx < 0);  // selected only if it was just added
-    } else if (removedIds.length) {
-      removedIds.forEach(function(rid) {
-        if (oc.indexOf("'" + rid + "'") !== -1) btn.classList.remove('sel');
-      });
+    var dbid = btn.getAttribute('data-bid') || '';
+    if (dbid === id) {
+      btn.classList.toggle('sel', sameLegIdx < 0);  // newly added → 'sel'; toggled off → no 'sel'
+    } else if (removedIds.indexOf(dbid) !== -1) {
+      btn.classList.remove('sel');
     }
   });
 };
