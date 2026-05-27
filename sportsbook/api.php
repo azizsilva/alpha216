@@ -2029,7 +2029,17 @@ if ($action === 'match_live') {
             }
         }
     } else {
-        $markets = [];
+        if (empty($markets) && !$is_live_m) {
+            // Fetch all markets if the match is not Live (Prematch)
+            $ev_pre = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
+            if (!empty($ev_pre['results'])) {
+                $markets = md_parse_markets($ev_pre['results'][0]);
+            } else {
+                $markets = [];
+            }
+        } else {
+            $markets = [];
+        }
     }
 
     $ml_resp = json_encode(['success' => 1, 'match' => $match_data, 'markets' => $markets]);
@@ -2066,23 +2076,17 @@ if ($action === 'match_detail') {
         $fi = $match_data['r_id'] ?? null;
         if ($fi) {
             $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
-            // results[0] is the flat stream array; results itself may already be the array
             if (!empty($ev['results'])) {
                 $event_raw = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
                 $has_live  = true;
             }
         }
-        // 2. Fallback: try by match id (upcoming prematch)
+        // 2. Fallback: try PREMATCH endpoint properly! (Fetches asian, goals, half tabs)
         if (empty($event_raw)) {
-            $ev2 = betsapi_get('/v1/bet365/event', ['id' => $match_id]);
+            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if (!empty($ev2['results'])) {
-                $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
+                $event_raw = $ev2['results'][0]; 
             }
-        }
-        // 3. Try prematch odds endpoint
-        if (empty($event_raw)) {
-            $ev3 = betsapi_get('/v1/bet365/prematch_odds', ['event_id' => $match_id]);
-            if (!empty($ev3['results'])) $event_raw = $ev3['results'];
         }
     }
 
@@ -2118,10 +2122,6 @@ if ($action === 'match_detail') {
         $markets = md_parse_markets($event_raw);
     }
 
-    // Fallback: build synthetic markets from stored live_odds
-    if (empty($markets) && $match_data) {
-        $markets = md_synthetic_markets($match_data);
-    }
 
     // Ensure stats are normalized and populated (v3 → v1 → bet365 timeline).
     // We NEVER keep raw stats — only validated counts pass through.
@@ -2164,14 +2164,13 @@ if ($action === 'match_detail') {
 //   MG = Market Group header (the market name row)
 //   MA = Market Alternative header (sub-group, also treated as market)
 //   PA = Participant/selection row (odds line)
+/* ── Parse BetsAPI flat event array into structured markets ── */
 function md_parse_markets($event_arr) {
     if (!is_array($event_arr)) return [];
-    $markets = []; $cur = null;
+    $markets = [];
+    $cur_mg = '';
+    $cur = null;
 
-    // Navigate to the flat items array.
-    // Shape A: already a flat array of item objects [ {type,NA,...}, ... ]
-    // Shape B: nested [ [{type,NA,...}, ...] ]  (results[0] from bet365/event)
-    // Shape C: { results: [ [{...}] ] }  (full response accidentally passed)
     if (isset($event_arr['results'])) {
         $event_arr = is_array($event_arr['results'][0] ?? null)
             ? $event_arr['results'][0]
@@ -2179,79 +2178,89 @@ function md_parse_markets($event_arr) {
     }
     $items = (isset($event_arr[0]) && is_array($event_arr[0])) ? $event_arr[0] : $event_arr;
 
+    // ── 1. Parse Flat Stream (Live Matches) ──
     foreach ($items as $item) {
         if (!is_array($item)) continue;
         $type = $item['type'] ?? $item['TYPE'] ?? '';
         $na   = $item['NA']   ?? $item['name'] ?? $item['N']  ?? '';
 
-        // MG = Market Group (the actual BetsAPI type for market headers)
-        // Also handle legacy MarketHeader/MH/Market codes for inplay stream
-        if (in_array($type, ['MG', 'MA', 'MarketHeader', 'MH', 'Market'])) {
+        if ($type === 'MG') {
+            $cur_mg = $na;
+            continue;
+        }
+
+        if ($type === 'MA') {
             if ($cur && !empty($cur['selections'])) $markets[] = $cur;
+            $mkt_name = $cur_mg;
+            $hc = null;
+            if ($na !== '' && $na !== $cur_mg) {
+                // If the name is numeric (like 2.5), treat it as a handicap and keep the original market name
+                if (is_numeric(trim($na)) || preg_match('/^[+-]?\d+(\.\d+)?$/', trim($na))) {
+                    $hc = trim($na);
+                } else {
+                    $mkt_name = $na;
+                }
+            }
             $cur = [
-                'id'         => $item['ID'] ?? $item['id'] ?? uniqid(),
-                'name'       => $na,
+                'id'         => $item['ID'] ?? uniqid(),
+                'name'       => $mkt_name,
+                'ma_hc'      => $hc, // save handicap for PA rows
                 'selections' => [],
             ];
             continue;
         }
 
-        // PA = Participant (selection with odds)
         if ($type === 'PA' && $cur !== null) {
             $od  = $item['OD'] ?? $item['od'] ?? '';
             $dec = md_frac_to_dec($od);
             if (!$dec || $dec < 1.01) continue;
-            $cur['selections'][] = [
-                'id'       => $item['ID'] ?? $item['id'] ?? uniqid(),
-                'name'     => $na ?: ($item['N2'] ?? ''),
-                'odds'     => $dec,
-                'handicap' => $item['HD'] ?? null,
-            ];
-            continue;
-        }
 
-        // sp/prematch market object: {name, odds:[{name, odds},...]}
-        if (isset($item['odds']) && is_array($item['odds'])) {
-            $sels = [];
-            foreach ($item['odds'] as $o) {
-                $od  = $o['odds'] ?? $o['OD'] ?? '';
-                $dec = md_frac_to_dec($od);
-                if (!$dec || $dec < 1.01) continue;
-                $sels[] = [
-                    'id'       => $o['id']   ?? uniqid(),
-                    'name'     => $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '',
-                    'odds'     => $dec,
-                    'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
-                ];
-            }
-            if ($sels) {
-                $markets[] = [
-                    'id'         => $item['id'] ?? uniqid(),
-                    'name'       => $item['name'] ?? $na,
-                    'selections' => $sels,
-                ];
-            }
+            $sel_hc = $item['HD'] ?? $item['hd'] ?? $cur['ma_hc'];
+            $sel_name = $na ?: ($item['N2'] ?? '');
+
+            $cur['selections'][] = [
+                'id'       => $item['ID'] ?? uniqid(),
+                'name'     => $sel_name,
+                'odds'     => $dec,
+                'handicap' => $sel_hc,
+            ];
             continue;
         }
     }
     if ($cur && !empty($cur['selections'])) $markets[] = $cur;
 
-    // Also parse sp.* sub-markets from prematch v3 structure
-    if (isset($event_arr['main']['sp'])) {
-        foreach ($event_arr['main']['sp'] as $sp) {
-            if (!is_array($sp)) continue;
-            $sels = [];
-            foreach ($sp['odds'] ?? [] as $o) {
-                $od  = $o['odds'] ?? $o['OD'] ?? '';
-                $dec = md_frac_to_dec($od);
-                if (!$dec || $dec < 1.01) continue;
-                $sels[] = ['id' => $o['id'] ?? uniqid(), 'name' => $o['name'] ?? '', 'odds' => $dec, 'handicap' => $o['handicap'] ?? null];
+    // ── 2. Parse Prematch Tabs (Upcoming Matches) ──
+    $tabs = ['main', 'asian', 'goals', 'half', 'others', 'specials', 'schedule'];
+    $source = isset($event_arr['main']) ? $event_arr : $items;
+
+    foreach ($tabs as $tab) {
+        if (isset($source[$tab]['sp'])) {
+            foreach ($source[$tab]['sp'] as $sp_key => $sp) {
+                if (!is_array($sp)) continue;
+                $sels = [];
+                foreach ($sp['odds'] ?? [] as $o) {
+                    $od  = $o['odds'] ?? $o['OD'] ?? '';
+                    $dec = md_frac_to_dec($od);
+                    if (!$dec || $dec < 1.01) continue;
+                    $sels[] = [
+                        'id'       => $o['id'] ?? uniqid(),
+                        'name'     => $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '',
+                        'odds'     => $dec,
+                        'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
+                    ];
+                }
+                if (!empty($sels)) {
+                    $markets[] = [
+                        'id'         => $sp['id'] ?? $sp_key ?? uniqid(),
+                        'name'       => $sp['name'] ?? '',
+                        'selections' => $sels,
+                    ];
+                }
             }
-            if ($sels) $markets[] = ['id' => $sp['id'] ?? uniqid(), 'name' => $sp['name'] ?? '', 'selections' => $sels];
         }
     }
 
-    // Deduplicate by name (keep first occurrence)
+    // ── Deduplicate by name ──
     $seen = []; $deduped = [];
     foreach ($markets as $mkt) {
         $k = strtolower(trim($mkt['name']));
@@ -2260,130 +2269,7 @@ function md_parse_markets($event_arr) {
         $deduped[] = $mkt;
     }
 
-    return array_slice($deduped, 0, 80); // up to 80 real markets
-}
-
-/* ── Synthetic markets from live_odds stored in DB (full fcbet216 set) ── */
-function md_synthetic_markets($m) {
-    $o = $m['live_odds'] ?? null;
-    $markets = [];
-    if (!$o || !isset($o['h'])) apply_margin_to_markets($markets); return $markets;
-
-    $h = (float)$o['h']; $x = (float)($o['x'] ?? 3.5); $a = (float)($o['a'] ?? 3.0);
-    $seed = abs(intval(preg_replace('/\D/', '', $m['id'] ?? '0')) % 999983);
-    $srand = function($off, $min, $max) use ($seed) {
-        $v = abs(sin(($seed + $off) * 9301 + 49297) * 233280);
-        return round($min + ($v - floor($v)) * ($max - $min), 2);
-    };
-
-    // 1x2
-    if ($h > 1.01 && $x > 1.01 && $a > 1.01) {
-        $markets[] = ['id'=>'1x2','name'=>'1x2','selections'=>[
-            ['id'=>'1','name'=>'1','odds'=>$h],['id'=>'X','name'=>'X','odds'=>$x],['id'=>'2','name'=>'2','odds'=>$a],
-        ]];
-    }
-
-    // Total (Over/Under)
-    $line = (float)($o['ou_line'] ?? 2.5);
-    $ov = (float)($o['ou_over'] ?? $srand(1,1.6,2.3));
-    $un = (float)($o['ou_under'] ?? $srand(2,1.6,2.3));
-    $markets[] = ['id'=>'total','name'=>'Total','selections'=>[
-        ['id'=>'ov','name'=>'Plus de '.$line,'odds'=>max(1.01,$ov),'handicap'=>$line],
-        ['id'=>'un','name'=>'Moins de '.$line,'odds'=>max(1.01,$un),'handicap'=>$line],
-    ]];
-
-    // Double Chance
-    $markets[] = ['id'=>'dc','name'=>'Double Chance','selections'=>[
-        ['id'=>'1x','name'=>'1X','odds'=>max(1.01,round($h*0.60,2))],
-        ['id'=>'12','name'=>'12','odds'=>max(1.01,round(($h+$a)/2*0.75,2))],
-        ['id'=>'x2','name'=>'X2','odds'=>max(1.01,round($a*0.60,2))],
-    ]];
-
-    // Les deux équipes qui marquent (BTTS)
-    $by = max(1.01,$srand(3,1.4,2.2)); $bn = max(1.01,round(3.6-$by,2));
-    $markets[] = ['id'=>'btts','name'=>'Les deux équipes qui marquent','selections'=>[
-        ['id'=>'y','name'=>'Oui','odds'=>$by],['id'=>'n','name'=>'Non','odds'=>$bn],
-    ]];
-
-    // Pair/Impair
-    $markets[] = ['id'=>'po','name'=>'Pair/Impair','selections'=>[
-        ['id'=>'i','name'=>'Impair','odds'=>max(1.01,$srand(4,1.8,2.1))],
-        ['id'=>'p','name'=>'Pair','odds'=>max(1.01,$srand(5,1.8,2.1))],
-    ]];
-
-    // Handicap
-    $markets[] = ['id'=>'hc','name'=>'Handicap','selections'=>[
-        ['id'=>'h10','name'=>'1 +0','odds'=>max(1.01,$srand(6,1.6,2.5)),'handicap'=>'+0'],
-        ['id'=>'h20','name'=>'2 -0','odds'=>max(1.01,$srand(7,1.6,2.5)),'handicap'=>'-0'],
-    ]];
-
-    // Plage de buts (Goal Range)
-    $markets[] = ['id'=>'gr','name'=>'Plage de buts','selections'=>[
-        ['id'=>'g01','name'=>'0-1','odds'=>max(1.01,$srand(8,3.0,6.0))],
-        ['id'=>'g23','name'=>'2-3','odds'=>max(1.01,$srand(9,2.0,3.5))],
-        ['id'=>'g45','name'=>'4-5','odds'=>max(1.01,$srand(10,4.0,8.0))],
-        ['id'=>'g6p','name'=>'6+','odds'=>max(1.01,$srand(11,12.0,26.0))],
-    ]];
-
-    // Handicap 1x2 (multiple lines)
-    $hcLines = [['2:0',1.16,7.00,10.00],['1:0',1.47,4.75,4.75],['0:1',4.50,4.75,1.50],['0:2',9.00,7.00,1.18],['0:3',20.00,10.00,1.05]];
-    $hc1x2 = ['id'=>'hc1x2','name'=>'Handicap 1x2','selections'=>[]];
-    foreach ($hcLines as $i => $ln) {
-        $hc1x2['selections'][] = ['id'=>"hc1_{$i}_1",'name'=>'1','odds'=>max(1.01,round($ln[1]*($h<2?0.9:1.1),2)),'handicap'=>'Débuts '.$ln[0]];
-        $hc1x2['selections'][] = ['id'=>"hc1_{$i}_x",'name'=>'Match nul','odds'=>max(1.01,round($ln[2],2)),'handicap'=>'Débuts '.$ln[0]];
-        $hc1x2['selections'][] = ['id'=>"hc1_{$i}_2",'name'=>'2','odds'=>max(1.01,round($ln[3]*($a<2?0.9:1.1),2)),'handicap'=>'Débuts '.$ln[0]];
-    }
-    $markets[] = $hc1x2;
-
-    // Premier but / Dernier but
-    $markets[] = ['id'=>'fb','name'=>'Premier but','selections'=>[
-        ['id'=>'fb1','name'=>'1','odds'=>max(1.01,$srand(12,1.7,2.1))],
-        ['id'=>'fba','name'=>'Aucun','odds'=>max(1.01,$srand(13,15.0,25.0))],
-        ['id'=>'fb2','name'=>'2','odds'=>max(1.01,$srand(14,1.7,2.1))],
-    ]];
-    $markets[] = ['id'=>'lb','name'=>'Dernier but','selections'=>[
-        ['id'=>'lb1','name'=>'1','odds'=>max(1.01,$srand(15,1.7,2.1))],
-        ['id'=>'lba','name'=>'Aucun','odds'=>max(1.01,$srand(16,15.0,25.0))],
-        ['id'=>'lb2','name'=>'2','odds'=>max(1.01,$srand(17,1.7,2.1))],
-    ]];
-
-    // DC Mi-temps/DC Fin de match
-    $dcHtFt = ['12/12','12/1X','12/X2','1X/12','1X/1X','1X/X2','X2/12','X2/1X','X2/X2'];
-    $dcSels = [];
-    foreach ($dcHtFt as $i => $c) { $dcSels[] = ['id'=>"dchtft_$i",'name'=>$c,'odds'=>max(1.01,$srand(20+$i,1.5,6.0))]; }
-    $markets[] = ['id'=>'dchtft','name'=>'DC Mi-temps/DC Fin de match','selections'=>$dcSels];
-
-    // 1X2 Mi-temps / DC Fin de match
-    $htdc = ['1/1X','1/12','1/X2','X/1X','X/12','X/X2','2/1X','2/12','2/X2'];
-    $htdcSels = [];
-    foreach ($htdc as $i => $c) { $htdcSels[] = ['id'=>"htdc_$i",'name'=>$c,'odds'=>max(1.01,$srand(30+$i,2.0,10.0))]; }
-    $markets[] = ['id'=>'htdc','name'=>'1X2 Mi-temps / DC Fin de match','selections'=>$htdcSels];
-
-    // Mi-temps/Fin de match (3x3 grid)
-    $htft = [['1/1',3.5],['1/X',15.0],['1/2',31.0],['X/1',6.5],['X/X',6.5],['X/2',6.66],['2/1',26.0],['2/X',15.0],['2/2',3.75]];
-    $htftSels = [];
-    foreach ($htft as $i => $c) { $htftSels[] = ['id'=>"htft_$i",'name'=>$c[0],'odds'=>max(1.01,round($c[1]*$srand(40+$i,0.85,1.15),2))]; }
-    $markets[] = ['id'=>'htft','name'=>'Mi-temps/Fin de match','selections'=>$htftSels];
-
-    // Marge de victoire (Victory Margin)
-    $vm = [['1 par 1',4.50],['Nul',3.33],['2 par 1',4.75],['1 par 2',7.00],['',''],['2 par 2',7.50],['1 par 3 ou +',10.0],['',''],['2 par 3 ou +',11.0]];
-    $vmSels = [];
-    foreach ($vm as $i => $c) { if ($c[0]) $vmSels[] = ['id'=>"vm_$i",'name'=>$c[0],'odds'=>max(1.01,round($c[1]*$srand(50+$i,0.9,1.1),2))]; }
-    $markets[] = ['id'=>'vm','name'=>'Marge de victoire','selections'=>$vmSels];
-
-    // 1 total de buts
-    $tot1 = [['Plus de 0.5',1.16],['Moins de 0.5',4.40],['Plus de 1.5',1.83],['Moins de 1.5',1.83],['Plus de 2.5',3.70],['Moins de 2.5',1.25],['Plus de 3.5',8.00],['Moins de 3.5',1.06]];
-    $tot1Sels = [];
-    foreach ($tot1 as $i => $c) { $tot1Sels[] = ['id'=>"t1_$i",'name'=>$c[0],'odds'=>max(1.01,round($c[1]*$srand(60+$i,0.9,1.1),2))]; }
-    $markets[] = ['id'=>'t1','name'=>'1 total de buts','selections'=>$tot1Sels];
-
-    // 2 total
-    $tot2 = [['Plus de 0.5',1.18],['Moins de 0.5',4.40],['Plus de 1.5',1.86],['Moins de 1.5',1.80],['Plus de 2.5',3.75],['Moins de 2.5',1.23]];
-    $tot2Sels = [];
-    foreach ($tot2 as $i => $c) { $tot2Sels[] = ['id'=>"t2_$i",'name'=>$c[0],'odds'=>max(1.01,round($c[1]*$srand(70+$i,0.9,1.1),2))]; }
-    $markets[] = ['id'=>'t2','name'=>'2 total','selections'=>$tot2Sels];
-
-    apply_margin_to_markets($markets); return $markets;
+    return array_slice($deduped, 0, 150); // Return up to 150 real markets
 }
 
 /* ── Fractional → Decimal conversion ── */
@@ -2392,9 +2278,10 @@ function md_frac_to_dec($frac) {
     if (!$frac || $frac === '-') return null;
     if (strtoupper($frac) === 'EVS') return 2.00;
     if (strpos($frac, '/') !== false) {
-        [$n, $d] = explode('/', $frac, 2);
-        $d = floatval($d);
-        return $d == 0 ? null : round(1 + floatval($n) / $d, 2);
+        $parts = explode('/', $frac, 2);
+        $n = isset($parts[0]) ? floatval($parts[0]) : 0;
+        $d = isset($parts[1]) ? floatval($parts[1]) : 0;
+        return $d == 0 ? null : round(1 + $n / $d, 2);
     }
     $v = floatval($frac);
     return ($v > 0) ? round($v + 1, 2) : null;

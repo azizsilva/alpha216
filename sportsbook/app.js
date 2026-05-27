@@ -503,12 +503,7 @@ function startMatchDetailPoll(mid) {
   // Fast detail polling for football (top European leagues), slower
   // for other sports to stay within BetsAPI rate limits. Backend is
   // pre-warmed by tick_live.php so 1s is safe for football detail.
-  var detailMs = 1000;
-  var mObj = window._mdMatch;
-  if (mObj) {
-    var sidNum = parseInt(mObj.sport_id || 0, 10);
-    if (sidNum !== 1 && sidNum !== 36) detailMs = 2000;
-  }
+  var detailMs = 1500;
   S._mdPollInterval = setInterval(function() {
     if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) {
       clearInterval(S._mdPollInterval);
@@ -665,7 +660,6 @@ function patchMatchDetailLive(m, markets) {
     // keep the last real Bet365 market tree on screen.
     nextMarkets = null;
   } else if (m && m.live_odds) {
-    try { nextMarkets = buildFallbackMarkets(m); } catch (e) {}
   }
   if (nextMarkets) {
     sbClearMdTabCache();
@@ -5464,7 +5458,6 @@ window.sbToggleMc = function(mid, ev) {
   var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
   if (localMatch) {
     var fb = [];
-    try { fb = buildFallbackMarkets(localMatch); } catch (e) {}
     window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
     box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
   } else {
@@ -5480,9 +5473,7 @@ window.sbToggleMc = function(mid, ev) {
       var m    = (d && d.match) ? d.match : localMatch;
       var mkts = (d && d.markets && d.markets.length) ? d.markets : null;
       if (!m) return;
-      if (!mkts || !mkts.length) {
-        try { mkts = buildFallbackMarkets(m); } catch (e) { mkts = []; }
-      }
+      if (!mkts || !mkts.length) { mkts = []; }
       var activeTab = ((window._mcMktCache[mid] || {}).tab) || 'Principaux';
       window._mcMktCache[mid] = { match: m, markets: mkts, tab: activeTab };
       box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, activeTab);
@@ -5550,7 +5541,6 @@ window.sbRestoreExpandedCards = function() {
       var nextOdds = fresh.live_odds ? JSON.stringify(fresh.live_odds) : '';
       if (prevOdds !== nextOdds) {
         var nextMkts = null;
-        try { nextMkts = buildFallbackMarkets(fresh); } catch (e) {}
         if (nextMkts && nextMkts.length) {
           _mcDiffMarkets(cached.markets, nextMkts);
           cached.match   = fresh;
@@ -5960,7 +5950,7 @@ function renderMatchDetail(m, markets) {
   out += '</div>';
 
   // ── Markets list (always visible; markets switch to BB-mode when tab is active)
-  if (!markets.length) markets = buildFallbackMarkets(m);
+  if (!markets.length) markets = [];
   // Merge separate "Goals Over/Under X" market groups from the Bet365 event
   // stream into a single normalised "Total" ladder.
   markets = mergeOuMarkets(markets, m);
@@ -6380,11 +6370,56 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
 
   var sels  = mkt.selections || [];
   var n     = sels.length;
-  var hasRange = /^total$/i.test(mkt.name);
+  var isTotal = /^total$/i.test(mkt.name);
+  var isHandicap = /^handicap$/i.test(mkt.name);
+  var hasRange = isTotal || isHandicap;
   var isHc1x2  = /handicap 1x2/i.test(mkt.name);
   var is3x3    = /mi-temps.*fin|marge|dc.*mi-temps/i.test(mkt.name);
 
-  if (isHc1x2) {
+  if (hasRange) {
+    var groups = {}, gord = [];
+    sels.forEach(function(s) {
+      var hc = parseFloat(s.handicap);
+      if (isNaN(hc)) hc = 0;
+      if (!groups[hc]) { groups[hc] = []; gord.push(hc); }
+      groups[hc].push(s);
+    });
+    gord.sort(function(a, b) { return a - b; });
+
+    var uid = (mkt.id || 'rng') + '_' + (m.id || 'm');
+    var activeIdx = Math.floor(gord.length / 2);
+    // For Over/Under we prefer a line close to current score if possible
+    if (isTotal && m.live_odds && m.live_odds.ou_line) {
+      var closest = -1, minDist = 999;
+      gord.forEach(function(hc, idx) {
+        var d = Math.abs(hc - m.live_odds.ou_line);
+        if (d < minDist) { minDist = d; closest = idx; }
+      });
+      if (closest !== -1) activeIdx = closest;
+    }
+    var activeHc = gord[activeIdx];
+
+    if (gord.length > 0) {
+      out += '<div id="slider-body-' + uid + '">';
+      gord.forEach(function(hc, idx) {
+        out += '<div class="md-mkt-row md-slider-group" data-hc-idx="' + idx + '" ' + (idx === activeIdx ? '' : 'style="display:none"') + '>';
+        groups[hc].forEach(function(s) { out += renderMktBtn(s, m, bbMode); });
+        out += '</div>';
+      });
+      out += '</div>';
+
+      if (gord.length > 1) {
+        var arrStr = JSON.stringify(gord);
+        out += '<div class="md-slider-wrap">';
+        out += '<span class="md-slider-val">' + activeHc + '</span>';
+        out += '<input type="range" class="md-slider" min="0" max="' + (gord.length - 1) + '" step="1" value="' + activeIdx + '" ' +
+               'oninput="window.sbUpdateSlider(this, \'' + uid + '\', ' + arrStr.replace(/"/g, '&quot;') + ')">';
+        out += '</div>';
+      } else {
+        out += '<div class="md-slider-wrap"><span class="md-slider-val">' + activeHc + '</span></div>';
+      }
+    }
+  } else if (isHc1x2) {
     var groups = {}, gord = [];
     sels.forEach(function(s) {
       var hc = s.handicap || '';
@@ -6418,20 +6453,22 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
     }
   }
 
-  // Slider for Total market — fcbet216 only shows the slider when the
-  // Total has a single handicap line. When we render a ladder (3+ lines)
-  // the slider is redundant and we omit it.
-  if (!bbMode && hasRange && sels.length >= 2 && sels.length <= 2) {
-    var lineVal = parseFloat(sels[0].handicap || 2.5);
-    out += '<div class="md-slider-wrap">';
-    out += '<span class="md-slider-val">' + lineVal + '</span>';
-    out += '<input type="range" class="md-slider" min="0.5" max="6.5" step="0.5" value="' + lineVal + '" oninput="this.previousElementSibling.textContent=this.value">';
-    out += '</div>';
-  }
-
   out += '</div></div>';
   return out;
 }
+
+window.sbUpdateSlider = function(input, uid, lines) {
+  var idx = parseInt(input.value, 10);
+  var val = lines[idx];
+  input.previousElementSibling.textContent = val;
+  var body = document.getElementById('slider-body-' + uid);
+  if (body) {
+    var groups = body.querySelectorAll('.md-slider-group');
+    groups.forEach(function(g) {
+      g.style.display = (parseInt(g.getAttribute('data-hc-idx'), 10) === idx) ? '' : 'none';
+    });
+  }
+};
 
 function renderMktBtn(sel, m, bbMode) {
   // Guard against malformed selections from the API (saw "X2 undefined"
@@ -6494,67 +6531,7 @@ function renderMktBtn(sel, m, bbMode) {
     + '</button>';
 }
 
-/* buildFallbackMarkets — Volume Plan edition
- * Only generates markets where we have REAL Bet365 odds from live_odds.
- * Nothing is seeded/faked. If live_odds is missing we return an empty
- * array and the UI will wait for the next poll to bring real markets. */
-function buildFallbackMarkets(m) {
-  var o    = odds(m);
-  var mkts = [];
-  var hv   = parseFloat(o.h);
-  var xv   = parseFloat(o.x);
-  var av   = parseFloat(o.a);
 
-  // 1x2 — real odds only
-  if (hv > 1.01 && av > 1.01) {
-    var sels1x2 = [{id:'1',name:'1',odds:hv}];
-    if (xv > 1.01) sels1x2.push({id:'X',name:'X',odds:xv});
-    sels1x2.push({id:'2',name:'2',odds:av});
-    mkts.push({ id:'1x2', name:'1x2', selections: sels1x2 });
-  }
-
-  // Total — real Bet365 ou_line / ou_over / ou_under
-  var api_ov = parseFloat(o.ov);
-  var api_un = parseFloat(o.un);
-  if (api_ov > 1.01 && api_un > 1.01) {
-    var _sc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, false];
-    var cur  = _sc[0] + _sc[1];
-    var anchor = parseFloat(o.ou);
-    if (isNaN(anchor) || anchor <= cur + 0.4) anchor = cur + 0.5;
-    var l1 = anchor;
-    var l2 = l1 + 1;
-    function _mk(name, odd, hc) {
-      return { id:'tot_'+String(hc), name:name, odds:Math.max(1.01,+parseFloat(odd).toFixed(2)), handicap:hc };
-    }
-    mkts.push({ id:'total', name:'Total', selections: [
-      _mk('Plus de '  + l1, api_ov,        l1),
-      _mk('Moins de ' + l1, api_un,        l1),
-      _mk('Plus de '  + l2, api_ov * 1.55, l2),
-      _mk('Moins de ' + l2, api_un * 0.65, l2),
-    ]});
-  }
-
-  // Double Chance — derived from real 1x2 using standard DC formula.
-  // Only when we have real 1x2 odds.
-  if (hv > 1.01 && xv > 1.01 && av > 1.01) {
-    function _dc(o1, o2) {
-      var implied = 1/o1 + 1/o2;
-      return Math.max(1.01, +(1/implied).toFixed(2));
-    }
-    mkts.push({id:'dc', name:'Double Chance', selections:[
-      {id:'1x', name:'1X', odds:_dc(hv,xv)},
-      {id:'12', name:'12', odds:_dc(hv,av)},
-      {id:'x2', name:'X2', odds:_dc(xv,av)},
-    ]});
-  }
-
-  // All remaining markets (Handicap, BTTS, Corners, HT/FT, Correct Score,
-  // Multigoals, etc.) come EXCLUSIVELY from the real Bet365 event stream
-  // via md_parse_markets / mergeOuMarkets in patchMatchDetailLive.
-  // Nothing seeded. If a market is not in the stream it is simply absent.
-
-  return mkts;
-}
 
 // ── Flash keywords: markets shown in "Flash" quick view (Principaux)
 var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts',
