@@ -2176,24 +2176,46 @@ function md_parse_markets($event_arr) {
     $cur_mg = '';
     $cur = null;
 
+    // 1. Correctly un-nest the BetsAPI response
+    $items = [];
     if (isset($event_arr['results'])) {
-        $event_arr = is_array($event_arr['results'][0] ?? null)
-            ? $event_arr['results'][0]
-            : ($event_arr['results'] ?? []);
+        $event_arr = $event_arr['results'];
     }
-    $items = (isset($event_arr[0]) && is_array($event_arr[0])) ? $event_arr[0] : $event_arr;
+    if (isset($event_arr[0]) && is_array($event_arr[0]) && isset($event_arr[0][0])) {
+        $items = $event_arr[0]; // Nested stream
+    } elseif (isset($event_arr[0]) && is_array($event_arr[0])) {
+        $items = $event_arr; // Flat stream or Prematch array
+    } else {
+        $items = [$event_arr]; // Single object
+    }
 
-    // ── 1. Parse Flat Stream (Live Matches) ──
+    // 2. Translate Bet365 English names to French for the UI
+    $translate = function($name) {
+        $map = [
+            'full time result' => '1x2',
+            'match goals' => 'Total',
+            'alternative match goals' => 'Total',
+            'asian handicap' => 'Handicap',
+            'double chance' => 'Double Chance',
+            'both teams to score' => 'Les deux équipes qui marquent',
+            'match corners' => 'Corners',
+            'cards' => 'Cartons',
+            'half time result' => '1ère mi-temps - 1x2',
+            'half time goals' => '1ère mi-temps - total'
+        ];
+        $low = strtolower(trim($name));
+        return isset($map[$low]) ? $map[$low] : $name;
+    };
+
+    // ── 3. Parse Flat Stream (Live Matches) ──
     foreach ($items as $item) {
         if (!is_array($item)) continue;
         $type = $item['type'] ?? $item['TYPE'] ?? '';
         $na   = $item['NA']   ?? $item['name'] ?? $item['N']  ?? '';
 
-        // MG = Market Group (the actual BetsAPI type for market headers)
         if ($type === 'MG' || in_array($type, ['MarketHeader', 'MH', 'Market'])) {
             if ($cur && !empty($cur['selections'])) $markets[] = $cur;
-            $cur_mg = $na;
-            // Initialize $cur here so markets without MA (like 1x2) aren't skipped
+            $cur_mg = $translate($na);
             $cur = [
                 'id'         => $item['ID'] ?? $item['id'] ?? uniqid(),
                 'name'       => $cur_mg,
@@ -2207,18 +2229,17 @@ function md_parse_markets($event_arr) {
             if ($cur && !empty($cur['selections'])) $markets[] = $cur;
             $mkt_name = $cur_mg;
             $hc = null;
-            if ($na !== '' && $na !== $cur_mg) {
-                // If the name is numeric (like 2.5), treat it as a handicap and keep the original market name
+            if ($na !== '' && $translate($na) !== $cur_mg) {
                 if (is_numeric(trim($na)) || preg_match('/^[+-]?\d+(\.\d+)?$/', trim($na))) {
                     $hc = trim($na);
                 } else {
-                    $mkt_name = $na;
+                    $mkt_name = $translate($na);
                 }
             }
             $cur = [
                 'id'         => $item['ID'] ?? uniqid(),
                 'name'       => $mkt_name,
-                'ma_hc'      => $hc, // save handicap for PA rows
+                'ma_hc'      => $hc,
                 'selections' => [],
             ];
             continue;
@@ -2232,6 +2253,14 @@ function md_parse_markets($event_arr) {
             $sel_hc = $item['HD'] ?? $item['hd'] ?? $cur['ma_hc'];
             $sel_name = $na ?: ($item['N2'] ?? '');
 
+            // Translate selection names
+            $l_sel = strtolower($sel_name);
+            if ($l_sel === 'over') $sel_name = 'Plus de';
+            if ($l_sel === 'under') $sel_name = 'Moins de';
+            if ($l_sel === 'yes') $sel_name = 'Oui';
+            if ($l_sel === 'no') $sel_name = 'Non';
+            if ($l_sel === 'draw') $sel_name = 'X';
+
             $cur['selections'][] = [
                 'id'       => $item['ID'] ?? uniqid(),
                 'name'     => $sel_name,
@@ -2243,32 +2272,42 @@ function md_parse_markets($event_arr) {
     }
     if ($cur && !empty($cur['selections'])) $markets[] = $cur;
 
-    // ── 2. Parse Prematch Tabs (Upcoming Matches) ──
+    // ── 4. Parse Prematch Tabs (Upcoming Matches) ──
     $tabs = ['main', 'asian', 'goals', 'half', 'others', 'specials', 'schedule'];
-    $source = isset($event_arr['main']) ? $event_arr : $items;
+    foreach ($items as $source) {
+        if (!is_array($source)) continue;
+        foreach ($tabs as $tab) {
+            if (isset($source[$tab]['sp'])) {
+                foreach ($source[$tab]['sp'] as $sp_key => $sp) {
+                    if (!is_array($sp)) continue;
+                    $sels = [];
+                    foreach ($sp['odds'] ?? [] as $o) {
+                        $od  = $o['odds'] ?? $o['OD'] ?? '';
+                        $dec = md_frac_to_dec($od);
+                        if (!$dec || $dec < 1.01) continue;
+                        
+                        $s_name = $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '';
+                        $ls_name = strtolower($s_name);
+                        if ($ls_name === 'over') $s_name = 'Plus de';
+                        if ($ls_name === 'under') $s_name = 'Moins de';
+                        if ($ls_name === 'yes') $s_name = 'Oui';
+                        if ($ls_name === 'no') $s_name = 'Non';
+                        if ($ls_name === 'draw') $s_name = 'X';
 
-    foreach ($tabs as $tab) {
-        if (isset($source[$tab]['sp'])) {
-            foreach ($source[$tab]['sp'] as $sp_key => $sp) {
-                if (!is_array($sp)) continue;
-                $sels = [];
-                foreach ($sp['odds'] ?? [] as $o) {
-                    $od  = $o['odds'] ?? $o['OD'] ?? '';
-                    $dec = md_frac_to_dec($od);
-                    if (!$dec || $dec < 1.01) continue;
-                    $sels[] = [
-                        'id'       => $o['id'] ?? uniqid(),
-                        'name'     => $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '',
-                        'odds'     => $dec,
-                        'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
-                    ];
-                }
-                if (!empty($sels)) {
-                    $markets[] = [
-                        'id'         => $sp['id'] ?? $sp_key ?? uniqid(),
-                        'name'       => $sp['name'] ?? '',
-                        'selections' => $sels,
-                    ];
+                        $sels[] = [
+                            'id'       => $o['id'] ?? uniqid(),
+                            'name'     => $s_name,
+                            'odds'     => $dec,
+                            'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
+                        ];
+                    }
+                    if (!empty($sels)) {
+                        $markets[] = [
+                            'id'         => $sp['id'] ?? $sp_key ?? uniqid(),
+                            'name'       => $translate($sp['name'] ?? ''),
+                            'selections' => $sels,
+                        ];
+                    }
                 }
             }
         }
