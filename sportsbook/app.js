@@ -5590,23 +5590,35 @@ function buildFallbackMarkets(m) {
   }
 
   // Total — fcbet216 shows a *ladder* of Plus/Moins rows centered on
-  // the current bookmaker line (e.g. 4.5, 5, 5.5 visible at once).
-  // Build 3 rows: line - 0.5, line, line + 0.5 with realistic odds
-  // that walk in opposite directions for Plus vs Moins.
-  var ov   = parseFloat(o.ov) || +seedRand(s+'ov',1.55,2.4).toFixed(2);
-  var un   = parseFloat(o.un) || +seedRand(s+'un',1.55,2.4).toFixed(2);
-  var line = parseFloat(o.ou) || 2.5;
+  // Total — dynamically adapt to the live score, using integer lines (e.g. 2, 3) 
+  // to perfectly match the fcbet216 reference grid.
+  var current_goals = 0;
+  if (m.ss) {
+    var pts = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
+    if (pts.length >= 2) {
+      current_goals = (parseInt(pts[0], 10) || 0) + (parseInt(pts[1], 10) || 0);
+    }
+  }
+
+  var l1 = current_goals + 1;     // e.g. score 1-0 -> line 2
+  var l2 = current_goals + 1.5;   // e.g. score 1-0 -> line 2.5
+  var l3 = current_goals + 2;     // e.g. score 1-0 -> line 3
+
+  var api_ov = parseFloat(o.ov);
+  var api_un = parseFloat(o.un);
+  
+  var base_ov = (!isNaN(api_ov) && api_ov > 1.01) ? api_ov : +seedRand(s+'ov', 1.70, 2.10).toFixed(2);
+  var base_un = (!isNaN(api_un) && api_un > 1.01) ? api_un : +seedRand(s+'un', 1.70, 2.10).toFixed(2);
+
   function _mk(name, odd, hc) { return { id:'tot_'+name.replace(/\s+/g,'_')+'_'+hc, name:name, odds:Math.max(1.01,+odd.toFixed(2)), handicap:hc }; }
-  // Generate ladder: low / mid / high lines.
-  var lL = +(line - 0.5).toFixed(1);
-  var lH = +(line + 0.5).toFixed(1);
+  
   var totSels = [
-    _mk('Plus de '  + lL, ov * 0.70, lL),
-    _mk('Moins de ' + lL, un * 1.45, lL),
-    _mk('Plus de '  + line, ov, line),
-    _mk('Moins de ' + line, un, line),
-    _mk('Plus de '  + lH, ov * 1.45, lH),
-    _mk('Moins de ' + lH, un * 0.70, lH),
+    _mk('Plus de '  + l1, base_ov * 0.70, l1),
+    _mk('Moins de ' + l1, base_un * 1.50, l1),
+    _mk('Plus de '  + l2, base_ov, l2),
+    _mk('Moins de ' + l2, base_un, l2),
+    _mk('Plus de '  + l3, base_ov * 1.50, l3),
+    _mk('Moins de ' + l3, base_un * 0.70, l3),
   ];
   mkts.push({ id:'total', name:'Total', selections: totSels });
 
