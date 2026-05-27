@@ -585,11 +585,14 @@ function patchMatchDetailLive(m, markets) {
     }
   }
 
-  // Score
+  // Score — use sticky cache so a momentary empty m.ss during a poll
+  // never flashes the score back to "0 : 0" on screen.
   var scoreEl = document.getElementById('md-score-display') || document.querySelector('.md-score-live');
-  if (scoreEl && m.ss) {
-    var sp = String(m.ss).split('-');
-    scoreEl.textContent = (sp[0] || '0').trim() + ' : ' + (sp[1] || '0').trim();
+  if (scoreEl) {
+    var ssc = _sbReadScore(m);
+    if (ssc[2]) { // we have a known score (current poll or sticky)
+      scoreEl.textContent = ssc[0] + ' : ' + ssc[1];
+    }
   }
 
   // Timer + period — skip ticking when match ended.
@@ -5283,9 +5286,11 @@ function renderMatchDetail(m, markets) {
   // Shorten only if name > 14 chars (to avoid overflow in the compact card)
   var hDisplay = hn.length > 14 ? hn.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'') : hn;
   var aDisplay = an.length > 14 ? an.replace(/^(FC|AC|AS|RC|SC|SS|CS|CF|SL|FK|NK|SK|BK)\s+/i,'') : an;
-  var scores   = m.ss ? m.ss.split('-') : ['',''];
-  var scoreH   = scores[0] !== undefined ? scores[0].trim() : '';
-  var scoreA   = scores[1] !== undefined ? scores[1].trim() : '';
+  // Read score with sticky-cache fallback so the score never visually
+  // disappears on a reload race or a momentary empty poll.
+  var _msc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, !!m.ss];
+  var scoreH   = _msc[2] ? String(_msc[0]) : '';
+  var scoreA   = _msc[2] ? String(_msc[1]) : '';
   var sportId  = parseInt(m.sport_id || 1);
   var lg       = m.league ? m.league.name : '';
   var country  = guessCountry(lg);
@@ -5471,30 +5476,60 @@ function renderMatchDetail(m, markets) {
  * We also prefer .5 lines (no push possible) over integer lines if
  * both are present.
  */
+/* Sticky cache for the last known live score per match.
+ * The match-detail poll can momentarily return an empty m.ss
+ * (during the half-time transition, a goal event, or a v3 snapshot
+ * race) and we don't want the totals filter to reset to current=0
+ * during that flicker. We remember the last NON-ZERO score we saw
+ * for each match and use it when m.ss is missing or zero. */
+window._sbScoreCache = window._sbScoreCache || {};
+
+function _sbReadScore(m) {
+  // Returns [home_g, away_g, totalSeen] where totalSeen is true if
+  // we have an actual score (current poll OR sticky cache).
+  var mid = m && m.id ? String(m.id) : '';
+  // Parse the current poll's m.ss first
+  if (m && m.ss) {
+    var p = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
+    if (p.length >= 2) {
+      var h = parseInt(p[0], 10);
+      var a = parseInt(p[1], 10);
+      if (!isNaN(h) && !isNaN(a)) {
+        // Update sticky cache only when it's a forward-progressing score
+        // (the cache should never decrease).
+        var prev = mid ? window._sbScoreCache[mid] : null;
+        if (!prev || h + a >= prev[0] + prev[1]) {
+          if (mid) window._sbScoreCache[mid] = [h, a];
+        }
+        return [Math.max(h, prev ? prev[0] : 0),
+                Math.max(a, prev ? prev[1] : 0),
+                true];
+      }
+    }
+  }
+  // No m.ss this cycle → fall back to sticky cache.
+  if (mid && window._sbScoreCache[mid]) {
+    var sc = window._sbScoreCache[mid];
+    return [sc[0], sc[1], true];
+  }
+  return [0, 0, false];
+}
+
 function filterMarketByScore(mkt, m) {
   if (!mkt || !mkt.selections) return mkt;
   var nm = String(mkt.name || '').toLowerCase().trim();
-  // Only filter score-dependent markets. 1x2 / Double Chance / etc.
-  // are not score-settled in the same simple way.
-  // Match: "Total", "Total de buts", "1 total", "2 total", "Total mi-temps",
-  //        "Plus/Moins", "Over/Under", "Goals"
   var isTotalAll  = /\btotal\b|plus\/moins|over\/under|goals\b/i.test(nm);
-  var isTotalHome = /^1\s*total/i.test(nm);   // "1 total de buts" → home only
-  var isTotalAway = /^2\s*total/i.test(nm);   // "2 total" → away only
+  var isTotalHome = /^1\s*total/i.test(nm);
+  var isTotalAway = /^2\s*total/i.test(nm);
   var isCorners   = /corner/i.test(nm);
   var isCards     = /carton|card/i.test(nm);
   if (!(isTotalAll || isTotalHome || isTotalAway || isCorners || isCards)) return mkt;
 
-  // Pick the right "current count" depending on market type
+  // Read score with sticky-cache fallback so a momentarily-empty m.ss
+  // never resets the filter to current=0.
+  var sc = _sbReadScore(m);
+  var home_g = sc[0], away_g = sc[1], hasScore = sc[2];
   var current = 0;
-  var home_g = 0, away_g = 0;
-  if (m && m.ss) {
-    var p = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
-    if (p.length >= 2) {
-      home_g = parseInt(p[0], 10) || 0;
-      away_g = parseInt(p[1], 10) || 0;
-    }
-  }
   if (isTotalHome) {
     current = home_g;
   } else if (isTotalAway) {
@@ -5712,16 +5747,10 @@ function buildFallbackMarkets(m) {
     ]});
   }
 
-  // Total — fcbet216 shows a *ladder* of Plus/Moins rows centered on
-  // Total — dynamically adapt to the live score, using integer lines (e.g. 2, 3) 
-  // to perfectly match the fcbet216 reference grid.
-  var current_goals = 0;
-  if (m.ss) {
-    var pts = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
-    if (pts.length >= 2) {
-      current_goals = (parseInt(pts[0], 10) || 0) + (parseInt(pts[1], 10) || 0);
-    }
-  }
+  // Total — dynamically adapt to the live score with sticky cache
+  // so a momentary empty m.ss during a poll never resets to 0.
+  var _sc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, false];
+  var current_goals = _sc[0] + _sc[1];
 
   // Use .5 lines only — same convention as fcbet216 and FlashScore.
   // Lines are dynamic and based on current_goals so a 2:0 game shows
@@ -5793,17 +5822,8 @@ function buildFallbackMarkets(m) {
   vm.forEach(function(c,i) { vmSels.push({id:'vm_'+i,name:c[0],odds:Math.max(1.01,+(c[1]*seedRand(s+'vm'+i,0.9,1.1)).toFixed(2))}); });
   mkts.push({id:'vm',name:'Marge de victoire',selections:vmSels});
 
-  // 1 total de buts — DYNAMIC per-team total based on home goals
-  // The home score is the first half of m.ss ("3-0" → 3 home goals).
-  // fcbet216 shows lines ABOVE the current home count so the bet is alive.
-  var home_goals = 0, away_goals = 0;
-  if (m.ss) {
-    var hp = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
-    if (hp.length >= 2) {
-      home_goals = parseInt(hp[0], 10) || 0;
-      away_goals = parseInt(hp[1], 10) || 0;
-    }
-  }
+  // 1 total de buts / 2 total — DYNAMIC per-team using sticky-cached score.
+  var home_goals = _sc[0], away_goals = _sc[1];
   var h_l1 = home_goals + 0.5;
   var h_l2 = home_goals + 1.5;
   mkts.push({id:'t1',name:'1 total de buts',selections:[
