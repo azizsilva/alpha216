@@ -199,15 +199,21 @@ function formatOdd(decVal) {
  * BetsAPI does NOT push a real m.timer at all. Showing 00:00 / En cours
  * for a 12-minute-old match is wrong. We derive an estimate from m.time
  * (kickoff Unix ts), tagged with .estimated so the UI can prefix "~".
- * effectiveTimer() prefers real timer first — this is fallback ONLY.  */
+ * effectiveTimer() prefers real timer first — this is fallback ONLY.
+ *
+ * KICKOFF DELAY OFFSET: real matches start 2-4 minutes after the
+ * scheduled kickoff (referees, anthems, late teams). Subtract a
+ * 2-minute offset so our estimate roughly matches FlashScore (which
+ * counts from actual play, not scheduled time). */
+var KICKOFF_DELAY_SEC = 120;
 function computeFallbackTimer(m) {
   if (!m) return null;
   if (isMatchEnded(m)) return null;
   var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
   if (kickoff <= 0) return null;
   var nowSec = Math.floor(Date.now() / 1000);
-  var elapsed = nowSec - kickoff;
-  if (elapsed < 0) return null;
+  var elapsed = nowSec - kickoff - KICKOFF_DELAY_SEC;
+  if (elapsed < 0) return null;  // match hasn't 'started' for our purposes
   var sid = parseInt(m.sport_id || 1, 10);
   if (sid === 1 || sid === 36) {
     var totalMin = Math.floor(elapsed / 60);
@@ -591,6 +597,9 @@ function patchMatchDetailLive(m, markets) {
     var tmStr  = String(effPatch.tm || effPatch.TM || '0').padStart(2, '0');
     var tsStr  = String(effPatch.ts || effPatch.TS || '0').padStart(2, '0');
     var clock  = tmStr + ':' + tsStr;
+    // Mark estimated timers with "~" so the user knows it's not the
+    // exact Bet365 clock (low-coverage leagues without a real timer).
+    if (effPatch.estimated && !isHTnow) clock = '~' + clock;
     var pblock = document.getElementById('md-period-block');
     if (pblock) {
       pblock.innerHTML = buildMdPeriodBlock(pname, isHTnow, clock);
@@ -635,6 +644,20 @@ function patchMatchDetailLive(m, markets) {
     // fallback always anchors on the correct current Bet365 main line.
     nextMarkets = mergeOuMarkets(markets, m);
     window._mdHasRealMarkets = true;
+    // ── Sticky markets: merge new with previous so a market that's
+    // momentarily absent from one poll doesn't flicker out. We keep
+    // any previously-seen market that isn't in the new tree.
+    if (prevMarkets.length) {
+      var newIds = {};
+      nextMarkets.forEach(function(mk){
+        var key = (mk.id || mk.name || '').toString().toLowerCase();
+        newIds[key] = true;
+      });
+      prevMarkets.forEach(function(pm){
+        var key = (pm.id || pm.name || '').toString().toLowerCase();
+        if (!newIds[key]) nextMarkets.push(pm);  // preserve stale market
+      });
+    }
   } else if (window._mdHasRealMarkets && prevMarkets.length) {
     // Empty markets[] on one poll must NOT revert to static fallback —
     // keep the last real Bet365 market tree on screen.
@@ -3404,9 +3427,8 @@ function renderBetSlip() {
         indicator = '<svg class="slip-odds-arrow slip-odds-arrow--up" width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,4 22,18 2,18"/></svg>';
       } else if (change === 'down') {
         indicator = '<svg class="slip-odds-arrow slip-odds-arrow--down" width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,20 22,6 2,6"/></svg>';
-      } else {
-        indicator = '<span class="slip-odds-minus">&#8722;</span>';
       }
+      // No minus filler when stable — fcbet216 shows just the number.
       return '<span class="' + boxCls + '">' + indicator + '<span class="slip-odds-num">' + (parseFloat(val) || 0).toFixed(2) + '</span></span>';
     }
 
@@ -6008,8 +6030,11 @@ function renderMktBtn(sel, m, bbMode) {
   // Market name for BB leg display — stored in the button's data-mkt attr if available
   var mktName = (renderMktBtn._curMkt || '');
   if (bbMode) {
+    // Pass handicap so the BB toggle knows different O/U lines (1.5 vs 2.5)
+    // are NOT mutually exclusive even though they share a market name.
+    var hcArg = (sel.handicap != null) ? String(sel.handicap) : '';
     return '<button type="button" class="md-odd-btn md-bb-btn' + (isBB ? ' sel' : '') + (hasOdd ? '' : ' md-odd-btn--locked') + flashCls + '"'
-      + (hasOdd ? ' onclick="window.sbBBToggle(\'' + bid + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\')"' : ' disabled')
+      + (hasOdd ? ' onclick="window.sbBBToggle(\'' + bid + '\',\'' + h(String(safeName)) + '\',' + val + ',\'' + h(mktName) + '\',\'' + h(hcArg) + '\')"' : ' disabled')
       + '>'
       + '<span class="md-o-name">' + lbl + '</span>'
       + (hasOdd ? '<span class="md-o-val">' + arrowHtml + val.toFixed(2) + '</span>' : '<span class="md-o-lock">' + ICON.lock + '</span>')
@@ -6347,11 +6372,11 @@ window.sbMdToggleInfo = function() {
 };
 
 // ── Bet Builder ──────────────────────────────────────────────
-window.sbBBToggle = function(id, name, odds, market) {
+window.sbBBToggle = function(id, name, odds, market, handicap) {
   var match = window._mdMatch;
   if (!match) return;
   var bbBetId = 'bb_' + match.id;
-  
+
   var bIdx = S.betSlip.findIndex(function(b) { return b.id === bbBetId; });
   var bet = (bIdx >= 0) ? S.betSlip[bIdx] : null;
 
@@ -6372,13 +6397,18 @@ window.sbBBToggle = function(id, name, odds, market) {
     S.betSlip.push(bet);
   }
 
-  // ── Mutual exclusion within the same market group ────────────────
-  // fcbet216 / Altenar Bet Builder: each market can contribute AT MOST
-  // ONE leg. Clicking a second selection in the same market replaces
-  // the first one. Clicking the same selection twice removes it.
+  // ── Mutual exclusion: scoped to MARKET + HANDICAP LINE ───────────
+  // fcbet216 / Altenar SGM rule: a single market with a single line
+  // (e.g., Total Plus de 2.5 vs Total Moins de 2.5) cannot have both
+  // sides selected — they are the same event. BUT different lines
+  // (Plus de 1.5 + Moins de 3.5) ARE compatible (final score 2 or 3
+  // makes both true) and must be allowed.
+  var hcStr = (handicap == null ? '' : String(handicap));
+  var lineKey = (market || '') + '|' + hcStr;
   var sameLegIdx = bet.legs.findIndex(function(l) { return l.id === id; });
   var sameMktIdx = bet.legs.findIndex(function(l) {
-    return (l.market || '') === (market || '') && l.id !== id;
+    var lk = (l.market || '') + '|' + (l.handicap || '');
+    return lk === lineKey && l.id !== id;
   });
   var removedIds = [];
   if (sameLegIdx >= 0) {
@@ -6391,7 +6421,7 @@ window.sbBBToggle = function(id, name, odds, market) {
       removedIds.push(bet.legs[sameMktIdx].id);
       bet.legs.splice(sameMktIdx, 1);
     }
-    bet.legs.push({ id: id, name: name, odds: parseFloat(odds), market: market || '' });
+    bet.legs.push({ id: id, name: name, odds: parseFloat(odds), market: market || '', handicap: hcStr });
   }
 
   if (!bet.legs.length) {
