@@ -7472,6 +7472,22 @@ body .sb-root .slip-bookmark-btn {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
+   SIDEBAR OPEN STATE — when .sb-sidebar-open is on .sb-root, hide
+   the center panel's mobile-topbar and suppress the bleed-through
+   of any center content visible beside the 280px sidebar.
+   ══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .sb-root.sb-sidebar-open .sb-mobile-topbar {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  /* Dim the center panel that peeks out on the right of the 280px sidebar */
+  .sb-root.sb-sidebar-open .sb-center {
+    pointer-events: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
    SIDEBAR BACKDROP — dark overlay shown behind the left drawer on mobile.
    Hidden by default (opacity:0 + pointer-events:none).
    JS adds .open class when sidebar opens.

@@ -4940,16 +4940,20 @@ window.sbTimeFilter = function(btn, range) {
 window.sbCloseLeft = function() {
   var sidebar  = document.getElementById('sb-left');
   var backdrop = document.getElementById('sb-left-backdrop');
+  var root     = document.querySelector('.sb-root');
   if (sidebar)  sidebar.classList.remove('open');
   if (backdrop) backdrop.classList.remove('open');
+  if (root)     root.classList.remove('sb-sidebar-open');
   document.body.style.overflow = '';
 };
 window.sbToggleLeft = function() {
   var sidebar  = document.getElementById('sb-left');
   var backdrop = document.getElementById('sb-left-backdrop');
+  var root     = document.querySelector('.sb-root');
   if (!sidebar) return;
   var isOpen = sidebar.classList.toggle('open');
   if (backdrop) backdrop.classList.toggle('open', isOpen);
+  if (root)     root.classList.toggle('sb-sidebar-open', isOpen);
   // Prevent body scroll while drawer is open on mobile
   document.body.style.overflow = isOpen ? 'hidden' : '';
 };
