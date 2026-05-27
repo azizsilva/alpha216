@@ -3885,7 +3885,22 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
   sbSetHomepanelVisible(false);
 
   var el = document.getElementById('sb-matches-body');
-  if (el) el.innerHTML = buildSkeleton(4);
+
+  // Instantly pre-populate with any matching live/upcoming matches already
+  // in memory so the user sees content immediately rather than a blank screen
+  // while we wait for the API round-trip.
+  var preMatches = (S.matches || []).filter(function(m) {
+    if (!m.league) return false;
+    if (sid && parseInt(m.sport_id || 1) !== parseInt(sid || 1)) return false;
+    return isLeagueMatch(name, m.league.name);
+  });
+  if (preMatches.length) {
+    S.champMatches = preMatches;
+    if (el) el.innerHTML = '';     // suppress skeleton — we already have data
+    renderChampionship(id, name, flag, preMatches);
+  } else {
+    if (el) el.innerHTML = buildSkeleton(4);
+  }
 
   // Token so a late response from a previous league click can't overwrite
   // the championship view if the user has since navigated to a different league.

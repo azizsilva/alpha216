@@ -1417,12 +1417,13 @@ if ($action === 'league_matches') {
     if ($db_connected) {
         try {
             // Try by league_id first (most precise — avoids wrong-sport/country fallbacks)
-            // Uses JSON_EXTRACT so no schema change needed; sport_id index keeps it fast
+            // Uses JSON_EXTRACT so no schema change needed; sport_id index keeps it fast.
+            // CAST to CHAR covers both JSON string "78" and numeric 78.
             if ($league_id_q !== '') {
                 $stmt = $pdo->prepare(
                     "SELECT raw_json, start_time, status FROM sb_matches
                       WHERE sport_id=? AND status!='ended'
-                        AND JSON_EXTRACT(raw_json,'$.league.id') = ?
+                        AND CAST(JSON_EXTRACT(raw_json,'$.league.id') AS CHAR) = ?
                       ORDER BY start_time ASC LIMIT 200"
                 );
                 $stmt->execute([$sport_id, $league_id_q]);
@@ -1466,6 +1467,35 @@ if ($action === 'league_matches') {
             }
         } catch (Exception $e) {}
     }
+    // ── Step 2b: Scan live cache files for live matches ──
+    // The DB cleanup in Step 0/1 can incorrectly mark a match as 'ended'
+    // if its start_time is > 3 hours ago (matches in ET/very long games).
+    // The tick_live daemon's cache files are the ground truth for live data —
+    // scan them here to rescue any live match the DB cleanup may have missed.
+    $live_file = $cache_dir . '/live_' . $sport_id . '.json';
+    if (file_exists($live_file)) {
+        $lj = json_decode(@file_get_contents($live_file), true);
+        if (is_array($lj)) {
+            // Build a set of IDs already in $results so we don't duplicate
+            $found_ids = [];
+            foreach ($results as $r) { if (isset($r['id'])) $found_ids[(string)$r['id']] = true; }
+            foreach ($lj as $mm) {
+                if (!is_array($mm)) continue;
+                if ((string)($mm['time_status'] ?? '0') !== '1') continue;
+                $mmid = (string)($mm['id'] ?? '');
+                if ($mmid && isset($found_ids[$mmid])) continue;
+                $lg_name = $mm['league']['name'] ?? '';
+                $match_q = $league_q !== '' ? $league_q : $league_id_q;
+                if ($match_q === '') continue;
+                // Broad case-insensitive substring match on league name
+                if (stripos($lg_name, $match_q) === false && stripos($match_q, $lg_name) === false) continue;
+                if (empty($mm['home']['name']) || empty($mm['away']['name'])) continue;
+                $results[] = $mm;
+                $found_ids[$mmid] = true;
+            }
+        }
+    }
+
     // ── Step 3: BetsAPI direct fallback ──
     // When the local DB has nothing for this league (typical for far-future
     // tournaments like FIFA World Cup 2026, UEFA Conference League off-
