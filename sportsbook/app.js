@@ -5810,8 +5810,10 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
   // Filter out already-settled lines so e.g. a 2:0 match no longer
   // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
   mkt = filterMarketByScore(mkt, m);
-  // Then window to 2 active line pairs like fcbet216 Principaux / BB.
-  mkt = trimTotalMarketWindow(mkt, m, 2);
+  // Principaux trims to 2 active pairs (compact view).
+  // Bet Builder / Tout / Total tab show ALL active lines so users can mix legs.
+  var trimMax = bbMode ? 99 : 2;
+  mkt = trimTotalMarketWindow(mkt, m, trimMax);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
   // Honor any user-driven expand/collapse override stored in S._mdMktState.
@@ -6267,10 +6269,25 @@ window.sbBBToggle = function(id, name, odds, market) {
     S.betSlip.push(bet);
   }
 
-  var legIdx = bet.legs.findIndex(function(l) { return l.id === id; });
-  if (legIdx >= 0) {
-    bet.legs.splice(legIdx, 1);
+  // ── Mutual exclusion within the same market group ────────────────
+  // fcbet216 / Altenar Bet Builder: each market can contribute AT MOST
+  // ONE leg. Clicking a second selection in the same market replaces
+  // the first one. Clicking the same selection twice removes it.
+  var sameLegIdx = bet.legs.findIndex(function(l) { return l.id === id; });
+  var sameMktIdx = bet.legs.findIndex(function(l) {
+    return (l.market || '') === (market || '') && l.id !== id;
+  });
+  var removedIds = [];
+  if (sameLegIdx >= 0) {
+    // Toggle off: same selection clicked again
+    removedIds.push(bet.legs[sameLegIdx].id);
+    bet.legs.splice(sameLegIdx, 1);
   } else {
+    // New selection in this market → drop the previous one from that market first
+    if (sameMktIdx >= 0) {
+      removedIds.push(bet.legs[sameMktIdx].id);
+      bet.legs.splice(sameMktIdx, 1);
+    }
     bet.legs.push({ id: id, name: name, odds: parseFloat(odds), market: market || '' });
   }
 
@@ -6285,11 +6302,16 @@ window.sbBBToggle = function(id, name, odds, market) {
   renderBetSlip();
   updateFloatingBetBadge();
 
-  // Highlight/unhighlight clicked button
+  // Refresh BB button highlights: the clicked one (added/removed) and
+  // any previously-selected button in the same market that we just bumped.
   document.querySelectorAll('.md-bb-btn').forEach(function(btn){
     var oc = btn.getAttribute('onclick') || '';
     if (oc.indexOf("'" + id + "'") !== -1) {
-      btn.classList.toggle('sel', legIdx < 0);
+      btn.classList.toggle('sel', sameLegIdx < 0);  // selected only if it was just added
+    } else if (removedIds.length) {
+      removedIds.forEach(function(rid) {
+        if (oc.indexOf("'" + rid + "'") !== -1) btn.classList.remove('sel');
+      });
     }
   });
 };
