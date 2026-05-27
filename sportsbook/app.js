@@ -1043,51 +1043,21 @@ function h(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/** Live match — BetsAPI uses string or number time_status */
+/** Live match — BetsAPI uses string or number time_status.
+ *  Volume Plan: trust ONLY BetsAPI's explicit ended signals. The old
+ *  elapsed-time heuristic (>=105 min + locked odds) was firing on
+ *  matches that fcbet216 still showed as live (stoppage time / ET).
+ *  We only fall back to a hard 4-hour staleness cutoff for matches
+ *  BetsAPI literally forgets to flip — by then they're definitely done. */
 function isMatchEnded(m) {
   if (!m) return false;
-  // Primary signals from BetsAPI / our DB ─ always trust these.
   if (String(m.time_status) === '3') return true;
   if (m.status === 'ended' || m.status === 'finished') return true;
-  // BetsAPI v3 sometimes fills scores.fulltime with the final score
-  // before flipping time_status. If we see a full-time score, the match
-  // is over for our purposes.
-  if (m.scores && m.scores.fulltime && (m.scores.fulltime.home != null || m.scores.fulltime.away != null)) {
+  // Absolute staleness cutoff: 4 hours past scheduled kickoff is
+  // unphysical for any football match including penalties.
+  var kickoff = parseInt(m.time || 0, 10) || 0;
+  if (kickoff > 0 && (Date.now() / 1000 - kickoff) >= 14400) {
     return true;
-  }
-  // Heuristic for football (sport_id 1, 36): regular matches end at
-  // ~95-100 min wall (90 reg + 15 HT + 0-5 stoppage). Knockout / ET
-  // matches can go to ~135 min wall. BetsAPI's time_status sometimes
-  // sticks at '1' for 30+ min after a real match ends — that's the
-  // "still showing live in EN DIRECT" bug. We declare the match ended
-  // when the wall clock + odds-locked signals make it obvious.
-  var sid = parseInt(m.sport_id || 1, 10);
-  if (sid === 1 || sid === 36) {
-    var kickoff = parseInt(m.time || 0, 10) || 0;
-    if (kickoff > 0) {
-      var elapsedMin = Math.floor((Date.now() / 1000 - kickoff) / 60);
-      // 105 min wall + main odds locked  →  regulation 90 ended, no ET
-      //  underway. BetsAPI hasn't flipped status yet but we know.
-      if (elapsedMin >= 105) {
-        var lo = m.live_odds || {};
-        var oneX2 = lo['1x2'] || lo.full_time_result || lo.match_winner || lo || {};
-        var hv = parseFloat(oneX2.h || oneX2.home || 0);
-        var av = parseFloat(oneX2.a || oneX2.away || 0);
-        // Locked / missing main market on a 105+ min football game
-        // ⇒ regulation has ended and there's no ET being offered.
-        if (!(hv > 1.01) && !(av > 1.01)) return true;
-      }
-      // 135 min wall + odds locked  →  ET also done. Anything past
-      // this with odds locked must be over.
-      if (elapsedMin >= 135) {
-        var lo2 = m.live_odds || {};
-        var oneX2b = lo2['1x2'] || lo2.full_time_result || lo2.match_winner || lo2 || {};
-        var hv2 = parseFloat(oneX2b.h || oneX2b.home || 0);
-        if (!(hv2 > 1.01)) return true;
-      }
-      // 150 min absolute: unphysical, definitely over regardless of odds.
-      if (elapsedMin >= 150) return true;
-    }
   }
   return false;
 }
@@ -6002,17 +5972,26 @@ function renderMktBtn(sel, m, bbMode) {
   var rawOdd = parseFloat(sel.odds);
   if (isNaN(rawOdd) || rawOdd < 1.01) rawOdd = 0;
   var val    = applyMargin(rawOdd);
-  // Lock ALL odds when match is finished — use the full isMatchEnded()
-  // heuristic so odds are locked even before BetsAPI flips time_status=3.
+  // Extra hard guard — applyMargin should never return undefined, but
+  // if anything ever leaks through we render a stable 0 so .toFixed()
+  // can't throw and produce the "undefined" string in the DOM.
+  if (typeof val !== 'number' || isNaN(val)) val = 0;
   var matchEnded = isMatchEnded(m);
   var hasOdd = !matchEnded && (val >= 1.01);
-  var safeName = (sel.name != null && sel.name !== '') ? sel.name : '-';
+  var safeName = (sel.name != null && sel.name !== '' && sel.name !== 'undefined') ? String(sel.name) : '-';
+  // Strip any literal "undefined" leak from the name (saw "Plus de undefined"
+  // when a market's line value was lost during merge).
+  if (safeName.indexOf('undefined') !== -1) safeName = safeName.replace(/\s*undefined\s*/g, '').trim() || '-';
   // Suppress the trailing handicap badge when the selection name already
   // contains the line value (e.g. "Plus de 4.5"). fcbet216 never shows
   // the line twice — we previously rendered "Plus de 2.5 2.5".
-  var hcStr = (sel.handicap != null) ? String(sel.handicap) : '';
-  var nameHasHc = hcStr && String(safeName).indexOf(hcStr) !== -1;
-  var lbl = h(String(safeName)) + (sel.handicap != null && !nameHasHc ? ' <span class="md-hc">' + h(hcStr) + '</span>' : '');
+  var hcStr = '';
+  if (sel.handicap != null) {
+    var hcn = parseFloat(sel.handicap);
+    if (!isNaN(hcn)) hcStr = String(sel.handicap);
+  }
+  var nameHasHc = hcStr && safeName.indexOf(hcStr) !== -1;
+  var lbl = h(safeName) + (hcStr && !nameHasHc ? ' <span class="md-hc">' + h(hcStr) + '</span>' : '');
   var bid    = h(String(m.id || '')) + '_md_' + h(String(sel.id || safeName));
   // Direction arrow — set by buildOddsDiff() when live odds move.
   var arrowHtml = '';
@@ -6397,18 +6376,15 @@ window.sbBBToggle = function(id, name, odds, market, handicap) {
     S.betSlip.push(bet);
   }
 
-  // ── Mutual exclusion: scoped to MARKET + HANDICAP LINE ───────────
-  // fcbet216 / Altenar SGM rule: a single market with a single line
-  // (e.g., Total Plus de 2.5 vs Total Moins de 2.5) cannot have both
-  // sides selected — they are the same event. BUT different lines
-  // (Plus de 1.5 + Moins de 3.5) ARE compatible (final score 2 or 3
-  // makes both true) and must be allowed.
+  // ── Mutual exclusion: ONE LEG PER MARKET GROUP ──────────────────
+  // fcbet216 / Altenar SGM rule: each market group can contribute at
+  // most ONE leg. Clicking a second selection in the same group
+  // (e.g., a different Total line) replaces the first. Same-selection
+  // click toggles off.
   var hcStr = (handicap == null ? '' : String(handicap));
-  var lineKey = (market || '') + '|' + hcStr;
   var sameLegIdx = bet.legs.findIndex(function(l) { return l.id === id; });
   var sameMktIdx = bet.legs.findIndex(function(l) {
-    var lk = (l.market || '') + '|' + (l.handicap || '');
-    return lk === lineKey && l.id !== id;
+    return (l.market || '') === (market || '') && l.id !== id;
   });
   var removedIds = [];
   if (sameLegIdx >= 0) {
