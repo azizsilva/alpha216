@@ -36,6 +36,7 @@ $passwords_to_try = array_unique([
 
 $pdo = null;
 $cache_file = dirname(__DIR__) . '/.db_auth_cache.php';
+$last_error = "Unknown Error";
 
 // First, try the cached configuration if it exists to avoid trying wrong passwords (which blocks the host in MySQL)
 if (file_exists($cache_file)) {
@@ -45,23 +46,29 @@ if (file_exists($cache_file)) {
             $dsn = "mysql:host=$host;dbname=$cached_db;charset=utf8mb4";
             $pdo = new PDO($dsn, $cached_user, $cached_pass, $options);
         } catch (\PDOException $e) {
+            $last_error = $e->getMessage();
             $pdo = null;
         }
     }
 } // end function 
 
 if (!$pdo) {
-    foreach ($databases_to_try as $db) {
-        if (!$db) continue;
-        foreach ($users_to_try as $user) {
-            foreach ($passwords_to_try as $pass) {
-                try {
-                    $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
-                    $pdo = new PDO($dsn, $user, $pass, $options);
-                    $cache_content = "<?php\n\$cached_db = " . var_export($db, true) . ";\n\$cached_user = " . var_export($user, true) . ";\n\$cached_pass = " . var_export($pass, true) . ";\n";
-                    @file_put_contents($cache_file, $cache_content);
-                    break 3; // Success
-                } catch (\PDOException $e) {
+    // Try both localhost and 127.0.0.1
+    $hosts_to_try = array_unique([$host, '127.0.0.1']);
+    foreach ($hosts_to_try as $current_host) {
+        foreach ($databases_to_try as $db) {
+            if (!$db) continue;
+            foreach ($users_to_try as $user) {
+                foreach ($passwords_to_try as $pass) {
+                    try {
+                        $dsn = "mysql:host=$current_host;dbname=$db;charset=utf8mb4";
+                        $pdo = new PDO($dsn, $user, $pass, $options);
+                        $cache_content = "<?php\n\$cached_db = " . var_export($db, true) . ";\n\$cached_user = " . var_export($user, true) . ";\n\$cached_pass = " . var_export($pass, true) . ";\n";
+                        @file_put_contents($cache_file, $cache_content);
+                        break 4; // Success
+                    } catch (\PDOException $e) {
+                        $last_error = $e->getMessage();
+                    }
                 }
             }
         }
@@ -74,10 +81,10 @@ if (!$pdo) {
     if (isset($_SERVER["HTTP_ACCEPT"]) && strpos($_SERVER["HTTP_ACCEPT"], "application/json") !== false) {
         http_response_code(503);
         header("Content-Type: application/json");
-        echo json_encode(["success" => false, "message" => "Database connection not established"]);
+        echo json_encode(["success" => false, "message" => "Database connection not established. Error: " . $last_error]);
         exit;
     }
-    $error_msg = "Database connection not established. Auto-detection failed.";
+    $error_msg = "Database connection not established. Auto-detection failed.<br><br><strong>LAST ERROR:</strong> " . htmlspecialchars($last_error);
     http_response_code(503);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Maintenance - Alpha216</title>';
     echo '<style>body{background:#000;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;flex-direction:column;}';
