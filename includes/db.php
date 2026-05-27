@@ -48,7 +48,7 @@ if (file_exists($cache_file)) {
             $pdo = null;
         }
     }
-}
+} // end function 
 
 if (!$pdo) {
     foreach ($databases_to_try as $db) {
@@ -69,6 +69,27 @@ if (!$pdo) {
 }
 
 
+
+if (!$pdo) {
+    if (isset($_SERVER["HTTP_ACCEPT"]) && strpos($_SERVER["HTTP_ACCEPT"], "application/json") !== false) {
+        http_response_code(503);
+        header("Content-Type: application/json");
+        echo json_encode(["success" => false, "message" => "Database connection not established"]);
+        exit;
+    }
+    $error_msg = "Database connection not established. Auto-detection failed.";
+    http_response_code(503);
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Maintenance - Alpha216</title>';
+    echo '<style>body{background:#000;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;flex-direction:column;}';
+    echo 'h1{color:#39FF14;font-size:40px;margin-bottom:10px;}p{font-size:18px;color:#ccc;max-width:600px;line-height:1.5;}';
+    echo '.loader{border:4px solid #333;border-top:4px solid #39FF14;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto;}';
+    echo '@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style></head>';
+    echo '<body><div class="loader"></div><h1>System Maintenance</h1>';
+    echo '<p>We are currently performing essential maintenance on our servers. Please check back in a few minutes.</p>';
+    echo '<p style="font-size:12px;color:#555;margin-top:40px;">' . $error_msg . '</p>';
+    echo '</body></html>';
+    exit;
+}
 try {
     $schema_marker = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.mk_schema_ready';
     if (!file_exists($schema_marker)) {
