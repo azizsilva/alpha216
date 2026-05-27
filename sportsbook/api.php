@@ -654,7 +654,9 @@ function _parse_flat_odds_api($o) {
         $v = trim((string)$v);
         if (!$v || $v === '0' || $v === '-') return 0.0;
         if (strpos($v, '/') !== false) {
-            [$fn, $fd] = explode('/', $v, 2);
+            $parts = explode('/', $v, 2);
+            $fn = $parts[0] ?? 0;
+            $fd = $parts[1] ?? 0;
             $fd = floatval($fd);
             return $fd > 0 ? round(1 + floatval($fn) / $fd, 2) : 0.0;
         }
@@ -673,7 +675,10 @@ function _stream_od_to_dec($raw) {
     if (!$raw || $raw==='-' || $raw==='0') return null;
     if (strtoupper($raw)==='EVS') return 2.00;
     if (strpos($raw,'/')!==false) {
-        [$fn,$fd]=explode('/',$raw,2); $fd=floatval($fd);
+        $parts = explode('/', $raw, 2);
+        $fn = $parts[0] ?? 0;
+        $fd = $parts[1] ?? 0;
+        $fd=floatval($fd);
         return $fd>0 ? round(1+floatval($fn)/$fd,2) : null;
     }
     $v=floatval($raw); return $v>0 ? round($v+1,2) : null;
@@ -2184,8 +2189,17 @@ function md_parse_markets($event_arr) {
         $type = $item['type'] ?? $item['TYPE'] ?? '';
         $na   = $item['NA']   ?? $item['name'] ?? $item['N']  ?? '';
 
-        if ($type === 'MG') {
+        // MG = Market Group (the actual BetsAPI type for market headers)
+        if ($type === 'MG' || in_array($type, ['MarketHeader', 'MH', 'Market'])) {
+            if ($cur && !empty($cur['selections'])) $markets[] = $cur;
             $cur_mg = $na;
+            // Initialize $cur here so markets without MA (like 1x2) aren't skipped
+            $cur = [
+                'id'         => $item['ID'] ?? $item['id'] ?? uniqid(),
+                'name'       => $cur_mg,
+                'ma_hc'      => null,
+                'selections' => [],
+            ];
             continue;
         }
 
@@ -2775,7 +2789,7 @@ if ($action === 'top_leagues_live') {
         }
     }
     // Back-compat: also return flat names so old clients keep working.
-    $names_flat = array_values(array_unique(array_map(fn($p) => $p['name'], $live_pairs)));
+    $names_flat = array_values(array_unique(array_map(function($p) { return $p['name']; }, $live_pairs)));
     echo json_encode([
         'success' => 1,
         'live_leagues' => $names_flat,
