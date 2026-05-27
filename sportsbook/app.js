@@ -463,6 +463,17 @@ function startMatchTimer(m) {
   var totalBase = baseMin * 60 + baseSec;
   var t0 = Date.now();
 
+  // ── Estimated timer indicator ────────────────────────────────────
+  //   When the match has NO real API timer (lower leagues like Polish
+  //   IV Liga), effectiveTimer falls back to the kickoff-derived clock.
+  //   That clock can drift several minutes from reality because it
+  //   doesn't know about stoppages, late starts, or extended HT.
+  //
+  //   We mark such timers as "estimated" by adding a ~ prefix once we
+  //   pass minute 45 (when drift becomes visible), so the user knows
+  //   the time is not exact. The CSS turns it a slightly muted color.
+  var hasRealApiTimer = !!(m.timer && (parseInt(m.timer.tm || m.timer.TM || 0, 10) || 0) > 0);
+
   window._mdTimerInterval = setInterval(function() {
     var el = document.getElementById('md-timer-display');
     if (!el) { clearInterval(window._mdTimerInterval); return; }
@@ -475,7 +486,11 @@ function startMatchTimer(m) {
     var curr = totalBase + elapsed;
     var mm = Math.floor(curr / 60);
     var ss = curr % 60;
-    el.textContent = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    var clk = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    // Prefix "~" when we know the time is estimated (no real API timer
+    // and we're past minute 45 where drift becomes visible).
+    if (!hasRealApiTimer && mm > 45) clk = '~' + clk;
+    el.textContent = clk;
   }, 1000);
 }
 
@@ -5438,7 +5453,101 @@ function renderMatchDetail(m, markets) {
   showMatchViewer(m);
 }
 
+/* ── Filter market selections that are already settled by the current
+ * score so we render only meaningful bets (matches fcbet216 behavior).
+ *
+ * For Total (Over/Under) and similar count-based markets, a line where
+ * the handicap is ≤ current_total is either certain to win or certain
+ * to lose. fcbet216 hides those — only lines where line > current_total
+ * are still active bets.
+ *
+ * Example with current_goals=2:
+ *   "Plus de 1"   → CERTAIN WIN (drop)
+ *   "Plus de 1.5" → CERTAIN WIN (drop)
+ *   "Plus de 2"   → still tied (drop)
+ *   "Plus de 2.5" → meaningful (keep)
+ *   "Plus de 3.5" → meaningful (keep)
+ *
+ * We also prefer .5 lines (no push possible) over integer lines if
+ * both are present.
+ */
+function filterMarketByScore(mkt, m) {
+  if (!mkt || !mkt.selections) return mkt;
+  var nm = String(mkt.name || '').toLowerCase();
+  // Only filter score-dependent markets. 1x2 / Double Chance / etc.
+  // are not score-settled in the same simple way.
+  var isTotal     = /\btotal\b|plus\/moins|over\/under/i.test(nm);
+  var isCorners   = /corner/i.test(nm);
+  var isCards     = /carton|card/i.test(nm);
+  if (!(isTotal || isCorners || isCards)) return mkt;
+
+  // Pick the right "current count" depending on market type
+  var current = 0;
+  if (isTotal) {
+    // Goals: sum of m.ss "H-A"
+    if (m && m.ss) {
+      var p = String(m.ss).replace(/\s+/g, '').split(/[-:]/);
+      if (p.length >= 2) {
+        current = (parseInt(p[0], 10) || 0) + (parseInt(p[1], 10) || 0);
+      }
+    }
+  } else if (isCorners) {
+    if (m && m.stats && m.stats.corners) {
+      var c = m.stats.corners;
+      var ca = Array.isArray(c) ? c : String(c).split(',');
+      current = (parseInt(ca[0], 10) || 0) + (parseInt(ca[1], 10) || 0);
+    }
+  } else if (isCards) {
+    if (m && m.stats && m.stats.yellow_cards) {
+      var yc = m.stats.yellow_cards;
+      var yca = Array.isArray(yc) ? yc : String(yc).split(',');
+      current = (parseInt(yca[0], 10) || 0) + (parseInt(yca[1], 10) || 0);
+    }
+  }
+
+  // Filter selections — drop anything where the line is already settled
+  var keptSels = mkt.selections.filter(function(s) {
+    var hcStr = String(s.handicap != null ? s.handicap : '');
+    // If no numeric handicap, keep (might be score-correct, btts, etc.)
+    var hcNum = parseFloat(hcStr);
+    if (isNaN(hcNum)) {
+      // Try to parse line from name ("Plus de 2.5" → 2.5)
+      var fromName = String(s.name || '').match(/(\d+(?:\.\d+)?)/);
+      if (!fromName) return true;
+      hcNum = parseFloat(fromName[1]);
+    }
+    var nameLow = String(s.name || '').toLowerCase();
+    var isOver  = /plus|over/.test(nameLow);
+    var isUnder = /moins|under/.test(nameLow);
+    if (isOver) {
+      // Over X is still active only when X >= current (a line of X.5
+      // with current X is still active; line X with current X pushes).
+      // We require the line to be STRICTLY greater than current so we
+      // never show a pushed bet.
+      return hcNum > current;
+    }
+    if (isUnder) {
+      // Under X is impossible to win once current >= X — drop those.
+      // We keep lines where there's still room: line > current.
+      return hcNum > current;
+    }
+    return true;
+  });
+
+  if (keptSels.length === 0) return mkt; // never empty out the market
+  // If we filtered, return a shallow clone with the new selections so we
+  // don't mutate the source market object (preserves prev odds cache).
+  if (keptSels.length === mkt.selections.length) return mkt;
+  return {
+    id: mkt.id, name: mkt.name, handicap: mkt.handicap,
+    selections: keptSels
+  };
+}
+
 function renderMarketGroup(mkt, m, expanded, bbMode) {
+  // Filter out already-settled lines so e.g. a 2:0 match no longer
+  // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
+  mkt = filterMarketByScore(mkt, m);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
   // Honor any user-driven expand/collapse override stored in S._mdMktState.
@@ -5600,9 +5709,12 @@ function buildFallbackMarkets(m) {
     }
   }
 
-  var l1 = current_goals + 1;     // e.g. score 1-0 -> line 2
-  var l2 = current_goals + 1.5;   // e.g. score 1-0 -> line 2.5
-  var l3 = current_goals + 2;     // e.g. score 1-0 -> line 3
+  // Use .5 lines only — same convention as fcbet216 and FlashScore.
+  // Lines are dynamic and based on current_goals so a 2:0 game shows
+  // 2.5 / 3.5 / 4.5 (NOT the stale 0.5 / 1.5 / 2.5 we used to show).
+  var l1 = current_goals + 0.5;
+  var l2 = current_goals + 1.5;
+  var l3 = current_goals + 2.5;
 
   var api_ov = parseFloat(o.ov);
   var api_un = parseFloat(o.un);
