@@ -2324,7 +2324,11 @@ function renderMatches(results) {
     var carouselRaw = liveList.length ? liveList : results;
     var carouselSrc = sortLiveMatches(carouselRaw);
     renderEnDirectCards(carouselSrc.slice(0, 6));
-    renderBoosted(sortUpcomingMatches(results).slice(0, 4));
+    // Show up to 10 important upcoming matches in the Cotes boostées
+    // carousel (fcbet216 carousel typically shows 5-10). The
+    // sortUpcomingMatches function already prioritises top European
+    // and continental cup matches.
+    renderBoosted(sortUpcomingMatches(results).slice(0, 10));
     sbSetHomepanelVisible(true);
   } else if (liveOnlyTab) {
     // EN DIRECT tab: hide carousel / boost / sport nav — show matches only.
@@ -2972,6 +2976,10 @@ function renderBoosted(matches) {
     { lines: ['1ère mi-temps - 1x2', 'Plus de 1.5 - total', 'Carton jaune - 1ère mi-temps'], key: '1h_winner_over15_yellow1h' },
     { lines: ['2 - 1ère mi-temps - 1x2', 'Plus de 0.5 - 1ère mi-temps - total', 'Plus de 10.5 - Total des corners'], key: '1h_over05_corners10_2' }
   ];
+  // Stash boost params per match-id so the click handler stays simple
+  // (no fragile string-escaping in the onclick attribute).
+  window._sbBoostCards = {};
+
   var out = '';
   matches.forEach(function(m, idx) {
     var combo = COMBOS[idx % COMBOS.length];
@@ -2996,7 +3004,24 @@ function renderBoosted(matches) {
     var timeStr = String(dObj.getHours()).padStart(2,'0') + ':' + String(dObj.getMinutes()).padStart(2,'0');
     var lines = legs;
 
-    out += '<div class="sb-boost-card" onclick="window.sbOpenMatch(\'' + h(m.id) + '\')">';
+    // Save the boost card payload so sbAddBoostBet can pick it up by id
+    window._sbBoostCards[String(m.id)] = {
+      matchId: String(m.id),
+      matchName: (m.home ? m.home.name : '') + ' vs. ' + (m.away ? m.away.name : ''),
+      league: m.league ? m.league.name : '',
+      lines: legs,
+      real: pricing.real,
+      boosted: pricing.boosted,
+      pick: pick,
+      isLive: isMatchLive(m)
+    };
+
+    var boostBetId  = 'boost_' + m.id;
+    var isSelected  = S.betSlip.some(function(b){ return b.id === boostBetId; });
+    var selCls      = isSelected ? ' is-selected' : '';
+
+    out += '<div class="sb-boost-card' + selCls + '" data-bid="' + h(boostBetId) + '"'
+         + ' onclick="event.stopPropagation();window.sbAddBoostBet(\'' + h(m.id) + '\')">';
     out += '<div class="sb-boost-card-top">';
     out += '<span class="sb-boost-sport-icon"><svg width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.3514 5.82922C26.7793 3.9223 24.7691 2.39532 22.4814 1.37952C20.4987 0.499084 18.3093 0 16 0C13.6884 0 11.4969 0.500244 9.51263 1.38239C7.31567 2.35901 5.38202 3.81335 3.84009 5.61737C1.45081 8.4129 0 12.0343 0 16C0 16.5004 0.0298462 16.9937 0.0748291 17.4824C0.335938 20.3214 1.34015 22.9412 2.88916 25.1552C4.98395 28.1493 8.07538 30.3843 11.6843 31.3944C13.059 31.7792 14.5024 32 16 32C17.5426 32 19.0293 31.7697 20.4407 31.3623C24.095 30.3076 27.2152 27.9962 29.2873 24.913C30.9767 22.3996 31.9672 19.3801 31.9934 16.1301C31.9938 16.0863 32 16.0439 32 16C32 12.137 30.6307 8.59399 28.3514 5.82922ZM28.0334 8.88104C28.957 10.4362 29.585 12.181 29.8473 14.046L27.7114 11.9718L28.0334 8.88104ZM26.2687 6.51642L25.7321 11.6733L25.7321 11.6738L21.1324 13.7266L21.1319 13.7262L21.1316 13.7263L17.6975 11.2315L16.9996 10.7246V10.7245V6.01465L22.4458 3.58508C23.8868 4.33636 25.1751 5.33313 26.2687 6.51642ZM18.371 19.7656H18.3707H13.631H13.6295L12.1648 15.2572L12.1647 15.2568L12.1658 15.256L15.9996 12.4707L16.0002 12.4711L16.0004 12.4709L19.8366 15.2568L18.371 19.7656ZM16 2C17.3374 2 18.627 2.19989 19.8528 2.5517L15.9988 4.27026L12.142 2.55304C13.3693 2.20026 14.6607 2 16 2ZM9.54932 3.58752L14.9996 6.01465V10.7247V10.7256L10.8698 13.7266L10.8688 13.7261L6.28674 11.6816L5.89728 6.3338C6.95319 5.23071 8.18378 4.30011 9.54932 3.58752ZM4.06567 8.71814L4.30731 12.0401L2.05377 14.9377C2.22528 12.6704 2.93909 10.5575 4.06567 8.71814ZM4.10193 23.3414C3.12085 21.7574 2.4505 19.9675 2.16718 18.0488L5.64026 13.584L10.1783 15.6168L10.1813 15.6182L11.7872 20.5656L11.7906 20.5762L11.7901 20.5769L8.90881 24.209L8.90771 24.2088L4.10193 23.3414ZM5.93231 25.7047L8.68652 26.202L10.1224 28.689C8.54498 27.9553 7.12585 26.9425 5.93231 25.7047ZM16 30C14.9681 30 13.9649 29.88 12.996 29.6671L10.5258 25.389L10.525 25.3877L13.3883 21.7656H13.4005H18.6783L22.2565 25.4014L19.2382 29.6068C18.1968 29.8547 17.1162 30 16 30ZM22.6138 28.3339L24.158 26.182L26.0621 25.7109C25.057 26.752 23.8981 27.6424 22.6138 28.3339ZM28.0019 23.1707L23.8735 24.1921L23.8727 24.1924L20.2361 20.4972L20.236 20.4971L20.236 20.4969L20.4579 19.8145L21.8258 15.6074L26.4557 13.541L29.9526 16.9363C29.8013 19.2053 29.11 21.3233 28.0019 23.1707Z" fill="rgba(255,255,255,0.75)"></path></svg></span>';
     out += '<span class="sb-badge-bb">BB</span>';
@@ -3231,15 +3256,58 @@ window.sbAddBet = function(id, match, sel, val, market) {
   _afterSlipChange();
 };
 
+// Add a "Cotes boostées" promo bet to the slip. The card data was
+// stashed on window._sbBoostCards by renderBoosted. Clicking again
+// toggles the boost off (consistent with every other slip button).
+window.sbAddBoostBet = function(matchId) {
+  var data = window._sbBoostCards && window._sbBoostCards[String(matchId)];
+  if (!data) return;
+  var boostBetId = 'boost_' + matchId;
+  var idx = S.betSlip.findIndex(function(b){ return b.id === boostBetId; });
+  if (idx !== -1) {
+    S.betSlip.splice(idx, 1);
+  } else {
+    S.betSlip.push({
+      id: boostBetId,
+      match: data.matchName,
+      sel: data.lines.length >= 2 ? data.lines[data.lines.length - 1] : (data.lines[0] || ''),
+      val: parseFloat(data.boosted),
+      _origVal: parseFloat(data.boosted),
+      _change: null,
+      isLive: !!data.isLive,
+      isBoost: true,
+      boostReal: parseFloat(data.real),
+      boostLines: data.lines.slice(),
+      matchId: String(matchId),
+      market: data.lines[0] || 'Cotes boostées',
+      stake: SLIP_STAKE
+    });
+  }
+  _afterSlipChange();
+  // Highlight every boost card matching this id (carousel + match-detail copy)
+  document.querySelectorAll('.sb-boost-card[data-bid="' + boostBetId + '"]').forEach(function(c){
+    c.classList.toggle('is-selected', S.betSlip.some(function(b){ return b.id === boostBetId; }));
+  });
+  // Open the slip drawer on mobile so the user sees the bet they just added
+  if (window.innerWidth < 1101) {
+    var right = document.getElementById('sb-right');
+    if (right && !right.classList.contains('open')) right.classList.add('open');
+    updateFloatingBetBadge();
+  }
+};
+
 // Centralised post-slip-change side-effects: pick the right mode,
 // re-render, sync the badge and refresh button highlights.
 function _afterSlipChange() {
-  // Auto-mode: Simple when only one match (whether SGM or single).
-  // Combiné only kicks in when bets span MULTIPLE matches.
+  // Boost (promotional) bets and Bet Builder tickets are always Simple
+  // mode — each one has its own combined price and can't be folded
+  // into an accumulator with the others.
+  var hasBoost = S.betSlip.some(function(b){ return b && b.isBoost; });
+  var hasBB    = S.betSlip.some(function(b){ return b && b.isBB; });
   var matchIds = {};
   S.betSlip.forEach(function(b){ if (b && b.matchId) matchIds[b.matchId] = true; });
   var distinctMatches = Object.keys(matchIds).length;
-  if (distinctMatches <= 1) {
+  if (hasBoost || hasBB || distinctMatches <= 1) {
     SLIP_MODE = 'simple';
   } else if (SLIP_MODE === 'simple' || !SLIP_MODE) {
     SLIP_MODE = 'combi';
@@ -3304,7 +3372,7 @@ function updateFloatingBetBadge() {
 
 window.sbSlipMode = function(mode) {
   if ((mode === 'combi' || mode === 'system') && S.betSlip.length < 2) return;
-  if ((mode === 'combi' || mode === 'system') && S.betSlip.some(function(b){ return b && b.isBB; })) return;
+  if ((mode === 'combi' || mode === 'system') && S.betSlip.some(function(b){ return b && (b.isBB || b.isBoost); })) return;
   SLIP_MODE = mode;
   renderBetSlip();
 };
@@ -3666,7 +3734,12 @@ function renderBetSlip() {
     out += '<div class="slip-item-body">';
 
     // ── Market name (single bets only; BB tickets show each leg's market inline)
-    if (!b.isBB) {
+    if (b.isBoost) {
+      out += '<div class="slip-market-nm slip-market-nm--boost">'
+           + '<span class="sb-badge-blue" style="font-size:10px;padding:2px 6px;border-radius:3px;background:#3a6fff;color:#fff;font-weight:700;letter-spacing:0.4px">COTES BOOSTÉES</span>'
+           + '<span style="margin-left:6px;color:rgba(255,255,255,0.7);font-size:12px">' + h(b.market || '') + '</span>'
+           + '</div>';
+    } else if (!b.isBB) {
       out += '<div class="slip-market-nm">' + h(b.market || '1x2') + '</div>';
     }
 
@@ -3687,7 +3760,24 @@ function renderBetSlip() {
     }
 
     // ── Selection row: EN DIRECT badge + selection + odds
-    if (b.isBB && b.legs && b.legs.length) {
+    if (b.isBoost && b.boostLines && b.boostLines.length) {
+      // Render each promo leg with the green timeline dot, then the
+      // strike-through "real" odd next to the boosted price.
+      b.boostLines.forEach(function(line) {
+        out += '<div class="slip-leg-row">';
+        out += '<span class="slip-leg-dot"></span>';
+        out += '<div class="slip-leg-info"><span class="slip-leg-sel">' + h(line) + '</span></div>';
+        out += '</div>';
+      });
+      out += '<div class="slip-sel-row">';
+      if (b.isLive) out += '<span class="slip-live-badge">EN DIRECT</span>';
+      out += '<span class="slip-sel-lbl" style="color:rgba(255,255,255,0.5);font-size:11px">Cote boostée</span>';
+      if (b.boostReal) {
+        out += '<span class="slip-old-odd" style="text-decoration:line-through;color:#f04a4a;margin-right:6px;font-size:12px">' + parseFloat(b.boostReal).toFixed(2) + '</span>';
+      }
+      out += renderOddsPill(b.val, b._change);
+      out += '</div>';
+    } else if (b.isBB && b.legs && b.legs.length) {
       b.legs.forEach(function(leg, li) {
         out += '<div class="slip-leg-row">';
         out += '<span class="slip-leg-dot"></span>';

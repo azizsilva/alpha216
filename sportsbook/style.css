@@ -1150,6 +1150,14 @@ button.sb-btn-live.active .sb-live-badge,
 .sb-boost-card.is-active {
   border-left: 1px solid rgb(33,151,243);
 }
+/* Selected boost card (added to slip) — clear green outline so the
+   user sees the picked promo at a glance. */
+.sb-boost-card.is-selected {
+  outline: 2px solid var(--sb-green) !important;
+  outline-offset: -2px;
+  box-shadow: 0 0 0 1px rgba(43,205,98,0.25) !important;
+}
+.sb-boost-card { cursor: pointer; }
 
 /* Pagination dots under the boost row (fcbet216 image 2 reference).
    Active dot = brand green pill; idle dots = muted gray circles. */
