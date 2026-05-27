@@ -352,7 +352,7 @@
       list.push(pth);
     }
 
-    var current = canonicalPath(getRouteFromHash());
+    var current = canonicalPath(getCurrentPath());
     list = list.filter(function (p) { return p !== current; });
 
     var queue = list.map(urlForPath);
