@@ -2878,28 +2878,123 @@ function renderEnDirectCards(matches) {
   el.innerHTML = out;
 }
 
+/* ── Boost-card maths (fcbet216 / Altenar-style)
+ *
+ * Each card shows a SAME-GAME-MULTI promo with a "boosted" price.
+ * We derive both prices from the match's real 1x2 odds:
+ *   1. Normalise h/x/a into a true probability (strip the bookmaker margin).
+ *   2. Estimate the conditional probability of each combo leg from the
+ *      relative strength of the two teams (asymmetry).
+ *   3. Multiply legs with a correlation discount (matches BB_CORR).
+ *   4. Apply a small house margin to get the "real" (struck-out) price.
+ *   5. Add a 10–15 % boost — deterministic per match so cards stay stable.
+ * The result feels real because it's anchored on actual Bet365 prices
+ * (which themselves reflect each team's classement / form). */
+function computeBoostOdds(m, pickKey) {
+  var o = odds(m);
+  var h = parseFloat(o.h);
+  var x = parseFloat(o.x);
+  var a = parseFloat(o.a);
+  if (!(h >= 1.01) || !(a >= 1.01)) return null;
+  if (!(x >= 1.01)) x = 3.2;
+
+  // Strip bookmaker margin to recover the "true" probabilities
+  var ph = 1 / h, px = 1 / x, pa = 1 / a;
+  var sumP = ph + px + pa;
+  ph /= sumP; px /= sumP; pa /= sumP;
+
+  // Asymmetry drives how lopsided the match is. 0 = even, 0.6 = mismatch
+  var asym = Math.abs(ph - pa);
+  // Higher asymmetry → fewer BTTS / Over 2.5 (one-sided games)
+  var pBtts   = Math.max(0.32, Math.min(0.70, 0.62 - asym * 0.45));
+  var pOver25 = Math.max(0.36, Math.min(0.66, 0.55 - asym * 0.25));
+  var pOver05 = 0.92, pOver15 = 0.78;
+  var pCorrect1H = 0.18; // 1H scorer market avg
+  var pOver10HCorners = 0.55;
+  var pYellow1H = 0.78;
+
+  // Correlation factor used when multiplying correlated legs
+  var CORR = 0.88;
+
+  // ── 1) Compute the FAIR probability for the requested pick
+  var pFair;
+  switch (pickKey) {
+    case '1_oui':  pFair = ph * pBtts          * CORR; break;
+    case '2_oui':  pFair = pa * pBtts          * CORR; break;
+    case '1_non':  pFair = ph * (1 - pBtts)    * CORR; break;
+    case '2_non':  pFair = pa * (1 - pBtts)    * CORR; break;
+    case 'over25': pFair = pOver25; break;
+    case 'under25':pFair = 1 - pOver25; break;
+    case '1':      pFair = ph; break;
+    case '2':      pFair = pa; break;
+    case 'X':      pFair = px; break;
+    case 'oui':    pFair = pBtts; break;
+    case 'non':    pFair = 1 - pBtts; break;
+    case '1h_over05_corners10_2':
+      // 3-leg: away win 1H + over 0.5 1H + over 10.5 corners
+      pFair = (pa * 0.55) * pOver05 * pOver10HCorners * Math.pow(CORR, 2);
+      break;
+    case 'over25_anytime_shots15':
+      pFair = pOver25 * 0.75 * 0.70 * Math.pow(CORR, 2);
+      break;
+    case '1h_winner_over15_yellow1h':
+      pFair = (Math.max(ph, pa) * 0.50) * pOver15 * pYellow1H * Math.pow(CORR, 2);
+      break;
+    default:       pFair = ph * pBtts * CORR;
+  }
+  if (pFair <= 0.005) pFair = 0.005;
+  if (pFair >= 0.95)  pFair = 0.95;
+
+  // House margin recovers a "real" book price (~7 % overround)
+  var realOdd = (1 / pFair) * 0.93;
+  // Deterministic boost 10–15 % depending on match id
+  var idn = parseInt(String(m.id || '0').replace(/[^0-9]/g, '')) || 0;
+  var boostPct = 0.10 + ((idn % 6) / 100); // 10 % … 15 %
+  var boostedOdd = realOdd * (1 + boostPct);
+
+  return {
+    real:    Math.max(1.05, +realOdd.toFixed(2)),
+    boosted: Math.max(1.06, +boostedOdd.toFixed(2))
+  };
+}
+
 /* ── Cotes Boostées (old promotional style with boost arrow) ─────────────── */
 function renderBoosted(matches) {
   var el = document.getElementById('sb-boosted-odds');
   if (!el) return;
   el.querySelectorAll('.sb-sk-boost-card').forEach(function(n){ n.parentNode.removeChild(n); });
 
-  var boostLines = [
-    ['2 - 1ère mi-temps - 1x2', 'Plus de 0.5 - 1ère mi-temps - total', 'Plus de 10.5 - Total des corners'],
-    ['1x2 & GG/NG', '2 & non'],
-    ['Plus de 2.5 - Total', "N'importe quand - Buteur", 'Plus de 1.5 - Tirs'],
-    ['1ère mi-temps - 1x2', 'Plus de 1.5 - total', 'Carton jaune - 1ère mi-temps'],
+  // Each combo: (display lines, pickKey, header pill text)
+  var COMBOS = [
+    { lines: ['1x2 & GG/NG', '1 & oui'],                                                  key: '1_oui'  },
+    { lines: ['1x2 & GG/NG', '2 & non'],                                                  key: '2_non'  },
+    { lines: ['Plus de 2.5 - Total', "N'importe quand - Buteur", 'Plus de 1.5 - Tirs'],   key: 'over25_anytime_shots15' },
+    { lines: ['1ère mi-temps - 1x2', 'Plus de 1.5 - total', 'Carton jaune - 1ère mi-temps'], key: '1h_winner_over15_yellow1h' },
+    { lines: ['2 - 1ère mi-temps - 1x2', 'Plus de 0.5 - 1ère mi-temps - total', 'Plus de 10.5 - Total des corners'], key: '1h_over05_corners10_2' }
   ];
   var out = '';
   matches.forEach(function(m, idx) {
-    var o = odds(m);
-    var oldOdd = Math.max(1.01, +(parseFloat(o.h) * 1.09 + 0.21)).toFixed(2);
-    var newOdd = (parseFloat(o.h) + 0.1).toFixed(2);
+    var combo = COMBOS[idx % COMBOS.length];
+    // Choose the home/away variant of the favourite when the combo allows
+    var pick = combo.key;
+    var oReal = odds(m);
+    if (pick === '1_oui' && parseFloat(oReal.a) < parseFloat(oReal.h)) pick = '2_oui';
+    if (pick === '2_non' && parseFloat(oReal.h) < parseFloat(oReal.a)) pick = '1_non';
+    var pricing = computeBoostOdds(m, pick);
+    if (!pricing) return; // skip matches with no real odds
+    var oldOdd = pricing.real.toFixed(2);
+    var newOdd = pricing.boosted.toFixed(2);
+    // Patch the display label so it reflects the chosen side
+    var legs = combo.lines.slice();
+    if (pick === '1_oui' && legs[1])  legs[1] = '1 & oui';
+    if (pick === '2_oui' && legs[1])  legs[1] = '2 & oui';
+    if (pick === '1_non' && legs[1])  legs[1] = '1 & non';
+    if (pick === '2_non' && legs[1])  legs[1] = '2 & non';
     var ts2 = parseInt(m.time || m.kickoff || 0) || 0;
     var dObj = ts2 > 0 ? new Date(ts2 * 1000) : new Date();
     var dateStr = String(dObj.getDate()).padStart(2,'0') + '/' + String(dObj.getMonth()+1).padStart(2,'0');
     var timeStr = String(dObj.getHours()).padStart(2,'0') + ':' + String(dObj.getMinutes()).padStart(2,'0');
-    var lines = boostLines[idx % boostLines.length];
+    var lines = legs;
 
     out += '<div class="sb-boost-card" onclick="window.sbOpenMatch(\'' + h(m.id) + '\')">';
     out += '<div class="sb-boost-card-top">';
