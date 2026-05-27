@@ -698,6 +698,8 @@ function patchMatchDetailLive(m, markets) {
     // pick up the new value so the combined Bet Builder odds stay
     // accurate. Single bets are handled by their own updater.
     try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
+    // Markets list changed — re-prune tab visibility
+    try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
   }
   if (needsRender) {
     // If the user is searching, preserve the search filter so live
@@ -5232,6 +5234,7 @@ window.sbOpenMatch = function(mid, _skipPush) {
           window._mdMarkets = mkts;
           sbClearMdTabCache();
           body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, i < 6, bbMode); }).join('');
+          try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
         }
       } else {
         renderMatchDetail(m, mkts);
@@ -5517,6 +5520,8 @@ function renderMatchDetail(m, markets) {
   if (isLive && !isHT) startMatchTimer(m);
   else clearInterval(window._mdTimerInterval);
   showMatchViewer(m);
+  // Hide tabs that have zero markets for this match (fcbet216 parity)
+  try { sbMdPruneEmptyTabs(); } catch(e) {}
 }
 
 /* ── Filter market selections that are already settled by the current
@@ -6114,6 +6119,138 @@ window.sbTabsScroll = function(dir) {
   }
 };
 
+// Build the filter function for a given tab name. Centralised so both
+// the renderer (sbMdTab) and the tab visibility prune (sbMdPruneEmptyTabs)
+// can reuse exactly the same rules.
+function getTabFilter(tabName) {
+  var isBB = (tabName === 'Bet Builder');
+  if (isBB) {
+    var BB_COMBINABLE = [
+      '1x2', '1 x 2', 'match winner', 'résultat',
+      'double chance',
+      'total',
+      'handicap',
+      'les deux équipes', 'btts', 'both teams to score',
+      'pair', 'impair', 'odd', 'even',
+      'mi-temps', 'half-time', 'first half', '1ère mi-temps', '1ere mi-temps',
+      '2ème mi-temps', '2eme mi-temps', 'second half',
+      'ht/ft', 'mi-temps/fin', 'half-time/full-time',
+      'correct score', 'score exact',
+      'corner', 'corners',
+      'card', 'cartons', 'cartes',
+      'plage de buts', 'goal range',
+      'next goal', 'prochain but',
+      'player', 'joueur', 'buteur',
+      'multigoal', 'multigoals'
+    ];
+    return function(mkt) {
+      var nm = (mkt.name || '').toLowerCase();
+      var combinable = BB_COMBINABLE.some(function(k){ return nm.indexOf(k) !== -1; });
+      if (!combinable) return false;
+      var sels = mkt.selections || [];
+      return sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; });
+    };
+  }
+  if (tabName === 'Principaux') {
+    return function(mkt) {
+      var nm = (mkt.name || '').toLowerCase();
+      if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
+      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    };
+  }
+  if (tabName === '2ème mi-temps' || tabName === '2eme mi-temps') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1 || nm.indexOf('second half') !== -1 || nm.indexOf('2h') === 0;
+    };
+  }
+  if (tabName === '1 minute') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    };
+  }
+  if (tabName === 'Correct Score') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      // Exact-match correct score variants
+      return nm.indexOf('correct score') !== -1
+          || nm.indexOf('score exact') !== -1
+          || nm.indexOf('exact score') !== -1
+          || nm.indexOf('score correct') !== -1
+          || nm.indexOf('résultat exact') !== -1
+          || nm.indexOf('resultat exact') !== -1
+          // Bet365 prematch fallback: per-team / total exact goals markets
+          || nm.indexOf('exact goals') !== -1
+          || nm.indexOf('nombre exact de buts') !== -1
+          || nm.indexOf('nombre exact') !== -1
+          || nm.indexOf('cs ') === 0
+          || nm === 'cs';
+    };
+  }
+  if (tabName === 'Corners') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('corner') !== -1
+          || nm.indexOf('corners') !== -1
+          || nm.indexOf('coup de coin') !== -1
+          || nm.indexOf('coups de coin') !== -1;
+    };
+  }
+  if (tabName === 'Multigoals') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('multigoal') !== -1 || nm.indexOf('multi-goal') !== -1 || nm.indexOf('multigoals') !== -1;
+    };
+  }
+  if (tabName === 'Teams H2H' || tabName === 'Teams H2h' || tabName === 'teams h2h') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('h2h') !== -1
+          || nm.indexOf('head to head') !== -1
+          || nm.indexOf('face-à-face') !== -1
+          || nm.indexOf('face a face') !== -1
+          || nm === '1x2'
+          || nm.indexOf('1 x 2') !== -1;
+    };
+  }
+  if (tabName !== 'Tout') {
+    var kw = tabName.toLowerCase();
+    return function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
+  }
+  return null;
+}
+
+// Hide tabs that produce zero matching markets, like fcbet216. Pre-match
+// matches in particular don't expose 1-minute, Corners, Multigoals so we
+// suppress their tabs entirely instead of greeting the user with empty
+// "Aucun marché" panes.
+function sbMdPruneEmptyTabs() {
+  if (!window._mdMarkets) return;
+  document.querySelectorAll('.md-tab[data-tab]').forEach(function(btn){
+    var tn = btn.getAttribute('data-tab');
+    if (tn === 'Tout' || tn === 'Principaux' || tn === 'Bet Builder') {
+      btn.style.display = '';
+      return;
+    }
+    var f = getTabFilter(tn);
+    var any = false;
+    if (f) {
+      for (var i = 0; i < window._mdMarkets.length; i++) {
+        if (f(window._mdMarkets[i])) {
+          var sels = window._mdMarkets[i].selections || [];
+          if (sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; })) {
+            any = true;
+            break;
+          }
+        }
+      }
+    }
+    btn.style.display = any ? '' : 'none';
+  });
+}
+window.sbMdPruneEmptyTabs = sbMdPruneEmptyTabs;
+
 window.sbMdTab = function(btn, tabName) {
   document.querySelectorAll('.md-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
@@ -6138,96 +6275,8 @@ window.sbMdTab = function(btn, tabName) {
     return;
   }
 
-  // Re-render markets (in BB mode or normal mode)
-  var filter = null;
-  if (isBB) {
-    // Bet Builder: only combinable Same-Game-Multi markets.
-    // Excludes single-outcome novelty markets (Penalty taken?, Goal in last X
-    // minutes?, etc.) that fcbet216 / Altenar don't expose for SGM.
-    var BB_COMBINABLE = [
-      '1x2', '1 x 2', 'match winner', 'résultat',
-      'double chance',
-      'total',                       // goals over/under (any line)
-      'handicap',
-      'les deux équipes', 'btts', 'both teams to score',
-      'pair', 'impair', 'odd', 'even',
-      'mi-temps', 'half-time', 'first half', '1ère mi-temps', '1ere mi-temps',
-      '2ème mi-temps', '2eme mi-temps', 'second half',
-      'ht/ft', 'mi-temps/fin', 'half-time/full-time',
-      'correct score', 'score exact',
-      'corner', 'corners',
-      'card', 'cartons', 'cartes',
-      'plage de buts', 'goal range',
-      'next goal', 'prochain but',
-      'player', 'joueur', 'buteur',  // player props (when available)
-      'multigoal', 'multigoals'
-    ];
-    filter = function(mkt) {
-      var nm = (mkt.name || '').toLowerCase();
-      // Filter requires at least one combinable keyword AND at least one
-      // selection with a real odds value (lock-only markets are useless in BB).
-      var combinable = BB_COMBINABLE.some(function(k){ return nm.indexOf(k) !== -1; });
-      if (!combinable) return false;
-      var sels = mkt.selections || [];
-      return sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; });
-    };
-  } else if (!isBB) {
-    if (tabName === 'Principaux') {
-      filter = function(mkt) {
-        var nm = (mkt.name || '').toLowerCase();
-        if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
-        return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
-      };
-    } else if (tabName === '2ème mi-temps' || tabName === '2eme mi-temps') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1 || nm.indexOf('second half') !== -1 || nm.indexOf('2h') === 0;
-      };
-    } else if (tabName === '1 minute') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
-      };
-    } else if (tabName === 'Correct Score') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('correct score') !== -1
-            || nm.indexOf('score exact') !== -1
-            || nm.indexOf('exact score') !== -1
-            || nm.indexOf('score correct') !== -1
-            || nm.indexOf('résultat exact') !== -1
-            || nm.indexOf('resultat exact') !== -1
-            || nm.indexOf('cs ') === 0
-            || nm === 'cs';
-      };
-    } else if (tabName === 'Corners') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('corner') !== -1
-            || nm.indexOf('corners') !== -1
-            || nm.indexOf('coup de coin') !== -1
-            || nm.indexOf('coups de coin') !== -1;
-      };
-    } else if (tabName === 'Multigoals') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('multigoal') !== -1 || nm.indexOf('multi-goal') !== -1 || nm.indexOf('multigoals') !== -1;
-      };
-    } else if (tabName === 'Teams H2H' || tabName === 'Teams H2h' || tabName === 'teams h2h') {
-      filter = function(mkt){
-        var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('h2h') !== -1
-            || nm.indexOf('head to head') !== -1
-            || nm.indexOf('face-à-face') !== -1
-            || nm.indexOf('face a face') !== -1
-            || nm === '1x2'
-            || nm.indexOf('1 x 2') !== -1;
-      };
-    } else if (tabName !== 'Tout') {
-      var kw = tabName.toLowerCase();
-      filter = function(mkt){ return (mkt.name||'').toLowerCase().indexOf(kw) !== -1; };
-    }
-  }
+  // Re-render markets — filter is built by the shared helper above
+  var filter = getTabFilter(tabName);
   var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
   if (!shown.length && tabName !== 'Tout') {
     // More helpful empty state: distinguish "pre-match" (will appear at kickoff)
