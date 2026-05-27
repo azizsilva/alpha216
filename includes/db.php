@@ -35,24 +35,39 @@ $passwords_to_try = array_unique([
 ]);
 
 $pdo = null;
-foreach ($databases_to_try as $db) {
-    if (!$db) continue;
-    foreach ($users_to_try as $user) {
-        foreach ($passwords_to_try as $pass) {
-            try {
-                $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
-                $pdo = new PDO($dsn, $user, $pass, $options);
-                break 3; // Success — break all three loops
-            } catch (\PDOException $e) {
-                // try next combination
-            }
+$cache_file = dirname(__DIR__) . '/.db_auth_cache.php';
+
+// First, try the cached configuration if it exists to avoid trying wrong passwords (which blocks the host in MySQL)
+if (file_exists($cache_file)) {
+    include $cache_file;
+    if (isset($cached_db, $cached_user, $cached_pass)) {
+        try {
+            $dsn = "mysql:host=$host;dbname=$cached_db;charset=utf8mb4";
+            $pdo = new PDO($dsn, $cached_user, $cached_pass, $options);
+        } catch (\PDOException $e) {
+            $pdo = null;
         }
     }
 }
 
 if (!$pdo) {
-    die("Database connection not established. Auto-detection failed.");
+    foreach ($databases_to_try as $db) {
+        if (!$db) continue;
+        foreach ($users_to_try as $user) {
+            foreach ($passwords_to_try as $pass) {
+                try {
+                    $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+                    $pdo = new PDO($dsn, $user, $pass, $options);
+                    $cache_content = "<?php\n\$cached_db = " . var_export($db, true) . ";\n\$cached_user = " . var_export($user, true) . ";\n\$cached_pass = " . var_export($pass, true) . ";\n";
+                    @file_put_contents($cache_file, $cache_content);
+                    break 3; // Success
+                } catch (\PDOException $e) {
+                }
+            }
+        }
+    }
 }
+
 
 try {
     $schema_marker = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.mk_schema_ready';
