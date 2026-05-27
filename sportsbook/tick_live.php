@@ -58,7 +58,6 @@ $FOOTBALL_FILTER_EVERY = 30;  // refresh football inplay_filter every 30 ticks (
 $OTHER_FILTER_EVERY   = 60;   // other sports every 60 ticks (60s)
 $FOOTBALL_SPORT_ID    = 1;
 $OTHER_LIVE_SPORTS    = [18, 13, 91, 17, 78];
-$MAX_INPLAY_PAGES     = 3;
 $LOG_EVERY_N_TICKS    = 30;   // log every ~60s
 
 // ── Lock: only one instance runs ──────────────────────────────
@@ -262,9 +261,10 @@ function tick_refresh_stream() {
 }
 
 /* ── Refresh /v1/bet365/inplay_filter per sport ────────────── */
-function tick_refresh_sport($sport_id, $max_pages = 5) {
+function tick_refresh_sport($sport_id) {
     $seen = []; $out = [];
-    for ($pg = 1; $pg <= $max_pages; $pg++) {
+    $pg = 1;
+    while (true) {
         $resp = tick_http_get('/v1/bet365/inplay_filter', ['sport_id' => $sport_id, 'page' => $pg]);
         if (empty($resp['results'])) break;
         foreach ($resp['results'] as $m) {
@@ -274,7 +274,9 @@ function tick_refresh_sport($sport_id, $max_pages = 5) {
                 $out[] = $m;
             }
         }
-        if (count($resp['results']) < 50) break;
+        $pager = $resp['pager'] ?? [];
+        if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
+        $pg++;
     }
     if (!$out) return 0;
     tick_atomic_write(CACHE_DIR . '/live_' . $sport_id . '.json', $out);
@@ -330,13 +332,13 @@ while (true) {
     // We only need this to populate the match list initially and
     // to pick up newly-started matches. Very infrequent calls.
     if ($tick % $FOOTBALL_FILTER_EVERY === 0) {
-        $cnt = tick_refresh_sport($FOOTBALL_SPORT_ID, $MAX_INPLAY_PAGES);
+        $cnt = tick_refresh_sport($FOOTBALL_SPORT_ID);
         if ($cnt > 0) $total_sport_matches += $cnt;
     }
     if ($tick % $OTHER_FILTER_EVERY === 0) {
         $rr_idx = (intdiv($tick, $OTHER_FILTER_EVERY) - 1) % count($OTHER_LIVE_SPORTS);
         $sid    = $OTHER_LIVE_SPORTS[$rr_idx];
-        $cnt    = tick_refresh_sport($sid, $MAX_INPLAY_PAGES);
+        $cnt    = tick_refresh_sport($sid);
         if ($cnt > 0) $total_sport_matches += $cnt;
     }
 

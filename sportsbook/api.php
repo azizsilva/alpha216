@@ -774,7 +774,7 @@ if ($action === 'inplay') {
     } elseif (!$daemon_alive) {
         // No daemon, no usable cache — fetch directly (cold start only).
         $live_api = []; $seen_ids = [];
-        for ($pg=1; $pg<=5; $pg++) {
+        for ($pg=1; true; $pg++) {
             $resp = betsapi_get('/v1/bet365/inplay_filter', ['sport_id'=>$sport_id,'page'=>$pg]);
             if (empty($resp['results'])) break;
             foreach ($resp['results'] as $m) {
@@ -785,7 +785,8 @@ if ($action === 'inplay') {
                     $live_api[] = $m;
                 }
             }
-            if (count($resp['results']) < 50) break;
+            $pager = $resp['pager'] ?? [];
+            if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
         }
         if (!empty($live_api)) {
             $results = $live_api;
@@ -1214,7 +1215,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
 
     // Fallback: fetch from BetsAPI (all pages up to 5) if DB empty
     if (empty($results)) {
-        for ($pg = 1; $pg <= 5; $pg++) {
+        for ($pg = 1; true; $pg++) {
             $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => $pg]);
             if (!$data || empty($data['results'])) break;
             foreach ($data['results'] as $m) {
@@ -1223,7 +1224,8 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
                 }
             }
             // Stop if last page
-            if (!isset($data['pager']['page']) || $data['pager']['page'] >= ($data['pager']['total_pages'] ?? 1)) break;
+            $pager = $data['pager'] ?? [];
+            if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
         }
         if (!empty($results) && $db_connected) {
             cache_to_db($pdo, $results, $sport_id);
@@ -1351,11 +1353,18 @@ if ($action === 'sync') {
         $saved += cache_to_db($pdo, $live['results']);
     }
 
-    // Upcoming per sport (1 page each for quick sync)
+    // Upcoming per sport (fetch all available pages)
     foreach ($sports as $sid) {
-        $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sid, 'page' => 1]);
-        if ($data && !empty($data['results'])) {
+        $pg = 1;
+        while (true) {
+            $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sid, 'page' => $pg]);
+            if (!$data || empty($data['results'])) break;
+            
             $saved += cache_to_db($pdo, $data['results'], $sid);
+            
+            $pager = $data['pager'] ?? [];
+            if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
+            $pg++;
         }
     }
 
@@ -2605,13 +2614,14 @@ if ($action === 'bg_sync_upcoming' && ($_GET['_k'] ?? '') === 'sbodds') {
 
     // Also load from BetsAPI if DB empty
     if (empty($up_matches)) {
-        for ($pg_bgu = 1; $pg_bgu <= 3; $pg_bgu++) {
+        for ($pg_bgu = 1; true; $pg_bgu++) {
             $d_bgu = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => $pg_bgu]);
             if (!$d_bgu || empty($d_bgu['results'])) break;
             foreach ($d_bgu['results'] as $mb) {
                 if (isset($mb['home']['name']) && $mb['home']['name'] !== '') $up_matches[] = $mb;
             }
-            if (!isset($d_bgu['pager']['page']) || $d_bgu['pager']['page'] >= ($d_bgu['pager']['total_pages'] ?? 1)) break;
+            $pager = $d_bgu['pager'] ?? [];
+            if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
         }
     }
 
