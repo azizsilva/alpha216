@@ -2202,10 +2202,10 @@ function md_parse_markets($event_arr) {
         $items = [$event_arr];
     }
 
-    // Translation Map: English (Bet365) to French (UI expected)
     $translate = function($name) {
         $map = [
             'full time result' => '1x2',
+            'fulltime result' => '1x2',
             'match winner' => '1x2',
             'to win match' => '1x2',
             'game lines' => '1x2',
@@ -2220,11 +2220,15 @@ function md_parse_markets($event_arr) {
             'both teams to score' => 'Les deux équipes qui marquent',
             'match corners' => 'Corners',
             'alternative corners' => 'Corners',
+            'alternative match corners' => 'Corners',
             'corners over/under' => 'Corners',
             'cards' => 'Cartons',
             'match cards' => 'Cartons',
             'half time result' => '1ère mi-temps - 1x2',
+            'halftime result' => '1ère mi-temps - 1x2',
             'half time goals' => '1ère mi-temps - total',
+            'halftime goals' => '1ère mi-temps - total',
+            'match goals - 1st half' => '1ère mi-temps - total',
             'correct score' => 'Score exact',
             'half-time/full-time' => 'Mi-temps/fin',
             'draw no bet' => 'Remboursé si nul',
@@ -2232,12 +2236,13 @@ function md_parse_markets($event_arr) {
             'goals odd/even' => 'Pair/Impair'
         ];
         $low = strtolower(trim($name));
-        return isset($map[$low]) ? $map[$low] : $name;
+        return $map[$low] ?? $name;
     };
 
-    // 1. ── Parse Live Matches (Flat Stream) ──
     foreach ($items as $item) {
         if (!is_array($item)) continue;
+        
+        // ── SHAPE 1: Live Stream (MG/MA/PA) ──
         $type = $item['type'] ?? $item['TYPE'] ?? '';
         $na   = $item['NA']   ?? $item['name'] ?? $item['N']  ?? '';
 
@@ -2281,7 +2286,6 @@ function md_parse_markets($event_arr) {
             $sel_hc = $item['HD'] ?? $item['hd'] ?? $cur['ma_hc'];
             $sel_name = $na ?: ($item['N2'] ?? '');
 
-            // Translate selection names
             $l_sel = strtolower(trim($sel_name));
             if ($l_sel === 'over') $sel_name = 'Plus de';
             if ($l_sel === 'under') $sel_name = 'Moins de';
@@ -2299,32 +2303,73 @@ function md_parse_markets($event_arr) {
             ];
             continue;
         }
+
+        // ── SHAPE 2: Direct SP Market Object (v3 fallback) ──
+        if (isset($item['odds']) && is_array($item['odds'])) {
+            $sels = [];
+            foreach ($item['odds'] as $o) {
+                $od  = $o['odds'] ?? $o['OD'] ?? '';
+                $dec = md_frac_to_dec($od);
+                if (!$dec || $dec < 1.01) continue;
+                
+                $s_name = $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '';
+                $l_sel = strtolower(trim($s_name));
+                if ($l_sel === 'over') $s_name = 'Plus de';
+                if ($l_sel === 'under') $s_name = 'Moins de';
+                if ($l_sel === 'yes') $s_name = 'Oui';
+                if ($l_sel === 'no') $s_name = 'Non';
+                if ($l_sel === 'draw') $s_name = 'X';
+                if ($l_sel === 'odd') $s_name = 'Impair';
+                if ($l_sel === 'even') $s_name = 'Pair';
+
+                $sels[] = [
+                    'id'       => $o['id'] ?? uniqid(),
+                    'name'     => $s_name,
+                    'odds'     => $dec,
+                    'handicap' => $o['handicap'] ?? $o['HD'] ?? null,
+                ];
+            }
+            if (!empty($sels)) {
+                $markets[] = [
+                    'id'         => $item['id'] ?? uniqid(),
+                    'name'       => $translate($item['name'] ?? $na),
+                    'selections' => $sels,
+                ];
+            }
+        }
     }
     if ($cur && !empty($cur['selections'])) $markets[] = $cur;
 
-    // 2. ── Parse Upcoming Matches (Prematch Tabs) ──
-    $tabs = ['main', 'asian', 'goals', 'half', 'others', 'specials', 'schedule'];
+    // ── SHAPE 3: Nested Prematch Tabs (main, asian, goals, etc) ──
+    $tabs = ['main', 'asian_lines', 'cards', 'corners', 'goals', 'half', 'minutes', 'player', 'schedule', 'specials'];
     foreach ($items as $source) {
         if (!is_array($source)) continue;
         foreach ($tabs as $tab) {
             if (isset($source[$tab]['sp'])) {
                 foreach ($source[$tab]['sp'] as $sp_key => $sp) {
                     if (!is_array($sp)) continue;
+                    
+                    $is_prematch_struct = isset($sp[0]);
+                    $odds_arr = $is_prematch_struct ? $sp : ($sp['odds'] ?? []);
+                    if (empty($odds_arr)) continue;
+
+                    $mkt_raw_name = $is_prematch_struct ? str_replace('_', ' ', $sp_key) : ($sp['name'] ?? $sp_key);
+
                     $sels = [];
-                    foreach ($sp['odds'] ?? [] as $o) {
+                    foreach ($odds_arr as $o) {
                         $od  = $o['odds'] ?? $o['OD'] ?? '';
                         $dec = md_frac_to_dec($od);
                         if (!$dec || $dec < 1.01) continue;
                         
-                        $s_name = $o['name'] ?? $o['NA'] ?? $o['N2'] ?? '';
-                        $ls_name = strtolower(trim($s_name));
-                        if ($ls_name === 'over') $s_name = 'Plus de';
-                        if ($ls_name === 'under') $s_name = 'Moins de';
-                        if ($ls_name === 'yes') $s_name = 'Oui';
-                        if ($ls_name === 'no') $s_name = 'Non';
-                        if ($ls_name === 'draw') $s_name = 'X';
-                        if ($ls_name === 'odd') $s_name = 'Impair';
-                        if ($ls_name === 'even') $s_name = 'Pair';
+                        $s_name = $o['name'] ?? $o['header'] ?? $o['NA'] ?? $o['N2'] ?? '';
+                        $l_sel = strtolower(trim($s_name));
+                        if ($l_sel === 'over') $s_name = 'Plus de';
+                        if ($l_sel === 'under') $s_name = 'Moins de';
+                        if ($l_sel === 'yes') $s_name = 'Oui';
+                        if ($l_sel === 'no') $s_name = 'Non';
+                        if ($l_sel === 'draw') $s_name = 'X';
+                        if ($l_sel === 'odd') $s_name = 'Impair';
+                        if ($l_sel === 'even') $s_name = 'Pair';
 
                         $sels[] = [
                             'id'       => $o['id'] ?? uniqid(),
@@ -2336,7 +2381,7 @@ function md_parse_markets($event_arr) {
                     if (!empty($sels)) {
                         $markets[] = [
                             'id'         => $sp['id'] ?? $sp_key ?? uniqid(),
-                            'name'       => $translate($sp['name'] ?? ''),
+                            'name'       => $translate($mkt_raw_name),
                             'selections' => $sels,
                         ];
                     }
@@ -2344,7 +2389,6 @@ function md_parse_markets($event_arr) {
             }
         }
     }
-
     // ── Deduplicate by name ──
     $seen = []; $deduped = [];
     foreach ($markets as $mkt) {
