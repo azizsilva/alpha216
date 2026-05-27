@@ -4908,7 +4908,22 @@ window.sbTimeFilter = function(btn, range) {
   renderMatches(filtered);
 };
 
-window.sbToggleLeft = function() { document.getElementById('sb-left').classList.toggle('open'); };
+window.sbCloseLeft = function() {
+  var sidebar  = document.getElementById('sb-left');
+  var backdrop = document.getElementById('sb-left-backdrop');
+  if (sidebar)  sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+  document.body.style.overflow = '';
+};
+window.sbToggleLeft = function() {
+  var sidebar  = document.getElementById('sb-left');
+  var backdrop = document.getElementById('sb-left-backdrop');
+  if (!sidebar) return;
+  var isOpen = sidebar.classList.toggle('open');
+  if (backdrop) backdrop.classList.toggle('open', isOpen);
+  // Prevent body scroll while drawer is open on mobile
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+};
 window.sbToggleRight = function() {
   var right = document.getElementById('sb-right');
   if (!right) return;

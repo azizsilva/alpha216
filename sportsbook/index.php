@@ -662,6 +662,9 @@ $zero_class = ($user_balance <= 0) ? ' sb-zero-balance' : '';
   </style>
   <?php endif; ?>
 
+<!-- ══ SIDEBAR BACKDROP (mobile) ══ -->
+<div id="sb-left-backdrop" class="sb-left-backdrop" onclick="window.sbCloseLeft()"></div>
+
 <!-- ══ LEFT SIDEBAR ══ -->
 <aside class="sb-left" id="sb-left">
   <div class="sb-sidebar-top">

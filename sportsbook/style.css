@@ -2681,9 +2681,38 @@ button.sb-btn-live.active .sb-live-badge,
     border-bottom: 1px solid #2a2a2a !important;
   }
 
-  /* Left sidebar â€” slides in from left */
-  .sb-left { position: fixed; top: 0; bottom: 0; left: 0; z-index: 2000; transform: translateX(-100%); width: 280px; }
-  .sb-left.open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,0.9); }
+  /* Left sidebar — slides in from left, position:fixed relative to viewport */
+  .sb-left {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    z-index: 2000 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94) !important;
+    background: var(--sb-bg-root) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    will-change: transform !important;
+  }
+  .sb-left.open {
+    transform: translateX(0) !important;
+    box-shadow: 10px 0 40px rgba(0,0,0,0.9) !important;
+  }
+  /* Inner scroll area — fill remaining height below sticky top */
+  .sb-left .sb-sidebar-scroll {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 0 !important;    /* forces flex child to respect flex:1 on iOS */
+    min-height: 0 !important;
+  }
+  .sb-left .sb-sidebar-top {
+    flex-shrink: 0 !important;
+  }
   /* Right panel (Fiche de Pari) â€” BOTTOM DRAWER on mobile */
   .sb-right {
     position: fixed !important;
@@ -7440,5 +7469,30 @@ body .sb-root .slip-bookmark-btn {
   justify-content: center !important;
   padding: 24px 16px !important;
   color: rgba(255,255,255,0.18) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SIDEBAR BACKDROP — dark overlay shown behind the left drawer on mobile.
+   Hidden by default (opacity:0 + pointer-events:none).
+   JS adds .open class when sidebar opens.
+   ══════════════════════════════════════════════════════════════════════ */
+.sb-left-backdrop {
+  display: none;               /* off on desktop — only activated inside media query */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 1999;               /* just below sidebar (z:2000) */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.sb-left-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 1100px) {
+  .sb-left-backdrop { display: block; }
 }
 
