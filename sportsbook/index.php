@@ -51,7 +51,7 @@ function sb_render_tl_item(array $l): void {
   $flag = htmlspecialchars($l['flag'], ENT_QUOTES, 'UTF-8');
   $sport = (int)$l['sport'];
   $flagUrl = 'https://flagcdn.com/w20/' . $flag . '.png';
-  echo '<div class="sb-tl-item" data-league-id="' . $id . '" data-league-label="' . $name . '" onclick="window.sbOpenLeague(\'' . $id . '\',\'' . $name . '\',\'' . $flagUrl . '\',' . $sport . ')">';
+  echo '<div class="sb-tl-item" data-league-id="' . $id . '" data-league-label="' . $name . '" data-sport="' . $sport . '" onclick="window.sbOpenLeague(\'' . $id . '\',\'' . $name . '\',\'' . $flagUrl . '\',' . $sport . ')">';
   if ($is_globe) {
     echo '<span class="sb-globe-icon" aria-hidden="true">';
     echo '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 8H14.4M8 1.6C9.7 3.5 10.6 5.7 10.6 8C10.6 10.3 9.7 12.5 8 14.4M8 1.6C6.3 3.5 5.4 5.7 5.4 8C5.4 10.3 6.3 12.5 8 14.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260527vp';   // Volume Plan: no fake timers/odds
+$sb_build_stamp = 'b20260527vp2';  // VP + per-sport live badges + top-tier carousel sort
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>

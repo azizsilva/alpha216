@@ -2783,16 +2783,30 @@ if ($action === 'fetch_event_odds') {
 // ═══ TOP LEAGUES LIVE — league names with in-play matches (multi-sport) ═══
 if ($action === 'top_leagues_live') {
     $cache_dir_tl = __DIR__ . '/cache';
-    $live_names = [];
-    // Scan ALL live_*.json files so every sport's live leagues are detected
-    // (previously only 1/13/18 were scanned — Tennis live outside those IDs was missed).
+    // Return {name, sport_id} pairs so the client can scope EN DIRECT
+    // badges to the correct sport. Previously a Handball "1. Bundesliga"
+    // would trigger the badge on the Football Bundesliga sidebar item.
+    $live_pairs = [];
+    $seen = [];
+    $push = function($ln, $sid) use (&$live_pairs, &$seen) {
+        $ln  = trim((string)$ln);
+        $sid = (int)$sid;
+        if ($ln === '' || $sid <= 0) return;
+        $key = $sid . '|' . strtolower($ln);
+        if (isset($seen[$key])) return;
+        $seen[$key] = true;
+        $live_pairs[] = ['name' => $ln, 'sport_id' => $sid];
+    };
+
     foreach (glob($cache_dir_tl . '/live_*.json') ?: [] as $lf) {
+        // Derive sport_id from filename (live_1.json -> 1, live_18.json -> 18 ...)
+        if (!preg_match('~live_(\d+)\.json$~', $lf, $mm)) continue;
+        $sid = (int)$mm[1];
         $arr = json_decode(@file_get_contents($lf), true);
         if (!is_array($arr)) continue;
         foreach ($arr as $m) {
             if ((string)($m['time_status'] ?? '') !== '1') continue;
-            $ln = trim($m['league']['name'] ?? '');
-            if ($ln !== '') $live_names[] = $ln;
+            $push($m['league']['name'] ?? '', $m['sport_id'] ?? $sid);
         }
     }
     // Also scan the global inplay stream for any leagues not yet in a sport cache
@@ -2802,12 +2816,17 @@ if ($action === 'top_leagues_live') {
         if (is_array($sarr)) {
             foreach ($sarr as $m) {
                 if ((string)($m['time_status'] ?? '') !== '1') continue;
-                $ln = trim($m['league']['name'] ?? '');
-                if ($ln !== '') $live_names[] = $ln;
+                $push($m['league']['name'] ?? '', $m['sport_id'] ?? 1);
             }
         }
     }
-    echo json_encode(['success' => 1, 'live_leagues' => array_values(array_unique($live_names))]);
+    // Back-compat: also return flat names so old clients keep working.
+    $names_flat = array_values(array_unique(array_map(fn($p) => $p['name'], $live_pairs)));
+    echo json_encode([
+        'success' => 1,
+        'live_leagues' => $names_flat,
+        'live_pairs'   => $live_pairs,
+    ]);
     exit;
 }
 

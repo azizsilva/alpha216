@@ -2123,11 +2123,19 @@ function sortLiveMatches(list) {
       if (sb2 === 1) return 1;
       return sa - sb2;
     }
-    // Europe FIRST within each sport (client request: Europe before others)
+    // ─ TIER 1 ── Big-5 European top divisions and UEFA club competitions
+    //   ALWAYS lead the live carousel, regardless of kickoff. This is what
+    //   fcbet216 does (PL, La Liga, Serie A, Bundesliga, Ligue 1 front).
+    var pa = getLeaguePriority(a.league);
+    var pb = getLeaguePriority(b.league);
+    var topA = pa <= 10 ? 0 : 1;  // priority 0-10 = Big 5 + UEFA + World Cup
+    var topB = pb <= 10 ? 0 : 1;
+    if (topA !== topB) return topA - topB;
+    // ─ TIER 2 ── European leagues before rest of world
     var ea = isEuropeanLeague(a.league) ? 0 : 1;
     var eb = isEuropeanLeague(b.league) ? 0 : 1;
     if (ea !== eb) return ea - eb;
-    return getLeaguePriority(a.league) - getLeaguePriority(b.league);
+    return pa - pb;
   });
 }
 /* Sort UPCOMING matches: Football first, EUROPE first, popular leagues
@@ -6650,11 +6658,16 @@ function refreshLiveTopLeagues() {
   fetch(BASE + 'sportsbook/api.php?action=top_leagues_live')
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d && d.live_leagues) {
-        S.allLiveLeagueNames = d.live_leagues;
-        // Merge in whatever the current match list has — covers the active sport
-        markLiveSidebarLeagues(S.matches);
+      if (!d) return;
+      // Prefer {name, sport_id} pairs so we never badge the wrong sport
+      // (e.g. Handball Bundesliga lighting up Football Bundesliga).
+      if (Array.isArray(d.live_pairs)) {
+        S.allLiveLeaguePairs = d.live_pairs;
+      } else if (Array.isArray(d.live_leagues)) {
+        S.allLiveLeaguePairs = d.live_leagues.map(function(n){ return { name: n, sport_id: 1 }; });
       }
+      S.allLiveLeagueNames = (S.allLiveLeaguePairs || []).map(function(p){ return p.name; });
+      markLiveSidebarLeagues(S.matches);
     })
     .catch(function() {});
 }
@@ -6670,10 +6683,12 @@ function refreshLiveTopLeagues() {
 
 /* ── Mark sidebar top-league items with EN DIRECT badge when live matches exist ── */
 function markLiveSidebarLeagues(matches) {
-  var liveApiLeagues = (S.allLiveLeagueNames || []).slice();
+  // Use {name, sport_id} pairs so we badge ONLY the correct sport's row.
+  // (Previously a handball "1. Bundesliga" would badge the football row.)
+  var livePairs = (S.allLiveLeaguePairs || []).slice();
   (matches || []).forEach(function(m) {
     if (isMatchLive(m) && m.league && m.league.name) {
-      liveApiLeagues.push(m.league.name);
+      livePairs.push({ name: m.league.name, sport_id: parseInt(m.sport_id || 1, 10) });
     }
   });
 
@@ -6681,9 +6696,17 @@ function markLiveSidebarLeagues(matches) {
     var nameEl = el.querySelector('.sb-league-name');
     if (!nameEl) return;
     var displayName = (el.getAttribute('data-league-label') || nameEl.textContent || '').trim();
+    // Each sidebar item carries its expected sport via the onclick (..., sport)
+    // OR a data-sport attribute. Fall back to 1 (football) when missing.
+    var itemSport = parseInt(el.getAttribute('data-sport') || '1', 10);
+    // Best-effort sport extraction from onclick handler text
+    var oc = el.getAttribute('onclick') || '';
+    var mSport = oc.match(/sbOpenLeague\([^)]*?,\s*(\d+)\)/);
+    if (mSport) itemSport = parseInt(mSport[1], 10) || itemSport;
 
-    var isLive = liveApiLeagues.some(function(apiLn) {
-      return isLeagueMatch(displayName, apiLn);
+    var isLive = livePairs.some(function(p) {
+      if (parseInt(p.sport_id || 1, 10) !== itemSport) return false;
+      return isLeagueMatch(displayName, p.name);
     });
 
     var badge = el.querySelector('.sb-tl-live-badge');
