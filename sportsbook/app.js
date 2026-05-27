@@ -194,14 +194,31 @@ function formatOdd(decVal) {
   return v.toFixed(2); // decimal default
 }
 
-/* ── computeFallbackTimer: DISABLED on Volume Plan ──────────────
- * Kickoff-derived timers run ahead of real time (matches always
- * start a few minutes late). With the Volume Plan BetsAPI sends a
- * real timer on every stream tick, so we never need the estimate.
- * Returning null forces all callers to show "En cours" instead of
- * a mathematically incorrect clock.  */
+/* ── computeFallbackTimer: kickoff-derived LAST-RESORT estimate ──
+ * For low-coverage leagues (Serie C Play-Offs, women's, lower regional)
+ * BetsAPI does NOT push a real m.timer at all. Showing 00:00 / En cours
+ * for a 12-minute-old match is wrong. We derive an estimate from m.time
+ * (kickoff Unix ts), tagged with .estimated so the UI can prefix "~".
+ * effectiveTimer() prefers real timer first — this is fallback ONLY.  */
 function computeFallbackTimer(m) {
-  return null;
+  if (!m) return null;
+  if (isMatchEnded(m)) return null;
+  var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
+  if (kickoff <= 0) return null;
+  var nowSec = Math.floor(Date.now() / 1000);
+  var elapsed = nowSec - kickoff;
+  if (elapsed < 0) return null;
+  var sid = parseInt(m.sport_id || 1, 10);
+  if (sid === 1 || sid === 36) {
+    var totalMin = Math.floor(elapsed / 60);
+    var sec = elapsed % 60;
+    if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
+    if (totalMin < 60)  return { tm: 45,       ts: 0,   md: '1', estimated: true };
+    var matchMin = 46 + (totalMin - 60);
+    if (matchMin > 125) return { tm: 90, ts: 0, md: '0', estimated: true };
+    return { tm: matchMin, ts: sec, md: '0', estimated: true };
+  }
+  return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0', estimated: true };
 }
 
 /* ── Score regression guard. Goals don't un-happen for EITHER team.
@@ -312,26 +329,23 @@ function _mergeTimer(m, newTimer) {
  * the match really is in its first minute. */
 function effectiveTimer(m) {
   if (isMatchEnded(m)) return null;
+  // ── 1) Real Bet365 timer always wins (Volume Plan: major leagues)
   if (m && m.timer) {
     var tmV = m.timer.tm;
     if (tmV === undefined || tmV === null) tmV = m.timer.TM;
     var tmn = parseInt(tmV, 10);
     var md  = String(m.timer.md || m.timer.MD || '');
-    // Halftime (1), extra-time (3), pause (2) period markers are
-    // trustworthy regardless of tm value.
     if (md === '1' || md === '2' || md === '3') return m.timer;
-    // Real Bet365 positive minute — use it directly.
     if (!isNaN(tmn) && tmn > 0 && tmn < 130) return m.timer;
   }
-  // tm=0 or missing: prefer the last REAL timer we received during
-  // the live poll (same match only) so the clock keeps ticking
-  // between polls without resetting to 00:00.
+  // ── 2) Last cached REAL timer from the live poll (same match)
   if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)
       && window._mdMatch && String(window._mdMatch.id) === String(m.id || '')) {
     return window._mdLastTimer;
   }
-  // No real timer — return null. Callers must show "En cours".
-  return null;
+  // ── 3) Kickoff-derived LAST-RESORT estimate (tagged with ~)
+  //    Used only for low-coverage leagues where BetsAPI sends no timer.
+  return computeFallbackTimer(m);
 }
 
 /* ── Build the inner HTML for the match-detail period+timer block.
@@ -371,7 +385,7 @@ function getMatchPeriod(m) {
   if (md === '3') return 'Prolongation';
   // Football (sport 1, 36) — derived from real tm value
   if (sid === 1 || sid === 36) {
-    if (tm > 0 && tm <= 45)  return '1ère mi-temps';
+    if (tm >= 0 && tm <= 45) return '1ère mi-temps';
     if (tm > 45 && tm <= 90) return '2ème mi-temps';
     if (tm > 90)             return 'Prolongation';
     return '';
@@ -388,9 +402,9 @@ function getMatchPeriod(m) {
   return '';
 }
 
-/* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ──
- * Volume Plan: strictly real Bet365 timer. Shows "En cours" when the
- * API hasn't sent a timer yet (lower-coverage leagues). */
+/* ── Live minute label for match cards (e.g. "45'" or "Mi-temps")
+ * Prefers real Bet365 timer; falls back to kickoff-derived estimate
+ * with "~" prefix for low-coverage leagues. */
 function formatLiveMinute(m) {
   if (!m) return '';
   var t = effectiveTimer(m);
@@ -400,31 +414,32 @@ function formatLiveMinute(m) {
   if (md === '2') return 'Pause';
   if (md === '3') return 'Prolong.';
   var tm = parseInt(t.tm || t.TM || 0, 10);
-  if (!isNaN(tm) && tm > 0 && tm < 130) {
-    return tm + "'";
+  if (!isNaN(tm) && tm >= 0 && tm < 130) {
+    var prefix = t.estimated ? '~' : '';
+    return prefix + tm + "'";
   }
   return isMatchLive(m) ? 'En cours' : '';
 }
 
-/* ── Live counting timer — only ever ticks from a REAL Bet365 timer
- * snapshot. If the API hasn't sent a timer yet, the display stays at
- * whatever the period block already shows ("En cours" / "Mi-temps").
- * This is the correct Volume Plan behaviour: no fake kickoff math. */
+/* ── Live counting timer — ticks every 1s from the latest snapshot.
+ * Prefers the real Bet365 timer; for low-coverage leagues where the API
+ * never sends a timer, falls back to the kickoff-derived estimate and
+ * tags the display with "~" so the user knows it's approximate. */
 function startMatchTimer(m) {
   clearInterval(window._mdTimerInterval);
   if (!m || isMatchEnded(m)) return;
   var tmr = effectiveTimer(m);
-  // No real timer at all → nothing to count from; leave display as-is.
   if (!tmr) return;
   var mdRaw = String(tmr.md || tmr.MD || '');
   if (mdRaw === '1' || mdRaw === '2') return;  // Mi-temps / Pause — no ticking
 
   var baseMin = parseInt(tmr.tm || tmr.TM || 0) || 0;
   var baseSec = parseInt(tmr.ts || tmr.TS || 0) || 0;
-  // Guard: a real timer must have a positive minute or seconds value.
-  // tm=0, ts=0 with md!='1' means the API is still sending zeros —
-  // don't start counting from 00:00.
-  if (baseMin === 0 && baseSec === 0) return;
+  // Don't tick from a completely empty (0,0) REAL snapshot — wait for
+  // the next poll to bring real data. For estimated fallback we DO
+  // count from 0 because that's the whole point of the fallback.
+  var isEstimate = !!tmr.estimated;
+  if (!isEstimate && baseMin === 0 && baseSec === 0) return;
 
   var totalBase = baseMin * 60 + baseSec;
   var t0 = Date.now();
@@ -441,7 +456,8 @@ function startMatchTimer(m) {
     var curr    = totalBase + elapsed;
     var mm      = Math.floor(curr / 60);
     var ss      = curr % 60;
-    el.textContent = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    var clk = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    el.textContent = isEstimate ? ('~' + clk) : clk;
   }, 1000);
 }
 
