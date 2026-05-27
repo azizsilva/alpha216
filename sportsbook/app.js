@@ -1057,11 +1057,35 @@ function isMatchEnded(m) {
   if (!m) return false;
   if (String(m.time_status) === '3') return true;
   if (m.status === 'ended' || m.status === 'finished') return true;
-  // Absolute staleness cutoff: 4 hours past scheduled kickoff is
-  // unphysical for any football match including penalties.
+
   var kickoff = parseInt(m.time || 0, 10) || 0;
-  if (kickoff > 0 && (Date.now() / 1000 - kickoff) >= 14400) {
-    return true;
+  if (kickoff > 0) {
+    var elapsed = Date.now() / 1000 - kickoff;
+    var sid     = parseInt(m.sport_id || 1, 10);
+
+    // Football (sport_id 1 = soccer, 36 = E-soccer): the maximum
+    // possible wall-clock duration is ~145 min (90 regulation + 15
+    // HT + 30 extra time + 10 penalty shootout). After 135 min from
+    // kickoff the match is over — even if Bet365 hasn't pushed
+    // time_status=3 yet (a known lag for lower leagues like Serie C
+    // play-offs, Polish IV Liga, etc.).
+    if ((sid === 1 || sid === 36) && elapsed >= 8100) return true; // 135 min
+
+    // Stale-fallback guard: when we never received a real Bet365
+    // timer for this match and the kickoff-derived estimate already
+    // shows the displayed minute past 100', the match is over for
+    // all practical purposes. (Real-timer matches naturally hit the
+    // 135-min wall-clock cutoff above.)
+    var hasRealTimer = m.timer && !m.timer.estimated
+                      && (parseInt(m.timer.tm, 10) >= 0)
+                      && m.timer.ts !== undefined;
+    if (!hasRealTimer && (sid === 1 || sid === 36) && elapsed >= 6300) {
+      // 105 min wall clock + no real API timer = ended estimate
+      return true;
+    }
+
+    // Absolute cutoff for any sport: 4 hours past scheduled kickoff
+    if (elapsed >= 14400) return true;
   }
   return false;
 }
@@ -2787,6 +2811,11 @@ function renderEnDirectCards(matches) {
   var el = document.getElementById('sb-en-direct-cards');
   if (!el) return;
   el.querySelectorAll('.sb-sk-boost-card').forEach(function(n){ n.parentNode.removeChild(n); });
+
+  // Safety filter: drop anything that has effectively ended even if
+  // the caller forgot. Covers stale Bet365 time_status=1 on lower
+  // leagues where the API takes minutes to push status=3.
+  matches = (matches || []).filter(function(m){ return !isMatchEnded(m); });
 
   var out = '';
   var shown = matches.slice(0, 6); // max 6 live cards

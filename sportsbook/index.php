@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260527vpH';  // Cotes boostées click adds to slip + 10 cards in carousel + selected-card outline + boost bet shown in slip with strike-through
+$sb_build_stamp = 'b20260527vpI';  // football matches past 135 min wall clock (or 105 min in fallback mode) drop out of EN DIRECT
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
