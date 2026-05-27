@@ -294,14 +294,24 @@ function _acceptTimerUpdate(oldT, newT) {
   var newTm = parseInt(newT.tm || newT.TM || 0, 10) || 0;
   // Reset-to-zero glitch inside an active period — almost certainly noise.
   if (newTm === 0 && oldTm > 3) return false;
-  // SMALL backwards drift (1-3 min) inside the same period is the classic
+  // Kickoff-derived fallback clocks often run 2-4 min AHEAD of the real
+  // Bet365 stream timer. Accept any ≥2 min correction so we snap to
+  // BetsAPI truth instead of staying stuck on a wrong estimate.
+  if (newTm > 0 && oldTm - newTm >= 2) return true;
+  // SMALL backwards drift (1 min) inside the same period is the classic
   // v3-snapshot-vs-EV-stream race — reject it to avoid flicker.
-  if (newTm > 0 && oldTm - newTm >= 1 && oldTm - newTm <= 3) return false;
-  // LARGE drops (≥ 4 min) are the OPPOSITE problem: we previously
-  // locked onto a bogus high spike (e.g. one stray "tm=78" while
-  // BetsAPI is really at 56). Accept the correction — the display
-  // will snap back to the real value next render.
+  if (newTm > 0 && oldTm - newTm === 1) return false;
   return true;
+}
+
+/* True when the timer object carries a real Bet365 minute/period
+ * (not our kickoff-derived fallback estimate). */
+function _timerIsReal(t) {
+  if (!t) return false;
+  var md = String(t.md || t.MD || '');
+  if (md === '1' || md === '3' || md === '2') return true;
+  var tm = parseInt(t.tm || t.TM || 0, 10) || 0;
+  return tm > 0;
 }
 /* Helper: in-place merge of m.timer with newTimer, respecting the
  * regression guard. Returns true if any field was updated.
@@ -365,9 +375,20 @@ function effectiveTimer(m) {
     if (!isNaN(tmn) && tmn > 0 && tmn < 130) {
       return m.timer;
     }
+    // tm = 0 or missing — prefer the last real timer from live poll
+    // over kickoff fallback (scheduled kickoff often ≠ actual start).
+    if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)
+        && window._mdMatch && String(window._mdMatch.id) === String(m.id || '')) {
+      return window._mdLastTimer;
+    }
     // tm = 0 or missing → only believe it if kickoff confirms minute 0
     if (fb && fbMin > 1) return fb;
     return m.timer;   // genuinely just kicked off
+  }
+  // Last resort: cached real timer beats kickoff estimate.
+  if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)
+      && window._mdMatch && String(window._mdMatch.id) === String(m.id || '')) {
+    return window._mdLastTimer;
   }
   return computeFallbackTimer(m);
 }
@@ -472,7 +493,7 @@ function startMatchTimer(m) {
   //   We mark such timers as "estimated" by adding a ~ prefix once we
   //   pass minute 45 (when drift becomes visible), so the user knows
   //   the time is not exact. The CSS turns it a slightly muted color.
-  var hasRealApiTimer = !!(m.timer && (parseInt(m.timer.tm || m.timer.TM || 0, 10) || 0) > 0);
+  var hasRealApiTimer = _timerIsReal(m.timer) || !!window._mdLastTimerWasReal;
 
   window._mdTimerInterval = setInterval(function() {
     var el = document.getElementById('md-timer-display');
@@ -518,6 +539,8 @@ function startMatchDetailPoll(mid) {
   // known timer/stats can't leak into this one.
   window._mdLastTimer = null;
   window._mdLastStats = null;
+  window._mdLastTimerWasReal = false;
+  window._mdHasRealMarkets = false;
   // Forget any previously expanded markets when switching match.
   S._mdMktState = {};
   // Fire one cycle right away so the timer/period populate without
@@ -600,22 +623,18 @@ function patchMatchDetailLive(m, markets) {
   // timer (window._mdLastTimer) so a momentary "tm:0" from upstream
   // never resets the on-screen clock to zero.
   if (!isMatchEnded(m)) {
-    if (m.timer && _acceptTimerUpdate(window._mdLastTimer, m.timer)) {
-      window._mdLastTimer = m.timer;
-    } else if (m.timer && window._mdLastTimer) {
-      // Large-drop sanity check: if the API reports a value that's
-      // 4+ minutes BELOW what we have cached, our cache is the one
-      // that's wrong (we locked onto an upstream spike). Snap back
-      // to the API by dropping the cache.
-      var oTm = parseInt(window._mdLastTimer.tm || window._mdLastTimer.TM || 0, 10) || 0;
-      var nTm = parseInt(m.timer.tm || m.timer.TM || 0, 10) || 0;
-      var sameMd = String(window._mdLastTimer.md || '') === String(m.timer.md || '');
-      if (sameMd && nTm > 0 && oTm - nTm >= 4) {
+    if (m.timer && _timerIsReal(m.timer)) {
+      var acceptT = !window._mdLastTimer
+        || _acceptTimerUpdate(window._mdLastTimer, m.timer)
+        || !window._mdLastTimerWasReal; // real Bet365 timer replaces kickoff estimate
+      if (acceptT) {
         window._mdLastTimer = m.timer;
-      } else {
-        // Keep ticking off the last-known-good timer.
+        window._mdLastTimerWasReal = true;
+      } else if (window._mdLastTimer) {
         m.timer = window._mdLastTimer;
       }
+    } else if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)) {
+      m.timer = window._mdLastTimer;
     }
   }
   var effPatch = isMatchEnded(m) ? null : effectiveTimer(m);
@@ -666,6 +685,11 @@ function patchMatchDetailLive(m, markets) {
   var nextMarkets = null;
   if (markets && markets.length) {
     nextMarkets = markets;
+    window._mdHasRealMarkets = true;
+  } else if (window._mdHasRealMarkets && prevMarkets.length) {
+    // Empty markets[] on one poll must NOT revert to static fallback —
+    // keep the last real Bet365 market tree on screen.
+    nextMarkets = null;
   } else if (m && m.live_odds) {
     try { nextMarkets = buildFallbackMarkets(m); } catch (e) {}
   }
@@ -5593,10 +5617,126 @@ function filterMarketByScore(mkt, m) {
   };
 }
 
+function _parseSelectionLine(s) {
+  if (!s) return NaN;
+  var hc = parseFloat(s.handicap);
+  if (!isNaN(hc)) return hc;
+  var m = String(s.name || '').match(/(\d+(?:\.\d+)?)/);
+  return m ? parseFloat(m[1]) : NaN;
+}
+function _isOverSelName(n) { return /plus|over/i.test(String(n || '')); }
+function _isUnderSelName(n) { return /moins|under/i.test(String(n || '')); }
+
+/* fcbet216 Principaux / Bet Builder show 2 active O/U line pairs
+ * anchored on the Bet365 main line — NOT the full 0.5→6.5 ladder.
+ * Example 0-0 @ 3': Plus de 3.5 / 4.5 (not 0.5 / 1.5 / 2.5). */
+function trimTotalMarketWindow(mkt, m, maxPairs) {
+  if (!mkt || !mkt.selections) return mkt;
+  maxPairs = maxPairs || 2;
+  var nm = String(mkt.name || '').toLowerCase().trim();
+  var isTotalAll  = /^total$/i.test(mkt.name || '');
+  var isTotalHome = /^1\s*total/i.test(nm);
+  var isTotalAway = /^2\s*total/i.test(nm);
+  var isCorners   = /corner/i.test(nm);
+  var isCards     = /carton|card/i.test(nm);
+  if (!(isTotalAll || isTotalHome || isTotalAway || isCorners || isCards)) return mkt;
+
+  var pairs = {};
+  mkt.selections.forEach(function(s) {
+    var line = _parseSelectionLine(s);
+    if (isNaN(line)) return;
+    var key = String(line);
+    if (!pairs[key]) pairs[key] = { line: line, over: null, under: null, other: [] };
+    if (_isOverSelName(s.name)) pairs[key].over = s;
+    else if (_isUnderSelName(s.name)) pairs[key].under = s;
+    else pairs[key].other.push(s);
+  });
+
+  var lineList = Object.keys(pairs).map(function(k) { return pairs[k]; })
+    .filter(function(p) { return p.over || p.under; })
+    .sort(function(a, b) { return a.line - b.line; });
+  if (lineList.length <= maxPairs) return mkt;
+
+  // Drop trivial overs (Plus de 0.5 @ 1.01) — fcbet hides these.
+  lineList = lineList.filter(function(p) {
+    var ov = p.over ? parseFloat(p.over.odds) : 0;
+    return !(ov > 0 && ov < 1.12);
+  });
+  if (lineList.length <= maxPairs) {
+    var quick = [];
+    lineList.forEach(function(p) {
+      if (p.over) quick.push(p.over);
+      if (p.under) quick.push(p.under);
+      quick = quick.concat(p.other);
+    });
+    if (!quick.length) return mkt;
+    return { id: mkt.id, name: mkt.name, handicap: mkt.handicap, selections: quick };
+  }
+
+  var anchor = null;
+  if (isTotalAll) {
+    var lo = odds(m);
+    anchor = parseFloat(lo.ou);
+    if (isNaN(anchor)) anchor = null;
+  }
+  if (anchor == null) {
+    var bestDist = 999;
+    lineList.forEach(function(p) {
+      var ov = p.over ? parseFloat(p.over.odds) : 0;
+      if (ov < 1.05) return;
+      var dist = Math.abs(ov - 1.85);
+      if (dist < bestDist) { bestDist = dist; anchor = p.line; }
+    });
+  }
+
+  var sc = _sbReadScore(m);
+  var floor = 0;
+  if (isTotalHome) floor = sc[0] + 0.5;
+  else if (isTotalAway) floor = sc[1] + 0.5;
+  else if (isTotalAll) floor = sc[0] + sc[1] + 0.5;
+  else if (isCorners && m && m.stats && m.stats.corners) {
+    var ca = Array.isArray(m.stats.corners) ? m.stats.corners : String(m.stats.corners).split(',');
+    floor = (parseInt(ca[0], 10) || 0) + (parseInt(ca[1], 10) || 0) + 0.5;
+  } else if (isCards && m && m.stats && m.stats.yellow_cards) {
+    var yca = Array.isArray(m.stats.yellow_cards) ? m.stats.yellow_cards : String(m.stats.yellow_cards).split(',');
+    floor = (parseInt(yca[0], 10) || 0) + (parseInt(yca[1], 10) || 0) + 0.5;
+  }
+
+  var eligible = lineList.filter(function(p) { return p.line >= floor - 0.001; });
+  if (!eligible.length) eligible = lineList;
+
+  var startIdx = 0;
+  if (anchor != null) {
+    for (var ai = 0; ai < eligible.length; ai++) {
+      if (eligible[ai].line >= anchor - 0.001) { startIdx = ai; break; }
+    }
+  } else if (floor > 0) {
+    for (var fi = 0; fi < eligible.length; fi++) {
+      if (eligible[fi].line >= floor - 0.001) { startIdx = fi; break; }
+    }
+  }
+
+  var picked = eligible.slice(startIdx, startIdx + maxPairs);
+  if (picked.length < maxPairs && eligible.length > maxPairs) {
+    picked = eligible.slice(Math.max(0, eligible.length - maxPairs));
+  }
+
+  var newSels = [];
+  picked.forEach(function(p) {
+    if (p.over) newSels.push(p.over);
+    if (p.under) newSels.push(p.under);
+    newSels = newSels.concat(p.other);
+  });
+  if (!newSels.length) return mkt;
+  return { id: mkt.id, name: mkt.name, handicap: mkt.handicap, selections: newSels };
+}
+
 function renderMarketGroup(mkt, m, expanded, bbMode) {
   // Filter out already-settled lines so e.g. a 2:0 match no longer
   // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
   mkt = filterMarketByScore(mkt, m);
+  // Then window to 2 active line pairs like fcbet216 Principaux / BB.
+  mkt = trimTotalMarketWindow(mkt, m, 2);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
   // Honor any user-driven expand/collapse override stored in S._mdMktState.
@@ -5752,12 +5892,13 @@ function buildFallbackMarkets(m) {
   var _sc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, false];
   var current_goals = _sc[0] + _sc[1];
 
-  // Use .5 lines only — same convention as fcbet216 and FlashScore.
-  // Lines are dynamic and based on current_goals so a 2:0 game shows
-  // 2.5 / 3.5 / 4.5 (NOT the stale 0.5 / 1.5 / 2.5 we used to show).
-  var l1 = current_goals + 0.5;
-  var l2 = current_goals + 1.5;
-  var l3 = current_goals + 2.5;
+  // Anchor on Bet365 main O/U line (ou_line) — fcbet216 shows 2 pairs
+  // around that line, NOT 0.5 / 1.5 / 2.5 for a 0-0 match.
+  var anchor = parseFloat(o.ou);
+  if (isNaN(anchor) || anchor <= 0) anchor = 2.5;
+  var minLine = current_goals + 0.5;
+  var l1 = Math.max(minLine, anchor);
+  var l2 = l1 + 1;
 
   var api_ov = parseFloat(o.ov);
   var api_un = parseFloat(o.un);
@@ -5768,12 +5909,10 @@ function buildFallbackMarkets(m) {
   function _mk(name, odd, hc) { return { id:'tot_'+name.replace(/\s+/g,'_')+'_'+hc, name:name, odds:Math.max(1.01,+odd.toFixed(2)), handicap:hc }; }
   
   var totSels = [
-    _mk('Plus de '  + l1, base_ov * 0.70, l1),
-    _mk('Moins de ' + l1, base_un * 1.50, l1),
-    _mk('Plus de '  + l2, base_ov, l2),
-    _mk('Moins de ' + l2, base_un, l2),
-    _mk('Plus de '  + l3, base_ov * 1.50, l3),
-    _mk('Moins de ' + l3, base_un * 0.70, l3),
+    _mk('Plus de '  + l1, base_ov, l1),
+    _mk('Moins de ' + l1, base_un, l1),
+    _mk('Plus de '  + l2, base_ov * 1.50, l2),
+    _mk('Moins de ' + l2, base_un * 0.70, l2),
   ];
   mkts.push({ id:'total', name:'Total', selections: totSels });
 
