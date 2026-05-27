@@ -3031,41 +3031,57 @@ window.sbAddBet = function(id, match, sel, val, market) {
     if (String(pool[p].id) === matchId) { live = isMatchLive(pool[p]); break; }
   }
 
-  // Find any existing bet (single or BB) for this match
-  var singleSameMatchIdx = S.betSlip.findIndex(function(b){
-    return !b.isBB && b.matchId === matchId;
+  // Find ALL existing single bets for this match — they ALL need to be
+  // pulled into the SGM ticket (covers stale slips from older builds
+  // that allowed multiple singles per match).
+  var singleIdxs = [];
+  S.betSlip.forEach(function(b, ii){
+    if (!b.isBB && b.matchId === matchId) singleIdxs.push(ii);
   });
 
-  if (bbIdx !== -1 || singleSameMatchIdx !== -1) {
+  if (bbIdx !== -1 || singleIdxs.length > 0) {
     // Promote/extend a per-match SGM ticket
     var bet;
     if (bbIdx !== -1) {
       bet = S.betSlip[bbIdx];
     } else {
-      // Convert the existing single bet into a 1-leg SGM ticket
-      var ex = S.betSlip[singleSameMatchIdx];
-      S.betSlip.splice(singleSameMatchIdx, 1);
+      // Convert the FIRST single into the SGM ticket header
+      var ex0 = S.betSlip[singleIdxs[0]];
       bet = {
-        id: bbBetId, match: ex.match, sel: '',
+        id: bbBetId, match: ex0.match, sel: '',
         val: 1.00, _origVal: 1.00, _change: null,
         isLive: live, isBB: true, matchId: matchId,
-        legs: [{
-          id: ex.id, name: ex.sel,
-          odds: parseFloat(ex.val) || 1.0,
-          market: ex.market || '',
-          handicap: ''
-        }],
-        stake: ex.stake || SLIP_STAKE
+        legs: [],
+        stake: ex0.stake || SLIP_STAKE
       };
-      S.betSlip.push(bet);
     }
+
+    // Pull every leftover single bet for this match into the ticket.
+    // Splice from the highest index down so earlier indices stay valid.
+    for (var k = singleIdxs.length - 1; k >= 0; k--) {
+      var idx = singleIdxs[k];
+      var ex  = S.betSlip[idx];
+      bet.legs.unshift({
+        id: ex.id, name: ex.sel,
+        odds: parseFloat(ex.val) || 1.0,
+        market: ex.market || '',
+        handicap: ''
+      });
+      S.betSlip.splice(idx, 1);
+    }
+    if (bbIdx === -1) S.betSlip.push(bet);
 
     // Mutual exclusion within the same market group
     var mktKey = (market || '').toLowerCase();
-    var sameMktIdx = bet.legs.findIndex(function(l){
-      return (l.market || '').toLowerCase() === mktKey;
-    });
-    if (sameMktIdx !== -1) bet.legs.splice(sameMktIdx, 1);
+    if (mktKey) {
+      var sameMktIdx = bet.legs.findIndex(function(l){
+        return (l.market || '').toLowerCase() === mktKey;
+      });
+      if (sameMktIdx !== -1) bet.legs.splice(sameMktIdx, 1);
+    }
+    // Also drop any duplicate of THIS exact bid before re-adding
+    var dupIdx = bet.legs.findIndex(function(l){ return l.id === id; });
+    if (dupIdx !== -1) bet.legs.splice(dupIdx, 1);
 
     bet.legs.push({
       id: id, name: sel,
@@ -3074,9 +3090,23 @@ window.sbAddBet = function(id, match, sel, val, market) {
       handicap: ''
     });
 
-    bet.val      = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
-    bet._origVal = bet.val;
-    bet.sel      = bet.legs.map(function(l){ return l.name; }).join(' + ');
+    // 1 leg only after the dust settles → render as a plain single bet
+    if (bet.legs.length === 1) {
+      var only2 = bet.legs[0];
+      var bIdx2 = S.betSlip.findIndex(function(b){ return b.id === bbBetId; });
+      if (bIdx2 !== -1) {
+        S.betSlip[bIdx2] = {
+          id: only2.id, match: bet.match, sel: only2.name,
+          val: parseFloat(only2.odds), _origVal: parseFloat(only2.odds),
+          _change: null, isLive: bet.isLive, matchId: matchId,
+          market: only2.market || '1x2', stake: bet.stake || SLIP_STAKE
+        };
+      }
+    } else {
+      bet.val      = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
+      bet._origVal = bet.val;
+      bet.sel      = bet.legs.map(function(l){ return l.name; }).join(' + ');
+    }
   } else {
     // No existing entry for this match → plain single bet
     S.betSlip.push({
