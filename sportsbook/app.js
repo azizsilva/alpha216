@@ -684,7 +684,10 @@ function patchMatchDetailLive(m, markets) {
   var prevMarkets = window._mdMarkets || [];
   var nextMarkets = null;
   if (markets && markets.length) {
-    nextMarkets = markets;
+    // Merge separate "Goals Over/Under X" market groups into a single
+    // normalised "Total" ladder and update m.live_odds.ou_line so the
+    // fallback always anchors on the correct current Bet365 main line.
+    nextMarkets = mergeOuMarkets(markets, m);
     window._mdHasRealMarkets = true;
   } else if (window._mdHasRealMarkets && prevMarkets.length) {
     // Empty markets[] on one poll must NOT revert to static fallback —
@@ -5478,6 +5481,9 @@ function renderMatchDetail(m, markets) {
 
   // ── Markets list (always visible; markets switch to BB-mode when tab is active)
   if (!markets.length) markets = buildFallbackMarkets(m);
+  // Merge separate "Goals Over/Under X" market groups from the Bet365 event
+  // stream into a single normalised "Total" ladder.
+  markets = mergeOuMarkets(markets, m);
   window._mdMarkets = markets;
   window._mdMatch   = m;
 
@@ -5642,6 +5648,109 @@ function _parseSelectionLine(s) {
 function _isOverSelName(n) { return /plus|over/i.test(String(n || '')); }
 function _isUnderSelName(n) { return /moins|under/i.test(String(n || '')); }
 
+/* Regex that identifies any Total / Over-Under / Goals market whether it
+ * comes from our synthetic fallback ("Total") or directly from the Bet365
+ * event stream ("Goals Over/Under 3.5", "Total Goals", "Under/Over" ...). */
+var _ouRx = /^total$|total goals|over.under|goals over|under.over/i;
+
+/* Merge multiple separate "Goals Over/Under X" markets that Bet365 returns
+ * as individual market-groups into a single normalised "Total" market whose
+ * selections are properly labelled ("Plus de X.5" / "Moins de X.5") with
+ * the line stored in s.handicap. The resulting market passes cleanly through
+ * filterMarketByScore → trimTotalMarketWindow → renderMarketGroup.
+ *
+ * Also updates m.live_odds.ou_line to the lowest ACTIVE line (the one that
+ * keeps buildFallbackMarkets anchored on the correct Bet365 main line). */
+function mergeOuMarkets(markets, m) {
+  if (!markets || !markets.length) return markets;
+  var ouMkts = [], others = [];
+  markets.forEach(function(mkt) {
+    if (_ouRx.test(mkt.name || '')) ouMkts.push(mkt);
+    else others.push(mkt);
+  });
+  if (!ouMkts.length) return markets;
+
+  // Collect all (line → {over,under}) pairs across all OU markets
+  var pairMap = {};
+  ouMkts.forEach(function(mkt) {
+    // Try to get the line from the market name ("Goals Over/Under 3.5" → 3.5)
+    var lineFromName = null;
+    var lm = String(mkt.name || '').match(/(\d+(?:\.\d+)?)/);
+    if (lm) lineFromName = parseFloat(lm[1]);
+
+    (mkt.selections || []).forEach(function(s) {
+      var line = _parseSelectionLine(s);
+      if (isNaN(line) && lineFromName !== null) line = lineFromName;
+      if (isNaN(line)) return;
+      var key = String(line);
+      if (!pairMap[key]) pairMap[key] = { line: line, over: null, under: null };
+      if (_isOverSelName(s.name)) pairMap[key].over = s;
+      else if (_isUnderSelName(s.name)) pairMap[key].under = s;
+    });
+  });
+
+  // Sort pairs by line ascending; build normalised selections list
+  var lineNums = Object.keys(pairMap).map(parseFloat).sort(function(a, b) { return a - b; });
+  var mergedSels = [];
+  lineNums.forEach(function(line) {
+    var p = pairMap[String(line)];
+    var overOdds  = p.over  ? parseFloat(p.over.odds)  : 0;
+    var underOdds = p.under ? parseFloat(p.under.odds) : 0;
+    if (overOdds < 1.01 && underOdds < 1.01) return; // skip locked pair
+    // Normalise label and set handicap
+    if (p.over) {
+      mergedSels.push({
+        id: (p.over.id  || 'ov_' + line),
+        name: 'Plus de ' + line,
+        odds: overOdds,
+        handicap: line,
+        _change: p.over._change || null
+      });
+    }
+    if (p.under) {
+      mergedSels.push({
+        id: (p.under.id || 'un_' + line),
+        name: 'Moins de ' + line,
+        odds: underOdds,
+        handicap: line,
+        _change: p.under._change || null
+      });
+    }
+  });
+
+  if (!mergedSels.length) return markets; // nothing to merge
+
+  var totalMkt = { id: 'total', name: 'Total', selections: mergedSels };
+
+  // Update m.live_odds.ou_line to the lowest ACTIVE OU line so that
+  // buildFallbackMarkets uses the correct anchor on the next poll.
+  if (m) {
+    var sc = _sbReadScore(m);
+    var cur = sc[0] + sc[1];
+    var firstActive = lineNums.find(function(ln) { return ln > cur; });
+    if (firstActive !== undefined) {
+      if (!m.live_odds) m.live_odds = {};
+      if (!m.live_odds.ou_line || m.live_odds.ou_line < firstActive) {
+        m.live_odds.ou_line = firstActive;
+        // Cache reset so odds() picks fresh value
+        m._o = null;
+      }
+    }
+  }
+
+  // Replace all OU markets with the single merged "Total" — keep insertion order
+  var result = [];
+  var inserted = false;
+  markets.forEach(function(mkt) {
+    if (_ouRx.test(mkt.name || '')) {
+      if (!inserted) { result.push(totalMkt); inserted = true; }
+    } else {
+      result.push(mkt);
+    }
+  });
+  return result;
+}
+
 /* fcbet216 Principaux / Bet Builder show 2 active O/U line pairs
  * anchored on the Bet365 main line — NOT the full 0.5→6.5 ladder.
  * Example 0-0 @ 3': Plus de 3.5 / 4.5 (not 0.5 / 1.5 / 2.5). */
@@ -5649,7 +5758,8 @@ function trimTotalMarketWindow(mkt, m, maxPairs) {
   if (!mkt || !mkt.selections) return mkt;
   maxPairs = maxPairs || 2;
   var nm = String(mkt.name || '').toLowerCase().trim();
-  var isTotalAll  = /^total$/i.test(mkt.name || '');
+  // Accept "Total", "Goals Over/Under 3.5", "Total Goals", etc.
+  var isTotalAll  = /^total$|total goals|over.under|goals over|under.over/i.test(mkt.name || '');
   var isTotalHome = /^1\s*total/i.test(nm);
   var isTotalAway = /^2\s*total/i.test(nm);
   var isCorners   = /corner/i.test(nm);

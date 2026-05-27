@@ -689,12 +689,14 @@ function parse_event_stream_odds($results_arr) {
     foreach ($stream as $item) {
         if (!is_array($item)) continue;
         $type = $item['type'] ?? $item['TYPE'] ?? '';
-        // Extract OU line from market name
-        if ($type === 'MA') {
+        // Extract OU line from market name (MA = inplay stream, MG = event stream)
+        if ($type === 'MA' || $type === 'MG') {
             $mkt = $item['NA'] ?? $item['N2'] ?? '';
             if (preg_match('/over.under\s*(\d+\.?\d*)/i', $mkt, $mat)
              || preg_match('/total[^0-9]*(\d+\.?\d*)/i', $mkt, $mat)) {
-                $curr_ou_line = (float)$mat[1];
+                // Only take the line if we haven't captured OU odds yet
+                // (so the FIRST / main OU market wins over secondary ones)
+                if (!$ov_o && !$un_o) $curr_ou_line = (float)$mat[1];
             }
         }
         if ($type === 'PA') {
@@ -1982,6 +1984,50 @@ if ($action === 'match_live') {
             }
         }
         $markets = md_parse_markets(is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results']);
+
+        // ── Update live_odds.ou_line from the REAL markets ────────────────
+        // parse_event_stream_odds only reads one OU line; the real market
+        // tree may have several lines (2.5, 3.5, 4.5 …). After a goal the
+        // Bet365 main line moves up, but the stale DB value keeps the old
+        // anchor. Scan the parsed markets and store the lowest active line
+        // (strictly above current_goals + 0.5) so buildFallbackMarkets
+        // uses the correct anchor next time.
+        if (!empty($markets)) {
+            $cur_goals = 0;
+            if (!empty($match_data['ss'])) {
+                $sp = preg_split('/[-:]/', $match_data['ss']);
+                if (count($sp) >= 2) $cur_goals = max(0, (int)$sp[0] + (int)$sp[1]);
+            }
+            $floor_line = $cur_goals + 0.5;   // minimum meaningful OU line
+            $best_line  = null;
+            foreach ($markets as $mkt) {
+                $mn = strtolower($mkt['name'] ?? '');
+                if (!preg_match('/over.under|total goals|goals over|^total$/i', $mkt['name'] ?? '')) continue;
+                // Extract line from market name ("Goals Over/Under 3.5" → 3.5)
+                if (!preg_match('/(\d+\.?\d*)/', $mkt['name'] ?? '', $lm)) continue;
+                $line = (float)$lm[1];
+                if ($line < $floor_line - 0.01) continue; // already settled
+                if ($best_line === null || $line < $best_line) {
+                    $best_line = $line;
+                    // Also update ou_over/under from this market's selections
+                    foreach ($mkt['selections'] as $sel) {
+                        $sn = strtolower($sel['name'] ?? '');
+                        if (strpos($sn, 'over')  !== false || strpos($sn, 'plus')  !== false) {
+                            $match_data['live_odds']['ou_over'] = $sel['odds'];
+                        }
+                        if (strpos($sn, 'under') !== false || strpos($sn, 'moins') !== false) {
+                            $match_data['live_odds']['ou_under'] = $sel['odds'];
+                        }
+                    }
+                }
+            }
+            if ($best_line !== null) {
+                if (!isset($match_data['live_odds']) || !is_array($match_data['live_odds'])) {
+                    $match_data['live_odds'] = [];
+                }
+                $match_data['live_odds']['ou_line'] = $best_line;
+            }
+        }
     } else {
         $markets = [];
     }
