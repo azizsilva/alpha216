@@ -2202,15 +2202,23 @@ function md_parse_markets($event_arr) {
     $translate = function($name) {
         $map = [
             'full time result' => '1x2',
+            'fulltime result' => '1x2',
+            'match winner' => '1x2',
             'match goals' => 'Total',
             'alternative match goals' => 'Total',
+            'goals over/under' => 'Total',
             'asian handicap' => 'Handicap',
+            'alternative asian handicap' => 'Handicap',
             'double chance' => 'Double Chance',
             'both teams to score' => 'Les deux équipes qui marquent',
             'match corners' => 'Corners',
+            'alternative match corners' => 'Corners',
             'cards' => 'Cartons',
             'half time result' => '1ère mi-temps - 1x2',
-            'half time goals' => '1ère mi-temps - total'
+            'halftime result' => '1ère mi-temps - 1x2',
+            'half time goals' => '1ère mi-temps - total',
+            'halftime goals' => '1ère mi-temps - total',
+            'match goals - 1st half' => '1ère mi-temps - total'
         ];
         $low = strtolower(trim($name));
         return isset($map[$low]) ? $map[$low] : $name;
