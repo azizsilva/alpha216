@@ -5882,8 +5882,9 @@ function renderMktBtn(sel, m, bbMode) {
   var rawOdd = parseFloat(sel.odds);
   if (isNaN(rawOdd) || rawOdd < 1.01) rawOdd = 0;
   var val    = applyMargin(rawOdd);
-  // Lock ALL odds when match is finished — cannot bet on ended matches
-  var matchEnded = (String(m.time_status || '') === '3');
+  // Lock ALL odds when match is finished — use the full isMatchEnded()
+  // heuristic so odds are locked even before BetsAPI flips time_status=3.
+  var matchEnded = isMatchEnded(m);
   var hasOdd = !matchEnded && (val >= 1.01);
   var safeName = (sel.name != null && sel.name !== '') ? sel.name : '-';
   // Suppress the trailing handicap badge when the selection name already
