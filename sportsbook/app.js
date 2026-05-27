@@ -2979,46 +2979,154 @@ var SLIP_COMBI_STAKE = 10;
 var SLIP_SYS_SINGLES_STAKE = 0;
 var SLIP_SYS_COMBO_STAKE = 0;
 
+// fcbet216 / Altenar behaviour: multiple selections from the SAME
+// match auto-group into a single Same-Game-Multi ticket in the slip
+// (Simple mode keeps working; Combiné only triggers when the user
+// adds bets from a DIFFERENT match). One leg per market group; click
+// a same-market different-line button replaces the previous leg.
 window.sbAddBet = function(id, match, sel, val, market) {
   id = String(id).replace(/'/g, '');
-  var idx = S.betSlip.findIndex(function(b) { return b.id === id; });
-  if (idx !== -1) S.betSlip.splice(idx, 1);
-  else {
-    // Extract matchId from the slip id (format: "matchId_sel" or "matchId_md_sel")
-    var matchId = String(id).split('_')[0];
-    // Try to detect live status from the current match in S.matches /
-    // S.champMatches so the EN DIRECT red pill shows in the slip.
-    var live = false;
-    var pool = (S.matches || []).concat(S.champMatches || []);
-    for (var p = 0; p < pool.length; p++) {
-      if (String(pool[p].id) === matchId) { live = isMatchLive(pool[p]); break; }
+  var matchId = String(id).split('_')[0];
+
+  // 1) Toggling OFF an existing single bet?
+  var sIdx = S.betSlip.findIndex(function(b) { return b.id === id && !b.isBB; });
+  if (sIdx !== -1) {
+    S.betSlip.splice(sIdx, 1);
+    _afterSlipChange();
+    return;
+  }
+  // 2) Toggling OFF a leg already inside the per-match SGM ticket?
+  var bbBetId = 'bb_' + matchId;
+  var bbIdx   = S.betSlip.findIndex(function(b) { return b.id === bbBetId; });
+  if (bbIdx !== -1) {
+    var bb = S.betSlip[bbIdx];
+    var legIdx = (bb.legs || []).findIndex(function(l){ return l.id === id; });
+    if (legIdx !== -1) {
+      bb.legs.splice(legIdx, 1);
+      // 1 leg left → collapse back to a regular single bet
+      if (bb.legs.length === 0) {
+        S.betSlip.splice(bbIdx, 1);
+      } else if (bb.legs.length === 1) {
+        var only = bb.legs[0];
+        S.betSlip[bbIdx] = {
+          id: only.id, match: bb.match, sel: only.name,
+          val: parseFloat(only.odds), _origVal: parseFloat(only.odds),
+          _change: null, isLive: bb.isLive, matchId: matchId,
+          market: only.market || '1x2', stake: bb.stake || SLIP_STAKE
+        };
+      } else {
+        bb.val = parseFloat(bbCombinedOdds(bb.legs).toFixed(2));
+        bb._origVal = bb.val;
+        bb.sel = bb.legs.map(function(l){ return l.name; }).join(' + ');
+      }
+      _afterSlipChange();
+      return;
     }
+  }
+
+  // 3) ADDING a new selection
+  var live = false;
+  var pool = (S.matches || []).concat(S.champMatches || []);
+  for (var p = 0; p < pool.length; p++) {
+    if (String(pool[p].id) === matchId) { live = isMatchLive(pool[p]); break; }
+  }
+
+  // Find any existing bet (single or BB) for this match
+  var singleSameMatchIdx = S.betSlip.findIndex(function(b){
+    return !b.isBB && b.matchId === matchId;
+  });
+
+  if (bbIdx !== -1 || singleSameMatchIdx !== -1) {
+    // Promote/extend a per-match SGM ticket
+    var bet;
+    if (bbIdx !== -1) {
+      bet = S.betSlip[bbIdx];
+    } else {
+      // Convert the existing single bet into a 1-leg SGM ticket
+      var ex = S.betSlip[singleSameMatchIdx];
+      S.betSlip.splice(singleSameMatchIdx, 1);
+      bet = {
+        id: bbBetId, match: ex.match, sel: '',
+        val: 1.00, _origVal: 1.00, _change: null,
+        isLive: live, isBB: true, matchId: matchId,
+        legs: [{
+          id: ex.id, name: ex.sel,
+          odds: parseFloat(ex.val) || 1.0,
+          market: ex.market || '',
+          handicap: ''
+        }],
+        stake: ex.stake || SLIP_STAKE
+      };
+      S.betSlip.push(bet);
+    }
+
+    // Mutual exclusion within the same market group
+    var mktKey = (market || '').toLowerCase();
+    var sameMktIdx = bet.legs.findIndex(function(l){
+      return (l.market || '').toLowerCase() === mktKey;
+    });
+    if (sameMktIdx !== -1) bet.legs.splice(sameMktIdx, 1);
+
+    bet.legs.push({
+      id: id, name: sel,
+      odds: parseFloat(val) || 1.0,
+      market: market || '',
+      handicap: ''
+    });
+
+    bet.val      = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
+    bet._origVal = bet.val;
+    bet.sel      = bet.legs.map(function(l){ return l.name; }).join(' + ');
+  } else {
+    // No existing entry for this match → plain single bet
     S.betSlip.push({
       id: id, match: match, sel: sel,
       val: parseFloat(val),
       _origVal: parseFloat(val),
-      _change: null,                       // 'up' / 'down' set by live poll
+      _change: null,
       isLive: live,
       matchId: matchId,
       market: market || '1x2',
       stake: SLIP_STAKE
     });
   }
-  
-  if (S.betSlip.length >= 2) SLIP_MODE = 'combi';
-  else if (S.betSlip.length === 1) SLIP_MODE = 'simple';
-  
+
+  _afterSlipChange();
+};
+
+// Centralised post-slip-change side-effects: pick the right mode,
+// re-render, sync the badge and refresh button highlights.
+function _afterSlipChange() {
+  // Auto-mode: Simple when only one match (whether SGM or single).
+  // Combiné only kicks in when bets span MULTIPLE matches.
+  var matchIds = {};
+  S.betSlip.forEach(function(b){ if (b && b.matchId) matchIds[b.matchId] = true; });
+  var distinctMatches = Object.keys(matchIds).length;
+  if (distinctMatches <= 1) {
+    SLIP_MODE = 'simple';
+  } else if (SLIP_MODE === 'simple' || !SLIP_MODE) {
+    SLIP_MODE = 'combi';
+  }
+
   renderBetSlip();
   updateFloatingBetBadge();
-  // Update button highlights
-  document.querySelectorAll('.md-odd-btn, .mc-odd-btn, .mc-o-val-cell, .slc-odd-btn').forEach(function(btn) {
-    var oc = btn.getAttribute('onclick') || '';
-    btn.classList.toggle('sel', S.betSlip.some(function(b) { return oc.indexOf(b.id) !== -1; }));
+
+  // Refresh selection highlights everywhere
+  document.querySelectorAll('.md-odd-btn, .md-bb-btn, .mc-odd-btn, .mc-o-val-cell, .slc-odd-btn').forEach(function(btn){
+    var dbid = btn.getAttribute('data-bid') || '';
+    var oc   = btn.getAttribute('onclick') || '';
+    var selectedIds = [];
+    S.betSlip.forEach(function(b){
+      if (b.isBB && b.legs) b.legs.forEach(function(l){ selectedIds.push(l.id); });
+      else if (b.id) selectedIds.push(b.id);
+    });
+    var hit = selectedIds.some(function(sid){
+      if (dbid) return sid === dbid;
+      return oc.indexOf(sid) !== -1;
+    });
+    btn.classList.toggle('sel', hit);
   });
-  // DO NOT auto-open the drawer on mobile — fcbet216 shows the FAB
-  // circle first; the user taps it to open the slip. Auto-opening
-  // hides the FAB and hijacks the flow.
-};
+}
 
 /* Floating bet badge — shows count when bets exist.
    Style matches fcbet216 reference image: circular dark FAB with the
@@ -3053,8 +3161,21 @@ window.sbSlipMode = function(mode) {
   SLIP_MODE = mode;
   renderBetSlip();
 };
-window.sbClearSlip = function() { S.betSlip = []; renderBetSlip(); updateFloatingBetBadge(); var right = document.getElementById('sb-right'); if (right && right.classList.contains('open')) window.sbToggleRight(); };
-window.sbRemoveBet = function(id) { window.sbAddBet(id, '', '', 0); };
+window.sbClearSlip = function() {
+  S.betSlip = [];
+  if (typeof _afterSlipChange === 'function') _afterSlipChange();
+  else { renderBetSlip(); updateFloatingBetBadge(); }
+  var right = document.getElementById('sb-right');
+  if (right && right.classList.contains('open')) window.sbToggleRight();
+};
+window.sbRemoveBet = function(id) {
+  // Find the bet — could be a regular single OR a per-match SGM ticket
+  var idx = S.betSlip.findIndex(function(b){ return b.id === id; });
+  if (idx === -1) return;
+  S.betSlip.splice(idx, 1);
+  if (typeof _afterSlipChange === 'function') _afterSlipChange();
+  else { renderBetSlip(); updateFloatingBetBadge(); }
+};
 window.sbToggleExclude = function(idx) {
   if (S.betSlip[idx]) { S.betSlip[idx].excluded = !S.betSlip[idx].excluded; renderBetSlip(); }
 };
@@ -3062,16 +3183,30 @@ window.sbToggleBanker = function(idx) {
   if (S.betSlip[idx]) { S.betSlip[idx].banker = !S.betSlip[idx].banker; renderBetSlip(); }
 };
 window.sbRemoveBBLeg = function(betId, legIdx) {
-  var bet = S.betSlip.find(function(b){ return b.id === betId; });
-  if (!bet || !bet.legs) return;
+  var bIdx = S.betSlip.findIndex(function(b){ return b.id === betId; });
+  if (bIdx < 0) return;
+  var bet = S.betSlip[bIdx];
+  if (!bet.legs) return;
   bet.legs.splice(legIdx, 1);
   if (!bet.legs.length) {
-    S.betSlip = S.betSlip.filter(function(b){ return b.id !== betId; });
+    S.betSlip.splice(bIdx, 1);
+  } else if (bet.legs.length === 1) {
+    // Collapse back to a regular single bet so the slip / button
+    // highlights match fcbet216 (1-leg = single, not SGM).
+    var only = bet.legs[0];
+    S.betSlip[bIdx] = {
+      id: only.id, match: bet.match, sel: only.name,
+      val: parseFloat(only.odds), _origVal: parseFloat(only.odds),
+      _change: null, isLive: bet.isLive, matchId: bet.matchId,
+      market: only.market || '1x2', stake: bet.stake || SLIP_STAKE
+    };
   } else {
-    bet.val = parseFloat(bet.legs.reduce(function(acc, l){ return acc * l.odds; }, 1).toFixed(2));
+    bet.val = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
+    bet._origVal = bet.val;
     bet.sel = bet.legs.map(function(l){ return l.name; }).join(' + ');
   }
-  renderBetSlip(); updateFloatingBetBadge();
+  if (typeof _afterSlipChange === 'function') _afterSlipChange();
+  else { renderBetSlip(); updateFloatingBetBadge(); }
 };
 
 /* ── Slip financial helpers — update totals WITHOUT re-rendering the
@@ -3383,10 +3518,8 @@ function renderBetSlip() {
 
     out += '<div class="slip-item-body">';
 
-    // ── Market name
-    if (b.isBB) {
-      out += '<div class="slip-market-nm">Bet Builder</div>';
-    } else {
+    // ── Market name (single bets only; BB tickets show each leg's market inline)
+    if (!b.isBB) {
       out += '<div class="slip-market-nm">' + h(b.market || '1x2') + '</div>';
     }
 
@@ -6424,77 +6557,14 @@ window.sbMdToggleInfo = function() {
 };
 
 // ── Bet Builder ──────────────────────────────────────────────
+// BB tab clicks delegate to the unified sbAddBet so the same
+// auto-grouping rules (per-match SGM, one leg per market group)
+// apply regardless of which tab the user is on.
 window.sbBBToggle = function(id, name, odds, market, handicap) {
   var match = window._mdMatch;
   if (!match) return;
-  var bbBetId = 'bb_' + match.id;
-
-  var bIdx = S.betSlip.findIndex(function(b) { return b.id === bbBetId; });
-  var bet = (bIdx >= 0) ? S.betSlip[bIdx] : null;
-
-  if (!bet) {
-    bet = {
-      id: bbBetId,
-      match: (match.home ? match.home.name : '') + ' vs. ' + (match.away ? match.away.name : ''),
-      sel: '',
-      val: 1.00,
-      _origVal: 1.00,
-      _change: null,
-      isLive: isMatchLive(match),
-      isBB: true,
-      matchId: String(match.id),
-      legs: [],
-      stake: SLIP_STAKE
-    };
-    S.betSlip.push(bet);
-  }
-
-  // ── Mutual exclusion: ONE LEG PER MARKET GROUP ──────────────────
-  // fcbet216 / Altenar SGM rule: each market group can contribute at
-  // most ONE leg. Clicking a second selection in the same group
-  // (e.g., a different Total line) replaces the first. Same-selection
-  // click toggles off.
-  var hcStr = (handicap == null ? '' : String(handicap));
-  var sameLegIdx = bet.legs.findIndex(function(l) { return l.id === id; });
-  var sameMktIdx = bet.legs.findIndex(function(l) {
-    return (l.market || '') === (market || '') && l.id !== id;
-  });
-  var removedIds = [];
-  if (sameLegIdx >= 0) {
-    // Toggle off: same selection clicked again
-    removedIds.push(bet.legs[sameLegIdx].id);
-    bet.legs.splice(sameLegIdx, 1);
-  } else {
-    // New selection in this market → drop the previous one from that market first
-    if (sameMktIdx >= 0) {
-      removedIds.push(bet.legs[sameMktIdx].id);
-      bet.legs.splice(sameMktIdx, 1);
-    }
-    bet.legs.push({ id: id, name: name, odds: parseFloat(odds), market: market || '', handicap: hcStr });
-  }
-
-  if (!bet.legs.length) {
-    S.betSlip = S.betSlip.filter(function(b) { return b.id !== bbBetId; });
-  } else {
-    bet.val = parseFloat(bbCombinedOdds(bet.legs).toFixed(2));
-    bet._origVal = bet.val;
-    bet.sel = bet.legs.map(function(s){ return s.name; }).join(' + ');
-  }
-
-  renderBetSlip();
-  updateFloatingBetBadge();
-
-  // Refresh BB button highlights via EXACT data-bid match (no fragile
-  // substring scan on the onclick attribute — that broke when one bid
-  // was a substring of another, e.g. ov_1.5 vs ov_15).
-  document.querySelectorAll('.md-bb-btn').forEach(function(btn){
-    var dbid = btn.getAttribute('data-bid') || '';
-    if (dbid === id) {
-      btn.classList.toggle('sel', sameLegIdx < 0);  // newly added → 'sel'; toggled off → no 'sel'
-    } else if (removedIds.indexOf(dbid) !== -1) {
-      btn.classList.remove('sel');
-    }
-  });
+  var matchName = (match.home ? match.home.name : '') + ' vs. ' + (match.away ? match.away.name : '');
+  return window.sbAddBet(id, matchName, name, odds, market);
 };
 
 // Removed duplicate sbSwitchTab
