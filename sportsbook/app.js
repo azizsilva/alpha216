@@ -2300,6 +2300,18 @@ function renderMatches(results) {
     });
   }
 
+  // Continental region filter (set by sbBcCountry for "Europe", "Africa",
+  // "Americas", "World", "International"). Matches via guessCountry() so
+  // every UEFA / CAF / CONMEBOL competition appears, not just leagues
+  // whose names literally contain the region word.
+  if (S.homeRegionFilter && S.viewMode === 'main' && !S.activeLeagueId) {
+    var region = S.homeRegionFilter;
+    results = results.filter(function(m) {
+      if (!m.league || !m.league.name) return false;
+      return guessCountry(m.league.name) === region;
+    });
+  }
+
   var liveList = results.filter(isMatchLive);
   var upcomingList = results.filter(function(m) { return !isMatchLive(m); });
   var isTodayInplay = (S.activeAction === 'inplay' && S.activeDateOffset === 0);
@@ -4439,13 +4451,16 @@ window.sbChampMktTab = function(index, label) {
    Country pill → filter league list to show that country's leagues
    League pill  → open championship page for that league              */
 window.sbBcSport = function(sportId) {
-  // Reset back to main live view for the sport
+  // Reset back to main live view for the sport (clears every filter)
   S.activeLeagueId   = null;
   S.activeLeagueName = null;
   S.activeLeagueFlag = null;
   S.activeMatchId    = null;
   S.champMatches     = [];
   S.viewMode         = 'main';
+  S.homeLeagueFilter = null;
+  S.homeRegionFilter = null;
+  S.activeCountryFilter = null;
   clearInterval(window._mdTimerInterval);
   if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
   var viewer = document.getElementById('sb-match-viewer');
@@ -4461,14 +4476,17 @@ window.sbBcSport = function(sportId) {
 };
 
 window.sbBcCountry = function(country, sportId) {
-  // Filter: show all matches for this country by filtering league names
+  // Filter: show all matches whose league's guessed country matches.
+  // For continental regions ("Europe", "Americas", "Africa", "World",
+  // "International") we use a region filter so every UEFA / CAF / CONMEBOL
+  // competition shows up — not just leagues with the literal word in the name.
   S.activeLeagueId   = null;
   S.activeLeagueName = null;
   S.activeLeagueFlag = null;
   S.activeMatchId    = null;
   S.champMatches     = [];
   S.viewMode         = 'main';
-  S.activeCountryFilter = country; // used by rendering to highlight
+  S.activeCountryFilter = country;
   clearInterval(window._mdTimerInterval);
   if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
   var viewer = document.getElementById('sb-match-viewer');
@@ -4479,8 +4497,15 @@ window.sbBcCountry = function(country, sportId) {
   S.activeSportId = sportId || 1;
   S.activeAction  = 'inplay';
   sbPushUrl('main');
-  // Apply country filter by setting homeLeagueFilter to country name
-  S.homeLeagueFilter = country;
+
+  var REGIONS = ['Europe','Americas','Africa','World','International'];
+  if (REGIONS.indexOf(country) !== -1) {
+    S.homeLeagueFilter = null;
+    S.homeRegionFilter = country;
+  } else {
+    S.homeLeagueFilter = country;
+    S.homeRegionFilter = null;
+  }
   loadAndFilter('inplay', S.activeSportId, null);
   try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { window.scrollTo(0,0); }
 };
@@ -4506,6 +4531,9 @@ window.sbBackToMain = function() {
   S.activeMatchId    = null;
   S.viewMode         = 'main';
   S.champMatches     = [];
+  // Restore the previous league filter if we came from a league view.
+  // Region filter is always cleared so the user sees the full live feed.
+  S.homeRegionFilter = null;
   if (prevLeague) S.homeLeagueFilter = prevLeague;
   clearInterval(window._mdTimerInterval);
   if (S._mdPollInterval) { clearInterval(S._mdPollInterval); S._mdPollInterval = null; }
