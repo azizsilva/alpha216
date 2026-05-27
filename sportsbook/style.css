@@ -184,7 +184,7 @@ body {
   background: var(--sb-bg-root);
 }
 /* â”€â”€ Mobile Top Action Buttons (base â€” overridden in mobile media queries) â”€â”€ */
-.sb-btn-home, .sb-btn-live, .sb-btn-stats {
+.sb-btn-home, .sb-btn-live, .sb-btn-mybets, .sb-btn-stats {
   border: none;
   border-radius: var(--sb-radius);
   height: 38px;
@@ -196,6 +196,16 @@ body {
   transition: background 0.18s, color 0.18s;
   outline: none;
 }
+.sb-btn-mybets {
+  background: var(--sb-bg-alt);
+  color: var(--sb-text-2);
+  width: 48px;
+  min-width: 48px;
+  font-size: 13px;
+}
+.sb-btn-mybets:hover { background: var(--sb-border); color: #fff; }
+.sb-btn-mybets svg { width: 18px; height: 18px; stroke: currentColor; }
+.sb-btn-mybets.active { background: var(--sb-green) !important; color: var(--sb-green-font) !important; }
 .sb-btn-home {
   background: var(--sb-bg-alt);
   color: var(--sb-text-2);
@@ -2429,6 +2439,7 @@ button.sb-btn-live.active .sb-live-badge,
 }
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
+.sb-mobile-topbar .sb-btn-mybets,
 .sb-mobile-topbar .sb-btn-stats {
   border: none;
   border-radius: 6px;
@@ -2447,6 +2458,7 @@ button.sb-btn-live.active .sb-live-badge,
    EN DIRECT badge sits centered inside its chip with no extra icon. â”€â”€ */
 .sb-mobile-topbar .sb-btn-home,
 .sb-mobile-topbar .sb-btn-live,
+.sb-mobile-topbar .sb-btn-mybets,
 .sb-mobile-topbar .sb-btn-stats {
   height: 40px !important;
   border-radius: 8px !important;
@@ -2679,6 +2691,66 @@ button.sb-btn-live.active .sb-live-badge,
     z-index: 200 !important;
     background: rgb(49,49,49) !important;
     border-bottom: 1px solid #2a2a2a !important;
+  }
+
+  /* ── Sidebar top bar: equal-flex chips on rgb(49,49,49) — mirrors sb-mobile-topbar ── */
+  .sb-left .sb-sidebar-top {
+    background: rgb(49,49,49) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+    flex-shrink: 0 !important;
+  }
+  .sb-left .sb-top-bar {
+    display: flex !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
+    background: rgb(49,49,49) !important;
+    align-items: stretch !important;
+  }
+  .sb-left .sb-top-bar .sb-btn-home,
+  .sb-left .sb-top-bar .sb-btn-live,
+  .sb-left .sb-top-bar .sb-btn-stats {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    background: rgb(58,58,58) !important;
+    border: 1px solid rgba(255,255,255,0.04) !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    color: rgba(255,255,255,0.7) !important;
+    outline: none !important;
+    transition: background 0.15s !important;
+  }
+  .sb-left .sb-top-bar .sb-btn-home.active {
+    background: #70f669 !important;
+    color: rgba(0,0,0,0.87) !important;
+  }
+  .sb-left .sb-top-bar .sb-btn-live.active {
+    background: #70f669 !important;
+    color: rgba(0,0,0,0.87) !important;
+  }
+  /* Keep EN DIRECT red badge unchanged inside active/inactive state */
+  .sb-left .sb-top-bar .sb-btn-live .sb-live-badge {
+    background: rgb(251,51,51) !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 2px 4px !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0 !important;
+    line-height: 12px !important;
+  }
+  .sb-left .sb-top-bar .sb-btn-home svg,
+  .sb-left .sb-top-bar .sb-btn-stats svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: currentColor !important;
   }
 
   /* Left sidebar — slides in from left, position:fixed relative to viewport */
@@ -7511,4 +7583,129 @@ body .sb-root .slip-bookmark-btn {
 @media (max-width: 1100px) {
   .sb-left-backdrop { display: block; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   MES PARIS (My Bets) — fcbet216 image 3 reference
+   Page replaces the center stream when active.
+   ══════════════════════════════════════════════════════════════════════ */
+.sb-mybets-wrap{ padding:10px 12px 80px; max-width:760px; margin:0 auto; }
+.sb-mybets-search{
+  display:flex; align-items:center; gap:8px;
+  background:rgb(58,58,58); border-radius:10px; padding:8px 12px;
+  margin-bottom:12px;
+}
+.sb-mybets-search svg{ width:16px; height:16px; opacity:0.65; }
+.sb-mybets-search input{
+  background:transparent; border:0; outline:0; color:#cfcfcf;
+  font-size:13px; flex:1; font-family:'Poppins',sans-serif;
+}
+.sb-mybets-filters{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.sb-mybets-filter{
+  padding:7px 14px; border-radius:8px; cursor:pointer;
+  background:rgb(58,58,58); color:#cfcfcf; border:1px solid rgba(255,255,255,0.04);
+  font-family:'Poppins',sans-serif; font-size:13px; font-weight:600;
+}
+.sb-mybets-filter.active{
+  background:var(--sb-green); color:var(--sb-green-font); border-color:var(--sb-green);
+}
+.sb-mybets-dates{ display:flex; gap:8px; margin-bottom:14px; }
+.sb-mybets-date{
+  display:flex; align-items:center; gap:8px; flex:1; padding:8px 12px;
+  background:rgb(58,58,58); border-radius:8px; color:#cfcfcf;
+  font-size:13px; font-family:'Poppins',sans-serif;
+}
+.sb-mybets-date input{
+  background:transparent; border:0; outline:0; color:#cfcfcf;
+  font-size:13px; flex:1; font-family:'Poppins',sans-serif;
+  color-scheme: dark;
+}
+.sb-mybets-empty{
+  text-align:center; padding:80px 20px 40px; color:#888;
+  font-family:'Poppins',sans-serif;
+}
+.sb-mybets-empty svg{ display:block; margin:0 auto 16px; width:48px; height:48px; opacity:0.5; }
+.sb-mybets-empty-txt{ font-size:14px; }
+.sb-mybets-loading{ text-align:center; padding:40px; color:#888; font-size:13px; }
+
+/* Bet card */
+.sb-bet-card{
+  background:rgb(43,43,43); border-radius:10px; margin-bottom:10px;
+  border:1px solid rgba(255,255,255,0.04);
+}
+.sb-bet-card-hdr{
+  display:flex; align-items:center; gap:8px; padding:11px 14px;
+  cursor:pointer; user-select:none;
+}
+.sb-bet-card-hdr-chev{
+  width:14px; height:14px; flex-shrink:0; transition:transform 0.18s;
+}
+.sb-bet-card.is-open .sb-bet-card-hdr-chev{ transform: rotate(180deg); }
+.sb-bet-card-title{
+  flex:1; font-weight:600; font-size:14px; color:#fff;
+  font-family:'Poppins',sans-serif; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.sb-bet-card-pill{
+  font-size:10px; font-weight:700; letter-spacing:0.4px;
+  padding:3px 8px; border-radius:4px; text-transform:uppercase;
+  background:rgba(255,255,255,0.05); color:#cfcfcf;
+}
+.sb-bet-card-pill.is-open  { background:rgba(43,205,98,0.12); color:#5fdc7d; }
+.sb-bet-card-pill.is-won   { background:rgba(43,205,98,0.12); color:#5fdc7d; }
+.sb-bet-card-pill.is-lost  { background:rgba(251,51,51,0.12); color:#ff7e7e; }
+.sb-bet-card-pill.is-ref   { background:rgba(255,180,0,0.12); color:#ffc94f; }
+
+.sb-bet-card-body{
+  padding:0 14px 12px; border-top:1px solid rgba(255,255,255,0.04);
+}
+.sb-bet-card-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; border-bottom:1px dashed rgba(255,255,255,0.06);
+  font-size:13px; color:#cfcfcf; font-family:'Poppins',sans-serif;
+}
+.sb-bet-card-row:last-child{ border-bottom:0; }
+.sb-bet-card-row .v{ color:#fff; font-weight:700; }
+.sb-bet-card-row .v.green{ color:var(--sb-green); }
+.sb-bet-leg{
+  padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.06);
+  font-size:12px; color:#cfcfcf;
+}
+.sb-bet-leg .lg-mk{ color:#888; font-size:11px; margin-bottom:2px; }
+.sb-bet-leg .lg-pk{ color:#fff; font-weight:600; }
+.sb-bet-leg .lg-meta{ color:#888; font-size:11px; margin-top:2px; }
+
+.sb-bet-card-foot{
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  border-top:1px solid rgba(255,255,255,0.04);
+  font-size:11px; color:#888;
+}
+.sb-bet-card-foot .meta{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sb-bet-card-foot .btn-icon{
+  width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer; border-radius:5px; color:#cfcfcf;
+  background:transparent; border:0; padding:0;
+  position:relative;
+}
+.sb-bet-card-foot .btn-icon:hover{ background:rgba(255,255,255,0.05); color:#fff; }
+.sb-bet-card-foot .btn-icon svg{ width:16px; height:16px; }
+
+.sb-bet-print-menu{
+  position:absolute; right:0; bottom:30px;
+  background:rgb(43,43,43); border:1px solid rgba(255,255,255,0.06);
+  border-radius:8px; padding:6px 0; min-width:200px; z-index:50;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+}
+.sb-bet-print-menu .item{
+  padding:10px 16px; font-size:13px; color:#cfcfcf;
+  cursor:pointer; font-family:'Poppins',sans-serif;
+  white-space:nowrap;
+}
+.sb-bet-print-menu .item:hover{ background:rgba(255,255,255,0.05); color:#fff; }
+/* Fiche de pari (slip) — print icon */
+.slip-print-btn{
+  width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:6px; background:transparent; border:0; color:#cfcfcf; cursor:pointer;
+}
+.slip-print-btn:hover{ background:rgba(255,255,255,0.05); color:#fff; }
+.slip-print-btn svg{ width:16px; height:16px; }
 
