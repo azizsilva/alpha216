@@ -44,7 +44,7 @@ if (!$game_url) {
 
 // ─── Now include the existing site header (outputs full <head> + navbar) ──
 ob_start();
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/includes/header.php';
 $site_header = ob_get_clean();
 echo $site_header;
 ?>
@@ -435,4 +435,4 @@ document.querySelectorAll('.sp-tab').forEach(function(b){
 });
 </script>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>
