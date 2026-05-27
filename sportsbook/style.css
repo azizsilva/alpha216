@@ -4710,36 +4710,46 @@ body .sb-root .slip-place-btn {
 .sb-bc-pill.sb-champ-back-btn svg { width: 13px; height: 13px; }
 
 /* Top tabs: Cotes de match | Victoire finale | Cotes boostÃ©es */
-.sb-champ-top-tabs {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--sb-border);
-  overflow-x: auto;
-  scrollbar-width: none;
+.sb-root .sb-champ-top-tabs,
+body .sb-root .sb-champ-top-tabs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin-bottom: 10px !important;
+  border-bottom: 1px solid var(--sb-border) !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  flex-wrap: nowrap !important;
 }
-.sb-champ-top-tabs::-webkit-scrollbar { display: none; }
-.sb-ctt {
+.sb-root .sb-champ-top-tabs::-webkit-scrollbar,
+body .sb-root .sb-champ-top-tabs::-webkit-scrollbar { display: none !important; }
+.sb-root .sb-ctt,
+body .sb-root .sb-ctt {
   background: transparent !important;
   border: none !important;
-  padding: 8px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  color: var(--sb-text-2);
-  cursor: pointer;
-  flex-shrink: 0;
+  border-bottom: 2px solid transparent !important;
+  padding: 8px 14px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  font-family: 'Poppins', sans-serif !important;
+  color: var(--sb-text-2) !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  border-bottom: 2px solid transparent;
-  transition: color 0.12s, border-color 0.12s;
-  white-space: nowrap;
+  white-space: nowrap !important;
+  transition: color 0.12s, border-color 0.12s !important;
+  line-height: 1.4 !important;
+  -webkit-appearance: none !important;
 }
-.sb-ctt:first-child { padding-left: 0; }
-.sb-ctt.active { color: var(--sb-green) !important; border-bottom-color: var(--sb-green) !important; }
-.sb-ctt:hover:not(.active) { color: var(--sb-text-1) !important; }
-.sb-ctt-more { color: var(--sb-text-2); padding: 8px 6px; font-size: 16px; cursor: pointer; }
+.sb-root .sb-ctt:first-child,
+body .sb-root .sb-ctt:first-child { padding-left: 0 !important; }
+.sb-root .sb-ctt.active,
+body .sb-root .sb-ctt.active { color: var(--sb-green) !important; border-bottom-color: var(--sb-green) !important; }
+.sb-root .sb-ctt:hover:not(.active),
+body .sb-root .sb-ctt:hover:not(.active) { color: var(--sb-text-1) !important; }
+.sb-root .sb-ctt-more,
+body .sb-root .sb-ctt-more { color: var(--sb-text-2) !important; padding: 8px 6px !important; font-size: 16px !important; cursor: pointer !important; }
 
 /* â”€â”€ Sub-nav: Par Ligue | Par Heure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Bootstrap on the host page resets <button> backgrounds, so every
@@ -5127,30 +5137,64 @@ body .sb-root .sb-champ-mkt-opt.active {
   padding: 4px 0 6px !important;
 }
 /* Period market shortcut grid (Populaire / 1x2 / Total / ...) */
-.sb-period-shortcuts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 8px 0;
+/* ── Period shortcut grid (fcbet216 Image-8 exact match)
+   Must use .sb-root + !important everywhere to survive Bootstrap resets. */
+.sb-root .sb-period-shortcuts,
+body .sb-root .sb-period-shortcuts {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin: 8px 0 12px !important;
+  padding: 0 !important;
 }
-.sb-period-shortcut {
-  background: rgb(49,49,49);
-  color: #fff;
-  border: 0;
-  border-radius: 4px;
-  padding: 14px 12px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.2;
-  cursor: pointer;
-  text-align: center;
-  outline: none;
+.sb-root .sb-period-shortcut,
+body .sb-root .sb-period-shortcut {
+  background: rgb(58,58,58) !important;
+  background-color: rgb(58,58,58) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 8px !important;
+  padding: 0 12px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  outline: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: normal !important;
+  transition: background 0.12s, color 0.12s !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
-.sb-period-shortcut.active {
-  background: rgb(113,246,105);
-  color: #000;
-  font-weight: 700;
+.sb-root .sb-period-shortcut.active,
+body .sb-root .sb-period-shortcut.active {
+  background: rgb(113,246,105) !important;
+  background-color: rgb(113,246,105) !important;
+  border-color: rgb(113,246,105) !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-weight: 700 !important;
+}
+/* "Voir tous les marchés" — always green CTA regardless of active state */
+.sb-root .sb-period-shortcut--cta,
+body .sb-root .sb-period-shortcut--cta {
+  background: rgb(113,246,105) !important;
+  background-color: rgb(113,246,105) !important;
+  border-color: rgb(113,246,105) !important;
+  color: rgba(0,0,0,0.87) !important;
+  font-weight: 700 !important;
+}
+.sb-root .sb-period-shortcut:hover:not(.active):not(.sb-period-shortcut--cta),
+body .sb-root .sb-period-shortcut:hover:not(.active):not(.sb-period-shortcut--cta) {
+  background: rgba(255,255,255,0.10) !important;
+  color: #fff !important;
 }
 .sb-period-sport-tabs { margin: 6px 0 10px; }
 

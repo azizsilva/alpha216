@@ -6443,8 +6443,13 @@ function renderPeriodPage(dayOffset, matches) {
   ];
   out += '<div class="sb-period-shortcuts">';
   shortcuts.forEach(function(s) {
-    var isAct = (s.k === activeShortcut) || (s.k === 'all_markets' && activeShortcut === 'all_markets');
-    out += '<button type="button" class="sb-period-shortcut' + (isAct?' active':'') + '" onclick="window.sbPeriodSetShortcut(\'' + s.k + '\')">' + h(s.label) + '</button>';
+    var isAct = s.k === activeShortcut;
+    var isCta = s.k === 'all_markets';
+    out += '<button type="button" class="sb-period-shortcut'
+      + (isCta ? ' sb-period-shortcut--cta' : '')
+      + (isAct ? ' active' : '')
+      + '" onclick="window.sbPeriodSetShortcut(\'' + s.k + '\')">'
+      + h(s.label) + '</button>';
   });
   out += '</div>';
 
