@@ -49,20 +49,13 @@ define('LOCK_FILE',     CACHE_DIR . '/tick_live.lock');
 if (!is_dir(CACHE_DIR)) @mkdir(CACHE_DIR, 0755, true);
 
 // ── Tunable parameters ─────────────────────────────────────────
-// STREAM-ONLY mode: we call /v1/bet365/inplay ONCE per tick and
-// extract everything from it (scores, timers, stats, odds stubs,
-// team names). This is 1 API call per tick instead of 7+, so we
-// can safely run at 2s intervals on any BetsAPI plan:
-//   - /v1/bet365/inplay (stream): 1 call / 2s = 30/min
-//   - /v1/bet365/inplay_filter (football, fallback for team names):
-//     1 call every 30 ticks = 1/min
-//   Total: ~31 req/min — safe on all plans including free tier.
-//
-// To go faster: lower TICK_SECONDS (need Volume Package for <2s).
-$TICK_SECONDS         = 2;    // base loop interval — safe on all plans
-$STREAM_EVERY         = 1;    // refresh stream every tick (2s)
-$FOOTBALL_FILTER_EVERY = 30;  // refresh football inplay_filter every 30 ticks (60s, for team names)
-$OTHER_FILTER_EVERY   = 60;   // other sports every 60 ticks (120s)
+// Volume Plan: unlimited API calls — run at 1s for maximum freshness.
+// /v1/bet365/inplay once per tick = 60 req/min (well within limits).
+// /v1/bet365/inplay_filter for football every 30s for team names.
+$TICK_SECONDS         = 1;    // Volume Plan: 1s tick — real-time
+$STREAM_EVERY         = 1;    // refresh stream every tick (1s)
+$FOOTBALL_FILTER_EVERY = 30;  // refresh football inplay_filter every 30 ticks (30s)
+$OTHER_FILTER_EVERY   = 60;   // other sports every 60 ticks (60s)
 $FOOTBALL_SPORT_ID    = 1;
 $OTHER_LIVE_SPORTS    = [18, 13, 91, 17, 78];
 $MAX_INPLAY_PAGES     = 3;

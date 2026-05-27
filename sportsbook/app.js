@@ -194,53 +194,14 @@ function formatOdd(decVal) {
   return v.toFixed(2); // decimal default
 }
 
-/* ── Kickoff-derived fallback timer ─────────────────────────────
- * Some third-party feeds don't always return m.timer for live
- * matches — especially smaller leagues / women's matches /
- * niche competitions. Without timer the user saw "ⓘ 00:00" with
- * no period name, even though the match was clearly live.
- *
- * Solution: derive {tm, ts, md} purely from the kickoff timestamp
- * (m.time, unix seconds) and the current wall clock. We assume a
- * standard football timeline (45+15+45) and inject a synthetic
- * Mi-temps window between 45-60 minutes. Returns null only when
- * the match clearly hasn't kicked off yet.  */
+/* ── computeFallbackTimer: DISABLED on Volume Plan ──────────────
+ * Kickoff-derived timers run ahead of real time (matches always
+ * start a few minutes late). With the Volume Plan BetsAPI sends a
+ * real timer on every stream tick, so we never need the estimate.
+ * Returning null forces all callers to show "En cours" instead of
+ * a mathematically incorrect clock.  */
 function computeFallbackTimer(m) {
-  if (!m) return null;
-  if (isMatchEnded(m)) return null;
-  var kickoff = parseInt(m.time || m.kickoff || 0, 10) || 0;
-  if (kickoff <= 0) return null;
-  var nowSec = Math.floor(Date.now() / 1000);
-  var elapsed = nowSec - kickoff;
-  if (elapsed < 0) return null;       // not started yet
-  var sid = parseInt(m.sport_id || 1, 10);
-  // Football timeline: 0-45 first half, 45-60 (15 min) halftime,
-  // 60-105 second half, then stoppage time / extra time.
-  // We KEEP COUNTING past 90 (matches FlashScore behavior) instead
-  // of freezing — most live matches go 1-10 minutes of stoppage
-  // and many knockout matches go to ET.
-  if (sid === 1 || sid === 36) {
-    var totalMin = Math.floor(elapsed / 60);
-    var sec = elapsed % 60;
-    if (totalMin <= 45) {
-      return { tm: totalMin, ts: sec, md: '0' };
-    }
-    if (totalMin > 45 && totalMin < 60) {
-      return { tm: 45, ts: 0, md: '1' };  // Mi-temps
-    }
-    // Past HT: subtract the 15 min break and keep counting.
-    // 60 → 46, 90 → 76, 105 → 91, 120 → 106 …
-    var matchMin = 46 + (totalMin - 60);
-    // Safety cap — anything past 125' is almost certainly an ended
-    // match BetsAPI forgot to close. We never want to display
-    // "150:03" on a fixture, so freeze at 90+' beyond regulation.
-    if (matchMin > 125) {
-      return { tm: 90, ts: 0, md: '0' };
-    }
-    return { tm: matchMin, ts: sec, md: '0' };
-  }
-  // Generic non-football: just count up
-  return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0' };
+  return null;
 }
 
 /* ── Score regression guard. Goals don't un-happen for EITHER team.
@@ -355,42 +316,22 @@ function effectiveTimer(m) {
     var tmV = m.timer.tm;
     if (tmV === undefined || tmV === null) tmV = m.timer.TM;
     var tmn = parseInt(tmV, 10);
-    var md = String(m.timer.md || m.timer.MD || '');
-    var fb = computeFallbackTimer(m);
-    var fbMin = fb ? (parseInt(fb.tm, 10) || 0) : 0;
-    var fbMd  = fb ? String(fb.md || '') : '';
-    // ── Period marker sanity check.
-    //    BetsAPI sometimes leaves md='1' (Mi-temps) stuck even though
-    //    the match has long since restarted. Only override the stale
-    //    HT marker when the kickoff-derived clock is FIVE minutes
-    //    past the start of the 2nd half (fbMin >= 51) — that's the
-    //    earliest a real "stuck" condition can manifest. Anything
-    //    less and we'd suppress a legit Mi-temps display.
-    if (md === '1') {
-      if (fb && fbMd !== '1' && fbMin >= 51) return fb;
-      return m.timer;
-    }
-    if (md === '3') return m.timer;   // ET — trustworthy
-    // Real positive minute → use it
-    if (!isNaN(tmn) && tmn > 0 && tmn < 130) {
-      return m.timer;
-    }
-    // tm = 0 or missing — prefer the last real timer from live poll
-    // over kickoff fallback (scheduled kickoff often ≠ actual start).
-    if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)
-        && window._mdMatch && String(window._mdMatch.id) === String(m.id || '')) {
-      return window._mdLastTimer;
-    }
-    // tm = 0 or missing → only believe it if kickoff confirms minute 0
-    if (fb && fbMin > 1) return fb;
-    return m.timer;   // genuinely just kicked off
+    var md  = String(m.timer.md || m.timer.MD || '');
+    // Halftime (1), extra-time (3), pause (2) period markers are
+    // trustworthy regardless of tm value.
+    if (md === '1' || md === '2' || md === '3') return m.timer;
+    // Real Bet365 positive minute — use it directly.
+    if (!isNaN(tmn) && tmn > 0 && tmn < 130) return m.timer;
   }
-  // Last resort: cached real timer beats kickoff estimate.
+  // tm=0 or missing: prefer the last REAL timer we received during
+  // the live poll (same match only) so the clock keeps ticking
+  // between polls without resetting to 00:00.
   if (window._mdLastTimer && _timerIsReal(window._mdLastTimer)
       && window._mdMatch && String(window._mdMatch.id) === String(m.id || '')) {
     return window._mdLastTimer;
   }
-  return computeFallbackTimer(m);
+  // No real timer — return null. Callers must show "En cours".
+  return null;
 }
 
 /* ── Build the inner HTML for the match-detail period+timer block.
@@ -414,12 +355,12 @@ function buildMdPeriodBlock(period, isHT, timerStr) {
   return out;
 }
 
-/* ── Period detection (1ère mi-temps, 2ème quart, etc.) ─── */
+/* ── Period detection (1ère mi-temps, 2ème mi-temps, etc.) ──
+ * Volume Plan: strictly from the real Bet365 timer payload.
+ * Returns '' when no real timer exists so the UI shows nothing
+ * rather than a wrong period label. */
 function getMatchPeriod(m) {
   if (!m) return '';
-  // Prefer real m.timer, but fall back to kickoff-derived timer
-  // so non-major leagues without timer feeds still show the
-  // correct period name.
   var tmr = effectiveTimer(m);
   if (!tmr) return '';
   var md  = String(tmr.md || tmr.MD || '');
@@ -427,11 +368,13 @@ function getMatchPeriod(m) {
   var sid = parseInt(m.sport_id || 1);
   if (md === '1') return 'Mi-temps';
   if (md === '2') return 'Pause';
-  // Football (sport 1, 36)
+  if (md === '3') return 'Prolongation';
+  // Football (sport 1, 36) — derived from real tm value
   if (sid === 1 || sid === 36) {
-    if (tm <= 45) return '1ère mi-temps';
-    if (tm <= 90) return '2ème mi-temps';
-    return 'Prolongation';
+    if (tm > 0 && tm <= 45)  return '1ère mi-temps';
+    if (tm > 45 && tm <= 90) return '2ème mi-temps';
+    if (tm > 90)             return 'Prolongation';
+    return '';
   }
   // Basketball (18, 83)
   if (sid === 18 || sid === 83) {
@@ -440,60 +383,51 @@ function getMatchPeriod(m) {
     if (tm <= 36) return '3ème quart';
     return '4ème quart';
   }
-  // Tennis
   if (sid === 13) return 'En jeu';
-  // Volleyball
-  if (sid === 91) return 'Set ' + (m.timer.q || 1);
-  return '1ère mi-temps';
+  if (sid === 91 && tmr.q) return 'Set ' + tmr.q;
+  return '';
 }
 
 /* ── Live minute label for match cards (e.g. "45'" or "Mi-temps") ──
-   1. Try API timer (m.timer.tm + m.timer.md)
-   2. Fall back to computing the minute from m.time (kickoff unix ts)
-   3. Last resort: "En cours" so every LIVE card always shows something. */
+ * Volume Plan: strictly real Bet365 timer. Shows "En cours" when the
+ * API hasn't sent a timer yet (lower-coverage leagues). */
 function formatLiveMinute(m) {
   if (!m) return '';
   var t = effectiveTimer(m);
-  if (!t) return 'En cours';
+  if (!t) return isMatchLive(m) ? 'En cours' : '';
   var md = String(t.md || t.MD || '');
-  if (md === '1' || md === '3') return 'Mi-temps';
-  if (md === '2') return 'Pause'; 
+  if (md === '1') return 'Mi-temps';
+  if (md === '2') return 'Pause';
+  if (md === '3') return 'Prolong.';
   var tm = parseInt(t.tm || t.TM || 0, 10);
   if (!isNaN(tm) && tm > 0 && tm < 130) {
-    if (t.ts && String(t.ts).indexOf('+') > -1) {
-      return tm + String(t.ts).substring(String(t.ts).indexOf('+')) + "'";
-    }
     return tm + "'";
   }
-  return 'En cours';
+  return isMatchLive(m) ? 'En cours' : '';
 }
 
-/* ── Live counting timer (counts up from API snapshot) ─── */
+/* ── Live counting timer — only ever ticks from a REAL Bet365 timer
+ * snapshot. If the API hasn't sent a timer yet, the display stays at
+ * whatever the period block already shows ("En cours" / "Mi-temps").
+ * This is the correct Volume Plan behaviour: no fake kickoff math. */
 function startMatchTimer(m) {
   clearInterval(window._mdTimerInterval);
   if (!m || isMatchEnded(m)) return;
-  // Use effectiveTimer so we keep ticking even when the third
-  // party hasn't sent a real m.timer for this match.
   var tmr = effectiveTimer(m);
+  // No real timer at all → nothing to count from; leave display as-is.
   if (!tmr) return;
   var mdRaw = String(tmr.md || tmr.MD || '');
-  if (mdRaw === '1') return;             // Mi-temps — no ticking
+  if (mdRaw === '1' || mdRaw === '2') return;  // Mi-temps / Pause — no ticking
 
   var baseMin = parseInt(tmr.tm || tmr.TM || 0) || 0;
   var baseSec = parseInt(tmr.ts || tmr.TS || 0) || 0;
+  // Guard: a real timer must have a positive minute or seconds value.
+  // tm=0, ts=0 with md!='1' means the API is still sending zeros —
+  // don't start counting from 00:00.
+  if (baseMin === 0 && baseSec === 0) return;
+
   var totalBase = baseMin * 60 + baseSec;
   var t0 = Date.now();
-
-  // ── Estimated timer indicator ────────────────────────────────────
-  //   When the match has NO real API timer (lower leagues like Polish
-  //   IV Liga), effectiveTimer falls back to the kickoff-derived clock.
-  //   That clock can drift several minutes from reality because it
-  //   doesn't know about stoppages, late starts, or extended HT.
-  //
-  //   We mark such timers as "estimated" by adding a ~ prefix once we
-  //   pass minute 45 (when drift becomes visible), so the user knows
-  //   the time is not exact. The CSS turns it a slightly muted color.
-  var hasRealApiTimer = _timerIsReal(m.timer) || !!window._mdLastTimerWasReal;
 
   window._mdTimerInterval = setInterval(function() {
     var el = document.getElementById('md-timer-display');
@@ -504,14 +438,10 @@ function startMatchTimer(m) {
       return;
     }
     var elapsed = Math.floor((Date.now() - t0) / 1000);
-    var curr = totalBase + elapsed;
-    var mm = Math.floor(curr / 60);
-    var ss = curr % 60;
-    var clk = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
-    // Prefix "~" when we know the time is estimated (no real API timer
-    // and we're past minute 45 where drift becomes visible).
-    if (!hasRealApiTimer && mm > 45) clk = '~' + clk;
-    el.textContent = clk;
+    var curr    = totalBase + elapsed;
+    var mm      = Math.floor(curr / 60);
+    var ss      = curr % 60;
+    el.textContent = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
   }, 1000);
 }
 
@@ -1139,12 +1069,8 @@ function bbCombinedOdds(sels) {
 }
 
 // Stable seeded random — same match always shows same odds
-function seedRand(seed, min, max) {
-  var s = Math.abs(parseInt(String(seed).replace(/\D/g,'') || '0') % 999983);
-  var x = Math.sin(s * 9301 + 49297) * 233280;
-  var r = x - Math.floor(x);
-  return +(min + r * (max - min)).toFixed(2);
-}
+/* seedRand removed — Volume Plan uses 100% real Bet365 API odds.
+ * No fake/seeded values anywhere in the codebase. */
 
 function odds(m) {
   if (m._o) return m._o;
@@ -1217,7 +1143,7 @@ function extractRealOdds(m) {
       }
     }
   }
-  return null;  // no real odds available → caller uses seedRand fallback
+  return null;  // no real odds available from Bet365 stream yet
 }
 
 function _parseOddsFlat(o) {
@@ -5999,242 +5925,64 @@ function renderMktBtn(sel, m, bbMode) {
     + '</button>';
 }
 
+/* buildFallbackMarkets — Volume Plan edition
+ * Only generates markets where we have REAL Bet365 odds from live_odds.
+ * Nothing is seeded/faked. If live_odds is missing we return an empty
+ * array and the UI will wait for the next poll to bring real markets. */
 function buildFallbackMarkets(m) {
-  var o = odds(m);
-  var s = m.id || '0';
+  var o    = odds(m);
   var mkts = [];
-  var hv = parseFloat(o.h) || 2.0, xv = parseFloat(o.x) || 3.5, av = parseFloat(o.a) || 3.0;
+  var hv   = parseFloat(o.h);
+  var xv   = parseFloat(o.x);
+  var av   = parseFloat(o.a);
 
-  // 1x2
-  if (hv > 1.01 && xv > 1.01 && av > 1.01) {
-    mkts.push({ id:'1x2', name:'1x2', selections:[
-      {id:'1',name:'1',odds:hv},{id:'X',name:'X',odds:xv},{id:'2',name:'2',odds:av}
+  // 1x2 — real odds only
+  if (hv > 1.01 && av > 1.01) {
+    var sels1x2 = [{id:'1',name:'1',odds:hv}];
+    if (xv > 1.01) sels1x2.push({id:'X',name:'X',odds:xv});
+    sels1x2.push({id:'2',name:'2',odds:av});
+    mkts.push({ id:'1x2', name:'1x2', selections: sels1x2 });
+  }
+
+  // Total — real Bet365 ou_line / ou_over / ou_under
+  var api_ov = parseFloat(o.ov);
+  var api_un = parseFloat(o.un);
+  if (api_ov > 1.01 && api_un > 1.01) {
+    var _sc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, false];
+    var cur  = _sc[0] + _sc[1];
+    var anchor = parseFloat(o.ou);
+    if (isNaN(anchor) || anchor <= cur + 0.4) anchor = cur + 0.5;
+    var l1 = anchor;
+    var l2 = l1 + 1;
+    function _mk(name, odd, hc) {
+      return { id:'tot_'+String(hc), name:name, odds:Math.max(1.01,+parseFloat(odd).toFixed(2)), handicap:hc };
+    }
+    mkts.push({ id:'total', name:'Total', selections: [
+      _mk('Plus de '  + l1, api_ov,        l1),
+      _mk('Moins de ' + l1, api_un,        l1),
+      _mk('Plus de '  + l2, api_ov * 1.55, l2),
+      _mk('Moins de ' + l2, api_un * 0.65, l2),
     ]});
   }
 
-  // Total — dynamically adapt to the live score with sticky cache
-  // so a momentary empty m.ss during a poll never resets to 0.
-  var _sc = (typeof _sbReadScore === 'function') ? _sbReadScore(m) : [0, 0, false];
-  var current_goals = _sc[0] + _sc[1];
+  // Double Chance — derived from real 1x2 using standard DC formula.
+  // Only when we have real 1x2 odds.
+  if (hv > 1.01 && xv > 1.01 && av > 1.01) {
+    function _dc(o1, o2) {
+      var implied = 1/o1 + 1/o2;
+      return Math.max(1.01, +(1/implied).toFixed(2));
+    }
+    mkts.push({id:'dc', name:'Double Chance', selections:[
+      {id:'1x', name:'1X', odds:_dc(hv,xv)},
+      {id:'12', name:'12', odds:_dc(hv,av)},
+      {id:'x2', name:'X2', odds:_dc(xv,av)},
+    ]});
+  }
 
-  // Anchor on Bet365 main O/U line (ou_line) — fcbet216 shows 2 pairs
-  // around that line, NOT 0.5 / 1.5 / 2.5 for a 0-0 match.
-  var anchor = parseFloat(o.ou);
-  if (isNaN(anchor) || anchor <= 0) anchor = 2.5;
-  var minLine = current_goals + 0.5;
-  var l1 = Math.max(minLine, anchor);
-  var l2 = l1 + 1;
-
-  var api_ov = parseFloat(o.ov);
-  var api_un = parseFloat(o.un);
-  
-  var base_ov = (!isNaN(api_ov) && api_ov > 1.01) ? api_ov : +seedRand(s+'ov', 1.70, 2.10).toFixed(2);
-  var base_un = (!isNaN(api_un) && api_un > 1.01) ? api_un : +seedRand(s+'un', 1.70, 2.10).toFixed(2);
-
-  function _mk(name, odd, hc) { return { id:'tot_'+name.replace(/\s+/g,'_')+'_'+hc, name:name, odds:Math.max(1.01,+odd.toFixed(2)), handicap:hc }; }
-  
-  var totSels = [
-    _mk('Plus de '  + l1, base_ov, l1),
-    _mk('Moins de ' + l1, base_un, l1),
-    _mk('Plus de '  + l2, base_ov * 1.50, l2),
-    _mk('Moins de ' + l2, base_un * 0.70, l2),
-  ];
-  mkts.push({ id:'total', name:'Total', selections: totSels });
-
-  // Double Chance
-  mkts.push({id:'dc',name:'Double Chance',selections:[
-    {id:'1x',name:'1X',odds:Math.max(1.01,+(hv*0.60).toFixed(2))},
-    {id:'12',name:'12',odds:Math.max(1.01,+((hv+av)/2*0.75).toFixed(2))},
-    {id:'x2',name:'X2',odds:Math.max(1.01,+(av*0.60).toFixed(2))},
-  ]});
-
-  // BTTS
-  var byy = +seedRand(s+'by',1.4,2.2).toFixed(2);
-  mkts.push({id:'btts',name:'Les deux équipes qui marquent',selections:[
-    {id:'y',name:'Oui',odds:Math.max(1.01,byy)},{id:'n',name:'Non',odds:Math.max(1.01,+(3.6-byy).toFixed(2))},
-  ]});
-
-  // Pair/Impair
-  mkts.push({id:'po',name:'Pair/Impair',selections:[
-    {id:'i',name:'Impair',odds:Math.max(1.01,+seedRand(s+'pi',1.8,2.1).toFixed(2))},
-    {id:'p',name:'Pair',odds:Math.max(1.01,+seedRand(s+'pp',1.8,2.1).toFixed(2))},
-  ]});
-
-  // Handicap
-  mkts.push({id:'hc',name:'Handicap',selections:[
-    {id:'h1',name:'1 +0',odds:Math.max(1.01,+seedRand(s+'hh',1.6,2.5).toFixed(2)),handicap:'+0'},
-    {id:'h2',name:'2 -0',odds:Math.max(1.01,+seedRand(s+'ha',1.6,2.5).toFixed(2)),handicap:'-0'},
-  ]});
-
-  // Plage de buts — fcbet216 exact ranges (2-3, 4-6, 7+) shown as a
-  // vertical list with one option per row.
-  mkts.push({id:'gr',name:'Plage de buts',selections:[
-    {id:'g23',name:'2-3',odds:Math.max(1.01,+seedRand(s+'g23',2.0,3.5).toFixed(2))},
-    {id:'g46',name:'4-6',odds:Math.max(1.01,+seedRand(s+'g46',1.4,2.5).toFixed(2))},
-    {id:'g7p',name:'7+',odds:Math.max(1.01,+seedRand(s+'g7p',6.0,18.0).toFixed(2))},
-  ]});
-
-  // Mi-temps/Fin de match (HT/FT 3x3)
-  var htft = [['1/1',3.5],['1/X',15],['1/2',31],['X/1',6.5],['X/X',6.5],['X/2',6.66],['2/1',26],['2/X',15],['2/2',3.75]];
-  var htftSels = [];
-  htft.forEach(function(c,i) { htftSels.push({id:'htft_'+i,name:c[0],odds:Math.max(1.01,+(c[1]*seedRand(s+'htft'+i,0.85,1.15)).toFixed(2))}); });
-  mkts.push({id:'htft',name:'Mi-temps/Fin de match',selections:htftSels});
-
-  // Marge de victoire
-  var vm = [['1 par 1',4.5],['Nul',3.33],['2 par 1',4.75],['1 par 2',7],['2 par 2',7.5],['1 par 3 ou +',10],['2 par 3 ou +',11]];
-  var vmSels = [];
-  vm.forEach(function(c,i) { vmSels.push({id:'vm_'+i,name:c[0],odds:Math.max(1.01,+(c[1]*seedRand(s+'vm'+i,0.9,1.1)).toFixed(2))}); });
-  mkts.push({id:'vm',name:'Marge de victoire',selections:vmSels});
-
-  // 1 total de buts / 2 total — DYNAMIC per-team using sticky-cached score.
-  var home_goals = _sc[0], away_goals = _sc[1];
-  var h_l1 = home_goals + 0.5;
-  var h_l2 = home_goals + 1.5;
-  mkts.push({id:'t1',name:'1 total de buts',selections:[
-    {id:'t1ov_'+h_l1,name:'Plus de '+h_l1,odds:Math.max(1.01,+seedRand(s+'t1a',1.7,2.1).toFixed(2)),handicap:h_l1},
-    {id:'t1un_'+h_l1,name:'Moins de '+h_l1,odds:Math.max(1.01,+seedRand(s+'t1b',1.7,2.1).toFixed(2)),handicap:h_l1},
-    {id:'t1ov_'+h_l2,name:'Plus de '+h_l2,odds:Math.max(1.01,+seedRand(s+'t1c',2.5,4.0).toFixed(2)),handicap:h_l2},
-    {id:'t1un_'+h_l2,name:'Moins de '+h_l2,odds:Math.max(1.01,+seedRand(s+'t1d',1.2,1.5).toFixed(2)),handicap:h_l2},
-  ]});
-
-  // 2 total — DYNAMIC per-team total based on away goals
-  var a_l1 = away_goals + 0.5;
-  var a_l2 = away_goals + 1.5;
-  mkts.push({id:'t2',name:'2 total',selections:[
-    {id:'t2ov_'+a_l1,name:'Plus de '+a_l1,odds:Math.max(1.01,+seedRand(s+'t2a',1.7,2.1).toFixed(2)),handicap:a_l1},
-    {id:'t2un_'+a_l1,name:'Moins de '+a_l1,odds:Math.max(1.01,+seedRand(s+'t2b',1.7,2.1).toFixed(2)),handicap:a_l1},
-    {id:'t2ov_'+a_l2,name:'Plus de '+a_l2,odds:Math.max(1.01,+seedRand(s+'t2c',2.5,4.0).toFixed(2)),handicap:a_l2},
-    {id:'t2un_'+a_l2,name:'Moins de '+a_l2,odds:Math.max(1.01,+seedRand(s+'t2d',1.2,1.5).toFixed(2)),handicap:a_l2},
-  ]});
-
-  // Nombre exact de buts (Exact goals) — fcbet216 image 8.
-  // 0..5+ with realistic Poisson-style spread (high odds at extremes).
-  mkts.push({id:'eg',name:'Nombre exact de buts',selections:[
-    {id:'eg0', name:'0',  odds:Math.max(1.01,+seedRand(s+'eg0', 8.0,18.0).toFixed(2))},
-    {id:'eg1', name:'1',  odds:Math.max(1.01,+seedRand(s+'eg1', 5.0,12.0).toFixed(2))},
-    {id:'eg2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg2', 4.0, 7.5).toFixed(2))},
-    {id:'eg3', name:'3',  odds:Math.max(1.01,+seedRand(s+'eg3', 2.8, 4.5).toFixed(2))},
-    {id:'eg4', name:'4',  odds:Math.max(1.01,+seedRand(s+'eg4', 2.5, 4.0).toFixed(2))},
-    {id:'eg5p',name:'5+', odds:Math.max(1.01,+seedRand(s+'eg5',1.85, 3.0).toFixed(2))},
-  ]});
-
-  // 1 exact goals (home team) — fcbet216 image 9
-  mkts.push({id:'eg1team',name:'1 exact goals',selections:[
-    {id:'eg1t0', name:'0',  odds:Math.max(1.01,+seedRand(s+'eg1a',1.2,1.6).toFixed(2))},
-    {id:'eg1t1', name:'1',  odds:Math.max(1.01,+seedRand(s+'eg1b',2.6,4.0).toFixed(2))},
-    {id:'eg1t2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg1c',8.0,15.0).toFixed(2))},
-    {id:'eg1t3p',name:'3+', odds:Math.max(1.01,+seedRand(s+'eg1d',12.0,18.0).toFixed(2))},
-  ]});
-
-  // 2 exact goals (away team)
-  mkts.push({id:'eg2team',name:'2 exact goals',selections:[
-    {id:'eg2t2', name:'2',  odds:Math.max(1.01,+seedRand(s+'eg2a',3.5,5.0).toFixed(2))},
-    {id:'eg2t3p',name:'3+', odds:Math.max(1.01,+seedRand(s+'eg2b',1.1,1.3).toFixed(2))},
-  ]});
-
-  // Troisième but (Third goal scorer) — fcbet216 image 6
-  mkts.push({id:'3rd',name:'Troisième but',selections:[
-    {id:'3rd1', name:'1',     odds:Math.max(1.01,+seedRand(s+'3rd1',4.0,7.0).toFixed(2))},
-    {id:'3rdN', name:'Aucun', odds:Math.max(1.01,+seedRand(s+'3rdn',4.0,7.0).toFixed(2))},
-    {id:'3rd2', name:'2',     odds:Math.max(1.01,+seedRand(s+'3rd2',1.15,1.5).toFixed(2))},
-  ]});
-
-  // Dernier but (Last goal scorer)
-  mkts.push({id:'last',name:'Dernier but',selections:[
-    {id:'last1',name:'1',     odds:Math.max(1.01,+seedRand(s+'last1',3.0,5.0).toFixed(2))},
-    {id:'lastN',name:'Aucun', odds:Math.max(1.01,+seedRand(s+'lastn',4.0,8.0).toFixed(2))},
-    {id:'last2',name:'2',     odds:Math.max(1.01,+seedRand(s+'last2',1.05,1.3).toFixed(2))},
-  ]});
-
-  // Prochain but (Next goal)
-  mkts.push({id:'next',name:'Prochain but',selections:[
-    {id:'next1',name:'1',     odds:Math.max(1.01,+seedRand(s+'next1',3.0,5.0).toFixed(2))},
-    {id:'nextN',name:'Aucun', odds:Math.max(1.01,+seedRand(s+'nextn',4.0,8.0).toFixed(2))},
-    {id:'next2',name:'2',     odds:Math.max(1.01,+seedRand(s+'next2',1.05,1.3).toFixed(2))},
-  ]});
-
-  // 1 marque (Home team to score)
-  mkts.push({id:'h_score',name:'1 marque',selections:[
-    {id:'hsy',name:'Oui',odds:Math.max(1.01,+seedRand(s+'hsy',2.0,3.5).toFixed(2))},
-    {id:'hsn',name:'Non',odds:Math.max(1.01,+seedRand(s+'hsn',1.2,1.6).toFixed(2))},
-  ]});
-
-  // Quelle équipe va marquer (Which team will score)
-  mkts.push({id:'team_score',name:'Quelle équipe va marquer',selections:[
-    {id:'ts1', name:'Seulement 1',     odds:Math.max(1.01,+seedRand(s+'ts1', 4.0,9.0).toFixed(2))},
-    {id:'ts2', name:'Seulement 2',     odds:Math.max(1.01,+seedRand(s+'ts2', 1.15,1.5).toFixed(2))},
-    {id:'tsB', name:'Les deux équipes',odds:Math.max(1.01,+seedRand(s+'tsB', 2.5,4.0).toFixed(2))},
-    {id:'tsN', name:'Aucun',           odds:Math.max(1.01,+seedRand(s+'tsN', 4.0,8.0).toFixed(2))},
-  ]});
-
-  // 2 remboursé si victoire (Insurance — refund if 2 wins)
-  mkts.push({id:'refund2',name:'2 remboursé si victoire',selections:[
-    {id:'r2_1',name:'1',  odds:Math.max(1.01,+seedRand(s+'r2_1',5.0,8.0).toFixed(2))},
-    {id:'r2_n',name:'Nul',odds:Math.max(1.01,+seedRand(s+'r2_n',1.05,1.2).toFixed(2))},
-  ]});
-
-  // ── 2ème mi-temps (second half) markets ───────────────────
-  // These mirror the main markets but with slightly different
-  // odds because the second half typically has different stats.
-  // The tab "2ème mi-temps" filters by the keyword "2ème mi-temps"
-  // so each market name must include it verbatim.
-  var hv2 = Math.max(1.20, +(hv * seedRand(s+'2h1',0.85,1.15)).toFixed(2));
-  var xv2 = Math.max(1.20, +(xv * seedRand(s+'2hx',0.85,1.15)).toFixed(2));
-  var av2 = Math.max(1.20, +(av * seedRand(s+'2h2',0.85,1.15)).toFixed(2));
-  mkts.push({id:'1x2_2h', name:'1x2 - 2ème mi-temps', selections:[
-    {id:'1',name:'1',odds:hv2},{id:'X',name:'X',odds:xv2},{id:'2',name:'2',odds:av2}
-  ]});
-  var line2 = 1.5;
-  var ov2 = Math.max(1.05, +seedRand(s+'2hov',1.50,2.30).toFixed(2));
-  var un2 = Math.max(1.05, +seedRand(s+'2hun',1.50,2.30).toFixed(2));
-  mkts.push({id:'tot_2h', name:'Total - 2ème mi-temps', selections:[
-    {id:'ov',name:'Plus de '+line2,odds:ov2,handicap:line2},
-    {id:'un',name:'Moins de '+line2,odds:un2,handicap:line2},
-  ]});
-  mkts.push({id:'btts_2h', name:'Les deux équipes qui marquent - 2ème mi-temps', selections:[
-    {id:'y',name:'Oui',odds:Math.max(1.01,+seedRand(s+'2hby',2.5,4.0).toFixed(2))},
-    {id:'n',name:'Non',odds:Math.max(1.01,+seedRand(s+'2hbn',1.10,1.30).toFixed(2))},
-  ]});
-  mkts.push({id:'dc_2h', name:'Double Chance - 2ème mi-temps', selections:[
-    {id:'1x',name:'1X',odds:Math.max(1.01,+(hv2*0.60).toFixed(2))},
-    {id:'12',name:'12',odds:Math.max(1.01,+((hv2+av2)/2*0.75).toFixed(2))},
-    {id:'x2',name:'X2',odds:Math.max(1.01,+(av2*0.60).toFixed(2))},
-  ]});
-
-  // ── Correct Score (Score exact) — common live market ──────
-  // Provides ~9 most likely scorelines. Used by the "Correct Score" tab.
-  var csList = [['0:0',8.0],['1:0',6.5],['0:1',7.5],['1:1',5.5],['2:0',12],['0:2',14],['2:1',9.5],['1:2',10.5],['2:2',12],['3:0',22],['0:3',26],['3:1',18],['1:3',20]];
-  var csSels = [];
-  csList.forEach(function(c,i){ csSels.push({id:'cs_'+i, name:c[0], odds:Math.max(1.05,+(c[1]*seedRand(s+'cs'+i,0.85,1.15)).toFixed(2))}); });
-  mkts.push({id:'cs', name:'Correct Score', selections:csSels});
-
-  // ── Corners markets ───────────────────────────────────────
-  mkts.push({id:'corn_tot', name:'Total Corners', selections:[
-    {id:'cov',name:'Plus de 9.5',odds:Math.max(1.05,+seedRand(s+'cov',1.70,2.20).toFixed(2)),handicap:9.5},
-    {id:'cun',name:'Moins de 9.5',odds:Math.max(1.05,+seedRand(s+'cun',1.60,2.10).toFixed(2)),handicap:9.5},
-  ]});
-  mkts.push({id:'corn_race', name:'Corners 1x2', selections:[
-    {id:'1',name:'1',odds:Math.max(1.05,+seedRand(s+'cr1',1.80,3.00).toFixed(2))},
-    {id:'X',name:'X',odds:Math.max(1.05,+seedRand(s+'crx',3.00,4.50).toFixed(2))},
-    {id:'2',name:'2',odds:Math.max(1.05,+seedRand(s+'cr2',1.80,3.00).toFixed(2))},
-  ]});
-
-  // ── Multigoals ────────────────────────────────────────────
-  mkts.push({id:'mg', name:'Multigoals', selections:[
-    {id:'mg13',name:'1-3',odds:Math.max(1.05,+seedRand(s+'mg13',1.30,1.70).toFixed(2))},
-    {id:'mg24',name:'2-4',odds:Math.max(1.05,+seedRand(s+'mg24',1.40,1.90).toFixed(2))},
-    {id:'mg35',name:'3-5',odds:Math.max(1.05,+seedRand(s+'mg35',1.80,2.40).toFixed(2))},
-    {id:'mg46',name:'4-6',odds:Math.max(1.05,+seedRand(s+'mg46',2.50,4.00).toFixed(2))},
-    {id:'mg5p',name:'5+', odds:Math.max(1.05,+seedRand(s+'mg5p',3.00,6.00).toFixed(2))},
-  ]});
-
-  // ── 1 minute / Prochain but (already covered via Prochain but) ──
-  // We add a 1-minute next goal flash market for completeness.
-  mkts.push({id:'nm_1min', name:'1 minute - Prochain but', selections:[
-    {id:'1',name:'1',odds:Math.max(1.05,+seedRand(s+'1mn1',3.0,5.0).toFixed(2))},
-    {id:'N',name:'Aucun',odds:Math.max(1.05,+seedRand(s+'1mnn',1.05,1.20).toFixed(2))},
-    {id:'2',name:'2',odds:Math.max(1.05,+seedRand(s+'1mn2',3.0,5.0).toFixed(2))},
-  ]});
+  // All remaining markets (Handicap, BTTS, Corners, HT/FT, Correct Score,
+  // Multigoals, etc.) come EXCLUSIVELY from the real Bet365 event stream
+  // via md_parse_markets / mergeOuMarkets in patchMatchDetailLive.
+  // Nothing seeded. If a market is not in the stream it is simply absent.
 
   return mkts;
 }

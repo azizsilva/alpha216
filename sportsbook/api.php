@@ -754,10 +754,11 @@ if ($action === 'inplay') {
     // When daemon is alive: infinite — tick_live will refresh it.
     // When daemon is dead and no cache: 0 — must fetch live.
     $cache_max_age = $daemon_alive ? PHP_INT_MAX : 30;
-    $cache_ttl     = 2;
-    $ev_cache_ttl  = $is_football ? 2 : 4;
-    $ev_stale_ttl  = 2;
-    $odds_bg_ttl   = $is_football ? 8 : 12;
+    // Volume Plan: unlimited calls — tighten TTLs for maximum freshness.
+    $cache_ttl     = 1;
+    $ev_cache_ttl  = $is_football ? 1 : 2;
+    $ev_stale_ttl  = 1;
+    $odds_bg_ttl   = $is_football ? 4 : 6;
     $ev_refresh_cap = 50;
 
     // ── Step 1: Get inplay_filter per sport ────────────────────────────────
@@ -1835,10 +1836,9 @@ if ($action === 'match_live') {
     if (!is_dir($ml_cache_dir)) @mkdir($ml_cache_dir, 0755, true);
     $ml_cache_file = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.json';
     $ml_lock_file  = $ml_cache_dir . '/ml_' . preg_replace('/[^A-Za-z0-9_-]/', '', $match_id) . '.lock';
-    // TTL matches tick_live TICK_SECONDS (2s). tick_live patches the
-    // live_X.json files every 2s via the stream, so our response cache
-    // is at most 2s stale — the same as the upstream source.
-    $ml_ttl_seconds = 2;
+    // Volume Plan: TTL = 1s for maximum freshness.
+    // tick_live patches live_X.json every 1-2s via the stream.
+    $ml_ttl_seconds = 1;
 
     if (file_exists($ml_cache_file) && (time() - filemtime($ml_cache_file)) < $ml_ttl_seconds) {
         header('X-SB-Cache: HIT');
