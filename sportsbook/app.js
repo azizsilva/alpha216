@@ -6191,12 +6191,22 @@ window.sbMdTab = function(btn, tabName) {
     } else if (tabName === 'Correct Score') {
       filter = function(mkt){
         var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('correct score') !== -1 || nm.indexOf('score exact') !== -1;
+        return nm.indexOf('correct score') !== -1
+            || nm.indexOf('score exact') !== -1
+            || nm.indexOf('exact score') !== -1
+            || nm.indexOf('score correct') !== -1
+            || nm.indexOf('résultat exact') !== -1
+            || nm.indexOf('resultat exact') !== -1
+            || nm.indexOf('cs ') === 0
+            || nm === 'cs';
       };
     } else if (tabName === 'Corners') {
       filter = function(mkt){
         var nm = (mkt.name||'').toLowerCase();
-        return nm.indexOf('corner') !== -1;
+        return nm.indexOf('corner') !== -1
+            || nm.indexOf('corners') !== -1
+            || nm.indexOf('coup de coin') !== -1
+            || nm.indexOf('coups de coin') !== -1;
       };
     } else if (tabName === 'Multigoals') {
       filter = function(mkt){
@@ -6220,7 +6230,19 @@ window.sbMdTab = function(btn, tabName) {
   }
   var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
   if (!shown.length && tabName !== 'Tout') {
-    var emptyHtml = '<div class="md-empty-tab">Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.</div>';
+    // More helpful empty state: distinguish "pre-match" (will appear at kickoff)
+    // from "live but missing" (Bet365 didn't expose this market for this game).
+    var msg;
+    var mdMatch = window._mdMatch;
+    var isLiveMatch = mdMatch && (typeof isMatchLive === 'function') && isMatchLive(mdMatch);
+    var liveOnlyTabs = ['1 minute', '1 minutes', 'minute', 'corners', 'corner'];
+    var lowerTab = tabName.toLowerCase();
+    if (!isLiveMatch && liveOnlyTabs.indexOf(lowerTab) !== -1) {
+      msg = '<b>' + h(tabName) + '</b> sera disponible après le coup d\'envoi.';
+    } else {
+      msg = 'Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.';
+    }
+    var emptyHtml = '<div class="md-empty-tab">' + msg + '</div>';
     window._mdTabCache[cacheKey] = emptyHtml;
     mktBody.innerHTML = emptyHtml;
     var bbSticky0 = document.getElementById('md-bb-sticky');

@@ -3509,9 +3509,12 @@ body .sb-root .slc-odd-val { color: rgb(113,246,105) !important; font-family: 'R
   background: var(--sb-green) !important;
   border-color: var(--sb-green) !important;
   color: #000 !important;
+  box-shadow: inset 0 0 0 2px #000, 0 0 0 1px var(--sb-green) !important;
 }
 .md-bb-btn.sel .md-o-name,
 .md-bb-btn.sel .md-o-val { color: #000 !important; }
+.md-bb-btn.sel.md-odd-flash--up,
+.md-bb-btn.sel.md-odd-flash--down { animation: none !important; background: var(--sb-green) !important; }
 /* BB mode market header indicator */
 .md-market-group.bb-mode .md-mkt-bb { background: var(--sb-green); color: #000; }
 .md-mkt-bb-active { background: var(--sb-green) !important; color: #000 !important; }
@@ -3996,9 +3999,13 @@ button.md-odd-btn,
 .md-odd-btn.sel {
   background: var(--sb-green) !important;
   border-color: var(--sb-green) !important;
+  box-shadow: inset 0 0 0 2px #000, 0 0 0 1px var(--sb-green) !important;
 }
 .md-odd-btn.sel .md-o-name { color: #000 !important; }
 .md-odd-btn.sel .md-o-val  { color: #000 !important; font-weight: 800 !important; }
+/* Flash animations must NEVER override .sel — selection stays solid green */
+.md-odd-btn.sel.md-odd-flash--up,
+.md-odd-btn.sel.md-odd-flash--down { animation: none !important; background: var(--sb-green) !important; }
 .md-odd-btn.md-odd-btn--locked { cursor: not-allowed; opacity: 0.85; }
 .md-odd-btn.md-odd-btn--locked:hover { background: rgb(74,74,74); }
 .md-odd-btn .md-o-lock { display: inline-flex; align-items: center; justify-content: center; }
