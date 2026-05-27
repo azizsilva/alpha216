@@ -1311,7 +1311,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
             if (file_exists($pm_lock) && (time() - filemtime($pm_lock)) < 300) continue;
             @touch($pm_lock);
             $pm = null;
-            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or); if ($pm) apply_margin_to_markets($pm);
             if (!$pm) {
                 $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
@@ -1612,7 +1612,7 @@ if ($action === 'league_matches') {
             $fi = $id_to_rid[$mid] ?? $mid; // use r_id (real Bet365 FI) if available
             $pm = null;
             // Try prematch endpoint (uses Bet365 FI)
-            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or); if ($pm) apply_margin_to_markets($pm);
             // Fallback: event stream
             if (!$pm) {
@@ -2087,7 +2087,7 @@ if ($action === 'match_detail') {
 
     if ($match_data) {
         // 1. Try live event via Bet365 FI (r_id)
-        $fi = $match_data['ev_id'] ?? $match_data['r_id'] ?? $match_id;
+        $fi = $match_data['r_id'] ?? null;
         if ($fi) {
             $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
             if (!empty($ev['results'])) {
@@ -2097,7 +2097,7 @@ if ($action === 'match_detail') {
         }
         // Fallback: try PREMATCH endpoint to get asian, goals, half tabs
         if (empty($event_raw)) {
-            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if (!empty($ev2['results'])) {
                 $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
             }
@@ -2508,8 +2508,7 @@ if ($action === 'live_refresh') {
         
         $rid = (string)($m['r_id'] ?? '');
         $rid_num = $rid ? preg_replace('/[^0-9].*$/', '', $rid) : null;
-        $ev_id = (string)($m['ev_id'] ?? '');
-        $fi = $ev_id ?: $rid_to_fi[$rid] ?? $rid_to_fi[$rid_num] ?? $rid_to_fi[$match_id] ?? $rid ?: $match_id;
+        $fi = $rid_to_fi[$rid] ?? $rid_to_fi[$rid_num] ?? $rid_to_fi[$match_id] ?? null;
 
         // Score
         $fresh_ss = null;
@@ -2612,7 +2611,7 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
         }
         // For upcoming (or if live fetch failed): use prematch endpoint
         if (!$pm) {
-            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if (!$or || empty($or['results'])) {
                 $or = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
             }
