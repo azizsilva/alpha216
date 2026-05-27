@@ -2087,7 +2087,7 @@ if ($action === 'match_detail') {
 
     if ($match_data) {
         // 1. Try live event via Bet365 FI (r_id)
-        $fi = $match_data['r_id'] ?? null;
+        $fi = $match_data['ev_id'] ?? $match_data['r_id'] ?? $match_id;
         if ($fi) {
             $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
             if (!empty($ev['results'])) {
@@ -2097,7 +2097,7 @@ if ($action === 'match_detail') {
         }
         // Fallback: try PREMATCH endpoint to get asian, goals, half tabs
         if (empty($event_raw)) {
-            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
+            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
             if (!empty($ev2['results'])) {
                 $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
             }
@@ -2210,6 +2210,9 @@ function md_parse_markets($event_arr) {
             'to win match' => '1x2',
             'game lines' => '1x2',
             'match goals' => 'Total',
+            'alternative total goals' => 'Total',
+            'total goals' => 'Total',
+            'result total goals' => 'Total',
             'goals over/under' => 'Total',
             'alternative match goals' => 'Total',
             'goal line' => 'Total',
@@ -2398,6 +2401,14 @@ function md_parse_markets($event_arr) {
         $deduped[] = $mkt;
     }
 
+    usort($deduped, function($a, $b) {
+        if ($a['name'] === '1x2' && $b['name'] !== '1x2') return -1;
+        if ($b['name'] === '1x2' && $a['name'] !== '1x2') return 1;
+        if ($a['name'] === 'Total' && $b['name'] !== 'Total') return -1;
+        if ($b['name'] === 'Total' && $a['name'] !== 'Total') return 1;
+        return 0;
+    });
+
     return array_slice($deduped, 0, 150);
 }
 // ══ LIVE REFRESH — FAST CACHE READ ONLY ══
@@ -2497,7 +2508,8 @@ if ($action === 'live_refresh') {
         
         $rid = (string)($m['r_id'] ?? '');
         $rid_num = $rid ? preg_replace('/[^0-9].*$/', '', $rid) : null;
-        $fi = $rid_to_fi[$rid] ?? $rid_to_fi[$rid_num] ?? $rid_to_fi[$match_id] ?? null;
+        $ev_id = (string)($m['ev_id'] ?? '');
+        $fi = $ev_id ?: $rid_to_fi[$rid] ?? $rid_to_fi[$rid_num] ?? $rid_to_fi[$match_id] ?? $rid ?: $match_id;
 
         // Score
         $fresh_ss = null;
