@@ -2175,11 +2175,21 @@ if ($action === 'match_detail') {
 
 /* ── Parse BetsAPI flat event array into structured markets ── */
 function md_frac_to_dec($frac) {
-    if (!$frac) return null;
+    if (!$frac && $frac !== '0') return null;
     $frac = trim((string)$frac);
+    if ($frac === '' || $frac === '0') return null;
     if (strtoupper($frac) === 'EVS') return 2.00;
+    // Already a decimal odd (e.g. "1.78", "2.50") — return as-is
+    if (strpos($frac, '/') === false) {
+        $v = (float)$frac;
+        // If value >= 1.01, it's already a decimal European odd
+        if ($v >= 1.01) return round($v, 2);
+        // Small value without slash — treat as fractional numerator/1 (e.g. "3" = 3/1 = 4.0)
+        return $v > 0 ? round($v + 1, 2) : null;
+    }
+    // Fractional format: "3/1", "6/4", etc.
     $p = explode('/', $frac);
-    if (count($p) !== 2 || (float)$p[1] == 0) return (float)$frac > 0 ? round((float)$frac + 1, 2) : null;
+    if (count($p) !== 2 || (float)$p[1] == 0) return null;
     return round(1 + ((float)$p[0] / (float)$p[1]), 2);
 }
 

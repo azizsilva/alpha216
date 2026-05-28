@@ -961,6 +961,7 @@ function sbClearMdTabCache() {
 
 /* ── SVG Icons (extracted from reference site shadow DOM) ─ */
 var ICON = {
+  lock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
   home: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14.6666V7.99992H10V14.6666M2 5.99992L8 1.33325L14 5.99992V13.3333C14 13.6869 13.8595 14.026 13.6095 14.2761C13.3594 14.5261 13.0203 14.6666 12.6667 14.6666H3.33333C2.97971 14.6666 2.64057 14.5261 2.39052 14.2761C2.14048 14.026 2 13.6869 2 13.3333V5.99992Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   stats: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 13V6H6V13V3H10V13V8H14V13H2Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   star: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.667C8.254 0.667 8.485 0.811 8.598 1.038L10.503 4.898L14.763 5.52C15.014 5.557 15.223 5.733 15.301 5.974C15.379 6.216 15.314 6.481 15.132 6.658L12.05 9.66L12.777 13.901C12.82 14.151 12.717 14.404 12.512 14.553C12.307 14.702 12.034 14.722 11.81 14.603L8 12.6L4.19 14.603C3.966 14.722 3.693 14.702 3.488 14.553C3.283 14.404 3.18 14.151 3.223 13.901L3.95 9.66L0.868 6.658C0.686 6.481 0.621 6.216 0.699 5.974C0.777 5.733 0.986 5.557 1.237 5.52L5.497 4.898L7.402 1.038C7.514 0.811 7.746 0.667 8 0.667Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>',
@@ -1057,29 +1058,14 @@ function isMatchEnded(m) {
     var elapsed = Date.now() / 1000 - kickoff;
     var sid     = parseInt(m.sport_id || 1, 10);
 
-    // Football (sport_id 1 = soccer, 36 = E-soccer): the maximum
-    // possible wall-clock duration is ~145 min (90 regulation + 15
-    // HT + 30 extra time + 10 penalty shootout). After 135 min from
-    // kickoff the match is over — even if Bet365 hasn't pushed
-    // time_status=3 yet (a known lag for lower leagues like Serie C
-    // play-offs, Polish IV Liga, etc.).
-    if ((sid === 1 || sid === 36) && elapsed >= 8100) return true; // 135 min
-
-    // Stale-fallback guard: when we never received a real Bet365
-    // timer for this match and the kickoff-derived estimate already
-    // shows the displayed minute past 100', the match is over for
-    // all practical purposes. (Real-timer matches naturally hit the
-    // 135-min wall-clock cutoff above.)
-    var hasRealTimer = m.timer && !m.timer.estimated
-                      && (parseInt(m.timer.tm, 10) >= 0)
-                      && m.timer.ts !== undefined;
-    if (!hasRealTimer && (sid === 1 || sid === 36) && elapsed >= 6300) {
-      // 105 min wall clock + no real API timer = ended estimate
-      return true;
-    }
-
-    // Absolute cutoff for any sport: 4 hours past scheduled kickoff
-    if (elapsed >= 14400) return true;
+    // ONLY use a generous wall-clock fallback — never flag a match ended
+    // based on elapsed minutes alone. Halftime pauses, extra time, and
+    // delayed kicks all cause false positives. Trust BetsAPI's explicit
+    // time_status=3 signal (above) as the primary source of truth.
+    // Football absolute fallback: 5 hours from scheduled kickoff
+    if ((sid === 1 || sid === 36) && elapsed >= 18000) return true;
+    // Any other sport: 8 hours absolute max
+    if (elapsed >= 28800) return true;
   }
   return false;
 }
