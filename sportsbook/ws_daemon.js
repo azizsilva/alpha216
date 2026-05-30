@@ -23,7 +23,7 @@
 const WebSocket = require('ws');
 const { createClient } = require('redis');
 
-const API_KEY    = process.env.ODDS_API_KEY || '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e';
+const API_KEY    = process.env.ODDS_API_KEY || '06eff561d8a52e749f38d64f95f4c22bc7504bc16c7122d849eabc9f97908d91';
 const REDIS_URL  = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
 const PREFETCH   = process.argv.includes('--prefetch') || process.env.PREFETCH === '1';
 
@@ -55,7 +55,9 @@ const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
 const WS_STATUS   = 'live';
 // Bookmakers configured in your odds-api.io account dashboard.
 // Leave empty to use whatever is configured there, or set explicitly e.g. 'Bet365'
-const BOOKMAKER   = process.env.BOOKMAKER || '';
+// Bet365 carries the richest market set on the Pro plan (30+ markets incl.
+// Corners, Correct Score, Team Totals, HT/2H). Default to it.
+const BOOKMAKER   = process.env.BOOKMAKER || 'Bet365';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {
@@ -203,16 +205,18 @@ function r2(v)  { return Math.round(v*100)/100; }
 // Names we map explicitly (normalized: UPPER, no spaces/_/-//).
 const RECOGNIZED_MKT = new Set([
   'ML','1X2','MONEYLINE',
-  'TOTALS','OVERUNDER','GOALS','TOTALGOALS',
-  'SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT',
+  'TOTALS','OVERUNDER','GOALS','TOTALGOALS','GOALSOVERUNDER','ALTERNATIVETOTALGOALS','ALTERNATIVEGOALLINE',
+  'SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP',
   'DOUBLECHANCE','BTTS','BOTHTEAMSTOSCORE',
-  'CORNERS','TOTALCORNERS','CORNERSOVERUNDER',
+  'CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS',
   'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER',
   'CORRECTSCORE','EXACTSCORE',
   'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL',
+  'TEAMTOTALHOME','TEAMTOTALAWAY','TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY',
   'DRAWNOBET','ODDEVEN','GOALSODDEVEN','HALFTIMERESULT','HALFTIME1X2',
   'MLHT','1X2HT','FIRSTHALF1X2','SPREADHT','HANDICAPHT','ASIANHANDICAPHT',
   'TOTALSHT','OVERUNDERHT','GOALSHT',
+  'ML2H','1X22H','SECONDHALF1X2','TOTALS2H','OVERUNDER2H','GOALS2H','SPREAD2H','HANDICAP2H',
 ]);
 
 // Generic builder for ANY market we don't map explicitly — guarantees the
@@ -286,7 +290,7 @@ function buildMarkets(markets) {
       if (ml_a>1) sel.push({name:'2',   odds:fmt(ml_a),NA:'2'});
       if (sel.length) md.push({name:'1X2',selections:sel,is_open:true});
     }
-    if (['TOTALS','OVERUNDER','GOALS','TOTALGOALS','OVER/UNDER'].includes(name)) {
+    if (['TOTALS','OVERUNDER','GOALS','TOTALGOALS','OVER/UNDER','GOALSOVERUNDER','ALTERNATIVETOTALGOALS','ALTERNATIVEGOALLINE'].includes(name)) {
       // ONE "Total" family with all O/U lines grouped (line in selection.handicap).
       // The UI groups by `handicap` → slider + grid toggle (fcbet216 parity).
       const tsel=[]; let firstLine=true;
@@ -300,7 +304,7 @@ function buildMarkets(markets) {
       }
       if (tsel.length) md.push({name:'Total',selections:tsel,is_open:true});
     }
-    if (['SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT'].includes(name)) {
+    if (['SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP'].includes(name)) {
       // ONE "Handicap" family with all lines grouped (line in selection.handicap).
       // odds-api.io "Spread" uses over=home-side, under=away-side.
       const hsel=[];
@@ -366,8 +370,8 @@ function buildMarkets(markets) {
       if (sel.length) md.push({name:'Score exact',selections:sel,is_open:true});
     }
     // Team Totals (Total équipe 1 / 2) — grouped family
-    if (['TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL'].includes(name)) {
-      const sideLabel = (name==='AWAYTOTALS'||name==='AWAYTEAMTOTAL') ? 'équipe 2' : 'équipe 1';
+    if (['TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL','TEAMTOTALHOME','TEAMTOTALAWAY','TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY'].includes(name)) {
+      const sideLabel = /AWAY/.test(name) ? 'équipe 2' : 'équipe 1';
       const ttsel=[];
       for (const entry of (mkt.odds||[])) {
         const line=+(entry.hdp??entry.max??entry.points??entry.line??1.5);
@@ -427,6 +431,40 @@ function buildMarkets(markets) {
         if (un>1) htsel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`HTU ${line}`,handicap:line});
       }
       if (htsel.length) md.push({name:'1ère mi-temps - Total',selections:htsel,is_open:true});
+    }
+    // 2nd Half 1X2 ("ML 2H")
+    if (['ML2H','1X22H','SECONDHALF1X2'].includes(name)) {
+      const hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      const sel=[];
+      if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'2H1'});
+      if (hx>1) sel.push({name:'X',odds:fmt(hx),NA:'2HX'});
+      if (ha>1) sel.push({name:'2',odds:fmt(ha),NA:'2H2'});
+      if (sel.length) md.push({name:'2ème mi-temps - 1x2',selections:sel,is_open:true});
+    }
+    // 2nd Half Totals ("Totals 2H")
+    if (['TOTALS2H','OVERUNDER2H','GOALS2H'].includes(name)) {
+      const s2=[];
+      for (const entry of (mkt.odds||[])) {
+        const line=+(entry.hdp??entry.max??entry.points??entry.line??1.5);
+        const ov=+(entry.over||0),un=+(entry.under||0);
+        if (ov<1.01&&un<1.01) continue;
+        if (ov>1) s2.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`2HO ${line}`,handicap:line});
+        if (un>1) s2.push({name:`Moins de ${line}`, odds:fmt(un),NA:`2HU ${line}`,handicap:line});
+      }
+      if (s2.length) md.push({name:'2ème mi-temps - Total',selections:s2,is_open:true});
+    }
+    // 2nd Half Handicap ("Spread 2H")
+    if (['SPREAD2H','HANDICAP2H'].includes(name)) {
+      const s2=[];
+      for (const entry of (mkt.odds||[])) {
+        const hdp=+(entry.hdp??entry.points??entry.line??0);
+        const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
+        if (hh<1.01&&ah<1.01) continue;
+        const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
+        if (hh>1) s2.push({name:`1 ${fh}`,odds:fmt(hh),NA:`2HH ${hdp}`,handicap:hdp});
+        if (ah>1) s2.push({name:`2 ${fa}`,odds:fmt(ah),NA:`2HA ${-hdp}`,handicap:hdp});
+      }
+      if (s2.length) md.push({name:'2ème mi-temps - Handicap',selections:s2,is_open:true});
     }
   }
 
@@ -799,14 +837,18 @@ async function refreshFootballLive() { await refreshSportLive('football'); }
 let oddsCursor = 0;
 async function refreshOddsBatch() {
   if (rateLimited()) return;
-  // Collect live event ids that currently have meta (prioritise football).
-  const liveIds = Object.keys(store).filter(id =>
-    store[id]?.meta?.time_status === '1'
-  ).sort((a,b) => {
-    const fa = store[a]?.sport === 'football' ? 0 : 1;
-    const fb = store[b]?.sport === 'football' ? 0 : 1;
-    return fa - fb;
-  });
+  // Fetch markets for LIVE first (time_status 1), then UPCOMING (0) so the
+  // Prochainement list also shows the rich prematch markets (Corners,
+  // Correct Score, Team Totals, ...). Football is prioritised within each.
+  const rank = id => {
+    const live = store[id]?.meta?.time_status === '1' ? 0 : 1;
+    const foot = store[id]?.sport === 'football' ? 0 : 1;
+    return live * 2 + foot;
+  };
+  const liveIds = Object.keys(store).filter(id => {
+    const ts = store[id]?.meta?.time_status;
+    return ts === '1' || ts === '0';
+  }).sort((a,b) => rank(a) - rank(b));
   if (!liveIds.length) return;
 
   // Round-robin through all live events, 10 per tick (1 request per tick).
