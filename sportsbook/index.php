@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260530vq2';  // Pro API key (30+ markets), odds for upcoming too, Bet365 default, new market mappings (corners/team totals/2H)
+$sb_build_stamp = 'b20260530vq3';  // honest live empty-state (corners/correct score = prematch-only on provider live feed)
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
