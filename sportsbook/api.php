@@ -35,7 +35,7 @@ if (class_exists('Redis')) {
 // ══ odds-api.io on-demand odds fetcher ═══════════════════════════════════════
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
-define('ODDSAPI_KEY',  'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2');
+define('ODDSAPI_KEY',  '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e');
 define('ODDSAPI_BASE', 'https://api.odds-api.io');
 define('ODDSAPI_BK',   'Bet365');
 

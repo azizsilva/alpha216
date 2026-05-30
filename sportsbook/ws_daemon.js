@@ -23,7 +23,7 @@
 const WebSocket = require('ws');
 const { createClient } = require('redis');
 
-const API_KEY    = process.env.ODDS_API_KEY || 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
+const API_KEY    = process.env.ODDS_API_KEY || '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e';
 const REDIS_URL  = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
 const PREFETCH   = process.argv.includes('--prefetch') || process.env.PREFETCH === '1';
 

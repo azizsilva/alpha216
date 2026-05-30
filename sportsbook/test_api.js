@@ -4,7 +4,7 @@
  * Usage:  node test_api.js
  */
 'use strict';
-const API_KEY = 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
+const API_KEY = '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e';
 
 let OddsAPIClient;
 try { OddsAPIClient = require('odds-api-io').OddsAPIClient; }
