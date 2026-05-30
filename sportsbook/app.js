@@ -1156,12 +1156,19 @@ function isMatchEnded(m) {
 }
 function isMatchLive(m) {
   if (!m || isMatchEnded(m)) return false;
-  // Primary: API says live — always trust this
+  var nowSec  = Date.now() / 1000;
+  var startTs = parseInt(m.time || 0);
+  // HARD GUARD: a match whose kickoff is still in the future can NEVER be live.
+  // Without this, a stale/partial provider record could falsely flip an
+  // upcoming match (e.g. a World Cup fixture two weeks away) to "EN DIRECT".
+  // We allow a tiny 60s skew so a match at exactly kickoff isn't flagged early.
+  if (startTs > 1000000000 && nowSec < (startTs - 60)) return false;
+  // Primary: API says live — trust it, but only once kickoff isn't in the future
+  // (guarded above), so a bad time_status can't override a future kickoff.
   if (String(m.time_status) === '1' || m.status === 'inplay') return true;
   // Secondary: start time has passed by more than 5 minutes — match has definitely started
   // We use a 5-minute grace window so a match at 20:00 doesn't show EN DIRECT at 19:59
-  var startTs = parseInt(m.time || 0);
-  if (startTs > 1000000000 && (Date.now() / 1000) >= (startTs + 300)) return true;
+  if (startTs > 1000000000 && nowSec >= (startTs + 300)) return true;
   return false;
 }
 function margin(v) { return Math.max(1.01, +(parseFloat(v) * (1 - MARGIN)).toFixed(2)); }
