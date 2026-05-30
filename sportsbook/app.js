@@ -5797,7 +5797,7 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
     out += '<div class="mc-md-empty">Aucun marché disponible.</div>';
   } else {
     shown.forEach(function(mk, i) {
-      out += renderMarketGroup(mk, m, i < 4, isBB);
+      out += renderMarketGroup(mk, m, true, isBB);
     });
   }
   out += '</div>';
@@ -5867,7 +5867,7 @@ window.sbOpenMatch = function(mid, _skipPush) {
           var bbMode = !!(bbActive && /bet builder/i.test(bbActive.textContent || ''));
           window._mdMarkets = mkts;
           sbClearMdTabCache();
-          body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, i < 6, bbMode); }).join('');
+          body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, true, bbMode); }).join('');
           try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
         }
       } else {
@@ -6141,7 +6141,7 @@ function renderMatchDetail(m, markets) {
   window._mdMatch   = m;
 
   out += '<div class="md-markets" id="md-markets-body">';
-  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
+  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, true, false); });
   out += '</div>';
 
   // Bet Builder sticky footer removed to add bets directly to the betslip (fcbet216 parity).
@@ -6515,9 +6515,8 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
   // Filter out already-settled lines so e.g. a 2:0 match no longer
   // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
   mkt = filterMarketByScore(mkt, m);
-  // Principaux trims to 2 active pairs (compact view).
-  // Bet Builder / Tout / Total tab show ALL active lines so users can mix legs.
-  var trimMax = bbMode ? 99 : 2;
+  // Always show all lines — user wants full ladders in every tab.
+  var trimMax = 99;
   mkt = trimTotalMarketWindow(mkt, m, trimMax);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
@@ -6998,7 +6997,7 @@ window.sbMdTab = function(btn, tabName) {
   mktBody.classList.add('md-markets--loading');
   requestAnimationFrame(function() {
   var out = '';
-  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, isBB); });
     window._mdTabCache[cacheKey] = out;
   mktBody.innerHTML = out;
     mktBody.classList.remove('md-markets--loading');
@@ -7085,7 +7084,7 @@ window.sbMdSearch = function(query) {
     return;
   }
   var out = '';
-  shown.forEach(function(mkt, i){ out += renderMarketGroup(mkt, window._mdMatch, i < 6, false); });
+  shown.forEach(function(mkt, i){ out += renderMarketGroup(mkt, window._mdMatch, true, false); });
   mktBody.innerHTML = out;
 };
 
@@ -7448,7 +7447,13 @@ function loadAndFilter(action, sid, lid) {
   sbAbortListFetches();
   var navGen = sbNextNav();
   var el = document.getElementById('sb-matches-body');
-  if (el) el.innerHTML = buildSkeleton(5);
+  // Paint cached matches INSTANTLY — no skeleton flash while fetching.
+  // The fetch runs in background and replaces with fresh data on arrival.
+  if (S.matches && S.matches.length && el) {
+    renderMatches(S.matches);
+  } else if (el) {
+    el.innerHTML = buildSkeleton(5);
+  }
 
   // Use `upcoming` action for future dates, `inplay` for today
   var apiAction = (S.activeDateOffset > 0) ? 'upcoming' : 'inplay';
