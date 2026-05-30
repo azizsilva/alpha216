@@ -2742,7 +2742,6 @@ function matchCard(m) {
     out += '<div class="mc-team-row mc-team-row--upcoming"><span class="mc-t-name">' + an + '</span></div>';
     out += '</div>';
     out += '<div class="mc-upcoming-actions">';
-    out += '<span class="mc-ed-pill">EN DIRECT</span>';
     out += '<span class="mc-signal-ico" aria-label="Statistiques">';
     out += '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14V11M6 14V8M10 14V5M14 14V2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
     out += '</span>';

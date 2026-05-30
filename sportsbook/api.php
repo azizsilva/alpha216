@@ -2069,15 +2069,33 @@ if ($action === 'league_matches') {
     {
         $league_id_q0 = trim($_GET['league_id'] ?? '');
         $redis_all = redis_get_sport_matches($sport_id, 'all');
-        if ($redis_all !== null && count($redis_all) > 0) {
-            $qn = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
+        // Redis is the single source of truth (odds-api migration). When it is
+        // reachable we serve ONLY its data and NEVER fall through to the stale
+        // MySQL/BetsAPI path below — that path resurrects ghost fixtures (wrong
+        // ids, no odds-api markets → "Aucun marché disponible"). Returning an
+        // empty list when nothing matches is correct and honest.
+        if ($redis_all !== null) {
+            // Loose canonical form: strip non-alphanumerics, 4-digit years and
+            // generic tournament words so a sidebar label like "World Cup 2026"
+            // matches the odds-api league name "International - World Cup".
+            $canon = function($s) {
+                $s = strtolower((string)$s);
+                $s = preg_replace('/\b(19|20)\d{2}\b/', ' ', $s); // drop years
+                $s = preg_replace('/\b(international|intl|uefa|fifa|concacaf|conmebol|afc|caf|coupe|du|monde|de|la|le|les|of|the)\b/', ' ', $s);
+                return preg_replace('/[^a-z0-9]/', '', $s);
+            };
+            $qn  = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
+            $qc  = $canon($league_q);
             $lg = [];
             foreach ($redis_all as $rm) {
-                $ln = preg_replace('/[^a-z0-9]/', '', strtolower($rm['league']['name'] ?? ''));
+                $rawln = $rm['league']['name'] ?? '';
+                $ln = preg_replace('/[^a-z0-9]/', '', strtolower($rawln));
                 if ($ln === '') continue;
+                $lc = $canon($rawln);
                 $idok   = ($league_id_q0 !== '' && (string)($rm['league']['id'] ?? '') === $league_id_q0);
                 $nameok = ($qn !== '' && ($ln === $qn || strpos($ln, $qn) !== false || strpos($qn, $ln) !== false));
-                if (!$idok && !$nameok) continue;
+                $coreok = ($qc !== '' && strlen($qc) >= 4 && ($lc === $qc || strpos($lc, $qc) !== false || strpos($qc, $lc) !== false));
+                if (!$idok && !$nameok && !$coreok) continue;
                 if (!empty($rm['live_odds'])) {
                     $lo = &$rm['live_odds'];
                     foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
@@ -2090,11 +2108,9 @@ if ($action === 'league_matches') {
             usort($lg, function($a, $b) {
                 return (int)($a['time'] ?? 0) <=> (int)($b['time'] ?? 0);
             });
-            if (count($lg) > 0) {
-                header('X-SB-Source: redis-league');
-                echo json_encode(['success' => 1, 'results' => array_values($lg), '_src' => 'redis']);
-                exit;
-            }
+            header('X-SB-Source: redis-league');
+            echo json_encode(['success' => 1, 'results' => array_values($lg), '_src' => 'redis']);
+            exit;
         }
     }
 
