@@ -58,6 +58,10 @@ const WS_STATUS   = 'live';
 // Bet365 carries the richest market set on the Pro plan (30+ markets incl.
 // Corners, Correct Score, Team Totals, HT/2H). Default to it.
 const BOOKMAKER   = process.env.BOOKMAKER || 'Bet365';
+// Bookmakers to request for /odds (must also be SELECTED in the account).
+// Bet365 first (primary), then good-coverage fallbacks. Per event we keep
+// whichever returns the most markets.
+const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,Betano,1xbet,888Sport,22Bet';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {
@@ -858,9 +862,10 @@ async function refreshOddsBatch() {
   oddsCursor += BATCH;
 
   try {
-    // /odds & /odds/multi REQUIRE a bookmakers param — default to Bet365.
-    const bkParam = BOOKMAKER || 'Bet365';
-    const params = { eventIds: batch.join(','), bookmakers: bkParam };
+    // /odds & /odds/multi REQUIRE a bookmakers param. Request several so that
+    // when the primary (Bet365) has no markets for an event we still get odds
+    // from another book. Per event we keep whichever book has the MOST markets.
+    const params = { eventIds: batch.join(','), bookmakers: ODDS_BOOKMAKERS };
     const resp = await httpGetJson('/odds/multi', params);
     onRLOk();
     const events = Array.isArray(resp) ? resp : (Array.isArray(resp?.data) ? resp.data : []);
@@ -869,10 +874,17 @@ async function refreshOddsBatch() {
       const id = String(ev.id);
       if (!store[id]) store[id] = {};
       const bk = ev.bookmakers || {};
-      const markets = (BOOKMAKER && bk[BOOKMAKER]) ? bk[BOOKMAKER] : (Object.values(bk)[0] || []);
+      // Prefer Bet365 (richest); else the bookmaker with the most markets.
+      let bestName = (BOOKMAKER && bk[BOOKMAKER] && bk[BOOKMAKER].length) ? BOOKMAKER : null;
+      if (!bestName) {
+        for (const k in bk) {
+          if (!bestName || (bk[k]||[]).length > (bk[bestName]||[]).length) bestName = k;
+        }
+      }
+      const markets = bestName ? (bk[bestName] || []) : [];
       if (markets && markets.length) {
         store[id].markets_raw = markets;
-        store[id].bookie = (BOOKMAKER && bk[BOOKMAKER]) ? BOOKMAKER : (Object.keys(bk)[0] || 'odds-api');
+        store[id].bookie = bestName || 'odds-api';
         withOdds++;
         await writeToRedis(id);
       }
