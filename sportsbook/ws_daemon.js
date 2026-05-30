@@ -23,7 +23,7 @@
 const WebSocket = require('ws');
 const { createClient } = require('redis');
 
-const API_KEY    = process.env.ODDS_API_KEY || '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e';
+const API_KEY    = process.env.ODDS_API_KEY || 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
 const REDIS_URL  = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
 const PREFETCH   = process.argv.includes('--prefetch') || process.env.PREFETCH === '1';
 
@@ -49,7 +49,8 @@ const WS_MARKETS_ARR = [
 ];
 const WS_MARKETS  = WS_MARKETS_ARR.join(',');
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
-const WS_STATUS   = 'live,upcoming';
+// status MUST be a single value per docs: 'live' or 'prematch' (NOT 'live,upcoming')
+const WS_STATUS   = 'live';
 // Bookmakers configured in your odds-api.io account dashboard.
 // Leave empty to use whatever is configured there, or set explicitly e.g. 'Bet365'
 const BOOKMAKER   = process.env.BOOKMAKER || '';
@@ -90,14 +91,18 @@ function onRLOk(){ rlBackoff = 30; }
 function isRL(e) { return /rate.limit|429|too many/i.test(String(e?.message||e)); }
 
 // ── Period helpers ────────────────────────────────────────────────────────────
+// UI (app.js) convention for the timer `md` flag:
+//   md === '1' → "Mi-temps" (halftime BREAK)   md === '2' → "Pause"
+//   md === '3' → "Prolongation" (extra time)   md === ''  → derive from minute (tm)
+// So we only set md to a non-empty flag for break states; during active play
+// we return '' and let the UI compute "45'" / "1ère mi-temps" from the minute.
 function mapPeriod(p) {
-  if (!p) return '1';
+  if (!p) return '';
   const s = String(p).toUpperCase().replace(/[-_ ]/g,'');
-  if (s==='HT'||s==='HALFTIME')   return 'HT';
-  if (s==='1'||s==='1H'||s==='FIRSTHALF')  return '1';
-  if (s==='2'||s==='2H'||s==='SECONDHALF') return '2';
-  if (s==='OT'||s==='ET')         return 'OT';
-  return '1';
+  if (s==='HT'||s==='HALFTIME'||s==='HALF-TIME'||s==='BREAK') return '1'; // halftime → Mi-temps
+  if (s==='PAUSE')                return '2';
+  if (s==='OT'||s==='ET'||s==='EXTRATIME'||s==='OVERTIME') return '3';
+  return ''; // first/second half or unknown → derive from minute
 }
 // Extract a string name from a field that could be a string, number, or object
 function extractName(...candidates) {
@@ -114,9 +119,15 @@ function extractName(...candidates) {
 }
 
 function mapScore(sc) {
-  if (!sc) return '';
+  if (!sc && sc !== 0) return '';
   if (typeof sc === 'string') return sc;
-  return `${sc.home??sc.h??0}-${sc.away??sc.a??0}`;
+  if (typeof sc === 'object') {
+    const h = sc.home ?? sc.h ?? null;
+    const a = sc.away ?? sc.a ?? null;
+    if (h === null && a === null) return '';
+    return `${h ?? 0}-${a ?? 0}`;
+  }
+  return '';
 }
 function normEv(ev, sportSlug) {
   const sid = SPORT_IDS[sportSlug] || '1';
@@ -128,8 +139,8 @@ function normEv(ev, sportSlug) {
     league:      { id: String(ev.league_id||''), name: extractName(ev.league_name, ev.competition, ev.league) },
     home:        { id: String(ev.home_id||''), name: extractName(ev.home_team, ev.home) },
     away:        { id: String(ev.away_id||''), name: extractName(ev.away_team, ev.away) },
-    ss:          mapScore(ev.score||ev.ss),
-    timer:       { tm: parseInt(ev.minute||ev.elapsed||0)||0, ts: parseInt(ev.second||0)||0, md: mapPeriod(ev.period||ev.half||ev.phase) },
+    ss:          mapScore(ev.scores||ev.score||ev.ss),
+    timer:       { tm: parseInt(ev.minute??ev.elapsed??ev.time_min??ev.clock??0)||0, ts: parseInt(ev.second??ev.seconds??0)||0, md: mapPeriod(ev.period||ev.half||ev.phase||ev.status_more) },
     _source:     'oddsapi',
     _ts:         Date.now(),
   };
@@ -559,17 +570,15 @@ async function handleWsMessage(data) {
   }
 }
 
-// ── Periodic score/meta refresh (REST, cheap — no odds) ──────────────────────
-// Fetches live AND upcoming events so Redis always has match metadata.
-let metaSportCursor = 0;
-async function refreshMeta() {
+// ── Live score/timer refresh for ONE sport (REST, cheap — no odds) ───────────
+// Scores + timer are NOT delivered over WebSocket (it only carries odds), so
+// we must poll /events/live to keep score/minute fresh. Football is polled
+// frequently (see fast timer in main); other sports cycle slower.
+async function refreshSportLive(sport) {
   if (rateLimited()) return;
-  const sport = ALL_SPORTS[metaSportCursor % ALL_SPORTS.length];
-  metaSportCursor++;
   const client = new OddsAPIClient({ apiKey: API_KEY });
   const liveIds = new Set();
   try {
-    // Live events
     const resp = await client.getLiveEvents(sport);
     const arr  = Array.isArray(resp)?resp:(Array.isArray(resp?.data)?resp.data:[]);
     onRLOk();
@@ -582,30 +591,8 @@ async function refreshMeta() {
       store[id].sport = sport;
       await writeToRedis(id);
     }
-    if (arr.length) log(`Meta refresh ${sport} live: ${arr.length} events`);
-
-    // Upcoming events (for prematch display) — no odds needed
-    try {
-      const uResp = await client.getUpcomingEvents(sport);
-      const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
-      let uCount = 0;
-      for (const ev of uArr) {
-        const id = String(ev.id);
-        if (!id || !(ev.home || ev.home_team)) continue;
-        if (store[id]) continue; // already in live, skip
-        if (!store[id]) store[id] = {};
-        const meta = normEv(ev, sport);
-        meta.time_status = '0'; // upcoming
-        store[id].meta  = meta;
-        store[id].sport = sport;
-        await writeToRedis(id);
-        uCount++;
-        if (uCount >= 50) break; // cap at 50 upcoming per sport per cycle
-      }
-      if (uCount) log(`Meta refresh ${sport} upcoming: ${uCount} events`);
-    } catch(eu) { /* upcoming may not exist on all plans — ignore */ }
-
-    // Remove events that vanished (live only — keep upcoming until they start)
+    if (arr.length) log(`Live refresh ${sport}: ${arr.length} events`);
+    // Remove live events that vanished (kept upcoming untouched)
     for (const id of Object.keys(store)) {
       if (store[id]?.sport===sport && store[id]?.meta?.time_status==='1' && !liveIds.has(id)) {
         await removeFromRedis(id);
@@ -614,6 +601,45 @@ async function refreshMeta() {
   } catch(e) {
     if (isRL(e)) onRL();
   } finally { try { client.close&&client.close(); } catch(_){} }
+}
+
+// ── Upcoming (prematch) refresh for ONE sport — runs in the slow cycle ───────
+async function refreshSportUpcoming(sport) {
+  if (rateLimited()) return;
+  const client = new OddsAPIClient({ apiKey: API_KEY });
+  try {
+    const uResp = await client.getUpcomingEvents(sport);
+    const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
+    onRLOk();
+    let uCount = 0;
+    for (const ev of uArr) {
+      const id = String(ev.id);
+      if (!id || !(ev.home || ev.home_team)) continue;
+      if (store[id] && store[id]?.meta?.time_status === '1') continue; // already live
+      if (!store[id]) store[id] = {};
+      const meta = normEv(ev, sport);
+      meta.time_status = '0'; // upcoming
+      store[id].meta  = meta;
+      store[id].sport = sport;
+      await writeToRedis(id);
+      uCount++;
+      if (uCount >= 80) break;
+    }
+    if (uCount) log(`Upcoming refresh ${sport}: ${uCount} events`);
+  } catch(eu) { /* upcoming may not exist on all plans — ignore */ }
+}
+
+// Fast football live loop (score/timer near real-time)
+async function refreshFootballLive() { await refreshSportLive('football'); }
+
+// Slow full cycle: all sports live + upcoming, one sport per tick
+let metaSportCursor = 0;
+async function refreshMeta() {
+  if (rateLimited()) return;
+  const sport = ALL_SPORTS[metaSportCursor % ALL_SPORTS.length];
+  metaSportCursor++;
+  await refreshSportLive(sport);
+  await refreshSportUpcoming(sport);
 }
 
 // ── Prune stale Redis entries ─────────────────────────────────────────────────
@@ -653,10 +679,14 @@ async function main() {
     }, 5000); // 5s delay so WS can connect first
   }
 
-  // Step 3: Score/meta refresh — run immediately, then every 30s
-  // Run refreshMeta immediately so Redis gets home/away names without waiting for WS welcome.
+  // Step 3a: Fast football live loop — score/timer near real-time (every 12s).
+  // Football is the priority sport; scores/timers must feel live like fcbet216.
+  refreshFootballLive().catch(e => log('Football live init error:', e.message));
+  setInterval(() => refreshFootballLive().catch(e => log('Football live error:', e.message)), 12_000);
+
+  // Step 3b: Full multi-sport cycle (live + upcoming), one sport per tick (every 20s).
   refreshMeta().catch(e => log('Meta init error:', e.message));
-  setInterval(refreshMeta, 30_000); // then every 30s
+  setInterval(refreshMeta, 20_000);
 
   // Periodic stats log every 60s — shows how many events are in store + Redis
   setInterval(async () => {
