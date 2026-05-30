@@ -992,9 +992,9 @@ if ($action === 'inplay') {
     }
 
     // ── Redis-first: ws_daemon.js feeds Redis — serve from there if available ──
+    // Only use Redis if it has actual events. If empty, fall through to BetsAPI.
     $redis_results = redis_get_sport_matches($sport_id);
     if ($redis_results !== null && count($redis_results) > 0) {
-        // Have live Redis data — apply margin to odds and return immediately
         foreach ($redis_results as &$rm) {
             if (!empty($rm['live_odds'])) {
                 $lo = &$rm['live_odds'];
@@ -1011,6 +1011,7 @@ if ($action === 'inplay') {
         echo json_encode(['success' => 1, 'results' => array_values($redis_results), '_src' => 'redis']);
         exit;
     }
+    // Redis empty or unavailable — fall through to BetsAPI (daemon rate-limited or not started yet)
 
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
     $stream_cache = $cache_dir . '/inplay_stream.json';
@@ -1032,17 +1033,14 @@ if ($action === 'inplay') {
     // cache file however old it is (tick_live will update it shortly).
     // Only fall back to a direct BetsAPI call when no lock file exists AND
     // no cache file exists (truly cold start with no daemon).
-    $tick_lock    = $cache_dir . '/tick_live.lock';
-    $daemon_alive = file_exists($tick_lock); // lock exists = daemon ever ran
-    // How old is the cache allowed to be before we show "no matches"?
-    // When daemon is alive: infinite — tick_live will refresh it.
-    // When daemon is dead and no cache: 0 — must fetch live.
-    $cache_max_age = $daemon_alive ? PHP_INT_MAX : 30;
-    // Volume Plan: unlimited calls — tighten TTLs for maximum freshness.
-    $cache_ttl     = 1;
-    $ev_cache_ttl  = $is_football ? 1 : 2;
-    $ev_stale_ttl  = 1;
-    $odds_bg_ttl   = $is_football ? 4 : 6;
+    // BetsAPI fallback: always allowed now (ws_daemon may be rate-limited).
+    // Use short cache so data stays fresh.
+    $cache_max_age  = 30;   // use file cache if < 30s old, else re-fetch from BetsAPI
+    $daemon_alive   = false; // ws_daemon is separate; don't block BetsAPI calls
+    $cache_ttl      = 1;
+    $ev_cache_ttl   = $is_football ? 1 : 2;
+    $ev_stale_ttl   = 1;
+    $odds_bg_ttl    = $is_football ? 4 : 6;
     $ev_refresh_cap = 50;
 
     // ── Step 1: Get inplay_filter per sport ────────────────────────────────
@@ -2106,7 +2104,6 @@ if ($action === 'match_live') {
     // ── Redis-first: serve from ws_daemon.js store when available ─────────────
     $redis_ev = redis_get_event($match_id);
     if ($redis_ev && !empty($redis_ev['home']['name'])) {
-        // Apply margin to live_odds if set
         if (!empty($redis_ev['live_odds'])) {
             $lo = &$redis_ev['live_odds'];
             foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
@@ -2119,22 +2116,22 @@ if ($action === 'match_live') {
         $markets = [];
         if (!empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
             foreach ($redis_ev['md_markets'] as $mkt) {
-                $sel = [];
-                foreach ($mkt['odds'] ?? [] as $o) {
-                    $v = (float)($o['odds'] ?? 0);
-                    if ($v > 1.01) $sel[] = ['name' => $o['name'] ?? '', 'odds' => apply_margin_to_odds($v), 'NA' => $o['NA'] ?? ''];
+                $sel_in = $mkt['selections'] ?? $mkt['odds'] ?? [];
+                $sel    = [];
+                foreach ($sel_in as $s) {
+                    $v = (float)($s['odds'] ?? 0);
+                    if ($v > 1.01) $sel[] = ['name'=>$s['name']??'','odds'=>apply_margin_to_odds($v),'NA'=>$s['NA']??''];
                 }
-                if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
+                if ($sel) $markets[] = ['name'=>$mkt['name'],'selections'=>$sel,'is_open'=>true];
             }
         }
-        header('X-SB-Source: redis-ml');
-        echo json_encode([
-            'success'  => 1,
-            'match'    => $redis_ev,
-            'markets'  => $markets,
-            '_src'     => 'redis',
-        ]);
-        exit;
+        // Only return from Redis if we have markets; else fall through to BetsAPI
+        if (!empty($markets)) {
+            header('X-SB-Source: redis-ml');
+            echo json_encode(['success'=>1,'match'=>$redis_ev,'markets'=>$markets,'_src'=>'redis']);
+            exit;
+        }
+        // No markets in Redis — fall through to BetsAPI to get them
     }
 
     // ── PER-MATCH RESPONSE CACHE ─────────────────────────────────────────────
@@ -2412,7 +2409,6 @@ if ($action === 'match_detail') {
             $md_built   = $odds_data ? oddsapi_build_markets($odds_data) : [];
             if ($md_built) {
                 oddsapi_save_to_redis($match_id, $md_built, 90);
-                // Apply margin and serve
                 foreach ($md_built as $mkt) {
                     $sel = [];
                     foreach ($mkt['selections'] as $s) {
@@ -2424,14 +2420,19 @@ if ($action === 'match_detail') {
             }
         }
 
-        header('X-SB-Source: redis-md');
-        echo json_encode([
-            'success'  => 1,
-            'match'    => $redis_ev,
-            'markets'  => $markets,
-            '_src'     => 'redis' . (empty($redis_ev['md_markets']) ? '+ondemand' : ''),
-        ]);
-        exit;
+        // If we now have markets (from Redis or on-demand odds-api.io) — return immediately.
+        // If still empty (odds-api.io also rate-limited) — fall through to BetsAPI below.
+        if (!empty($markets)) {
+            header('X-SB-Source: redis-md');
+            echo json_encode([
+                'success'  => 1,
+                'match'    => $redis_ev,
+                'markets'  => $markets,
+                '_src'     => 'redis' . (empty($redis_ev['md_markets']) ? '+ondemand' : ''),
+            ]);
+            exit;
+        }
+        // else: odds-api.io also unavailable — fall through to BetsAPI fallback below
     }
 
     $match_data = null;
