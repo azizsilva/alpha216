@@ -287,33 +287,32 @@ function buildMarkets(markets) {
       if (sel.length) md.push({name:'1X2',selections:sel,is_open:true});
     }
     if (['TOTALS','OVERUNDER','GOALS','TOTALGOALS','OVER/UNDER'].includes(name)) {
-      // Build one Over/Under market per line (multiple lines in odds array).
-      // REST /odds uses `max` for the line; WS uses `hdp`. Read both.
-      let firstLine = true;
+      // ONE "Total" family with all O/U lines grouped (line in selection.handicap).
+      // The UI groups by `handicap` → slider + grid toggle (fcbet216 parity).
+      const tsel=[]; let firstLine=true;
       for (const entry of (mkt.odds||[])) {
         const line=+(entry.hdp??entry.max??entry.points??entry.line??entry.total??2.5);
         const ov=+(entry.over||0),un=+(entry.under||0);
         if (ov<1.01&&un<1.01) continue;
         if (firstLine) { lo.ou_line=line; lo.ou_over=ov; lo.ou_under=un; firstLine=false; }
-        const sel=[];
-        if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`O ${line}`});
-        if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`U ${line}`});
-        if (sel.length) md.push({name:`Total ${line}`,selections:sel,is_open:true});
+        if (ov>1) tsel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`O ${line}`,handicap:line});
+        if (un>1) tsel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`U ${line}`,handicap:line});
       }
+      if (tsel.length) md.push({name:'Total',selections:tsel,is_open:true});
     }
     if (['SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT'].includes(name)) {
-      // odds-api.io "Spread" uses over=home-side, under=away-side (NOT home/away).
-      // Build ONE market per handicap line (multiple lines in odds array).
+      // ONE "Handicap" family with all lines grouped (line in selection.handicap).
+      // odds-api.io "Spread" uses over=home-side, under=away-side.
+      const hsel=[];
       for (const entry of (mkt.odds||[])) {
         const hdp=+(entry.hdp??entry.points??entry.line??entry.handicap??0);
         const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
         if (hh<1.01&&ah<1.01) continue;
         const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
-        const sel=[];
-        if (hh>1) sel.push({name:`1 (${fh})`,odds:fmt(hh),NA:`H ${hdp}`});
-        if (ah>1) sel.push({name:`2 (${fa})`,odds:fmt(ah),NA:`A ${-hdp}`});
-        if (sel.length) md.push({name:`Handicap Asiatique ${fh}`,selections:sel,is_open:true});
+        if (hh>1) hsel.push({name:`1 ${fh}`,odds:fmt(hh),NA:`H ${hdp}`,handicap:hdp});
+        if (ah>1) hsel.push({name:`2 ${fa}`,odds:fmt(ah),NA:`A ${-hdp}`,handicap:hdp});
       }
+      if (hsel.length) md.push({name:'Handicap',selections:hsel,is_open:true});
     }
     if (name==='DOUBLECHANCE') {
       const dc={};
@@ -337,26 +336,26 @@ function buildMarkets(markets) {
       if (sel.length) md.push({name:'Les deux équipes qui marquent',selections:sel,is_open:true});
     }
     if (['CORNERS','TOTALCORNERS','CORNERSOVERUNDER'].includes(name)) {
+      const csel=[];
       for (const entry of (mkt.odds||[])) {
         const cl=+(entry.hdp??entry.max??entry.points??entry.line??9.5);
         const co=+(entry.over||0),cu=+(entry.under||0);
         if (co<1.01&&cu<1.01) continue;
-        const sel=[];
-        if (co>1) sel.push({name:`Plus de ${cl}`,  odds:fmt(co),NA:`CO ${cl}`});
-        if (cu>1) sel.push({name:`Moins de ${cl}`, odds:fmt(cu),NA:`CU ${cl}`});
-        if (sel.length) md.push({name:`Total des corners Plus/Moins ${cl}`,selections:sel,is_open:true});
+        if (co>1) csel.push({name:`Plus de ${cl}`,  odds:fmt(co),NA:`CO ${cl}`,handicap:cl});
+        if (cu>1) csel.push({name:`Moins de ${cl}`, odds:fmt(cu),NA:`CU ${cl}`,handicap:cl});
       }
+      if (csel.length) md.push({name:'Total des corners',selections:csel,is_open:true});
     }
     if (['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER'].includes(name)) {
+      const ysel=[];
       for (const entry of (mkt.odds||[])) {
         const yl=+(entry.hdp??entry.max??entry.points??entry.line??3.5);
         const yo=+(entry.over||0),yu=+(entry.under||0);
         if (yo<1.01&&yu<1.01) continue;
-        const sel=[];
-        if (yo>1) sel.push({name:`Plus de ${yl}`,  odds:fmt(yo),NA:`YC ${yl}`});
-        if (yu>1) sel.push({name:`Moins de ${yl}`, odds:fmt(yu),NA:`YC- ${yl}`});
-        if (sel.length) md.push({name:`Cartons Plus/Moins ${yl}`,selections:sel,is_open:true});
+        if (yo>1) ysel.push({name:`Plus de ${yl}`,  odds:fmt(yo),NA:`YC ${yl}`,handicap:yl});
+        if (yu>1) ysel.push({name:`Moins de ${yl}`, odds:fmt(yu),NA:`YC- ${yl}`,handicap:yl});
       }
+      if (ysel.length) md.push({name:'Cartons',selections:ysel,is_open:true});
     }
     if (['CORRECTSCORE','EXACTSCORE'].includes(name)) {
       const sel=[];
@@ -366,18 +365,18 @@ function buildMarkets(markets) {
       }
       if (sel.length) md.push({name:'Score exact',selections:sel,is_open:true});
     }
-    // Team Totals (Total équipe 1 / 2)
+    // Team Totals (Total équipe 1 / 2) — grouped family
     if (['TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL'].includes(name)) {
       const sideLabel = (name==='AWAYTOTALS'||name==='AWAYTEAMTOTAL') ? 'équipe 2' : 'équipe 1';
+      const ttsel=[];
       for (const entry of (mkt.odds||[])) {
         const line=+(entry.hdp??entry.max??entry.points??entry.line??1.5);
         const ov=+(entry.over||0),un=+(entry.under||0);
         if (ov<1.01&&un<1.01) continue;
-        const sel=[];
-        if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`TT O ${line}`});
-        if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`TT U ${line}`});
-        if (sel.length) md.push({name:`Total ${sideLabel} Plus/Moins ${line}`,selections:sel,is_open:true});
+        if (ov>1) ttsel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`TT O ${line}`,handicap:line});
+        if (un>1) ttsel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`TT U ${line}`,handicap:line});
       }
+      if (ttsel.length) md.push({name:`Total ${sideLabel}`,selections:ttsel,is_open:true});
     }
     // Draw No Bet
     if (name==='DRAWNOBET') {
@@ -404,30 +403,30 @@ function buildMarkets(markets) {
       if (ha>1) sel.push({name:'2',odds:fmt(ha),NA:'HT2'});
       if (sel.length) md.push({name:'1ère mi-temps - 1x2',selections:sel,is_open:true});
     }
-    // Half Time Handicap ("Spread HT") — one market per line, over/under sides
+    // Half Time Handicap ("Spread HT") — grouped family
     if (['SPREADHT','HANDICAPHT','ASIANHANDICAPHT'].includes(name)) {
+      const hhsel=[];
       for (const entry of (mkt.odds||[])) {
         const hdp=+(entry.hdp??entry.points??entry.line??0);
         const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
         if (hh<1.01&&ah<1.01) continue;
         const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
-        const sel=[];
-        if (hh>1) sel.push({name:`1 (${fh})`,odds:fmt(hh),NA:`HTH ${hdp}`});
-        if (ah>1) sel.push({name:`2 (${fa})`,odds:fmt(ah),NA:`HTA ${-hdp}`});
-        if (sel.length) md.push({name:`1ère mi-temps - Handicap ${fh}`,selections:sel,is_open:true});
+        if (hh>1) hhsel.push({name:`1 ${fh}`,odds:fmt(hh),NA:`HTH ${hdp}`,handicap:hdp});
+        if (ah>1) hhsel.push({name:`2 ${fa}`,odds:fmt(ah),NA:`HTA ${-hdp}`,handicap:hdp});
       }
+      if (hhsel.length) md.push({name:'1ère mi-temps - Handicap',selections:hhsel,is_open:true});
     }
-    // Half Time Totals ("Totals HT") — one market per line
+    // Half Time Totals ("Totals HT") — grouped family
     if (['TOTALSHT','OVERUNDERHT','GOALSHT'].includes(name)) {
+      const htsel=[];
       for (const entry of (mkt.odds||[])) {
         const line=+(entry.hdp??entry.max??entry.points??entry.line??1.5);
         const ov=+(entry.over||0),un=+(entry.under||0);
         if (ov<1.01&&un<1.01) continue;
-        const sel=[];
-        if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`HTO ${line}`});
-        if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`HTU ${line}`});
-        if (sel.length) md.push({name:`1ère mi-temps - Total ${line}`,selections:sel,is_open:true});
+        if (ov>1) htsel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`HTO ${line}`,handicap:line});
+        if (un>1) htsel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`HTU ${line}`,handicap:line});
       }
+      if (htsel.length) md.push({name:'1ère mi-temps - Total',selections:htsel,is_open:true});
     }
   }
 

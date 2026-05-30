@@ -391,11 +391,16 @@ function build_markets_from_redis_ev($redis_ev) {
         $sel    = [];
         foreach ($sel_in as $s) {
             $v = (float)($s['odds'] ?? 0);
-            if ($v > 1.01) $sel[] = [
-                'name' => $s['name'] ?? '',
-                'odds' => apply_margin_to_odds($v),
-                'NA'   => $s['NA']   ?? '',
-            ];
+            if ($v > 1.01) {
+                $one = [
+                    'name' => $s['name'] ?? '',
+                    'odds' => apply_margin_to_odds($v),
+                    'NA'   => $s['NA']   ?? '',
+                ];
+                // Preserve the line so the UI groups Total/Handicap "en famille".
+                if (isset($s['handicap']) && $s['handicap'] !== '') $one['handicap'] = $s['handicap'];
+                $sel[] = $one;
+            }
         }
         if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
     }

@@ -225,20 +225,18 @@ function computeFallbackTimer(m) {
     var totalMin = Math.floor(elapsed / 60);
     var sec = elapsed % 60;
     if (apiHalf === 2) {
-      // 2nd half confirmed by API — count in 46-90 range, no halftime flip.
+      // 2nd half CONFIRMED by API (p2 data exists) — count in 46-90 range,
+      // never flip to halftime regardless of wall-clock.
       var mm2 = (totalMin > 60) ? (46 + (totalMin - 60)) : Math.max(46, totalMin);
       if (mm2 > 125) mm2 = 90;
       return { tm: mm2, ts: sec, md: '0', estimated: true };
     }
-    if (apiHalf === 1) {
-      // 1st half confirmed. Past 45' with no 2nd-half data yet → real break.
-      if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
-      return { tm: 45, ts: 0, md: '1', estimated: true };
-    }
-    // Unknown half (no period data) — legacy heuristic.
+    // apiHalf 0 or 1 is AMBIGUOUS: a scoreless 2nd half produces no p2 data,
+    // so we must NOT force halftime from it. Use the wall-clock heuristic —
+    // halftime lasts ~15 min, so past minute ~60 the match is in the 2nd half.
     if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
-    if (totalMin < 60)  return { tm: 45,       ts: 0,   md: '1', estimated: true };
-    var matchMin = 46 + (totalMin - 60);
+    if (totalMin < 58)  return { tm: 45,       ts: 0,   md: '1', estimated: true };
+    var matchMin = 46 + (totalMin - 58);
     if (matchMin > 125) return { tm: 90, ts: 0, md: '0', estimated: true };
     return { tm: matchMin, ts: sec, md: '0', estimated: true };
   }
