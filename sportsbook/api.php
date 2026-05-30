@@ -552,17 +552,11 @@ function resolve_match_markets($match_id, $redis_ev = null) {
             if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
         }
     }
-    $needs_fetch = empty($markets) || count($markets) < 3;
-    if (!$needs_fetch) {
-        $has_btts = false;
-        foreach ($markets as $m) {
-            if (stripos($m['name'] ?? '', 'deux équipes') !== false || stripos($m['name'] ?? '', 'marquent') !== false) {
-                $has_btts = true;
-                break;
-            }
-        }
-        if (!$has_btts) $needs_fetch = true;
-    }
+    // Only fetch on-demand if we have no usable markets at all.
+    // The daemon's REST batch polling (every 3s) fills corners/BTTS/cards from
+    // 1xbet/22Bet; forcing a fetch just because BTTS is absent hammers the API
+    // rate limit and makes page loads slow.
+    $needs_fetch = empty($markets) || count($markets) < 2;
     if ($needs_fetch) {
         $hn = $redis_ev['home']['name'] ?? '';
         $an = $redis_ev['away']['name'] ?? '';

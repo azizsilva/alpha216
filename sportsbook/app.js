@@ -6923,13 +6923,10 @@ window.sbMdTab = function(btn, tabName) {
     var mdMatch = window._mdMatch;
     var isLiveMatch = mdMatch && (typeof isMatchLive === 'function') && isMatchLive(mdMatch);
     var lowerTab = tabName.toLowerCase();
-    // Markets the odds provider only publishes PRE-MATCH (its live feed is
-    // limited to 1X2 / Total / Handicap). Be honest about why they're empty.
-    var prematchOnly = ['corners','corner','correct score','cartes','cartons','cards'];
-    var isPrematchOnly = prematchOnly.some(function(k){ return lowerTab.indexOf(k) !== -1; });
-    if (isLiveMatch && isPrematchOnly) {
-      msg = '<b>' + h(tabName) + '</b> non proposé en direct par le fournisseur — disponible avant le coup d\'envoi.';
-    } else if (!isLiveMatch && (lowerTab.indexOf('minute') !== -1)) {
+    // The daemon requests Corners/Cards/Correct Score live from multiple bookmakers.
+    // If they're empty it's because the provider doesn't offer them for this fixture,
+    // not because they're prematch-only — so always show the generic message.
+    if (!isLiveMatch && (lowerTab.indexOf('minute') !== -1)) {
       msg = '<b>' + h(tabName) + '</b> sera disponible après le coup d\'envoi.';
     } else {
       msg = 'Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.';

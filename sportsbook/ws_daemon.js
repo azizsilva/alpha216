@@ -909,10 +909,32 @@ async function handleWsMessage(data) {
         if (data.league) store[id].meta.league = { id: '', name: extractName(data.league_name, data.competition, data.league) };
       }
 
-      // Update odds/markets from WS
+      // Update odds/markets from WS — MERGE into existing rather than replace.
+      // WS pushes are single-bookmaker (e.g. Bet365 only carries ML/Spread/Totals/HT).
+      // REST batch polling (/odds/multi) already merged Corners/Cards from 1xbet/22Bet.
+      // Overwriting kills those markets on every Bet365 push. We keep existing markets
+      // not present in this WS push (Corners, Cards, etc.) and update those that are.
       if (data.markets && data.markets.length > 0) {
-        store[id].markets_raw = data.markets;
-        store[id].bookie      = data.bookie || BOOKMAKER || 'Bet365';
+        const prevRaw = store[id].markets_raw || [];
+        if (prevRaw.length) {
+          const byName = {};
+          for (const m of prevRaw) {
+            const key = m?.name ? m.name.toUpperCase().replace(/[\s_\-\/]/g,'') : null;
+            if (key) byName[key] = m;
+          }
+          for (const m of data.markets) {
+            const key = m?.name ? m.name.toUpperCase().replace(/[\s_\-\/]/g,'') : null;
+            if (!key) continue;
+            const existing = byName[key];
+            const prevCnt = existing ? (Array.isArray(existing.odds) ? existing.odds.length : 0) : -1;
+            const cnt = Array.isArray(m.odds) ? m.odds.length : 0;
+            if (!existing || cnt >= prevCnt) byName[key] = m;
+          }
+          store[id].markets_raw = Object.values(byName);
+        } else {
+          store[id].markets_raw = data.markets;
+        }
+        store[id].bookie = data.bookie || BOOKMAKER || 'Bet365';
       }
 
       // Update live score/timer if WS sends them
