@@ -761,8 +761,8 @@ function patchMatchDetailLive(m, markets) {
     if (newSig === window._mdMktSig || _activeSig === window._mdActiveSig) {
       try { _mdUpdateOddsInPlace(nextMarkets, m); } catch (e) {}
       try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
-      // Keep the tab cache in sync with fresh odds for instant tab switches.
-      sbClearMdTabCache();
+      // Fast path: odds moved in-place — keep the tab cache so clicking tabs
+      // stays instant. Only clear cache when market structure actually changes.
       window._mdMktSig = newSig;
       window._mdActiveSig = _activeSig;
       needsRender = false;
@@ -1928,8 +1928,10 @@ function startPolling() {
         if (isChamp) {
           renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
         } else {
-          renderMatches(S.matches);
-          markLiveSidebarLeagues(S.matches);
+          // Try fast in-place patch first — avoids scroll jank from full rebuild.
+          // Falls back to full renderMatches when cards appear/disappear.
+          var patched = patchMatchCardsInPlace(S.matches);
+          if (!patched) { renderMatches(S.matches); markLiveSidebarLeagues(S.matches); }
         }
       })
       .catch(function() {
@@ -2592,6 +2594,43 @@ function startLiveMinuteTicker() {
     patch('.mc-live-min');
     patch('.slc-time');
   }, 1000);
+}
+
+// Fast in-place patcher: updates score, odds values, timer inside existing card DOM.
+// Returns true if ALL cards were found and patched. Returns false if any card is
+// missing (new match appeared or vanished) — caller does full renderMatches instead.
+function patchMatchCardsInPlace(matches) {
+  var liveBody = document.getElementById('sb-live-groups-body');
+  if (!liveBody) return false;
+  var allCards = liveBody.querySelectorAll('.mc[id^="mc-"]');
+  var cardIds = {};
+  allCards.forEach(function(c) { cardIds[c.id] = true; });
+  var matchIds = {};
+  var liveMatches = (matches || []).filter(isMatchLive);
+  liveMatches.forEach(function(m) { matchIds['mc-' + m.id] = true; });
+
+  // If card set changed (addition/removal), do full rebuild
+  var idsMatch = Object.keys(cardIds).length === Object.keys(matchIds).length &&
+    Object.keys(matchIds).every(function(k) { return cardIds[k]; });
+  if (!idsMatch) return false;
+
+  liveMatches.forEach(function(m) {
+    var card = document.getElementById('mc-' + m.id);
+    if (!card) return;
+    var scores = m.ss ? m.ss.split('-') : ['0','0'];
+    // Patch scores — .mc-t-score elements (home=first, away=second)
+    var scoreEls = card.querySelectorAll('.mc-t-score');
+    if (scoreEls[0]) { var sv = String(scores[0]||'0'); if (scoreEls[0].textContent !== sv) scoreEls[0].textContent = sv; }
+    if (scoreEls[1]) { var sv = String(scores[1]||'0'); if (scoreEls[1].textContent !== sv) scoreEls[1].textContent = sv; }
+    // Patch odds — .mc-odd-val elements (1, X, 2 order)
+    var o = odds(m);
+    var oddEls = card.querySelectorAll('.mc-odd-val');
+    var oddVals = [o.h, o.x, o.a].filter(function(v) { return v > 1; });
+    oddEls.forEach(function(el, i) {
+      if (i < oddVals.length) { var fv = formatOdd(oddVals[i]); if (el.textContent !== fv) el.textContent = fv; }
+    });
+  });
+  return true;
 }
 
 function matchCard(m) {
