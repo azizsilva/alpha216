@@ -18,6 +18,65 @@ error_reporting(0);
 define('BETSAPI_TOKEN', '254610-7T3dEgVPsVZPNY');
 define('BETSAPI_BASE',  'https://api.b365api.com');
 
+// ══ Redis connection — populated by ws_daemon.js (odds-api.io feed) ══════════
+// Falls back gracefully when Redis is unavailable (file cache still works).
+$redis_conn = null;
+$redis_ok    = false;
+if (class_exists('Redis')) {
+    try {
+        $r = new Redis();
+        if (@$r->connect('127.0.0.1', 6379, 0.5)) {
+            $redis_conn = $r;
+            $redis_ok   = true;
+        }
+    } catch (Exception $_re) { $redis_conn = null; $redis_ok = false; }
+}
+
+/**
+ * Get all live matches for a sport from Redis.
+ * Returns an array of match objects, or null if Redis not available.
+ */
+function redis_get_sport_matches($sport_id) {
+    global $redis_conn, $redis_ok;
+    if (!$redis_ok || !$redis_conn) return null;
+    try {
+        $ids = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
+        if (empty($ids)) return [];
+        $out = [];
+        foreach ($ids as $id) {
+            $raw = $redis_conn->get("sb:ev:{$id}");
+            if ($raw) {
+                $m = json_decode($raw, true);
+                if ($m && !empty($m['home']['name'])) $out[] = $m;
+            }
+        }
+        return $out;
+    } catch (Exception $e) { return null; }
+}
+
+/**
+ * Get a single event from Redis by ID.
+ * Returns the match array or null.
+ */
+function redis_get_event($id) {
+    global $redis_conn, $redis_ok;
+    if (!$redis_ok || !$redis_conn) return null;
+    try {
+        $raw = $redis_conn->get("sb:ev:{$id}");
+        return $raw ? json_decode($raw, true) : null;
+    } catch (Exception $e) { return null; }
+}
+
+/**
+ * Get all live event IDs from Redis.
+ */
+function redis_get_all_ids() {
+    global $redis_conn, $redis_ok;
+    if (!$redis_ok || !$redis_conn) return null;
+    try { return $redis_conn->sMembers('sb:live:all'); }
+    catch (Exception $e) { return null; }
+}
+
 // ── DB Connection — try forza path first (where sb_matches lives) ──────────
 $pdo = null;
 $db_connected = false;
@@ -731,6 +790,27 @@ if ($action === 'inplay') {
     // Auto-purge stale sb_counts files older than 8 min so EN DIRECT badges refresh
     foreach (glob($cache_dir . '/sb_counts_*.json') ?: [] as $sf) {
         if ((time() - filemtime($sf)) >= 480) @unlink($sf);
+    }
+
+    // ── Redis-first: ws_daemon.js feeds Redis — serve from there if available ──
+    $redis_results = redis_get_sport_matches($sport_id);
+    if ($redis_results !== null && count($redis_results) > 0) {
+        // Have live Redis data — apply margin to odds and return immediately
+        foreach ($redis_results as &$rm) {
+            if (!empty($rm['live_odds'])) {
+                $lo = &$rm['live_odds'];
+                foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
+                    if (isset($lo[$ok]) && $lo[$ok] > 1.01) {
+                        $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                    }
+                }
+                unset($lo);
+            }
+        }
+        unset($rm);
+        header('X-SB-Source: redis');
+        echo json_encode(['success' => 1, 'results' => array_values($redis_results), '_src' => 'redis']);
+        exit;
     }
 
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
@@ -1824,6 +1904,40 @@ if ($action === 'match_live') {
     $match_id = trim($_GET['match_id'] ?? '');
     if (!$match_id) { echo json_encode(['success' => 0, 'error' => 'match_id required']); exit; }
 
+    // ── Redis-first: serve from ws_daemon.js store when available ─────────────
+    $redis_ev = redis_get_event($match_id);
+    if ($redis_ev && !empty($redis_ev['home']['name'])) {
+        // Apply margin to live_odds if set
+        if (!empty($redis_ev['live_odds'])) {
+            $lo = &$redis_ev['live_odds'];
+            foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
+                if (isset($lo[$ok]) && (float)$lo[$ok] > 1.01) {
+                    $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                }
+            }
+            unset($lo);
+        }
+        $markets = [];
+        if (!empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
+            foreach ($redis_ev['md_markets'] as $mkt) {
+                $sel = [];
+                foreach ($mkt['odds'] ?? [] as $o) {
+                    $v = (float)($o['odds'] ?? 0);
+                    if ($v > 1.01) $sel[] = ['name' => $o['name'] ?? '', 'odds' => apply_margin_to_odds($v), 'NA' => $o['NA'] ?? ''];
+                }
+                if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
+            }
+        }
+        header('X-SB-Source: redis-ml');
+        echo json_encode([
+            'success'  => 1,
+            'match'    => $redis_ev,
+            'markets'  => $markets,
+            '_src'     => 'redis',
+        ]);
+        exit;
+    }
+
     // ── PER-MATCH RESPONSE CACHE ─────────────────────────────────────────────
     //   match_live used to fire 3 fresh BetsAPI calls (/v3/event/view,
     //   _fetch_event_stats, /v1/bet365/event) on every single poll —
@@ -2070,6 +2184,30 @@ if ($action === 'match_live') {
 if ($action === 'match_detail') {
     $match_id = trim($_GET['match_id'] ?? '');
     if (!$match_id) { echo json_encode(['success' => 0, 'error' => 'match_id required']); exit; }
+
+    // ── Redis-first match_detail ────────────────────────────────────────────
+    $redis_ev = redis_get_event($match_id);
+    if ($redis_ev && !empty($redis_ev['home']['name'])) {
+        $markets = [];
+        if (!empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
+            foreach ($redis_ev['md_markets'] as $mkt) {
+                $sel = [];
+                foreach ($mkt['odds'] ?? [] as $o) {
+                    $v = (float)($o['odds'] ?? 0);
+                    if ($v > 1.01) $sel[] = ['name' => $o['name'] ?? '', 'odds' => apply_margin_to_odds($v), 'NA' => $o['NA'] ?? ''];
+                }
+                if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
+            }
+        }
+        header('X-SB-Source: redis-md');
+        echo json_encode([
+            'success'  => 1,
+            'match'    => $redis_ev,
+            'markets'  => $markets,
+            '_src'     => 'redis',
+        ]);
+        exit;
+    }
 
     $match_data = null;
     if ($db_connected) {
@@ -2432,6 +2570,48 @@ if ($action === 'live_refresh') {
     } else {
         $raw_ids = trim($_GET['ids'] ?? '');
         if ($raw_ids) $ids = array_slice(array_filter(explode(',', $raw_ids)), 0, 24);
+    }
+
+    // ── Redis-first live_refresh ───────────────────────────────────────────
+    if ($redis_ok && $ids) {
+        $refreshed_redis = [];
+        $all_from_redis  = true;
+        foreach ($ids as $mid) {
+            $re = redis_get_event($mid);
+            if ($re && !empty($re['home']['name'])) {
+                // Minimal patch — just score, timer, odds (what the client polls for)
+                if (!empty($re['live_odds'])) {
+                    $lo = &$re['live_odds'];
+                    foreach (['h','x','a','ou_over','ou_under'] as $ok) {
+                        if (isset($lo[$ok]) && (float)$lo[$ok] > 1.01) {
+                            $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                        }
+                    }
+                    unset($lo);
+                }
+                $refreshed_redis[$mid] = [
+                    'id'          => $re['id'],
+                    'ss'          => $re['ss']          ?? '',
+                    'timer'       => $re['timer']        ?? null,
+                    'time_status' => $re['time_status']  ?? '1',
+                    'stats'       => $re['stats']        ?? null,
+                    'live_odds'   => $re['live_odds']    ?? null,
+                ];
+            } else {
+                $all_from_redis = false;
+            }
+        }
+        if ($all_from_redis && $refreshed_redis) {
+            header('X-SB-Source: redis-refresh');
+            echo json_encode(['success' => 1, 'refreshed' => $refreshed_redis, '_src' => 'redis']);
+            exit;
+        }
+        // Partial — merge what we got from Redis and keep the rest for file-cache path
+        if ($refreshed_redis) {
+            $ids = array_values(array_diff($ids, array_keys($refreshed_redis)));
+            // Will continue below and merge at output — store partial result
+            $GLOBALS['_redis_partial'] = $refreshed_redis;
+        }
     }
 
     $refreshed = [];

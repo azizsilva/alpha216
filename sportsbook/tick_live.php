@@ -1,8 +1,21 @@
 <?php
 /**
  * ───────────────────────────────────────────────────────────────
- *   tick_live.php  —  Fast Live Tick Daemon
+ *   tick_live.php  —  RETIRED (replaced by ws_daemon.js)
  * ───────────────────────────────────────────────────────────────
+ * BetsAPI has been replaced by odds-api.io WebSocket feed.
+ * The new real-time daemon is: sportsbook/ws_daemon.js
+ *
+ * TO START THE NEW DAEMON on the VPS:
+ *   cd /var/www/public_html/sportsbook
+ *   npm install
+ *   node ws_daemon.js
+ *   (or: pm2 start ws_daemon.js --name alpina216-odds)
+ *
+ * This file is kept for reference only. Running it will print
+ * the message below and exit immediately.
+ *
+ * OLD DESCRIPTION (archived):
  * Runs forever as a long-lived CLI process. Every TICK_SECONDS
  * (default 2s) it fetches the freshest data DIRECTLY from
  * BetsAPI and writes to the per-sport file caches that the
@@ -30,6 +43,22 @@
  * (enforced via a lock file).
  */
 
+// ── RETIRED — print instructions and exit ────────────────────────────
+fwrite(STDOUT, "\n");
+fwrite(STDOUT, "╔══════════════════════════════════════════════════════════════╗\n");
+fwrite(STDOUT, "║  tick_live.php is RETIRED — replaced by ws_daemon.js        ║\n");
+fwrite(STDOUT, "║                                                              ║\n");
+fwrite(STDOUT, "║  To run the new real-time daemon:                            ║\n");
+fwrite(STDOUT, "║    cd /var/www/public_html/sportsbook                        ║\n");
+fwrite(STDOUT, "║    npm install                                                ║\n");
+fwrite(STDOUT, "║    node ws_daemon.js                                          ║\n");
+fwrite(STDOUT, "║                                                              ║\n");
+fwrite(STDOUT, "║  Or with pm2:                                                ║\n");
+fwrite(STDOUT, "║    pm2 start ws_daemon.js --name alpina216-odds              ║\n");
+fwrite(STDOUT, "╚══════════════════════════════════════════════════════════════╝\n");
+fwrite(STDOUT, "\n");
+exit(0);
+
 if (PHP_SAPI !== 'cli') {
     $ip = $_SERVER['REMOTE_ADDR'] ?? '';
     if (!in_array($ip, ['127.0.0.1','::1','::ffff:127.0.0.1'])) {
@@ -41,7 +70,7 @@ if (PHP_SAPI !== 'cli') {
 @set_time_limit(0);
 @ini_set('memory_limit', '256M');
 
-define('BETSAPI_TOKEN', '254610-7T3dEgVPsVZPNY');
+define('BETSAPI_TOKEN', 'RETIRED-see-ws_daemon.js');
 define('BETSAPI_BASE',  'https://api.b365api.com');
 define('CACHE_DIR',     __DIR__ . '/cache');
 define('LOCK_FILE',     CACHE_DIR . '/tick_live.lock');

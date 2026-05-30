@@ -1,0 +1,17 @@
+{
+  "name": "alpina216-ws-daemon",
+  "version": "1.0.0",
+  "description": "Real-time odds WebSocket daemon for alpina216 sportsbook",
+  "main": "ws_daemon.js",
+  "scripts": {
+    "start": "node ws_daemon.js",
+    "dev":   "node ws_daemon.js"
+  },
+  "dependencies": {
+    "redis": "^4.7.0",
+    "ws":    "^8.18.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
