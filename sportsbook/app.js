@@ -5595,6 +5595,9 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
   }
   var shown = filter ? markets.filter(filter) : markets;
   if (!shown.length) shown = markets;
+  if (activeTab === 'Principaux' && typeof sortMarketsForPrincipaux === 'function') {
+    shown = sortMarketsForPrincipaux(shown);
+  }
 
   out += '<div class="mc-md-markets">';
   if (!shown.length) {
@@ -5897,7 +5900,7 @@ function renderMatchDetail(m, markets) {
   //   1 minute  2ème mi-temps  Correct Score  Corners  Multigoals  [ⓘ alert]
   // The search button toggles an inline "Search market" input. The
   // red info button reveals a tooltip with the market lock legend.
-  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','2ème mi-temps','Correct Score','Corners','Multigoals'];
+  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','2ème mi-temps','Correct Score','Corners','Cartes','Multigoals'];
   out += '<div class="md-tabs-wrap" id="md-tabs-wrap">';
 
   // Search trigger (expands to input when clicked)
@@ -6520,10 +6523,44 @@ function renderMktBtn(sel, m, bbMode) {
 
 
 // ── Flash keywords: markets shown in "Flash" quick view (Principaux)
-var MD_FLASH_MARKETS = ['1x2','1 x 2','double chance','total','handicap','les deux équipes','btts',
-  'pair','impair','odd','even','pari combiné','corner','corners','plage de buts','goal range',
-  'multigoal','multigoals'];
+// Must match ALL market names produced by ws_daemon.js buildMarkets()
+var MD_FLASH_MARKETS = [
+  '1x2','1 x 2','match winner','résultat du match',
+  'double chance',
+  'over/under','total','les deux équipes','btts','both teams',
+  'handicap','handicap asiatique',
+  'score exact','correct score','exact score',
+  'corner','corners','total des corners',
+  'carton','carte','cards','yellow','jaune','cartons plus',
+  'pair','impair','odd','even',
+  'plage de buts','goal range','multigoal','multigoals',
+];
 var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
+
+// Canonical display order for "Principaux" tab (fcbet216 parity):
+// 1x2, Double Chance, Over/Under, Handicap, BTTS, Score exact, Corners, Cards, rest
+var PRINCIPAUX_ORDER = [
+  '1x2','1 x 2','match winner',
+  'double chance',
+  'over/under','total des buts','total goals','over','total',
+  'handicap asiatique','handicap',
+  'les deux équipes','btts','both teams',
+  'score exact','correct score',
+  'total des corners','corner',
+  'carton','cartons','cards','yellow','jaune',
+];
+function sortMarketsForPrincipaux(mkts) {
+  return mkts.slice().sort(function(a, b) {
+    var na = (a.name||'').toLowerCase(), nb = (b.name||'').toLowerCase();
+    function rank(n) {
+      for (var i = 0; i < PRINCIPAUX_ORDER.length; i++) {
+        if (n.indexOf(PRINCIPAUX_ORDER[i]) !== -1) return i;
+      }
+      return PRINCIPAUX_ORDER.length;
+    }
+    return rank(na) - rank(nb);
+  });
+}
 
 window._bbModeActive = false;
 
@@ -6579,6 +6616,7 @@ function getTabFilter(tabName) {
     return function(mkt) {
       var nm = (mkt.name || '').toLowerCase();
       if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
+      if (nm.indexOf('1 minute') !== -1) return false;
       return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
     };
   }
@@ -6627,6 +6665,14 @@ function getTabFilter(tabName) {
       return nm.indexOf('multigoal') !== -1 || nm.indexOf('multi-goal') !== -1 || nm.indexOf('multigoals') !== -1;
     };
   }
+  if (tabName === 'Cartes' || tabName === 'Cards' || tabName === 'Cartons') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('carton') !== -1 || nm.indexOf('carte') !== -1
+          || nm.indexOf('cards') !== -1 || nm.indexOf('yellow') !== -1
+          || nm.indexOf('jaune') !== -1 || nm.indexOf('red card') !== -1;
+    };
+  }
   if (tabName === 'Teams H2H' || tabName === 'Teams H2h' || tabName === 'teams h2h') {
     return function(mkt){
       var nm = (mkt.name||'').toLowerCase();
@@ -6657,6 +6703,7 @@ function sbMdPruneEmptyTabs() {
       btn.style.display = '';
       return;
     }
+    // Cartes, Corners, Correct Score — only show if data exists (handled below)
     var f = getTabFilter(tn);
     var any = false;
     if (f) {
@@ -6702,6 +6749,8 @@ window.sbMdTab = function(btn, tabName) {
   // Re-render markets — filter is built by the shared helper above
   var filter = getTabFilter(tabName);
   var shown = filter ? window._mdMarkets.filter(filter) : window._mdMarkets;
+  // Principaux: enforce canonical order (1X2 → DC → Over → Handicap → BTTS → CS → Corners → Cards)
+  if (tabName === 'Principaux') shown = sortMarketsForPrincipaux(shown);
   if (!shown.length && tabName !== 'Tout') {
     // More helpful empty state: distinguish "pre-match" (will appear at kickoff)
     // from "live but missing" (Bet365 didn't expose this market for this game).
