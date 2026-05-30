@@ -552,6 +552,15 @@ function _mdMarketSig(markets) {
   }).join('|');
 }
 
+/* Signature of just the markets visible under a given tab. Used so a sliding
+ * live ladder in another tab doesn't force a rebuild of the tab you're on. */
+function _mdActiveTabSig(markets, tabName) {
+  var filter = (tabName && tabName !== 'Tout' && typeof getTabFilter === 'function')
+    ? getTabFilter(tabName) : null;
+  var subset = filter ? (markets || []).filter(filter) : (markets || []);
+  return _mdMarketSig(subset);
+}
+
 /* Update odds values in the already-rendered DOM without rebuilding HTML.
  * Finds each button by its data-bid, updates the number, and flashes
  * green (up) / red (down). Returns count of changed buttons. */
@@ -739,14 +748,23 @@ function patchMatchDetailLive(m, markets) {
   if (nextMarkets) {
     window._mdMarkets = nextMarkets;
     var newSig = _mdMarketSig(nextMarkets);
-    // ── Fast path: same market structure → only odds values moved.
-    // Patch them in place (no innerHTML rebuild) so the user's tab and
-    // scroll position never jump. This kills the click-then-revert glitch.
-    if (newSig === window._mdMktSig) {
+    // Signature of ONLY the markets visible under the current tab. The global
+    // signature changes whenever the live Total/Handicap/Corners ladder window
+    // slides — but if the tab you're viewing (e.g. Correct Score, Mi-temps)
+    // is unchanged, we must NOT rebuild it (that's the click-then-flicker bug).
+    var _activeTabName = (S._mdActiveTab) ||
+      (document.querySelector('.md-tab.active') && document.querySelector('.md-tab.active').getAttribute('data-tab')) || 'Principaux';
+    var _activeSig = _mdActiveTabSig(nextMarkets, _activeTabName);
+    // ── Fast path: same market structure (globally OR for the active tab)
+    // → only odds values moved. Patch them in place (no innerHTML rebuild)
+    // so the user's tab and scroll position never jump.
+    if (newSig === window._mdMktSig || _activeSig === window._mdActiveSig) {
       try { _mdUpdateOddsInPlace(nextMarkets, m); } catch (e) {}
       try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
       // Keep the tab cache in sync with fresh odds for instant tab switches.
       sbClearMdTabCache();
+      window._mdMktSig = newSig;
+      window._mdActiveSig = _activeSig;
       needsRender = false;
     } else {
       // Structure changed (market added/removed) → full re-render once.
@@ -769,6 +787,7 @@ function patchMatchDetailLive(m, markets) {
             ? (nv > pv ? 'up' : 'down') : null;
         });
       });
+      window._mdActiveSig = _activeSig;
       needsRender = true;
       try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
       try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
@@ -5659,24 +5678,27 @@ window.sbRestoreExpandedCards = function() {
     if (chev) chev.classList.add('mc-chevron-up');
     if (!cached || !cached.markets) return;
 
-    // Pull the FRESH match data from the in-memory list. If odds changed,
-    // rebuild fallback markets, annotate _change for the arrows, and
-    // re-paint. Keeps the inline view truly live across poll cycles.
+    // Pull FRESH markets from the in-memory match (Redis md_markets) so the
+    // inline view stays live. Rebuild the DOM ONLY when the tab or the
+    // market structure actually changed — otherwise leave it untouched so
+    // the tab content never flickers on every 1.5s poll (the glitch).
     var fresh = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
     if (fresh) {
-      var prevOdds = cached.match && cached.match.live_odds ? JSON.stringify(cached.match.live_odds) : '';
-      var nextOdds = fresh.live_odds ? JSON.stringify(fresh.live_odds) : '';
-      if (prevOdds !== nextOdds) {
-        var nextMkts = null;
-        if (nextMkts && nextMkts.length) {
-          _mcDiffMarkets(cached.markets, nextMkts);
-          cached.match   = fresh;
-          cached.markets = nextMkts;
-        }
+      var freshMkts = marketsFromMatch(fresh);
+      if (freshMkts.length) {
+        _mcDiffMarkets(cached.markets, freshMkts);
+        cached.match   = fresh;
+        cached.markets = freshMkts;
+      } else if (fresh.live_odds) {
+        cached.match = fresh;
       }
     }
 
-    box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, cached.tab || 'Principaux');
+    var tab = cached.tab || 'Principaux';
+    var sig = tab + '|' + _mdMarketSig(cached.markets);
+    if (box._sbSig === sig && box.querySelector('.mc-md-inner')) return; // unchanged → no rebuild
+    box._sbSig = sig;
+    box.innerHTML = renderInlineMatchMarkets(mid, cached.match, cached.markets, tab);
   });
 };
 
@@ -5747,6 +5769,7 @@ window.sbInlineMcTab = function(btn, mid, tabName) {
   var cache = (window._mcMktCache || {})[mid];
   if (!cache || !cache.match || !cache.markets) return;
   cache.tab = tabName;
+  box._sbSig = tabName + '|' + _mdMarketSig(cache.markets);
   box.innerHTML = renderInlineMatchMarkets(mid, cache.match, cache.markets, tabName);
 };
 

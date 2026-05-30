@@ -924,14 +924,17 @@ async function refreshSportUpcoming(sport) {
     const uResp = await client.getUpcomingEvents(sport);
     const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
     onRLOk();
+    // Sort by KICKOFF first so the next several days are fully covered (the
+    // "browse by date" page needs every date populated). Priority European
+    // leagues only break ties within the same kickoff time.
     const PRIORITY = /world cup|champions league|premier league|la liga|serie a|bundesliga|ligue 1|europa league|conference league/i;
     uArr.sort((a, b) => {
+      const da = Date.parse(a.date || a.starts_at || a.start_time || 0) || 0;
+      const db = Date.parse(b.date || b.starts_at || b.start_time || 0) || 0;
+      if (da !== db) return da - db;
       const la = extractName(a.league_name, a.competition, a.league);
       const lb = extractName(b.league_name, b.competition, b.league);
-      const pa = PRIORITY.test(la) ? 0 : 1;
-      const pb = PRIORITY.test(lb) ? 0 : 1;
-      if (pa !== pb) return pa - pb;
-      return (Date.parse(a.date || a.starts_at || 0) || 0) - (Date.parse(b.date || b.starts_at || 0) || 0);
+      return (PRIORITY.test(la) ? 0 : 1) - (PRIORITY.test(lb) ? 0 : 1);
     });
     let uCount = 0;
     for (const ev of uArr) {
@@ -945,7 +948,7 @@ async function refreshSportUpcoming(sport) {
       store[id].sport = sport;
       await writeToRedis(id);
       uCount++;
-      if (uCount >= 250) break;
+      if (uCount >= 1200) break;
     }
     if (uCount) log(`Upcoming refresh ${sport}: ${uCount} events`);
   } catch(eu) { /* upcoming may not exist on all plans — ignore */ }
