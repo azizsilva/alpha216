@@ -32,7 +32,9 @@ const WS_URL      = 'wss://api.odds-api.io/v3/ws';
 const WS_MARKETS  = 'ML,Spread,Totals,BTTS,DoubleChance,Corners,Cards,CorrectScore';
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
 const WS_STATUS   = 'live';
-const BOOKMAKER   = 'Bet365';
+// Bookmakers configured in your odds-api.io account dashboard.
+// Leave empty to use whatever is configured there, or set explicitly e.g. 'Bet365'
+const BOOKMAKER   = process.env.BOOKMAKER || '';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {
@@ -266,7 +268,9 @@ async function restPrefetch() {
           await sleep(rlUntil - Date.now() + 500);
         }
         try {
-          const oddsResp = await client.getEventOdds({ eventId: id, bookmakers: BOOKMAKER });
+          const oddsParams = { eventId: id };
+          if (BOOKMAKER) oddsParams.bookmakers = BOOKMAKER;
+          const oddsResp = await client.getEventOdds(oddsParams);
           onRLOk();
           const bkData  = oddsResp?.bookmakers || oddsResp?.data?.bookmakers || {};
           const markets  = bkData[BOOKMAKER] || Object.values(bkData)[0] || [];
@@ -366,12 +370,17 @@ async function handleWsMessage(data) {
   if (data.seq && data.seq > lastSeq) lastSeq = data.seq;
 
   switch (data.type) {
-    case 'welcome':
-      log('WS welcome. Bookmakers:', (data.bookmakers||[]).join(','));
+    case 'welcome': {
+      const bks = data.bookmakers || [];
+      log('WS welcome. Bookmakers:', bks.length ? bks.join(',') : '(none configured — go to odds-api.io → Bookmakers tab)');
       log('Sports:', (data.sport_filter||[]).join(','), '| Status:', data.status_filter||'live');
-      if (data.warning) log('Warning:', data.warning);
-      if (lastSeq > 0) log(`Replay mode: lastSeq=${lastSeq} — catching up missed updates...`);
+      if (data.warning) log('⚠ Warning:', data.warning);
+      if (bks.length === 0) {
+        log('ACTION REQUIRED: Go to https://odds-api.io → Bookmakers tab → select your bookmakers → save');
+      }
+      if (lastSeq > 0) log(`Replay: lastSeq=${lastSeq} — catching up missed updates...`);
       break;
+    }
 
     case 'resync_required':
       log(`WS resync required: ${data.reason}. Rebuilding from REST...`);
@@ -384,10 +393,13 @@ async function handleWsMessage(data) {
       const id = String(data.id);
       if (!store[id]) store[id] = {};
       store[id].markets_raw = data.markets || [];
-      store[id].bookie      = data.bookie || BOOKMAKER;
-      // If we don't have meta for this event yet, it'll be written without it
-      // The next REST refresh will add meta. For now write what we have.
+      store[id].bookie      = data.bookie || BOOKMAKER || 'unknown';
       await writeToRedis(id);
+      // Log first few updates so user can confirm data is flowing
+      if (Math.random() < 0.05) {
+        const mkts = (data.markets||[]).map(m=>m.name).join(',');
+        log(`WS ${data.type}: event ${id} | ${store[id].bookie} | markets: ${mkts||'none'}`);
+      }
       break;
     }
 
