@@ -259,28 +259,34 @@ async function writeToRedis(id) {
   // Skip if we have neither meta nor markets — nothing useful to store
   if (!ev?.meta && !(ev?.markets_raw?.length)) return;
 
-  // If meta is missing but we have markets, read existing Redis entry to preserve meta
-  let existingMeta = null;
-  if (!ev.meta) {
-    try {
-      const raw = await redis.get(KEY_EV(id));
-      if (raw) existingMeta = JSON.parse(raw);
-    } catch(_){}
-  }
+  // ALWAYS read existing Redis entry to preserve fields we don't have in memory.
+  // Critical: refreshMeta has meta but no markets; WS push has markets but no meta.
+  // We must merge both to avoid overwriting each other.
+  let existing = null;
+  try {
+    const raw = await redis.get(KEY_EV(id));
+    if (raw) existing = JSON.parse(raw);
+  } catch(_){}
 
-  const { live_odds, md_markets } = buildMarkets(ev.markets_raw||[]);
+  const { live_odds, md_markets } = buildMarkets(ev.markets_raw || existing?.markets_raw_cache || []);
 
-  // Determine sport_id — prefer live meta, then existing Redis entry, then default '1'
-  const sid = ev.meta?.sport_id || existingMeta?.sport_id || '1';
+  // sport_id: prefer fresh meta, then existing, then default football
+  const sid = ev.meta?.sport_id || existing?.sport_id || '1';
 
   const match = {
-    ...(existingMeta || {}),    // existing Redis data (meta + any old markets)
-    ...(ev.meta    || {}),      // fresh meta from refreshMeta (overwrites stale)
-    live_odds:  Object.keys(live_odds).length ? live_odds  : (existingMeta?.live_odds),
-    md_markets: md_markets.length             ? md_markets : (existingMeta?.md_markets),
-    _bookie:    ev.bookie || existingMeta?._bookie,
+    // 1. start with existing Redis data (safe fallback for all fields)
+    ...(existing || {}),
+    // 2. overwrite with fresh meta if available (score, timer, home/away names)
+    ...(ev.meta  || {}),
+    // 3. always set computed fields
+    live_odds:  Object.keys(live_odds).length ? live_odds  : (existing?.live_odds  || undefined),
+    md_markets: md_markets.length             ? md_markets : (existing?.md_markets || undefined),
+    _bookie:    ev.bookie || existing?._bookie,
     _updated:   Date.now(),
   };
+
+  // Persist a lightweight markets cache so the next refreshMeta doesn't lose them
+  if (ev.markets_raw?.length) match.markets_raw_cache = ev.markets_raw;
 
   // Ensure id is always present
   if (!match.id) match.id = id;
