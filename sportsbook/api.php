@@ -552,23 +552,10 @@ function resolve_match_markets($match_id, $redis_ev = null) {
             if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
         }
     }
-    // Only fetch on-demand if we have no usable markets at all.
-    // The daemon's REST batch polling (every 3s) fills corners/BTTS/cards from
-    // 1xbet/22Bet; forcing a fetch just because BTTS is absent hammers the API
-    // rate limit and makes page loads slow.
-    $needs_fetch = empty($markets) || count($markets) < 2;
-    if ($needs_fetch) {
-        $hn = $redis_ev['home']['name'] ?? '';
-        $an = $redis_ev['away']['name'] ?? '';
-        $od = oddsapi_fetch_event_odds($match_id);
-        if ($od) {
-            $built = oddsapi_build_markets($od, $hn, $an);
-            if ($built) {
-                $markets = $built;
-                oddsapi_save_to_redis($match_id, $built, 120);
-            }
-        }
-    }
+    // Never do a blocking on-demand fetch here — the ws_daemon REST batch
+    // (every 3s, /odds/multi) fills all markets. A synchronous fetch on every
+    // match_detail poll adds 3-6s latency and burns API rate-limit quota.
+    // If markets are empty the frontend retries in 3s and the daemon fills it.
     return $markets;
 }
 
@@ -2867,15 +2854,9 @@ if ($action === 'match_detail') {
         exit;
     }
 
-    // Redis empty for this match — try direct odds-api.io fetch
-    $markets2 = resolve_match_markets($match_id, null);
-    if ($markets2) {
-        apply_margin_to_markets($markets2);
-        echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi-direct'],'markets'=>$markets2,'_src'=>'oddsapi-direct']);
-        exit;
-    }
-
-    // Nothing available yet — return empty (daemon will fill Redis shortly)
+    // Redis empty for this match — return immediately, daemon will fill Redis within seconds.
+    // Never block here with a synchronous API call — it adds 3-6s latency on every cold load.
+    // The frontend polls match_detail every 3s, so markets appear on the next tick.
     echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi'],'markets'=>[],'_src'=>'warming-up']);
     exit;
 

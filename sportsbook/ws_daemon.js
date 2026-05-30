@@ -1086,20 +1086,40 @@ async function refreshOddsBatch() {
   oddsCursor += BATCH;
 
   try {
-    // /odds & /odds/multi REQUIRE a bookmakers param. Request several so that
-    // when the primary (Bet365) has no markets for an event we still get odds
-    // from another book. Per event we keep whichever book has the MOST markets.
     const params = { eventIds: batch.join(','), bookmakers: ODDS_BOOKMAKERS };
     const resp = await httpGetJson('/odds/multi', params);
     onRLOk();
-    const events = Array.isArray(resp) ? resp : (Array.isArray(resp?.data) ? resp.data : []);
+
+    // /odds/multi can return: array of events OR {data:[...]} OR {events:{id:{bookmakers:{...}}}}
+    let events = [];
+    if (Array.isArray(resp)) events = resp;
+    else if (Array.isArray(resp?.data)) events = resp.data;
+    else if (resp && typeof resp === 'object') {
+      // Some API versions return {events: {id: {bookmakers: {...}}}}
+      const evMap = resp.events || resp.odds || null;
+      if (evMap && typeof evMap === 'object') {
+        events = Object.entries(evMap).map(([id, val]) => ({ id, ...val }));
+      }
+    }
+
+    // Log first response shape for debugging (once per daemon run)
+    if (!refreshOddsBatch._logged && resp) {
+      refreshOddsBatch._logged = true;
+      const sample = JSON.stringify(resp).slice(0, 400);
+      log(`Odds/multi response shape (first 400 chars): ${sample}`);
+    }
+
     let withOdds = 0;
     for (const ev of events) {
-      const id = String(ev.id);
+      const id = String(ev.id || ev.eventId || '');
+      if (!id) continue;
       if (!store[id]) store[id] = {};
-      const bk = ev.bookmakers || {};
-      // Merge ALL bookmakers so corners (1xbet), half-time (Bet365), cards, etc.
-      // all survive instead of dropping everything but the single richest book.
+
+      // Try ev.bookmakers (standard), ev.odds (some versions), ev itself if keyed by book name
+      let bk = ev.bookmakers || ev.odds || {};
+      // If bk is an array, it's a flat market list from one bookmaker — wrap it
+      if (Array.isArray(bk)) bk = { 'unknown': bk };
+
       const markets = mergeBookmakerMarkets(bk);
       if (markets && markets.length) {
         store[id].markets_raw = markets;
@@ -1109,7 +1129,16 @@ async function refreshOddsBatch() {
       }
     }
     if (withOdds) log(`Odds batch: ${withOdds}/${batch.length} events got markets (cursor ${oddsCursor}/${liveIds.length})`);
-    else log(`Odds batch: 0/${batch.length} got markets — check bookmakers selected in account`);
+    else {
+      // Zero markets from /odds/multi — log raw shape to diagnose
+      if (!refreshOddsBatch._warnedEmpty) {
+        refreshOddsBatch._warnedEmpty = true;
+        const shape = JSON.stringify(resp).slice(0, 600);
+        log(`Odds batch: 0 markets. Raw: ${shape}`);
+      } else {
+        log(`Odds batch: 0/${batch.length} got markets`);
+      }
+    }
   } catch(e) {
     if (isRL(e)) onRL();
     else log('Odds batch error:', e.message);
