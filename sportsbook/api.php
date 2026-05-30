@@ -9,6 +9,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
 error_reporting(0);
+@ini_set('memory_limit', '256M');
 
 // Capture PHP fatal errors and return them as JSON instead of a blank 500
 register_shutdown_function(function() {
@@ -631,7 +632,13 @@ function redis_get_sport_matches($sport_id, $which = 'live') {
                 $src = $m['_source'] ?? '';
                 if ($src && $src !== 'oddsapi') continue;
                 if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue;
+                // List views never need the full market tree (43 markets/event).
+                // Keeping it for thousands of upcoming events exhausts PHP memory
+                // (was the cause of the upcoming 500). Inline cards / detail pages
+                // re-fetch markets via match_detail, so drop the heavy fields here.
+                unset($m['md_markets']);
                 $out[] = $m;
+                unset($m, $raw, $vals[$i]);
             }
         }
         return $out;
@@ -1963,13 +1970,19 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         }
     }
 
-    // Inject prematch odds (from Redis if available, else skip)
+    // Inject prematch 1X2 odds for items that don't already have them.
+    // Redis-first results (the common path) already carry live_odds, so we only
+    // hit Redis for the REST-fallback items that are missing odds. We NEVER
+    // attach md_markets here — list payloads with the full market tree for
+    // thousands of fixtures exhaust PHP memory (the upcoming 500). Inline cards
+    // and the detail page re-fetch markets via match_detail on demand.
     foreach ($results as &$m_up) {
+        if (!empty($m_up['live_odds']) && (($m_up['live_odds']['h'] ?? 0) > 1.01)) continue;
         $mid = $m_up['id'] ?? '';
         if (!$mid) continue;
         $rev = redis_get_event($mid);
         if ($rev && !empty($rev['live_odds'])) $m_up['live_odds'] = $rev['live_odds'];
-        if ($rev && !empty($rev['md_markets'])) $m_up['md_markets'] = $rev['md_markets'];
+        unset($rev);
     }
     unset($m_up);
 
@@ -2075,27 +2088,52 @@ if ($action === 'league_matches') {
         // ids, no odds-api markets → "Aucun marché disponible"). Returning an
         // empty list when nothing matches is correct and honest.
         if ($redis_all !== null) {
-            // Loose canonical form: strip non-alphanumerics, 4-digit years and
-            // generic tournament words so a sidebar label like "World Cup 2026"
-            // matches the odds-api league name "International - World Cup".
-            $canon = function($s) {
+            // Order-independent token matching so sidebar labels in either
+            // language ("World Cup 2026", "Coupe du Monde 2026") resolve to the
+            // odds-api league name "International - World Cup". We translate a
+            // few FR tournament phrases to EN, drop years + generic words, then
+            // require the query's tokens to be a subset of the league's tokens.
+            $tokens = function($s) {
                 $s = strtolower((string)$s);
-                $s = preg_replace('/\b(19|20)\d{2}\b/', ' ', $s); // drop years
-                $s = preg_replace('/\b(international|intl|uefa|fifa|concacaf|conmebol|afc|caf|coupe|du|monde|de|la|le|les|of|the)\b/', ' ', $s);
-                return preg_replace('/[^a-z0-9]/', '', $s);
+                $s = str_replace(
+                    ['coupe du monde', 'championnat', 'ligue des champions', 'ligue europa'],
+                    ['world cup',      'championship', 'champions league',    'europa league'],
+                    $s
+                );
+                $s = preg_replace('/[^a-z0-9]+/', ' ', $s);
+                $stop = ['international'=>1,'intl'=>1,'uefa'=>1,'fifa'=>1,'concacaf'=>1,
+                         'conmebol'=>1,'afc'=>1,'caf'=>1,'du'=>1,'de'=>1,'la'=>1,'le'=>1,
+                         'les'=>1,'of'=>1,'the'=>1,'des'=>1,'el'=>1];
+                $out = [];
+                foreach (explode(' ', $s) as $t) {
+                    if ($t === '' || isset($stop[$t])) continue;
+                    if (preg_match('/^(19|20)\d{2}$/', $t)) continue;   // drop years (2026)
+                    // Keep short numeric tokens (Ligue "1" vs "2") but drop short
+                    // word-noise like "fc", "a".
+                    if (strlen($t) < 3 && !ctype_digit($t)) continue;
+                    $out[$t] = 1;
+                }
+                return $out;
             };
-            $qn  = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
-            $qc  = $canon($league_q);
+            $qn   = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
+            $qtok = $tokens($league_q);
             $lg = [];
             foreach ($redis_all as $rm) {
                 $rawln = $rm['league']['name'] ?? '';
                 $ln = preg_replace('/[^a-z0-9]/', '', strtolower($rawln));
                 if ($ln === '') continue;
-                $lc = $canon($rawln);
+                $ltok = $tokens($rawln);
                 $idok   = ($league_id_q0 !== '' && (string)($rm['league']['id'] ?? '') === $league_id_q0);
                 $nameok = ($qn !== '' && ($ln === $qn || strpos($ln, $qn) !== false || strpos($qn, $ln) !== false));
-                $coreok = ($qc !== '' && strlen($qc) >= 4 && ($lc === $qc || strpos($lc, $qc) !== false || strpos($qc, $lc) !== false));
-                if (!$idok && !$nameok && !$coreok) continue;
+                // Token subset either direction (query ⊆ league or league ⊆ query).
+                $tokok = false;
+                if (!empty($qtok) && !empty($ltok)) {
+                    $small = count($qtok) <= count($ltok) ? $qtok : $ltok;
+                    $big   = count($qtok) <= count($ltok) ? $ltok : $qtok;
+                    $tokok = true;
+                    foreach ($small as $t => $_) { if (!isset($big[$t])) { $tokok = false; break; } }
+                }
+                if (!$idok && !$nameok && !$tokok) continue;
                 if (!empty($rm['live_odds'])) {
                     $lo = &$rm['live_odds'];
                     foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
