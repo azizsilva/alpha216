@@ -1,35 +1,85 @@
 <?php
 /**
- * Sportsbook API Backend
- * Reads matches from sb_matches DB (populated by sync_daemon.php cron).
- * BetsAPI Token: 254610-7T3dEgVPsVZPNY
- *
- * DB: connects to forza_db (where sb_matches table lives).
+ * Sportsbook API Backend — odds-api.io + Redis
+ * Data source: ws_daemon.js (Node.js WebSocket daemon) → Redis → here
  */
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-// HARD no-cache for every response — live odds / timer / score must
-// never be served from any intermediate cache (browser, CDN, proxy).
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
 error_reporting(0);
 
-define('BETSAPI_TOKEN', '254610-7T3dEgVPsVZPNY');
-define('BETSAPI_BASE',  'https://api.b365api.com');
+define('ODDSAPI_KEY',  'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2');
+define('ODDSAPI_BASE', 'https://api.odds-api.io/v3');
 
-// ══ Redis connection — populated by ws_daemon.js (odds-api.io feed) ══════════
-// Falls back gracefully when Redis is unavailable (file cache still works).
+// ══ Minimal Redis socket client ═══════════════════════════════════════════════
+// Works without the phpredis extension (pure TCP sockets via fsockopen).
+class RedisSocket {
+    private $fp = null;
+    public function connect($host='127.0.0.1', $port=6379, $timeout=1.0) {
+        $this->fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
+        return $this->fp !== false;
+    }
+    public function get($key)              { return $this->cmd('GET',     [$key]); }
+    public function set($key, $val)        { return $this->cmd('SET',     [$key, $val]); }
+    public function setEx($key, $ttl, $v)  { return $this->cmd('SETEX',   [$key, (string)$ttl, $v]); }
+    public function sMembers($key)         { $r=$this->cmd('SMEMBERS',[$key]); return is_array($r)?$r:[]; }
+    public function sCard($key)            { return (int)$this->cmd('SCARD',[$key]); }
+    public function sAdd($key, ...$ms)     { return $this->cmd('SADD', array_merge([$key],$ms)); }
+    public function exists($key)           { return (int)$this->cmd('EXISTS',[$key]); }
+    private function cmd($c, $a=[]) {
+        if (!$this->fp) return null;
+        $parts = array_merge([$c], $a);
+        $req = '*'.count($parts)."\r\n";
+        foreach ($parts as $p) { $p=(string)$p; $req.='$'.strlen($p)."\r\n".$p."\r\n"; }
+        if (@fwrite($this->fp, $req) === false) return null;
+        return $this->read();
+    }
+    private function read() {
+        if (!$this->fp) return null;
+        $line = @fgets($this->fp, 4096);
+        if ($line===false||$line==='') return null;
+        $t = $line[0]; $d = rtrim(substr($line,1));
+        switch($t) {
+            case '+': return $d;
+            case '-': return null;
+            case ':': return (int)$d;
+            case '$':
+                $len=(int)$d; if($len===-1) return null;
+                $buf='';
+                while(strlen($buf)<$len+2) {
+                    $chunk=@fread($this->fp,$len+2-strlen($buf));
+                    if($chunk===false||$chunk==='') break;
+                    $buf.=$chunk;
+                }
+                return substr($buf,0,$len);
+            case '*':
+                $cnt=(int)$d; if($cnt===-1) return null;
+                $arr=[];
+                for($i=0;$i<$cnt;$i++) $arr[]=$this->read();
+                return $arr;
+        }
+        return null;
+    }
+    public function close() { if($this->fp){@fclose($this->fp);$this->fp=null;} }
+}
+
+// ══ Redis connection ══════════════════════════════════════════════════════════
+// Try phpredis extension first (faster), fall back to RedisSocket (pure PHP).
 $redis_conn = null;
 $redis_ok    = false;
 if (class_exists('Redis')) {
     try {
         $r = new Redis();
-        if (@$r->connect('127.0.0.1', 6379, 0.5)) {
-            $redis_conn = $r;
-            $redis_ok   = true;
-        }
-    } catch (Exception $_re) { $redis_conn = null; $redis_ok = false; }
+        if (@$r->connect('127.0.0.1', 6379, 0.5)) { $redis_conn = $r; $redis_ok = true; }
+    } catch (Exception $_re) {}
+}
+if (!$redis_ok) {
+    try {
+        $r = new RedisSocket();
+        if ($r->connect('127.0.0.1', 6379, 1.0)) { $redis_conn = $r; $redis_ok = true; }
+    } catch (Exception $_re) {}
 }
 
 // ══ odds-api.io on-demand odds fetcher ═══════════════════════════════════════
@@ -406,37 +456,31 @@ function apply_margin_to_markets(&$markets) {
 }
 // -------------------------------------
 
-// ── BetsAPI helper — returns full decoded response ──────────────────────────
-function betsapi_get($path, $params = []) {
-    $params['token'] = BETSAPI_TOKEN;
-    $url = BETSAPI_BASE . $path . '?' . http_build_query($params);
+// ── odds-api.io REST helper ───────────────────────────────────────────────────
+function oddsapi_rest($path, $params = []) {
+    $params['apiKey'] = ODDSAPI_KEY;
+    $url = ODDSAPI_BASE . $path . '?' . http_build_query($params);
     $ctx = stream_context_create(['http' => [
-        'timeout' => 10,
+        'timeout' => 8,
         'ignore_errors' => true,
-        'header' => "User-Agent: SB-API/1.0\r\n"
+        'header' => "User-Agent: AlpinaOdds/1.0\r\nAccept: application/json\r\n",
     ]]);
     $body = @file_get_contents($url, false, $ctx);
     if (!$body) return null;
     return json_decode($body, true);
 }
 
-// ── BetsAPI helper — returns pager.total (real live count) ─────────────────
-// Uses pager.total so Football shows 999+, Basketball 510+, etc.
-function betsapi_live_count($sport_id) {
-    $resp = betsapi_get('/v1/bet365/inplay_filter', ['sport_id' => $sport_id, 'page' => 1]);
-    if (!$resp || empty($resp['success'])) return 0;
-    // pager.total is the REAL total, not just page-1 count
-    if (isset($resp['pager']['total'])) return (int)$resp['pager']['total'];
-    return count($resp['results'] ?? []);
+// ── Live event count from Redis ────────────────────────────────────────────
+function oddsapi_live_count($sport_id) {
+    global $redis_conn, $redis_ok;
+    if (!$redis_ok || !$redis_conn) return 0;
+    try { return (int)$redis_conn->sCard("sb:live:sport:{$sport_id}"); } catch(Exception $e){ return 0; }
 }
 
-// ── BetsAPI helper — returns pager.total for upcoming matches ──────────────
-function betsapi_upcoming_count($sport_id) {
-    $resp = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => 1]);
-    if (!$resp || empty($resp['success'])) return 0;
-    if (isset($resp['pager']['total'])) return (int)$resp['pager']['total'];
-    return count($resp['results'] ?? []);
-}
+// ── Stub — BetsAPI removed. Returns 0 so badges show correctly. ────────────
+function betsapi_get($path, $params=[]) { return null; }
+function betsapi_live_count($sport_id)     { return oddsapi_live_count($sport_id); }
+function betsapi_upcoming_count($sport_id) { return 0; }
 
 // ── Ensure sb_matches table exists ────────────────────────────────────────
 if ($db_connected) {
@@ -1083,8 +1127,13 @@ if ($action === 'inplay') {
         echo json_encode(['success' => 1, 'results' => array_values($redis_results), '_src' => 'redis']);
         exit;
     }
-    // Redis empty or unavailable — fall through to BetsAPI (daemon rate-limited or not started yet)
+    // Redis empty / daemon not yet warmed up — return empty. Frontend will retry in 1.5s.
+    // ws_daemon.js populates Redis within seconds of startup.
+    header('X-SB-Source: redis-empty');
+    echo json_encode(['success' => 1, 'results' => [], '_src' => 'redis-empty']);
+    exit;
 
+    // ── DEAD CODE BELOW — kept only for reference, never executed ──────────────
     $sport_cache  = $cache_dir . '/live_' . $sport_id . '.json';
     $stream_cache = $cache_dir . '/inplay_stream.json';
     $is_football  = ((int)$sport_id === 1);
@@ -1553,33 +1602,51 @@ if ($action === 'inplay') {
     exit;
 }
 
-// ═══ UPCOMING ══════════════════════════════════════════════════════════════
+// ═══ UPCOMING — odds-api.io REST ══════════════════════════════════════════
 if ($action === 'upcoming' || $action === 'all_upcoming') {
     $results = [];
     $up_cache_dir = __DIR__ . '/cache';
+    if (!is_dir($up_cache_dir)) @mkdir($up_cache_dir, 0755, true);
 
-    if ($db_connected) {
-        $results = db_fetch_matches($pdo, "sport_id=? AND status!='ended'", [$sport_id], 1000, $sport_id);
+    // Sport slug map (same as ws_daemon.js SPORT_IDS)
+    $sport_slug_map = [1=>'football',18=>'basketball',13=>'tennis',91=>'volleyball',17=>'ice-hockey',78=>'handball'];
+    $sport_slug = $sport_slug_map[$sport_id] ?? 'football';
+
+    // 60s file cache — upcoming changes infrequently
+    $up_cache_file = $up_cache_dir . '/upcoming_' . $sport_id . '.json';
+    $up_cache_age  = file_exists($up_cache_file) ? (time() - filemtime($up_cache_file)) : 9999;
+    if ($up_cache_age < 60) {
+        $results = json_decode(@file_get_contents($up_cache_file), true) ?: [];
+    } else {
+        // Fetch upcoming events from odds-api.io
+        $resp = oddsapi_rest("/events/{$sport_slug}/upcoming");
+        $arr  = $resp['data'] ?? $resp['events'] ?? (is_array($resp) ? $resp : []);
+        foreach ($arr as $ev) {
+            if (empty($ev['home']) && empty($ev['home_team'])) continue;
+            $results[] = [
+                'id'          => (string)($ev['id'] ?? ''),
+                'sport_id'    => (string)$sport_id,
+                'time'        => (string)($ev['starts_at'] ?? $ev['start_time'] ?? 0),
+                'time_status' => '0',
+                'league'      => ['id'=>'','name'=>$ev['league']??$ev['competition']??''],
+                'home'        => ['id'=>'','name'=>$ev['home']??$ev['home_team']??''],
+                'away'        => ['id'=>'','name'=>$ev['away']??$ev['away_team']??''],
+                'ss'          => '',
+                'live_odds'   => [],
+                '_source'     => 'oddsapi',
+            ];
+        }
+        if (!empty($results)) @file_put_contents($up_cache_file, json_encode($results));
     }
 
-    // Fallback: fetch from BetsAPI (all pages up to 5) if DB empty
-    if (empty($results)) {
-        for ($pg = 1; true; $pg++) {
-            $data = betsapi_get('/v1/bet365/upcoming', ['sport_id' => $sport_id, 'page' => $pg]);
-            if (!$data || empty($data['results'])) break;
-            foreach ($data['results'] as $m) {
-                if (isset($m['home']['name']) && $m['home']['name'] !== '') {
-                    $results[] = $m;
-                }
-            }
-            // Stop if last page
-            $pager = $data['pager'] ?? [];
-            if (($pager['page'] ?? 1) >= ($pager['total_pages'] ?? 1)) break;
-        }
-        if (!empty($results) && $db_connected) {
-            cache_to_db($pdo, $results, $sport_id);
-        }
+    // Inject prematch odds (from Redis if available, else skip)
+    foreach ($results as &$m_up) {
+        $mid = $m_up['id'] ?? '';
+        if (!$mid) continue;
+        $rev = redis_get_event($mid);
+        if ($rev && !empty($rev['live_odds'])) $m_up['live_odds'] = $rev['live_odds'];
     }
+    unset($m_up);
 
     // ── Inject odds from cache (same as inplay Step 4.5) ──────────────────
     $odds_cache_up = $up_cache_dir . '/odds_' . $sport_id . '.json';
@@ -1607,75 +1674,18 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
     }
     unset($m_up);
 
-    // ── Trigger bg_sync if odds cache stale (same threshold as inplay) ──────
-    $odds_cache_age_up = file_exists($odds_cache_up) ? (time() - filemtime($odds_cache_up)) : 9999;
-    if ($odds_cache_age_up > 90 && !empty($results)) {
-        $lock_up = $up_cache_dir . '/bgsync_' . $sport_id . '.lock';
-        $lock_age_up = file_exists($lock_up) ? (time() - filemtime($lock_up)) : 9999;
-        if ($lock_age_up > 60) {
-            touch($lock_up);
-            $host_up  = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
-            $path_up  = parse_url($_SERVER['REQUEST_URI'] ?? '/sportsbook/api.php', PHP_URL_PATH);
-            fire_and_forget('http://' . $host_up . $path_up . '?action=bg_sync_upcoming&sport_id=' . $sport_id . '&_k=sbodds');
-        }
+    // ── RETURN ─────────────────────────────────────────────────────────────
+    // (BetsAPI async fill removed — upcoming odds come from ws_daemon.js via Redis)
+    if (true) {
+        echo json_encode(['success' => 1, 'results' => $results]);
+        exit;
     }
 
-    // ── FAST RETURN + ASYNC prematch odds fill ──────────────────────────
-    // Collect upcoming matches still missing odds; respond to client
-    // FIRST so the UI paints immediately, then fetch prematch odds in
-    // the background and persist them to DB so the next poll cycle
-    // shows real values instead of 🔒 locks.
-    $needs_async_up = [];
-    foreach ($results as $m_chk) {
-        if (empty($m_chk['live_odds']['h']) || (float)($m_chk['live_odds']['h'] ?? 0) < 1.01) {
-            if (!empty($m_chk['id'])) $needs_async_up[] = $m_chk['id'];
-        }
-    }
-    // Cap to avoid hammering BetsAPI per request — daemon picks up the rest.
-    // Bumped from 12 to 20 so sports with many matches (basketball, tennis)
-    // fill their odds within ~3-4 poll cycles instead of 8-10.
-    $needs_async_up = array_slice(array_values(array_unique($needs_async_up)), 0, 20);
-
-    $json_out_up = json_encode(['success' => 1, 'results' => $results,
-                                 'odds_pending' => count($needs_async_up)]);
-    header('Content-Type: application/json');
-    if (function_exists('fastcgi_finish_request')) {
-        echo $json_out_up;
-        fastcgi_finish_request();
-    } else {
-        header('Content-Length: ' . strlen($json_out_up));
-        header('Connection: close');
-        echo $json_out_up;
-        @ob_end_flush(); @flush();
-    }
-
-    if (!empty($needs_async_up) && $db_connected) {
-        @set_time_limit(120);
-        foreach ($needs_async_up as $fi) {
-            if (!$fi) continue;
-            // Per-match dedup: skip if we tried within the last 5 minutes,
-            // even if we got no odds back. Prevents 5 polls × 12 matches
-            // = 60 BetsAPI calls/min on a single sport.
-            $pm_lock = $up_cache_dir . '/pm_' . $fi . '.lock';
-            if (file_exists($pm_lock) && (time() - filemtime($pm_lock)) < 300) continue;
-            @touch($pm_lock);
-            $pm = null;
-            $or = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
-            if ($or && !empty($or['results'])) $pm = api_parse_prematch_odds($or); if ($pm) apply_margin_to_markets($pm);
-            if (!$pm) {
-                $or2 = betsapi_get('/v1/bet365/event', ['FI' => $fi]);
-                if ($or2 && !empty($or2['results'])) {
-                    $pm = api_parse_prematch_odds($or2);
-                    if (!$pm && function_exists('parse_event_stream_odds')) {
-                        $pm = parse_event_stream_odds($or2['results'] ?? []);
-                    }
-                }
-            }
-            if (!$pm || ($pm['h'] ?? 0) < 1.01) continue;
-            try {
-                $rj = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=?");
-                $rj->execute([$fi]);
-                $raw = $rj->fetchColumn();
+    // ── DEAD CODE BELOW ────────────────────────────────────────────────────────
+    $pm_lock = $up_cache_dir . '/UNUSED';
+    if (false) {
+                $rj = null;
+                $raw = null;
                 if ($raw) {
                     $mdata = json_decode($raw, true);
                     $mdata['live_odds'] = $pm;
@@ -2282,27 +2292,13 @@ if ($action === 'match_live') {
         }
     }
 
-    // ── PER-MATCH RESPONSE CACHE ─────────────────────────────────────────────
-    //   match_live used to fire 3 fresh BetsAPI calls (/v3/event/view,
-    //   _fetch_event_stats, /v1/bet365/event) on every single poll —
-    //   600-2400ms per request, multiplied by every user on the page.
-    //
-    //   We now coalesce identical requests inside a 1-second window
-    //   into a single backend call. The first request in a window does
-    //   the work and writes ml_<id>.json; concurrent and follow-up
-    //   requests during the same second read the cached blob in <10ms.
-    //
-    //   Latency budget after this change (football match detail page):
-    //     BetsAPI source delay :  2-10s  (upstream, immutable)
-    //     Response cache TTL   :  0-1s
-    //     Frontend poll        :  0-1s
-    //     ── Total perceived  :  ~2-3s best case, ~12s worst case
-    //
-    //   To go faster than this we'd need either:
-    //     (a) Sportradar / Stats Perform (paid feeds, no 2-10s delay)
-    //     (b) SSE/WebSocket push from this server to the browser
-    //         (eliminates the 0-1s poll component only — BetsAPI
-    //          source delay still dominates).
+    // ── Redis event exists but no home name — no data yet, wait for daemon ──
+    // Return minimal response so frontend keeps polling.
+    echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi'],'markets'=>[],'_src'=>'no-meta-yet']);
+    exit;
+
+    // ── DEAD CODE — BetsAPI fallback removed ─────────────────────────────────
+    if (false) {
     //
     $ml_cache_dir = __DIR__ . '/cache';
     if (!is_dir($ml_cache_dir)) @mkdir($ml_cache_dir, 0755, true);
@@ -2527,9 +2523,10 @@ if ($action === 'match_live') {
     header('X-SB-Cache: MISS');
     echo $ml_resp;
     exit;
+    } // end if(false) dead code block
 }
 
-// ═══ MATCH DETAIL — live markets from BetsAPI ════════════════════════════
+// ═══ MATCH DETAIL — Redis + odds-api.io ═══════════════════════════════════
 if ($action === 'match_detail') {
     $match_id = trim($_GET['match_id'] ?? '');
     if (!$match_id) { echo json_encode(['success' => 0, 'error' => 'match_id required']); exit; }
@@ -2573,21 +2570,32 @@ if ($action === 'match_detail') {
             }
         }
 
-        // If we now have markets (from Redis or on-demand odds-api.io) — return immediately.
-        // If still empty (odds-api.io also rate-limited) — fall through to BetsAPI below.
-        if (!empty($markets)) {
-            header('X-SB-Source: redis-md');
-            echo json_encode([
-                'success'  => 1,
-                'match'    => $redis_ev,
-                'markets'  => $markets,
-                '_src'     => 'redis' . (empty($redis_ev['md_markets']) ? '+ondemand' : ''),
-            ]);
-            exit;
-        }
-        // else: odds-api.io also unavailable — fall through to BetsAPI fallback below
+        // Return from Redis / on-demand odds-api.io
+        header('X-SB-Source: redis-md');
+        echo json_encode([
+            'success'  => 1,
+            'match'    => $redis_ev,
+            'markets'  => $markets,
+            '_src'     => 'redis' . (empty($redis_ev['md_markets']) ? '+ondemand' : ''),
+        ]);
+        exit;
     }
 
+    // Redis empty for this match — try direct odds-api.io fetch
+    $od2 = oddsapi_fetch_event_odds($match_id);
+    if ($od2) {
+        $markets2 = oddsapi_build_markets($od2);
+        oddsapi_save_to_redis($match_id, $markets2, 120);
+        echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi-direct'],'markets'=>$markets2,'_src'=>'oddsapi-direct']);
+        exit;
+    }
+
+    // Nothing available yet — return empty (daemon will fill Redis shortly)
+    echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi'],'markets'=>[],'_src'=>'warming-up']);
+    exit;
+
+    // ── DEAD CODE — BetsAPI match_detail removed ──────────────────────────────
+    if (false) {
     $match_data = null;
     if ($db_connected) {
         try {
@@ -2940,6 +2948,7 @@ function md_parse_markets($event_arr) {
 
     return array_slice($deduped, 0, 150);
 }
+    } // end if(false) dead code for match_detail
 // ══ LIVE REFRESH — FAST CACHE READ ONLY ══
 // POST ?action=live_refresh with JSON body: {"ids":["matchId1",...]} (max 24)
 if ($action === 'live_refresh') {
@@ -2987,14 +2996,18 @@ if ($action === 'live_refresh') {
             echo json_encode(['success' => 1, 'refreshed' => $refreshed_redis, '_src' => 'redis']);
             exit;
         }
-        // Partial — merge what we got from Redis and keep the rest for file-cache path
-        if ($refreshed_redis) {
-            $ids = array_values(array_diff($ids, array_keys($refreshed_redis)));
-            // Will continue below and merge at output — store partial result
-            $GLOBALS['_redis_partial'] = $refreshed_redis;
-        }
+        // Return whatever we have from Redis (partial or full)
+        header('X-SB-Source: redis-refresh');
+        echo json_encode(['success' => 1, 'refreshed' => $refreshed_redis, '_src' => 'redis']);
+        exit;
     }
 
+    // Redis unavailable — return empty (daemon not running yet)
+    echo json_encode(['success' => 1, 'refreshed' => [], '_src' => 'no-redis']);
+    exit;
+
+    // ── DEAD CODE — BetsAPI live_refresh removed ──────────────────────────────
+    if (false) {
     $refreshed = [];
     $stream_cache = __DIR__ . '/cache/inplay_stream.json';
     $stream = json_decode(@file_get_contents($stream_cache)?:'[]', true) ?: [];
@@ -3224,6 +3237,7 @@ if ($action === 'bg_sync' && ($_GET['_k'] ?? '') === 'sbodds') {
     @unlink($lock_f);
     echo json_encode(['success' => 1, 'fetched' => count($new_odds)]);
     exit;
+    } // end if(false) dead code
 }
 
 // ═══ BG_SYNC_UPCOMING — async odds fetch for upcoming matches ══════════════

@@ -49,7 +49,7 @@ const WS_MARKETS_ARR = [
 ];
 const WS_MARKETS  = WS_MARKETS_ARR.join(',');
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
-const WS_STATUS   = 'live';
+const WS_STATUS   = 'live,upcoming';
 // Bookmakers configured in your odds-api.io account dashboard.
 // Leave empty to use whatever is configured there, or set explicitly e.g. 'Bet365'
 const BOOKMAKER   = process.env.BOOKMAKER || '';
@@ -546,32 +546,57 @@ async function handleWsMessage(data) {
 }
 
 // ── Periodic score/meta refresh (REST, cheap — no odds) ──────────────────────
-// Even in WS mode: scores/timers come from REST getLiveEvents (WS gives odds only).
+// Fetches live AND upcoming events so Redis always has match metadata.
 let metaSportCursor = 0;
 async function refreshMeta() {
   if (rateLimited()) return;
   const sport = ALL_SPORTS[metaSportCursor % ALL_SPORTS.length];
   metaSportCursor++;
   const client = new OddsAPIClient({ apiKey: API_KEY });
+  const liveIds = new Set();
   try {
+    // Live events
     const resp = await client.getLiveEvents(sport);
     const arr  = Array.isArray(resp)?resp:(Array.isArray(resp?.data)?resp.data:[]);
     onRLOk();
     for (const ev of arr) {
       const id = String(ev.id);
       if (!id||!ev.home) continue;
+      liveIds.add(id);
       if (!store[id]) store[id] = {};
       store[id].meta  = normEv(ev, sport);
       store[id].sport = sport;
-      // Write to Redis immediately (updates score/timer; keeps existing markets)
       await writeToRedis(id);
     }
-    // Remove events that vanished from this sport
-    const liveIds = new Set(arr.map(e=>String(e.id)));
+    if (arr.length) log(`Meta refresh ${sport} live: ${arr.length} events`);
+
+    // Upcoming events (for prematch display) — no odds needed
+    try {
+      const uResp = await client.getUpcomingEvents(sport);
+      const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
+      let uCount = 0;
+      for (const ev of uArr) {
+        const id = String(ev.id);
+        if (!id||!ev.home) continue;
+        if (store[id]) continue; // already in live, skip
+        if (!store[id]) store[id] = {};
+        const meta = normEv(ev, sport);
+        meta.time_status = '0'; // upcoming
+        store[id].meta  = meta;
+        store[id].sport = sport;
+        await writeToRedis(id);
+        uCount++;
+        if (uCount >= 50) break; // cap at 50 upcoming per sport per cycle
+      }
+      if (uCount) log(`Meta refresh ${sport} upcoming: ${uCount} events`);
+    } catch(eu) { /* upcoming may not exist on all plans — ignore */ }
+
+    // Remove events that vanished (live only — keep upcoming until they start)
     for (const id of Object.keys(store)) {
-      if (store[id]?.sport===sport && !liveIds.has(id)) await removeFromRedis(id);
+      if (store[id]?.sport===sport && store[id]?.meta?.time_status==='1' && !liveIds.has(id)) {
+        await removeFromRedis(id);
+      }
     }
-    if (arr.length) log(`Meta refresh ${sport}: ${arr.length} events`);
   } catch(e) {
     if (isRL(e)) onRL();
   } finally { try { client.close&&client.close(); } catch(_){} }
