@@ -1931,7 +1931,12 @@ function startPolling() {
           // Try fast in-place patch first — avoids scroll jank from full rebuild.
           // Falls back to full renderMatches when cards appear/disappear.
           var patched = patchMatchCardsInPlace(S.matches);
-          if (!patched) { renderMatches(S.matches); markLiveSidebarLeagues(S.matches); }
+          if (!patched) {
+            renderMatches(S.matches);
+            markLiveSidebarLeagues(S.matches);
+            // Re-expand any cards the user had open (full rebuild destroys DOM).
+            if (typeof window.sbRestoreExpandedCards === 'function') window.sbRestoreExpandedCards();
+          }
         }
       })
       .catch(function() {
@@ -1942,6 +1947,7 @@ function startPolling() {
           } else {
             renderMatches(S.matches);
             markLiveSidebarLeagues(S.matches);
+            if (typeof window.sbRestoreExpandedCards === 'function') window.sbRestoreExpandedCards();
           }
         }
       });

@@ -1882,6 +1882,7 @@ if ($action === 'inplay') {
 
 // ═══ UPCOMING — Redis-first, REST fallback ════════════════════════════════
 if ($action === 'upcoming' || $action === 'all_upcoming') {
+    ini_set('memory_limit', '256M');
     $results = [];
     $up_cache_dir = __DIR__ . '/cache';
     if (!is_dir($up_cache_dir)) @mkdir($up_cache_dir, 0755, true);
@@ -1895,14 +1896,32 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         return '';
     };
 
-    // ── Redis-first: ws_daemon writes upcoming events to the sport set ──────
-    $all_redis = redis_get_sport_matches($sport_id);
-    if ($all_redis !== null) {
-        foreach ($all_redis as $m) {
-            if (($m['time_status'] ?? '1') === '0') { // upcoming only
-                $results[] = $m;
+    // List fields needed for match-card display — skip heavy md_markets / markets_raw_cache
+    $list_fields_up = ['id','sport_id','time','time_status','league','home','away','ss','live_odds','_source','_updated'];
+
+    // ── Redis-first: decode one event at a time to avoid OOM ─────────────────
+    if ($redis_ok && $redis_conn) {
+        try {
+            $ids_up = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
+            foreach ((array)$ids_up as $uid) {
+                $raw_up = $redis_conn->get("sb:ev:{$uid}");
+                if (!$raw_up) continue;
+                $m = json_decode($raw_up, true);
+                $raw_up = null; // free raw string
+                if (!$m || empty($m['home']['name'])) { $m = null; continue; }
+                // Skip live events and legacy non-oddsapi events
+                if (($m['time_status'] ?? '') !== '0') { $m = null; continue; }
+                $src = $m['_source'] ?? '';
+                if ($src && $src !== 'oddsapi') { $m = null; continue; }
+                if (!$src && ctype_digit((string)$uid) && strlen((string)$uid) >= 9) { $m = null; continue; }
+                // Copy only slim fields
+                $slim = [];
+                foreach ($list_fields_up as $f) { if (isset($m[$f])) $slim[$f] = $m[$f]; }
+                $m = null;
+                $results[] = $slim;
+                $slim = null;
             }
-        }
+        } catch (Exception $e) {}
     }
 
     // ── REST fallback: if Redis has no upcoming, call odds-api.io ───────────
@@ -1940,41 +1959,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         }
     }
 
-    // Inject prematch odds (from Redis if available, else skip)
-    foreach ($results as &$m_up) {
-        $mid = $m_up['id'] ?? '';
-        if (!$mid) continue;
-        $rev = redis_get_event($mid);
-        if ($rev && !empty($rev['live_odds'])) $m_up['live_odds'] = $rev['live_odds'];
-        if ($rev && !empty($rev['md_markets'])) $m_up['md_markets'] = $rev['md_markets'];
-    }
-    unset($m_up);
-
-    // ── Inject odds from cache (same as inplay Step 4.5) ──────────────────
-    $odds_cache_up = $up_cache_dir . '/odds_' . $sport_id . '.json';
-    $up_odds = file_exists($odds_cache_up)
-        ? (json_decode(@file_get_contents($odds_cache_up), true) ?: [])
-        : [];
-
-    // Also check per-match ev_ cache files
-    foreach ($results as &$m_up) {
-        $mid_up = (string)($m_up['id'] ?? '');
-        if (!$mid_up) continue;
-        // Already has odds from DB live_odds field?
-        if (!empty($m_up['live_odds']) && ($m_up['live_odds']['h'] ?? 0) > 1.01) continue;
-        // Try the odds cache
-        if (!empty($up_odds[$mid_up]) && ($up_odds[$mid_up]['h'] ?? 0) > 1.01) {
-            $m_up['live_odds'] = $up_odds[$mid_up];
-        } else {
-            // Try per-match ev_ file
-            $ev_file_up = $up_cache_dir . '/ev_' . $mid_up . '.json';
-            if (file_exists($ev_file_up) && (time() - filemtime($ev_file_up)) < 120) {
-                $ev_data_up = json_decode(@file_get_contents($ev_file_up), true);
-                if (!empty($ev_data_up['live_odds'])) $m_up['live_odds'] = $ev_data_up['live_odds'];
-            }
-        }
-    }
-    unset($m_up);
+    // live_odds already copied from Redis in the main loop above — no second pass needed.
 
     echo json_encode(['success' => 1, 'results' => $results]);
     exit;
