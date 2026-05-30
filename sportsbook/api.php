@@ -10,6 +10,15 @@ header('Pragma: no-cache');
 header('Expires: 0');
 error_reporting(0);
 
+// Capture PHP fatal errors and return them as JSON instead of a blank 500
+register_shutdown_function(function() {
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR], true)) {
+        if (!headers_sent()) { header('HTTP/1.1 500 Internal Server Error'); header('Content-Type: application/json'); }
+        echo json_encode(['success'=>0,'_fatal'=>$e['message'],'_file'=>basename($e['file']),'_line'=>$e['line']]);
+    }
+});
+
 define('ODDSAPI_KEY',  'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2');
 define('ODDSAPI_BASE', 'https://api.odds-api.io/v3');
 
@@ -85,9 +94,7 @@ if (!$redis_ok) {
 // ══ odds-api.io on-demand odds fetcher ═══════════════════════════════════════
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
-define('ODDSAPI_KEY',  '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e');
-define('ODDSAPI_BASE', 'https://api.odds-api.io');
-define('ODDSAPI_BK',   'Bet365');
+if (!defined('ODDSAPI_BK')) define('ODDSAPI_BK', 'Bet365');
 
 function oddsapi_curl($url) {
     $ch = curl_init($url);
@@ -112,9 +119,9 @@ function oddsapi_fetch_event_odds($event_id) {
     $bk  = ODDSAPI_BK;
     // Try the most likely endpoint formats in order
     $candidates = [
-        ODDSAPI_BASE . "/v3/events/{$event_id}/odds?bookmakers={$bk}&apiKey={$key}",
-        ODDSAPI_BASE . "/v3/events/{$event_id}?bookmakers={$bk}&apiKey={$key}",
-        ODDSAPI_BASE . "/v3/odds?eventId={$event_id}&bookmakers={$bk}&apiKey={$key}",
+        ODDSAPI_BASE . "/events/{$event_id}/odds?bookmakers={$bk}&apiKey={$key}",
+        ODDSAPI_BASE . "/events/{$event_id}?bookmakers={$bk}&apiKey={$key}",
+        ODDSAPI_BASE . "/odds?eventId={$event_id}&bookmakers={$bk}&apiKey={$key}",
     ];
     foreach ($candidates as $url) {
         [$code, $body] = oddsapi_curl($url);
@@ -478,9 +485,9 @@ function oddsapi_live_count($sport_id) {
 }
 
 // ── Stub — BetsAPI removed. Returns 0 so badges show correctly. ────────────
-function betsapi_get($path, $params=[]) { return null; }
-function betsapi_live_count($sport_id)     { return oddsapi_live_count($sport_id); }
-function betsapi_upcoming_count($sport_id) { return 0; }
+if (!function_exists('betsapi_get'))            { function betsapi_get($path, $params=[]) { return null; } }
+if (!function_exists('betsapi_live_count'))     { function betsapi_live_count($sport_id) { return oddsapi_live_count($sport_id); } }
+if (!function_exists('betsapi_upcoming_count')) { function betsapi_upcoming_count($sport_id) { return 0; } }
 
 // ── Ensure sb_matches table exists ────────────────────────────────────────
 if ($db_connected) {
@@ -652,6 +659,9 @@ if ($action === 'counts') {
     @set_time_limit(12);
     header('Content-Type: application/json');
     header('Cache-Control: no-store');
+
+    $cache_dir  = __DIR__ . '/cache';
+    if (!is_dir($cache_dir)) @mkdir($cache_dir, 0755, true);
 
     // Fresh cache: 90s bucket
     $cache_path = $cache_dir . '/sb_counts_' . floor(time() / 90) . '.json';
@@ -1674,26 +1684,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
     }
     unset($m_up);
 
-    // ── RETURN ─────────────────────────────────────────────────────────────
-    // (BetsAPI async fill removed — upcoming odds come from ws_daemon.js via Redis)
-    if (true) {
-        echo json_encode(['success' => 1, 'results' => $results]);
-        exit;
-    }
-
-    // ── DEAD CODE BELOW ────────────────────────────────────────────────────────
-    $pm_lock = $up_cache_dir . '/UNUSED';
-    if (false) {
-                $rj = null;
-                $raw = null;
-                if ($raw) {
-                    $mdata = json_decode($raw, true);
-                    $mdata['live_odds'] = $pm;
-                    $pdo->prepare("UPDATE sb_matches SET raw_json=? WHERE id=?")->execute([json_encode($mdata), $fi]);
-                }
-            } catch (Exception $e) {}
-        }
-    }
+    echo json_encode(['success' => 1, 'results' => $results]);
     exit;
 }
 
