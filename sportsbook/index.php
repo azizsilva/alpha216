@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260531vr1';  // fix upcoming 500 (memory): strip md_markets from list reads + drop redundant per-event md_markets re-inject; token-based FR/EN league matching (Coupe du Monde 2026 -> International - World Cup); 256M memory_limit
+$sb_build_stamp = 'b20260531vr2';  // inline collapse card no longer downgrades full match_detail markets to 1X2-only on list polls (kept Corners/Cartes/Correct Score parity with detail page); throttled full-markets refresh keeps odds live
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>

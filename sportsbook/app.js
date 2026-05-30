@@ -5677,20 +5677,36 @@ window.sbRestoreExpandedCards = function() {
     if (chev) chev.classList.add('mc-chevron-up');
     if (!cached || !cached.markets) return;
 
-    // Pull FRESH markets from the in-memory match (Redis md_markets) so the
-    // inline view stays live. Rebuild the DOM ONLY when the tab or the
-    // market structure actually changed — otherwise leave it untouched so
-    // the tab content never flickers on every 1.5s poll (the glitch).
+    // Keep the match meta (score/timer) fresh from the in-memory list item,
+    // but DO NOT downgrade the market tree: marketsFromMatch() only rebuilds
+    // 1X2/Total from the list item's live_odds, which would wipe the full
+    // tab set (Corners / Cartes / Correct Score …) we fetched from
+    // match_detail. The detail page keeps the full set; the inline card must
+    // too. We refresh the FULL markets from the API on a throttle instead.
     var fresh = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
-    if (fresh) {
-      var freshMkts = marketsFromMatch(fresh);
-      if (freshMkts.length) {
-        _mcDiffMarkets(cached.markets, freshMkts);
-        cached.match   = fresh;
-        cached.markets = freshMkts;
-      } else if (fresh.live_odds) {
-        cached.match = fresh;
-      }
+    if (fresh) cached.match = fresh;
+
+    var nowT = Date.now();
+    if (!cached._lastFullFetch || (nowT - cached._lastFullFetch) > 6000) {
+      cached._lastFullFetch = nowT;
+      (function(_mid, _box, _cached){
+        fetch(BASE + 'sportsbook/api.php?action=match_detail&match_id=' + encodeURIComponent(_mid))
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (!_box || _box.getAttribute('data-open') !== '1') return;
+            var mk = (d && d.markets && d.markets.length) ? d.markets : null;
+            if (!mk) return; // keep what we have if the feed is briefly empty
+            _mcDiffMarkets(_cached.markets, mk);
+            if (d.match) _cached.match = d.match;
+            _cached.markets = mk;
+            var t2 = _cached.tab || 'Principaux';
+            var s2 = t2 + '|' + _mdMarketSig(mk);
+            if (_box._sbSig === s2 && _box.querySelector('.mc-md-inner')) return;
+            _box._sbSig = s2;
+            _box.innerHTML = renderInlineMatchMarkets(_mid, _cached.match, _cached.markets, t2);
+          })
+          .catch(function(){});
+      })(mid, box, cached);
     }
 
     var tab = cached.tab || 'Principaux';
