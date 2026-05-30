@@ -143,20 +143,29 @@ function buildMarkets(markets) {
       if (sel.length) md.push({name:'1X2',selections:sel,is_open:true});
     }
     if (['TOTALS','OVERUNDER','GOALS','TOTALGOALS'].includes(name)) {
-      const line=+(o.hdp??2.5),ov=+(o.over||0),un=+(o.under||0);
-      lo.ou_line=line; lo.ou_over=ov; lo.ou_under=un;
-      const sel=[];
-      if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`O ${line}`});
-      if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`U ${line}`});
-      if (sel.length) md.push({name:`Over/Under ${line}`,selections:sel,is_open:true});
+      // Build one Over/Under market per line (multiple lines in odds array)
+      let firstLine = true;
+      for (const entry of (mkt.odds||[])) {
+        const line=+(entry.hdp??2.5),ov=+(entry.over||0),un=+(entry.under||0);
+        if (ov<1.01&&un<1.01) continue;
+        if (firstLine) { lo.ou_line=line; lo.ou_over=ov; lo.ou_under=un; firstLine=false; }
+        const sel=[];
+        if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`O ${line}`});
+        if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`U ${line}`});
+        if (sel.length) md.push({name:`Over/Under ${line}`,selections:sel,is_open:true});
+      }
     }
     if (['SPREAD','ASIANHANDICAP','HANDICAP'].includes(name)) {
-      const hdp=+(o.hdp||0),hh=+(o.home||0),ah=+(o.away||0);
-      const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
-      const sel=[];
-      if (hh>1) sel.push({name:`1 (${fh})`,odds:fmt(hh),NA:`H ${hdp}`});
-      if (ah>1) sel.push({name:`2 (${fa})`,odds:fmt(ah),NA:`A ${-hdp}`});
-      if (sel.length) md.push({name:'Handicap Asiatique',selections:sel,is_open:true});
+      // Build ONE market per handicap line (multiple lines in odds array)
+      for (const entry of (mkt.odds||[])) {
+        const hdp=+(entry.hdp||0),hh=+(entry.home||0),ah=+(entry.away||0);
+        if (hh<1.01&&ah<1.01) continue;
+        const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
+        const sel=[];
+        if (hh>1) sel.push({name:`1 (${fh})`,odds:fmt(hh),NA:`H ${hdp}`});
+        if (ah>1) sel.push({name:`2 (${fa})`,odds:fmt(ah),NA:`A ${-hdp}`});
+        if (sel.length) md.push({name:`Handicap Asiatique ${fh}`,selections:sel,is_open:true});
+      }
     }
     if (name==='DOUBLECHANCE') {
       const dc={};
