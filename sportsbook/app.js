@@ -1411,9 +1411,18 @@ function getFlag(c) {
 // Strip the country prefix from a league name for display
 // e.g. "England Premier League" → "Premier League"
 //      "Spain La Liga" → "La Liga"
+// Coerce league/home/away name fields to strings (odds-api.io can return IDs as numbers)
+function normalizeMatch(m) {
+  if (!m) return m;
+  if (m.league) m.league.name = String(m.league.name || '');
+  if (m.home)   m.home.name   = String(m.home.name   || '');
+  if (m.away)   m.away.name   = String(m.away.name   || '');
+  return m;
+}
+
 function stripCountryPrefix(leagueName) {
-  if (!leagueName) return leagueName;
-  var n = leagueName;
+  if (!leagueName) return '';
+  var n = typeof leagueName === 'string' ? leagueName : String(leagueName);
   // Try 2-word prefix first (e.g. "South Africa ...")
   var words = n.split(' ');
   var twoWord = (words[0] + ' ' + words[1]).toLowerCase();
@@ -1427,7 +1436,7 @@ function stripCountryPrefix(leagueName) {
 // Accurate country detection using BetsAPI prefix convention
 function guessCountry(l) {
   if (!l) return 'International';
-  var n = l.toLowerCase().trim();
+  var n = (typeof l === 'string' ? l : String(l)).toLowerCase().trim();
   var words = n.split(/\s+/);
 
   // Check 2-word prefix first (e.g. "south africa", "new zealand", "north macedonia")
@@ -1705,7 +1714,7 @@ function startPolling() {
           return;
         }
         // Always filter out finished matches from fresh API response
-        var newResults = d.results.filter(function(m) { return m.time_status !== '3'; });
+        var newResults = d.results.filter(function(m) { return m.time_status !== '3'; }).map(normalizeMatch);
         var updated = false;
 
         // If list count changed significantly, do a full refresh (new matches went live, etc.)
@@ -2455,8 +2464,8 @@ function matchCard(m) {
   if (isMatchEnded(m)) return '';
   var o = odds(m);
   var isLive = isMatchLive(m);
-  var hn = h(m.home ? m.home.name : '');
-  var an = h(m.away ? m.away.name : '');
+  var hn = h(m.home ? String(m.home.name || '') : '');
+  var an = h(m.away ? String(m.away.name || '') : '');
   var mid = h(m.id);
 
   // Format date/time for upcoming matches — safe parsing
@@ -2477,7 +2486,7 @@ function matchCard(m) {
   var alogo = al ? 'https://assets.b365api.com/images/team/m/' + al + '.png' : FALLBACK;
 
   // League / country info — strip country prefix for display (matches reference)
-  var rawLeagueName  = m.league ? (m.league.name || '') : '';
+  var rawLeagueName  = m.league ? String(m.league.name || '') : '';
   var leagueName     = h(stripCountryPrefix(rawLeagueName)); // "England Premier League" → "Premier League"
   var country        = guessCountry(rawLeagueName);
   var flagUrl        = getFlag(country);
@@ -7275,6 +7284,7 @@ function loadAndFilter(action, sid, lid) {
         });
       }
 
+      res = res.map(normalizeMatch);
       res.forEach(function(m) { m._o = null; });
       S.matches = res;
       if (!sbNavAlive(navGen)) return;
