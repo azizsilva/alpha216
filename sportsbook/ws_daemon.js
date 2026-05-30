@@ -485,7 +485,41 @@ function buildMarkets(markets) {
       md.splice(pos,0,{name:'Double chance',selections:sel,is_open:true});
     }
   }
-  return { live_odds: lo, md_markets: md };
+
+  // ── Merge same-named market families into ONE market with all lines ──────────
+  // The provider can return several total-type markets ("Totals",
+  // "Alternative Total Goals", "Goals Over/Under") and several spread-type
+  // markets, each as a separate block. Merging them into a single "Total" /
+  // "Handicap" family gives the UI the WIDEST possible Over/Under ladder
+  // (e.g. 0.5 → 4.5 when the books collectively offer it) instead of just the
+  // narrow live window from one block. Dedupe by selection key (NA) keeping the
+  // best/last price, then sort by the handicap line so the slider is ordered.
+  const mergedOrder = [];
+  const mergedByName = new Map();
+  for (const mk of md) {
+    if (!mergedByName.has(mk.name)) {
+      mergedByName.set(mk.name, mk);
+      mergedOrder.push(mk.name);
+    } else {
+      const tgt = mergedByName.get(mk.name);
+      const seen = new Set(tgt.selections.map(s => s.NA || s.name));
+      for (const s of (mk.selections || [])) {
+        const k = s.NA || s.name;
+        if (!seen.has(k)) { tgt.selections.push(s); seen.add(k); }
+      }
+    }
+  }
+  const merged = mergedOrder.map(n => mergedByName.get(n));
+  for (const mk of merged) {
+    if (mk.selections && mk.selections.length && mk.selections.some(s => s.handicap !== undefined)) {
+      mk.selections.sort((a, b) => {
+        const ha = a.handicap === undefined ? 1e9 : +a.handicap;
+        const hb = b.handicap === undefined ? 1e9 : +b.handicap;
+        return ha - hb;
+      });
+    }
+  }
+  return { live_odds: lo, md_markets: merged };
 }
 
 // ── Redis write/remove ────────────────────────────────────────────────────────
