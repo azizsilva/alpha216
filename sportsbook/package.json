@@ -8,8 +8,9 @@
     "dev":   "node ws_daemon.js"
   },
   "dependencies": {
-    "redis": "^4.7.0",
-    "ws":    "^8.18.0"
+    "odds-api-io": "^1.0.0",
+    "redis":       "^4.7.0",
+    "ws":          "^8.18.0"
   },
   "engines": {
     "node": ">=18.0.0"

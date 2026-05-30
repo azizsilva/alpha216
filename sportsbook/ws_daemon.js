@@ -1,107 +1,93 @@
 'use strict';
 /**
  * ─────────────────────────────────────────────────────────────────────────
- *  ws_daemon.js — Real-Time Odds WebSocket Daemon
+ *  ws_daemon.js — Real-Time Odds Daemon (odds-api.io)
  * ─────────────────────────────────────────────────────────────────────────
- * Connects to the odds-api.io WebSocket feed and keeps Redis stocked
- * with fresh live-match data so api.php can serve it in <10 ms per request.
+ * Two-mode operation:
+ *  1. WebSocket mode (preferred): zero-latency push updates
+ *  2. REST polling mode (fallback): if WS returns 403/401, falls back to
+ *     polling the REST API every POLL_INTERVAL_MS (default 3s) — still
+ *     dramatically faster and more reliable than the old BetsAPI setup.
  *
- * Replaces the old BetsAPI-based tick_live.php.
+ * Uses the official odds-api-io Node SDK for all REST calls (handles auth).
  *
- * START (once Node.js + Redis are installed on the VPS):
+ * START:
  *   cd /var/www/public_html/sportsbook
  *   npm install
  *   node ws_daemon.js
  *
- * Or as a systemd service — see ws_daemon.service (auto-created below).
- *
  * ENV OVERRIDES:
- *   ODDS_API_KEY=...    (default: key hard-coded below)
+ *   ODDS_API_KEY=...
  *   REDIS_URL=redis://127.0.0.1:6379
- *   WS_SPORT=football,basketball,tennis   (comma-separated slugs)
- *   WS_MARKETS=ML,Spread,Totals,BTTS,Corners
+ *   POLL_INTERVAL_MS=3000        (REST poll interval in ms, default 3000)
+ *   WS_DISABLE=1                 (force REST-only mode for debugging)
  * ─────────────────────────────────────────────────────────────────────────
  */
 
 const WebSocket = require('ws');
 const { createClient } = require('redis');
-const https = require('https');
 
 // ── Configuration ────────────────────────────────────────────────────────
-const API_KEY  = process.env.ODDS_API_KEY  || 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
-const REDIS_URL = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
-const REST_BASE = 'https://api.odds-api.io/v3';
-const WS_URL    = 'wss://api.odds-api.io/v3/ws';
+const API_KEY         = process.env.ODDS_API_KEY       || 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
+const REDIS_URL       = process.env.REDIS_URL           || 'redis://127.0.0.1:6379';
+const POLL_INTERVAL   = parseInt(process.env.POLL_INTERVAL_MS || '3000', 10);
+const WS_DISABLE      = process.env.WS_DISABLE === '1';
+const WS_URL          = 'wss://api.odds-api.io/v3/ws';
+const MARKETS_WS      = 'ML,Spread,Totals,BTTS,Corners';
 
-// Markets to subscribe to (ML=1x2, Spread=Asian HDP, Totals=O/U, BTTS, Corners)
-const MARKETS   = process.env.WS_MARKETS  || 'ML,Spread,Totals,BTTS,Corners';
+// SDK client (lazy-loaded so we can catch missing module gracefully)
+let OddsAPIClient = null;
+try { OddsAPIClient = require('odds-api-io').OddsAPIClient; } catch(e) {
+  console.error('[ws_daemon] WARN: odds-api-io SDK not found. Run: npm install');
+}
 
-// Sports: { slug: odds-api slug, id: our numeric sport_id }
+// Sports table
 const SPORTS = [
-  { slug: 'football',   id: 1  },
-  { slug: 'basketball', id: 18 },
-  { slug: 'tennis',     id: 13 },
-  { slug: 'volleyball', id: 91 },
-  { slug: 'ice-hockey', id: 17 },
-  { slug: 'handball',   id: 78 },
+  { slug: 'football',   id: '1'  },
+  { slug: 'basketball', id: '18' },
+  { slug: 'tennis',     id: '13' },
+  { slug: 'volleyball', id: '91' },
+  { slug: 'ice-hockey', id: '17' },
+  { slug: 'handball',   id: '78' },
 ];
 
-// Redis key namespace
-const KEY_EV      = id => `sb:ev:${id}`;          // JSON string per event
-const KEY_SPORT   = sid => `sb:live:sport:${sid}`; // SET of event IDs
-const KEY_ALL     = 'sb:live:all';                 // SET of all live event IDs
-const KEY_UPDATED = 'sb:live:updated';             // timestamp of last WS tick
+// Redis key helpers
+const KEY_EV      = id  => `sb:ev:${id}`;
+const KEY_SPORT   = sid => `sb:live:sport:${sid}`;
+const KEY_ALL     = 'sb:live:all';
+const KEY_UPDATED = 'sb:live:updated';
 
-// Sequence number for zero-data-loss reconnect replay
-let lastSeq = 0;
-
-// In-memory mirror: eventId → full match object (so we merge meta + odds)
+// In-memory mirror
 const store = {};
 
-// ── Redis setup ──────────────────────────────────────────────────────────
+// Sequence tracking for WS replay
+let lastSeq = 0;
+
+// Mode flag
+let wsMode = !WS_DISABLE;
+let wsAuthFailed = false;
+
+// ── Logging ──────────────────────────────────────────────────────────────
+function log(...args) {
+  const t = new Date().toISOString().replace('T',' ').slice(0,19);
+  process.stdout.write(`[ws_daemon ${t}] ${args.join(' ')}\n`);
+}
+
+// ── Redis ────────────────────────────────────────────────────────────────
 const redis = createClient({ url: REDIS_URL });
 redis.on('error', e => log('Redis error:', e.message));
 
-// ── Helpers ──────────────────────────────────────────────────────────────
-function log(...args) {
-  process.stdout.write('[ws_daemon ' + ts() + '] ' + args.join(' ') + '\n');
-}
-function ts() {
-  return new Date().toISOString().replace('T',' ').slice(0,19);
-}
-
-/** Simple HTTPS GET — returns parsed JSON or null */
-function restGet(path) {
-  return new Promise((resolve) => {
-    const url = REST_BASE + path;
-    const opts = {
-      headers: { 'X-API-Key': API_KEY, 'Accept': 'application/json' },
-      timeout: 10000,
-    };
-    https.get(url, opts, res => {
-      let buf = '';
-      res.on('data', d => buf += d);
-      res.on('end', () => {
-        try { resolve(JSON.parse(buf)); }
-        catch(e) { log('JSON parse error', path, e.message); resolve(null); }
-      });
-    }).on('error', e => { log('REST error', path, e.message); resolve(null); });
-  });
-}
-
-/** Map a period string ("1H","2H","HT","OT"…) to BetsAPI-style md */
+// ── Map period string to our md format ───────────────────────────────────
 function mapPeriod(period) {
   if (!period) return '1';
-  const p = String(period).toUpperCase();
-  if (p === 'HT' || p === 'HALF_TIME' || p === 'HALF-TIME') return 'HT';
-  if (p === '1H' || p === '1'  || p === 'FIRST_HALF')  return '1';
-  if (p === '2H' || p === '2'  || p === 'SECOND_HALF') return '2';
-  if (p === 'OT' || p === 'ET' || p === 'EXTRA_TIME')  return 'OT';
-  if (p === 'PEN'|| p === 'PENALTIES') return 'PEN';
+  const p = String(period).toUpperCase().replace(/[-_]/g, '');
+  if (p === 'HT' || p === 'HALFTIME') return 'HT';
+  if (p === '1H' || p === '1' || p === 'FIRSTHALF') return '1';
+  if (p === '2H' || p === '2' || p === 'SECONDHALF') return '2';
+  if (p === 'OT' || p === 'ET' || p === 'EXTRATIME') return 'OT';
   return '1';
 }
 
-/** Build a score string "H-A" from the event score object */
 function mapScore(score) {
   if (!score) return '';
   if (typeof score === 'string') return score;
@@ -110,382 +96,359 @@ function mapScore(score) {
   return `${h}-${a}`;
 }
 
-/**
- * Convert odds-api.io markets array (from WS message) into
- * the live_odds + totals format the PHP/JS frontend understands:
- *
- *   live_odds: { h, x, a, ou_line, ou_over, ou_under }
- *   markets_raw: full array from API (for match detail / tabs)
- */
+// ── Convert WS/SDK market data → live_odds + md_markets ─────────────────
 function parseMarkets(markets) {
-  const live_odds = {};
-  const markets_raw = markets || [];
-
-  for (const mkt of markets_raw) {
-    const name = (mkt.name || '').toUpperCase();
-    const o    = (mkt.odds || [])[0] || {};
-
-    if (name === 'ML') {
-      if (o.home  != null) live_odds.h = parseFloat(o.home);
-      if (o.draw  != null) live_odds.x = parseFloat(o.draw);
-      if (o.away  != null) live_odds.a = parseFloat(o.away);
-    }
-    if (name === 'TOTALS') {
-      if (o.hdp   != null) live_odds.ou_line  = parseFloat(o.hdp);
-      if (o.over  != null) live_odds.ou_over  = parseFloat(o.over);
-      if (o.under != null) live_odds.ou_under = parseFloat(o.under);
-    }
-    if (name === 'SPREAD') {
-      live_odds.hdp_line = parseFloat(o.hdp  || 0);
-      live_odds.hdp_h    = parseFloat(o.home || 0);
-      live_odds.hdp_a    = parseFloat(o.away || 0);
-    }
-    if (name === 'BTTS') {
-      live_odds.btts_yes = parseFloat(o.yes || o.home || 0);
-      live_odds.btts_no  = parseFloat(o.no  || o.away || 0);
-    }
-    if (name === 'CORNERS') {
-      if (o.hdp   != null) live_odds.corners_line  = parseFloat(o.hdp);
-      if (o.over  != null) live_odds.corners_over  = parseFloat(o.over);
-      if (o.under != null) live_odds.corners_under = parseFloat(o.under);
-    }
-  }
-
-  return { live_odds, markets_raw };
-}
-
-/**
- * Convert odds-api.io markets_raw into md_markets array
- * that the match-detail tab renderer in api.php / app.js can use.
- * Each entry: { name: 'Over/Under 2.5', odds: [{name:'Over',odds:1.92},{name:'Under',odds:1.92}] }
- */
-function buildMdMarkets(markets_raw) {
+  const lo = {};
   const md = [];
-  for (const mkt of markets_raw) {
-    const name = (mkt.name || '').toUpperCase();
+  for (const mkt of (markets || [])) {
+    const name = String(mkt.name || '').toUpperCase();
     const o    = (mkt.odds || [])[0] || {};
 
     if (name === 'ML') {
-      md.push({
-        name: '1X2',
-        odds: [
-          { name: '1', odds: String(o.home || ''), NA: '1' },
-          { name: 'X', odds: String(o.draw || ''), NA: 'X' },
-          { name: '2', odds: String(o.away || ''), NA: '2' },
-        ].filter(x => parseFloat(x.odds) > 1.0)
-      });
+      if (o.home != null) lo.h = +o.home;
+      if (o.draw != null) lo.x = +o.draw;
+      if (o.away != null) lo.a = +o.away;
+      const sel = [];
+      if (lo.h > 1) sel.push({ name:'1', odds: String(lo.h), NA:'1' });
+      if (lo.x > 1) sel.push({ name:'X', odds: String(lo.x), NA:'X' });
+      if (lo.a > 1) sel.push({ name:'2', odds: String(lo.a), NA:'2' });
+      if (sel.length) md.push({ name:'1X2', selections: sel, is_open: true });
     }
     if (name === 'TOTALS') {
       const line = o.hdp ?? 2.5;
-      md.push({
-        name: `Over/Under ${line}`,
-        odds: [
-          { name: `Plus de ${line}`, odds: String(o.over  || ''), NA: `O ${line}` },
-          { name: `Moins de ${line}`,odds: String(o.under || ''), NA: `U ${line}` },
-        ].filter(x => parseFloat(x.odds) > 1.0)
-      });
+      if (o.over  != null) lo.ou_over  = +o.over;
+      if (o.under != null) lo.ou_under = +o.under;
+      if (line    != null) lo.ou_line  = +line;
+      const sel = [];
+      if (lo.ou_over  > 1) sel.push({ name:`Plus de ${line}`,  odds: String(lo.ou_over),  NA:`O ${line}` });
+      if (lo.ou_under > 1) sel.push({ name:`Moins de ${line}`, odds: String(lo.ou_under), NA:`U ${line}` });
+      if (sel.length) md.push({ name:`Over/Under ${line}`, selections: sel, is_open: true });
     }
     if (name === 'SPREAD') {
-      md.push({
-        name: 'Handicap Asiatique',
-        odds: [
-          { name: `1 (${o.hdp >= 0 ? '+' : ''}${o.hdp})`, odds: String(o.home || ''), NA: `H ${o.hdp}` },
-          { name: `2 (${-(o.hdp||0) >= 0 ? '+' : ''}${-(o.hdp||0)})`, odds: String(o.away || ''), NA: `A ${-(o.hdp||0)}` },
-        ].filter(x => parseFloat(x.odds) > 1.0)
-      });
+      lo.hdp_line = +(o.hdp  ?? 0);
+      lo.hdp_h    = +(o.home ?? 0);
+      lo.hdp_a    = +(o.away ?? 0);
+      const sel = [];
+      const hdp  = o.hdp ?? 0;
+      if (lo.hdp_h > 1) sel.push({ name:`1 (${hdp >= 0 ? '+' : ''}${hdp})`, odds: String(lo.hdp_h), NA:`H ${hdp}` });
+      if (lo.hdp_a > 1) sel.push({ name:`2 (${-hdp >= 0 ? '+' : ''}${-hdp})`, odds: String(lo.hdp_a), NA:`A ${-hdp}` });
+      if (sel.length) md.push({ name:'Handicap Asiatique', selections: sel, is_open: true });
     }
     if (name === 'BTTS') {
-      md.push({
-        name: 'Les deux équipes qui marquent',
-        odds: [
-          { name: 'Oui', odds: String(o.yes  || o.home || ''), NA: 'Yes' },
-          { name: 'Non', odds: String(o.no   || o.away || ''), NA: 'No'  },
-        ].filter(x => parseFloat(x.odds) > 1.0)
-      });
+      lo.btts_yes = +(o.yes || o.home || 0);
+      lo.btts_no  = +(o.no  || o.away || 0);
+      const sel = [];
+      if (lo.btts_yes > 1) sel.push({ name:'Oui', odds: String(lo.btts_yes), NA:'Yes' });
+      if (lo.btts_no  > 1) sel.push({ name:'Non', odds: String(lo.btts_no),  NA:'No'  });
+      if (sel.length) md.push({ name:'Les deux équipes qui marquent', selections: sel, is_open: true });
     }
     if (name === 'CORNERS') {
-      const cline = o.hdp ?? 9.5;
-      md.push({
-        name: `Total des corners Plus/Moins ${cline}`,
-        odds: [
-          { name: `Plus de ${cline}`,  odds: String(o.over  || ''), NA: `CO ${cline}` },
-          { name: `Moins de ${cline}`, odds: String(o.under || ''), NA: `CU ${cline}` },
-        ].filter(x => parseFloat(x.odds) > 1.0)
-      });
+      const cl = o.hdp ?? 9.5;
+      lo.corners_line  = +cl;
+      lo.corners_over  = +(o.over  ?? 0);
+      lo.corners_under = +(o.under ?? 0);
+      const sel = [];
+      if (lo.corners_over  > 1) sel.push({ name:`Plus de ${cl}`,  odds: String(lo.corners_over),  NA:`CO ${cl}` });
+      if (lo.corners_under > 1) sel.push({ name:`Moins de ${cl}`, odds: String(lo.corners_under), NA:`CU ${cl}` });
+      if (sel.length) md.push({ name:`Total des corners Plus/Moins ${cl}`, selections: sel, is_open: true });
     }
   }
-  return md;
+  return { live_odds: lo, md_markets: md };
 }
 
-// ── REST: fetch all live events for a sport ──────────────────────────────
-async function fetchLiveEvents(sport) {
-  const data = await restGet(`/events?sport=${sport.slug}&status=live`);
-  // odds-api.io returns an array of events (or {data:[...]} wrapper)
-  const events = Array.isArray(data) ? data
-    : (Array.isArray(data?.data) ? data.data
-    : (Array.isArray(data?.events) ? data.events : []));
-
-  let count = 0;
-  for (const ev of events) {
-    const id = String(ev.id);
-    if (!id) continue;
-    if (!store[id]) store[id] = {};
-
-    // Build match metadata in the format api.php / frontend expects
-    store[id].meta = {
-      id,
-      sport_id: String(sport.id),
-      time:        String(ev.starts_at || ev.start_time || ev.time || 0),
-      time_status: ev.status === 'live' ? '1' : (ev.status === 'finished' ? '3' : '0'),
-      league: { id: String(ev.league_id || ''), name: ev.league || ev.competition || ev.league_name || '' },
-      home:   { id: String(ev.home_id   || ''), name: ev.home   || ev.home_team   || '' },
-      away:   { id: String(ev.away_id   || ''), name: ev.away   || ev.away_team   || '' },
-      ss:      mapScore(ev.score || ev.ss),
-      timer: {
-        tm: parseInt(ev.minute || ev.timer_minutes || ev.elapsed || 0),
-        ts: parseInt(ev.second || ev.timer_seconds || 0),
-        md: mapPeriod(ev.period || ev.half || ev.phase),
-      },
-      stats: buildStats(ev),
-      _source: 'oddsapi',
-    };
-    count++;
-    await writeEventToRedis(id);
-  }
-  return count;
+// ── Normalise SDK event → our frontend format ────────────────────────────
+function normEvent(ev, sportId) {
+  const id = String(ev.id);
+  return {
+    id,
+    sport_id:    sportId,
+    time:        String(ev.starts_at || ev.start_time || ev.time || 0),
+    time_status: ev.status === 'live' ? '1' : (ev.status === 'finished' ? '3' : '0'),
+    league: { id: String(ev.league_id || ''), name: ev.league || ev.competition || ev.league_name || '' },
+    home:   { id: String(ev.home_id   || ''), name: ev.home   || ev.home_team   || '' },
+    away:   { id: String(ev.away_id   || ''), name: ev.away   || ev.away_team   || '' },
+    ss:      mapScore(ev.score || ev.ss),
+    timer: {
+      tm: parseInt(ev.minute || ev.elapsed || 0) || 0,
+      ts: parseInt(ev.second || 0) || 0,
+      md: mapPeriod(ev.period || ev.half || ev.phase),
+    },
+    stats: buildStats(ev),
+    _source: 'oddsapi',
+  };
 }
 
-/** Extract stats (corners, cards) from event if provided by the REST API */
 function buildStats(ev) {
   const s = ev.stats || ev.statistics || {};
   const out = {};
   const tryPair = (key, src) => {
     const hk = `home_${src}`, ak = `away_${src}`;
-    if (s[hk] != null && s[ak] != null) out[key] = [parseInt(s[hk]), parseInt(s[ak])];
+    if (s[hk] != null && s[ak] != null)
+      out[key] = [parseInt(s[hk])||0, parseInt(s[ak])||0];
   };
   tryPair('corners',       'corners');
   tryPair('yellow_cards',  'yellow_cards');
   tryPair('red_cards',     'red_cards');
-  tryPair('attacks',       'attacks');
-  tryPair('shots_on_target','shots_on_target');
   return Object.keys(out).length ? out : undefined;
 }
 
-/** Write the merged match object to Redis */
-async function writeEventToRedis(id) {
+// ── Write merged event to Redis ──────────────────────────────────────────
+async function writeToRedis(id) {
   const ev = store[id];
-  if (!ev) return;
-  const meta  = ev.meta  || {};
-  const parsed = parseMarkets(ev.markets_raw || []);
+  if (!ev || !ev.meta) return;
 
-  const match = {
-    ...meta,
-    live_odds:   parsed.live_odds,
-    md_markets:  buildMdMarkets(ev.markets_raw || []),
-    _bookie:     ev.bookie,
-    _seq:        ev.seq,
-    _updated:    Date.now(),
+  const parsed = parseMarkets(ev.markets_raw || []);
+  const match  = {
+    ...ev.meta,
+    live_odds:  Object.keys(parsed.live_odds).length ? parsed.live_odds : undefined,
+    md_markets: parsed.md_markets.length            ? parsed.md_markets : undefined,
+    _bookie:    ev.bookie,
+    _seq:       ev.seq,
+    _updated:   Date.now(),
   };
 
-  const sportId = meta.sport_id || '1';
-
-  // Store per-event JSON string (TTL 10 min — cleaned up if event disappears)
+  const sid = ev.meta.sport_id || '1';
   await redis.set(KEY_EV(id), JSON.stringify(match), { EX: 600 });
-
-  // Track in sport-specific set and global set
-  await redis.sAdd(KEY_SPORT(sportId), id);
+  await redis.sAdd(KEY_SPORT(sid), id);
   await redis.sAdd(KEY_ALL, id);
-
-  // Timestamp for SSE/polling freshness
   await redis.set(KEY_UPDATED, String(Date.now()));
 }
 
-/** Remove an event that was deleted/finished from Redis */
-async function removeEventFromRedis(id) {
-  const ev = store[id] || {};
-  const sportId = (ev.meta || {}).sport_id || '1';
+async function removeFromRedis(id) {
+  const sid = (store[id]?.meta?.sport_id) || '1';
   await redis.del(KEY_EV(id));
-  await redis.sRem(KEY_SPORT(sportId), id);
+  await redis.sRem(KEY_SPORT(sid), id);
   await redis.sRem(KEY_ALL, id);
   delete store[id];
 }
 
-// ── WebSocket ────────────────────────────────────────────────────────────
-let wsInstance = null;
-let reconnectTimer = null;
-let reconnectAttempts = 0;
-const MAX_RECONNECT = 20;
+// ── REST: fetch live events via SDK ──────────────────────────────────────
+async function restFetchSport(sport) {
+  if (!OddsAPIClient) return 0;
+  const client = new OddsAPIClient({ apiKey: API_KEY });
+  try {
+    const events = await client.getLiveEvents(sport.slug);
+    const arr = Array.isArray(events) ? events
+      : (Array.isArray(events?.data) ? events.data
+      : (Array.isArray(events?.events) ? events.events : []));
+
+    for (const ev of arr) {
+      const id = String(ev.id);
+      if (!id || !ev.home) continue;
+      if (!store[id]) store[id] = {};
+      store[id].meta = normEvent(ev, sport.id);
+      await writeToRedis(id);
+    }
+
+    // Also try to fetch odds for live events if WS is not working
+    if (wsAuthFailed && arr.length > 0) {
+      const ids = arr.map(e => String(e.id)).slice(0, 10).join(',');
+      try {
+        const oddsResp = await client.getOddsForMultipleEvents({
+          event_ids: ids,
+          bookmakers: 'Bet365',
+        });
+        const items = Array.isArray(oddsResp) ? oddsResp
+          : (Array.isArray(oddsResp?.data) ? oddsResp.data : []);
+        for (const item of items) {
+          const eid = String(item.id || '');
+          if (!eid || !store[eid]) continue;
+          // Convert SDK odds format to our markets_raw format
+          const bkData = item.bookmakers || {};
+          for (const [, mkts] of Object.entries(bkData)) {
+            if (Array.isArray(mkts) && mkts.length) {
+              store[eid].markets_raw = mkts;
+              break; // use first bookmaker's data
+            }
+          }
+          await writeToRedis(eid);
+        }
+      } catch(e) {
+        // odds fetch failed — still have meta data
+      }
+    }
+
+    return arr.length;
+  } catch(e) {
+    log(`REST error (${sport.slug}):`, e.message || String(e));
+    return 0;
+  } finally {
+    try { client.close && client.close(); } catch(_) {}
+  }
+}
+
+async function restFetchAll() {
+  let total = 0;
+  for (const sport of SPORTS) {
+    try { total += await restFetchSport(sport); } catch(e) { log('Fetch error:', sport.slug, e.message); }
+  }
+  if (total > 0) log(`REST: ${total} live events updated in Redis`);
+  else log('REST: 0 live events found (off-peak hours or auth issue)');
+}
+
+// ── Prune stale events from Redis ────────────────────────────────────────
+async function pruneStale() {
+  try {
+    const ids = await redis.sMembers(KEY_ALL);
+    for (const id of ids) {
+      const exists = await redis.exists(KEY_EV(id));
+      if (!exists) {
+        const sid = store[id]?.meta?.sport_id || '1';
+        await redis.sRem(KEY_SPORT(sid), id);
+        await redis.sRem(KEY_ALL, id);
+        delete store[id];
+      }
+    }
+  } catch(e) { log('Prune error:', e.message); }
+}
+
+// ── WebSocket mode ───────────────────────────────────────────────────────
+let wsInstance    = null;
+let wsReconnTimer = null;
+let wsAttempts    = 0;
 
 function buildWsUrl() {
-  const sportSlugs = SPORTS.map(s => s.slug).join(',');
-  let url = `${WS_URL}?apiKey=${API_KEY}&markets=${encodeURIComponent(MARKETS)}&sport=${encodeURIComponent(sportSlugs)}&status=live`;
+  let url = `${WS_URL}?apiKey=${API_KEY}&markets=${encodeURIComponent(MARKETS_WS)}&status=live`;
+  const slugs = SPORTS.map(s => s.slug).join(',');
+  url += `&sport=${encodeURIComponent(slugs)}`;
   if (lastSeq > 0) url += `&lastSeq=${lastSeq}`;
   return url;
 }
 
 function startWebSocket() {
-  if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+  if (wsReconnTimer) { clearTimeout(wsReconnTimer); wsReconnTimer = null; }
 
-  const url = buildWsUrl();
-  log(`Connecting WS${lastSeq > 0 ? ' lastSeq=' + lastSeq : ' (fresh)'}...`);
-  const ws = new WebSocket(url);
+  log(`Connecting WS${lastSeq > 0 ? ' lastSeq='+lastSeq : ' (fresh)'}...`);
+  const ws = new WebSocket(buildWsUrl());
   wsInstance = ws;
-
-  // Ping every 30s to keep connection alive
-  let pingTimer = null;
+  let ping = null;
 
   ws.on('open', () => {
-    log('WebSocket connected.');
-    reconnectAttempts = 0;
-    pingTimer = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) ws.ping();
-    }, 30000);
+    log('WebSocket connected OK.');
+    wsAttempts = 0;
+    wsAuthFailed = false;
+    ping = setInterval(() => { if (ws.readyState === WebSocket.OPEN) ws.ping(); }, 30000);
   });
 
   ws.on('message', async (raw) => {
-    const lines = raw.toString().trim().split('\n');
-    for (const line of lines) {
+    for (const line of raw.toString().trim().split('\n')) {
       if (!line.trim()) continue;
-      try {
-        await handleMessage(JSON.parse(line));
-      } catch(e) {
-        log('Parse error:', e.message, '|', line.slice(0, 80));
-      }
+      try { await handleWsMessage(JSON.parse(line)); }
+      catch(e) { log('WS parse error:', e.message); }
+    }
+  });
+
+  ws.on('unexpected-response', (req, res) => {
+    log(`WS auth error: HTTP ${res.statusCode} — WebSocket access not enabled for this key.`);
+    if (res.statusCode === 403 || res.statusCode === 401) {
+      wsAuthFailed = true;
+      log('Switching to REST polling mode (faster than BetsAPI was).');
+      ws.terminate();
+      // Don't reconnect WS — start REST polling
+      startRestPolling();
+      return;
     }
   });
 
   ws.on('error', (e) => log('WS error:', e.message));
 
   ws.on('close', (code) => {
-    if (pingTimer) { clearInterval(pingTimer); pingTimer = null; }
+    if (ping) { clearInterval(ping); ping = null; }
+    if (wsAuthFailed) return; // Already switched to REST mode
     log(`WS closed code=${code}.`);
-    scheduleReconnect();
+    wsAttempts++;
+    if (wsAttempts > 20) {
+      log('Too many WS failures — switching to REST polling mode.');
+      wsAuthFailed = true;
+      startRestPolling();
+      return;
+    }
+    const delay = Math.min(Math.pow(2, wsAttempts - 1) * 1000, 30000);
+    log(`Reconnect in ${delay/1000}s (attempt ${wsAttempts}/20)`);
+    wsReconnTimer = setTimeout(startWebSocket, delay);
   });
 }
 
-function scheduleReconnect() {
-  reconnectAttempts++;
-  if (reconnectAttempts > MAX_RECONNECT) {
-    log('Max reconnect attempts reached. Exiting.');
-    process.exit(1);
-  }
-  const delay = Math.min(Math.pow(2, reconnectAttempts - 1) * 1000, 30000);
-  log(`Reconnect in ${delay / 1000}s (attempt ${reconnectAttempts}/${MAX_RECONNECT})`);
-  reconnectTimer = setTimeout(startWebSocket, delay);
-}
-
-async function handleMessage(msg) {
+async function handleWsMessage(msg) {
   const { type, id, bookie, markets, seq, reason } = msg;
-
-  // Track sequence for zero-data-loss replay
   if (seq && seq > lastSeq) lastSeq = seq;
 
   switch (type) {
     case 'welcome':
-      log('Welcome. Bookmakers:', (msg.bookmakers || []).join(', '));
-      if (lastSeq > 0) log('Replaying missed updates since seq', lastSeq);
+      log('WS Welcome. Bookmakers:', (msg.bookmakers || []).join(', '));
+      if (msg.warning) log('WS Warning:', msg.warning);
       break;
-
     case 'resync_required':
-      log('Resync required:', reason, '— rebuilding from REST...');
+      log('WS Resync required:', reason);
       lastSeq = 0;
-      for (const sport of SPORTS) await fetchLiveEvents(sport);
+      await restFetchAll();
       break;
-
     case 'created':
     case 'updated': {
       const eid = String(id);
       if (!store[eid]) store[eid] = {};
       store[eid].markets_raw = markets || [];
-      store[eid].bookie      = bookie;
-      store[eid].seq         = seq;
-      await writeEventToRedis(eid);
-      // Log every 5th update to avoid flooding stdout
-      if (seq % 5 === 0) log(`${type.toUpperCase()} ev=${eid} bk=${bookie} seq=${seq}`);
+      store[eid].bookie = bookie;
+      store[eid].seq    = seq;
+      await writeToRedis(eid);
+      if (seq % 10 === 0) log(`WS ${type.toUpperCase()} ev=${eid} bk=${bookie} seq=${seq}`);
       break;
     }
-
-    case 'deleted': {
-      const eid = String(id);
-      log(`DELETED ev=${eid}`);
-      await removeEventFromRedis(eid);
+    case 'deleted':
+      log(`WS DELETED ev=${id}`);
+      await removeFromRedis(String(id));
       break;
-    }
-
     case 'no_markets':
-      // Event exists but has no markets right now — keep meta, clear odds
-      if (id) {
-        const eid = String(id);
-        if (store[eid]) {
-          store[eid].markets_raw = [];
-          await writeEventToRedis(eid);
-        }
+      if (id && store[String(id)]) {
+        store[String(id)].markets_raw = [];
+        await writeToRedis(String(id));
       }
       break;
   }
 }
 
-// ── Periodic REST refresh for scores/timers ──────────────────────────────
-// The WS gives us real-time odds but NOT live scores/timers.
-// We poll the REST API every 10s to keep scores/timers fresh.
-async function refreshAllScores() {
-  for (const sport of SPORTS) {
-    try {
-      await fetchLiveEvents(sport);
-    } catch(e) {
-      log('REST refresh error:', sport.slug, e.message);
-    }
-  }
-}
-
-// ── Cleanup: purge stale events from sets ────────────────────────────────
-// Any event in the Redis sets that no longer has a key gets pruned.
-async function pruneStaleEvents() {
-  try {
-    const ids = await redis.sMembers(KEY_ALL);
-    for (const id of ids) {
-      const exists = await redis.exists(KEY_EV(id));
-      if (!exists) {
-        // Key expired or was deleted — remove from sets
-        const sportId = (store[id]?.meta?.sport_id) || '1';
-        await redis.sRem(KEY_SPORT(sportId), id);
-        await redis.sRem(KEY_ALL, id);
-        delete store[id];
-      }
-    }
-  } catch(e) {
-    log('Prune error:', e.message);
-  }
+// ── REST polling mode (fallback when WS is 403) ──────────────────────────
+let pollTimer = null;
+function startRestPolling() {
+  if (pollTimer) return; // already running
+  log(`Starting REST polling every ${POLL_INTERVAL}ms — real-time via REST.`);
+  // Poll immediately, then on interval
+  restFetchAll();
+  pollTimer = setInterval(restFetchAll, POLL_INTERVAL);
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────
 async function main() {
   log('='.repeat(60));
   log('alpina216 ws_daemon — odds-api.io Real-Time Feed');
-  log('Markets:', MARKETS);
-  log('Sports:', SPORTS.map(s => s.slug).join(', '));
+  log('API Key:', API_KEY.slice(0,8) + '...' + API_KEY.slice(-4));
+  log('Redis:', REDIS_URL);
   log('='.repeat(60));
 
-  await redis.connect();
-  log('Redis connected:', REDIS_URL);
-
-  // Initial REST snapshot so we have team names before WS lands
-  log('Fetching initial live events...');
-  for (const sport of SPORTS) {
-    const n = await fetchLiveEvents(sport);
-    log(`  ${sport.slug}: ${n} events`);
+  if (!OddsAPIClient) {
+    log('ERROR: odds-api-io SDK not installed. Run: npm install');
+    process.exit(1);
   }
 
-  // Start the WebSocket
-  startWebSocket();
+  await redis.connect();
+  log('Redis connected OK.');
 
-  // Refresh scores/timers from REST every 10s
-  setInterval(refreshAllScores, 10_000);
+  // Initial REST snapshot
+  log('Initial REST fetch...');
+  await restFetchAll();
 
-  // Prune stale Redis keys every 5 min
-  setInterval(pruneStaleEvents, 5 * 60_000);
+  // Start REST polling regardless (scores/timers need REST every 10s)
+  // WS provides instant odds updates on top of this
+  setInterval(restFetchAll, 10_000);
+  setInterval(pruneStale,   5 * 60_000);
 
-  // Graceful shutdown
+  if (!WS_DISABLE && !wsAuthFailed) {
+    startWebSocket();
+  } else {
+    log('WS disabled — REST polling only.');
+    startRestPolling();
+  }
+
   process.on('SIGINT',  shutdown);
   process.on('SIGTERM', shutdown);
 }
@@ -493,6 +456,7 @@ async function main() {
 async function shutdown() {
   log('Shutting down...');
   if (wsInstance) wsInstance.close();
+  if (pollTimer)  clearInterval(pollTimer);
   await redis.quit();
   process.exit(0);
 }
