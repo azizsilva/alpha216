@@ -64,7 +64,7 @@ const BOOKMAKER   = process.env.BOOKMAKER || 'Bet365';
 // Multiple books are queried and MERGED per event (see mergeBookmakerMarkets).
 // 1xbet/22Bet carry corners & cards; Bet365 carries half-time/correct score;
 // the rest fill gaps. odds-api allows up to 30 bookmakers per request.
-const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,William Hill';
+const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {
@@ -986,10 +986,21 @@ async function refreshSportLive(sport) {
 // ── Upcoming (prematch) refresh for ONE sport — runs in the slow cycle ───────
 async function refreshSportUpcoming(sport) {
   if (rateLimited()) return;
-  const client = new OddsAPIClient({ apiKey: API_KEY });
   try {
-    const uResp = await client.getUpcomingEvents(sport);
-    const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
+    // NOTE: there is NO /events/upcoming endpoint (it 400s). The correct source
+    // is /events?sport=X which returns ALL events; we keep the ones that are
+    // upcoming (status pending/not-started) with a future kickoff so the
+    // "browse by date" and league pages are fully populated across days.
+    const uResp = await httpGetJson('/events', { sport });
+    const rawArr = Array.isArray(uResp) ? uResp : (Array.isArray(uResp?.events) ? uResp.events : (Array.isArray(uResp?.data) ? uResp.data : []));
+    const nowMs = Date.now() - 2 * 3600 * 1000;       // keep just-started (<2h) too
+    const maxMs = Date.now() + 8 * 24 * 3600 * 1000;  // cover the next ~8 days of dates
+    const uArr = rawArr.filter(e => {
+      const st = String(e.status || '').toLowerCase();
+      if (st === 'settled' || st === 'cancelled' || st === 'finished' || st === 'ended' || st === 'live') return false;
+      const ms = Date.parse(e.date || e.starts_at || e.start_time || 0) || 0;
+      return ms === 0 || (ms >= nowMs && ms <= maxMs);
+    });
     onRLOk();
     // Sort by KICKOFF first so the next several days are fully covered (the
     // "browse by date" page needs every date populated). Priority European
@@ -1015,7 +1026,7 @@ async function refreshSportUpcoming(sport) {
       store[id].sport = sport;
       await writeToRedis(id);
       uCount++;
-      if (uCount >= 1200) break;
+      if (uCount >= 5000) break;
     }
     if (uCount) log(`Upcoming refresh ${sport}: ${uCount} events`);
   } catch(eu) { /* upcoming may not exist on all plans — ignore */ }
@@ -1134,6 +1145,13 @@ async function main() {
   // Football is the priority sport; scores/timers must feel live like fcbet216.
   refreshFootballLive().catch(e => log('Football live init error:', e.message));
   setInterval(() => refreshFootballLive().catch(e => log('Football live error:', e.message)), 12_000);
+
+  // Step 3a': Dedicated football UPCOMING loop. The slow multi-sport cycle only
+  // touches one sport per tick, so football's "browse by date" / league pages
+  // could sit empty for minutes after a flush. Populate football upcoming
+  // immediately and refresh it every 45s so every near date is covered fast.
+  refreshSportUpcoming('football').catch(e => log('Football upcoming init error:', e.message));
+  setInterval(() => refreshSportUpcoming('football').catch(e => log('Football upcoming error:', e.message)), 45_000);
 
   // Step 3b: Full multi-sport cycle (live + upcoming), one sport per tick (every 20s).
   refreshMeta().catch(e => log('Meta init error:', e.message));

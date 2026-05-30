@@ -95,7 +95,7 @@ if (!$redis_ok) {
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
 if (!defined('ODDSAPI_BK')) define('ODDSAPI_BK', 'Bet365');
-if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,William Hill');
+if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet');
 
 function oddsapi_curl($url) {
     $ch = curl_init($url);
@@ -2026,6 +2026,43 @@ if ($action === 'sync') {
 if ($action === 'league_matches') {
     $league_q  = trim($_GET['league']   ?? '');
     $results   = [];
+
+    // ── Redis-first (odds-api migration) ─────────────────────────────────────
+    // The old DB/BetsAPI path below is stale. Serve live + upcoming events for
+    // this league straight from Redis (what ws_daemon.js feeds). Match on
+    // league id when present, else a loose normalized name match; the frontend
+    // applies its own precise isLeagueMatch() refine on top.
+    {
+        $league_id_q0 = trim($_GET['league_id'] ?? '');
+        $redis_all = redis_get_sport_matches($sport_id);
+        if ($redis_all !== null && count($redis_all) > 0) {
+            $qn = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
+            $lg = [];
+            foreach ($redis_all as $rm) {
+                $ln = preg_replace('/[^a-z0-9]/', '', strtolower($rm['league']['name'] ?? ''));
+                if ($ln === '') continue;
+                $idok   = ($league_id_q0 !== '' && (string)($rm['league']['id'] ?? '') === $league_id_q0);
+                $nameok = ($qn !== '' && ($ln === $qn || strpos($ln, $qn) !== false || strpos($qn, $ln) !== false));
+                if (!$idok && !$nameok) continue;
+                if (!empty($rm['live_odds'])) {
+                    $lo = &$rm['live_odds'];
+                    foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
+                        if (isset($lo[$ok]) && $lo[$ok] > 1.01) $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                    }
+                    unset($lo);
+                }
+                $lg[] = $rm;
+            }
+            usort($lg, function($a, $b) {
+                return (int)($a['time'] ?? 0) <=> (int)($b['time'] ?? 0);
+            });
+            if (count($lg) > 0) {
+                header('X-SB-Source: redis-league');
+                echo json_encode(['success' => 1, 'results' => array_values($lg), '_src' => 'redis']);
+                exit;
+            }
+        }
+    }
 
     // ── Step 0: Aggressive time-based cleanup ─────────────────────────────
     // Any match whose start_time + 3 hours is in the past → mark ended
