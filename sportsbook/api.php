@@ -610,7 +610,7 @@ function redis_get_sport_matches($sport_id) {
             if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue; // unstamped + BetsAPI-shaped id
             // Strip heavy fields that bloat list-view responses (100KB+ per event).
             // match_detail fetches these directly via redis_get_event().
-            unset($m['markets_raw_cache']);
+            unset($m['markets_raw_cache'], $m['md_markets']);
             $out[] = $m;
         }
         return $out;
@@ -1372,6 +1372,7 @@ function parse_event_stream_odds($results_arr) {
 // Uses a 20-second file cache per sport + global stream cache for live OU odds.
 // This means real-time data with zero manual intervention required.
 if ($action === 'inplay') {
+    ini_set('memory_limit', '256M');
     $results    = [];
     $cache_dir  = __DIR__ . '/cache';
     if (!is_dir($cache_dir)) @mkdir($cache_dir, 0755, true);
@@ -1382,32 +1383,43 @@ if ($action === 'inplay') {
     }
 
     // ── Redis-first: ws_daemon.js feeds Redis — serve from there if available ──
-    // Only use Redis if it has actual events. If empty, fall through to BetsAPI.
-    $redis_results = redis_get_sport_matches($sport_id);
-    if ($redis_results !== null && count($redis_results) > 0) {
-        $list_fields = ['id','sport_id','time','time_status','league','home','away','ss','timer','live_odds','stats','_source','_updated'];
-        $out = [];
-        foreach ($redis_results as $rm) {
-            // Apply margin to live_odds chips (h/x/a/ou)
-            if (!empty($rm['live_odds'])) {
-                foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
-                    if (isset($rm['live_odds'][$ok]) && $rm['live_odds'][$ok] > 1.01) {
-                        $rm['live_odds'][$ok] = apply_margin_to_odds((float)$rm['live_odds'][$ok]);
+    // Read IDs then decode one event at a time (never hold all 60+ full blobs in memory).
+    $list_fields = ['id','sport_id','time','time_status','league','home','away','ss','timer','live_odds','stats','_source','_updated'];
+    $out = [];
+    if ($redis_ok && $redis_conn) {
+        try {
+            $ids = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
+            foreach ((array)$ids as $id) {
+                $raw = $redis_conn->get("sb:ev:{$id}");
+                if (!$raw) continue;
+                $m = json_decode($raw, true);
+                unset($raw); // free immediately
+                if (!$m || empty($m['home']['name'])) continue;
+                $src = $m['_source'] ?? '';
+                if ($src && $src !== 'oddsapi') continue;
+                if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue;
+                // Apply margin to live_odds chips
+                if (!empty($m['live_odds'])) {
+                    foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
+                        if (isset($m['live_odds'][$ok]) && $m['live_odds'][$ok] > 1.01) {
+                            $m['live_odds'][$ok] = apply_margin_to_odds((float)$m['live_odds'][$ok]);
+                        }
                     }
                 }
+                // Copy only slim fields — never touch md_markets / markets_raw_cache
+                $slim = [];
+                foreach ($list_fields as $f) { if (isset($m[$f])) $slim[$f] = $m[$f]; }
+                $out[] = $slim;
+                unset($m, $slim); // free full blob before next iteration
             }
-            // Strip md_markets and markets_raw_cache — not needed for the list view
-            // and can be 100KB+ per event causing memory exhaustion with 60+ live events.
-            $slim = [];
-            foreach ($list_fields as $f) { if (isset($rm[$f])) $slim[$f] = $rm[$f]; }
-            $out[] = $slim;
-        }
+        } catch (Exception $e) {}
+    }
+    if (count($out) > 0) {
         header('X-SB-Source: redis');
         echo json_encode(['success' => 1, 'results' => $out, '_src' => 'redis']);
         exit;
     }
     // Redis empty / daemon not yet warmed up — return empty. Frontend will retry in 1.5s.
-    // ws_daemon.js populates Redis within seconds of startup.
     header('X-SB-Source: redis-empty');
     echo json_encode(['success' => 1, 'results' => [], '_src' => 'redis-empty']);
     exit;
