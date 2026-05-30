@@ -1057,26 +1057,18 @@ async function refreshSportUpcoming(sport) {
 // Fast football live loop (score/timer near real-time)
 async function refreshFootballLive() { await refreshSportLive('football'); }
 
-// ── Continuous REST odds polling (works on plans WITHOUT the WebSocket add-on) ─
-// Fetches full markets for live events via /odds/multi (10 events per request,
-// counts as 1 API call). This is what makes 1X2, O/U, Handicap, Corners, Cards
-// etc. appear and update during the match. Bookmaker is auto-detected from the
-// response if BOOKMAKER is not set.
+// ── Continuous REST odds polling ──────────────────────────────────────────────
+// TWO separate batches:
+//   refreshOddsBatch()        — LIVE only, every 3s, 10 events/tick (fast real-time)
+//   refreshUpcomingOddsBatch()— UPCOMING only, every 30s, 10 events/tick (prematch)
+// Keeping them separate means 2551 upcoming events never delay live odds updates.
+
 let oddsCursor = 0;
 async function refreshOddsBatch() {
   if (rateLimited()) return;
-  // Fetch markets for LIVE first (time_status 1), then UPCOMING (0) so the
-  // Prochainement list also shows the rich prematch markets (Corners,
-  // Correct Score, Team Totals, ...). Football is prioritised within each.
-  const rank = id => {
-    const live = store[id]?.meta?.time_status === '1' ? 0 : 1;
-    const foot = store[id]?.sport === 'football' ? 0 : 1;
-    return live * 2 + foot;
-  };
-  const liveIds = Object.keys(store).filter(id => {
-    const ts = store[id]?.meta?.time_status;
-    return ts === '1' || ts === '0';
-  }).sort((a,b) => rank(a) - rank(b));
+  // LIVE events only — football first, then other sports
+  const liveIds = Object.keys(store).filter(id => store[id]?.meta?.time_status === '1')
+    .sort((a,b) => (store[a]?.sport==='football'?0:1) - (store[b]?.sport==='football'?0:1));
   if (!liveIds.length) return;
 
   // Round-robin through all live events, 10 per tick (1 request per tick).
@@ -1145,6 +1137,63 @@ async function refreshOddsBatch() {
   }
 }
 
+// ── Upcoming/prematch odds batch (slow) ──────────────────────────────────────
+// Fetches /odds/multi for UPCOMING events every 30s, 10 per tick.
+// Keeping this separate from the live batch ensures live odds never get delayed
+// by cycling through 2500+ prematch events.
+let upcomingOddsCursor = 0;
+async function refreshUpcomingOddsBatch() {
+  if (rateLimited()) return;
+  // Upcoming events only (ts=0), football first
+  const upcomingIds = Object.keys(store)
+    .filter(id => store[id]?.meta?.time_status === '0')
+    .sort((a,b) => (store[a]?.sport==='football'?0:1) - (store[b]?.sport==='football'?0:1));
+  if (!upcomingIds.length) return;
+
+  const BATCH = 10;
+  if (upcomingOddsCursor >= upcomingIds.length) upcomingOddsCursor = 0;
+  const batch = upcomingIds.slice(upcomingOddsCursor, upcomingOddsCursor + BATCH);
+  upcomingOddsCursor += BATCH;
+
+  try {
+    const params = { eventIds: batch.join(','), bookmakers: ODDS_BOOKMAKERS };
+    const resp = await httpGetJson('/odds/multi', params);
+    onRLOk();
+
+    let events = [];
+    if (Array.isArray(resp)) events = resp;
+    else if (Array.isArray(resp?.data)) events = resp.data;
+    else if (resp && typeof resp === 'object') {
+      const evMap = resp.events || resp.odds || null;
+      if (evMap && typeof evMap === 'object') {
+        events = Object.entries(evMap).map(([id, val]) => ({ id, ...val }));
+      }
+    }
+
+    let withOdds = 0;
+    for (const ev of events) {
+      const id = String(ev.id || ev.eventId || '');
+      if (!id) continue;
+      if (!store[id]) store[id] = {};
+
+      let bk = ev.bookmakers || ev.odds || {};
+      if (Array.isArray(bk)) bk = { 'unknown': bk };
+
+      const markets = mergeBookmakerMarkets(bk);
+      if (markets && markets.length) {
+        store[id].markets_raw = markets;
+        store[id].bookie = Object.keys(bk).join('+') || 'odds-api';
+        withOdds++;
+        await writeToRedis(id);
+      }
+    }
+    if (withOdds) log(`Upcoming odds batch: ${withOdds}/${batch.length} events got markets (cursor ${upcomingOddsCursor}/${upcomingIds.length})`);
+  } catch(e) {
+    if (isRL(e)) onRL();
+    else log('Upcoming odds batch error:', e.message);
+  }
+}
+
 // Slow full cycle: all sports live + upcoming, one sport per tick
 let metaSportCursor = 0;
 async function refreshMeta() {
@@ -1209,12 +1258,18 @@ async function main() {
   setInterval(refreshMeta, 20_000);
 
   // Step 3c: Continuous REST odds polling — fetches full markets via /odds/multi.
-  // This is the PRIMARY odds source on plans without the WebSocket add-on.
-  // Runs every 3s: 10 events/request → cycles ~95 live football events in ~30s.
+  // LIVE batch: 10 events every 3s → full cycle of ~95 live events in ~30s.
+  // UPCOMING batch: 10 events every 30s → covers prematch odds without starving live.
   setTimeout(() => {
     refreshOddsBatch().catch(e => log('Odds init error:', e.message));
     setInterval(() => refreshOddsBatch().catch(e => log('Odds loop error:', e.message)), 3_000);
-  }, 8000); // wait for first meta refresh to populate live ids
+
+    // Start upcoming batch 15s after live batch to stagger API calls
+    setTimeout(() => {
+      refreshUpcomingOddsBatch().catch(e => log('Upcoming odds init error:', e.message));
+      setInterval(() => refreshUpcomingOddsBatch().catch(e => log('Upcoming odds loop error:', e.message)), 30_000);
+    }, 15_000);
+  }, 8000); // wait for first meta refresh to populate event store
 
   // Periodic stats log every 60s — shows how many events are in store + Redis
   setInterval(async () => {
