@@ -228,7 +228,9 @@ function computeFallbackTimer(m) {
       // 2nd half CONFIRMED by API (p2 data exists) — count in 46-90 range,
       // never flip to halftime regardless of wall-clock.
       var mm2 = (totalMin > 60) ? (46 + (totalMin - 60)) : Math.max(46, totalMin);
-      if (mm2 > 125) mm2 = 90;
+      // Cap at 90: we can't know real stoppage/extra-time from an estimate,
+      // so show a static "90+'" instead of an invented climbing clock.
+      if (mm2 >= 90) return { tm: 90, ts: 0, md: '0', estimated: true, plus: true };
       return { tm: mm2, ts: sec, md: '0', estimated: true };
     }
     // apiHalf 0 or 1 is AMBIGUOUS: a scoreless 2nd half produces no p2 data,
@@ -237,7 +239,8 @@ function computeFallbackTimer(m) {
     if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
     if (totalMin < 58)  return { tm: 45,       ts: 0,   md: '1', estimated: true };
     var matchMin = 46 + (totalMin - 58);
-    if (matchMin > 125) return { tm: 90, ts: 0, md: '0', estimated: true };
+    // Cap at 90+': never invent a climbing "Prolongation" clock from a guess.
+    if (matchMin >= 90) return { tm: 90, ts: 0, md: '0', estimated: true, plus: true };
     return { tm: matchMin, ts: sec, md: '0', estimated: true };
   }
   return { tm: Math.floor(elapsed / 60), ts: elapsed % 60, md: '0', estimated: true };
@@ -407,10 +410,12 @@ function getMatchPeriod(m) {
   if (md === '3') return 'Prolongation';
   // Football (sport 1, 36) — derived from real tm value
   if (sid === 1 || sid === 36) {
+    // Estimated, capped past 90' → don't invent "Prolongation"; show 2nd half.
+    if (tmr.plus) return '2ème mi-temps';
     if (tm >= 0 && tm <= 45) return '1ère mi-temps';
     if (tm > 45 && tm <= 90) return '2ème mi-temps';
-    if (tm > 90)             return 'Prolongation';
-    return '';
+    if (tm > 90 && !tmr.estimated) return 'Prolongation';
+    return '2ème mi-temps';
   }
   // Basketball (18, 83)
   if (sid === 18 || sid === 83) {
@@ -436,6 +441,8 @@ function formatLiveMinute(m) {
   if (md === '2') return 'Pause';
   if (md === '3') return 'Prolong.';
   var tm = parseInt(t.tm || t.TM || 0, 10);
+  // Capped estimate past 90' — show static "90+'" instead of a fake clock.
+  if (t.plus) return (t.estimated ? '~' : '') + "90+'";
   if (!isNaN(tm) && tm >= 0 && tm < 130) {
     var prefix = t.estimated ? '~' : '';
     return prefix + tm + "'";
@@ -454,6 +461,7 @@ function startMatchTimer(m) {
   if (!tmr) return;
   var mdRaw = String(tmr.md || tmr.MD || '');
   if (mdRaw === '1' || mdRaw === '2') return;  // Mi-temps / Pause — no ticking
+  if (tmr.plus) return;  // capped "90+'" estimate — static, don't tick
 
   var baseMin = parseInt(tmr.tm || tmr.TM || 0) || 0;
   var baseSec = parseInt(tmr.ts || tmr.TS || 0) || 0;
@@ -659,6 +667,8 @@ function patchMatchDetailLive(m, markets) {
     var tmStr  = String(effPatch.tm || effPatch.TM || '0').padStart(2, '0');
     var tsStr  = String(effPatch.ts || effPatch.TS || '0').padStart(2, '0');
     var clock  = tmStr + ':' + tsStr;
+    // Capped estimate past 90' → static "90+'" instead of an invented clock.
+    if (effPatch.plus) clock = '90+';
     // Mark estimated timers with "~" so the user knows it's not the
     // exact Bet365 clock (low-coverage leagues without a real timer).
     if (effPatch.estimated && !isHTnow) clock = '~' + clock;
@@ -1135,10 +1145,12 @@ function isMatchEnded(m) {
     // based on elapsed minutes alone. Halftime pauses, extra time, and
     // delayed kicks all cause false positives. Trust BetsAPI's explicit
     // time_status=3 signal (above) as the primary source of truth.
-    // Football absolute fallback: 5 hours from scheduled kickoff
-    if ((sid === 1 || sid === 36) && elapsed >= 18000) return true;
-    // Any other sport: 8 hours absolute max
-    if (elapsed >= 28800) return true;
+    // Football absolute fallback: 3 hours from kickoff. Even extra-time +
+    // penalties + breaks finish well within this, so a match still "live"
+    // after 3h is stuck data from the provider — treat as ended.
+    if ((sid === 1 || sid === 36) && elapsed >= 10800) return true;
+    // Any other sport: 5 hours absolute max
+    if (elapsed >= 18000) return true;
   }
   return false;
 }
