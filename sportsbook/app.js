@@ -14,10 +14,10 @@
 (function injectCSS() {
   if (document.querySelector('#sb-css-link, link[href*="sportsbook/style.css"]')) return;
   var base = window.location.pathname.replace(/\/sportsbook.*$/i, '/') || '/';
-  var link = document.createElement('link');
-  link.rel = 'stylesheet';
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
   link.href = base + 'sportsbook/style.css';
-  document.head.appendChild(link);
+    document.head.appendChild(link);
 })();
 
 var MARGIN = 0; // BetsAPI provides real Bet365 odds directly; margin is in Bet365's overround
@@ -601,7 +601,7 @@ function patchMatchDetailLive(m, markets) {
     if (pblock) {
       pblock.innerHTML = buildMdPeriodBlock(pname, isHTnow, clock);
     } else {
-      var timerEl = document.getElementById('md-timer-display');
+  var timerEl = document.getElementById('md-timer-display');
       if (timerEl) timerEl.textContent = isHTnow ? 'Mi-temps' : clock;
     }
     if (isHTnow) {
@@ -660,11 +660,6 @@ function patchMatchDetailLive(m, markets) {
     // keep the last real Bet365 market tree on screen.
     nextMarkets = null;
   } else if (m && m.live_odds) {
-    var fromLo = marketsFromLiveOdds(m);
-    if (fromLo.length) {
-      nextMarkets = mergeOuMarkets(fromLo, m);
-      window._mdHasRealMarkets = true;
-    }
   }
   if (nextMarkets) {
     sbClearMdTabCache();
@@ -1165,52 +1160,6 @@ function refreshBetSlipLegOdds(markets, m) {
 // Stable seeded random — same match always shows same odds
 /* seedRand removed — Volume Plan uses 100% real Bet365 API odds.
  * No fake/seeded values anywhere in the codebase. */
-
-/** Build real market groups from live_odds when API returns match but markets[] is empty. */
-function marketsFromLiveOdds(m) {
-  if (!m || !m.live_odds) return [];
-  var lo = m.live_odds;
-  var md = [];
-  var h = parseFloat(lo.h || 0), x = parseFloat(lo.x || 0), a = parseFloat(lo.a || 0);
-  if (h > 1.01) {
-    var sel = [];
-    if (h > 1.01) sel.push({ name: '1', odds: h, NA: '1' });
-    if (x > 1.01) sel.push({ name: 'X', odds: x, NA: 'X' });
-    if (a > 1.01) sel.push({ name: '2', odds: a, NA: '2' });
-    if (sel.length) md.push({ name: '1X2', selections: sel, is_open: true });
-  }
-  var line = parseFloat(lo.ou_line || 2.5);
-  var ov = parseFloat(lo.ou_over || 0), un = parseFloat(lo.ou_under || 0);
-  if (ov > 1.01 || un > 1.01) {
-    sel = [];
-    if (ov > 1.01) sel.push({ name: 'Plus de ' + line, odds: ov, NA: 'O ' + line });
-    if (un > 1.01) sel.push({ name: 'Moins de ' + line, odds: un, NA: 'U ' + line });
-    if (sel.length) md.push({ name: 'Over/Under ' + line, selections: sel, is_open: true });
-  }
-  var hdp = lo.hdp != null ? parseFloat(lo.hdp) : null;
-  var hh = parseFloat(lo.hdp_h || 0), ah = parseFloat(lo.hdp_a || 0);
-  if (hh > 1.01 || ah > 1.01) {
-    hdp = hdp != null ? hdp : 0;
-    var fh = hdp >= 0 ? '+' + hdp : '' + hdp;
-    var fa = (-hdp) >= 0 ? '+' + (-hdp) : '' + (-hdp);
-    sel = [];
-    if (hh > 1.01) sel.push({ name: '1 (' + fh + ')', odds: hh, NA: 'H ' + hdp });
-    if (ah > 1.01) sel.push({ name: '2 (' + fa + ')', odds: ah, NA: 'A ' + (-hdp) });
-    if (sel.length) md.push({ name: 'Handicap Asiatique', selections: sel, is_open: true });
-  }
-  if (h > 1.01 && x > 1.01 && a > 1.01) {
-    var p1 = 1/h, px = 1/x, p2 = 1/a;
-    var dc1x = Math.round((1/(p1+px))*0.95*100)/100;
-    var dc12 = Math.round((1/(p1+p2))*0.95*100)/100;
-    var dcx2 = Math.round((1/(px+p2))*0.95*100)/100;
-    sel = [];
-    if (dc1x > 1.01) sel.push({ name: '1X', odds: dc1x, NA: '1X' });
-    if (dc12 > 1.01) sel.push({ name: '12', odds: dc12, NA: '12' });
-    if (dcx2 > 1.01) sel.push({ name: 'X2', odds: dcx2, NA: 'X2' });
-    if (sel.length) md.splice(1, 0, { name: 'Double chance', selections: sel, is_open: true });
-  }
-  return md;
-}
 
 function odds(m) {
   if (m._o) return m._o;
@@ -2144,8 +2093,10 @@ var EUROPEAN_COUNTRIES = {
   'Europe':1   // UEFA continental tournaments
 };
 function isEuropeanLeague(league) {
-  if (!league || !league.name) return false;
-  var c = guessCountry(league.name);
+  if (!league) return false;
+  var n = typeof league === 'string' ? league : String(league.name || '');
+  if (!n) return false;
+  var c = guessCountry(n);
   return !!EUROPEAN_COUNTRIES[c];
 }
 
@@ -2220,8 +2171,9 @@ var ELITE_LEAGUE_PREFIXES = [
 ];
 
 function getLeaguePriority(league) {
-  if (!league || !league.name) return 900;
-  var n   = league.name;
+  if (!league) return 900;
+  var n = typeof league === 'string' ? league : String(league.name || '');
+  if (!n) return 900;
   var low = n.toLowerCase();
 
   // Penalty check FIRST — small nations and non-competitive leagues go to bottom
@@ -2590,11 +2542,11 @@ function matchCard(m) {
     out += '<img src="' + flagUrl + '" class="mc-league-flag mc-league-flag--inline" onerror="this.style.display=\'none\'">';
     out += '<span class="mc-league-name mc-league-name--inline">' + leagueName + '</span>';
   }
-  out += '</div>';
-  out += '<div class="mc-hl-right">';
-  out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
-  out += '</div>';
-  out += '</div>';
+    out += '</div>';
+    out += '<div class="mc-hl-right">';
+    out += '<button class="mc-star" onclick="event.stopPropagation()">' + ICON.star + '</button>';
+    out += '</div>';
+    out += '</div>';
 
   out += '<div class="mc-body-col">';
 
@@ -2608,7 +2560,7 @@ function matchCard(m) {
       out += '<span class="mc-live-sep">&bull;</span>';
       out += '<span class="mc-league-country">' + countryLabel + '</span>';
     }
-    out += '</div>';
+  out += '</div>';
   }
 
   /* ── Teams layout — fcbet216 image 2 spec:
@@ -2618,14 +2570,14 @@ function matchCard(m) {
     out += '<div class="mc-teams-wrap mc-teams-wrap--live mc-teams-wrap--rows" onclick="event.stopPropagation();window.sbOpenMatch(\'' + mid + '\')">';
     out += '<div class="mc-team-row mc-team-row--live">';
     out += '<span class="mc-shirt-cell">' + shirtSVG(m.home ? m.home.name : '', 'mc-jersey-svg', 16) + '</span>';
-    out += '<span class="mc-t-name">' + hn + '</span>';
+  out += '<span class="mc-t-name">' + hn + '</span>';
     out += '<span class="mc-t-score">' + h(scores[0] !== '' ? scores[0] : '0') + '</span>';
-    out += '</div>';
+  out += '</div>';
     out += '<div class="mc-team-row mc-team-row--live">';
     out += '<span class="mc-shirt-cell">' + shirtSVG(m.away ? m.away.name : '', 'mc-jersey-svg', 16) + '</span>';
-    out += '<span class="mc-t-name">' + an + '</span>';
+  out += '<span class="mc-t-name">' + an + '</span>';
     out += '<span class="mc-t-score">' + h(scores[1] !== '' ? scores[1] : '0') + '</span>';
-    out += '</div>';
+  out += '</div>';
     out += '</div>';
   } else {
     // UPCOMING — fcbet216 reference image 3 (Paderborn vs VfL Wolfsburg):
@@ -3893,10 +3845,10 @@ function renderBetSlip() {
 
   // ── Promo hint — shown for Simple and Système only; Combiné has its own ──
   if (SLIP_MODE !== 'combi') {
-    out += '<div class="slip-promo">'
-      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
+  out += '<div class="slip-promo">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M16 6V4a2 2 0 00-4 0v2M8 6V4a2 2 0 00-4 0v2"/></svg>'
       + ' Ajoutez 1 événement avec une cote de 1.20 ou plus pour augmenter vos gains de <strong>5&nbsp;%</strong>'
-      + '</div>';
+    + '</div>';
   }
 
   // ── Tout effacer ───────────────────────────────────────────
@@ -3909,9 +3861,9 @@ function renderBetSlip() {
   var hasOddsChange = S.betSlip.some(function(b) { return b && b._change; });
   if (hasOddsChange) {
     out += '<div class="slip-odds-warning" onclick="window.sbAcceptOddsChanges()" role="button">'
-      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-      + ' Certaines cotes ont changées, veuillez accepter.'
-      + '</div>';
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+    + ' Certaines cotes ont changées, veuillez accepter.'
+    + '</div>';
   }
 
   // ═══ MODE-SPECIFIC SUMMARY ═════════════════════════════════
@@ -4048,11 +4000,11 @@ function renderBetSlip() {
       var stake = parseFloat(S._sysStakes[lvl.id] || 0) || 0;
       totalBetsCount += stake > 0 ? combos : 0;
       totalSysMise   += stake * combos;
-      out += '<div class="slip-sys-row">';
+    out += '<div class="slip-sys-row">';
       out += '<span class="slip-sys-lbl">' + lvl.lbl + '</span>';
       out += '<span class="slip-sys-cnt">' + combos + ' x</span>';
       out += '<input type="text" inputmode="decimal" class="slip-stake-inp" value="' + (stake || '') + '" autocomplete="off" placeholder="Fixer la mise" oninput="window.sbUpdateSysLevelStake(\'' + lvl.id + '\',this.value)">';
-      out += '</div>';
+    out += '</div>';
     });
 
     // Summary
@@ -4102,7 +4054,7 @@ window.sbPlaceBet = function() {
   var totalAmount = 0;
   var totalOdds = 1;
 
-  if (SLIP_MODE === 'combi') {
+    if (SLIP_MODE === 'combi') {
     totalAmount = SLIP_COMBI_STAKE || 0;
     S.betSlip.filter(function(b) { return !b.excluded; }).forEach(function(b) {
       totalOdds *= (parseFloat(b.val) || 1);
@@ -4372,7 +4324,7 @@ window.sbOpenLeague = function(id, name, flag, sid, _skipPush) {
     if (el) el.innerHTML = '';     // suppress skeleton — we already have data
     renderChampionship(id, name, flag, preMatches);
   } else {
-    if (el) el.innerHTML = buildSkeleton(4);
+  if (el) el.innerHTML = buildSkeleton(4);
   }
 
   // Token so a late response from a previous league click can't overwrite
@@ -5494,7 +5446,7 @@ window.sbToggleMc = function(mid, ev) {
   // the API fetch in background and upgrade when it resolves.
   var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
   if (localMatch) {
-    var fb = marketsFromLiveOdds(localMatch);
+    var fb = [];
     window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
     box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
   } else {
@@ -5510,8 +5462,7 @@ window.sbToggleMc = function(mid, ev) {
       var m    = (d && d.match) ? d.match : localMatch;
       var mkts = (d && d.markets && d.markets.length) ? d.markets : null;
       if (!m) return;
-      if (!mkts || !mkts.length) mkts = marketsFromLiveOdds(m);
-      if (!mkts) mkts = [];
+      if (!mkts || !mkts.length) { mkts = []; }
       var activeTab = ((window._mcMktCache[mid] || {}).tab) || 'Principaux';
       window._mcMktCache[mid] = { match: m, markets: mkts, tab: activeTab };
       box.innerHTML = renderInlineMatchMarkets(mid, m, mkts, activeTab);
@@ -5715,7 +5666,6 @@ window.sbOpenMatch = function(mid, _skipPush) {
       if (S.viewMode !== 'matchDetail' || String(S.activeMatchId) !== String(mid)) return;
       var m = (d && d.match) ? d.match : cached;
       var mkts = (d && d.markets) ? d.markets : [];
-      if (!mkts.length && m && m.live_odds) mkts = marketsFromLiveOdds(m);
       if (!m) return;
       sbSyncMatchCache(m);
       if (cached || document.getElementById('md-period-block')) {
@@ -5740,7 +5690,7 @@ window.sbOpenMatch = function(mid, _skipPush) {
       if (S.viewMode !== 'matchDetail') return;
       if (!cached) {
         var m = sbFindMatch(mid);
-        if (m) renderMatchDetail(m, []);
+      if (m) renderMatchDetail(m, []);
       }
     });
 };
@@ -5960,7 +5910,7 @@ function renderMatchDetail(m, markets) {
   out += '<button type="button" class="md-tab-search-btn" id="md-search-btn"'
        + ' onclick="window.sbMdSearchToggle(true)" title="Rechercher">'
        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>'
-       + '</button>';
+    + '</button>';
 
   // Inline search panel. Hidden by default via CSS rule
   //   .md-search-panel { display:none !important }
@@ -5987,12 +5937,11 @@ function renderMatchDetail(m, markets) {
   out += '<button type="button" class="md-tab-info-btn" id="md-tab-info-btn"'
        + ' onclick="window.sbMdToggleInfo()" title="Légende des marchés">'
        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/></svg>'
-       + '</button>';
+    + '</button>';
 
   out += '</div>';
 
   // ── Markets list (always visible; markets switch to BB-mode when tab is active)
-  if (!markets.length && m.live_odds) markets = marketsFromLiveOdds(m);
   if (!markets.length) markets = [];
   // Merge separate "Goals Over/Under X" market groups from the Bet365 event
   // stream into a single normalised "Total" ladder.
@@ -6831,19 +6780,19 @@ window.sbMdTab = function(btn, tabName) {
   // Paint on next frame so the active tab highlight lands first (feels instant).
   mktBody.classList.add('md-markets--loading');
   requestAnimationFrame(function() {
-    var out = '';
-    shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
+  var out = '';
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
     window._mdTabCache[cacheKey] = out;
-    mktBody.innerHTML = out;
+  mktBody.innerHTML = out;
     mktBody.classList.remove('md-markets--loading');
 
-    var bbSticky = document.getElementById('md-bb-sticky');
-    if (isBB) {
-      if (bbSticky && window._bbSelections && window._bbSelections.length > 0) bbSticky.style.display = '';
-      mktBody.style.paddingBottom = '120px';
-    } else {
-      mktBody.style.paddingBottom = '';
-    }
+  var bbSticky = document.getElementById('md-bb-sticky');
+  if (isBB) {
+    if (bbSticky && window._bbSelections && window._bbSelections.length > 0) bbSticky.style.display = '';
+    mktBody.style.paddingBottom = '120px';
+  } else {
+    mktBody.style.paddingBottom = '';
+  }
   });
 };
 
@@ -6897,7 +6846,7 @@ window.sbMdSearchToggle = function(open) {
 };
 
 window.sbMdSearch = function(query) {
-  var mktBody = document.getElementById('md-markets-body');
+    var mktBody = document.getElementById('md-markets-body');
   if (!mktBody || !window._mdMarkets || !window._mdMatch) return;
   var q = String(query || '').toLowerCase().trim();
   var shown;

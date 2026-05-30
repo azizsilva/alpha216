@@ -111,9 +111,9 @@ function normEv(ev, sportSlug) {
     sport_id:    sid,
     time:        String(ev.starts_at||ev.start_time||ev.time||0),
     time_status: ev.status==='live'?'1': ev.status==='finished'?'3':'0',
-    league:      { id: String(ev.league_id||''), name: ev.league||ev.competition||ev.league_name||'' },
-    home:        { id: String(ev.home_id||''), name: ev.home||ev.home_team||'' },
-    away:        { id: String(ev.away_id||''), name: ev.away||ev.away_team||'' },
+    league:      { id: String(ev.league_id||''), name: String(ev.league_name||ev.competition||ev.league||'') },
+    home:        { id: String(ev.home_id||''), name: String(ev.home_team||ev.home||'') },
+    away:        { id: String(ev.away_id||''), name: String(ev.away_team||ev.away||'') },
     ss:          mapScore(ev.score||ev.ss),
     timer:       { tm: parseInt(ev.minute||ev.elapsed||0)||0, ts: parseInt(ev.second||0)||0, md: mapPeriod(ev.period||ev.half||ev.phase) },
     _source:     'oddsapi',
@@ -344,7 +344,7 @@ async function restPrefetch() {
       // Fetch odds for each event (1 per event, staggered 1s)
       for (const ev of arr) {
         const id = String(ev.id);
-        if (!id || !ev.home) continue;
+        if (!id || !(ev.home || ev.home_team)) continue;
         if (!store[id]) store[id] = {};
         store[id].meta  = normEv(ev, sport);
         store[id].sport = sport;
@@ -501,7 +501,7 @@ async function handleWsMessage(data) {
       } else if (!store[id].meta && (data.league || data.competition)) {
         // Partial update: at least capture league
         if (!store[id].meta) store[id].meta = { id };
-        if (data.league) store[id].meta.league = { id: '', name: data.league };
+        if (data.league) store[id].meta.league = { id: '', name: String(data.league) };
       }
 
       // Update odds/markets from WS
@@ -561,7 +561,7 @@ async function refreshMeta() {
     onRLOk();
     for (const ev of arr) {
       const id = String(ev.id);
-      if (!id||!ev.home) continue;
+      if (!id || !(ev.home || ev.home_team)) continue;
       liveIds.add(id);
       if (!store[id]) store[id] = {};
       store[id].meta  = normEv(ev, sport);
@@ -577,7 +577,7 @@ async function refreshMeta() {
       let uCount = 0;
       for (const ev of uArr) {
         const id = String(ev.id);
-        if (!id||!ev.home) continue;
+        if (!id || !(ev.home || ev.home_team)) continue;
         if (store[id]) continue; // already in live, skip
         if (!store[id]) store[id] = {};
         const meta = normEv(ev, sport);
