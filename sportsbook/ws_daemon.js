@@ -99,6 +99,20 @@ function mapPeriod(p) {
   if (s==='OT'||s==='ET')         return 'OT';
   return '1';
 }
+// Extract a string name from a field that could be a string, number, or object
+function extractName(...candidates) {
+  for (const v of candidates) {
+    if (!v && v !== 0) continue;
+    if (typeof v === 'string' && v.trim()) return v.trim();
+    if (typeof v === 'number') return String(v);
+    if (typeof v === 'object') {
+      const n = v.name || v.title || v.long_name || v.short_name || '';
+      if (n) return String(n).trim();
+    }
+  }
+  return '';
+}
+
 function mapScore(sc) {
   if (!sc) return '';
   if (typeof sc === 'string') return sc;
@@ -111,9 +125,9 @@ function normEv(ev, sportSlug) {
     sport_id:    sid,
     time:        String(ev.starts_at||ev.start_time||ev.time||0),
     time_status: ev.status==='live'?'1': ev.status==='finished'?'3':'0',
-    league:      { id: String(ev.league_id||''), name: String(ev.league_name||ev.competition||ev.league||'') },
-    home:        { id: String(ev.home_id||''), name: String(ev.home_team||ev.home||'') },
-    away:        { id: String(ev.away_id||''), name: String(ev.away_team||ev.away||'') },
+    league:      { id: String(ev.league_id||''), name: extractName(ev.league_name, ev.competition, ev.league) },
+    home:        { id: String(ev.home_id||''), name: extractName(ev.home_team, ev.home) },
+    away:        { id: String(ev.away_id||''), name: extractName(ev.away_team, ev.away) },
     ss:          mapScore(ev.score||ev.ss),
     timer:       { tm: parseInt(ev.minute||ev.elapsed||0)||0, ts: parseInt(ev.second||0)||0, md: mapPeriod(ev.period||ev.half||ev.phase) },
     _source:     'oddsapi',
@@ -501,7 +515,7 @@ async function handleWsMessage(data) {
       } else if (!store[id].meta && (data.league || data.competition)) {
         // Partial update: at least capture league
         if (!store[id].meta) store[id].meta = { id };
-        if (data.league) store[id].meta.league = { id: '', name: String(data.league) };
+        if (data.league) store[id].meta.league = { id: '', name: extractName(data.league_name, data.competition, data.league) };
       }
 
       // Update odds/markets from WS

@@ -1612,41 +1612,64 @@ if ($action === 'inplay') {
     exit;
 }
 
-// ═══ UPCOMING — odds-api.io REST ══════════════════════════════════════════
+// ═══ UPCOMING — Redis-first, REST fallback ════════════════════════════════
 if ($action === 'upcoming' || $action === 'all_upcoming') {
     $results = [];
     $up_cache_dir = __DIR__ . '/cache';
     if (!is_dir($up_cache_dir)) @mkdir($up_cache_dir, 0755, true);
 
-    // Sport slug map (same as ws_daemon.js SPORT_IDS)
-    $sport_slug_map = [1=>'football',18=>'basketball',13=>'tennis',91=>'volleyball',17=>'ice-hockey',78=>'handball'];
-    $sport_slug = $sport_slug_map[$sport_id] ?? 'football';
+    // Helper: extract name string from field that may be string/number/object
+    $extract_name = function($v) {
+        if (!isset($v)) return '';
+        if (is_string($v)) return trim($v);
+        if (is_numeric($v)) return (string)$v;
+        if (is_array($v)) return trim((string)($v['name'] ?? $v['title'] ?? $v['long_name'] ?? ''));
+        return '';
+    };
 
-    // 60s file cache — upcoming changes infrequently
-    $up_cache_file = $up_cache_dir . '/upcoming_' . $sport_id . '.json';
-    $up_cache_age  = file_exists($up_cache_file) ? (time() - filemtime($up_cache_file)) : 9999;
-    if ($up_cache_age < 60) {
-        $results = json_decode(@file_get_contents($up_cache_file), true) ?: [];
-    } else {
-        // Fetch upcoming events from odds-api.io
-        $resp = oddsapi_rest("/events/{$sport_slug}/upcoming");
-        $arr  = $resp['data'] ?? $resp['events'] ?? (is_array($resp) ? $resp : []);
-        foreach ($arr as $ev) {
-            if (empty($ev['home']) && empty($ev['home_team'])) continue;
-            $results[] = [
-                'id'          => (string)($ev['id'] ?? ''),
-                'sport_id'    => (string)$sport_id,
-                'time'        => (string)($ev['starts_at'] ?? $ev['start_time'] ?? 0),
-                'time_status' => '0',
-                'league'      => ['id'=>'','name'=>$ev['league']??$ev['competition']??''],
-                'home'        => ['id'=>'','name'=>$ev['home']??$ev['home_team']??''],
-                'away'        => ['id'=>'','name'=>$ev['away']??$ev['away_team']??''],
-                'ss'          => '',
-                'live_odds'   => [],
-                '_source'     => 'oddsapi',
-            ];
+    // ── Redis-first: ws_daemon writes upcoming events to the sport set ──────
+    $all_redis = redis_get_sport_matches($sport_id);
+    if ($all_redis !== null) {
+        foreach ($all_redis as $m) {
+            if (($m['time_status'] ?? '1') === '0') { // upcoming only
+                $results[] = $m;
+            }
         }
-        if (!empty($results)) @file_put_contents($up_cache_file, json_encode($results));
+    }
+
+    // ── REST fallback: if Redis has no upcoming, call odds-api.io ───────────
+    if (empty($results)) {
+        $sport_slug_map = [1=>'football',18=>'basketball',13=>'tennis',91=>'volleyball',17=>'ice-hockey',78=>'handball'];
+        $sport_slug = $sport_slug_map[$sport_id] ?? 'football';
+
+        $up_cache_file = $up_cache_dir . '/upcoming_' . $sport_id . '.json';
+        $up_cache_age  = file_exists($up_cache_file) ? (time() - filemtime($up_cache_file)) : 9999;
+        if ($up_cache_age < 60) {
+            $results = json_decode(@file_get_contents($up_cache_file), true) ?: [];
+        } else {
+            $resp = oddsapi_rest("/events/{$sport_slug}/upcoming");
+            if (!$resp) $resp = oddsapi_rest("/events/{$sport_slug}");
+            $arr = $resp['data'] ?? $resp['events'] ?? (is_array($resp) ? $resp : []);
+            foreach ($arr as $ev) {
+                $home_name = $extract_name($ev['home_team'] ?? $ev['home'] ?? null);
+                $away_name = $extract_name($ev['away_team'] ?? $ev['away'] ?? null);
+                if (!$home_name && !$away_name) continue;
+                $lg_name   = $extract_name($ev['league_name'] ?? $ev['competition'] ?? $ev['league'] ?? null);
+                $results[] = [
+                    'id'          => (string)($ev['id'] ?? ''),
+                    'sport_id'    => (string)$sport_id,
+                    'time'        => (string)($ev['starts_at'] ?? $ev['start_time'] ?? $ev['time'] ?? 0),
+                    'time_status' => '0',
+                    'league'      => ['id'=>'','name'=>$lg_name],
+                    'home'        => ['id'=>'','name'=>$home_name],
+                    'away'        => ['id'=>'','name'=>$away_name],
+                    'ss'          => '',
+                    'live_odds'   => [],
+                    '_source'     => 'oddsapi_rest',
+                ];
+            }
+            if (!empty($results)) @file_put_contents($up_cache_file, json_encode($results));
+        }
     }
 
     // Inject prematch odds (from Redis if available, else skip)
@@ -2498,8 +2521,8 @@ if ($action === 'match_live') {
             $ev_pre = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
             if (!empty($ev_pre['results'])) {
                 $markets = md_parse_markets($ev_pre['results'][0]);
-            } else {
-                $markets = [];
+    } else {
+        $markets = [];
             }
         } else {
             $markets = [];
@@ -2878,7 +2901,7 @@ function md_parse_markets($event_arr) {
         foreach ($tabs as $tab) {
             if (isset($source[$tab]['sp'])) {
                 foreach ($source[$tab]['sp'] as $sp_key => $sp) {
-                    if (!is_array($sp)) continue;
+            if (!is_array($sp)) continue;
                     
                     $is_prematch_struct = isset($sp[0]);
                     $odds_arr = $is_prematch_struct ? $sp : ($sp['odds'] ?? []);
@@ -2886,11 +2909,11 @@ function md_parse_markets($event_arr) {
 
                     $mkt_raw_name = $is_prematch_struct ? str_replace('_', ' ', $sp_key) : ($sp['name'] ?? $sp_key);
 
-                    $sels = [];
+            $sels = [];
                     foreach ($odds_arr as $o) {
-                        $od  = $o['odds'] ?? $o['OD'] ?? '';
-                        $dec = md_frac_to_dec($od);
-                        if (!$dec || $dec < 1.01) continue;
+                $od  = $o['odds'] ?? $o['OD'] ?? '';
+                $dec = md_frac_to_dec($od);
+                if (!$dec || $dec < 1.01) continue;
                         
                         $s_name = $o['name'] ?? $o['header'] ?? $o['NA'] ?? $o['N2'] ?? '';
                         $l_sel = strtolower(trim($s_name));
@@ -3009,9 +3032,9 @@ if ($action === 'live_refresh') {
     $curr_fi = null; $curr_h = null; $curr_x = null; $curr_a = null;
     $curr_ou_line = 2.5; $curr_ou_over = null; $curr_ou_under = null;
 
-    foreach ($stream as $item) {
-        if (!is_array($item)) continue;
-        $type = $item['type'] ?? $item['TYPE'] ?? '';
+        foreach ($stream as $item) {
+            if (!is_array($item)) continue;
+            $type = $item['type'] ?? $item['TYPE'] ?? '';
 
         if ($type === 'EV') {
             if ($curr_fi && $curr_h) {
@@ -3030,17 +3053,17 @@ if ($action === 'live_refresh') {
             }
             $curr_h = $curr_x = $curr_a = $curr_ou_over = $curr_ou_under = null; $curr_ou_line = 2.5;
             continue;
-        }
-        if ($type === 'MA') {
+            }
+            if ($type === 'MA') {
             $curr_ma = $item['NA'] ?? $item['N2'] ?? '';
             if (preg_match('/(\d+\.?\d*)/', $curr_ma, $mat)) $curr_ou_line = (float)$mat[1];
             continue;
-        }
-        if ($type === 'PA') {
-            $n2 = (string)($item['N2'] ?? $item['NA'] ?? '');
-            $or = (string)($item['OR'] ?? '');
-            $od = md_frac_to_dec($item['OD'] ?? $item['od'] ?? '');
-            if (!$od || $od < 1.01) continue;
+            }
+            if ($type === 'PA') {
+                $n2 = (string)($item['N2'] ?? $item['NA'] ?? '');
+                $or = (string)($item['OR'] ?? '');
+                $od = md_frac_to_dec($item['OD'] ?? $item['od'] ?? '');
+                if (!$od || $od < 1.01) continue;
             if (($n2 === '1' || $or === '0') && !$curr_h) $curr_h = $od;
             if (($n2 === 'X' || $or === '1') && !$curr_x) $curr_x = $od;
             if (($n2 === '2' || $or === '2') && !$curr_a) $curr_a = $od;
@@ -3064,13 +3087,13 @@ if ($action === 'live_refresh') {
     foreach ($ids as $match_id) {
         $m = $all_live[$match_id] ?? null;
         if (!$m) {
-            if ($db_connected) {
-                try {
-                    $rq = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=? LIMIT 1");
+        if ($db_connected) {
+            try {
+                $rq = $pdo->prepare("SELECT raw_json FROM sb_matches WHERE id=? LIMIT 1");
                     $rq->execute([$match_id]);
-                    $rj = $rq->fetchColumn();
+                $rj = $rq->fetchColumn();
                     if ($rj) $m = json_decode($rj, true);
-                } catch (Exception $e) {}
+            } catch (Exception $e) {}
             }
             if (!$m) continue;
         }

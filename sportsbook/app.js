@@ -1411,12 +1411,19 @@ function getFlag(c) {
 // Strip the country prefix from a league name for display
 // e.g. "England Premier League" → "Premier League"
 //      "Spain La Liga" → "La Liga"
-// Coerce league/home/away name fields to strings (odds-api.io can return IDs as numbers)
+// Coerce league/home/away name fields to strings (odds-api.io can return IDs as numbers or objects)
+function _safeNameStr(v) {
+  if (!v && v !== 0) return '';
+  if (typeof v === 'string') return v;
+  if (typeof v === 'number') return String(v);
+  if (typeof v === 'object') return String(v.name || v.title || v.long_name || '') || '';
+  return String(v);
+}
 function normalizeMatch(m) {
   if (!m) return m;
-  if (m.league) m.league.name = String(m.league.name || '');
-  if (m.home)   m.home.name   = String(m.home.name   || '');
-  if (m.away)   m.away.name   = String(m.away.name   || '');
+  if (m.league) m.league.name = _safeNameStr(m.league.name);
+  if (m.home)   m.home.name   = _safeNameStr(m.home.name);
+  if (m.away)   m.away.name   = _safeNameStr(m.away.name);
   return m;
 }
 
