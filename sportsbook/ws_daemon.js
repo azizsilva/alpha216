@@ -276,9 +276,21 @@ function buildGenericMarket(mkt) {
   return { name: String(mkt.name||'Marché'), selections: sel, is_open: true };
 }
 
-function buildMarkets(markets) {
+// Odds value can live under several keys depending on the market shape:
+// {odds}, or list-style {label, under}, etc. Read the first that is > 1.01.
+function oddsVal(e) {
+  for (const k of ['odds','price','value','under','over','home','away']) {
+    const v = +(e?.[k] || 0);
+    if (v > 1.01) return v;
+  }
+  return 0;
+}
+
+function buildMarkets(markets, homeName, awayName) {
   const lo = {}, md = [];
   let ml_h=0, ml_x=0, ml_a=0;
+  const _hl = String(homeName||'').toLowerCase().trim();
+  const _al = String(awayName||'').toLowerCase().trim();
 
   for (const mkt of (markets||[])) {
     const name = String(mkt.name||'').toUpperCase().replace(/[\s_\-\/]/g,'');
@@ -331,10 +343,20 @@ function buildMarkets(markets) {
     if (name==='DOUBLECHANCE') {
       const dc={};
       for (const e of (mkt.odds||[])) {
+        const val = oddsVal(e);
+        if (val<1.01) continue;
         const en=String(e.name||'').toUpperCase().replace(/[\s_]/g,'');
-        if (en==='1X'||en==='HOMEORDRAW')  dc['1X']=+(e.odds||0);
-        if (en==='12'||en==='HOMEORAWAY')  dc['12']=+(e.odds||0);
-        if (en==='X2'||en==='DRAWORAWAY') dc['X2']=+(e.odds||0);
+        if (en==='1X'||en==='HOMEORDRAW')  { dc['1X']=val; continue; }
+        if (en==='12'||en==='HOMEORAWAY')  { dc['12']=val; continue; }
+        if (en==='X2'||en==='DRAWORAWAY')  { dc['X2']=val; continue; }
+        // Label-based ("Mexico or Draw", "Mexico or South Africa", "Draw or South Africa")
+        const lbl=String(e.label||e.name||'').toLowerCase();
+        const hasDraw=/\bdraw\b|\bnul\b|\bx\b/.test(lbl);
+        const hasHome=_hl && lbl.indexOf(_hl)!==-1;
+        const hasAway=_al && lbl.indexOf(_al)!==-1;
+        if (hasDraw && hasHome) dc['1X']=val;
+        else if (hasDraw && hasAway) dc['X2']=val;
+        else if (hasHome && hasAway) dc['12']=val;
       }
       const sel=[];
       if ((dc['1X']||0)>1) sel.push({name:'1X',odds:fmt(dc['1X']),NA:'1X'});
@@ -374,7 +396,7 @@ function buildMarkets(markets) {
     if (['CORRECTSCORE','EXACTSCORE'].includes(name)) {
       const sel=[];
       for (const e of (mkt.odds||[])) {
-        const sc=String(e.name||e.score||''),v=+(e.odds||0);
+        const sc=String(e.label||e.name||e.score||''),v=+(e.odds||e.price||0);
         if (v>1&&sc) sel.push({name:sc,odds:fmt(v),NA:sc});
       }
       if (sel.length) md.push({name:'Score exact',selections:sel,is_open:true});
@@ -408,9 +430,20 @@ function buildMarkets(markets) {
       if (even>1) sel.push({name:'Pair',  odds:fmt(even),NA:'Even'});
       if (sel.length) md.push({name:'Pair/Impair',selections:sel,is_open:true});
     }
-    // Half Time Result (1ère mi-temps 1X2) — odds-api.io sends this as "ML HT"
+    // Half Time Result (1ère mi-temps 1X2) — odds-api.io sends this as "ML HT".
+    // Two shapes: (a) odds[0] = {home,draw,away}; (b) list of {label:'1'|'2'|'Draw', under:odds}.
     if (['HALFTIMERESULT','HALFTIME1X2','MLHT','1X2HT','FIRSTHALF1X2'].includes(name)) {
-      const hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      let hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      if (hh<1.01&&ha<1.01) {
+        for (const e of (mkt.odds||[])) {
+          const lbl=String(e.label||e.name||'').toLowerCase().trim();
+          const val=oddsVal(e);
+          if (val<1.01) continue;
+          if (lbl==='1'||lbl==='home'||(_hl&&lbl===_hl)) hh=val;
+          else if (lbl==='2'||lbl==='away'||(_al&&lbl===_al)) ha=val;
+          else if (lbl==='draw'||lbl==='x'||lbl==='nul'||lbl==='tie') hx=val;
+        }
+      }
       const sel=[];
       if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'HT1'});
       if (hx>1) sel.push({name:'X',odds:fmt(hx),NA:'HTX'});
@@ -444,7 +477,17 @@ function buildMarkets(markets) {
     }
     // 2nd Half 1X2 ("ML 2H")
     if (['ML2H','1X22H','SECONDHALF1X2'].includes(name)) {
-      const hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      let hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      if (hh<1.01&&ha<1.01) {
+        for (const e of (mkt.odds||[])) {
+          const lbl=String(e.label||e.name||'').toLowerCase().trim();
+          const val=oddsVal(e);
+          if (val<1.01) continue;
+          if (lbl==='1'||lbl==='home'||(_hl&&lbl===_hl)) hh=val;
+          else if (lbl==='2'||lbl==='away'||(_al&&lbl===_al)) ha=val;
+          else if (lbl==='draw'||lbl==='x'||lbl==='nul'||lbl==='tie') hx=val;
+        }
+      }
       const sel=[];
       if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'2H1'});
       if (hx>1) sel.push({name:'X',odds:fmt(hx),NA:'2HX'});
@@ -525,7 +568,34 @@ function buildMarkets(markets) {
       });
     }
   }
+  // Canonical display order: 1X2 → Total → Double chance → Handicap → Pair/Impair → BTTS → others.
+  merged.sort((a, b) => marketRank(a.name) - marketRank(b.name));
   return { live_odds: lo, md_markets: merged };
+}
+
+// Canonical market ordering shared by the daemon (matches frontend PRINCIPAUX_ORDER).
+const MARKET_ORDER = [
+  '1x2','total équipe','total','double chance','handicap','pair/impair','impair','pair',
+  'les deux équipes','remboursé si nul',
+  '1ère mi-temps','2ème mi-temps','total des corners','cartons','score exact',
+];
+function marketRank(name) {
+  const n = String(name || '').toLowerCase();
+  // "Total équipe" must rank after the main "Total"; check specific before generic.
+  if (n === '1x2') return 0;
+  if (n.indexOf('total équipe') !== -1 || n.indexOf('total equipe') !== -1) return 6;
+  if (n === 'total' || n.indexOf('total des buts') !== -1) return 1;
+  if (n.indexOf('double chance') !== -1) return 2;
+  if (n === 'handicap' || n.indexOf('handicap asiatique') !== -1) return 3;
+  if (n.indexOf('pair') !== -1 || n.indexOf('impair') !== -1) return 4;
+  if (n.indexOf('deux équipes') !== -1 || n.indexOf('marquent') !== -1) return 5;
+  if (n.indexOf('remboursé') !== -1) return 7;
+  if (n.indexOf('1ère mi-temps') !== -1 || n.indexOf('1ere mi-temps') !== -1) return 20;
+  if (n.indexOf('2ème mi-temps') !== -1 || n.indexOf('2eme mi-temps') !== -1) return 21;
+  if (n.indexOf('corner') !== -1) return 30;
+  if (n.indexOf('carton') !== -1) return 31;
+  if (n.indexOf('score exact') !== -1) return 32;
+  return 15;
 }
 
 // ── Redis write/remove ────────────────────────────────────────────────────────
@@ -543,7 +613,9 @@ async function writeToRedis(id) {
     if (raw) existing = JSON.parse(raw);
   } catch(_){}
 
-  const { live_odds, md_markets } = buildMarkets(ev.markets_raw || existing?.markets_raw_cache || []);
+  const _hn = ev.meta?.home?.name || existing?.home?.name || '';
+  const _an = ev.meta?.away?.name || existing?.away?.name || '';
+  const { live_odds, md_markets } = buildMarkets(ev.markets_raw || existing?.markets_raw_cache || [], _hn, _an);
 
   // sport_id: prefer fresh meta, then existing, then default football
   const sid = ev.meta?.sport_id || existing?.sport_id || '1';

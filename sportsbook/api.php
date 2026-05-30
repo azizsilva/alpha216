@@ -153,6 +153,15 @@ function oddsapi_fmt($v) {
     return number_format(round((float)$v * 100) / 100, 2, '.', '');
 }
 
+/** Odds value can live under odds/price/value/under/over/home/away (list-style markets). */
+function oddsapi_odds_val($e) {
+    foreach (['odds', 'price', 'value', 'under', 'over', 'home', 'away'] as $k) {
+        $v = (float)($e[$k] ?? 0);
+        if ($v > 1.01) return $v;
+    }
+    return 0;
+}
+
 function oddsapi_line_val($entry, $fallback = 0) {
     foreach (['hdp', 'max', 'points', 'line', 'total', 'handicap'] as $k) {
         if (isset($entry[$k]) && $entry[$k] !== '') return (float)$entry[$k];
@@ -228,6 +237,24 @@ function oddsapi_build_generic_market($mkt) {
     return ['name' => oddsapi_display_name($mkt['name'] ?? 'Marché'), 'selections' => $sel, 'is_open' => true];
 }
 
+function oddsapi_market_rank($name) {
+    $n = strtolower((string)$name);
+    if ($n === '1x2') return 0;
+    if (strpos($n, 'total équipe') !== false || strpos($n, 'total equipe') !== false) return 6;
+    if ($n === 'total' || strpos($n, 'total des buts') !== false) return 1;
+    if (strpos($n, 'double chance') !== false) return 2;
+    if ($n === 'handicap' || strpos($n, 'handicap asiatique') !== false) return 3;
+    if (strpos($n, 'pair') !== false || strpos($n, 'impair') !== false) return 4;
+    if (strpos($n, 'deux équipes') !== false || strpos($n, 'marquent') !== false) return 5;
+    if (strpos($n, 'remboursé') !== false) return 7;
+    if (strpos($n, '1ère mi-temps') !== false || strpos($n, '1ere mi-temps') !== false) return 20;
+    if (strpos($n, '2ème mi-temps') !== false || strpos($n, '2eme mi-temps') !== false) return 21;
+    if (strpos($n, 'corner') !== false) return 30;
+    if (strpos($n, 'carton') !== false) return 31;
+    if (strpos($n, 'score exact') !== false) return 32;
+    return 15;
+}
+
 function oddsapi_merge_market_families(array $md) {
     $order = [];
     $byName = [];
@@ -259,6 +286,9 @@ function oddsapi_merge_market_families(array $md) {
         }
         $out[] = $mk;
     }
+    usort($out, function ($a, $b) {
+        return oddsapi_market_rank($a['name'] ?? '') <=> oddsapi_market_rank($b['name'] ?? '');
+    });
     return $out;
 }
 
@@ -266,9 +296,11 @@ function oddsapi_merge_market_families(array $md) {
  * Convert odds-api.io event odds response into the frontend md_markets format.
  * Mirrors ws_daemon.js buildMarkets() (grouped Total/Handicap/Corners/Cartons).
  */
-function oddsapi_build_markets($data) {
+function oddsapi_build_markets($data, $homeName = '', $awayName = '') {
     $raw = oddsapi_extract_raw_markets($data);
     if (empty($raw)) return [];
+    $hl = strtolower(trim((string)$homeName));
+    $al = strtolower(trim((string)$awayName));
 
     static $recognized = null;
     if ($recognized === null) {
@@ -344,10 +376,19 @@ function oddsapi_build_markets($data) {
         if ($name === 'DOUBLECHANCE') {
             $dc = [];
             foreach ($odds as $entry) {
+                $val = oddsapi_odds_val($entry);
+                if ($val < 1.01) continue;
                 $en = oddsapi_norm_mkt_name($entry['name'] ?? '');
-                if (in_array($en, ['1X','HOMEORDRAW'], true)) $dc['1X'] = (float)($entry['odds'] ?? 0);
-                if (in_array($en, ['12','HOMEORAWAY'], true)) $dc['12'] = (float)($entry['odds'] ?? 0);
-                if (in_array($en, ['X2','DRAWORAWAY'], true)) $dc['X2'] = (float)($entry['odds'] ?? 0);
+                if (in_array($en, ['1X','HOMEORDRAW'], true)) { $dc['1X'] = $val; continue; }
+                if (in_array($en, ['12','HOMEORAWAY'], true)) { $dc['12'] = $val; continue; }
+                if (in_array($en, ['X2','DRAWORAWAY'], true)) { $dc['X2'] = $val; continue; }
+                $lbl = strtolower((string)($entry['label'] ?? $entry['name'] ?? ''));
+                $hasDraw = (bool)preg_match('/\bdraw\b|\bnul\b|\bx\b/', $lbl);
+                $hasHome = $hl !== '' && strpos($lbl, $hl) !== false;
+                $hasAway = $al !== '' && strpos($lbl, $al) !== false;
+                if ($hasDraw && $hasHome) $dc['1X'] = $val;
+                elseif ($hasDraw && $hasAway) $dc['X2'] = $val;
+                elseif ($hasHome && $hasAway) $dc['12'] = $val;
             }
             $sel = [];
             if (!empty($dc['1X']) && $dc['1X'] > 1) $sel[] = ['name'=>'1X','odds'=>oddsapi_fmt($dc['1X']),'NA'=>'1X'];
@@ -390,8 +431,8 @@ function oddsapi_build_markets($data) {
         if (in_array($name, ['CORRECTSCORE','EXACTSCORE'], true)) {
             $sel = [];
             foreach ($odds as $entry) {
-                $sc = $entry['name'] ?? $entry['score'] ?? '';
-                $v = (float)($entry['odds'] ?? 0);
+                $sc = $entry['label'] ?? $entry['name'] ?? $entry['score'] ?? '';
+                $v = (float)($entry['odds'] ?? $entry['price'] ?? 0);
                 if ($v > 1 && $sc !== '') $sel[] = ['name'=>$sc,'odds'=>oddsapi_fmt($v),'NA'=>$sc];
             }
             if ($sel) $md[] = ['name'=>'Score exact','selections'=>$sel,'is_open'=>true];
@@ -433,6 +474,16 @@ function oddsapi_build_markets($data) {
             $hh = (float)($o['home'] ?? 0);
             $hx = (float)($o['draw'] ?? 0);
             $ha = (float)($o['away'] ?? 0);
+            if ($hh < 1.01 && $ha < 1.01) {
+                foreach ($odds as $entry) {
+                    $lbl = strtolower(trim((string)($entry['label'] ?? $entry['name'] ?? '')));
+                    $val = oddsapi_odds_val($entry);
+                    if ($val < 1.01) continue;
+                    if ($lbl === '1' || $lbl === 'home' || ($hl !== '' && $lbl === $hl)) $hh = $val;
+                    elseif ($lbl === '2' || $lbl === 'away' || ($al !== '' && $lbl === $al)) $ha = $val;
+                    elseif (in_array($lbl, ['draw','x','nul','tie'], true)) $hx = $val;
+                }
+            }
             $sel = [];
             if ($hh > 1) $sel[] = ['name'=>'1','odds'=>oddsapi_fmt($hh),'NA'=>'HT1'];
             if ($hx > 1) $sel[] = ['name'=>'X','odds'=>oddsapi_fmt($hx),'NA'=>'HTX'];
@@ -496,9 +547,11 @@ function resolve_match_markets($match_id, $redis_ev = null) {
         if (!$has_btts) $needs_fetch = true;
     }
     if ($needs_fetch) {
+        $hn = $redis_ev['home']['name'] ?? '';
+        $an = $redis_ev['away']['name'] ?? '';
         $od = oddsapi_fetch_event_odds($match_id);
         if ($od) {
-            $built = oddsapi_build_markets($od);
+            $built = oddsapi_build_markets($od, $hn, $an);
             if ($built) {
                 $markets = $built;
                 oddsapi_save_to_redis($match_id, $built, 120);
