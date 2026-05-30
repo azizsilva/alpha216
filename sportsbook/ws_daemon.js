@@ -30,7 +30,8 @@ const { createClient } = require('redis');
 // ── Configuration ────────────────────────────────────────────────────────
 const API_KEY         = process.env.ODDS_API_KEY       || 'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2';
 const REDIS_URL       = process.env.REDIS_URL           || 'redis://127.0.0.1:6379';
-const POLL_INTERVAL   = parseInt(process.env.POLL_INTERVAL_MS || '3000', 10);
+// Poll one sport per cycle, staggered — so 6 sports at 15s each = 1 call/2.5s ≈ 1440 req/hr (within 5000 limit)
+const POLL_INTERVAL   = parseInt(process.env.POLL_INTERVAL_MS || '15000', 10);
 const WS_DISABLE      = process.env.WS_DISABLE === '1';
 const WS_URL          = 'wss://api.odds-api.io/v3/ws';
 const MARKETS_WS      = 'ML,Spread,Totals,BTTS,Corners';
@@ -222,14 +223,43 @@ async function removeFromRedis(id) {
   delete store[id];
 }
 
-// ── REST: fetch live events via SDK ──────────────────────────────────────
-async function restFetchSport(sport) {
-  if (!OddsAPIClient) return 0;
+// ── Rate-limit state ─────────────────────────────────────────────────────
+let rateLimitUntil  = 0;   // epoch ms — don't call REST before this time
+let rateLimitBackoff = 30; // seconds — doubles on each hit, resets on success
+
+function isRateLimited() {
+  return Date.now() < rateLimitUntil;
+}
+function onRateLimited() {
+  rateLimitBackoff = Math.min(rateLimitBackoff * 2, 300); // max 5 min
+  rateLimitUntil   = Date.now() + rateLimitBackoff * 1000;
+  log(`Rate limited — backing off ${rateLimitBackoff}s (until ${new Date(rateLimitUntil).toISOString().slice(11,19)})`);
+}
+function onRateLimitSuccess() {
+  rateLimitBackoff = 30; // reset
+}
+
+// ── REST: fetch ONE sport per call (stagger to stay within rate limit) ───
+// We cycle through sports one at a time, so each full cycle = SPORTS.length calls.
+// At POLL_INTERVAL=15s per sport cycle iteration → 1 call every 2.5s → ~1440/hr.
+let sportCursor = 0;
+
+async function restFetchNext() {
+  if (isRateLimited()) {
+    const wait = Math.ceil((rateLimitUntil - Date.now()) / 1000);
+    log(`Rate-limited, skipping (${wait}s remaining)`);
+    return;
+  }
+  if (!OddsAPIClient) return;
+
+  const sport  = SPORTS[sportCursor % SPORTS.length];
+  sportCursor++;
+
   const client = new OddsAPIClient({ apiKey: API_KEY });
   try {
     const events = await client.getLiveEvents(sport.slug);
     const arr = Array.isArray(events) ? events
-      : (Array.isArray(events?.data) ? events.data
+      : (Array.isArray(events?.data)   ? events.data
       : (Array.isArray(events?.events) ? events.events : []));
 
     for (const ev of arr) {
@@ -240,50 +270,57 @@ async function restFetchSport(sport) {
       await writeToRedis(id);
     }
 
-    // Also try to fetch odds for live events if WS is not working
-    if (wsAuthFailed && arr.length > 0) {
-      const ids = arr.map(e => String(e.id)).slice(0, 10).join(',');
-      try {
-        const oddsResp = await client.getOddsForMultipleEvents({
-          event_ids: ids,
-          bookmakers: 'Bet365',
-        });
-        const items = Array.isArray(oddsResp) ? oddsResp
-          : (Array.isArray(oddsResp?.data) ? oddsResp.data : []);
-        for (const item of items) {
-          const eid = String(item.id || '');
-          if (!eid || !store[eid]) continue;
-          // Convert SDK odds format to our markets_raw format
-          const bkData = item.bookmakers || {};
-          for (const [, mkts] of Object.entries(bkData)) {
-            if (Array.isArray(mkts) && mkts.length) {
-              store[eid].markets_raw = mkts;
-              break; // use first bookmaker's data
-            }
-          }
-          await writeToRedis(eid);
-        }
-      } catch(e) {
-        // odds fetch failed — still have meta data
-      }
-    }
+    onRateLimitSuccess();
+    if (arr.length > 0) log(`REST ${sport.slug}: ${arr.length} events → Redis`);
 
-    return arr.length;
   } catch(e) {
-    log(`REST error (${sport.slug}):`, e.message || String(e));
-    return 0;
+    const msg = String(e.message || e);
+    if (/rate.limit|429|too many/i.test(msg)) {
+      onRateLimited();
+    } else {
+      log(`REST error (${sport.slug}):`, msg);
+    }
   } finally {
     try { client.close && client.close(); } catch(_) {}
   }
 }
 
+// Full scan of all sports — used only at startup and on WS resync
 async function restFetchAll() {
+  if (isRateLimited()) { log('Rate-limited, skipping full scan'); return; }
+  if (!OddsAPIClient)  return;
+
   let total = 0;
   for (const sport of SPORTS) {
-    try { total += await restFetchSport(sport); } catch(e) { log('Fetch error:', sport.slug, e.message); }
+    if (isRateLimited()) break;
+    const client = new OddsAPIClient({ apiKey: API_KEY });
+    try {
+      const events = await client.getLiveEvents(sport.slug);
+      const arr = Array.isArray(events) ? events
+        : (Array.isArray(events?.data)   ? events.data
+        : (Array.isArray(events?.events) ? events.events : []));
+
+      for (const ev of arr) {
+        const id = String(ev.id);
+        if (!id || !ev.home) continue;
+        if (!store[id]) store[id] = {};
+        store[id].meta = normEvent(ev, sport.id);
+        await writeToRedis(id);
+        total++;
+      }
+      onRateLimitSuccess();
+      // Small gap between sports during bulk fetch to avoid burst rate-limit
+      await new Promise(r => setTimeout(r, 500));
+    } catch(e) {
+      const msg = String(e.message || e);
+      if (/rate.limit|429|too many/i.test(msg)) { onRateLimited(); break; }
+      log(`REST error (${sport.slug}):`, msg);
+    } finally {
+      try { client.close && client.close(); } catch(_) {}
+    }
   }
-  if (total > 0) log(`REST: ${total} live events updated in Redis`);
-  else log('REST: 0 live events found (off-peak hours or auth issue)');
+  if (total > 0) log(`REST full scan: ${total} events → Redis`);
+  else if (!isRateLimited()) log('REST: 0 live events (off-peak or auth issue)');
 }
 
 // ── Prune stale events from Redis ────────────────────────────────────────
@@ -408,13 +445,14 @@ async function handleWsMessage(msg) {
 }
 
 // ── REST polling mode (fallback when WS is 403) ──────────────────────────
+// Stagger: one sport per interval tick so we don't burst all 6 at once.
+// 6 sports × 15s = full cycle in 90s = ~24 req/hour/sport (144 total/hr)
 let pollTimer = null;
 function startRestPolling() {
   if (pollTimer) return; // already running
-  log(`Starting REST polling every ${POLL_INTERVAL}ms — real-time via REST.`);
-  // Poll immediately, then on interval
-  restFetchAll();
-  pollTimer = setInterval(restFetchAll, POLL_INTERVAL);
+  log(`Starting staggered REST polling (one sport per ${POLL_INTERVAL}ms tick)...`);
+  restFetchNext(); // immediate first tick
+  pollTimer = setInterval(restFetchNext, POLL_INTERVAL);
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────
@@ -437,10 +475,9 @@ async function main() {
   log('Initial REST fetch...');
   await restFetchAll();
 
-  // Start REST polling regardless (scores/timers need REST every 10s)
-  // WS provides instant odds updates on top of this
-  setInterval(restFetchAll, 10_000);
-  setInterval(pruneStale,   5 * 60_000);
+  // Background staggered polling for score/timer refresh (one sport per cycle)
+  setInterval(restFetchNext, POLL_INTERVAL);
+  setInterval(pruneStale,    5 * 60_000);
 
   if (!WS_DISABLE && !wsAuthFailed) {
     startWebSocket();
