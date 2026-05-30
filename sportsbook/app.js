@@ -6735,14 +6735,19 @@ var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain
 // 1x2 → Total → Double chance (big chance) → Handicap → Pair/Impair → others
 var PRINCIPAUX_ORDER = [
   '1x2','1 x 2','match winner',
-  'total','over/under','total des buts','total goals','over',
+  'total','over/under','total des buts','total goals',
   'double chance',
   'handicap asiatique','handicap',
   'pair','impair','odd','even',
   'les deux équipes','btts','both teams','goal goal','gg',
-  'score exact','correct score',
+  'plage de buts','goal range','multigoal',
+  'remboursé si match nul','draw no bet',
+  'score exact','correct score','nombre exact','exact goals',
+  'premier but','dernier but','next goal','first goal',
   'total des corners','corner',
   'carton','cartons','cards','yellow','jaune',
+  'mi-temps','half time','half-time',
+  'marge','margin',
 ];
 function sortMarketsForPrincipaux(mkts) {
   return mkts.slice().sort(function(a, b) {
@@ -6810,9 +6815,11 @@ function getTabFilter(tabName) {
   if (tabName === 'Principaux') {
     return function(mkt) {
       var nm = (mkt.name || '').toLowerCase();
-      if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
-      if (nm.indexOf('1 minute') !== -1) return false;
-      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+      // Exclude 1-minute markets (only shown in their own tab)
+      if (nm.indexOf('1 minute') !== -1 || nm.indexOf('1-minute') !== -1) return false;
+      // Principaux = all markets with at least one valid odd (same scope as Bet Builder)
+      var sels = mkt.selections || [];
+      return sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; });
     };
   }
   if (tabName === '1ère mi-temps' || tabName === '1ere mi-temps') {
@@ -6977,7 +6984,8 @@ window.sbMdTab = function(btn, tabName) {
       msg = 'Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.';
     }
     var emptyHtml = '<div class="md-empty-tab">' + msg + '</div>';
-    window._mdTabCache[cacheKey] = emptyHtml;
+    // Do NOT cache empty states — when markets load on next poll the user
+    // should see them immediately without stale "Aucun marché" from cache.
     mktBody.innerHTML = emptyHtml;
     var bbSticky0 = document.getElementById('md-bb-sticky');
     if (bbSticky0) bbSticky0.style.display = 'none';
