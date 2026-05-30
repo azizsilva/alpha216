@@ -79,7 +79,8 @@ catch(e) { console.error('[ws_daemon] odds-api-io not found — run: npm install
 
 // ── Redis keys ────────────────────────────────────────────────────────────────
 const KEY_EV    = id  => `sb:ev:${id}`;
-const KEY_SPORT = sid => `sb:live:sport:${sid}`;
+const KEY_SPORT = sid => `sb:live:sport:${sid}`;   // LIVE events only (small, hot path)
+const KEY_UP    = sid => `sb:up:sport:${sid}`;     // UPCOMING events (large, cold path)
 const KEY_ALL   = 'sb:live:all';
 const KEY_TS    = 'sb:live:updated';
 
@@ -708,7 +709,15 @@ async function writeToRedis(id) {
 
   try {
     await redis.set(KEY_EV(id), JSON.stringify(match), { EX: 600 });
-    await redis.sAdd(KEY_SPORT(sid), id);
+    // Route into the right set so the LIVE list (polled every ~1.5s) never has
+    // to scan thousands of upcoming events. Move between sets on status change.
+    if (match.time_status === '1') {
+      await redis.sAdd(KEY_SPORT(sid), id);
+      await redis.sRem(KEY_UP(sid), id);
+    } else {
+      await redis.sAdd(KEY_UP(sid), id);
+      await redis.sRem(KEY_SPORT(sid), id);
+    }
     await redis.sAdd(KEY_ALL, id);
     await redis.set(KEY_TS, String(Date.now()));
   } catch(e) { log('Redis write error:', e.message); }
@@ -719,6 +728,7 @@ async function removeFromRedis(id) {
   try {
     await redis.del(KEY_EV(id));
     await redis.sRem(KEY_SPORT(sid), id);
+    await redis.sRem(KEY_UP(sid), id);
     await redis.sRem(KEY_ALL, id);
   } catch(_){}
   delete store[id];
@@ -909,32 +919,10 @@ async function handleWsMessage(data) {
         if (data.league) store[id].meta.league = { id: '', name: extractName(data.league_name, data.competition, data.league) };
       }
 
-      // Update odds/markets from WS — MERGE into existing rather than replace.
-      // WS pushes are single-bookmaker (e.g. Bet365 only carries ML/Spread/Totals/HT).
-      // REST batch polling (/odds/multi) already merged Corners/Cards from 1xbet/22Bet.
-      // Overwriting kills those markets on every Bet365 push. We keep existing markets
-      // not present in this WS push (Corners, Cards, etc.) and update those that are.
+      // Update odds/markets from WS
       if (data.markets && data.markets.length > 0) {
-        const prevRaw = store[id].markets_raw || [];
-        if (prevRaw.length) {
-          const byName = {};
-          for (const m of prevRaw) {
-            const key = m?.name ? m.name.toUpperCase().replace(/[\s_\-\/]/g,'') : null;
-            if (key) byName[key] = m;
-          }
-          for (const m of data.markets) {
-            const key = m?.name ? m.name.toUpperCase().replace(/[\s_\-\/]/g,'') : null;
-            if (!key) continue;
-            const existing = byName[key];
-            const prevCnt = existing ? (Array.isArray(existing.odds) ? existing.odds.length : 0) : -1;
-            const cnt = Array.isArray(m.odds) ? m.odds.length : 0;
-            if (!existing || cnt >= prevCnt) byName[key] = m;
-          }
-          store[id].markets_raw = Object.values(byName);
-        } else {
-          store[id].markets_raw = data.markets;
-        }
-        store[id].bookie = data.bookie || BOOKMAKER || 'Bet365';
+        store[id].markets_raw = data.markets;
+        store[id].bookie      = data.bookie || BOOKMAKER || 'Bet365';
       }
 
       // Update live score/timer if WS sends them
@@ -1057,18 +1045,26 @@ async function refreshSportUpcoming(sport) {
 // Fast football live loop (score/timer near real-time)
 async function refreshFootballLive() { await refreshSportLive('football'); }
 
-// ── Continuous REST odds polling ──────────────────────────────────────────────
-// TWO separate batches:
-//   refreshOddsBatch()        — LIVE only, every 3s, 10 events/tick (fast real-time)
-//   refreshUpcomingOddsBatch()— UPCOMING only, every 30s, 10 events/tick (prematch)
-// Keeping them separate means 2551 upcoming events never delay live odds updates.
-
+// ── Continuous REST odds polling (works on plans WITHOUT the WebSocket add-on) ─
+// Fetches full markets for live events via /odds/multi (10 events per request,
+// counts as 1 API call). This is what makes 1X2, O/U, Handicap, Corners, Cards
+// etc. appear and update during the match. Bookmaker is auto-detected from the
+// response if BOOKMAKER is not set.
 let oddsCursor = 0;
 async function refreshOddsBatch() {
   if (rateLimited()) return;
-  // LIVE events only — football first, then other sports
-  const liveIds = Object.keys(store).filter(id => store[id]?.meta?.time_status === '1')
-    .sort((a,b) => (store[a]?.sport==='football'?0:1) - (store[b]?.sport==='football'?0:1));
+  // Fetch markets for LIVE first (time_status 1), then UPCOMING (0) so the
+  // Prochainement list also shows the rich prematch markets (Corners,
+  // Correct Score, Team Totals, ...). Football is prioritised within each.
+  const rank = id => {
+    const live = store[id]?.meta?.time_status === '1' ? 0 : 1;
+    const foot = store[id]?.sport === 'football' ? 0 : 1;
+    return live * 2 + foot;
+  };
+  const liveIds = Object.keys(store).filter(id => {
+    const ts = store[id]?.meta?.time_status;
+    return ts === '1' || ts === '0';
+  }).sort((a,b) => rank(a) - rank(b));
   if (!liveIds.length) return;
 
   // Round-robin through all live events, 10 per tick (1 request per tick).
@@ -1078,40 +1074,20 @@ async function refreshOddsBatch() {
   oddsCursor += BATCH;
 
   try {
+    // /odds & /odds/multi REQUIRE a bookmakers param. Request several so that
+    // when the primary (Bet365) has no markets for an event we still get odds
+    // from another book. Per event we keep whichever book has the MOST markets.
     const params = { eventIds: batch.join(','), bookmakers: ODDS_BOOKMAKERS };
     const resp = await httpGetJson('/odds/multi', params);
     onRLOk();
-
-    // /odds/multi can return: array of events OR {data:[...]} OR {events:{id:{bookmakers:{...}}}}
-    let events = [];
-    if (Array.isArray(resp)) events = resp;
-    else if (Array.isArray(resp?.data)) events = resp.data;
-    else if (resp && typeof resp === 'object') {
-      // Some API versions return {events: {id: {bookmakers: {...}}}}
-      const evMap = resp.events || resp.odds || null;
-      if (evMap && typeof evMap === 'object') {
-        events = Object.entries(evMap).map(([id, val]) => ({ id, ...val }));
-      }
-    }
-
-    // Log first response shape for debugging (once per daemon run)
-    if (!refreshOddsBatch._logged && resp) {
-      refreshOddsBatch._logged = true;
-      const sample = JSON.stringify(resp).slice(0, 400);
-      log(`Odds/multi response shape (first 400 chars): ${sample}`);
-    }
-
+    const events = Array.isArray(resp) ? resp : (Array.isArray(resp?.data) ? resp.data : []);
     let withOdds = 0;
     for (const ev of events) {
-      const id = String(ev.id || ev.eventId || '');
-      if (!id) continue;
+      const id = String(ev.id);
       if (!store[id]) store[id] = {};
-
-      // Try ev.bookmakers (standard), ev.odds (some versions), ev itself if keyed by book name
-      let bk = ev.bookmakers || ev.odds || {};
-      // If bk is an array, it's a flat market list from one bookmaker — wrap it
-      if (Array.isArray(bk)) bk = { 'unknown': bk };
-
+      const bk = ev.bookmakers || {};
+      // Merge ALL bookmakers so corners (1xbet), half-time (Bet365), cards, etc.
+      // all survive instead of dropping everything but the single richest book.
       const markets = mergeBookmakerMarkets(bk);
       if (markets && markets.length) {
         store[id].markets_raw = markets;
@@ -1121,76 +1097,10 @@ async function refreshOddsBatch() {
       }
     }
     if (withOdds) log(`Odds batch: ${withOdds}/${batch.length} events got markets (cursor ${oddsCursor}/${liveIds.length})`);
-    else {
-      // Zero markets from /odds/multi — log raw shape to diagnose
-      if (!refreshOddsBatch._warnedEmpty) {
-        refreshOddsBatch._warnedEmpty = true;
-        const shape = JSON.stringify(resp).slice(0, 600);
-        log(`Odds batch: 0 markets. Raw: ${shape}`);
-      } else {
-        log(`Odds batch: 0/${batch.length} got markets`);
-      }
-    }
+    else log(`Odds batch: 0/${batch.length} got markets — check bookmakers selected in account`);
   } catch(e) {
     if (isRL(e)) onRL();
     else log('Odds batch error:', e.message);
-  }
-}
-
-// ── Upcoming/prematch odds batch (slow) ──────────────────────────────────────
-// Fetches /odds/multi for UPCOMING events every 30s, 10 per tick.
-// Keeping this separate from the live batch ensures live odds never get delayed
-// by cycling through 2500+ prematch events.
-let upcomingOddsCursor = 0;
-async function refreshUpcomingOddsBatch() {
-  if (rateLimited()) return;
-  // Upcoming events only (ts=0), football first
-  const upcomingIds = Object.keys(store)
-    .filter(id => store[id]?.meta?.time_status === '0')
-    .sort((a,b) => (store[a]?.sport==='football'?0:1) - (store[b]?.sport==='football'?0:1));
-  if (!upcomingIds.length) return;
-
-  const BATCH = 10;
-  if (upcomingOddsCursor >= upcomingIds.length) upcomingOddsCursor = 0;
-  const batch = upcomingIds.slice(upcomingOddsCursor, upcomingOddsCursor + BATCH);
-  upcomingOddsCursor += BATCH;
-
-  try {
-    const params = { eventIds: batch.join(','), bookmakers: ODDS_BOOKMAKERS };
-    const resp = await httpGetJson('/odds/multi', params);
-    onRLOk();
-
-    let events = [];
-    if (Array.isArray(resp)) events = resp;
-    else if (Array.isArray(resp?.data)) events = resp.data;
-    else if (resp && typeof resp === 'object') {
-      const evMap = resp.events || resp.odds || null;
-      if (evMap && typeof evMap === 'object') {
-        events = Object.entries(evMap).map(([id, val]) => ({ id, ...val }));
-      }
-    }
-
-    let withOdds = 0;
-    for (const ev of events) {
-      const id = String(ev.id || ev.eventId || '');
-      if (!id) continue;
-      if (!store[id]) store[id] = {};
-
-      let bk = ev.bookmakers || ev.odds || {};
-      if (Array.isArray(bk)) bk = { 'unknown': bk };
-
-      const markets = mergeBookmakerMarkets(bk);
-      if (markets && markets.length) {
-        store[id].markets_raw = markets;
-        store[id].bookie = Object.keys(bk).join('+') || 'odds-api';
-        withOdds++;
-        await writeToRedis(id);
-      }
-    }
-    if (withOdds) log(`Upcoming odds batch: ${withOdds}/${batch.length} events got markets (cursor ${upcomingOddsCursor}/${upcomingIds.length})`);
-  } catch(e) {
-    if (isRL(e)) onRL();
-    else log('Upcoming odds batch error:', e.message);
   }
 }
 
@@ -1210,6 +1120,7 @@ async function pruneStale() {
     for (const id of await redis.sMembers(KEY_ALL)) {
       if (!await redis.exists(KEY_EV(id))) {
         await redis.sRem(KEY_SPORT(store[id]?.meta?.sport_id||'1'), id);
+        await redis.sRem(KEY_UP(store[id]?.meta?.sport_id||'1'), id);
         await redis.sRem(KEY_ALL, id);
         delete store[id];
       }
@@ -1258,18 +1169,12 @@ async function main() {
   setInterval(refreshMeta, 20_000);
 
   // Step 3c: Continuous REST odds polling — fetches full markets via /odds/multi.
-  // LIVE batch: 10 events every 3s → full cycle of ~95 live events in ~30s.
-  // UPCOMING batch: 10 events every 30s → covers prematch odds without starving live.
+  // This is the PRIMARY odds source on plans without the WebSocket add-on.
+  // Runs every 3s: 10 events/request → cycles ~95 live football events in ~30s.
   setTimeout(() => {
     refreshOddsBatch().catch(e => log('Odds init error:', e.message));
     setInterval(() => refreshOddsBatch().catch(e => log('Odds loop error:', e.message)), 3_000);
-
-    // Start upcoming batch 15s after live batch to stagger API calls
-    setTimeout(() => {
-      refreshUpcomingOddsBatch().catch(e => log('Upcoming odds init error:', e.message));
-      setInterval(() => refreshUpcomingOddsBatch().catch(e => log('Upcoming odds loop error:', e.message)), 30_000);
-    }, 15_000);
-  }, 8000); // wait for first meta refresh to populate event store
+  }, 8000); // wait for first meta refresh to populate live ids
 
   // Periodic stats log every 60s — shows how many events are in store + Redis
   setInterval(async () => {

@@ -31,6 +31,7 @@ class RedisSocket {
         return $this->fp !== false;
     }
     public function get($key)              { return $this->cmd('GET',     [$key]); }
+    public function mGet($keys)            { $r=$this->cmd('MGET', array_values($keys)); return is_array($r)?$r:[]; }
     public function set($key, $val)        { return $this->cmd('SET',     [$key, $val]); }
     public function setEx($key, $ttl, $v)  { return $this->cmd('SETEX',   [$key, (string)$ttl, $v]); }
     public function sMembers($key)         { $r=$this->cmd('SMEMBERS',[$key]); return is_array($r)?$r:[]; }
@@ -552,10 +553,29 @@ function resolve_match_markets($match_id, $redis_ev = null) {
             if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
         }
     }
-    // Never do a blocking on-demand fetch here — the ws_daemon REST batch
-    // (every 3s, /odds/multi) fills all markets. A synchronous fetch on every
-    // match_detail poll adds 3-6s latency and burns API rate-limit quota.
-    // If markets are empty the frontend retries in 3s and the daemon fills it.
+    $needs_fetch = empty($markets) || count($markets) < 3;
+    if (!$needs_fetch) {
+        $has_btts = false;
+        foreach ($markets as $m) {
+            if (stripos($m['name'] ?? '', 'deux équipes') !== false || stripos($m['name'] ?? '', 'marquent') !== false) {
+                $has_btts = true;
+                break;
+            }
+        }
+        if (!$has_btts) $needs_fetch = true;
+    }
+    if ($needs_fetch) {
+        $hn = $redis_ev['home']['name'] ?? '';
+        $an = $redis_ev['away']['name'] ?? '';
+        $od = oddsapi_fetch_event_odds($match_id);
+        if ($od) {
+            $built = oddsapi_build_markets($od, $hn, $an);
+            if ($built) {
+                $markets = $built;
+                oddsapi_save_to_redis($match_id, $built, 120);
+            }
+        }
+    }
     return $markets;
 }
 
@@ -577,28 +597,42 @@ function oddsapi_save_to_redis($event_id, array $md_markets, $ttl = 90) {
  * Get all live matches for a sport from Redis.
  * Returns an array of match objects, or null if Redis not available.
  */
-function redis_get_sport_matches($sport_id) {
+/**
+ * Read events for a sport from Redis.
+ * $which: 'live' (default, hot path — small set), 'upcoming', or 'all'.
+ * Live and upcoming are stored in SEPARATE sets so the live list (polled every
+ * ~1.5s) never scans thousands of upcoming events. Reads are batched via MGET
+ * (one round-trip per 400 ids) instead of one GET per id.
+ */
+function redis_get_sport_matches($sport_id, $which = 'live') {
     global $redis_conn, $redis_ok;
     if (!$redis_ok || !$redis_conn) return null;
     try {
-        $ids = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
+        $ids = [];
+        if ($which === 'live' || $which === 'all') {
+            $ids = array_merge($ids, $redis_conn->sMembers("sb:live:sport:{$sport_id}") ?: []);
+        }
+        if ($which === 'upcoming' || $which === 'all') {
+            $ids = array_merge($ids, $redis_conn->sMembers("sb:up:sport:{$sport_id}") ?: []);
+        }
         if (empty($ids)) return [];
+        $ids = array_values(array_unique($ids));
         $out = [];
-        foreach ($ids as $id) {
-            $raw = $redis_conn->get("sb:ev:{$id}");
-            if (!$raw) continue;
-            $m = json_decode($raw, true);
-            if (!$m || empty($m['home']['name'])) continue;
-            // Safety net: hide stale legacy (BetsAPI) events left in Redis from
-            // before the odds-api migration — their IDs 404 on the detail page.
-            // Events written by the current daemon are stamped _source='oddsapi'.
-            $src = $m['_source'] ?? '';
-            if ($src && $src !== 'oddsapi') continue;            // explicitly non-odds-api
-            if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue; // unstamped + BetsAPI-shaped id
-            // Strip heavy fields that bloat list-view responses (100KB+ per event).
-            // match_detail fetches these directly via redis_get_event().
-            unset($m['markets_raw_cache'], $m['md_markets']);
-            $out[] = $m;
+        foreach (array_chunk($ids, 400) as $chunk) {
+            $keys = array_map(function($id){ return "sb:ev:{$id}"; }, $chunk);
+            $vals = $redis_conn->mGet($keys);
+            if (!is_array($vals)) continue;
+            foreach ($vals as $i => $raw) {
+                if (!$raw) continue;
+                $m = json_decode($raw, true);
+                if (!$m || empty($m['home']['name'])) continue;
+                $id = $chunk[$i] ?? ($m['id'] ?? '');
+                // Safety net: hide stale legacy (BetsAPI) events left in Redis.
+                $src = $m['_source'] ?? '';
+                if ($src && $src !== 'oddsapi') continue;
+                if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue;
+                $out[] = $m;
+            }
         }
         return $out;
     } catch (Exception $e) { return null; }
@@ -1359,7 +1393,6 @@ function parse_event_stream_odds($results_arr) {
 // Uses a 20-second file cache per sport + global stream cache for live OU odds.
 // This means real-time data with zero manual intervention required.
 if ($action === 'inplay') {
-    ini_set('memory_limit', '256M');
     $results    = [];
     $cache_dir  = __DIR__ . '/cache';
     if (!is_dir($cache_dir)) @mkdir($cache_dir, 0755, true);
@@ -1370,43 +1403,33 @@ if ($action === 'inplay') {
     }
 
     // ── Redis-first: ws_daemon.js feeds Redis — serve from there if available ──
-    // Read IDs then decode one event at a time (never hold all 60+ full blobs in memory).
-    $list_fields = ['id','sport_id','time','time_status','league','home','away','ss','timer','live_odds','stats','_source','_updated'];
-    $out = [];
-    if ($redis_ok && $redis_conn) {
-        try {
-            $ids = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
-            foreach ((array)$ids as $id) {
-                $raw = $redis_conn->get("sb:ev:{$id}");
-                if (!$raw) continue;
-                $m = json_decode($raw, true);
-                unset($raw); // free immediately
-                if (!$m || empty($m['home']['name'])) continue;
-                $src = $m['_source'] ?? '';
-                if ($src && $src !== 'oddsapi') continue;
-                if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue;
-                // Apply margin to live_odds chips
-                if (!empty($m['live_odds'])) {
-                    foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
-                        if (isset($m['live_odds'][$ok]) && $m['live_odds'][$ok] > 1.01) {
-                            $m['live_odds'][$ok] = apply_margin_to_odds((float)$m['live_odds'][$ok]);
-                        }
+    // Only use Redis if it has actual events. If empty, fall through to BetsAPI.
+    $redis_results = redis_get_sport_matches($sport_id, 'live');
+    // Safety net during set migration: only keep genuinely live events.
+    if (is_array($redis_results)) {
+        $redis_results = array_values(array_filter($redis_results, function($m) {
+            return ($m['time_status'] ?? '1') === '1';
+        }));
+    }
+    if ($redis_results !== null && count($redis_results) > 0) {
+        foreach ($redis_results as &$rm) {
+            if (!empty($rm['live_odds'])) {
+                $lo = &$rm['live_odds'];
+                foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
+                    if (isset($lo[$ok]) && $lo[$ok] > 1.01) {
+                        $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
                     }
                 }
-                // Copy only slim fields — never touch md_markets / markets_raw_cache
-                $slim = [];
-                foreach ($list_fields as $f) { if (isset($m[$f])) $slim[$f] = $m[$f]; }
-                $out[] = $slim;
-                unset($m, $slim); // free full blob before next iteration
+                unset($lo);
             }
-        } catch (Exception $e) {}
-    }
-    if (count($out) > 0) {
+        }
+        unset($rm);
         header('X-SB-Source: redis');
-        echo json_encode(['success' => 1, 'results' => $out, '_src' => 'redis']);
+        echo json_encode(['success' => 1, 'results' => array_values($redis_results), '_src' => 'redis']);
         exit;
     }
     // Redis empty / daemon not yet warmed up — return empty. Frontend will retry in 1.5s.
+    // ws_daemon.js populates Redis within seconds of startup.
     header('X-SB-Source: redis-empty');
     echo json_encode(['success' => 1, 'results' => [], '_src' => 'redis-empty']);
     exit;
@@ -1882,7 +1905,6 @@ if ($action === 'inplay') {
 
 // ═══ UPCOMING — Redis-first, REST fallback ════════════════════════════════
 if ($action === 'upcoming' || $action === 'all_upcoming') {
-    ini_set('memory_limit', '256M');
     $results = [];
     $up_cache_dir = __DIR__ . '/cache';
     if (!is_dir($up_cache_dir)) @mkdir($up_cache_dir, 0755, true);
@@ -1896,32 +1918,14 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         return '';
     };
 
-    // List fields needed for match-card display — skip heavy md_markets / markets_raw_cache
-    $list_fields_up = ['id','sport_id','time','time_status','league','home','away','ss','live_odds','_source','_updated'];
-
-    // ── Redis-first: decode one event at a time to avoid OOM ─────────────────
-    if ($redis_ok && $redis_conn) {
-        try {
-            $ids_up = $redis_conn->sMembers("sb:live:sport:{$sport_id}");
-            foreach ((array)$ids_up as $uid) {
-                $raw_up = $redis_conn->get("sb:ev:{$uid}");
-                if (!$raw_up) continue;
-                $m = json_decode($raw_up, true);
-                $raw_up = null; // free raw string
-                if (!$m || empty($m['home']['name'])) { $m = null; continue; }
-                // Skip live events and legacy non-oddsapi events
-                if (($m['time_status'] ?? '') !== '0') { $m = null; continue; }
-                $src = $m['_source'] ?? '';
-                if ($src && $src !== 'oddsapi') { $m = null; continue; }
-                if (!$src && ctype_digit((string)$uid) && strlen((string)$uid) >= 9) { $m = null; continue; }
-                // Copy only slim fields
-                $slim = [];
-                foreach ($list_fields_up as $f) { if (isset($m[$f])) $slim[$f] = $m[$f]; }
-                $m = null;
-                $results[] = $slim;
-                $slim = null;
+    // ── Redis-first: ws_daemon writes upcoming events to the upcoming set ───
+    $all_redis = redis_get_sport_matches($sport_id, 'upcoming');
+    if ($all_redis !== null) {
+        foreach ($all_redis as $m) {
+            if (($m['time_status'] ?? '1') !== '1') { // upcoming (not live)
+                $results[] = $m;
             }
-        } catch (Exception $e) {}
+        }
     }
 
     // ── REST fallback: if Redis has no upcoming, call odds-api.io ───────────
@@ -1959,7 +1963,51 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         }
     }
 
-    // live_odds already copied from Redis in the main loop above — no second pass needed.
+    // Inject prematch odds (from Redis if available, else skip)
+    foreach ($results as &$m_up) {
+        $mid = $m_up['id'] ?? '';
+        if (!$mid) continue;
+        $rev = redis_get_event($mid);
+        if ($rev && !empty($rev['live_odds'])) $m_up['live_odds'] = $rev['live_odds'];
+        if ($rev && !empty($rev['md_markets'])) $m_up['md_markets'] = $rev['md_markets'];
+    }
+    unset($m_up);
+
+    // ── Inject odds from cache (same as inplay Step 4.5) ──────────────────
+    $odds_cache_up = $up_cache_dir . '/odds_' . $sport_id . '.json';
+    $up_odds = file_exists($odds_cache_up)
+        ? (json_decode(@file_get_contents($odds_cache_up), true) ?: [])
+        : [];
+
+    // Also check per-match ev_ cache files
+    foreach ($results as &$m_up) {
+        $mid_up = (string)($m_up['id'] ?? '');
+        if (!$mid_up) continue;
+        // Already has odds from DB live_odds field?
+        if (!empty($m_up['live_odds']) && ($m_up['live_odds']['h'] ?? 0) > 1.01) continue;
+        // Try the odds cache
+        if (!empty($up_odds[$mid_up]) && ($up_odds[$mid_up]['h'] ?? 0) > 1.01) {
+            $m_up['live_odds'] = $up_odds[$mid_up];
+        } else {
+            // Try per-match ev_ file
+            $ev_file_up = $up_cache_dir . '/ev_' . $mid_up . '.json';
+            if (file_exists($ev_file_up) && (time() - filemtime($ev_file_up)) < 120) {
+                $ev_data_up = json_decode(@file_get_contents($ev_file_up), true);
+                if (!empty($ev_data_up['live_odds'])) $m_up['live_odds'] = $ev_data_up['live_odds'];
+            }
+        }
+    }
+    unset($m_up);
+
+    // Sort by kickoff so "nearest first", then optionally cap. The home/sport
+    // page polls this every ~15s and only needs the nearest fixtures, so it
+    // passes &limit=N to keep the payload small. The browse-by-date page sends
+    // no limit (it fetches once) so every date stays available.
+    usort($results, function($a, $b) {
+        return (int)($a['time'] ?? $a['start_time'] ?? 0) <=> (int)($b['time'] ?? $b['start_time'] ?? 0);
+    });
+    $limit = (int)($_GET['limit'] ?? 0);
+    if ($limit > 0 && count($results) > $limit) $results = array_slice($results, 0, $limit);
 
     echo json_encode(['success' => 1, 'results' => $results]);
     exit;
@@ -2020,7 +2068,7 @@ if ($action === 'league_matches') {
     // applies its own precise isLeagueMatch() refine on top.
     {
         $league_id_q0 = trim($_GET['league_id'] ?? '');
-        $redis_all = redis_get_sport_matches($sport_id);
+        $redis_all = redis_get_sport_matches($sport_id, 'all');
         if ($redis_all !== null && count($redis_all) > 0) {
             $qn = preg_replace('/[^a-z0-9]/', '', strtolower($league_q));
             $lg = [];
@@ -2031,12 +2079,12 @@ if ($action === 'league_matches') {
                 $nameok = ($qn !== '' && ($ln === $qn || strpos($ln, $qn) !== false || strpos($qn, $ln) !== false));
                 if (!$idok && !$nameok) continue;
                 if (!empty($rm['live_odds'])) {
+                    $lo = &$rm['live_odds'];
                     foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
-                        if (isset($rm['live_odds'][$ok]) && $rm['live_odds'][$ok] > 1.01) $rm['live_odds'][$ok] = apply_margin_to_odds((float)$rm['live_odds'][$ok]);
+                        if (isset($lo[$ok]) && $lo[$ok] > 1.01) $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
                     }
+                    unset($lo);
                 }
-                // Strip heavy fields not needed by list view
-                unset($rm['md_markets'], $rm['markets_raw_cache']);
                 $lg[] = $rm;
             }
             usort($lg, function($a, $b) {
@@ -2839,9 +2887,15 @@ if ($action === 'match_detail') {
         exit;
     }
 
-    // Redis empty for this match — return immediately, daemon will fill Redis within seconds.
-    // Never block here with a synchronous API call — it adds 3-6s latency on every cold load.
-    // The frontend polls match_detail every 3s, so markets appear on the next tick.
+    // Redis empty for this match — try direct odds-api.io fetch
+    $markets2 = resolve_match_markets($match_id, null);
+    if ($markets2) {
+        apply_margin_to_markets($markets2);
+        echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi-direct'],'markets'=>$markets2,'_src'=>'oddsapi-direct']);
+        exit;
+    }
+
+    // Nothing available yet — return empty (daemon will fill Redis shortly)
     echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi'],'markets'=>[],'_src'=>'warming-up']);
     exit;
 

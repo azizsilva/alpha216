@@ -761,8 +761,8 @@ function patchMatchDetailLive(m, markets) {
     if (newSig === window._mdMktSig || _activeSig === window._mdActiveSig) {
       try { _mdUpdateOddsInPlace(nextMarkets, m); } catch (e) {}
       try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
-      // Fast path: odds moved in-place — keep the tab cache so clicking tabs
-      // stays instant. Only clear cache when market structure actually changes.
+      // Keep the tab cache in sync with fresh odds for instant tab switches.
+      sbClearMdTabCache();
       window._mdMktSig = newSig;
       window._mdActiveSig = _activeSig;
       needsRender = false;
@@ -1928,15 +1928,8 @@ function startPolling() {
         if (isChamp) {
           renderChampionship(S.activeLeagueId, S.activeLeagueName, S.activeLeagueFlag, S.champMatches);
         } else {
-          // Try fast in-place patch first — avoids scroll jank from full rebuild.
-          // Falls back to full renderMatches when cards appear/disappear.
-          var patched = patchMatchCardsInPlace(S.matches);
-          if (!patched) {
-            renderMatches(S.matches);
-            markLiveSidebarLeagues(S.matches);
-            // Re-expand any cards the user had open (full rebuild destroys DOM).
-            if (typeof window.sbRestoreExpandedCards === 'function') window.sbRestoreExpandedCards();
-          }
+          renderMatches(S.matches);
+          markLiveSidebarLeagues(S.matches);
         }
       })
       .catch(function() {
@@ -1947,7 +1940,6 @@ function startPolling() {
           } else {
             renderMatches(S.matches);
             markLiveSidebarLeagues(S.matches);
-            if (typeof window.sbRestoreExpandedCards === 'function') window.sbRestoreExpandedCards();
           }
         }
       });
@@ -2600,43 +2592,6 @@ function startLiveMinuteTicker() {
     patch('.mc-live-min');
     patch('.slc-time');
   }, 1000);
-}
-
-// Fast in-place patcher: updates score, odds values, timer inside existing card DOM.
-// Returns true if ALL cards were found and patched. Returns false if any card is
-// missing (new match appeared or vanished) — caller does full renderMatches instead.
-function patchMatchCardsInPlace(matches) {
-  var liveBody = document.getElementById('sb-live-groups-body');
-  if (!liveBody) return false;
-  var allCards = liveBody.querySelectorAll('.mc[id^="mc-"]');
-  var cardIds = {};
-  allCards.forEach(function(c) { cardIds[c.id] = true; });
-  var matchIds = {};
-  var liveMatches = (matches || []).filter(isMatchLive);
-  liveMatches.forEach(function(m) { matchIds['mc-' + m.id] = true; });
-
-  // If card set changed (addition/removal), do full rebuild
-  var idsMatch = Object.keys(cardIds).length === Object.keys(matchIds).length &&
-    Object.keys(matchIds).every(function(k) { return cardIds[k]; });
-  if (!idsMatch) return false;
-
-  liveMatches.forEach(function(m) {
-    var card = document.getElementById('mc-' + m.id);
-    if (!card) return;
-    var scores = m.ss ? m.ss.split('-') : ['0','0'];
-    // Patch scores — .mc-t-score elements (home=first, away=second)
-    var scoreEls = card.querySelectorAll('.mc-t-score');
-    if (scoreEls[0]) { var sv = String(scores[0]||'0'); if (scoreEls[0].textContent !== sv) scoreEls[0].textContent = sv; }
-    if (scoreEls[1]) { var sv = String(scores[1]||'0'); if (scoreEls[1].textContent !== sv) scoreEls[1].textContent = sv; }
-    // Patch odds — .mc-odd-val elements (1, X, 2 order)
-    var o = odds(m);
-    var oddEls = card.querySelectorAll('.mc-odd-val');
-    var oddVals = [o.h, o.x, o.a].filter(function(v) { return v > 1; });
-    oddEls.forEach(function(el, i) {
-      if (i < oddVals.length) { var fv = formatOdd(oddVals[i]); if (el.textContent !== fv) el.textContent = fv; }
-    });
-  });
-  return true;
 }
 
 function matchCard(m) {
@@ -5286,7 +5241,7 @@ function renderSportPage(sportId, sportName) {
   // compute the four category-card counts AND to populate the matches list
   // that lives BELOW the cards on the sport page (matches fcbet216 layout).
   var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sportId + '&_t=' + Date.now();
-  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId + '&_t=' + Date.now();
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sportId + '&limit=250&_t=' + Date.now();
 
   Promise.all([
     fetch(liveUrl).then(function(r){ return r.json(); }).catch(function(){ return {results: []}; }),
@@ -5352,7 +5307,7 @@ function sbPollSportPage() {
 
   var t = Date.now();
   var liveUrl = BASE + 'sportsbook/api.php?action=inplay&sport_id=' + sid + '&_t=' + t;
-  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sid + '&_t=' + t;
+  var upUrl   = BASE + 'sportsbook/api.php?action=upcoming&sport_id=' + sid + '&limit=250&_t=' + t;
 
   // Tick counter — refresh upcoming every 3rd cycle (~15s at 5s poll).
   // First call also refreshes upcoming (handles missed odds on initial load).
@@ -5797,7 +5752,7 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
     out += '<div class="mc-md-empty">Aucun marché disponible.</div>';
   } else {
     shown.forEach(function(mk, i) {
-      out += renderMarketGroup(mk, m, true, isBB);
+      out += renderMarketGroup(mk, m, i < 4, isBB);
     });
   }
   out += '</div>';
@@ -5867,7 +5822,7 @@ window.sbOpenMatch = function(mid, _skipPush) {
           var bbMode = !!(bbActive && /bet builder/i.test(bbActive.textContent || ''));
           window._mdMarkets = mkts;
           sbClearMdTabCache();
-          body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, true, bbMode); }).join('');
+          body.innerHTML = mkts.map(function(mk, i){ return renderMarketGroup(mk, m, i < 6, bbMode); }).join('');
           try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
         }
       } else {
@@ -6141,7 +6096,7 @@ function renderMatchDetail(m, markets) {
   window._mdMatch   = m;
 
   out += '<div class="md-markets" id="md-markets-body">';
-  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, true, false); });
+  markets.forEach(function(mkt, i) { out += renderMarketGroup(mkt, m, i < 6, false); });
   out += '</div>';
 
   // Bet Builder sticky footer removed to add bets directly to the betslip (fcbet216 parity).
@@ -6515,8 +6470,9 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
   // Filter out already-settled lines so e.g. a 2:0 match no longer
   // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
   mkt = filterMarketByScore(mkt, m);
-  // Always show all lines — user wants full ladders in every tab.
-  var trimMax = 99;
+  // Principaux trims to 2 active pairs (compact view).
+  // Bet Builder / Tout / Total tab show ALL active lines so users can mix legs.
+  var trimMax = bbMode ? 99 : 2;
   mkt = trimTotalMarketWindow(mkt, m, trimMax);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
@@ -6734,19 +6690,14 @@ var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain
 // 1x2 → Total → Double chance (big chance) → Handicap → Pair/Impair → others
 var PRINCIPAUX_ORDER = [
   '1x2','1 x 2','match winner',
-  'total','over/under','total des buts','total goals',
+  'total','over/under','total des buts','total goals','over',
   'double chance',
   'handicap asiatique','handicap',
   'pair','impair','odd','even',
   'les deux équipes','btts','both teams','goal goal','gg',
-  'plage de buts','goal range','multigoal',
-  'remboursé si match nul','draw no bet',
-  'score exact','correct score','nombre exact','exact goals',
-  'premier but','dernier but','next goal','first goal',
+  'score exact','correct score',
   'total des corners','corner',
   'carton','cartons','cards','yellow','jaune',
-  'mi-temps','half time','half-time',
-  'marge','margin',
 ];
 function sortMarketsForPrincipaux(mkts) {
   return mkts.slice().sort(function(a, b) {
@@ -6814,11 +6765,9 @@ function getTabFilter(tabName) {
   if (tabName === 'Principaux') {
     return function(mkt) {
       var nm = (mkt.name || '').toLowerCase();
-      // Exclude 1-minute markets (only shown in their own tab)
-      if (nm.indexOf('1 minute') !== -1 || nm.indexOf('1-minute') !== -1) return false;
-      // Principaux = all markets with at least one valid odd (same scope as Bet Builder)
-      var sels = mkt.selections || [];
-      return sels.some(function(s){ var v = parseFloat(s.odds); return v >= 1.01; });
+      if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
+      if (nm.indexOf('1 minute') !== -1) return false;
+      return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
     };
   }
   if (tabName === '1ère mi-temps' || tabName === '1ere mi-temps') {
@@ -6974,17 +6923,19 @@ window.sbMdTab = function(btn, tabName) {
     var mdMatch = window._mdMatch;
     var isLiveMatch = mdMatch && (typeof isMatchLive === 'function') && isMatchLive(mdMatch);
     var lowerTab = tabName.toLowerCase();
-    // The daemon requests Corners/Cards/Correct Score live from multiple bookmakers.
-    // If they're empty it's because the provider doesn't offer them for this fixture,
-    // not because they're prematch-only — so always show the generic message.
-    if (!isLiveMatch && (lowerTab.indexOf('minute') !== -1)) {
+    // Markets the odds provider only publishes PRE-MATCH (its live feed is
+    // limited to 1X2 / Total / Handicap). Be honest about why they're empty.
+    var prematchOnly = ['corners','corner','correct score','cartes','cartons','cards'];
+    var isPrematchOnly = prematchOnly.some(function(k){ return lowerTab.indexOf(k) !== -1; });
+    if (isLiveMatch && isPrematchOnly) {
+      msg = '<b>' + h(tabName) + '</b> non proposé en direct par le fournisseur — disponible avant le coup d\'envoi.';
+    } else if (!isLiveMatch && (lowerTab.indexOf('minute') !== -1)) {
       msg = '<b>' + h(tabName) + '</b> sera disponible après le coup d\'envoi.';
     } else {
       msg = 'Aucun marché disponible pour <b>' + h(tabName) + '</b> pour le moment.';
     }
     var emptyHtml = '<div class="md-empty-tab">' + msg + '</div>';
-    // Do NOT cache empty states — when markets load on next poll the user
-    // should see them immediately without stale "Aucun marché" from cache.
+    window._mdTabCache[cacheKey] = emptyHtml;
     mktBody.innerHTML = emptyHtml;
     var bbSticky0 = document.getElementById('md-bb-sticky');
     if (bbSticky0) bbSticky0.style.display = 'none';
@@ -6997,7 +6948,7 @@ window.sbMdTab = function(btn, tabName) {
   mktBody.classList.add('md-markets--loading');
   requestAnimationFrame(function() {
   var out = '';
-  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, true, isBB); });
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
     window._mdTabCache[cacheKey] = out;
   mktBody.innerHTML = out;
     mktBody.classList.remove('md-markets--loading');
@@ -7084,7 +7035,7 @@ window.sbMdSearch = function(query) {
     return;
   }
   var out = '';
-  shown.forEach(function(mkt, i){ out += renderMarketGroup(mkt, window._mdMatch, true, false); });
+  shown.forEach(function(mkt, i){ out += renderMarketGroup(mkt, window._mdMatch, i < 6, false); });
   mktBody.innerHTML = out;
 };
 
@@ -7447,13 +7398,7 @@ function loadAndFilter(action, sid, lid) {
   sbAbortListFetches();
   var navGen = sbNextNav();
   var el = document.getElementById('sb-matches-body');
-  // Paint cached matches INSTANTLY — no skeleton flash while fetching.
-  // The fetch runs in background and replaces with fresh data on arrival.
-  if (S.matches && S.matches.length && el) {
-    renderMatches(S.matches);
-  } else if (el) {
-    el.innerHTML = buildSkeleton(5);
-  }
+  if (el) el.innerHTML = buildSkeleton(5);
 
   // Use `upcoming` action for future dates, `inplay` for today
   var apiAction = (S.activeDateOffset > 0) ? 'upcoming' : 'inplay';
