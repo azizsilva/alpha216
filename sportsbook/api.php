@@ -19,7 +19,7 @@ register_shutdown_function(function() {
     }
 });
 
-define('ODDSAPI_KEY',  'fbfb8d1a32e0f0a1b4dc55ef2b72abad19e86f1b9c37df1032464e25882e68f2');
+define('ODDSAPI_KEY',  '8957223a4359087972aee3d805832e0dd264bff0e3c78b7733e5f8cbd45f7b2e');
 define('ODDSAPI_BASE', 'https://api.odds-api.io/v3');
 
 // ══ Minimal Redis socket client ═══════════════════════════════════════════════
