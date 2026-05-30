@@ -95,6 +95,7 @@ if (!$redis_ok) {
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
 if (!defined('ODDSAPI_BK')) define('ODDSAPI_BK', 'Bet365');
+if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,Betano,1xbet,888Sport,22Bet');
 
 function oddsapi_curl($url) {
     $ch = curl_init($url);
@@ -116,207 +117,395 @@ function oddsapi_curl($url) {
 
 function oddsapi_fetch_event_odds($event_id) {
     $key = ODDSAPI_KEY;
-    $bk  = ODDSAPI_BK; // 'Bet365' — /odds REQUIRES a bookmakers param
-    $candidates = [
-        ODDSAPI_BASE . "/odds?eventId={$event_id}&bookmakers={$bk}&apiKey={$key}",
-    ];
-    foreach ($candidates as $url) {
-        [$code, $body] = oddsapi_curl($url);
-        if ($code === 200 && $body) {
-            $data = json_decode($body, true);
-            if (is_array($data)) return $data;
-        }
-        if ($code === 429) return null; // rate-limited, stop
+    $bks = urlencode(ODDSAPI_BKS);
+    $url = ODDSAPI_BASE . "/odds?eventId={$event_id}&bookmakers={$bks}&apiKey={$key}";
+    [$code, $body] = oddsapi_curl($url);
+    if ($code === 429) return null;
+    if ($code === 200 && $body) {
+        $data = json_decode($body, true);
+        if (is_array($data)) return $data;
     }
     return null;
 }
 
+function oddsapi_norm_mkt_name($name) {
+    return strtoupper(preg_replace('/[\s\-_\/]/', '', (string)$name));
+}
+
+/** Pick the bookmaker array with the most markets (same strategy as ws_daemon.js). */
+function oddsapi_extract_raw_markets($data) {
+    if (empty($data)) return [];
+    if (isset($data['bookmakers']) && is_array($data['bookmakers'])) {
+        $best = [];
+        foreach ($data['bookmakers'] as $bk_mkts) {
+            if (!is_array($bk_mkts) || empty($bk_mkts)) continue;
+            if (count($bk_mkts) > count($best)) $best = $bk_mkts;
+        }
+        return $best;
+    }
+    if (isset($data[0]['name'])) return $data;
+    if (isset($data['data']) && is_array($data['data'])) return oddsapi_extract_raw_markets($data['data']);
+    if (isset($data['results'][0])) return oddsapi_extract_raw_markets($data['results'][0]);
+    return [];
+}
+
+function oddsapi_fmt($v) {
+    return number_format(round((float)$v * 100) / 100, 2, '.', '');
+}
+
+function oddsapi_line_val($entry, $fallback = 0) {
+    foreach (['hdp', 'max', 'points', 'line', 'total', 'handicap'] as $k) {
+        if (isset($entry[$k]) && $entry[$k] !== '') return (float)$entry[$k];
+    }
+    return (float)$fallback;
+}
+
+function oddsapi_display_name($rawName) {
+    $raw = (string)$rawName;
+    $n = oddsapi_norm_mkt_name($raw);
+    if (in_array($n, ['BTTS', 'BOTHTEAMSTOSCORE'], true)) return 'Les deux équipes qui marquent';
+    if (preg_match('/^BOTHTEAMSTOSCORE/i', $n)) return 'Les deux équipes qui marquent';
+    if (preg_match('/CARD|CARTON|BOOKING|YELLOW/i', $n)) {
+        if (preg_match('/PLAYER/i', $n)) return 'Cartons joueurs';
+        return 'Cartons';
+    }
+    if (preg_match('/CORNER/i', $n)) return 'Total des corners';
+    if (preg_match('/CORRECTSCORE|EXACTSCORE/i', $n)) return 'Score exact';
+    return $raw ?: 'Marché';
+}
+
+function oddsapi_build_generic_market($mkt) {
+    $sel = [];
+    foreach (($mkt['odds'] ?? []) as $e) {
+        if (!is_array($e)) continue;
+        $line = oddsapi_line_val($e, null);
+        $suffix = ($line !== null && $line !== '') ? " {$line}" : '';
+
+        if (isset($e['home']) || isset($e['draw']) || isset($e['away'])) {
+            foreach (['home' => '1', 'draw' => 'X', 'away' => '2'] as $k => $lbl) {
+                $v = (float)($e[$k] ?? 0);
+                if ($v > 1) $sel[] = ['name' => "{$lbl}{$suffix}", 'odds' => oddsapi_fmt($v), 'NA' => "{$lbl}{$suffix}"];
+            }
+            continue;
+        }
+
+        $nm = trim((string)($e['name'] ?? $e['label'] ?? $e['selection'] ?? $e['score'] ?? ''));
+        $hasUnder = isset($e['under']) && (float)$e['under'] > 1.01;
+        if ($nm !== '' && isset($e['over']) && (float)$e['over'] > 1.01 && !$hasUnder && !isset($e['home'])) {
+            $sel[] = ['name' => $nm, 'odds' => oddsapi_fmt($e['over']), 'NA' => $nm];
+            continue;
+        }
+
+        if (isset($e['over']) || isset($e['under'])) {
+            $ov = (float)($e['over'] ?? 0);
+            $un = (float)($e['under'] ?? 0);
+            $ln = oddsapi_line_val($e, 0);
+            if ($ov > 1) {
+                $row = ['name' => "Plus de {$ln}", 'odds' => oddsapi_fmt($ov), 'NA' => "O {$ln}"];
+                if ($ln !== 0.0 || isset($e['hdp'])) $row['handicap'] = $ln;
+                $sel[] = $row;
+            }
+            if ($un > 1) {
+                $row = ['name' => "Moins de {$ln}", 'odds' => oddsapi_fmt($un), 'NA' => "U {$ln}"];
+                if ($ln !== 0.0 || isset($e['hdp'])) $row['handicap'] = $ln;
+                $sel[] = $row;
+            }
+            continue;
+        }
+
+        if (isset($e['yes']) || isset($e['no'])) {
+            $y = (float)($e['yes'] ?? 0);
+            $n = (float)($e['no'] ?? 0);
+            if ($y > 1) $sel[] = ['name' => 'Oui', 'odds' => oddsapi_fmt($y), 'NA' => 'Yes'];
+            if ($n > 1) $sel[] = ['name' => 'Non', 'odds' => oddsapi_fmt($n), 'NA' => 'No'];
+            continue;
+        }
+
+        $v = (float)($e['odds'] ?? $e['price'] ?? $e['value'] ?? 0);
+        if ($nm !== '' && $v > 1) $sel[] = ['name' => $nm, 'odds' => oddsapi_fmt($v), 'NA' => $nm];
+    }
+    if (!$sel) return null;
+    return ['name' => oddsapi_display_name($mkt['name'] ?? 'Marché'), 'selections' => $sel, 'is_open' => true];
+}
+
+function oddsapi_merge_market_families(array $md) {
+    $order = [];
+    $byName = [];
+    foreach ($md as $mk) {
+        $n = $mk['name'] ?? '';
+        if ($n === '') continue;
+        if (!isset($byName[$n])) {
+            $byName[$n] = $mk;
+            $order[] = $n;
+        } else {
+            $seen = [];
+            foreach ($byName[$n]['selections'] as $s) $seen[$s['NA'] ?? $s['name']] = true;
+            foreach ($mk['selections'] as $s) {
+                $k = $s['NA'] ?? $s['name'];
+                if (empty($seen[$k])) {
+                    $byName[$n]['selections'][] = $s;
+                    $seen[$k] = true;
+                }
+            }
+        }
+    }
+    $out = [];
+    foreach ($order as $n) {
+        $mk = $byName[$n];
+        if (!empty($mk['selections']) && isset($mk['selections'][0]['handicap'])) {
+            usort($mk['selections'], function ($a, $b) {
+                return ((float)($a['handicap'] ?? 0)) <=> ((float)($b['handicap'] ?? 0));
+            });
+        }
+        $out[] = $mk;
+    }
+    return $out;
+}
+
 /**
  * Convert odds-api.io event odds response into the frontend md_markets format.
- * Mirrors ws_daemon.js buildMarkets() exactly.
+ * Mirrors ws_daemon.js buildMarkets() (grouped Total/Handicap/Corners/Cartons).
  */
 function oddsapi_build_markets($data) {
-    if (empty($data)) return [];
-    // Extract raw market array from whatever structure the API returned
-    $raw = [];
-    if (isset($data['bookmakers']) && is_array($data['bookmakers'])) {
-        foreach ($data['bookmakers'] as $bk_mkts) {
-            if (is_array($bk_mkts) && !empty($bk_mkts)) { $raw = $bk_mkts; break; }
-        }
-    } elseif (isset($data[0]['name'])) {
-        $raw = $data;
-    } elseif (isset($data['data']) && is_array($data['data'])) {
-        return oddsapi_build_markets($data['data']);
-    } elseif (isset($data['results'][0])) {
-        return oddsapi_build_markets($data['results'][0]);
-    }
+    $raw = oddsapi_extract_raw_markets($data);
     if (empty($raw)) return [];
 
-    $md   = [];
+    static $recognized = null;
+    if ($recognized === null) {
+        $recognized = array_flip([
+            'ML','1X2','MONEYLINE',
+            'TOTALS','OVERUNDER','GOALS','TOTALGOALS','GOALSOVERUNDER','ALTERNATIVETOTALGOALS','ALTERNATIVEGOALLINE',
+            'SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP','EUROPEANHANDICAP',
+            'DOUBLECHANCE','BTTS','BOTHTEAMSTOSCORE',
+            'CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS','CORNERSSpread',
+            'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH',
+            'CORRECTSCORE','EXACTSCORE',
+            'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','TEAMTOTALHOME','TEAMTOTALAWAY',
+            'TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY','DRAWNOBET','ODDEVEN','GOALSODDEVEN',
+            'HALFTIMERESULT','HALFTIME1X2','MLHT','1X2HT','FIRSTHALF1X2',
+            'SPREADHT','HANDICAPHT','TOTALSHT','OVERUNDERHT','GOALSHT',
+        ]);
+    }
+
+    $md = [];
     $ml_h = 0; $ml_x = 0; $ml_a = 0;
+    $totalSel = [];
+    $handicapSel = [];
+    $cornerSel = [];
+    $cardSel = [];
 
     foreach ($raw as $mkt) {
-        $name = strtoupper(preg_replace('/[\s\-_]/', '', $mkt['name'] ?? ''));
+        $rawName = $mkt['name'] ?? '';
+        $name = oddsapi_norm_mkt_name($rawName);
         $odds = $mkt['odds'] ?? [];
-        $o    = !empty($odds[0]) ? $odds[0] : [];
+        $o = !empty($odds[0]) ? $odds[0] : [];
 
-        // 1X2
-        if (in_array($name, ['ML','1X2','MONEYLINE'])) {
+        if (!isset($recognized[$name])) {
+            $gm = oddsapi_build_generic_market($mkt);
+            if ($gm) $md[] = $gm;
+            continue;
+        }
+
+        if (in_array($name, ['ML','1X2','MONEYLINE'], true)) {
             $ml_h = (float)($o['home'] ?? 0);
             $ml_x = (float)($o['draw'] ?? 0);
             $ml_a = (float)($o['away'] ?? 0);
-            $sel  = [];
-            if ($ml_h > 1) $sel[] = ['name'=>'1', 'odds'=>number_format($ml_h,2,'.','' ), 'NA'=>'1'];
-            if ($ml_x > 1) $sel[] = ['name'=>'X', 'odds'=>number_format($ml_x,2,'.','' ), 'NA'=>'X'];
-            if ($ml_a > 1) $sel[] = ['name'=>'2', 'odds'=>number_format($ml_a,2,'.','' ), 'NA'=>'2'];
-            if ($sel) $md[] = ['name'=>'1X2', 'selections'=>$sel, 'is_open'=>true];
+            $sel = [];
+            if ($ml_h > 1) $sel[] = ['name'=>'1','odds'=>oddsapi_fmt($ml_h),'NA'=>'1'];
+            if ($ml_x > 1) $sel[] = ['name'=>'X','odds'=>oddsapi_fmt($ml_x),'NA'=>'X'];
+            if ($ml_a > 1) $sel[] = ['name'=>'2','odds'=>oddsapi_fmt($ml_a),'NA'=>'2'];
+            if ($sel) $md[] = ['name'=>'1X2','selections'=>$sel,'is_open'=>true];
         }
-        // Over/Under — multiple lines per market
-        if (in_array($name, ['TOTALS','OVERUNDER','GOALS','TOTALGOALS'])) {
-            $first = true;
+
+        if (in_array($name, ['TOTALS','OVERUNDER','GOALS','TOTALGOALS','GOALSOVERUNDER','ALTERNATIVETOTALGOALS','ALTERNATIVEGOALLINE'], true)) {
             foreach ($odds as $entry) {
-                $line = (float)($entry['hdp'] ?? 2.5);
-                $ov   = (float)($entry['over']  ?? 0);
-                $un   = (float)($entry['under'] ?? 0);
+                $line = oddsapi_line_val($entry, 2.5);
+                $ov = (float)($entry['over'] ?? 0);
+                $un = (float)($entry['under'] ?? 0);
                 if ($ov < 1.01 && $un < 1.01) continue;
-                $sel  = [];
-                if ($ov > 1) $sel[] = ['name'=>"Plus de {$line}",  'odds'=>number_format($ov,2,'.','' ), 'NA'=>"O {$line}"];
-                if ($un > 1) $sel[] = ['name'=>"Moins de {$line}", 'odds'=>number_format($un,2,'.','' ), 'NA'=>"U {$line}"];
-                if ($sel) $md[] = ['name'=>"Over/Under {$line}", 'selections'=>$sel, 'is_open'=>true];
-                $first = false;
+                if ($ov > 1) $totalSel[] = ['name'=>"Plus de {$line}",'odds'=>oddsapi_fmt($ov),'NA'=>"O {$line}",'handicap'=>$line];
+                if ($un > 1) $totalSel[] = ['name'=>"Moins de {$line}",'odds'=>oddsapi_fmt($un),'NA'=>"U {$line}",'handicap'=>$line];
             }
         }
-        // Handicap — multiple lines per market
-        if (in_array($name, ['SPREAD','ASIANHANDICAP','HANDICAP'])) {
+
+        if (in_array($name, ['SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP','EUROPEANHANDICAP'], true)) {
             foreach ($odds as $entry) {
-                $hdp = (float)($entry['hdp'] ?? 0);
-                $hh  = (float)($entry['home'] ?? 0);
-                $ah  = (float)($entry['away'] ?? 0);
+                $hdp = oddsapi_line_val($entry, 0);
+                $hh = (float)($entry['home'] ?? $entry['over'] ?? 0);
+                $ah = (float)($entry['away'] ?? $entry['under'] ?? 0);
                 if ($hh < 1.01 && $ah < 1.01) continue;
-                $fh  = $hdp >= 0 ? "+{$hdp}" : "{$hdp}";
-                $fa  = (-$hdp) >= 0 ? "+".(-$hdp) : "".(-$hdp);
-                $sel = [];
-                if ($hh > 1) $sel[] = ['name'=>"1 ({$fh})", 'odds'=>number_format($hh,2,'.','' ), 'NA'=>"H {$hdp}"];
-                if ($ah > 1) $sel[] = ['name'=>"2 ({$fa})", 'odds'=>number_format($ah,2,'.','' ), 'NA'=>"A " . (-$hdp)];
-                if ($sel) $md[] = ['name'=>"Handicap Asiatique {$fh}", 'selections'=>$sel, 'is_open'=>true];
+                $fh = $hdp >= 0 ? "+{$hdp}" : "{$hdp}";
+                $fa = (-$hdp) >= 0 ? '+'.(-$hdp) : (string)(-$hdp);
+                if ($hh > 1) $handicapSel[] = ['name'=>"1 {$fh}",'odds'=>oddsapi_fmt($hh),'NA'=>"H {$hdp}",'handicap'=>$hdp];
+                if ($ah > 1) $handicapSel[] = ['name'=>"2 {$fa}",'odds'=>oddsapi_fmt($ah),'NA'=>"A ".(-$hdp),'handicap'=>$hdp];
             }
         }
-        // Double Chance
+
         if ($name === 'DOUBLECHANCE') {
             $dc = [];
             foreach ($odds as $entry) {
-                $en = strtoupper(preg_replace('/[\s_]/', '', $entry['name'] ?? ''));
-                if (in_array($en, ['1X','HOMEORDRAW']))  $dc['1X'] = (float)($entry['odds'] ?? 0);
-                if (in_array($en, ['12','HOMEORAWAY']))  $dc['12'] = (float)($entry['odds'] ?? 0);
-                if (in_array($en, ['X2','DRAWORAWAY']))  $dc['X2'] = (float)($entry['odds'] ?? 0);
+                $en = oddsapi_norm_mkt_name($entry['name'] ?? '');
+                if (in_array($en, ['1X','HOMEORDRAW'], true)) $dc['1X'] = (float)($entry['odds'] ?? 0);
+                if (in_array($en, ['12','HOMEORAWAY'], true)) $dc['12'] = (float)($entry['odds'] ?? 0);
+                if (in_array($en, ['X2','DRAWORAWAY'], true)) $dc['X2'] = (float)($entry['odds'] ?? 0);
             }
             $sel = [];
-            if (!empty($dc['1X']) && $dc['1X']>1) $sel[] = ['name'=>'1X','odds'=>number_format($dc['1X'],2,'.','' ),'NA'=>'1X'];
-            if (!empty($dc['12']) && $dc['12']>1) $sel[] = ['name'=>'12','odds'=>number_format($dc['12'],2,'.','' ),'NA'=>'12'];
-            if (!empty($dc['X2']) && $dc['X2']>1) $sel[] = ['name'=>'X2','odds'=>number_format($dc['X2'],2,'.','' ),'NA'=>'X2'];
-            if ($sel) $md[] = ['name'=>'Double chance', 'selections'=>$sel, 'is_open'=>true];
+            if (!empty($dc['1X']) && $dc['1X'] > 1) $sel[] = ['name'=>'1X','odds'=>oddsapi_fmt($dc['1X']),'NA'=>'1X'];
+            if (!empty($dc['12']) && $dc['12'] > 1) $sel[] = ['name'=>'12','odds'=>oddsapi_fmt($dc['12']),'NA'=>'12'];
+            if (!empty($dc['X2']) && $dc['X2'] > 1) $sel[] = ['name'=>'X2','odds'=>oddsapi_fmt($dc['X2']),'NA'=>'X2'];
+            if ($sel) $md[] = ['name'=>'Double chance','selections'=>$sel,'is_open'=>true];
         }
-        // BTTS
-        if (in_array($name, ['BTTS','BOTHTEAMSTOSCORE'])) {
+
+        if (in_array($name, ['BTTS','BOTHTEAMSTOSCORE'], true)) {
             $y = (float)($o['yes'] ?? $o['home'] ?? 0);
-            $n = (float)($o['no']  ?? $o['away'] ?? 0);
+            $n = (float)($o['no'] ?? $o['away'] ?? 0);
             $sel = [];
-            if ($y>1) $sel[] = ['name'=>'Oui','odds'=>number_format($y,2,'.','' ),'NA'=>'Yes'];
-            if ($n>1) $sel[] = ['name'=>'Non','odds'=>number_format($n,2,'.','' ),'NA'=>'No'];
+            if ($y > 1) $sel[] = ['name'=>'Oui','odds'=>oddsapi_fmt($y),'NA'=>'Yes'];
+            if ($n > 1) $sel[] = ['name'=>'Non','odds'=>oddsapi_fmt($n),'NA'=>'No'];
             if ($sel) $md[] = ['name'=>'Les deux équipes qui marquent','selections'=>$sel,'is_open'=>true];
         }
-        // Corners
-        if (in_array($name, ['CORNERS','TOTALCORNERS'])) {
-            $cl = (float)($o['hdp'] ?? 9.5);
-            $co = (float)($o['over'] ?? 0);
-            $cu = (float)($o['under'] ?? 0);
-            $sel = [];
-            if ($co>1) $sel[] = ['name'=>"Plus de {$cl}",  'odds'=>number_format($co,2,'.','' ),'NA'=>"CO {$cl}"];
-            if ($cu>1) $sel[] = ['name'=>"Moins de {$cl}", 'odds'=>number_format($cu,2,'.','' ),'NA'=>"CU {$cl}"];
-            if ($sel) $md[] = ['name'=>"Total des corners Plus/Moins {$cl}",'selections'=>$sel,'is_open'=>true];
+
+        if (in_array($name, ['CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS','CORNERSSpread'], true)) {
+            foreach ($odds as $entry) {
+                $line = oddsapi_line_val($entry, 9.5);
+                $co = (float)($entry['over'] ?? 0);
+                $cu = (float)($entry['under'] ?? 0);
+                if ($co < 1.01 && $cu < 1.01) continue;
+                if ($co > 1) $cornerSel[] = ['name'=>"Plus de {$line}",'odds'=>oddsapi_fmt($co),'NA'=>"CO {$line}",'handicap'=>$line];
+                if ($cu > 1) $cornerSel[] = ['name'=>"Moins de {$line}",'odds'=>oddsapi_fmt($cu),'NA'=>"CU {$line}",'handicap'=>$line];
+            }
         }
-        // Cards
-        if (in_array($name, ['CARDS','TOTALCARDS','YELLOWCARDS'])) {
-            $yl = (float)($o['hdp'] ?? 3.5);
-            $yo = (float)($o['over'] ?? 0);
-            $yu = (float)($o['under'] ?? 0);
-            $sel = [];
-            if ($yo>1) $sel[] = ['name'=>"Plus de {$yl}",  'odds'=>number_format($yo,2,'.','' ),'NA'=>"YC {$yl}"];
-            if ($yu>1) $sel[] = ['name'=>"Moins de {$yl}", 'odds'=>number_format($yu,2,'.','' ),'NA'=>"YC- {$yl}"];
-            if ($sel) $md[] = ['name'=>"Cartons Plus/Moins {$yl}",'selections'=>$sel,'is_open'=>true];
+
+        if (in_array($name, ['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH'], true)) {
+            foreach ($odds as $entry) {
+                $line = oddsapi_line_val($entry, 3.5);
+                $yo = (float)($entry['over'] ?? 0);
+                $yu = (float)($entry['under'] ?? 0);
+                if ($yo < 1.01 && $yu < 1.01) continue;
+                if ($yo > 1) $cardSel[] = ['name'=>"Plus de {$line}",'odds'=>oddsapi_fmt($yo),'NA'=>"YC {$line}",'handicap'=>$line];
+                if ($yu > 1) $cardSel[] = ['name'=>"Moins de {$line}",'odds'=>oddsapi_fmt($yu),'NA'=>"YC- {$line}",'handicap'=>$line];
+            }
         }
-        // Correct Score
-        if (in_array($name, ['CORRECTSCORE','EXACTSCORE'])) {
+
+        if (in_array($name, ['CORRECTSCORE','EXACTSCORE'], true)) {
             $sel = [];
             foreach ($odds as $entry) {
                 $sc = $entry['name'] ?? $entry['score'] ?? '';
-                $v  = (float)($entry['odds'] ?? 0);
-                if ($v>1 && $sc) $sel[] = ['name'=>$sc,'odds'=>number_format($v,2,'.','' ),'NA'=>$sc];
+                $v = (float)($entry['odds'] ?? 0);
+                if ($v > 1 && $sc !== '') $sel[] = ['name'=>$sc,'odds'=>oddsapi_fmt($v),'NA'=>$sc];
             }
             if ($sel) $md[] = ['name'=>'Score exact','selections'=>$sel,'is_open'=>true];
         }
-        // Team Totals (Total équipe 1 / 2)
-        if (in_array($name, ['TEAMTOTALS','HOMETOTALS','AWAYTOTALS'])) {
-            $tl = (float)($o['hdp'] ?? 1.5);
-            $to = (float)($o['over'] ?? 0);
-            $tu = (float)($o['under'] ?? 0);
-            $sideLabel = $name === 'AWAYTOTALS' ? 'équipe 2' : 'équipe 1';
-            $sel = [];
-            if ($to>1) $sel[] = ['name'=>"Plus de {$tl}",  'odds'=>number_format($to,2,'.','' ),'NA'=>"TT O {$tl}"];
-            if ($tu>1) $sel[] = ['name'=>"Moins de {$tl}", 'odds'=>number_format($tu,2,'.','' ),'NA'=>"TT U {$tl}"];
-            if ($sel) $md[] = ['name'=>"Total {$sideLabel} Plus/Moins {$tl}",'selections'=>$sel,'is_open'=>true];
+
+        if (in_array($name, ['TEAMTOTALS','HOMETOTALS','AWAYTOTALS','TEAMTOTALHOME','TEAMTOTALAWAY','TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY'], true)) {
+            $sideLabel = preg_match('/AWAY/', $name) ? 'équipe 2' : 'équipe 1';
+            $ttsel = [];
+            foreach ($odds as $entry) {
+                $line = oddsapi_line_val($entry, 1.5);
+                $ov = (float)($entry['over'] ?? 0);
+                $un = (float)($entry['under'] ?? 0);
+                if ($ov < 1.01 && $un < 1.01) continue;
+                if ($ov > 1) $ttsel[] = ['name'=>"Plus de {$line}",'odds'=>oddsapi_fmt($ov),'NA'=>"TT O {$line}",'handicap'=>$line];
+                if ($un > 1) $ttsel[] = ['name'=>"Moins de {$line}",'odds'=>oddsapi_fmt($un),'NA'=>"TT U {$line}",'handicap'=>$line];
+            }
+            if ($ttsel) $md[] = ['name'=>"Total {$sideLabel}",'selections'=>$ttsel,'is_open'=>true];
         }
-        // Draw No Bet
+
         if ($name === 'DRAWNOBET') {
             $hh = (float)($o['home'] ?? 0);
             $ah = (float)($o['away'] ?? 0);
             $sel = [];
-            if ($hh>1) $sel[] = ['name'=>'1','odds'=>number_format($hh,2,'.','' ),'NA'=>'DNB1'];
-            if ($ah>1) $sel[] = ['name'=>'2','odds'=>number_format($ah,2,'.','' ),'NA'=>'DNB2'];
+            if ($hh > 1) $sel[] = ['name'=>'1','odds'=>oddsapi_fmt($hh),'NA'=>'DNB1'];
+            if ($ah > 1) $sel[] = ['name'=>'2','odds'=>oddsapi_fmt($ah),'NA'=>'DNB2'];
             if ($sel) $md[] = ['name'=>'Remboursé si nul','selections'=>$sel,'is_open'=>true];
         }
-        // Odd/Even
-        if (in_array($name, ['ODDEVEN','GOALSODDEVEN'])) {
-            $odd  = (float)($o['odd']  ?? $o['home'] ?? 0);
+
+        if (in_array($name, ['ODDEVEN','GOALSODDEVEN'], true)) {
+            $odd = (float)($o['odd'] ?? $o['home'] ?? 0);
             $even = (float)($o['even'] ?? $o['away'] ?? 0);
             $sel = [];
-            if ($odd>1)  $sel[] = ['name'=>'Impair','odds'=>number_format($odd,2,'.','' ),'NA'=>'Odd'];
-            if ($even>1) $sel[] = ['name'=>'Pair',  'odds'=>number_format($even,2,'.','' ),'NA'=>'Even'];
+            if ($odd > 1) $sel[] = ['name'=>'Impair','odds'=>oddsapi_fmt($odd),'NA'=>'Odd'];
+            if ($even > 1) $sel[] = ['name'=>'Pair','odds'=>oddsapi_fmt($even),'NA'=>'Even'];
             if ($sel) $md[] = ['name'=>'Pair/Impair','selections'=>$sel,'is_open'=>true];
         }
-        // Half Time Result
-        if (in_array($name, ['HALFTIMERESULT','HALFTIME1X2'])) {
+
+        if (in_array($name, ['HALFTIMERESULT','HALFTIME1X2','MLHT','1X2HT','FIRSTHALF1X2'], true)) {
             $hh = (float)($o['home'] ?? 0);
             $hx = (float)($o['draw'] ?? 0);
             $ha = (float)($o['away'] ?? 0);
             $sel = [];
-            if ($hh>1) $sel[] = ['name'=>'1','odds'=>number_format($hh,2,'.','' ),'NA'=>'HT1'];
-            if ($hx>1) $sel[] = ['name'=>'X','odds'=>number_format($hx,2,'.','' ),'NA'=>'HTX'];
-            if ($ha>1) $sel[] = ['name'=>'2','odds'=>number_format($ha,2,'.','' ),'NA'=>'HT2'];
+            if ($hh > 1) $sel[] = ['name'=>'1','odds'=>oddsapi_fmt($hh),'NA'=>'HT1'];
+            if ($hx > 1) $sel[] = ['name'=>'X','odds'=>oddsapi_fmt($hx),'NA'=>'HTX'];
+            if ($ha > 1) $sel[] = ['name'=>'2','odds'=>oddsapi_fmt($ha),'NA'=>'HT2'];
             if ($sel) $md[] = ['name'=>'1ère mi-temps - 1x2','selections'=>$sel,'is_open'=>true];
         }
     }
 
-    // Compute Double Chance from ML if API didn't provide it
+    if ($totalSel) $md[] = ['name'=>'Total','selections'=>$totalSel,'is_open'=>true];
+    if ($handicapSel) $md[] = ['name'=>'Handicap','selections'=>$handicapSel,'is_open'=>true];
+    if ($cornerSel) $md[] = ['name'=>'Total des corners','selections'=>$cornerSel,'is_open'=>true];
+    if ($cardSel) $md[] = ['name'=>'Cartons','selections'=>$cardSel,'is_open'=>true];
+
     $has_dc = false;
-    foreach ($md as $m) { if ($m['name'] === 'Double chance') { $has_dc = true; break; } }
+    foreach ($md as $m) { if (($m['name'] ?? '') === 'Double chance') { $has_dc = true; break; } }
     if (!$has_dc && $ml_h > 1 && $ml_x > 1 && $ml_a > 1) {
-        $p1 = 1/$ml_h; $px = 1/$ml_x; $p2 = 1/$ml_a;
-        $dc1x = round((1/($p1+$px))*0.95, 2);
-        $dc12 = round((1/($p1+$p2))*0.95, 2);
-        $dcx2 = round((1/($px+$p2))*0.95, 2);
+        $p1 = 1 / $ml_h; $px = 1 / $ml_x; $p2 = 1 / $ml_a;
         $sel = [];
-        if ($dc1x>1) $sel[] = ['name'=>'1X','odds'=>number_format($dc1x,2,'.','' ),'NA'=>'1X'];
-        if ($dc12>1) $sel[] = ['name'=>'12','odds'=>number_format($dc12,2,'.','' ),'NA'=>'12'];
-        if ($dcx2>1) $sel[] = ['name'=>'X2','odds'=>number_format($dcx2,2,'.','' ),'NA'=>'X2'];
+        $dc1x = round((1 / ($p1 + $px)) * 0.95, 2);
+        $dc12 = round((1 / ($p1 + $p2)) * 0.95, 2);
+        $dcx2 = round((1 / ($px + $p2)) * 0.95, 2);
+        if ($dc1x > 1) $sel[] = ['name'=>'1X','odds'=>oddsapi_fmt($dc1x),'NA'=>'1X'];
+        if ($dc12 > 1) $sel[] = ['name'=>'12','odds'=>oddsapi_fmt($dc12),'NA'=>'12'];
+        if ($dcx2 > 1) $sel[] = ['name'=>'X2','odds'=>oddsapi_fmt($dcx2),'NA'=>'X2'];
         if ($sel) {
             $pos = 0;
-            foreach ($md as $i => $m) { if ($m['name'] === '1X2') { $pos = $i + 1; break; } }
+            foreach ($md as $i => $m) { if (($m['name'] ?? '') === '1X2') { $pos = $i + 1; break; } }
             array_splice($md, $pos, 0, [['name'=>'Double chance','selections'=>$sel,'is_open'=>true]]);
         }
     }
 
-    return array_values(array_filter($md));
+    return oddsapi_merge_market_families($md);
+}
+
+/** Resolve markets for match_detail: Redis first, on-demand API if sparse/missing. */
+function resolve_match_markets($match_id, $redis_ev = null) {
+    $markets = [];
+    if ($redis_ev && !empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
+        foreach ($redis_ev['md_markets'] as $mkt) {
+            $sel = [];
+            foreach (($mkt['selections'] ?? $mkt['odds'] ?? []) as $s) {
+                $v = (float)($s['odds'] ?? 0);
+                if ($v > 1.01) {
+                    $one = ['name' => $s['name'] ?? '', 'odds' => $v, 'NA' => $s['NA'] ?? ''];
+                    if (isset($s['handicap']) && $s['handicap'] !== '') $one['handicap'] = $s['handicap'];
+                    $sel[] = $one;
+                }
+            }
+            if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
+        }
+    }
+    $needs_fetch = empty($markets) || count($markets) < 3;
+    if (!$needs_fetch) {
+        $has_btts = false;
+        foreach ($markets as $m) {
+            if (stripos($m['name'] ?? '', 'deux équipes') !== false || stripos($m['name'] ?? '', 'marquent') !== false) {
+                $has_btts = true;
+                break;
+            }
+        }
+        if (!$has_btts) $needs_fetch = true;
+    }
+    if ($needs_fetch) {
+        $od = oddsapi_fetch_event_odds($match_id);
+        if ($od) {
+            $built = oddsapi_build_markets($od);
+            if ($built) {
+                $markets = $built;
+                oddsapi_save_to_redis($match_id, $built, 120);
+            }
+        }
+    }
+    return $markets;
 }
 
 function oddsapi_save_to_redis($event_id, array $md_markets, $ttl = 90) {
@@ -1680,6 +1869,7 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
         if (!$mid) continue;
         $rev = redis_get_event($mid);
         if ($rev && !empty($rev['live_odds'])) $m_up['live_odds'] = $rev['live_odds'];
+        if ($rev && !empty($rev['md_markets'])) $m_up['md_markets'] = $rev['md_markets'];
     }
     unset($m_up);
 
@@ -2282,23 +2472,8 @@ if ($action === 'match_live') {
             }
             unset($lo);
         }
-        $markets = build_markets_from_redis_ev($redis_ev);
-
-        // If no markets yet, try on-demand fetch from odds-api.io REST
-        if (empty($markets)) {
-            $od = oddsapi_fetch_event_odds($match_id);
-            if ($od) {
-                $mkts_built = oddsapi_build_markets($od);
-                $markets    = $mkts_built;
-                // Patch the Redis event for next callers
-                if (!empty($mkts_built)) {
-                    $redis_ev['md_markets'] = $mkts_built;
-                    if ($redis_ok && $redis_conn) {
-                        try { $redis_conn->setEx("sb:ev:{$match_id}", 600, json_encode($redis_ev)); } catch(Exception $_){}
-                    }
-                }
-            }
-        }
+        $markets = resolve_match_markets($match_id, $redis_ev);
+        apply_margin_to_markets($markets);
 
         // Return from Redis path (even with empty markets — at least gives score/timer)
         if (!empty($redis_ev['home']['name'])) {
@@ -2552,56 +2727,23 @@ if ($action === 'match_detail') {
     $markets  = [];
 
     if ($redis_ev && !empty($redis_ev['home']['name'])) {
-        // Build markets from Redis md_markets (format: {name, selections:[{name,odds,NA}]})
-        if (!empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
-            foreach ($redis_ev['md_markets'] as $mkt) {
-                $sel_in = $mkt['selections'] ?? $mkt['odds'] ?? []; // handle both field names
-                $sel    = [];
-                foreach ($sel_in as $s) {
-                    $v = (float)($s['odds'] ?? 0);
-                    if ($v > 1.01) $sel[] = [
-                        'name' => $s['name'] ?? '',
-                        'odds' => apply_margin_to_odds($v),
-                        'NA'   => $s['NA']   ?? '',
-                    ];
-                }
-                if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
-            }
-        }
+        $markets = resolve_match_markets($match_id, $redis_ev);
+        apply_margin_to_markets($markets);
 
-        // If no markets in Redis yet (daemon was rate-limited), fetch on-demand from odds-api.io
-        if (empty($markets)) {
-            $odds_data  = oddsapi_fetch_event_odds($match_id);
-            $md_built   = $odds_data ? oddsapi_build_markets($odds_data) : [];
-            if ($md_built) {
-                oddsapi_save_to_redis($match_id, $md_built, 90);
-                foreach ($md_built as $mkt) {
-                    $sel = [];
-                    foreach ($mkt['selections'] as $s) {
-                        $v = (float)($s['odds'] ?? 0);
-                        if ($v > 1.01) $sel[] = ['name'=>$s['name'],'odds'=>apply_margin_to_odds($v),'NA'=>$s['NA']??''];
-                    }
-                    if ($sel) $markets[] = ['name'=>$mkt['name'],'selections'=>$sel,'is_open'=>true];
-                }
-            }
-        }
-
-        // Return from Redis / on-demand odds-api.io
         header('X-SB-Source: redis-md');
         echo json_encode([
             'success'  => 1,
             'match'    => $redis_ev,
             'markets'  => $markets,
-            '_src'     => 'redis' . (empty($redis_ev['md_markets']) ? '+ondemand' : ''),
+            '_src'     => 'redis' . (empty($markets) ? '+warming' : ''),
         ]);
         exit;
     }
 
     // Redis empty for this match — try direct odds-api.io fetch
-    $od2 = oddsapi_fetch_event_odds($match_id);
-    if ($od2) {
-        $markets2 = oddsapi_build_markets($od2);
-        oddsapi_save_to_redis($match_id, $markets2, 120);
+    $markets2 = resolve_match_markets($match_id, null);
+    if ($markets2) {
+        apply_margin_to_markets($markets2);
         echo json_encode(['success'=>1,'match'=>['id'=>$match_id,'_source'=>'oddsapi-direct'],'markets'=>$markets2,'_src'=>'oddsapi-direct']);
         exit;
     }

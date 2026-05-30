@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260530vq8';  // merge all total/handicap-type market blocks into one ladder (widest O/U lines), sorted by line
+$sb_build_stamp = 'b20260530vq9';  // fix: BTTS/Total/Handicap/Cartons load via upgraded oddsapi_build_markets + on-demand multi-book fetch
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>

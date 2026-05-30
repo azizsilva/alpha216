@@ -213,7 +213,7 @@ const RECOGNIZED_MKT = new Set([
   'SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP',
   'DOUBLECHANCE','BTTS','BOTHTEAMSTOSCORE',
   'CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS',
-  'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER',
+  'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH','BOOKINGPOINTS','NUMBEROFCARDSINMATCH',
   'CORRECTSCORE','EXACTSCORE',
   'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL',
   'TEAMTOTALHOME','TEAMTOTALAWAY','TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY',
@@ -240,11 +240,17 @@ function buildGenericMarket(mkt) {
       if (ha>1) sel.push({name:`2${suffix}`,odds:fmt(ha),NA:`2${suffix}`});
       continue;
     }
-    // Over/Under-shaped
-    if (e.over !== undefined || e.under !== undefined) {
+    // Over/Under-shaped (both sides, or single-sided with a line)
+    if ((e.over !== undefined || e.under !== undefined) && (e.under !== undefined || e.hdp !== undefined || e.line !== undefined)) {
       const ov=+(e.over||0), un=+(e.under||0);
-      if (ov>1) sel.push({name:`Plus de ${line??''}`.trim(),odds:fmt(ov),NA:`O ${line??''}`});
-      if (un>1) sel.push({name:`Moins de ${line??''}`.trim(),odds:fmt(un),NA:`U ${line??''}`});
+      if (ov>1) sel.push({name:`Plus de ${line??''}`.trim(),odds:fmt(ov),NA:`O ${line??''}`,handicap:line});
+      if (un>1) sel.push({name:`Moins de ${line??''}`.trim(),odds:fmt(un),NA:`U ${line??''}`,handicap:line});
+      continue;
+    }
+    // Player prop: label + over only (e.g. "Player Cards")
+    const nmEarly = e.name ?? e.label ?? e.selection ?? e.score ?? '';
+    if (nmEarly && e.over !== undefined && +(e.over||0)>1 && e.under === undefined) {
+      sel.push({name:String(nmEarly),odds:fmt(e.over),NA:String(nmEarly)});
       continue;
     }
     // Yes/No-shaped
@@ -354,7 +360,7 @@ function buildMarkets(markets) {
       }
       if (csel.length) md.push({name:'Total des corners',selections:csel,is_open:true});
     }
-    if (['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER'].includes(name)) {
+    if (['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH'].includes(name)) {
       const ysel=[];
       for (const entry of (mkt.odds||[])) {
         const yl=+(entry.hdp??entry.max??entry.points??entry.line??3.5);
@@ -846,6 +852,15 @@ async function refreshSportUpcoming(sport) {
     const uResp = await client.getUpcomingEvents(sport);
     const uArr  = Array.isArray(uResp)?uResp:(Array.isArray(uResp?.data)?uResp.data:[]);
     onRLOk();
+    const PRIORITY = /world cup|champions league|premier league|la liga|serie a|bundesliga|ligue 1|europa league|conference league/i;
+    uArr.sort((a, b) => {
+      const la = extractName(a.league_name, a.competition, a.league);
+      const lb = extractName(b.league_name, b.competition, b.league);
+      const pa = PRIORITY.test(la) ? 0 : 1;
+      const pb = PRIORITY.test(lb) ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      return (Date.parse(a.date || a.starts_at || 0) || 0) - (Date.parse(b.date || b.starts_at || 0) || 0);
+    });
     let uCount = 0;
     for (const ev of uArr) {
       const id = String(ev.id);
@@ -858,7 +873,7 @@ async function refreshSportUpcoming(sport) {
       store[id].sport = sport;
       await writeToRedis(id);
       uCount++;
-      if (uCount >= 80) break;
+      if (uCount >= 250) break;
     }
     if (uCount) log(`Upcoming refresh ${sport}: ${uCount} events`);
   } catch(eu) { /* upcoming may not exist on all plans — ignore */ }

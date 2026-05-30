@@ -5517,6 +5517,17 @@ window.sbScrollNav = function() {
 window._mcMktCache    = window._mcMktCache || {};
 window._mcExpandedSet = window._mcExpandedSet || {};
 
+/** Build inline market list from match object (Redis md_markets) if available. */
+function marketsFromMatch(m) {
+  if (!m || !Array.isArray(m.md_markets) || !m.md_markets.length) return [];
+  return m.md_markets.map(function(mk) {
+    var sels = (mk.selections || mk.odds || []).filter(function(s) {
+      return parseFloat(s.odds) >= 1.01;
+    });
+    return sels.length ? { name: mk.name, selections: sels, is_open: true } : null;
+  }).filter(Boolean);
+}
+
 function _mcSkeletonHTML() {
   // Skeleton matches the real inline UI: a tabs row + 4 accordion bars.
   var out = '<div class="mc-md-inner mc-md-skeleton">';
@@ -5573,7 +5584,7 @@ window.sbToggleMc = function(mid, ev) {
   // the API fetch in background and upgrade when it resolves.
   var localMatch = (typeof sbFindMatch === 'function') ? sbFindMatch(mid) : null;
   if (localMatch) {
-    var fb = [];
+    var fb = marketsFromMatch(localMatch);
     window._mcMktCache[mid] = { match: localMatch, markets: fb, tab: 'Principaux' };
     box.innerHTML = renderInlineMatchMarkets(mid, localMatch, fb, 'Principaux');
   } else {
@@ -6642,7 +6653,7 @@ function renderMktBtn(sel, m, bbMode) {
 var MD_FLASH_MARKETS = [
   '1x2','1 x 2','match winner','résultat du match',
   'double chance',
-  'over/under','total','les deux équipes','btts','both teams',
+  'over/under','total','les deux équipes','btts','both teams','goal goal','gg',
   'handicap','handicap asiatique',
   'score exact','correct score','exact score',
   'corner','corners','total des corners',
@@ -6660,7 +6671,7 @@ var PRINCIPAUX_ORDER = [
   'double chance',
   'handicap asiatique','handicap',
   'pair','impair','odd','even',
-  'les deux équipes','btts','both teams',
+  'les deux équipes','btts','both teams','goal goal','gg',
   'score exact','correct score',
   'total des corners','corner',
   'carton','cartons','cards','yellow','jaune',
