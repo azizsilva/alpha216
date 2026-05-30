@@ -608,6 +608,9 @@ function redis_get_sport_matches($sport_id) {
             $src = $m['_source'] ?? '';
             if ($src && $src !== 'oddsapi') continue;            // explicitly non-odds-api
             if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue; // unstamped + BetsAPI-shaped id
+            // Strip heavy fields that bloat list-view responses (100KB+ per event).
+            // match_detail fetches these directly via redis_get_event().
+            unset($m['markets_raw_cache']);
             $out[] = $m;
         }
         return $out;
@@ -1382,20 +1385,25 @@ if ($action === 'inplay') {
     // Only use Redis if it has actual events. If empty, fall through to BetsAPI.
     $redis_results = redis_get_sport_matches($sport_id);
     if ($redis_results !== null && count($redis_results) > 0) {
-        foreach ($redis_results as &$rm) {
+        $list_fields = ['id','sport_id','time','time_status','league','home','away','ss','timer','live_odds','stats','_source','_updated'];
+        $out = [];
+        foreach ($redis_results as $rm) {
+            // Apply margin to live_odds chips (h/x/a/ou)
             if (!empty($rm['live_odds'])) {
-                $lo = &$rm['live_odds'];
                 foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
-                    if (isset($lo[$ok]) && $lo[$ok] > 1.01) {
-                        $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                    if (isset($rm['live_odds'][$ok]) && $rm['live_odds'][$ok] > 1.01) {
+                        $rm['live_odds'][$ok] = apply_margin_to_odds((float)$rm['live_odds'][$ok]);
                     }
                 }
-                unset($lo);
             }
+            // Strip md_markets and markets_raw_cache — not needed for the list view
+            // and can be 100KB+ per event causing memory exhaustion with 60+ live events.
+            $slim = [];
+            foreach ($list_fields as $f) { if (isset($rm[$f])) $slim[$f] = $rm[$f]; }
+            $out[] = $slim;
         }
-        unset($rm);
         header('X-SB-Source: redis');
-        echo json_encode(['success' => 1, 'results' => array_values($redis_results), '_src' => 'redis']);
+        echo json_encode(['success' => 1, 'results' => $out, '_src' => 'redis']);
         exit;
     }
     // Redis empty / daemon not yet warmed up — return empty. Frontend will retry in 1.5s.
@@ -2039,12 +2047,12 @@ if ($action === 'league_matches') {
                 $nameok = ($qn !== '' && ($ln === $qn || strpos($ln, $qn) !== false || strpos($qn, $ln) !== false));
                 if (!$idok && !$nameok) continue;
                 if (!empty($rm['live_odds'])) {
-                    $lo = &$rm['live_odds'];
                     foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
-                        if (isset($lo[$ok]) && $lo[$ok] > 1.01) $lo[$ok] = apply_margin_to_odds((float)$lo[$ok]);
+                        if (isset($rm['live_odds'][$ok]) && $rm['live_odds'][$ok] > 1.01) $rm['live_odds'][$ok] = apply_margin_to_odds((float)$rm['live_odds'][$ok]);
                     }
-                    unset($lo);
                 }
+                // Strip heavy fields not needed by list view
+                unset($rm['md_markets'], $rm['markets_raw_cache']);
                 $lg[] = $rm;
             }
             usort($lg, function($a, $b) {
