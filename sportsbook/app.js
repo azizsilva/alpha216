@@ -499,6 +499,8 @@ function startMatchDetailPoll(mid) {
   S._mdMktState = {};
   // Default active tab for a freshly opened match is "Principaux".
   S._mdActiveTab = 'Principaux';
+  // Reset market-structure signature so the first poll does a full render.
+  window._mdMktSig = null;
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
@@ -514,6 +516,53 @@ function startMatchDetailPoll(mid) {
     }
     _mdPollOnce(mid);
   }, detailMs);
+}
+
+/* Structure signature of a markets tree: market names + selection ids.
+ * When this is unchanged between polls, only the odds VALUES moved, so we
+ * patch them in place instead of rebuilding the whole markets body (which
+ * caused the click-then-revert glitch). */
+function _mdMarketSig(markets) {
+  return (markets || []).map(function(mk){
+    return (mk.name || '') + ':' + (mk.selections || []).map(function(s){
+      return String(s.id || s.name || '');
+    }).join(',');
+  }).join('|');
+}
+
+/* Update odds values in the already-rendered DOM without rebuilding HTML.
+ * Finds each button by its data-bid, updates the number, and flashes
+ * green (up) / red (down). Returns count of changed buttons. */
+function _mdUpdateOddsInPlace(markets, m) {
+  // Build bid → display value map.
+  var want = {};
+  (markets || []).forEach(function(mk){
+    (mk.selections || []).forEach(function(sel){
+      var safeName = (sel.name != null && sel.name !== '' && sel.name !== 'undefined') ? String(sel.name) : '-';
+      var bid = String(m.id || '') + '_md_' + String(sel.id || safeName);
+      var raw = parseFloat(sel.odds);
+      var val = applyMargin(isNaN(raw) || raw < 1.01 ? 0 : raw);
+      if (typeof val === 'number' && val >= 1.01) want[bid] = val;
+    });
+  });
+  var changed = 0;
+  document.querySelectorAll('#md-markets-body .md-odd-btn[data-bid]').forEach(function(btn){
+    var bid = btn.getAttribute('data-bid');
+    var val = want[bid];
+    if (val === undefined) return;
+    var valEl = btn.querySelector('.md-o-val');
+    if (!valEl) return;
+    var oldTxt = (valEl.textContent || '').replace(/[▲▼~\s]/g, '');
+    var newTxt = val.toFixed(2);
+    if (oldTxt === newTxt) return;
+    var dir = (parseFloat(newTxt) > parseFloat(oldTxt || 0)) ? 'up' : 'down';
+    valEl.innerHTML = '<span class="md-o-arrow md-o-arrow--' + dir + '" aria-hidden="true">' + (dir === 'up' ? '▲' : '▼') + '</span>' + newTxt;
+    btn.classList.remove('md-odd-flash--up', 'md-odd-flash--down');
+    void btn.offsetWidth; // force reflow so the CSS animation restarts
+    btn.classList.add('md-odd-flash--' + dir);
+    changed++;
+  });
+  return changed;
 }
 
 function patchMatchDetailLive(m, markets) {
@@ -664,38 +713,42 @@ function patchMatchDetailLive(m, markets) {
   } else if (m && m.live_odds) {
   }
   if (nextMarkets) {
-    sbClearMdTabCache();
-    // Diff: annotate each selection with _change ('up'|'down'|null)
-    // and a flash class so renderMktBtn can show the ▲ / ▼ arrow.
-    var prevIdx = {};
-    prevMarkets.forEach(function(pm){
-      (pm.selections || []).forEach(function(ps){
-        var key = (pm.id || pm.name || '') + '|' + (ps.id || ps.name || '');
-        var pv = parseFloat(ps.odds);
-        if (!isNaN(pv) && pv > 1.01) prevIdx[key] = pv;
-      });
-    });
-    nextMarkets.forEach(function(nm){
-      (nm.selections || []).forEach(function(ns){
-        var key = (nm.id || nm.name || '') + '|' + (ns.id || ns.name || '');
-        var nv = parseFloat(ns.odds);
-        var pv = prevIdx[key];
-        if (pv && !isNaN(nv) && nv > 1.01 && Math.abs(nv - pv) >= 0.01) {
-          ns._change = (nv > pv) ? 'up' : 'down';
-        } else {
-          ns._change = null;
-        }
-      });
-    });
     window._mdMarkets = nextMarkets;
-    needsRender = true;
-    // ── Refresh bet slip BB legs with live odds ─────────────────
-    // When polling brings new odds, every BB leg in the slip must
-    // pick up the new value so the combined Bet Builder odds stay
-    // accurate. Single bets are handled by their own updater.
-    try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
-    // Markets list changed — re-prune tab visibility
-    try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
+    var newSig = _mdMarketSig(nextMarkets);
+    // ── Fast path: same market structure → only odds values moved.
+    // Patch them in place (no innerHTML rebuild) so the user's tab and
+    // scroll position never jump. This kills the click-then-revert glitch.
+    if (newSig === window._mdMktSig) {
+      try { _mdUpdateOddsInPlace(nextMarkets, m); } catch (e) {}
+      try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
+      // Keep the tab cache in sync with fresh odds for instant tab switches.
+      sbClearMdTabCache();
+      needsRender = false;
+    } else {
+      // Structure changed (market added/removed) → full re-render once.
+      window._mdMktSig = newSig;
+      sbClearMdTabCache();
+      var prevIdx = {};
+      prevMarkets.forEach(function(pm){
+        (pm.selections || []).forEach(function(ps){
+          var key = (pm.id || pm.name || '') + '|' + (ps.id || ps.name || '');
+          var pv = parseFloat(ps.odds);
+          if (!isNaN(pv) && pv > 1.01) prevIdx[key] = pv;
+        });
+      });
+      nextMarkets.forEach(function(nm){
+        (nm.selections || []).forEach(function(ns){
+          var key = (nm.id || nm.name || '') + '|' + (ns.id || ns.name || '');
+          var nv = parseFloat(ns.odds);
+          var pv = prevIdx[key];
+          ns._change = (pv && !isNaN(nv) && nv > 1.01 && Math.abs(nv - pv) >= 0.01)
+            ? (nv > pv ? 'up' : 'down') : null;
+        });
+      });
+      needsRender = true;
+      try { refreshBetSlipLegOdds(nextMarkets, m); } catch (e) {}
+      try { if (typeof sbMdPruneEmptyTabs === 'function') sbMdPruneEmptyTabs(); } catch(e) {}
+    }
   }
   if (needsRender) {
     // If the user is searching, preserve the search filter so live
@@ -5925,7 +5978,7 @@ function renderMatchDetail(m, markets) {
   //   1 minute  2ème mi-temps  Correct Score  Corners  Multigoals  [ⓘ alert]
   // The search button toggles an inline "Search market" input. The
   // red info button reveals a tooltip with the market lock legend.
-  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','2ème mi-temps','Correct Score','Corners','Cartes','Multigoals'];
+  var TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1 minute','1ère mi-temps','2ème mi-temps','Correct Score','Corners','Cartes','Multigoals'];
   out += '<div class="md-tabs-wrap" id="md-tabs-wrap">';
 
   // Search trigger (expands to input when clicked)
@@ -6643,6 +6696,15 @@ function getTabFilter(tabName) {
       if (nm.indexOf('2ème mi-temps') !== -1 || nm.indexOf('2eme mi-temps') !== -1) return false;
       if (nm.indexOf('1 minute') !== -1) return false;
       return MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; });
+    };
+  }
+  if (tabName === '1ère mi-temps' || tabName === '1ere mi-temps') {
+    return function(mkt){
+      var nm = (mkt.name||'').toLowerCase();
+      return nm.indexOf('1ère mi-temps') !== -1 || nm.indexOf('1ere mi-temps') !== -1
+          || nm.indexOf('first half') !== -1 || nm.indexOf('half time') !== -1
+          || nm.indexOf('half-time') !== -1 || nm.indexOf('halftime') !== -1
+          || nm.indexOf('1st half') !== -1 || nm.indexOf('1h ') === 0 || nm === '1h';
     };
   }
   if (tabName === '2ème mi-temps' || tabName === '2eme mi-temps') {
