@@ -588,10 +588,16 @@ function redis_get_sport_matches($sport_id) {
         $out = [];
         foreach ($ids as $id) {
             $raw = $redis_conn->get("sb:ev:{$id}");
-            if ($raw) {
-                $m = json_decode($raw, true);
-                if ($m && !empty($m['home']['name'])) $out[] = $m;
-            }
+            if (!$raw) continue;
+            $m = json_decode($raw, true);
+            if (!$m || empty($m['home']['name'])) continue;
+            // Safety net: hide stale legacy (BetsAPI) events left in Redis from
+            // before the odds-api migration — their IDs 404 on the detail page.
+            // Events written by the current daemon are stamped _source='oddsapi'.
+            $src = $m['_source'] ?? '';
+            if ($src && $src !== 'oddsapi') continue;            // explicitly non-odds-api
+            if (!$src && ctype_digit((string)$id) && strlen((string)$id) >= 9) continue; // unstamped + BetsAPI-shaped id
+            $out[] = $m;
         }
         return $out;
     } catch (Exception $e) { return null; }

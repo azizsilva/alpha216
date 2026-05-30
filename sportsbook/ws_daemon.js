@@ -629,6 +629,7 @@ async function writeToRedis(id) {
     live_odds:  Object.keys(live_odds).length ? live_odds  : (existing?.live_odds  || undefined),
     md_markets: md_markets.length             ? md_markets : (existing?.md_markets || undefined),
     _bookie:    ev.bookie || existing?._bookie,
+    _source:    'oddsapi',   // stamp source so api.php can drop legacy leftovers
     _updated:   Date.now(),
   };
 
