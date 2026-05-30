@@ -183,6 +183,66 @@ function normEv(ev, sportSlug) {
 function fmt(v) { return (Math.round(parseFloat(v)*100)/100).toFixed(2); }
 function r2(v)  { return Math.round(v*100)/100; }
 
+// Names we map explicitly (normalized: UPPER, no spaces/_/-//).
+const RECOGNIZED_MKT = new Set([
+  'ML','1X2','MONEYLINE',
+  'TOTALS','OVERUNDER','GOALS','TOTALGOALS',
+  'SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT',
+  'DOUBLECHANCE','BTTS','BOTHTEAMSTOSCORE',
+  'CORNERS','TOTALCORNERS','CORNERSOVERUNDER',
+  'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER',
+  'CORRECTSCORE','EXACTSCORE',
+  'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL',
+  'DRAWNOBET','ODDEVEN','GOALSODDEVEN','HALFTIMERESULT','HALFTIME1X2',
+]);
+
+// Generic builder for ANY market we don't map explicitly — guarantees the
+// market still appears (Corners, Mi-temps variants, player props, etc.) so
+// no tab is ever empty just because of a naming difference.
+function buildGenericMarket(mkt) {
+  const sel = [];
+  for (const e of (mkt.odds || [])) {
+    if (e == null) continue;
+    const line = e.hdp ?? e.max ?? e.points ?? e.line ?? null;
+    const suffix = (line !== null && line !== undefined && line !== '') ? ` ${line}` : '';
+    // 1X2-shaped
+    if (e.home !== undefined || e.draw !== undefined || e.away !== undefined) {
+      const hh=+(e.home||0), hx=+(e.draw||0), ha=+(e.away||0);
+      if (hh>1) sel.push({name:`1${suffix}`,odds:fmt(hh),NA:`1${suffix}`});
+      if (hx>1) sel.push({name:`X${suffix}`,odds:fmt(hx),NA:`X${suffix}`});
+      if (ha>1) sel.push({name:`2${suffix}`,odds:fmt(ha),NA:`2${suffix}`});
+      continue;
+    }
+    // Over/Under-shaped
+    if (e.over !== undefined || e.under !== undefined) {
+      const ov=+(e.over||0), un=+(e.under||0);
+      if (ov>1) sel.push({name:`Plus de ${line??''}`.trim(),odds:fmt(ov),NA:`O ${line??''}`});
+      if (un>1) sel.push({name:`Moins de ${line??''}`.trim(),odds:fmt(un),NA:`U ${line??''}`});
+      continue;
+    }
+    // Yes/No-shaped
+    if (e.yes !== undefined || e.no !== undefined) {
+      const y=+(e.yes||0), n=+(e.no||0);
+      if (y>1) sel.push({name:'Oui',odds:fmt(y),NA:'Yes'});
+      if (n>1) sel.push({name:'Non',odds:fmt(n),NA:'No'});
+      continue;
+    }
+    // Odd/Even-shaped
+    if (e.odd !== undefined || e.even !== undefined) {
+      const od=+(e.odd||0), ev2=+(e.even||0);
+      if (od>1)  sel.push({name:'Impair',odds:fmt(od),NA:'Odd'});
+      if (ev2>1) sel.push({name:'Pair',odds:fmt(ev2),NA:'Even'});
+      continue;
+    }
+    // {name, odds}-shaped (correct score, player props, etc.)
+    const nm = e.name ?? e.label ?? e.selection ?? e.score ?? '';
+    const v  = +(e.odds ?? e.price ?? e.value ?? 0);
+    if (nm && v>1) sel.push({name:String(nm),odds:fmt(v),NA:String(nm)});
+  }
+  if (!sel.length) return null;
+  return { name: String(mkt.name||'Marché'), selections: sel, is_open: true };
+}
+
 function buildMarkets(markets) {
   const lo = {}, md = [];
   let ml_h=0, ml_x=0, ml_a=0;
@@ -190,6 +250,13 @@ function buildMarkets(markets) {
   for (const mkt of (markets||[])) {
     const name = String(mkt.name||'').toUpperCase().replace(/[\s_\-\/]/g,'');
     const o    = (mkt.odds||[])[0]||{};
+
+    // Unrecognized market → generic passthrough so it still shows in the UI.
+    if (!RECOGNIZED_MKT.has(name)) {
+      const gm = buildGenericMarket(mkt);
+      if (gm) md.push(gm);
+      continue;
+    }
 
     if (['ML','1X2','MONEYLINE'].includes(name)) {
       ml_h=+(o.home||0); ml_x=+(o.draw||0); ml_a=+(o.away||0);

@@ -497,6 +497,8 @@ function startMatchDetailPoll(mid) {
   window._mdHasRealMarkets = false;
   // Forget any previously expanded markets when switching match.
   S._mdMktState = {};
+  // Default active tab for a freshly opened match is "Principaux".
+  S._mdActiveTab = 'Principaux';
   // Fire one cycle right away so the timer/period populate without
   // a 3s blank-screen wait.
   _mdPollOnce(mid);
@@ -705,6 +707,10 @@ function patchMatchDetailLive(m, markets) {
       return;
     }
     var activeTab = document.querySelector('.md-tab.active');
+    // Fall back to the remembered tab if the DOM lost its .active marker.
+    if (!activeTab && S._mdActiveTab) {
+      activeTab = document.querySelector('.md-tab[data-tab="' + (S._mdActiveTab.replace(/"/g,'\\"')) + '"]');
+    }
     if (activeTab && typeof window.sbMdTab === 'function') {
       var tabName = activeTab.getAttribute('data-tab') || activeTab.textContent.trim();
       window.sbMdTab(activeTab, tabName);
@@ -6723,6 +6729,9 @@ function sbMdPruneEmptyTabs() {
       return;
     }
     // Cartes, Corners, Correct Score — only show if data exists (handled below)
+    // Never hide the tab the user is currently viewing — that's what
+    // caused the "I click Corners and it jumps back to Principaux" bug.
+    if (tn === S._mdActiveTab) { btn.style.display = ''; return; }
     var f = getTabFilter(tn);
     var any = false;
     if (f) {
@@ -6744,6 +6753,9 @@ window.sbMdPruneEmptyTabs = sbMdPruneEmptyTabs;
 window.sbMdTab = function(btn, tabName) {
   document.querySelectorAll('.md-tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
+  // Remember the user's chosen tab so the 1.5s live poll re-render and the
+  // empty-tab prune can never silently kick them back to "Principaux".
+  S._mdActiveTab = tabName;
   var mktBody = document.getElementById('md-markets-body');
   if (!mktBody || !window._mdMarkets || !window._mdMatch) return;
 
