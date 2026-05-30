@@ -27,9 +27,27 @@ const API_KEY    = process.env.ODDS_API_KEY || '8957223a4359087972aee3d805832e0d
 const REDIS_URL  = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
 const PREFETCH   = process.argv.includes('--prefetch') || process.env.PREFETCH === '1';
 
-// ── WebSocket config (matches official SDK example exactly) ───────────────────
+// ── WebSocket config ──────────────────────────────────────────────────────────
 const WS_URL      = 'wss://api.odds-api.io/v3/ws';
-const WS_MARKETS  = 'ML,Spread,Totals,BTTS,DoubleChance,Corners,Cards,CorrectScore';
+// Market names MUST match odds-api.io's exact naming (see docs.odds-api.io/guides/fetching-odds).
+// Confirmed names: ML, Spread, Totals, Both Teams to Score, Correct Score.
+// Others requested speculatively — daemon logs welcome.market_filter to show which are accepted.
+const WS_MARKETS_ARR = [
+  'ML',
+  'Spread',
+  'Totals',
+  'Both Teams to Score',
+  'Correct Score',
+  'Double Chance',
+  'Asian Handicap',
+  'Draw No Bet',
+  'Odd/Even',
+  'Corners',
+  'Cards',
+  'Team Totals',
+  'Half Time Result',
+];
+const WS_MARKETS  = WS_MARKETS_ARR.join(',');
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
 const WS_STATUS   = 'live';
 // Bookmakers configured in your odds-api.io account dashboard.
@@ -112,7 +130,7 @@ function buildMarkets(markets) {
   let ml_h=0, ml_x=0, ml_a=0;
 
   for (const mkt of (markets||[])) {
-    const name = String(mkt.name||'').toUpperCase().replace(/[\s_\-]/g,'');
+    const name = String(mkt.name||'').toUpperCase().replace(/[\s_\-\/]/g,'');
     const o    = (mkt.odds||[])[0]||{};
 
     if (['ML','1X2','MONEYLINE'].includes(name)) {
@@ -182,6 +200,40 @@ function buildMarkets(markets) {
         if (v>1&&sc) sel.push({name:sc,odds:fmt(v),NA:sc});
       }
       if (sel.length) md.push({name:'Score exact',selections:sel,is_open:true});
+    }
+    // Team Totals (Total équipe 1 / 2)
+    if (['TEAMTOTALS','HOMETOTALS','AWAYTOTALS'].includes(name)) {
+      const line=+(o.hdp??1.5),ov=+(o.over||0),un=+(o.under||0);
+      const sideLabel = name==='AWAYTOTALS' ? 'équipe 2' : 'équipe 1';
+      const sel=[];
+      if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`TT O ${line}`});
+      if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`TT U ${line}`});
+      if (sel.length) md.push({name:`Total ${sideLabel} Plus/Moins ${line}`,selections:sel,is_open:true});
+    }
+    // Draw No Bet
+    if (name==='DRAWNOBET') {
+      const hh=+(o.home||0),ah=+(o.away||0);
+      const sel=[];
+      if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'DNB1'});
+      if (ah>1) sel.push({name:'2',odds:fmt(ah),NA:'DNB2'});
+      if (sel.length) md.push({name:'Remboursé si nul',selections:sel,is_open:true});
+    }
+    // Odd/Even
+    if (['ODDEVEN','GOALSODDEVEN'].includes(name)) {
+      const odd=+(o.odd||o.home||0),even=+(o.even||o.away||0);
+      const sel=[];
+      if (odd>1)  sel.push({name:'Impair',odds:fmt(odd),NA:'Odd'});
+      if (even>1) sel.push({name:'Pair',  odds:fmt(even),NA:'Even'});
+      if (sel.length) md.push({name:'Pair/Impair',selections:sel,is_open:true});
+    }
+    // Half Time Result (1ère mi-temps 1X2)
+    if (['HALFTIMERESULT','HALFTIME1X2'].includes(name)) {
+      const hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
+      const sel=[];
+      if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'HT1'});
+      if (hx>1) sel.push({name:'X',odds:fmt(hx),NA:'HTX'});
+      if (ha>1) sel.push({name:'2',odds:fmt(ha),NA:'HT2'});
+      if (sel.length) md.push({name:'1ère mi-temps - 1x2',selections:sel,is_open:true});
     }
   }
 
@@ -315,13 +367,15 @@ let wsReconnTimeout = null;
 let wsPingInterval = null;
 
 function buildWsUrl() {
-  // Exact format from official SDK example — no encodeURIComponent on comma lists
-  let url = `${WS_URL}?apiKey=${API_KEY}`;
-  url += `&markets=${WS_MARKETS}`;
-  url += `&sport=${WS_SPORT}`;
-  url += `&status=${WS_STATUS}`;
-  if (lastSeq > 0) url += `&lastSeq=${lastSeq}`;
-  return url;
+  // Use URLSearchParams so market names with spaces (e.g. "Both Teams to Score")
+  // are correctly percent-encoded — otherwise the server drops them silently.
+  const params = new URLSearchParams();
+  params.set('apiKey', API_KEY);
+  params.set('markets', WS_MARKETS);
+  params.set('sport', WS_SPORT);
+  params.set('status', WS_STATUS);
+  if (lastSeq > 0) params.set('lastSeq', String(lastSeq));
+  return `${WS_URL}?${params.toString()}`;
 }
 
 function startWs() {
@@ -384,6 +438,14 @@ async function handleWsMessage(data) {
       const bks = data.bookmakers || [];
       log('WS welcome. Bookmakers:', bks.length ? bks.join(',') : '(none configured — go to odds-api.io → Bookmakers tab)');
       log('Sports:', (data.sport_filter||[]).join(','), '| Status:', data.status_filter||'live');
+      // CRITICAL: log which markets the server ACCEPTED vs what we requested.
+      // Any requested market missing here is rejected (wrong name) or unavailable.
+      const accepted = (data.market_filter || []).map(m => String(m).toUpperCase());
+      log('MARKETS requested:', WS_MARKETS_ARR.join(' | '));
+      log('MARKETS accepted :', accepted.join(' | ') || '(none!)');
+      const dropped = WS_MARKETS_ARR.filter(m => !accepted.includes(m.toUpperCase().replace(/\s+/g,' ')))
+        .filter(m => !accepted.some(a => a.replace(/[\s/]/g,'') === m.toUpperCase().replace(/[\s/]/g,'')));
+      if (dropped.length) log('MARKETS DROPPED  :', dropped.join(' | '), '(wrong name or not available for your bookmakers)');
       if (data.warning) log('⚠ Warning:', data.warning);
       if (bks.length === 0) {
         log('ACTION REQUIRED: Go to https://odds-api.io → Bookmakers tab → select your bookmakers → save');

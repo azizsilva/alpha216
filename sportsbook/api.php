@@ -193,6 +193,46 @@ function oddsapi_build_markets($data) {
             }
             if ($sel) $md[] = ['name'=>'Score exact','selections'=>$sel,'is_open'=>true];
         }
+        // Team Totals (Total équipe 1 / 2)
+        if (in_array($name, ['TEAMTOTALS','HOMETOTALS','AWAYTOTALS'])) {
+            $tl = (float)($o['hdp'] ?? 1.5);
+            $to = (float)($o['over'] ?? 0);
+            $tu = (float)($o['under'] ?? 0);
+            $sideLabel = $name === 'AWAYTOTALS' ? 'équipe 2' : 'équipe 1';
+            $sel = [];
+            if ($to>1) $sel[] = ['name'=>"Plus de {$tl}",  'odds'=>number_format($to,2,'.','' ),'NA'=>"TT O {$tl}"];
+            if ($tu>1) $sel[] = ['name'=>"Moins de {$tl}", 'odds'=>number_format($tu,2,'.','' ),'NA'=>"TT U {$tl}"];
+            if ($sel) $md[] = ['name'=>"Total {$sideLabel} Plus/Moins {$tl}",'selections'=>$sel,'is_open'=>true];
+        }
+        // Draw No Bet
+        if ($name === 'DRAWNOBET') {
+            $hh = (float)($o['home'] ?? 0);
+            $ah = (float)($o['away'] ?? 0);
+            $sel = [];
+            if ($hh>1) $sel[] = ['name'=>'1','odds'=>number_format($hh,2,'.','' ),'NA'=>'DNB1'];
+            if ($ah>1) $sel[] = ['name'=>'2','odds'=>number_format($ah,2,'.','' ),'NA'=>'DNB2'];
+            if ($sel) $md[] = ['name'=>'Remboursé si nul','selections'=>$sel,'is_open'=>true];
+        }
+        // Odd/Even
+        if (in_array($name, ['ODDEVEN','GOALSODDEVEN'])) {
+            $odd  = (float)($o['odd']  ?? $o['home'] ?? 0);
+            $even = (float)($o['even'] ?? $o['away'] ?? 0);
+            $sel = [];
+            if ($odd>1)  $sel[] = ['name'=>'Impair','odds'=>number_format($odd,2,'.','' ),'NA'=>'Odd'];
+            if ($even>1) $sel[] = ['name'=>'Pair',  'odds'=>number_format($even,2,'.','' ),'NA'=>'Even'];
+            if ($sel) $md[] = ['name'=>'Pair/Impair','selections'=>$sel,'is_open'=>true];
+        }
+        // Half Time Result
+        if (in_array($name, ['HALFTIMERESULT','HALFTIME1X2'])) {
+            $hh = (float)($o['home'] ?? 0);
+            $hx = (float)($o['draw'] ?? 0);
+            $ha = (float)($o['away'] ?? 0);
+            $sel = [];
+            if ($hh>1) $sel[] = ['name'=>'1','odds'=>number_format($hh,2,'.','' ),'NA'=>'HT1'];
+            if ($hx>1) $sel[] = ['name'=>'X','odds'=>number_format($hx,2,'.','' ),'NA'=>'HTX'];
+            if ($ha>1) $sel[] = ['name'=>'2','odds'=>number_format($ha,2,'.','' ),'NA'=>'HT2'];
+            if ($sel) $md[] = ['name'=>'1ère mi-temps - 1x2','selections'=>$sel,'is_open'=>true];
+        }
     }
 
     // Compute Double Chance from ML if API didn't provide it
