@@ -116,12 +116,11 @@ function oddsapi_curl($url) {
 
 function oddsapi_fetch_event_odds($event_id) {
     $key = ODDSAPI_KEY;
-    $bk  = ODDSAPI_BK;
-    // Try the most likely endpoint formats in order
+    // Correct endpoint per docs: /v3/odds?eventId=X (bookmakers optional —
+    // omit to get whatever is selected on the account).
     $candidates = [
-        ODDSAPI_BASE . "/events/{$event_id}/odds?bookmakers={$bk}&apiKey={$key}",
-        ODDSAPI_BASE . "/events/{$event_id}?bookmakers={$bk}&apiKey={$key}",
-        ODDSAPI_BASE . "/odds?eventId={$event_id}&bookmakers={$bk}&apiKey={$key}",
+        ODDSAPI_BASE . "/odds?eventId={$event_id}&apiKey={$key}",
+        ODDSAPI_BASE . "/events/{$event_id}?apiKey={$key}",
     ];
     foreach ($candidates as $url) {
         [$code, $body] = oddsapi_curl($url);
