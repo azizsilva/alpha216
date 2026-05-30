@@ -2465,10 +2465,12 @@ function renderMatches(results) {
   // ── POINTS FORTS — home page only, not EN DIRECT tab ──
   if (!S.activeLeagueId && S.viewMode === 'main' && !liveOnlyTab) {
     var TOP_LEAGUE_KEYWORDS = [
-      'Champions League','Europa League','Conference League',
+      'Champions League','Europa League','Conference League','UEFA','Super Cup',
       'Premier League','LaLiga','La Liga','Serie A','Bundesliga','Ligue 1',
-      'Eredivisie','Primera Division','Primeira Liga','FIFA World Cup',
-      'NBA','Euroligue'
+      'Eredivisie','Primera Division','Primeira Liga','Liga Portugal',
+      'Championship','Copa del Rey','Coupe de France','Coppa Italia','DFB Pokal','FA Cup',
+      'FIFA World Cup','Euro','Copa America','Nations League','Libertadores','Sudamericana',
+      'NBA','Euroligue','EuroLeague'
     ];
     var featuredMatches = results.filter(function(m) {
       var lg = (m.league && m.league.name) ? m.league.name : '';
@@ -5622,7 +5624,17 @@ window.sbRestoreExpandedCards = function() {
    so the look-and-feel is identical (images 7 / 2-6 in the spec). */
 function renderInlineMatchMarkets(mid, m, markets, activeTab) {
   activeTab = activeTab || 'Principaux';
-  var TABS = ['Principaux','Bet Builder','Teams H2H','1 minute'];
+  // Full tab set — identical to the dedicated match-detail page. We only
+  // render a tab if it actually has markets (empty tabs are pruned), so
+  // Corners / Cartes / Mi-temps appear only when the feed provides them.
+  var ALL_TABS = ['Tout','Principaux','Bet Builder','Teams H2H','1ère mi-temps','2ème mi-temps','Correct Score','Corners','Cartes'];
+  var TABS = ALL_TABS.filter(function(t){
+    if (t === 'Tout' || t === 'Principaux' || t === 'Bet Builder') return true;
+    var f = (typeof getTabFilter === 'function') ? getTabFilter(t) : null;
+    if (!f) return false;
+    return markets.some(f);
+  });
+  if (TABS.indexOf(activeTab) === -1) activeTab = 'Principaux';
 
   var out = '<div class="mc-md-inner" data-mid="' + h(String(mid)) + '">';
 
@@ -5641,36 +5653,11 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
       + '</button>';
   out += '</div>';
 
-  // Filter markets by active tab (same logic as match-detail page)
+  // Filter markets by active tab — reuse the SAME shared filter the
+  // match-detail page uses (getTabFilter) so behaviour is identical.
   var isBB = (activeTab === 'Bet Builder');
-  var filter = null;
-  if (!isBB && activeTab !== 'Tout') {
-    var kw = activeTab.toLowerCase();
-    if (activeTab === 'Principaux') {
-      filter = function(mk){
-        var nm = (mk.name||'').toLowerCase();
-        if (nm.indexOf('2ème mi-temps') !== -1) return false;
-        return (typeof MD_FLASH_MARKETS !== 'undefined')
-          ? MD_FLASH_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; })
-          : true;
-      };
-    } else if (activeTab === '1 minute') {
-      filter = function(mk){
-        var nm = (mk.name||'').toLowerCase();
-        return (typeof MD_1MIN_MARKETS !== 'undefined')
-          ? MD_1MIN_MARKETS.some(function(k){ return nm.indexOf(k) !== -1; })
-          : false;
-      };
-    } else if (activeTab === 'Teams H2H') {
-      filter = function(mk){
-        var nm = (mk.name||'').toLowerCase();
-        return nm.indexOf('h2h') !== -1 || nm.indexOf('head to head') !== -1
-            || nm.indexOf('face') !== -1 || nm === '1x2' || nm.indexOf('1 x 2') !== -1;
-      };
-    } else {
-      filter = function(mk){ return (mk.name||'').toLowerCase().indexOf(kw) !== -1; };
-    }
-  }
+  var filter = (activeTab !== 'Tout' && typeof getTabFilter === 'function')
+    ? getTabFilter(activeTab) : null;
   var shown = filter ? markets.filter(filter) : markets;
   if (!shown.length) shown = markets;
   if (activeTab === 'Principaux' && typeof sortMarketsForPrincipaux === 'function') {
@@ -6615,13 +6602,14 @@ var MD_FLASH_MARKETS = [
 ];
 var MD_1MIN_MARKETS  = ['1 minute','1-minute','minute 1','minute bets','prochain but','next goal','1 minute bets'];
 
-// Canonical display order for "Principaux" tab (fcbet216 parity):
-// 1x2, Double Chance, Over/Under, Handicap, BTTS, Score exact, Corners, Cards, rest
+// Canonical display order requested by user:
+// 1x2 → Total → Double chance (big chance) → Handicap → Pair/Impair → others
 var PRINCIPAUX_ORDER = [
   '1x2','1 x 2','match winner',
+  'total','over/under','total des buts','total goals','over',
   'double chance',
-  'over/under','total des buts','total goals','over','total',
   'handicap asiatique','handicap',
+  'pair','impair','odd','even',
   'les deux équipes','btts','both teams',
   'score exact','correct score',
   'total des corners','corner',

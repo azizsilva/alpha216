@@ -283,7 +283,7 @@ function buildMarkets(markets) {
         const sel=[];
         if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`O ${line}`});
         if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`U ${line}`});
-        if (sel.length) md.push({name:`Over/Under ${line}`,selections:sel,is_open:true});
+        if (sel.length) md.push({name:`Total ${line}`,selections:sel,is_open:true});
       }
     }
     if (['SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT'].includes(name)) {
