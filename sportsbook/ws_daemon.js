@@ -343,7 +343,7 @@ function buildMarkets(markets) {
       if (n>1) sel.push({name:'Non',odds:fmt(n),NA:'No'});
       if (sel.length) md.push({name:'Les deux équipes qui marquent',selections:sel,is_open:true});
     }
-    if (['CORNERS','TOTALCORNERS','CORNERSOVERUNDER'].includes(name)) {
+    if (['CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS'].includes(name)) {
       const csel=[];
       for (const entry of (mkt.odds||[])) {
         const cl=+(entry.hdp??entry.max??entry.points??entry.line??9.5);
