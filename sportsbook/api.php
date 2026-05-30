@@ -95,7 +95,7 @@ if (!$redis_ok) {
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
 if (!defined('ODDSAPI_BK')) define('ODDSAPI_BK', 'Bet365');
-if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,Betano,1xbet,888Sport,22Bet');
+if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,William Hill');
 
 function oddsapi_curl($url) {
     $ch = curl_init($url);
@@ -132,16 +132,33 @@ function oddsapi_norm_mkt_name($name) {
     return strtoupper(preg_replace('/[\s\-_\/]/', '', (string)$name));
 }
 
-/** Pick the bookmaker array with the most markets (same strategy as ws_daemon.js). */
+/**
+ * Merge markets from ALL bookmakers (same strategy as ws_daemon.js).
+ * Different books cover different categories for the same fixture — corners on
+ * 1xbet, half-time/correct-score on Bet365, etc. Picking a single "richest"
+ * book silently drops whole tabs (this is why Corners came up empty). We dedupe
+ * by market name and keep whichever book exposes the most odds lines.
+ */
 function oddsapi_extract_raw_markets($data) {
     if (empty($data)) return [];
     if (isset($data['bookmakers']) && is_array($data['bookmakers'])) {
-        $best = [];
+        $byName = [];
         foreach ($data['bookmakers'] as $bk_mkts) {
-            if (!is_array($bk_mkts) || empty($bk_mkts)) continue;
-            if (count($bk_mkts) > count($best)) $best = $bk_mkts;
+            if (!is_array($bk_mkts)) continue;
+            $list = isset($bk_mkts['odds']) || isset($bk_mkts['markets'])
+                ? ($bk_mkts['odds'] ?? $bk_mkts['markets']) : $bk_mkts;
+            if (!is_array($list)) continue;
+            foreach ($list as $m) {
+                if (!is_array($m)) continue;
+                $name = $m['name'] ?? $m['market'] ?? '';
+                if ($name === '') continue;
+                $cnt = isset($m['odds']) && is_array($m['odds']) ? count($m['odds']) : 0;
+                $prevCnt = isset($byName[$name]['odds']) && is_array($byName[$name]['odds'])
+                    ? count($byName[$name]['odds']) : -1;
+                if (!isset($byName[$name]) || $cnt > $prevCnt) $byName[$name] = $m;
+            }
         }
-        return $best;
+        return array_values($byName);
     }
     if (isset($data[0]['name'])) return $data;
     if (isset($data['data']) && is_array($data['data'])) return oddsapi_extract_raw_markets($data['data']);

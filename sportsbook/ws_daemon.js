@@ -61,7 +61,10 @@ const BOOKMAKER   = process.env.BOOKMAKER || 'Bet365';
 // Bookmakers to request for /odds (must also be SELECTED in the account).
 // Bet365 first (primary), then good-coverage fallbacks. Per event we keep
 // whichever returns the most markets.
-const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,Betano,1xbet,888Sport,22Bet';
+// Multiple books are queried and MERGED per event (see mergeBookmakerMarkets).
+// 1xbet/22Bet carry corners & cards; Bet365 carries half-time/correct score;
+// the rest fill gaps. odds-api allows up to 30 bookmakers per request.
+const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,William Hill';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {
@@ -212,8 +215,9 @@ const RECOGNIZED_MKT = new Set([
   'TOTALS','OVERUNDER','GOALS','TOTALGOALS','GOALSOVERUNDER','ALTERNATIVETOTALGOALS','ALTERNATIVEGOALLINE',
   'SPREAD','ASIANHANDICAP','HANDICAP','ALTERNATIVEASIANHANDICAP',
   'DOUBLECHANCE','BTTS','BOTHTEAMSTOSCORE',
-  'CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS',
-  'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH','BOOKINGPOINTS','NUMBEROFCARDSINMATCH',
+  'CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS','CORNERSSPREAD','CORNERSTOTALSHOME','CORNERSTOTALSAWAY',
+  'CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH',
+  'BOOKINGS','BOOKINGSSPREAD','BOOKINGSTOTALS','BOOKINGSTOTALSHOME','BOOKINGSTOTALSAWAY',
   'CORRECTSCORE','EXACTSCORE',
   'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL',
   'TEAMTOTALHOME','TEAMTOTALAWAY','TEAMTOTALGOALSHOME','TEAMTOTALGOALSAWAY',
@@ -371,7 +375,10 @@ function buildMarkets(markets, homeName, awayName) {
       if (n>1) sel.push({name:'Non',odds:fmt(n),NA:'No'});
       if (sel.length) md.push({name:'Les deux équipes qui marquent',selections:sel,is_open:true});
     }
-    if (['CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS'].includes(name)) {
+    if (['CORNERS','TOTALCORNERS','CORNERSOVERUNDER','CORNERSTOTALS','CORNERSTOTALSHOME','CORNERSTOTALSAWAY'].includes(name)) {
+      const cTitle = name==='CORNERSTOTALSHOME' ? 'Corners équipe 1'
+                   : name==='CORNERSTOTALSAWAY' ? 'Corners équipe 2'
+                   : 'Total des corners';
       const csel=[];
       for (const entry of (mkt.odds||[])) {
         const cl=+(entry.hdp??entry.max??entry.points??entry.line??9.5);
@@ -380,9 +387,25 @@ function buildMarkets(markets, homeName, awayName) {
         if (co>1) csel.push({name:`Plus de ${cl}`,  odds:fmt(co),NA:`CO ${cl}`,handicap:cl});
         if (cu>1) csel.push({name:`Moins de ${cl}`, odds:fmt(cu),NA:`CU ${cl}`,handicap:cl});
       }
-      if (csel.length) md.push({name:'Total des corners',selections:csel,is_open:true});
+      if (csel.length) md.push({name:cTitle,selections:csel,is_open:true});
     }
-    if (['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH'].includes(name)) {
+    // Corners Spread / Handicap (home vs away)
+    if (name==='CORNERSSPREAD') {
+      const csel=[];
+      for (const entry of (mkt.odds||[])) {
+        const hdp=+(entry.hdp??entry.points??entry.line??0);
+        const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
+        if (hh<1.01&&ah<1.01) continue;
+        const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
+        if (hh>1) csel.push({name:`1 ${fh}`,odds:fmt(hh),NA:`CH ${hdp}`,handicap:hdp});
+        if (ah>1) csel.push({name:`2 ${fa}`,odds:fmt(ah),NA:`CA ${-hdp}`,handicap:hdp});
+      }
+      if (csel.length) md.push({name:'Handicap corners',selections:csel,is_open:true});
+    }
+    if (['CARDS','TOTALCARDS','YELLOWCARDS','CARDSOVERUNDER','BOOKINGPOINTS','NUMBEROFCARDSINMATCH','BOOKINGS','BOOKINGSTOTALS','BOOKINGSTOTALSHOME','BOOKINGSTOTALSAWAY'].includes(name)) {
+      const yTitle = name==='BOOKINGSTOTALSHOME' ? 'Cartons équipe 1'
+                   : name==='BOOKINGSTOTALSAWAY' ? 'Cartons équipe 2'
+                   : 'Cartons';
       const ysel=[];
       for (const entry of (mkt.odds||[])) {
         const yl=+(entry.hdp??entry.max??entry.points??entry.line??3.5);
@@ -391,7 +414,20 @@ function buildMarkets(markets, homeName, awayName) {
         if (yo>1) ysel.push({name:`Plus de ${yl}`,  odds:fmt(yo),NA:`YC ${yl}`,handicap:yl});
         if (yu>1) ysel.push({name:`Moins de ${yl}`, odds:fmt(yu),NA:`YC- ${yl}`,handicap:yl});
       }
-      if (ysel.length) md.push({name:'Cartons',selections:ysel,is_open:true});
+      if (ysel.length) md.push({name:yTitle,selections:ysel,is_open:true});
+    }
+    // Bookings Spread / Cards Handicap (home vs away)
+    if (name==='BOOKINGSSPREAD') {
+      const ysel=[];
+      for (const entry of (mkt.odds||[])) {
+        const hdp=+(entry.hdp??entry.points??entry.line??0);
+        const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
+        if (hh<1.01&&ah<1.01) continue;
+        const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
+        if (hh>1) ysel.push({name:`1 ${fh}`,odds:fmt(hh),NA:`BH ${hdp}`,handicap:hdp});
+        if (ah>1) ysel.push({name:`2 ${fa}`,odds:fmt(ah),NA:`BA ${-hdp}`,handicap:hdp});
+      }
+      if (ysel.length) md.push({name:'Handicap cartons',selections:ysel,is_open:true});
     }
     if (['CORRECTSCORE','EXACTSCORE'].includes(name)) {
       const sel=[];
@@ -598,6 +634,37 @@ function marketRank(name) {
   return 15;
 }
 
+// Merge markets from ALL bookmakers into one list. Different books cover
+// different markets for the same fixture (e.g. corners live on 1xbet, while
+// Half Time Result / Correct Score live on Bet365). Picking a single "best"
+// bookmaker silently drops whole categories, which is why clicking "Corners"
+// showed nothing. We dedupe by market name and, when two books expose the
+// same market, keep whichever has the most odds lines (richest ladder).
+function mergeBookmakerMarkets(bk) {
+  if (!bk || typeof bk !== 'object') return [];
+  const byName = {};
+  // Process books in priority order so ties favour the more reliable feed.
+  const order = ODDS_BOOKMAKERS.split(',').map(s => s.trim());
+  const books = Object.keys(bk).sort((a, b) => {
+    const ia = order.indexOf(a); const ib = order.indexOf(b);
+    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+  });
+  for (const book of books) {
+    const raw = bk[book];
+    const list = Array.isArray(raw) ? raw : (raw?.odds || raw?.markets || []);
+    if (!Array.isArray(list)) continue;
+    for (const m of list) {
+      const name = m && (m.name || m.market);
+      if (!name) continue;
+      const cnt = Array.isArray(m.odds) ? m.odds.length : 0;
+      const prev = byName[name];
+      const prevCnt = prev ? (Array.isArray(prev.odds) ? prev.odds.length : 0) : -1;
+      if (!prev || cnt > prevCnt) byName[name] = m;
+    }
+  }
+  return Object.values(byName);
+}
+
 // ── Redis write/remove ────────────────────────────────────────────────────────
 async function writeToRedis(id) {
   const ev = store[id];
@@ -693,15 +760,14 @@ async function restPrefetch() {
           await sleep(rlUntil - Date.now() + 500);
         }
         try {
-          const oddsParams = { eventId: id };
-          if (BOOKMAKER) oddsParams.bookmakers = BOOKMAKER;
+          const oddsParams = { eventId: id, bookmakers: ODDS_BOOKMAKERS };
           const oddsResp = await client.getEventOdds(oddsParams);
           onRLOk();
           const bkData  = oddsResp?.bookmakers || oddsResp?.data?.bookmakers || {};
-          const markets  = bkData[BOOKMAKER] || Object.values(bkData)[0] || [];
+          const markets  = mergeBookmakerMarkets(bkData);
           if (markets.length) {
             store[id].markets_raw = markets;
-            store[id].bookie      = BOOKMAKER;
+            store[id].bookie      = Object.keys(bkData).join('+') || 'odds-api';
             totalWithOdds++;
           }
           await writeToRedis(id);
@@ -999,17 +1065,12 @@ async function refreshOddsBatch() {
       const id = String(ev.id);
       if (!store[id]) store[id] = {};
       const bk = ev.bookmakers || {};
-      // Prefer Bet365 (richest); else the bookmaker with the most markets.
-      let bestName = (BOOKMAKER && bk[BOOKMAKER] && bk[BOOKMAKER].length) ? BOOKMAKER : null;
-      if (!bestName) {
-        for (const k in bk) {
-          if (!bestName || (bk[k]||[]).length > (bk[bestName]||[]).length) bestName = k;
-        }
-      }
-      const markets = bestName ? (bk[bestName] || []) : [];
+      // Merge ALL bookmakers so corners (1xbet), half-time (Bet365), cards, etc.
+      // all survive instead of dropping everything but the single richest book.
+      const markets = mergeBookmakerMarkets(bk);
       if (markets && markets.length) {
         store[id].markets_raw = markets;
-        store[id].bookie = bestName || 'odds-api';
+        store[id].bookie = Object.keys(bk).join('+') || 'odds-api';
         withOdds++;
         await writeToRedis(id);
       }
