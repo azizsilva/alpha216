@@ -1003,8 +1003,8 @@ async function refreshSportUpcoming(sport) {
     // "browse by date" and league pages are fully populated across days.
     const uResp = await httpGetJson('/events', { sport });
     const rawArr = Array.isArray(uResp) ? uResp : (Array.isArray(uResp?.events) ? uResp.events : (Array.isArray(uResp?.data) ? uResp.data : []));
-    const nowMs = Date.now() - 2 * 3600 * 1000;       // keep just-started (<2h) too
-    const maxMs = Date.now() + 8 * 24 * 3600 * 1000;  // cover the next ~8 days of dates
+    const nowMs = Date.now() - 2 * 3600 * 1000;        // keep just-started (<2h) too
+    const maxMs = Date.now() + 18 * 24 * 3600 * 1000;  // cover ~18 days so World Cup / big tournaments appear
     const uArr = rawArr.filter(e => {
       const st = String(e.status || '').toLowerCase();
       if (st === 'settled' || st === 'cancelled' || st === 'finished' || st === 'ended' || st === 'live') return false;
