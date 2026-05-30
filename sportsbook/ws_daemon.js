@@ -463,7 +463,6 @@ async function handleWsMessage(data) {
       log('WS welcome. Bookmakers:', bks.length ? bks.join(',') : '(none configured — go to odds-api.io → Bookmakers tab)');
       log('Sports:', (data.sport_filter||[]).join(','), '| Status:', data.status_filter||'live');
       // CRITICAL: log which markets the server ACCEPTED vs what we requested.
-      // Any requested market missing here is rejected (wrong name) or unavailable.
       const accepted = (data.market_filter || []).map(m => String(m).toUpperCase());
       log('MARKETS requested:', WS_MARKETS_ARR.join(' | '));
       log('MARKETS accepted :', accepted.join(' | ') || '(none!)');
@@ -475,6 +474,11 @@ async function handleWsMessage(data) {
         log('ACTION REQUIRED: Go to https://odds-api.io → Bookmakers tab → select your bookmakers → save');
       }
       if (lastSeq > 0) log(`Replay: lastSeq=${lastSeq} — catching up missed updates...`);
+      // Trigger immediate meta refresh on first connect so Redis gets home/away right away
+      if (wsReconnectAttempts <= 1) {
+        log('WS connected — triggering immediate meta refresh to populate Redis...');
+        setTimeout(() => refreshMeta().catch(e => log('Meta refresh error:', e.message)), 200);
+      }
       break;
     }
 
@@ -611,10 +615,21 @@ async function main() {
   }
 
   // Step 3: Score/meta refresh — run immediately, then every 30s
-  // (WS gives odds but not always team names/scores; REST getLiveEvents fills the gap)
-  // Run once per sport every 30s = 6 sports * 30s = ~one REST call per 5s cycle total
-  setTimeout(refreshMeta, 3000);   // first run 3s after WS connects
-  setInterval(refreshMeta, 30_000); // then every 30s (was 90s — too slow for initial population)
+  // Run refreshMeta immediately so Redis gets home/away names without waiting for WS welcome.
+  refreshMeta().catch(e => log('Meta init error:', e.message));
+  setInterval(refreshMeta, 30_000); // then every 30s
+
+  // Periodic stats log every 60s — shows how many events are in store + Redis
+  setInterval(async () => {
+    const total = Object.keys(store).length;
+    const withMarkets = Object.values(store).filter(e => e.markets_raw?.length > 0).length;
+    try {
+      const redisCount = await redis.sCard('sb:live:all');
+      log(`STATS: store=${total} events (${withMarkets} with markets) | Redis=${redisCount} events`);
+    } catch(_) {
+      log(`STATS: store=${total} events (${withMarkets} with markets)`);
+    }
+  }, 60_000);
 
   // Step 4: Prune expired entries every 5 minutes
   setInterval(pruneStale, 5 * 60_000);

@@ -324,6 +324,30 @@ function redis_get_all_ids() {
     catch (Exception $e) { return null; }
 }
 
+/**
+ * Build normalised markets array from a Redis event object.
+ * Handles both 'selections' and 'odds' field names (daemon uses 'selections').
+ * Returns [] if no valid odds found.
+ */
+function build_markets_from_redis_ev($redis_ev) {
+    $markets = [];
+    if (empty($redis_ev['md_markets']) || !is_array($redis_ev['md_markets'])) return [];
+    foreach ($redis_ev['md_markets'] as $mkt) {
+        $sel_in = $mkt['selections'] ?? $mkt['odds'] ?? [];
+        $sel    = [];
+        foreach ($sel_in as $s) {
+            $v = (float)($s['odds'] ?? 0);
+            if ($v > 1.01) $sel[] = [
+                'name' => $s['name'] ?? '',
+                'odds' => apply_margin_to_odds($v),
+                'NA'   => $s['NA']   ?? '',
+            ];
+        }
+        if ($sel) $markets[] = ['name' => $mkt['name'], 'selections' => $sel, 'is_open' => true];
+    }
+    return $markets;
+}
+
 // ── DB Connection — try forza path first (where sb_matches lives) ──────────
 $pdo = null;
 $db_connected = false;
@@ -2144,6 +2168,74 @@ if ($action === 'status') {
     exit;
 }
 
+// ═══ DEBUG REDIS — check what's stored for a sport or event ═════════════════
+if ($action === 'debug_redis') {
+    if (!$redis_ok || !$redis_conn) { echo json_encode(['error'=>'Redis not connected']); exit; }
+    $sid   = (int)($_GET['sport_id'] ?? 1);
+    $eid   = trim($_GET['event_id'] ?? '');
+    $out   = ['redis_ok'=>true, 'sport_id'=>$sid];
+
+    if ($eid) {
+        // Single event details
+        $raw = $redis_conn->get("sb:ev:{$eid}");
+        if ($raw) {
+            $ev = json_decode($raw, true);
+            $out['event'] = [
+                'id'          => $ev['id']          ?? '?',
+                'home'        => $ev['home']['name'] ?? '?',
+                'away'        => $ev['away']['name'] ?? '?',
+                'sport_id'    => $ev['sport_id']     ?? '?',
+                'ss'          => $ev['ss']           ?? '',
+                'timer'       => $ev['timer']        ?? null,
+                'source'      => $ev['_source']      ?? '?',
+                'updated'     => $ev['_updated']     ?? 0,
+                'live_odds'   => $ev['live_odds']    ?? null,
+                'markets_count'     => count($ev['md_markets'] ?? []),
+                'markets_names'     => array_column($ev['md_markets'] ?? [], 'name'),
+                'has_raw_cache'     => !empty($ev['markets_raw_cache']),
+            ];
+        } else {
+            $out['event'] = null;
+            $out['error'] = "Event {$eid} not found in Redis";
+        }
+    } else {
+        // Sport overview
+        $ids     = $redis_conn->sMembers("sb:live:sport:{$sid}") ?: [];
+        $out['event_count'] = count($ids);
+        $out['sample_events'] = [];
+        $with_markets = 0;
+        $with_home    = 0;
+        foreach (array_slice($ids, 0, 200) as $id) {
+            $raw = $redis_conn->get("sb:ev:{$id}");
+            if (!$raw) continue;
+            $ev = json_decode($raw, true);
+            if (!is_array($ev)) continue;
+            $has_home  = !empty($ev['home']['name']);
+            $has_mkts  = !empty($ev['md_markets']);
+            $mkt_count = count($ev['md_markets'] ?? []);
+            if ($has_home) $with_home++;
+            if ($has_mkts) $with_markets++;
+            if (count($out['sample_events']) < 5) {
+                $out['sample_events'][] = [
+                    'id'             => $ev['id'] ?? $id,
+                    'home'           => $ev['home']['name'] ?? '(missing)',
+                    'away'           => $ev['away']['name'] ?? '(missing)',
+                    'ss'             => $ev['ss'] ?? '',
+                    'markets_count'  => $mkt_count,
+                    'markets_names'  => array_column($ev['md_markets'] ?? [], 'name'),
+                    'source'         => $ev['_source'] ?? '?',
+                    'updated_s_ago'  => $ev['_updated'] ? round((time()*1000 - $ev['_updated'])/1000) : '?',
+                ];
+            }
+        }
+        $out['events_with_home_name'] = $with_home;
+        $out['events_with_markets']   = $with_markets;
+    }
+    header('Content-Type: application/json');
+    echo json_encode($out, JSON_PRETTY_PRINT);
+    exit;
+}
+
 // ═══ MATCH LIVE — lightweight poll for score/timer/odds (match detail page) ═══
 if ($action === 'match_live') {
     $match_id = trim($_GET['match_id'] ?? '');
@@ -2151,7 +2243,10 @@ if ($action === 'match_live') {
 
     // ── Redis-first: serve from ws_daemon.js store when available ─────────────
     $redis_ev = redis_get_event($match_id);
-    if ($redis_ev && !empty($redis_ev['home']['name'])) {
+    // Also check without leading zeros / numeric normalisation
+    if (!$redis_ev) $redis_ev = redis_get_event(ltrim($match_id,'0'));
+
+    if ($redis_ev) {
         if (!empty($redis_ev['live_odds'])) {
             $lo = &$redis_ev['live_odds'];
             foreach (['h','x','a','ou_over','ou_under','hdp_h','hdp_a','btts_yes','btts_no','corners_over','corners_under'] as $ok) {
@@ -2161,25 +2256,30 @@ if ($action === 'match_live') {
             }
             unset($lo);
         }
-        $markets = [];
-        if (!empty($redis_ev['md_markets']) && is_array($redis_ev['md_markets'])) {
-            foreach ($redis_ev['md_markets'] as $mkt) {
-                $sel_in = $mkt['selections'] ?? $mkt['odds'] ?? [];
-                $sel    = [];
-                foreach ($sel_in as $s) {
-                    $v = (float)($s['odds'] ?? 0);
-                    if ($v > 1.01) $sel[] = ['name'=>$s['name']??'','odds'=>apply_margin_to_odds($v),'NA'=>$s['NA']??''];
+        $markets = build_markets_from_redis_ev($redis_ev);
+
+        // If no markets yet, try on-demand fetch from odds-api.io REST
+        if (empty($markets)) {
+            $od = oddsapi_fetch_event_odds($match_id);
+            if ($od) {
+                $mkts_built = oddsapi_build_markets($od);
+                $markets    = $mkts_built;
+                // Patch the Redis event for next callers
+                if (!empty($mkts_built)) {
+                    $redis_ev['md_markets'] = $mkts_built;
+                    if ($redis_ok && $redis_conn) {
+                        try { $redis_conn->setEx("sb:ev:{$match_id}", 600, json_encode($redis_ev)); } catch(Exception $_){}
+                    }
                 }
-                if ($sel) $markets[] = ['name'=>$mkt['name'],'selections'=>$sel,'is_open'=>true];
             }
         }
-        // Only return from Redis if we have markets; else fall through to BetsAPI
-        if (!empty($markets)) {
+
+        // Return from Redis path (even with empty markets — at least gives score/timer)
+        if (!empty($redis_ev['home']['name'])) {
             header('X-SB-Source: redis-ml');
             echo json_encode(['success'=>1,'match'=>$redis_ev,'markets'=>$markets,'_src'=>'redis']);
             exit;
         }
-        // No markets in Redis — fall through to BetsAPI to get them
     }
 
     // ── PER-MATCH RESPONSE CACHE ─────────────────────────────────────────────
