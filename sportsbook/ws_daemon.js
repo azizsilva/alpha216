@@ -151,6 +151,21 @@ function mapScore(sc) {
   }
   return '';
 }
+
+// odds-api.io gives NO minute/period field, but scores.periods tells us which
+// halves have data. Derive the active half (1 or 2) so the UI can show the
+// correct period and STOP falsely flipping to "Mi-temps" during the 2nd half.
+function derivePeriod(scores) {
+  if (!scores || typeof scores !== 'object') return 0;
+  const p = scores.periods;
+  if (!p || typeof p !== 'object') return 0;
+  const has = (...keys) => keys.some(k => p[k] && typeof p[k] === 'object');
+  // 2nd half / later
+  if (has('p2','secondhalf','second_half','ht2','h2','p3','p4','et1','et2','overtime')) return 2;
+  // 1st half
+  if (has('p1','firsthalf','first_half','ht1','h1')) return 1;
+  return 0;
+}
 // Parse kickoff to a unix-seconds string (frontend estimates the live minute
 // from this, since odds-api.io provides NO live clock field).
 function parseKickoff(ev) {
@@ -175,7 +190,7 @@ function normEv(ev, sportSlug) {
     home:        { id: String(ev.homeId||ev.home_id||''), name: extractName(ev.home_team, ev.home) },
     away:        { id: String(ev.awayId||ev.away_id||''), name: extractName(ev.away_team, ev.away) },
     ss:          mapScore(ev.scores||ev.score||ev.ss),
-    timer:       { tm: parseInt(ev.minute??ev.elapsed??ev.time_min??ev.clock??0)||0, ts: parseInt(ev.second??ev.seconds??0)||0, md: mapPeriod(ev.period||ev.half||ev.phase||ev.status_more) },
+    timer:       { tm: parseInt(ev.minute??ev.elapsed??ev.time_min??ev.clock??0)||0, ts: parseInt(ev.second??ev.seconds??0)||0, md: mapPeriod(ev.period||ev.half||ev.phase||ev.status_more), half: derivePeriod(ev.scores||ev.score) },
     _source:     'oddsapi',
     _ts:         Date.now(),
   };

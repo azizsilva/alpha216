@@ -217,9 +217,25 @@ function computeFallbackTimer(m) {
   var elapsed = nowSec - kickoff - KICKOFF_DELAY_SEC;
   if (elapsed < 0) return null;  // match hasn't 'started' for our purposes
   var sid = parseInt(m.sport_id || 1, 10);
+  // API-derived active half (from scores.periods): 1 = 1st half, 2 = 2nd half.
+  // When the feed confirms the 2nd half, we must NEVER show "Mi-temps" again.
+  var apiHalf = 0;
+  if (m.timer) apiHalf = parseInt(m.timer.half || m.timer.HALF || 0, 10) || 0;
   if (sid === 1 || sid === 36) {
     var totalMin = Math.floor(elapsed / 60);
     var sec = elapsed % 60;
+    if (apiHalf === 2) {
+      // 2nd half confirmed by API — count in 46-90 range, no halftime flip.
+      var mm2 = (totalMin > 60) ? (46 + (totalMin - 60)) : Math.max(46, totalMin);
+      if (mm2 > 125) mm2 = 90;
+      return { tm: mm2, ts: sec, md: '0', estimated: true };
+    }
+    if (apiHalf === 1) {
+      // 1st half confirmed. Past 45' with no 2nd-half data yet → real break.
+      if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
+      return { tm: 45, ts: 0, md: '1', estimated: true };
+    }
+    // Unknown half (no period data) — legacy heuristic.
     if (totalMin <= 45) return { tm: totalMin, ts: sec, md: '0', estimated: true };
     if (totalMin < 60)  return { tm: 45,       ts: 0,   md: '1', estimated: true };
     var matchMin = 46 + (totalMin - 60);
@@ -1847,6 +1863,23 @@ function startPolling() {
         } else {
           S.matches = S.matches.filter(function(m) { return m.time_status !== '3'; });
           if (S.matches.length !== beforeLen) updated = true;
+        }
+
+        // ── Sync with feed: when a match FINISHES, the daemon drops it from
+        // Redis so it's no longer in the live response. Such matches never
+        // get time_status='3' (they simply vanish), so we must remove any
+        // currently-live match that disappeared from the fresh live feed.
+        // Only on the main live/inplay view (not champ, not future dates),
+        // where the response is the COMPLETE current live set.
+        if (!isChamp && (S.activeAction === 'inplay' || S.activeDateOffset === 0)) {
+          var liveIdSet = {};
+          newResults.forEach(function(nm) { liveIdSet[String(nm.id)] = true; });
+          var before2 = S.matches.length;
+          S.matches = S.matches.filter(function(m) {
+            if (!isMatchLive(m)) return true;            // keep upcoming entries
+            return liveIdSet[String(m.id)] === true;     // drop vanished (finished) live
+          });
+          if (S.matches.length !== before2) updated = true;
         }
 
         if (!updated) return;
