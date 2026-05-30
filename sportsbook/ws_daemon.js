@@ -258,7 +258,7 @@ async function writeToRedis(id) {
   const ev = store[id];
   // Skip if we have neither meta nor markets — nothing useful to store
   if (!ev?.meta && !(ev?.markets_raw?.length)) return;
-  const { live_odds, md_markets } = buildMarkets(ev.markets_raw||[]);
+
   // If meta is missing but we have markets, read existing Redis entry to preserve meta
   let existingMeta = null;
   if (!ev.meta) {
@@ -267,15 +267,24 @@ async function writeToRedis(id) {
       if (raw) existingMeta = JSON.parse(raw);
     } catch(_){}
   }
+
+  const { live_odds, md_markets } = buildMarkets(ev.markets_raw||[]);
+
+  // Determine sport_id — prefer live meta, then existing Redis entry, then default '1'
+  const sid = ev.meta?.sport_id || existingMeta?.sport_id || '1';
+
   const match = {
-    ...(existingMeta || {}),
-    ...(ev.meta || {}),
-    live_odds:  Object.keys(live_odds).length ? live_odds  : undefined,
-    md_markets: md_markets.length             ? md_markets : undefined,
-    _bookie:    ev.bookie,
+    ...(existingMeta || {}),    // existing Redis data (meta + any old markets)
+    ...(ev.meta    || {}),      // fresh meta from refreshMeta (overwrites stale)
+    live_odds:  Object.keys(live_odds).length ? live_odds  : (existingMeta?.live_odds),
+    md_markets: md_markets.length             ? md_markets : (existingMeta?.md_markets),
+    _bookie:    ev.bookie || existingMeta?._bookie,
     _updated:   Date.now(),
   };
-  const sid = ev.meta.sport_id||'1';
+
+  // Ensure id is always present
+  if (!match.id) match.id = id;
+
   try {
     await redis.set(KEY_EV(id), JSON.stringify(match), { EX: 600 });
     await redis.sAdd(KEY_SPORT(sid), id);
