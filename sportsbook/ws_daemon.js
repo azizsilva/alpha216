@@ -69,11 +69,18 @@ function log(...a) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // ── Rate-limit guard ─────────────────────────────────────────────────────────
-let rlUntil = 0, rlBackoff = 60;
+// Max backoff capped at 120s (2 min) so the daemon recovers quickly once the
+// API's rolling 1-hour window resets.
+let rlUntil = 0, rlBackoff = 30;
 function rateLimited()  { return Date.now() < rlUntil; }
-function onRL(secs)     { rlBackoff = Math.min(rlBackoff * 2, 600); rlUntil = Date.now() + (secs || rlBackoff) * 1000; log(`Rate-limited — pause ${secs||rlBackoff}s`); }
-function onRLOk()       { rlBackoff = Math.max(30, Math.floor(rlBackoff / 2)); }
-function isRL(e)        { return /rate.limit|429|too many/i.test(String(e?.message || e)); }
+function onRL(secs) {
+  rlBackoff = Math.min(rlBackoff * 2, 120); // max 2-minute backoff
+  const wait = secs || rlBackoff;
+  rlUntil = Date.now() + wait * 1000;
+  log(`Rate-limited — pause ${wait}s (retry at ${new Date(rlUntil).toISOString().slice(11,19)})`);
+}
+function onRLOk() { rlBackoff = 30; log('API call OK — rate-limit cleared.'); }
+function isRL(e)  { return /rate.limit|429|too many/i.test(String(e?.message || e)); }
 
 // ── Redis ─────────────────────────────────────────────────────────────────────
 const redis = createClient({ url: REDIS_URL });
@@ -421,12 +428,19 @@ async function main() {
   await redis.connect();
   log('Redis connected.');
 
-  // Initial scan — staggered 3s between sports to avoid burst
-  log('Initial scan (staggered)...');
+  // Initial scan — staggered 5s between sports to avoid burst
+  log('Initial scan (staggered 5s gap)...');
   for (let i = 0; i < SPORTS.length; i++) {
+    if (rateLimited()) {
+      const wait = Math.max(0, rlUntil - Date.now()) + 500;
+      log(`Waiting ${Math.ceil(wait/1000)}s for rate-limit to clear...`);
+      await sleep(wait);
+    }
     await fetchEventMetadata();
-    if (i < SPORTS.length - 1) await sleep(rateLimited() ? Math.max(0, rlUntil - Date.now()) + 1000 : 3000);
+    if (i < SPORTS.length - 1 && !rateLimited()) await sleep(5000);
   }
+  const evCount = Object.keys(store).length;
+  log(`Initial scan done. ${evCount} events in store.`);
 
   // Event metadata cycle (one sport per EVENT_MS)
   setInterval(fetchEventMetadata, EVENT_MS);
