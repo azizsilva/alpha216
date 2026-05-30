@@ -457,14 +457,18 @@ async function main() {
   await redis.connect();
   log('Redis connected.');
 
-  // Step 1: REST snapshot (optional but recommended)
-  if (PREFETCH) {
-    await restPrefetch();
-  }
-
-  // Step 2: WebSocket for real-time push
-  log('Starting WebSocket for real-time updates...');
+  // Step 1: Start WebSocket IMMEDIATELY — no REST quota consumed
+  // WebSocket push gives us real-time odds without any API rate limits
+  log('Starting WebSocket...');
   startWs();
+
+  // Step 2: REST snapshot runs in background (non-blocking)
+  // If rate-limited it will wait and retry, but WebSocket is already live
+  if (PREFETCH) {
+    setTimeout(() => {
+      restPrefetch().catch(e => log('Pre-fetch error:', e.message));
+    }, 5000); // 5s delay so WS can connect first
+  }
 
   // Step 3: Score/meta refresh every 90s cycling through sports
   // (WS gives odds but not always live scores; REST fills the gap)
