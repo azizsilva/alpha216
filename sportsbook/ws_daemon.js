@@ -204,10 +204,20 @@ function buildMarkets(markets) {
 // ── Redis write/remove ────────────────────────────────────────────────────────
 async function writeToRedis(id) {
   const ev = store[id];
-  if (!ev?.meta) return;
+  // Skip if we have neither meta nor markets — nothing useful to store
+  if (!ev?.meta && !(ev?.markets_raw?.length)) return;
   const { live_odds, md_markets } = buildMarkets(ev.markets_raw||[]);
+  // If meta is missing but we have markets, read existing Redis entry to preserve meta
+  let existingMeta = null;
+  if (!ev.meta) {
+    try {
+      const raw = await redis.get(KEY_EV(id));
+      if (raw) existingMeta = JSON.parse(raw);
+    } catch(_){}
+  }
   const match = {
-    ...ev.meta,
+    ...(existingMeta || {}),
+    ...(ev.meta || {}),
     live_odds:  Object.keys(live_odds).length ? live_odds  : undefined,
     md_markets: md_markets.length             ? md_markets : undefined,
     _bookie:    ev.bookie,
@@ -392,13 +402,45 @@ async function handleWsMessage(data) {
     case 'updated': {
       const id = String(data.id);
       if (!store[id]) store[id] = {};
-      store[id].markets_raw = data.markets || [];
-      store[id].bookie      = data.bookie || BOOKMAKER || 'unknown';
+
+      // Populate meta from WS data (home/away/league/score/timer included in created events)
+      if (data.home || data.home_team || data.away || data.away_team) {
+        const sportSlug = data.sport || store[id]?.sport || 'football';
+        store[id].meta  = normEv(data, sportSlug);
+        store[id].sport = sportSlug;
+      } else if (!store[id].meta && (data.league || data.competition)) {
+        // Partial update: at least capture league
+        if (!store[id].meta) store[id].meta = { id };
+        if (data.league) store[id].meta.league = { id: '', name: data.league };
+      }
+
+      // Update odds/markets from WS
+      if (data.markets && data.markets.length > 0) {
+        store[id].markets_raw = data.markets;
+        store[id].bookie      = data.bookie || BOOKMAKER || 'Bet365';
+      }
+
+      // Update live score/timer if WS sends them
+      if (store[id].meta) {
+        if (data.score || data.ss) store[id].meta.ss = mapScore(data.score || data.ss);
+        if (data.minute !== undefined) {
+          store[id].meta.timer = {
+            tm: parseInt(data.minute || 0) || 0,
+            ts: parseInt(data.second || 0) || 0,
+            md: mapPeriod(data.period || data.half || data.phase),
+          };
+        }
+        if (data.status) store[id].meta.time_status = data.status === 'live' ? '1' : data.status === 'finished' ? '3' : '0';
+      }
+
       await writeToRedis(id);
-      // Log first few updates so user can confirm data is flowing
+
+      // Log a sample of updates to confirm data is flowing
       if (Math.random() < 0.05) {
         const mkts = (data.markets||[]).map(m=>m.name).join(',');
-        log(`WS ${data.type}: event ${id} | ${store[id].bookie} | markets: ${mkts||'none'}`);
+        const hn   = store[id]?.meta?.home?.name || '?';
+        const an   = store[id]?.meta?.away?.name || '?';
+        log(`WS ${data.type}: ${hn} v ${an} [${id}] | ${store[id].bookie} | markets: ${mkts||'none'}`);
       }
       break;
     }
@@ -482,9 +524,11 @@ async function main() {
     }, 5000); // 5s delay so WS can connect first
   }
 
-  // Step 3: Score/meta refresh every 90s cycling through sports
-  // (WS gives odds but not always live scores; REST fills the gap)
-  setInterval(refreshMeta, 90_000);
+  // Step 3: Score/meta refresh — run immediately, then every 30s
+  // (WS gives odds but not always team names/scores; REST getLiveEvents fills the gap)
+  // Run once per sport every 30s = 6 sports * 30s = ~one REST call per 5s cycle total
+  setTimeout(refreshMeta, 3000);   // first run 3s after WS connects
+  setInterval(refreshMeta, 30_000); // then every 30s (was 90s — too slow for initial population)
 
   // Step 4: Prune expired entries every 5 minutes
   setInterval(pruneStale, 5 * 60_000);

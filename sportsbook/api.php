@@ -2233,6 +2233,11 @@ if ($action === 'match_live') {
                 $match_data[$fk] = $ev3[$fk];
             }
         }
+        // Extract r_id (Bet365 FI) from v3 — needed for /v1/bet365/event live markets
+        if (!empty($ev3['r_id'])) {
+            $match_data['r_id'] = $ev3['r_id'];
+            $fi = $ev3['r_id'];  // update fi so live event call uses correct Bet365 FI
+        }
     }
     $fresh_stats = _fetch_event_stats($match_id, $fi);
     if ($fresh_stats) {
@@ -2449,26 +2454,10 @@ if ($action === 'match_detail') {
     $has_live  = false;
     $event_raw = null;
 
-    if ($match_data) {
-        // 1. Try live event via Bet365 FI (r_id)
-        $fi = $match_data['r_id'] ?? null;
-        if ($fi) {
-            $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
-            if (!empty($ev['results'])) {
-                $event_raw = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
-                $has_live  = true;
-            }
-        }
-        // Fallback: try PREMATCH endpoint to get asian, goals, half tabs
-        if (empty($event_raw)) {
-            $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi ?: $match_id]);
-            if (!empty($ev2['results'])) {
-                $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
-            }
-        }
-    }
-
-    // ── Step 3: v3/event/view — fresh stats, timer, scores + prematch sp odds ──
+    // ── Step 1: v3/event/view — get r_id (Bet365 FI), fresh stats, timer, scores ──
+    // Do this FIRST so we have the correct Bet365 FI before calling /v1/bet365/event
+    $fi   = $match_data['r_id'] ?? null;
+    $ev3  = null;
     $v3_data = betsapi_get('/v3/event/view', ['event_id' => $match_id, 'source' => 'bet365', 'odds' => '1']);
     if (!empty($v3_data['results'][0])) {
         $ev3 = $v3_data['results'][0];
@@ -2481,19 +2470,37 @@ if ($action === 'match_detail') {
             $norm = _normalize_stats($ev3['stats']);
             if ($norm) $match_data['stats'] = $norm;
         }
-        // Half-time score
         if (!empty($ev3['scores'])) $match_data['scores'] = $ev3['scores'];
-        // Supply team image_ids if missing
         foreach (['home','away'] as $side) {
             if (!empty($ev3[$side]['image_id']) && empty($match_data[$side]['image_id'])) {
                 $match_data[$side]['image_id'] = $ev3[$side]['image_id'];
             }
         }
-        // Use v3 sp markets as fallback if no live event tree
-        // Pass the full sp array; md_parse_markets handles {name, odds:[...]} objects
-        if (empty($event_raw) && !empty($ev3['main']['sp'])) {
-            $event_raw = array_values($ev3['main']['sp']);
+        // Update fi with the real Bet365 FI (r_id) from v3
+        if (!empty($ev3['r_id'])) $fi = $ev3['r_id'];
+    }
+
+    // ── Step 2: Live markets via Bet365 FI ──
+    if ($fi) {
+        // Use the real Bet365 FI to get full live in-play markets
+        $ev = betsapi_get('/v1/bet365/event', ['FI' => $fi, 'stats' => '1']);
+        if (!empty($ev['results'])) {
+            $event_raw = is_array($ev['results'][0]) ? $ev['results'][0] : $ev['results'];
+            $has_live  = true;
         }
+    }
+
+    // ── Step 3: Prematch markets (if no live tree yet) ──
+    if (empty($event_raw) && $fi) {
+        $ev2 = betsapi_get('/v1/bet365/prematch', ['FI' => $fi]);
+        if (!empty($ev2['results'])) {
+            $event_raw = is_array($ev2['results'][0]) ? $ev2['results'][0] : $ev2['results'];
+        }
+    }
+
+    // ── Step 4: v3 sp markets as last resort ──
+    if (empty($event_raw) && $ev3 && !empty($ev3['main']['sp'])) {
+        $event_raw = array_values($ev3['main']['sp']);
     }
 
     if ($event_raw) {
