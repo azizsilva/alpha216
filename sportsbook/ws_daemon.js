@@ -36,6 +36,9 @@ const WS_MARKETS_ARR = [
   'ML',
   'Spread',
   'Totals',
+  'ML HT',
+  'Spread HT',
+  'Totals HT',
   'Both Teams to Score',
   'Correct Score',
   'Double Chance',
@@ -45,7 +48,6 @@ const WS_MARKETS_ARR = [
   'Corners',
   'Cards',
   'Team Totals',
-  'Half Time Result',
 ];
 const WS_MARKETS  = WS_MARKETS_ARR.join(',');
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
@@ -194,6 +196,8 @@ const RECOGNIZED_MKT = new Set([
   'CORRECTSCORE','EXACTSCORE',
   'TEAMTOTALS','HOMETOTALS','AWAYTOTALS','HOMETEAMTOTAL','AWAYTEAMTOTAL',
   'DRAWNOBET','ODDEVEN','GOALSODDEVEN','HALFTIMERESULT','HALFTIME1X2',
+  'MLHT','1X2HT','FIRSTHALF1X2','SPREADHT','HANDICAPHT','ASIANHANDICAPHT',
+  'TOTALSHT','OVERUNDERHT','GOALSHT',
 ]);
 
 // Generic builder for ANY market we don't map explicitly — guarantees the
@@ -283,11 +287,11 @@ function buildMarkets(markets) {
       }
     }
     if (['SPREAD','ASIANHANDICAP','HANDICAP','EUROPEANHANDICAP','HANDICAPRESULT'].includes(name)) {
+      // odds-api.io "Spread" uses over=home-side, under=away-side (NOT home/away).
       // Build ONE market per handicap line (multiple lines in odds array).
-      // Line field varies: hdp / points / line / handicap.
       for (const entry of (mkt.odds||[])) {
         const hdp=+(entry.hdp??entry.points??entry.line??entry.handicap??0);
-        const hh=+(entry.home||0),ah=+(entry.away||0);
+        const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
         if (hh<1.01&&ah<1.01) continue;
         const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
         const sel=[];
@@ -376,14 +380,39 @@ function buildMarkets(markets) {
       if (even>1) sel.push({name:'Pair',  odds:fmt(even),NA:'Even'});
       if (sel.length) md.push({name:'Pair/Impair',selections:sel,is_open:true});
     }
-    // Half Time Result (1ère mi-temps 1X2)
-    if (['HALFTIMERESULT','HALFTIME1X2'].includes(name)) {
+    // Half Time Result (1ère mi-temps 1X2) — odds-api.io sends this as "ML HT"
+    if (['HALFTIMERESULT','HALFTIME1X2','MLHT','1X2HT','FIRSTHALF1X2'].includes(name)) {
       const hh=+(o.home||0),hx=+(o.draw||0),ha=+(o.away||0);
       const sel=[];
       if (hh>1) sel.push({name:'1',odds:fmt(hh),NA:'HT1'});
       if (hx>1) sel.push({name:'X',odds:fmt(hx),NA:'HTX'});
       if (ha>1) sel.push({name:'2',odds:fmt(ha),NA:'HT2'});
       if (sel.length) md.push({name:'1ère mi-temps - 1x2',selections:sel,is_open:true});
+    }
+    // Half Time Handicap ("Spread HT") — one market per line, over/under sides
+    if (['SPREADHT','HANDICAPHT','ASIANHANDICAPHT'].includes(name)) {
+      for (const entry of (mkt.odds||[])) {
+        const hdp=+(entry.hdp??entry.points??entry.line??0);
+        const hh=+(entry.home??entry.over??0),ah=+(entry.away??entry.under??0);
+        if (hh<1.01&&ah<1.01) continue;
+        const fh=hdp>=0?`+${hdp}`:`${hdp}`,fa=-hdp>=0?`+${-hdp}`:`${-hdp}`;
+        const sel=[];
+        if (hh>1) sel.push({name:`1 (${fh})`,odds:fmt(hh),NA:`HTH ${hdp}`});
+        if (ah>1) sel.push({name:`2 (${fa})`,odds:fmt(ah),NA:`HTA ${-hdp}`});
+        if (sel.length) md.push({name:`1ère mi-temps - Handicap ${fh}`,selections:sel,is_open:true});
+      }
+    }
+    // Half Time Totals ("Totals HT") — one market per line
+    if (['TOTALSHT','OVERUNDERHT','GOALSHT'].includes(name)) {
+      for (const entry of (mkt.odds||[])) {
+        const line=+(entry.hdp??entry.max??entry.points??entry.line??1.5);
+        const ov=+(entry.over||0),un=+(entry.under||0);
+        if (ov<1.01&&un<1.01) continue;
+        const sel=[];
+        if (ov>1) sel.push({name:`Plus de ${line}`,  odds:fmt(ov),NA:`HTO ${line}`});
+        if (un>1) sel.push({name:`Moins de ${line}`, odds:fmt(un),NA:`HTU ${line}`});
+        if (sel.length) md.push({name:`1ère mi-temps - Total ${line}`,selections:sel,is_open:true});
+      }
     }
   }
 
@@ -773,8 +802,9 @@ async function refreshOddsBatch() {
   oddsCursor += BATCH;
 
   try {
-    const params = { eventIds: batch.join(',') };
-    if (BOOKMAKER) params.bookmakers = BOOKMAKER;
+    // /odds & /odds/multi REQUIRE a bookmakers param — default to Bet365.
+    const bkParam = BOOKMAKER || 'Bet365';
+    const params = { eventIds: batch.join(','), bookmakers: bkParam };
     const resp = await httpGetJson('/odds/multi', params);
     onRLOk();
     const events = Array.isArray(resp) ? resp : (Array.isArray(resp?.data) ? resp.data : []);
