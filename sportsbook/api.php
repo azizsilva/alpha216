@@ -829,6 +829,27 @@ if ($db_connected) {
 $action   = $_GET['action']   ?? 'inplay';
 $sport_id = (int)($_GET['sport_id'] ?? 1);
 
+// ── Manual settlement trigger (admin session or shared secret) ───────────────
+if ($action === 'run_settlement') {
+    if (session_status() === PHP_SESSION_NONE) @session_start();
+    $secret = $_GET['key'] ?? ($_POST['key'] ?? '');
+    $allowed = ($secret === 'alp_settle_5b9c3e1f');
+    if (!$allowed && !empty($_SESSION['user_id'])) {
+        try {
+            require_once __DIR__ . '/../includes/db.php';
+            $s = $pdo->prepare("SELECT role FROM users WHERE id=?");
+            $s->execute([$_SESSION['user_id']]);
+            $allowed = in_array($s->fetchColumn(), ['admin','super_admin','provider'], true);
+        } catch (\Throwable $e) {}
+    }
+    if (!$allowed) { http_response_code(403); echo json_encode(['success'=>false,'message'=>'forbidden']); exit; }
+    require_once __DIR__ . '/../includes/db.php';
+    require_once __DIR__ . '/bet_settle_lib.php';
+    $sum = sbset_run($pdo, ['limit' => 2000]);
+    echo json_encode(['success'=>true, 'summary'=>$sum]);
+    exit;
+}
+
 // ── Premium leagues list — shown at top of match list ─────────────────────
 // Mapped by sport_id → array of priority league name fragments (case-insensitive)
 define('PRIORITY_LEAGUES', [

@@ -22,6 +22,8 @@
 
 const WebSocket = require('ws');
 const { createClient } = require('redis');
+const { execFile } = require('child_process');
+const path = require('path');
 
 const API_KEY    = process.env.ODDS_API_KEY || '06eff561d8a52e749f38d64f95f4c22bc7504bc16c7122d849eabc9f97908d91';
 const REDIS_URL  = process.env.REDIS_URL    || 'redis://127.0.0.1:6379';
@@ -96,6 +98,12 @@ const KEY_SPORT = sid => `sb:live:sport:${sid}`;   // LIVE events only (small, h
 const KEY_UP    = sid => `sb:up:sport:${sid}`;     // UPCOMING events (large, cold path)
 const KEY_ALL   = 'sb:live:all';
 const KEY_TS    = 'sb:live:updated';
+// FINAL results: a durable snapshot of a finished match's score so the bet
+// settlement engine can grade tickets AFTER odds-api drops the event from the
+// live feed (the live sb:ev:* key is deleted the moment a match disappears).
+const KEY_FINAL  = id => `sb:final:${id}`;
+const KEY_FINALS = 'sb:finals';
+const FINAL_TTL  = 7 * 24 * 3600;                  // keep final scores 7 days
 
 // ── In-memory store ───────────────────────────────────────────────────────────
 const store = {};   // eventId → { meta, markets_raw, bookie, sport }
@@ -751,8 +759,64 @@ async function writeToRedis(id) {
   } catch(e) { log('Redis write error:', e.message); }
 }
 
+// Persist a finished match's final score so the PHP settlement engine can grade
+// open tickets long after odds-api drops the event from the live feed. We snapshot
+// the LAST KNOWN score/teams from memory (or the existing Redis event) right
+// before the live key is deleted.
+// Spawn the PHP settlement engine on a fixed interval. Uses execFile (no shell)
+// so it works on Linux and Windows. The PHP binary can be overridden with
+// SETTLE_PHP; the script path defaults to ./settle_bets.php next to this daemon.
+let settleRunning = false;
+function runSettlementOnce() {
+  if (settleRunning) return;
+  settleRunning = true;
+  const php = process.env.SETTLE_PHP || 'php';
+  const script = path.join(__dirname, 'settle_bets.php');
+  execFile(php, [script], { timeout: 55_000, windowsHide: true }, (err, stdout, stderr) => {
+    settleRunning = false;
+    const out = (stdout || '').trim();
+    if (out) log(out);
+    if (err && !out) log('Settlement error:', (stderr || err.message || '').toString().slice(0, 200));
+  });
+}
+function startSettlementLoop() {
+  setTimeout(runSettlementOnce, 15_000);          // first pass shortly after boot
+  setInterval(runSettlementOnce, 60_000);          // then every 60s
+  log('Settlement loop armed (every 60s).');
+}
+
+async function captureFinal(id) {
+  try {
+    let meta = store[id]?.meta || null;
+    if (!meta || !meta.ss) {
+      const raw = await redis.get(KEY_EV(id));
+      if (raw) { const ev = JSON.parse(raw); if (!meta) meta = ev; else if (!meta.ss) meta.ss = ev.ss; }
+    }
+    if (!meta) return;
+    const ss = meta.ss || '';
+    const home = meta.home?.name || '';
+    const away = meta.away?.name || '';
+    // Only worth storing if we actually have a score AND identifiable teams.
+    if (!ss || !home || !away) return;
+    const rec = {
+      id:          String(id),
+      sport_id:    meta.sport_id || '1',
+      ss,
+      home:        { name: home },
+      away:        { name: away },
+      league:      meta.league || { name: '' },
+      time_status: '3',
+      ended_at:    Date.now(),
+    };
+    await redis.set(KEY_FINAL(id), JSON.stringify(rec), { EX: FINAL_TTL });
+    await redis.sAdd(KEY_FINALS, String(id));
+  } catch(_){}
+}
+
 async function removeFromRedis(id) {
   const sid = store[id]?.meta?.sport_id||'1';
+  // Snapshot the final score BEFORE deleting so bets can be settled later.
+  await captureFinal(id);
   try {
     await redis.del(KEY_EV(id));
     await redis.sRem(KEY_SPORT(sid), id);
@@ -1003,10 +1067,16 @@ async function refreshSportLive(sport) {
     for (const ev of arr) {
       const id = String(ev.id);
       if (!id || !(ev.home || ev.home_team)) continue;
-      liveIds.add(id);
       if (!store[id]) store[id] = {};
       store[id].meta  = normEv(ev, sport);
       store[id].sport = sport;
+      // Match reported as finished/ended → snapshot its final score and drop it
+      // from the live list so it cannot be bet on and can be settled.
+      if (store[id].meta.time_status === '3') {
+        await removeFromRedis(id);
+        continue;
+      }
+      liveIds.add(id);
       await writeToRedis(id);
     }
     if (arr.length) log(`Live refresh ${sport}: ${arr.length} events`);
@@ -1227,6 +1297,12 @@ async function main() {
       log(`STATS: store=${total} events (${withMarkets} with markets)`);
     }
   }, 60_000);
+
+  // Step 3d: Automatic bet settlement. Finished matches are snapshotted to
+  // sb:final:* (see captureFinal); this runs the PHP settlement engine every
+  // 60s to grade open tickets and pay out winners. Decoupled (separate process)
+  // so a settlement error can never crash the odds daemon.
+  startSettlementLoop();
 
   // Step 4: Prune expired entries every 5 minutes
   setInterval(pruneStale, 5 * 60_000);
