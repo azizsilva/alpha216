@@ -687,6 +687,21 @@ async function writeToRedis(id) {
   const _an = ev.meta?.away?.name || existing?.away?.name || '';
   const { live_odds, md_markets } = buildMarkets(ev.markets_raw || existing?.markets_raw_cache || [], _hn, _an);
 
+  // Merge fresh markets with the previously-stored set BY NAME. The live feed
+  // exposes only core markets (1X2/Total/Handicap + HT); the bookmakers suspend
+  // corners/cards/correct-score/team-totals once a match is in-play. Without a
+  // merge, the live refresh would wipe those prematch tabs the moment the match
+  // goes live. We update the markets the live feed provides and PRESERVE the
+  // rest so the full tab set stays visible all match long.
+  let finalMd = md_markets;
+  if (md_markets.length && existing?.md_markets?.length) {
+    const freshNames = new Set(md_markets.map(x => String(x.name || '').toLowerCase()));
+    const preserved = existing.md_markets.filter(x => !freshNames.has(String(x.name || '').toLowerCase()));
+    finalMd = md_markets.concat(preserved);
+  } else if (!md_markets.length && existing?.md_markets?.length) {
+    finalMd = existing.md_markets;
+  }
+
   // sport_id: prefer fresh meta, then existing, then default football
   const sid = ev.meta?.sport_id || existing?.sport_id || '1';
 
@@ -697,7 +712,7 @@ async function writeToRedis(id) {
     ...(ev.meta  || {}),
     // 3. always set computed fields
     live_odds:  Object.keys(live_odds).length ? live_odds  : (existing?.live_odds  || undefined),
-    md_markets: md_markets.length             ? md_markets : (existing?.md_markets || undefined),
+    md_markets: finalMd.length                ? finalMd    : (existing?.md_markets || undefined),
     _bookie:    ev.bookie || existing?._bookie,
     _source:    'oddsapi',   // stamp source so api.php can drop legacy leftovers
     _updated:   Date.now(),

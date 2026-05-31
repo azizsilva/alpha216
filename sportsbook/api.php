@@ -572,12 +572,30 @@ function resolve_match_markets($match_id, $redis_ev = null) {
         if ($od) {
             $built = oddsapi_build_markets($od, $hn, $an);
             if ($built) {
-                $markets = $built;
-                oddsapi_save_to_redis($match_id, $built, 120);
+                // MERGE, never replace. The live feed only returns core markets
+                // (1X2/Total/Handicap); replacing would wipe the prematch tabs
+                // (corners/cards/correct-score/team-totals) the books suspend in
+                // play. Fresh markets update by name; previously-known ones stay.
+                $markets = oddsapi_merge_markets_by_name($markets, $built);
+                oddsapi_save_to_redis($match_id, $markets, 120);
             }
         }
     }
     return $markets;
+}
+
+/** Merge two market lists by (lowercased) name: $fresh wins, $old preserved. */
+function oddsapi_merge_markets_by_name($old, $fresh) {
+    if (empty($old))   return $fresh ?: [];
+    if (empty($fresh)) return $old;
+    $freshNames = [];
+    foreach ($fresh as $m) { $freshNames[strtolower($m['name'] ?? '')] = true; }
+    $out = $fresh;
+    foreach ($old as $m) {
+        $nm = strtolower($m['name'] ?? '');
+        if ($nm !== '' && empty($freshNames[$nm])) $out[] = $m;
+    }
+    return $out;
 }
 
 function oddsapi_save_to_redis($event_id, array $md_markets, $ttl = 90) {
@@ -587,6 +605,11 @@ function oddsapi_save_to_redis($event_id, array $md_markets, $ttl = 90) {
         $raw = $redis_conn->get("sb:ev:{$event_id}");
         $ev  = $raw ? json_decode($raw, true) : ['id' => $event_id];
         if (!is_array($ev)) $ev = ['id' => $event_id];
+        // Preserve previously-captured markets the live feed dropped (corners,
+        // cards, correct score…) so live matches keep the full tab set.
+        if (!empty($ev['md_markets']) && is_array($ev['md_markets'])) {
+            $md_markets = oddsapi_merge_markets_by_name($ev['md_markets'], $md_markets);
+        }
         $ev['md_markets'] = $md_markets;
         $ev['_odds_src']  = 'ondemand';
         $ev['_odds_ts']   = time();

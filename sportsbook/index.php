@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260531vr3';  // add William Hill + Marathonbet (full 11 allowed bookmakers) for deeper prematch coverage; Tout tab shows ALL Total/Handicap lines (like Bet Builder) instead of slider window
+$sb_build_stamp = 'b20260531vr4';  // preserve full market set on live matches: merge md_markets by name everywhere (daemon + api) so corners/cards/correct-score don't get wiped when a match goes in-play
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>
