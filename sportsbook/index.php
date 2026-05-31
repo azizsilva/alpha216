@@ -102,7 +102,7 @@ body.mk-game-no-chrome { padding-top: 0 !important; overflow: hidden; }
 // is a last-ditch fallback; we also concat a manual build stamp so when the
 // version changes everyone gets fresh CSS/JS even on hosts where filemtime
 // is cached by opcache or the CDN ignores stat changes.
-$sb_build_stamp = 'b20260531vr4';  // preserve full market set on live matches: merge md_markets by name everywhere (daemon + api) so corners/cards/correct-score don't get wiped when a match goes in-play
+$sb_build_stamp = 'b20260531vr6';  // FIX live corners/cards: WS now subscribes with VALID odds-api market names (Corners Totals/Spread, Bookings Totals/Spread, Team Total Home/Away) — old "Corners"/"Cards" names were silently dropped by the server, which is why live corners/cards never arrived
 $sb_css_v = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/style.css') ?: time()));
 $sb_js_v  = ($sb_build_stamp . '.' . (@filemtime(__DIR__ . '/app.js')   ?: time()));
 ?>

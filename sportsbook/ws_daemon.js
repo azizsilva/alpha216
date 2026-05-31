@@ -32,22 +32,33 @@ const WS_URL      = 'wss://api.odds-api.io/v3/ws';
 // Market names MUST match odds-api.io's exact naming (see docs.odds-api.io/guides/fetching-odds).
 // Confirmed names: ML, Spread, Totals, Both Teams to Score, Correct Score.
 // Others requested speculatively — daemon logs welcome.market_filter to show which are accepted.
+// IMPORTANT: these MUST be the exact market names odds-api supports for the
+// live WS/markets filter (max 20). Wrong names (e.g. "Corners", "Cards",
+// "Both Teams to Score") are silently DROPPED by the server — which is why
+// live corners/cards never arrived. Authoritative list (docs):
+//   ML, Spread, Totals, Spread HT, Totals HT, Totals 1Q, Spread 1Q,
+//   Team Total Home, Team Total Away, Corners Spread, Corners Totals,
+//   Corners Spread HT, Corners Totals HT, Bookings Spread, Bookings Totals,
+//   Player Props
+// (BTTS / Correct Score / Double Chance / Draw No Bet are PREMATCH-only: they
+//  come from the REST /odds snapshot and are preserved live via the merge.)
 const WS_MARKETS_ARR = [
   'ML',
   'Spread',
   'Totals',
-  'ML HT',
   'Spread HT',
   'Totals HT',
-  'Both Teams to Score',
-  'Correct Score',
-  'Double Chance',
-  'Asian Handicap',
-  'Draw No Bet',
-  'Odd/Even',
-  'Corners',
-  'Cards',
-  'Team Totals',
+  'Totals 1Q',
+  'Spread 1Q',
+  'Team Total Home',
+  'Team Total Away',
+  'Corners Spread',
+  'Corners Totals',
+  'Corners Spread HT',
+  'Corners Totals HT',
+  'Bookings Spread',
+  'Bookings Totals',
+  'Player Props',
 ];
 const WS_MARKETS  = WS_MARKETS_ARR.join(',');
 const WS_SPORT    = 'football,basketball,tennis,volleyball,ice-hockey,handball';
@@ -1073,10 +1084,22 @@ async function refreshOddsBatch() {
   // Fetch markets for LIVE first (time_status 1), then UPCOMING (0) so the
   // Prochainement list also shows the rich prematch markets (Corners,
   // Correct Score, Team Totals, ...). Football is prioritised within each.
+  // Priority order:
+  //   0 = live  (keep core odds fresh)
+  //   1 = upcoming kicking off within 2h — fetch their FULL markets (corners,
+  //       cards, correct score…) BEFORE they go live and the books suspend
+  //       those markets. Once captured, writeToRedis MERGES them so they stay
+  //       visible the whole live match.
+  //   3 = far-future upcoming
+  // Football breaks ties (+0.1) within each band.
+  const SOON_MS = 2 * 3600 * 1000;
   const rank = id => {
-    const live = store[id]?.meta?.time_status === '1' ? 0 : 1;
-    const foot = store[id]?.sport === 'football' ? 0 : 1;
-    return live * 2 + foot;
+    const m = store[id]?.meta || {};
+    const foot = store[id]?.sport === 'football' ? 0 : 0.1;
+    if (m.time_status === '1') return 0 + foot;
+    const koMs = (parseInt(m.time || 0, 10) * 1000) - Date.now();
+    if (koMs > 0 && koMs < SOON_MS) return 1 + foot;   // about to kick off
+    return 3 + foot;
   };
   const liveIds = Object.keys(store).filter(id => {
     const ts = store[id]?.meta?.time_status;
