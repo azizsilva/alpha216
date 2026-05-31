@@ -64,7 +64,9 @@ const BOOKMAKER   = process.env.BOOKMAKER || 'Bet365';
 // Multiple books are queried and MERGED per event (see mergeBookmakerMarkets).
 // 1xbet/22Bet carry corners & cards; Bet365 carries half-time/correct score;
 // the rest fill gaps. odds-api allows up to 30 bookmakers per request.
-const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet';
+// Plan allows max 15 bookmakers; this is the FULL allowed set for this key.
+// William Hill + Marathonbet add deep prematch coverage (corners/cards/etc.).
+const ODDS_BOOKMAKERS = process.env.ODDS_BOOKMAKERS || 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet,William Hill,Marathonbet';
 
 // Sport slug → sport_id mapping for Redis keys
 const SPORT_IDS = {

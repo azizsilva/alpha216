@@ -97,7 +97,7 @@ if (!$redis_ok) {
 // Called by match_detail when Redis has no md_markets (daemon was rate-limited).
 // Result is cached in Redis for 90s to prevent repeat hits.
 if (!defined('ODDSAPI_BK')) define('ODDSAPI_BK', 'Bet365');
-if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet');
+if (!defined('ODDSAPI_BKS')) define('ODDSAPI_BKS', 'Bet365,1xbet,22Bet,888Sport,Betano,Unibet,10BET,12bet,18bet,William Hill,Marathonbet');
 
 function oddsapi_curl($url) {
     $ch = curl_init($url);
@@ -1930,9 +1930,9 @@ if ($action === 'upcoming' || $action === 'all_upcoming') {
     if ($all_redis !== null) {
         foreach ($all_redis as $m) {
             if (($m['time_status'] ?? '1') !== '1') { // upcoming (not live)
-                $results[] = $m;
+                    $results[] = $m;
+                }
             }
-        }
     }
 
     // ── REST fallback: if Redis has no upcoming, call odds-api.io ───────────

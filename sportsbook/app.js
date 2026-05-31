@@ -5766,8 +5766,9 @@ function renderInlineMatchMarkets(mid, m, markets, activeTab) {
   if (!shown.length) {
     out += '<div class="mc-md-empty">Aucun marché disponible.</div>';
   } else {
+    var fullLines = (activeTab === 'Tout');
     shown.forEach(function(mk, i) {
-      out += renderMarketGroup(mk, m, i < 4, isBB);
+      out += renderMarketGroup(mk, m, i < 4, isBB, fullLines);
     });
   }
   out += '</div>';
@@ -6481,13 +6482,14 @@ function trimTotalMarketWindow(mkt, m, maxPairs) {
   return { id: mkt.id, name: mkt.name, handicap: mkt.handicap, selections: newSels };
 }
 
-function renderMarketGroup(mkt, m, expanded, bbMode) {
+function renderMarketGroup(mkt, m, expanded, bbMode, fullLines) {
   // Filter out already-settled lines so e.g. a 2:0 match no longer
   // shows "Plus de 1 / 1.5 / 2" — only "Plus de 2.5 / 3.5 …" (fcbet216 behavior).
   mkt = filterMarketByScore(mkt, m);
   // Principaux trims to 2 active pairs (compact view).
-  // Bet Builder / Tout / Total tab show ALL active lines so users can mix legs.
-  var trimMax = bbMode ? 99 : 2;
+  // Bet Builder AND the "Tout" tab (fullLines) show ALL active lines.
+  var showAll = bbMode || fullLines;
+  var trimMax = showAll ? 99 : 2;
   mkt = trimTotalMarketWindow(mkt, m, trimMax);
   // Stable id so the toggle handler can target this exact group.
   var grpId = 'md-mkt-' + (mkt.id || (mkt.name||'mkt').replace(/[^a-z0-9]/gi,'_'));
@@ -6555,20 +6557,23 @@ function renderMarketGroup(mkt, m, expanded, bbMode) {
     if (gord.length > 0) {
       out += '<div id="slider-body-' + uid + '">';
       gord.forEach(function(hc, idx) {
-        out += '<div class="md-mkt-row md-slider-group" data-hc-idx="' + idx + '" ' + (idx === activeIdx ? '' : 'style="display:none"') + '>';
+        // "Tout"/Bet Builder (showAll): every line visible. Otherwise only the
+        // slider's active line shows and the user scrubs between lines.
+        var hide = (!showAll && idx !== activeIdx) ? ' style="display:none"' : '';
+        out += '<div class="md-mkt-row md-slider-group" data-hc-idx="' + idx + '"' + hide + '>';
         groups[hc].forEach(function(s) { out += renderMktBtn(s, m, bbMode); });
         out += '</div>';
       });
       out += '</div>';
 
-      if (gord.length > 1) {
+      if (!showAll && gord.length > 1) {
         var arrStr = JSON.stringify(gord);
         out += '<div class="md-slider-wrap">';
         out += '<span class="md-slider-val">' + activeHc + '</span>';
         out += '<input type="range" class="md-slider" min="0" max="' + (gord.length - 1) + '" step="1" value="' + activeIdx + '" ' +
                'oninput="window.sbUpdateSlider(this, \'' + uid + '\', ' + arrStr.replace(/"/g, '&quot;') + ')">';
         out += '</div>';
-      } else {
+      } else if (!showAll) {
         out += '<div class="md-slider-wrap"><span class="md-slider-val">' + activeHc + '</span></div>';
       }
     }
@@ -6963,7 +6968,8 @@ window.sbMdTab = function(btn, tabName) {
   mktBody.classList.add('md-markets--loading');
   requestAnimationFrame(function() {
   var out = '';
-  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB); });
+  var fullLinesTab = (tabName === 'Tout');
+  shown.forEach(function(mkt, i) { out += renderMarketGroup(mkt, window._mdMatch, i < 6, isBB, fullLinesTab); });
     window._mdTabCache[cacheKey] = out;
   mktBody.innerHTML = out;
     mktBody.classList.remove('md-markets--loading');
