@@ -14,132 +14,140 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// ─── Get CMS Wager sportsbook URL ────────────────────────────────────────────
-$game_url   = '';
-$cw_error   = '';
-$cw_token   = '';
+// ─── Get CMS Wager session token ─────────────────────────────────────────────
+$cw_token = '';
+$cw_error = '';
 
-// Cache in session for 3 hours to avoid re-generating on every page load
+// Cache session token for 3 hours
 $cached = $_SESSION['_cmsw_launch'] ?? null;
-if ($cached && !empty($cached['url']) && !empty($cached['ts']) && (time() - $cached['ts']) < 10800) {
-    $game_url = $cached['url'];
-    $cw_token = $cached['token'] ?? '';
+if ($cached && !empty($cached['token']) && !empty($cached['ts']) && (time() - $cached['ts']) < 10800) {
+    $cw_token = $cached['token'];
 } else {
-    $home_url = $base_url . 'sports/sportsbook.php';
-    $result   = launchCmsWagerGame($_SESSION['user_id'], $pdo, $home_url);
-    if (!empty($result['success']) && !empty($result['game_url'])) {
-        $game_url  = $result['game_url'];
-        $cw_token  = $result['_session_token'] ?? '';
-        $_SESSION['_cmsw_launch'] = ['url' => $game_url, 'token' => $cw_token, 'ts' => time()];
+    $result = launchCmsWagerGame($_SESSION['user_id'], $pdo, $base_url . 'sports/sportsbook.php');
+    if (!empty($result['_session_token'])) {
+        $cw_token = $result['_session_token'];
+        $_SESSION['_cmsw_launch'] = ['token' => $cw_token, 'ts' => time()];
+    } elseif (!empty($result['_token'])) {
+        $cw_token = $result['_token'];
+        $_SESSION['_cmsw_launch'] = ['token' => $cw_token, 'ts' => time()];
     } else {
-        $cw_error = $result['message'] ?? 'Erreur de chargement';
-        // Show token for debugging if URL not yet configured
-        $cw_token = $result['_token'] ?? '';
+        $cw_error = $result['message'] ?? 'Session error';
     }
 }
+
+// Language mapping (your site locale → CMS Wager culture)
+$lang = $_SESSION['lang'] ?? 'fr';
+$culture_map = ['fr' => 'fr-fr', 'en' => 'en-en', 'ar' => 'ar-ar'];
+$culture = $culture_map[$lang] ?? 'fr-fr';
 
 require_once __DIR__ . '/../includes/header.php';
 ?>
 <style>
-body { overflow: hidden !important; }
-.cmsw-wrapper {
+/* Hide site scrollbar — sportsbook fills full viewport below navbar */
+body { overflow: hidden !important; margin: 0; }
+
+#cmsw-wrapper {
   position: fixed;
   top: 50px; /* site navbar height */
   left: 0; right: 0; bottom: 0;
-  background: #111;
-  display: flex;
-  flex-direction: column;
+  background: #0f1923;
 }
-.cmsw-iframe {
-  flex: 1;
-  border: none;
+
+/* The SDK injects its iframe into #appcontent */
+#appcontent {
   width: 100%;
   height: 100%;
+  position: relative;
 }
-.cmsw-loading {
+#appcontent iframe {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: calc(100vh - 50px) !important;
+  border: none !important;
+  display: block !important;
+}
+
+/* Loading overlay — hidden once iframe fires iframeReady */
+#cmsw-loading {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  background: #111; color: #fff; gap: 16px;
-  font-family: sans-serif;
+  flex-direction: column; gap: 14px;
+  background: #0f1923; color: #fff;
+  font-family: sans-serif; font-size: 14px;
+  pointer-events: none; z-index: 10;
+  transition: opacity .4s;
 }
+#cmsw-loading.hidden { opacity: 0; pointer-events: none; }
 .cmsw-spinner {
-  width: 44px; height: 44px;
-  border: 4px solid rgba(255,255,255,.15);
+  width: 40px; height: 40px;
+  border: 4px solid rgba(255,255,255,.1);
   border-top-color: #c0181e;
   border-radius: 50%;
-  animation: cmsw-spin .8s linear infinite;
+  animation: cmsw-spin .75s linear infinite;
 }
 @keyframes cmsw-spin { to { transform: rotate(360deg); } }
-.cmsw-error {
+
+/* Error state */
+#cmsw-error {
+  display: none;
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  background: #111; color: #fff; gap: 12px; text-align: center;
-  padding: 20px; font-family: sans-serif;
+  align-items: center; justify-content: center; flex-direction: column;
+  background: #0f1923; color: #fff; gap: 12px;
+  font-family: sans-serif; text-align: center; padding: 20px;
 }
-.cmsw-error h2 { color: #c0181e; margin: 0; font-size: 18px; }
-.cmsw-error p  { color: #aaa; font-size: 14px; margin: 0; max-width: 400px; line-height: 1.6; }
-.cmsw-error a  { color: #c0181e; }
-.cmsw-pending-box {
-  background: #1e1e1e; border: 1px solid #333; border-radius: 8px;
-  padding: 20px 24px; max-width: 460px; text-align: left;
-}
-.cmsw-pending-box h3 { color: #f0f0f0; margin: 0 0 10px; font-size: 15px; }
-.cmsw-pending-box code {
-  display: block; background: #2a2a2a; border-radius: 4px;
-  padding: 8px 12px; font-size: 12px; color: #4caf50; word-break: break-all;
-  margin: 8px 0;
-}
-.cmsw-pending-box p { color: #888; font-size: 13px; margin: 4px 0; }
+#cmsw-error h2 { color: #c0181e; margin: 0; }
+#cmsw-error p  { color: #aaa; font-size: 13px; max-width: 380px; line-height: 1.6; }
 </style>
 
-<div class="cmsw-wrapper" id="cmsw-wrapper">
-
-<?php if ($game_url): ?>
-  <!-- ── Sportsbook iframe ────────────────────────────────────────────────── -->
-  <div class="cmsw-loading" id="cmsw-loading">
-    <div class="cmsw-spinner"></div>
-    <span style="font-size:13px;color:#888">Chargement du sportsbook...</span>
-  </div>
-  <iframe
-    class="cmsw-iframe"
-    id="cmsw-iframe"
-    src="<?= htmlspecialchars($game_url) ?>"
-    allowfullscreen
-    allow="autoplay; fullscreen"
-    style="opacity:0;transition:opacity .3s"
-    onload="document.getElementById('cmsw-loading').style.display='none';this.style.opacity='1'">
-  </iframe>
-
-<?php elseif ($cw_token): ?>
-  <!-- ── Token generated but iframe URL not yet configured ──────────────── -->
-  <div class="cmsw-error">
-    <h2>⚙️ Configuration en cours</h2>
-    <div class="cmsw-pending-box">
-      <h3>Session CMS Wager créée avec succès</h3>
-      <p>Token joueur :</p>
-      <code><?= htmlspecialchars($cw_token) ?></code>
-      <p>En attente de l'URL d'intégration de CMS Wager.</p>
-      <p>Envoyez à CMS Wager :</p>
-      <code>Callback URL: <?= htmlspecialchars($base_url) ?>api/cmswager_wallet.php</code>
-      <p style="margin-top:12px;color:#666;font-size:12px">
-        Une fois qu'ils fournissent l'URL iframe, mettez à jour<br>
-        <code style="color:#4caf50">CMS_WAGER_SB_URL</code> dans <code style="color:#4caf50">cmswager_launch.php</code>
-      </p>
+<div id="cmsw-wrapper">
+  <div id="appcontent">
+    <div id="cmsw-loading">
+      <div class="cmsw-spinner"></div>
+      <span style="color:#888">Chargement du sportsbook…</span>
     </div>
-    <a href="<?= htmlspecialchars($base_url) ?>" style="font-size:13px;margin-top:8px">← Retour à l'accueil</a>
+    <?php if ($cw_error): ?>
+    <div id="cmsw-error" style="display:flex">
+      <h2>❌ Erreur</h2>
+      <p><?= htmlspecialchars($cw_error) ?></p>
+      <p><a href="<?= htmlspecialchars($base_url) ?>" style="color:#c0181e">← Retour à l'accueil</a></p>
+    </div>
+    <?php endif; ?>
   </div>
-
-<?php else: ?>
-  <!-- ── Error ──────────────────────────────────────────────────────────── -->
-  <div class="cmsw-error">
-    <h2>❌ Erreur Sportsbook</h2>
-    <p><?= htmlspecialchars($cw_error ?: 'Impossible de charger le sportsbook.') ?></p>
-    <p>Veuillez réessayer ou <a href="<?= htmlspecialchars($base_url) ?>">retourner à l'accueil</a>.</p>
-  </div>
-<?php endif; ?>
-
 </div>
+
+<!-- CMS Wager Sportsbook SDK -->
+<script src="https://testsportsbook.cmswager.com/js/sportsbook.js"></script>
+<script>
+(function () {
+  var token       = <?= json_encode($cw_token ?: 'guest') ?>;
+  var culture     = <?= json_encode($culture) ?>;
+  var integration = <?= json_encode('alpina216') ?>;
+  var platform    = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+
+  if (!token || token === 'guest') {
+    document.getElementById('cmsw-loading').style.display = 'none';
+    document.getElementById('cmsw-error').style.display   = 'flex';
+    return;
+  }
+
+  // Hide loading once iframe is ready
+  window.addEventListener('message', function (e) {
+    if (e.data === 'iframeReady' || (e.data && e.data.action === 'loadDone')) {
+      var el = document.getElementById('cmsw-loading');
+      if (el) el.classList.add('hidden');
+      setTimeout(function () { if (el) el.style.display = 'none'; }, 500);
+    }
+  });
+
+  // Also hide loading after 6s max (fallback)
+  setTimeout(function () {
+    var el = document.getElementById('cmsw-loading');
+    if (el) { el.classList.add('hidden'); setTimeout(function(){ if(el) el.style.display='none'; }, 500); }
+  }, 6000);
+
+  // Launch the sportsbook
+  cmsSportbook.startSportbook(platform, token, culture, integration, 'sport');
+})();
+</script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -8,7 +8,7 @@
 define('CMS_WAGER_API_BASE',    'https://api.cmswager.com');
 define('CMS_WAGER_CLIENT_USER', 'doublembet');
 define('CMS_WAGER_CLIENT_PASS', 'STNb58@ps!');
-define('CMS_WAGER_SB_URL',      '');   // ← FILL IN when CMS Wager provides the iframe domain
+define('CMS_WAGER_SB_URL',      'https://test1.cmswager.com/'); // SDK baseUrl from sportsbook.js
 define('CMS_WAGER_CURRENCY',    'TND');
 define('CMS_WAGER_LANGUAGE',    'fr');
 
