@@ -27,7 +27,7 @@ if ($cw_token) {
     $iframe_url = 'https://test1.cmswager.com/?' . http_build_query([
         'language'    => $culture,
         'token'       => $cw_token,
-        'integration' => 'doublembet',  // use the account name as integration ID
+        'integration' => 'classic',   // must be 'classic' or 'strVer' per their JS bundle
         'platform'    => $platform,
         'defaultpage' => 'sport',
     ]);
