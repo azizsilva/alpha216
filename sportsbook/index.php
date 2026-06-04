@@ -1,9 +1,10 @@
 <?php
 $mk_fragment = isset($_GET['mk_fragment']);
 if (!$mk_fragment) { require_once __DIR__.'/../app/index.php'; exit; }
-// Session-only check — no full db.php needed here (all DB ops are via AJAX to api.php)
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { echo '<script>window.location.href="/";</script>'; exit; }
+echo '<script>window.location.href="/sports/sportsbook.php";</script>';
+exit;
 require_once __DIR__.'/../includes/db.php';
 $stmt = $pdo->prepare("SELECT balance FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
