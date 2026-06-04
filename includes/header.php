@@ -315,7 +315,7 @@ $__sb_skip_bootstrap = ($__sb_path !== '' && (preg_match('#/sportsbook(?:/|$)#i'
             return;
         }
         if (id === '6260') {
-            window.location.href = '<?php echo $base_url; ?>sports/sportsbook.php';
+            window.location.href = '<?php echo $base_url; ?>sportsbook/';
             return;
         }
         launchGame(id, name);
@@ -365,8 +365,8 @@ $__sb_skip_bootstrap = ($__sb_path !== '' && (preg_match('#/sportsbook(?:/|$)#i'
           '/bet-history': base + 'bet-history/?mk_fragment=1',
           '/activity-log': base + 'activity-log/?mk_fragment=1',
           '/pinned': base + 'pinned/?mk_fragment=1',
-          '/sports': base + 'sports/sportsbook.php',
-          '/sportsbook': base + 'sports/sportsbook.php',
+          '/sports': base + 'sports/?mk_fragment=1',
+          '/sportsbook': base + 'sportsbook/?mk_fragment=1',
           '/casino': base + 'casino-games/?mk_fragment=1',
           '/casino-games/slot-games': base + 'casino-games/slot-games/?mk_fragment=1',
           '/casino-games/live-casino': base + 'casino-games/live-casino/?mk_fragment=1',
