@@ -24,10 +24,10 @@ $culture = 'fr-fr';
 $platform = 'mobile'; // server can't detect UA, JS will fix it client-side
 $iframe_url = '';
 if ($cw_token) {
-    $iframe_url = 'https://test1.cmswager.com/?' . http_build_query([
+    $iframe_url = rtrim(CMS_WAGER_SB_URL, '/') . '/?' . http_build_query([
         'language'    => $culture,
         'token'       => $cw_token,
-        'integration' => 'classic',   // must be 'classic' or 'strVer' per their JS bundle
+        'integration' => CMS_WAGER_INTEGRATION,  // the integration key, not username
         'platform'    => $platform,
         'defaultpage' => 'sport',
     ]);
